@@ -1,0 +1,92 @@
+#ifndef WLANCONFIG_H
+#define WLANCONFIG_H
+
+#define PLATFORM_FREERTOS 1
+#define CONFIG_GSPI_HCI
+//#define CONFIG_SDIO_HCI
+#define CONFIG_ODM_REFRESH_RAMASK
+#define HAL_MAC_ENABLE 1
+#define HAL_BB_ENABLE 1
+#define HAL_RF_ENABLE 1
+
+#define CONFIG_DEBUG
+#define CONFIG_DEBUG_RTL871X
+#define CONFIG_MEM_MONITOR	MEM_MONITOR_LEAK
+//#define WLAN_INTF_DBG
+
+#define CONFIG_XMIT_THREAD_MODE
+//#define CONFIG_RECV_THREAD_MODE				/* Wlan IRQ Polling  Mode*/
+//#define CONFIG_ISR_THREAD_MODE_POLLING		/* Wlan IRQ Polling  Mode*/
+#if defined(CONFIG_ISR_THREAD_MODE_POLLING)
+#error "CONFIG_ISR_THREAD_MODE_POLLING is mutually exclusive. "
+#endif
+
+
+/* CRC DMEM optimized mode consume 1k less SRM memory consumption */
+#define CRC_IMPLEMENTATION_MODE CRC_IMPLEMENTATION_DMEM_OPTIMIZED
+
+/* AES DMEM optimized mode comsume 10k less memory compare to
+     IMEM optimized mode AES_IMPLEMENTATION_IMEM_OPTIMIZED */
+#define AES_IMPLEMENTATION_MODE AES_IMPLEMENTATION_DMEM_OPTIMIZED
+
+#define USE_XMIT_EXTBUFF	0
+//#define SUPPORT_5G_CHANNEL
+#define SUPPORT_FAKE_EFUSE	0
+//#define CONFIG_AUTO_RECONNECT
+#define SUPPORT_SCAN_BUF	1
+
+/* For promiscuous mode */
+#define CONFIG_PROMISC
+
+/* For AP_MODE */
+#define AP_STA_NUM	3	//Not less than 1
+
+//#define CONFIG_CONCURRENT_MODE
+/* For WPS and P2P */
+//#define CONFIG_WPS
+//#ifdef CONFIG_WPS
+//#define CONFIG_P2P
+//#endif
+
+/* For Tx Power By Rate */
+#define CONFIG_INIT_TXPWR_BY_RATE 0
+
+//	#define CONFIG_GK_REKEY
+
+/* For MP_MODE */
+//#define CONFIG_MP_INCLUDED
+#ifdef CONFIG_MP_INCLUDED
+#define MP_DRIVER		1
+#else
+#define MP_DRIVER		0
+#endif // #ifdef CONFIG_MP_INCLUDED
+
+#define CONFIG_RTL8188E
+//#define RTL8188ES_SUPPORT 1
+#define RTL8188E_SUPPORT 1
+#define RTL8192C_SUPPORT 0
+#define RTL8192CE_SUPPORT 0
+#define RTL8192CU_SUPPORT 0
+#define RTL8192D_SUPPORT 0
+#define RTL8192DE_SUPPORT 0
+#define RTL8192DU_SUPPORT 0
+#define RTL8723A_SUPPORT 0
+#define RTL8723AU_SUPPORT 0
+#define RTL8723AS_SUPPORT 0
+#define RTL8192E_SUPPORT 0
+#define RTL8812A_SUPPORT 0
+#define RTL8821A_SUPPORT 0
+#define RTL8723B_SUPPORT 0
+#define RTL8195A_SUPPORT 0
+#define RTL8711B_SUPPORT 0
+#define TEST_CHIP_SUPPORT 0
+
+#define RTL8723_FPGA_VERIFICATION 0
+#define RTL8188E_FOR_TEST_CHIP 0
+#define RTL8188E_FPGA_TRUE_PHY_VERIFICATION 0
+#define DISABLE_BB_RF 0
+#define DBG 0
+#define RATE_ADAPTIVE_SUPPORT 1
+
+#define CONFIG_LWIP_LAYER    1
+#endif //WLANCONFIG_H
