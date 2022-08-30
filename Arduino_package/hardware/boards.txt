@@ -1,0 +1,52 @@
+
+menu.EraseFlash=* Erase Flash
+menu.AutoUploadMode=* Auto Flash Mode
+menu.VideoModeInit=* Video Init
+menu.StdLibInit=* Standard Lib Enable
+
+##############################################################
+# PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
+##############################################################
+
+Ameba_AMB82-MINI.name=AMB82-MINI
+#Ameba_AMB82-MINI.vid.0=0x1A86
+#Ameba_AMB82-MINI.pid.0=0x7523
+
+Ameba_AMB82-MINI.upload.tool=ameba_pro2_tools
+Ameba_AMB82-MINI.upload.protocol=usb_serial
+Ameba_AMB82-MINI.upload.maximum_size=16777216
+Ameba_AMB82-MINI.upload.use_1200bps_touch=false
+Ameba_AMB82-MINI.upload.wait_for_upload_port=false
+Ameba_AMB82-MINI.upload.native_usb=false
+
+Ameba_AMB82-MINI.build.tarch=Arm-v8M
+Ameba_AMB82-MINI.build.mcu=RTL8735B
+Ameba_AMB82-MINI.build.f_cpu=500000000L
+Ameba_AMB82-MINI.build.usb_product="AMB82-MINI"
+Ameba_AMB82-MINI.build.board=AMEBA
+Ameba_AMB82-MINI.build.core=ambpro2
+#Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+Ameba_AMB82-MINI.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
+Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
+
+Ameba_AMB82-MINI.menu.EraseFlash.Disable=Disable
+Ameba_AMB82-MINI.menu.EraseFlash.Disable.build.erase_flash=Disable
+Ameba_AMB82-MINI.menu.EraseFlash.Enable=Enable
+Ameba_AMB82-MINI.menu.EraseFlash.Enable.build.erase_flash=Enable
+
+Ameba_AMB82-MINI.menu.AutoUploadMode.Disable=Disable
+Ameba_AMB82-MINI.menu.AutoUploadMode.Disable.build.auto_upload_mode=Disable
+Ameba_AMB82-MINI.menu.AutoUploadMode.Enable=Enable
+Ameba_AMB82-MINI.menu.AutoUploadMode.Enable.build.auto_upload_mode=Enable
+
+Ameba_AMB82-MINI.menu.VideoModeInit.Enable=Enable
+Ameba_AMB82-MINI.menu.VideoModeInit.Enable.build.video_init=Enable
+Ameba_AMB82-MINI.menu.VideoModeInit.Disable=Disable
+Ameba_AMB82-MINI.menu.VideoModeInit.Disable.build.video_init=Disable
+
+Ameba_AMB82-MINI.menu.StdLibInit.Disable=NA
+Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+
+##############################################################

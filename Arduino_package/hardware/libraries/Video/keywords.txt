@@ -1,0 +1,146 @@
+#######################################
+# Syntax Coloring Map Camera
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Camera	KEYWORD1
+VideoSetting	KEYWORD1
+AudioSetting	KEYWORD1
+StreamIO	KEYWORD1
+Audio	KEYWORD1
+AAC	KEYWORD1
+RTSP	KEYWORD1
+MP4Recording	KEYWORD1
+
+#######################################
+# Audio.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+printInfo	KEYWORD2
+
+ASR_8KHZ	LITERAL1
+ASR_16KHZ	LITERAL1
+ASR_32KHZ	LITERAL1
+ASR_44p1KHZ	LITERAL1
+ASR_48KHZ	LITERAL1
+ASR_96KHZ	LITERAL1
+ASR_88p2KHZ	LITERAL1
+
+WL_16BIT	LITERAL1
+WL_24BIT	LITERAL1
+
+MIC_0DB	LITERAL1
+MIC_20DB	LITERAL1
+MIC_30DB	LITERAL1
+MIC_40DB	LITERAL1
+
+DMIC_BOOST_0DB	LITERAL1
+DMIC_BOOST_12DB	LITERAL1
+DMIC_BOOST_24DB	LITERAL1
+DMIC_BOOST_36DB	LITERAL1
+
+USE_AUDIO_AMIC	LITERAL1
+USE_AUDIO_LEFT_DMIC	LITERAL1
+USE_AUDIO_RIGHT_DMIC	LITERAL1
+USE_AUDIO_STEREO_DMIC	LITERAL1
+
+#######################################
+# Video.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideoChannel	KEYWORD2
+videoInit	KEYWORD2
+videoDeinit	KEYWORD2
+channelBegin	KEYWORD2
+channelEnd	KEYWORD2
+getStream	KEYWORD2
+getP	KEYWORD2
+setFPS	KEYWORD2
+printInfo	KEYWORD2
+
+VIDEO_QCIF	LITERAL1
+VIDEO_CIF	LITERAL1
+VIDEO_WVGA	LITERAL1
+VIDEO_VGA	LITERAL1
+VIDEO_D1  	LITERAL1
+VIDEO_HD	LITERAL1
+VIDEO_FHD	LITERAL1
+VIDEO_3M	LITERAL1
+VIDEO_5M	LITERAL1
+VIDEO_2K	LITERAL1
+
+VIDEO_HEVC	LITERAL1
+VIDEO_H264	LITERAL1
+VIDEO_JPEG	LITERAL1
+VIDEO_NV12	LITERAL1
+VIDEO_RGB	LITERAL1
+VIDEO_NV16	LITERAL1
+VIDEO_HEVC_JPEG	LITERAL1
+VIDEO_H264_JPEG	LITERAL1
+
+#######################################
+# MP4Recording.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+printInfo	KEYWORD2
+setRecordingFileName	KEYWORD2
+setRecordingDuration	KEYWORD2
+setRecordingFileCount	KEYWORD2
+setLoopRecording	KEYWORD2
+setRecordingDataType	KEYWORD2
+getRecordingFileName	KEYWORD2
+getRecordingDuration	KEYWORD2
+getRecordingFileCount	KEYWORD2
+getRecordingState	KEYWORD2
+
+STORAGE_ALL	LITERAL1
+STORAGE_VIDEO	LITERAL1
+STORAGE_AUDIO	LITERAL1
+
+AUDIO_AAC	LITERAL1
+AUDIO_ULAW	LITERAL1
+AUDIO_ALAW	LITERAL1
+
+#######################################
+# RTSP.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+enableAudio	KEYWORD2
+getPort	KEYWORD2
+printInfo	KEYWORD2
+
+#######################################
+# StreamIO.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+pause	KEYWORD2
+resume	KEYWORD2
+registerInput	KEYWORD2
+registerInput1	KEYWORD2
+registerInput2	KEYWORD2
+registerInput3	KEYWORD2
+registerOutput	KEYWORD2
+registerOutput1	KEYWORD2
+registerOutput2	KEYWORD2
+setStackSize	KEYWORD2
+setTaskPriority	KEYWORD2
