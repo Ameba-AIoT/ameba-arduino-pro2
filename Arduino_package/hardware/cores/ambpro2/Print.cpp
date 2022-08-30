@@ -104,6 +104,26 @@ size_t Print::print(unsigned long n, int base)
     }
 }
 
+size_t Print::print(long long n)
+{
+    return printf("%lld", n);
+}
+
+size_t Print::print(unsigned long long n)
+{
+    return printf("%llu", n);
+}
+
+size_t Print::println(long long n)
+{
+    return printf("%lld\r\n", n);
+}
+
+size_t Print::println(unsigned long long n)
+{
+    return printf("%llu\r\n", n);
+}
+
 size_t Print::print(double n, int digits)
 {
     return printFloat(n, digits);
