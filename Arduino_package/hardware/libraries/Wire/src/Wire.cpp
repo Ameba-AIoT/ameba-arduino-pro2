@@ -40,10 +40,9 @@ i2c_t i2cwire1;
 TwoWire::TwoWire (void *pWireObj, uint32_t dwSDAPin, uint32_t dwSCLPin) {
     this->SDA_pin = (PinName)g_APinDescription[dwSDAPin].pinname;
     this->SCL_pin = (PinName)g_APinDescription[dwSCLPin].pinname;
-	this->user_onReceive = NULL;
-	this->user_onRequest = NULL;
-	this->pI2C = pWireObj;
-	
+    this->user_onReceive = NULL;
+    this->user_onRequest = NULL;
+    this->pI2C = pWireObj;
 }
 
 void TwoWire::begin () {
@@ -91,22 +90,23 @@ uint8_t TwoWire::requestFrom (uint8_t address, uint8_t quantity, uint8_t sendSto
     // perform blocking read into buffer
     readed = i2c_read(((i2c_t *)this->pI2C), ((int)address), ((char*)&this->rxBuffer[0]), ((int)quantity), ((int)sendStop));
 
-    // i2c_read error;
-	//    if (readed != quantity) {
-	//        printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
-	//		
-	//        return readed;
-	//    }
-
-	if (readed != 0){
+	// i2c_read error;
+	if (readed != 0) {
 		printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
 	}
+
+	/*//i2c_read error;
+    if (readed != quantity) {
+        printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
+		
+        return readed;
+    }
+	rxBufferLength = readed;*/
 	
     // set rx buffer iterator vars
     rxBufferIndex = 0;
-    //rxBufferLength = readed;
     rxBufferLength = quantity;
-	
+
     return quantity;
 }
 
@@ -119,16 +119,14 @@ uint8_t TwoWire::requestFrom(int address, int quantity) {
 }
 
 uint8_t TwoWire::requestFrom (int address, int quantity, int sendStop) {
-
     return requestFrom(((uint8_t)address), ((uint8_t)quantity), ((uint8_t)sendStop));
 }
 
 void TwoWire::beginTransmission (uint8_t address) {
-
     // save address of target and empty buffer
+    // If target address changes, wait for 50us to avoid losing next data packet, tested ok down to 10us
     if (txAddress != address) {
-        txAddress = address;
-        // If target address changes, wait for 50us to avoid losing next data packet, tested ok down to 10us
+       txAddress = address;
        delay(50);
     }
     txBufferLength = 0;
@@ -149,7 +147,6 @@ void TwoWire::beginTransmission (int address) {
 //  is very possible to leave the bus in a hung state if
 //  no call to endTransmission(true) is made. Some I2C
 //  devices will behave oddly if they do not see a STOP.
-//
 uint8_t TwoWire::endTransmission (uint8_t sendStop) {
     int length;
     uint8_t error = 0;
@@ -158,14 +155,13 @@ uint8_t TwoWire::endTransmission (uint8_t sendStop) {
     if ((txBufferLength > 0) && (length <= 0)) {
         error = 1;
     }
-
-    txBufferLength = 0;     // empty buffer
+	
+    txBufferLength = 0; // empty buffer
     return error;
 }
 
 //	This provides backwards compatibility with the original
 //	definition, and expected behaviour, of endTransmission
-//
 uint8_t TwoWire::endTransmission (void) {
     return endTransmission(true);
 }
@@ -199,6 +195,7 @@ int TwoWire::read (void) {
     return -1;
 }
 
+
 int TwoWire::peek (void) {
     if (rxBufferIndex < rxBufferLength) {
         return rxBuffer[rxBufferIndex];
@@ -210,22 +207,6 @@ void TwoWire::flush (void) {
     // Do nothing, use endTransmission(..) to force
     // data transfer.
 }
-
-
-//size_t TwoWire::slaveWrite(int buffer) {
-//    return slaveWrite((uint8_t *)&buffer, 1);
-//}
-//
-//
-//size_t TwoWire::slaveWrite(char *buffer) {
-//    return slaveWrite((uint8_t *)buffer, (size_t)sizeof(buffer));
-//}
-//
-//
-//size_t TwoWire::slaveWrite(uint8_t *buffer, size_t len) {
-//    return i2cSlaveWrite(buffer, len, RECV_TIMEOUT);
-//}
-
 
 void TwoWire::onReceiveService(uint8_t *inBytes, size_t numBytes, bool stop, void *arg) {
 	//status = SLAVE_RECV;
@@ -246,9 +227,8 @@ void TwoWire::onReceiveService(uint8_t *inBytes, size_t numBytes, bool stop, voi
 }
 
 void TwoWire::onRequestService(void * arg) {
-	//status = SLAVE_SEND;
-
-	//printf("in onRequestService\r\n");
+    //status = SLAVE_SEND;
+    //printf("in onRequestService\r\n");
 
     TwoWire *wire = (TwoWire*)arg;
     if(!wire->user_onRequest){
@@ -256,12 +236,14 @@ void TwoWire::onRequestService(void * arg) {
     }
     wire->txBufferLength = 0;
     wire->user_onRequest(); // user callback normally write data into txbuffer
-//    if(wire->txBufferLength){
-//        wire->slaveWrite((uint8_t*)wire->txBuffer, wire->txBufferLength);
-//        wire->slaveWrite((uint8_t*)txBuffer, txBufferLength);
-//    }
+    
+	//if(wire->txBufferLength) {
+	//    wire->slaveWrite((uint8_t*)wire->txBuffer, wire->txBufferLength);
+	//    wire->slaveWrite((uint8_t*)txBuffer, txBufferLength);
+	//}
 }
 
+#if 0
 
 void TwoWire::onReceive (void(*function)(int)) {
     user_onReceive = function;
@@ -271,6 +253,19 @@ void TwoWire::onRequest (void(*function)(void)) {
     user_onRequest = function;
 }
 
+size_t TwoWire::slaveWrite(int buffer) {
+    return slaveWrite((uint8_t *)&buffer, 1);
+}
+
+size_t TwoWire::slaveWrite(char *buffer) {
+    return slaveWrite((uint8_t *)buffer, (size_t)sizeof(buffer));
+}
+
+size_t TwoWire::slaveWrite(uint8_t *buffer, size_t len) {
+    return i2cSlaveWrite(buffer, len, RECV_TIMEOUT);
+}
+
+#endif
 
 TwoWire Wire  = TwoWire((void *)(&i2cwire0), 12, 13); 
 TwoWire Wire1  = TwoWire((void *)(&i2cwire1), 9, 10); 
