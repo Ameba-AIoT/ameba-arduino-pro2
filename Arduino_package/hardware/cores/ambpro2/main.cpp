@@ -16,32 +16,23 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 #define ARDUINO_MAIN
 #include "Arduino.h"
 #include "cmsis_os.h"
 #include "diag.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-//extern void console_init(void);
-
-osThreadId main_tid = 0;
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
 void initVariant() __attribute__((weak));
 void initVariant() { }
 
-
-void main_task(void)
-{
-//    (void)arg;
-
+void main_task (void*) {
     delay(1);
-
     setup();
 
     for (;;) {
@@ -49,23 +40,20 @@ void main_task(void)
         if (serialEventRun) {
             serialEventRun();
         }
-        osThreadYield();
-        //vTaskDelete(NULL);
+        vPortYield();
     }
+    vTaskDelete(NULL);
 }
 
-
 int main(void) {
-
-    //dbg_printf("Arduino Build \r\n");
 
     ameba_init();
     initVariant();
 
-    osThreadDef(main_task, osPriorityRealtime, 1, MAIN_THREAD_STACK_SIZE);
-    main_tid = osThreadCreate(osThread(main_task), NULL);
-
-    osKernelStart();
+    if (xTaskCreate(main_task, ((const char *)"main task"), MAIN_THREAD_STACK_SIZE, NULL, 1, NULL) != pdPASS) {
+        printf("\n\r%s xTaskCreate(main task) failed\n", __FUNCTION__);
+    }
+    vTaskStartScheduler();
 
     while(1);
 
@@ -75,6 +63,3 @@ int main(void) {
 #ifdef __cplusplus
 }
 #endif
-
-
-
