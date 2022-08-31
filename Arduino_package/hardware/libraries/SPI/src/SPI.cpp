@@ -27,8 +27,8 @@ extern "C" {
 }
 #endif
 
-spi_t spi_master;
-spi_t spi_slave;
+spi_t spi_obj0;
+spi_t spi_obj1;
 
 SPIClass::SPIClass(void *pSpiObj, int mosi, int miso, int clk, int ss)
 {
@@ -41,7 +41,6 @@ SPIClass::SPIClass(void *pSpiObj, int mosi, int miso, int clk, int ss)
     pinSS = ss;
 
     pinUserSS = -1;
-
     defaultFrequency = SPI_DEFAULT_FREQ;
 }
 
@@ -54,14 +53,13 @@ void SPIClass::begin(void)
         (PinName)g_APinDescription[pinCLK].pinname, 
         (PinName)g_APinDescription[pinSS].pinname
     );
-	 spi_format((spi_t *)pSpiMaster, 8, 0, 0);
-	 spi_frequency((spi_t *)pSpiMaster, defaultFrequency);
+    spi_format((spi_t *)pSpiMaster, 8, 0, 0);
+    spi_frequency((spi_t *)pSpiMaster, defaultFrequency);
 }
 
-// to be checked again
 void SPIClass::begin(int ss)
 {
-	pinSS = (PinName)g_APinDescription[ss].pinname;
+    pinSS = (PinName)g_APinDescription[ss].pinname;
 
     spi_init(
         (spi_t *)pSpiMaster,
@@ -70,14 +68,8 @@ void SPIClass::begin(int ss)
         (PinName)g_APinDescription[pinCLK].pinname, 
         (PinName)g_APinDescription[pinSS].pinname
     );
-	 spi_format((spi_t *)pSpiMaster, 8, 0, 0);
-	 spi_frequency((spi_t *)pSpiMaster, defaultFrequency);
-}
-
-
-void SPIClass::end(void)
-{
-	spi_free((spi_t *)pSpiMaster);
+    spi_format((spi_t *)pSpiMaster, 8, 0, 0);
+    spi_frequency((spi_t *)pSpiMaster, defaultFrequency);
 }
 
 void SPIClass::beginTransaction(uint8_t pin, SPISettings settings)
@@ -105,25 +97,23 @@ void SPIClass::endTransaction(void)
 }
 
 byte SPIClass::transfer(uint8_t _data, SPITransferMode _mode){ // transfer 1 byte data without SS
-	(void)_mode;
-	
-	spi_master_write((spi_t *)pSpiMaster, _data);
-	printf("Master write: %02X\n\r", _data);
-	
-	return 0;
+    (void)_mode;
+    
+    spi_master_write((spi_t *)pSpiMaster, _data);
+    //printf("Master write: %02X\n\r", _data);
+    return 0;
 }
 
-// to be checked again
 byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode){ // transfer 1 byte data with SS
 
-	if (_pin != pinSS) {
+    if (_pin != pinSS) {
         pinMode(_pin, OUTPUT);
         digitalWrite(_pin, 0);
     }
-	spi_master_write((spi_t *)pSpiMaster, _data);
-	printf("Master write: %02X\n\r", _data);
-	
-	return 0;
+    spi_master_write((spi_t *)pSpiMaster, _data);
+    //printf("Master write: %02X\n\r", _data);
+    
+    return 0;
 }
 
 void SPIClass::transfer(byte _pin, void *_buf, SIZE_T _count, SPITransferMode _mode)
@@ -145,7 +135,6 @@ void SPIClass::transfer(void *_buf, SIZE_T _count, SPITransferMode _mode)
     transfer(pinSS, _buf, _count, _mode);
 }
 
-
 uint16_t SPIClass::transfer16(byte _pin, uint16_t _data, SPITransferMode _mode)
 {
     union { uint16_t val; struct { uint8_t lsb; uint8_t msb; }; } t;
@@ -158,9 +147,9 @@ uint16_t SPIClass::transfer16(byte _pin, uint16_t _data, SPITransferMode _mode)
         t.msb = transfer(_pin, t.msb, SPI_CONTINUE);
         t.lsb = transfer(_pin, t.lsb, _mode);
     }
-	printf("Master write: %04X\n\r", t.val);
+    //printf("Master write: %04X\n\r", t.val);
+    
     _data = t.val;
-	
     return _data;
 }
 
@@ -169,14 +158,12 @@ uint16_t SPIClass::transfer16(uint16_t _data, SPITransferMode _mode)
     return transfer16(pinSS, _data, _mode);
 }
 
-
 void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder)
 {
     (void)_pin;
 
     bitOrder = _bitOrder;
 }
-
 
 void SPIClass::setDataMode(uint8_t _pin, uint8_t _mode)
 {
@@ -210,5 +197,10 @@ void SPIClass::setDefaultFrequency(int _frequency)
     defaultFrequency = _frequency;
 }
 
-SPIClass SPI((void *)(&spi_slave), 13, 14, 15, 12);
-SPIClass SPI1((void *)(&spi_master), 2, 0, 1, 3);
+void SPIClass::end(void)
+{
+    spi_free((spi_t *)pSpiMaster);
+}
+
+SPIClass SPI((void *)(&spi_obj0), 13, 14, 15, 12);
+SPIClass SPI1((void *)(&spi_obj1), 2, 0, 1, 3);
