@@ -63,7 +63,7 @@ void TwoWire::begin (uint8_t address = 0) {
     this->txBufferLength = 0;
     this->twiClock = this->TWI_CLOCK;
 
-	i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
+    i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
     i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
 }
 
@@ -90,19 +90,19 @@ uint8_t TwoWire::requestFrom (uint8_t address, uint8_t quantity, uint8_t sendSto
     // perform blocking read into buffer
     readed = i2c_read(((i2c_t *)this->pI2C), ((int)address), ((char*)&this->rxBuffer[0]), ((int)quantity), ((int)sendStop));
 
-	// i2c_read error;
-	if (readed != 0) {
-		printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
-	}
+    // i2c_read error;
+    if (readed != 0) {
+        printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
+    }
 
-	/*//i2c_read error;
+    /*//i2c_read error;
     if (readed != quantity) {
         printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
-		
+        
         return readed;
     }
-	rxBufferLength = readed;*/
-	
+    rxBufferLength = readed;*/
+    
     // set rx buffer iterator vars
     rxBufferIndex = 0;
     rxBufferLength = quantity;
@@ -155,7 +155,7 @@ uint8_t TwoWire::endTransmission (uint8_t sendStop) {
     if ((txBufferLength > 0) && (length <= 0)) {
         error = 1;
     }
-	
+    
     txBufferLength = 0; // empty buffer
     return error;
 }
@@ -171,7 +171,7 @@ size_t TwoWire::write (uint8_t data) {
         return 0;
     }
     txBuffer[txBufferLength++] = data;
-	return 1;
+    return 1;
 }
 
 size_t TwoWire::write (const uint8_t *data, size_t quantity) {
@@ -209,11 +209,11 @@ void TwoWire::flush (void) {
 }
 
 void TwoWire::onReceiveService(uint8_t *inBytes, size_t numBytes, bool stop, void *arg) {
-	//status = SLAVE_RECV;
+    //status = SLAVE_RECV;
     //printf("in onReceiveService\r\n");
 
-	stop = stop;
-	
+    stop = stop;
+    
     TwoWire *wire = (TwoWire*)arg;
     if(!wire->user_onReceive){
         return;
@@ -237,10 +237,10 @@ void TwoWire::onRequestService(void * arg) {
     wire->txBufferLength = 0;
     wire->user_onRequest(); // user callback normally write data into txbuffer
     
-	//if(wire->txBufferLength) {
-	//    wire->slaveWrite((uint8_t*)wire->txBuffer, wire->txBufferLength);
-	//    wire->slaveWrite((uint8_t*)txBuffer, txBufferLength);
-	//}
+    //if(wire->txBufferLength) {
+    //    wire->slaveWrite((uint8_t*)wire->txBuffer, wire->txBufferLength);
+    //    wire->slaveWrite((uint8_t*)txBuffer, txBufferLength);
+    //}
 }
 
 #if 0

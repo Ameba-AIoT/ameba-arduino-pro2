@@ -10,7 +10,7 @@
  */
 
 #include "SPI.h"
-#include "Arduino.h"
+#include "Arduino.h"s
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,7 +59,7 @@ void SPIClass::begin(void)
 
 void SPIClass::begin(int ss)
 {
-	pinSS = (PinName)g_APinDescription[ss].pinname;
+    pinSS = (PinName)g_APinDescription[ss].pinname;
 
     spi_init(
         (spi_t *)pSpiMaster,
@@ -98,10 +98,10 @@ void SPIClass::endTransaction(void)
 
 byte SPIClass::transfer(uint8_t _data, SPITransferMode _mode){ // transfer 1 byte data without SS
     (void)_mode;
-	
+    
     spi_master_write((spi_t *)pSpiMaster, _data);
     //printf("Master write: %02X\n\r", _data);
-	return 0;
+    return 0;
 }
 
 byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode){ // transfer 1 byte data with SS
@@ -112,7 +112,7 @@ byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode){ // tra
     }
     spi_master_write((spi_t *)pSpiMaster, _data);
     //printf("Master write: %02X\n\r", _data);
-	
+    
     return 0;
 }
 
@@ -147,8 +147,8 @@ uint16_t SPIClass::transfer16(byte _pin, uint16_t _data, SPITransferMode _mode)
         t.msb = transfer(_pin, t.msb, SPI_CONTINUE);
         t.lsb = transfer(_pin, t.lsb, _mode);
     }
-	//printf("Master write: %04X\n\r", t.val);
-	
+    //printf("Master write: %04X\n\r", t.val);
+    
     _data = t.val;
     return _data;
 }

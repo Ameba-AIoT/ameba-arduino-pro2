@@ -35,12 +35,12 @@ class TwoWire : public Stream {
         void begin();
         void begin(uint8_t);
         void begin(int);
-		
-		void end();
-		
+        
+        void end();
+        
         void setClock(uint32_t);
 
-		uint8_t requestFrom(uint8_t, uint8_t);
+        uint8_t requestFrom(uint8_t, uint8_t);
         uint8_t requestFrom(uint8_t, uint8_t, uint8_t);
         uint8_t requestFrom(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t);
         uint8_t requestFrom(int, int);
@@ -53,10 +53,10 @@ class TwoWire : public Stream {
 
         virtual size_t write(uint8_t);
         virtual size_t write(const uint8_t *, size_t);
-		
+        
         virtual int available(void);
         virtual int read(void);
-		virtual int peek(void);
+        virtual int peek(void);
         virtual void flush(void);
         inline size_t write(unsigned long n) { return write((uint8_t)n); }
         inline size_t write(long n) { return write((uint8_t)n); }
@@ -65,19 +65,19 @@ class TwoWire : public Stream {
         using Print::write;
 
 #if 0
-	
-	void onReceive(void(*)(int));
+    
+    void onReceive(void(*)(int));
     void onRequest(void(*)(void));
 
-	size_t slaveWrite(int);
-	size_t slaveWrite(char *);
-	size_t slaveWrite(uint8_t *, size_t);
-	
+    size_t slaveWrite(int);
+    size_t slaveWrite(char *);
+    size_t slaveWrite(uint8_t *, size_t);
+    
 #endif
 
     private:
-		bool is_slave;
-		
+        bool is_slave;
+        
         // RX Buffer
         uint8_t rxBuffer[BUFFER_LENGTH];
         uint8_t rxBufferIndex;
@@ -91,9 +91,9 @@ class TwoWire : public Stream {
 
         // Callback user functions
         void (*user_onRequest)(void);
-    	void (*user_onReceive)(int);
-		static void onRequestService(void *);
-    	static void onReceiveService(uint8_t*, size_t, bool, void *);
+        void (*user_onReceive)(int);
+        static void onRequestService(void *);
+        static void onReceiveService(uint8_t*, size_t, bool, void *);
 
         uint32_t SDA_pin;
         uint32_t SCL_pin;
