@@ -42,7 +42,7 @@ For all `release` information, please visit this [link](https://github.com/ambio
     
     </br>
 
-3. **Select your Ameba model in *"Tools" -> "Board" -> "AmebaD ARM (32-bits) Boards"***
+3. **Select your Ameba model in *"Tools" -> "Board" -> "AmebaPro2 ARM (32-bits) Boards"***
 
     > Make sure you select the correct model for your board, otherwise your program might not work properly 
 
