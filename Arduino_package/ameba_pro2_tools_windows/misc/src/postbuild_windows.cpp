@@ -56,7 +56,13 @@ int main(int argc, char *argv[]) {
 
     size_t pos;
 
-//    int check_powersavemode = 0;
+    string cam_user_selection;
+
+    if (argv[6]) {
+        cam_user_selection = argv[6];
+    } else {
+        cam_user_selection = "Disable";
+    }
 
     // 0. change work folder
     chdir(argv[1]);
@@ -217,7 +223,11 @@ int main(int argc, char *argv[]) {
 
     // 8. generate .bin
     cmdss.clear();
-    cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
+    if (cam_user_selection == "Enable") {
+        cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
+    } else {
+        cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
+    }
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -227,16 +237,12 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-#if 0
-	../../GCC-RELEASE/mp/elf2bin.exe combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin
-	cp ./firmware.bin ./ota.bin
-	../../GCC-RELEASE/mp/checksum.exe ./ota.bin
-	cp ./firmware_isp_iq.bin ./isp_iq_ota.bin
-	../../GCC-RELEASE/mp/checksum.exe ./isp_iq_ota.bin
-#endif
-
     cmdss.clear();
-    cmdss << ".\\misc\\elf2bin.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+    if (cam_user_selection == "Enable") {
+        cmdss << ".\\misc\\elf2bin.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+    } else {
+        cmdss << ".\\misc\\elf2bin.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+    }
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
