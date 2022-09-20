@@ -56,12 +56,12 @@ int main(int argc, char *argv[]) {
 
     size_t pos;
 
-    string cam_user_selection;
+    string video_init_user_selection;
 
     if (argv[6]) {
-        cam_user_selection = argv[6];
+        video_init_user_selection = argv[6];
     } else {
-        cam_user_selection = "Disable";
+        video_init_user_selection = "Disable";
     }
 
     // 0. change work folder
@@ -125,6 +125,10 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     cmd = "copy misc\\image\\amebapro2_firmware.json .\\";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "copy misc\\image\\amebapro2_firmware_NA_cam.json .\\";
     cout << cmd << endl;
     system(cmd.c_str());
 
@@ -223,7 +227,7 @@ int main(int argc, char *argv[]) {
 
     // 8. generate .bin
     cmdss.clear();
-    if (cam_user_selection == "Enable") {
+    if (video_init_user_selection == "Enable") {
         cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
     } else {
         cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
@@ -232,20 +236,24 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    //cmd = "cp firmware_ntz.bin firmware.bin";
-    cmd = "copy firmware_ntz.bin firmware.bin";
-    cout << cmd << endl;
-    system(cmd.c_str());
+    if (video_init_user_selection == "Enable") {
+        //cmd = "cp firmware_ntz.bin firmware.bin";
+        cmd = "copy firmware_ntz.bin firmware.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
 
-    cmdss.clear();
-    if (cam_user_selection == "Enable") {
+        cmdss.clear();
         cmdss << ".\\misc\\elf2bin.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
     } else {
-        cmdss << ".\\misc\\elf2bin.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+        //cmdss << ".\\misc\\elf2bin.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin //PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+
+        cmd = "copy firmware_ntz.bin flash_ntz.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
     }
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
 
 #if 0
     // 9. add checksum
