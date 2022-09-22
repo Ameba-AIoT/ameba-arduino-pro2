@@ -56,14 +56,13 @@ void delayMicroseconds(uint32_t us)
     dfactor = 10 * us - 10 + (40 * us / 100);
 #elif defined(BOARD_RTL8195AM)
     dfactor = 20 * us - 10 + (81 * us / 100);
-#elif defined(BOARD_RTL8722DM)
+#elif defined(RTL8722DM)
     dfactor = 20 * us - 10 + (81 * us / 100);
-#elif defined(BOARD_RTL8722DM_MINI)
-    dfactor = 20 * us - 10 + (81 * us / 100);
-#elif defined(BOARD_RTL8720DN_BW16)
-    dfactor = 20 * us - 10 + (81 * us / 100);
+#elif defined(ARDUINO_AMBPRO2)
+    // Best fit equation obtained experiementally from continuous asm("nop")
+    dfactor = 166 * us - 16;
 #else
-    dfactor = 20 * us - 10 + (81 * us / 100);
+#error "delayMicroseconds(): Unknown chip delay factor"
 #endif
 
     if (us > 100) {
@@ -91,14 +90,12 @@ uint32_t micros(void) {
     tick_per_us = 83333;
 #elif defined(BOARD_RTL8195AM)
     tick_per_us = 166666;
-#elif defined(BOARD_RTL8722DM)
+#elif defined(RTL8722DM)
     tick_per_us = 200000;
-#elif defined(BOARD_RTL8722DM_MINI)
-    tick_per_us = 200000;
-#elif defined(BOARD_RTL8720DN_BW16)
-    tick_per_us = 200000;
+#elif defined(ARDUINO_AMBPRO2)
+    tick_per_us = 500000;
 #else
-    tick_per_us = 200000;
+#error "micros(): Unknown chip frequency"
 #endif
 
     if (__get_ipsr__() == 0) {
