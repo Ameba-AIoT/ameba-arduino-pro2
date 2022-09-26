@@ -24,7 +24,7 @@ ameba_rtl8735b.build.f_cpu=500000000L
 ameba_rtl8735b.build.usb_product="AMB82-MINI"
 ameba_rtl8735b.build.board=AMEBA
 ameba_rtl8735b.build.core=ambpro2
-ameba_rtl8735b.build.extra_flags=
+ameba_rtl8735b.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
 ameba_rtl8735b.build.ldscript=linker_scripts/gcc/rtl8735b_ram.ld
 ameba_rtl8735b.build.variant=amb82-mini
 

@@ -59,7 +59,7 @@ compiler.ar.flags=rcs
 compiler.ld_flags=
 
 ### this can be overriden in boards.txt
-build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+build.extra_flags=
 
 ###These can be overridden in platform.local.txt
 compiler.c.extra_flags=
