@@ -1,6 +1,7 @@
 
 menu.AutoUploadMode=Auto Upload Mode
 menu.EraseFlash=Erase Flash
+menu.VideoModeInit=Video Init
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -37,4 +38,8 @@ ameba_rtl8735b.menu.AutoUploadMode.Disable.build.auto_upload_mode=Disable
 ameba_rtl8735b.menu.AutoUploadMode.Enable=Enable
 ameba_rtl8735b.menu.AutoUploadMode.Enable.build.auto_upload_mode=Enable
 
+ameba_rtl8735b.menu.VideoModeInit.Enable=Enable
+ameba_rtl8735b.menu.VideoModeInit.Enable.build.video_init=Enable
+ameba_rtl8735b.menu.VideoModeInit.Disable=Disable
+ameba_rtl8735b.menu.VideoModeInit.Disable.build.video_init=Disable
 ##############################################################

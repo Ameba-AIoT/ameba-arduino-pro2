@@ -90,5 +90,3 @@ void AMB_RTC::DisableAlarm(void) {
     rtc_disable_alarm();
     printf("Alarm disabled\r\n");
 }
-
-
