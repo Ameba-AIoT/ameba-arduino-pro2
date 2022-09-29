@@ -17,8 +17,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef WiFi_h_asdafec
-#define WiFi_h_asdafec
+#ifndef WiFi_h
+#define WiFi_h
 
 #include <Arduino.h>
 #include <inttypes.h>

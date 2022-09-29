@@ -92,13 +92,13 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmd = "copy misc\\image\\voe.bin .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
+//    cmd = "copy misc\\image\\voe.bin .\\";
+//    cout << cmd << endl;
+//    system(cmd.c_str());
 
-    cmd = "copy misc\\image\\firmware_isp_iq.bin .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
+//    cmd = "copy misc\\image\\firmware_isp_iq.bin .\\";
+//    cout << cmd << endl;
+//    system(cmd.c_str());
 
     cmd = "copy misc\\image\\boot.bin .\\";
     cout << cmd << endl;
@@ -124,13 +124,43 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmd = "copy misc\\image\\amebapro2_firmware.json .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
+    if (video_init_user_selection == "Enable") {
+        cmd = "copy misc\\video_img\\voe.bin .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
 
-    cmd = "copy misc\\image\\amebapro2_firmware_NA_cam.json .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
+        cmd = "copy misc\\image\\amebapro2_firmware.json .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\amebapro2_isp_iq.json .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\amebapro2_sensor_set.json .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\fcs_data_dummy.bin .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\iq.bin .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\sensor_jxf37.bin .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\sensor_fixp.bin .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+    } else {
+        cmd = "copy misc\\image\\amebapro2_firmware_NA_cam.json .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+    }
 
     // 2. copy elf application.ntz to current folder
     cmdss.clear();
@@ -226,15 +256,23 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     // 8. generate .bin
-    cmdss.clear();
     if (video_init_user_selection == "Enable") {
-        cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
+        cmd = ".\\misc\\elf2bin.exe convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = ".\\misc\\elf2bin.exe convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = ".\\misc\\elf2bin.exe convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
     } else {
-        cmdss << ".\\misc\\elf2bin.exe " << "convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
+        cmd = ".\\misc\\elf2bin.exe convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
     }
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
 
     if (video_init_user_selection == "Enable") {
         //cmd = "cp firmware_ntz.bin firmware.bin";

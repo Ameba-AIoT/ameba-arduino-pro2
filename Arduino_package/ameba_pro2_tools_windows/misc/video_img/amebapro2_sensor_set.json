@@ -1,0 +1,165 @@
+{
+    "msg_level":3,
+
+	"PROFILE":["ISP_SENSOR_SETS"],
+	"ISP_SENSOR_SETS":{
+        "multi_fcs_hdr": "MULTI_FCS_HDR",
+        "multi_fcs_info": "MULTI_FCS_INFO",
+        "sensor_sets":[
+			"SENSOR_SET9"
+		]
+	},
+    "MULTI_FCS_HDR":{
+        "km_init_timeout": 5000
+    },
+	"SENSOR_SET0":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor.bin"
+        }
+    },
+	"SENSOR_SET1":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_sc2336.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_sc2336.bin"        
+        }
+    },
+    "SENSOR_SET2":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_gc2053.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_gc2053.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_gc2053.bin"        
+        }   
+    },
+	"SENSOR_SET3":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_gc4653.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_gc4653.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_gc4653.bin"        
+        }
+    },
+	"SENSOR_SET4":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_mis2008.bin"        
+        }
+    },
+	"SENSOR_SET5":{
+        "merge_en": false,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_ps5258.bin"        
+        }
+    },
+	"SENSOR_SET6":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_jxf51.bin"        
+        }
+    },
+	"SENSOR_SET7":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_sc301.bin"        
+        }
+    },
+	"SENSOR_SET8":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_imx307.bin"        
+        }
+    },
+	"SENSOR_SET9":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq.bin"        
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_fixp.bin"        
+        }
+    }
+}
