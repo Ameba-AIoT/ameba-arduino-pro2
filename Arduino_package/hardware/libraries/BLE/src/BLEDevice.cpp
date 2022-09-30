@@ -52,8 +52,8 @@ uint8_t BLEDevice::tx_phys = GAP_PHYS_PREFER_2M_BIT;
 uint8_t BLEDevice::rx_phys = GAP_PHYS_PREFER_2M_BIT;
 T_GAP_PHYS_OPTIONS BLEDevice::phy_options = GAP_PHYS_OPTIONS_CODED_PREFER_NO;
 
-//const u8 ftl_phy_page_num = 3;
-//const u32 ftl_phy_page_start_addr = BT_FTL_BKUP_ADDR;
+const u8 ftl_phy_page_num = 3;
+const u32 ftl_phy_page_start_addr = BT_FTL_BKUP_ADDR;
 
 BLEDevice::BLEDevice() {
 }
@@ -76,7 +76,7 @@ void BLEDevice::init() {
         printf("BT Stack already on\r\n");
     } else {
         bt_trace_init();
-//        ftl_init(ftl_phy_page_start_addr, ftl_phy_page_num);
+        ftl_init(ftl_phy_page_start_addr, ftl_phy_page_num);
         bte_init();
     }
 }
