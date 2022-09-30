@@ -135,8 +135,8 @@ int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP,
         iClient->print("Host: ");
         iClient->print(aServerName);
         if (aPort != kHttpPort) {
-          	iClient->print(":");
-          	iClient->print(aPort);
+            iClient->print(":");
+            iClient->print(aPort);
         }
         iClient->println();
     }

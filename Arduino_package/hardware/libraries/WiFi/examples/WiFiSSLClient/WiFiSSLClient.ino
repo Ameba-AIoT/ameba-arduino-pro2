@@ -51,7 +51,7 @@ void setup() {
     printWifiStatus();
 
     Serial.println("\nStarting connection to server...");
-	client.setRootCA((unsigned char*)rootCABuff);
+    client.setRootCA((unsigned char*)rootCABuff);
     // if a connection is formed, report back via serial
     if (client.connect(HTTPS_SERVER, 443)) {
         Serial.println("connected to server");

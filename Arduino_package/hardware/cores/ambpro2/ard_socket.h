@@ -4,7 +4,6 @@
 #include <inttypes.h>
 #include <stddef.h>
 
-
 int start_server(uint16_t port, uint8_t protMode);
 
 //int start_server_v6(uint16_t port, uint8_t protMode);

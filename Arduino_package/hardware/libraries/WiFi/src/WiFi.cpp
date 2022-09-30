@@ -187,7 +187,6 @@ uint8_t WiFiClass::status()
     return WiFiDrv::getConnectionStatus();
 }
 
-
 int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult)
 {
     return WiFiDrv::getHostByName(aHostname, aResult);
@@ -198,7 +197,6 @@ int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult)
 //    printf("[INFO]wifi.cpp: hostByNamev6()\n\r");
 //    return WiFiDrv::getHostByNamev6(aHostname, aResult);
 //}
-
 
 int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid)
 {

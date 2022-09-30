@@ -10,8 +10,6 @@
 #define UDP_SERVER_PORT 5002
 #define TCP_SERVER_PORT 5003
 
-
-
 //static int EXAMPLE_IPV6 = 0;
 
 int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
@@ -206,7 +204,6 @@ int start_server(uint16_t port, uint8_t protMode) {
         return -1;
     }
     //lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
-	
     return _sock;
 }
 
@@ -407,13 +404,13 @@ int sendto_data_v6(int sock, const void *send_data, size_t len, uint32_t peer_ip
     int ret = 0;
     struct sockaddr_in6 peer_addr;
 
-	peer_ip = peer_ip;
-	peer_port = peer_port;
+    peer_ip = peer_ip;
+    peer_port = peer_port;
 
     memset(&peer_addr, 0, sizeof(peer_addr));
     peer_addr.sin6_family = AF_INET6;
     peer_addr.sin6_port = htons(UDP_SERVER_PORT);
-	inet_pton(AF_INET6, (char*)peer_ip, &(peer_addr.sin6_addr));
+    inet_pton(AF_INET6, (char*)peer_ip, &(peer_addr.sin6_addr));
 
     ret = lwip_sendto(sock, send_data, len, 0, ((struct sockaddr *)&peer_addr), sizeof(peer_addr));
 
@@ -466,8 +463,8 @@ int get_receive_v6(int sock, void *recv_data, int len, int flags, uint32_t *peer
     struct sockaddr_in6 peer_addr;
     unsigned int peer_len = sizeof(struct sockaddr_in6);
 
-	peer_ip = peer_ip;
-	peer_port = peer_port;
+    peer_ip = peer_ip;
+    peer_port = peer_port;
 
     ret = lwip_recvfrom(sock, recv_data, len, flags, ((struct sockaddr *)&peer_addr), &peer_len);
     //printf("get_rec_v6 lwip_recvfrom: %d\r\n", ret);
@@ -507,4 +504,3 @@ void ipv6_udp_server(void) {
     return;
 }
 #endif
-

@@ -67,7 +67,6 @@ void loop() {
     }
 }
 
-
 void printWifiStatus() {
     // print the SSID of the network you're attached to:
     Serial.print("SSID: ");

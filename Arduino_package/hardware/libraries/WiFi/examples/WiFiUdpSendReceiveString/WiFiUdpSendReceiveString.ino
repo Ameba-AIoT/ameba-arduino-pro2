@@ -1,4 +1,3 @@
-
 /*
   WiFi UDP Send and Receive String
 
@@ -12,7 +11,6 @@
  by dlf (Metodo2 srl)
 
  */
-
 
 #include <WiFi.h>
 #include <WiFiUdp.h>
@@ -87,7 +85,6 @@ void loop() {
         Udp.endPacket();
     }
 }
-
 
 void printWifiStatus() {
     // print the SSID of the network you're attached to:

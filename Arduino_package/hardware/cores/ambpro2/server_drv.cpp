@@ -140,7 +140,7 @@ void ServerDrv::stopSocket(int sock) {
 
 bool ServerDrv::sendData(int sock, const uint8_t *data, uint16_t len) {
     //printf("[info] server_drv.cpp sendData()");
-	
+
     int ret;
     int flag = 0;
 
@@ -178,9 +178,7 @@ void ServerDrv::getRemoteData(int sock, uint32_t *ip, uint16_t *port) {
     sock = sock;
     *ip = _peer_addr;
     *port = _peer_port;
-
 }
-
 
 int ServerDrv::setSockRecvTimeout(int sock, int timeout) {
     return set_sock_recv_timeout(sock, timeout);
@@ -196,8 +194,6 @@ int ServerDrv::getIPv6Status() {
 }
 
 void ServerDrv::setIPv6UDPServer(void) {
-
-
     ipv6_udp_server();
 }
 #endif

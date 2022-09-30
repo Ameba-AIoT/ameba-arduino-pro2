@@ -2,7 +2,6 @@
 #include "WiFiSSLClient.h"
 #include "errno.h"
 
-
 extern "C" {
     #include "wl_definitions.h"
     #include "wl_types.h"

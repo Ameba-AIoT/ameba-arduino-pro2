@@ -13,7 +13,6 @@ extern "C" {
 #include "WiFiServer.h"
 #include "server_drv.h"
 
-
 WiFiClient::WiFiClient() : _sock(MAX_SOCK_NUM) {
     _is_connected = false;
     recvTimeout = 3000;

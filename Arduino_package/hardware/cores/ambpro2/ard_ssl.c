@@ -42,17 +42,17 @@ static int my_verify(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *fla
 
 static void* my_calloc(size_t nelements, size_t elementSize)
 {
-	size_t size;
-	void *ptr = NULL;
+    size_t size;
+    void *ptr = NULL;
 
-	size = nelements * elementSize;
-	ptr = pvPortMalloc(size);
-//	ptr = malloc(size);
+    size = nelements * elementSize;
+    ptr = pvPortMalloc(size);
+//  ptr = malloc(size);
 
-	if(ptr)
-		memset(ptr, 0, size);
+    if(ptr)
+        memset(ptr, 0, size);
 
-	return ptr;
+    return ptr;
 }
 
 static void my_debug(void *ctx, int level, const char *file, int line, const char *str )
@@ -70,8 +70,8 @@ static void my_debug(void *ctx, int level, const char *file, int line, const cha
 
 //Adding definition here as complier was not able to find this function
 int mbedtls_ssl_conf_psk(mbedtls_ssl_config *conf,
-						 const unsigned char *psk, size_t psk_len,
-						 const unsigned char *psk_identity, size_t psk_identity_len);
+                        const unsigned char *psk, size_t psk_len,
+                        const unsigned char *psk_identity, size_t psk_identity_len);
 
 int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t port, unsigned char* rootCABuff, unsigned char* cli_cert, unsigned char* cli_key, unsigned char* pskIdent, unsigned char* psKey, char* SNI_hostname)
 {
@@ -408,5 +408,3 @@ int get_ssl_bytes_avail(sslclient_context *ssl_client) {
         return 0;
     }
 }
-
-

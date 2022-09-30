@@ -19,7 +19,7 @@ const int kNetworkDelay = 1000;
 int status = WL_IDLE_STATUS;
 
 void setup() {
-    Serial.begin(115200); 
+    Serial.begin(115200);
 
     while ( status != WL_CONNECTED) { 
         Serial.print("Attempting to connect to SSID: ");
@@ -27,7 +27,7 @@ void setup() {
         status = WiFi.begin(ssid, pass);
         // wait 10 seconds for connection:
         delay(10000);
-    } 
+    }
     Serial.println("\n\rConnected to wifi");
     printWifiStatus();
 }

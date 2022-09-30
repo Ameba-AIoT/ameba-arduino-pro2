@@ -213,7 +213,6 @@ void WiFiUDP::flush() {
     while((read() > 0));
 }
 
-
 IPAddress WiFiUDP::remoteIP() {
     uint32_t _remoteIp;
     uint16_t _remotePort;
@@ -239,7 +238,6 @@ void WiFiUDP::setRecvTimeout(int timeout) {
         serverDrv.setSockRecvTimeout(_sock, timeout);
     }
 }
-
 
 // IPv6 related
 //int WiFiUDP::enableIPv6() {

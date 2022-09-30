@@ -35,7 +35,6 @@ void setup() {
     printWifiStatus();
 }
 
-
 void loop() {
     // listen for incoming clients
     WiFiClient client = server.available();
@@ -88,7 +87,6 @@ void loop() {
         Serial.println("client disonnected");
     }
 }
-
 
 void printWifiStatus() {
     // print the SSID of the network you're attached to:

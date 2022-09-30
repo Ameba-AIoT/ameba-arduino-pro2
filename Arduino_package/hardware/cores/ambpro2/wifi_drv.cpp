@@ -6,7 +6,6 @@
 #include "wiring.h"
 #include "wifi_conf.h"
 
-
 #undef CONFIG_LWIP_DHCP_COARSE_TIMER //Remove redfinition warning
 #ifdef __cplusplus
 extern "C" {
@@ -56,7 +55,6 @@ IPAddress WiFiDrv::_arduinoDns1;
 IPAddress WiFiDrv::_arduinoDns2;
 bool WiFiDrv::_useStaticIp = false;
 char WiFiDrv::_hostname[HOSTNAME_LEN+1] = {0};
-
 
 static void init_wifi_struct(void)
 {
@@ -725,7 +723,3 @@ const char* WiFiDrv::getHostname() {
 #endif
 
 WiFiDrv wiFiDrv;
-
-
-
-

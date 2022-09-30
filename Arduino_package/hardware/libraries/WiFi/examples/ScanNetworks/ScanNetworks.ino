@@ -1,5 +1,4 @@
 /*
-
  This example  prints the Wifi shield's MAC address, and
  scans for available Wifi networks using the Wifi shield.
  Every ten seconds, it scans again. It doesn't actually
@@ -13,7 +12,6 @@
  modified 21 Junn 2012
  by Tom Igoe and Jaymes Dec
  */
-
 
 #include <WiFi.h>
 
@@ -151,4 +149,3 @@ void printEncryptionType(int thisType) {
     }
     Serial.println();
 }
-

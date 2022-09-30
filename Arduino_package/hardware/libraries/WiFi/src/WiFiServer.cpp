@@ -147,4 +147,3 @@ int WiFiServer::getIPv6Status() {
     return serverdrv.getIPv6Status();
 }
 #endif
-

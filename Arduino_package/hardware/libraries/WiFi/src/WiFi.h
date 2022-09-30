@@ -139,15 +139,12 @@ class WiFiClass
          */
         IPAddress localIP();
 
-
-
          /*
          * Get the interface IPv6 address.
          *
          * return: Ipv6 address value
          */
         void printLocalIPv6();
-
 
         /*
          * Get the interface subnet mask address.
@@ -243,7 +240,6 @@ class WiFiClass
          */
         uint8_t status();
 
-
         /*
          * Resolve the given hostname to an IP address.
          * param aHostname: Name to be resolved
@@ -264,7 +260,6 @@ class WiFiClass
         int hostByNamev6(const char* aHostname, IPv6Address& aResult);
 #endif
 
-
         int apbegin(char* ssid, char* channel, uint8_t hidden_ssid = 0);
 
         int apbegin(char* ssid, char* password, char* channel, uint8_t hidden_ssid = 0);
@@ -275,7 +270,6 @@ class WiFiClass
         void setHostname(const char* hostname);
 
         const char* getHostname();
-		
 
 //        friend class WiFiClient;
 //        friend class WiFiServer;
