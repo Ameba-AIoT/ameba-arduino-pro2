@@ -122,6 +122,8 @@
 
 #define VOE_ISP_GET_3A_STATIS			 0x24D
 
+#define VOE_ISP_GET_REAL_FPS			 0x24E
+
 //OSD
 #define VOE_OSD_QUERY                    0x260
 #define VOE_OSD_UPDATE                   0x261

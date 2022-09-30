@@ -61,22 +61,28 @@ struct osd_info {
 
 enum rts_osd_err_code rts_osd_set_info(int osd_type, void *osd_info);
 void rts_osd_init_wo_sntp(int chn_id, int char_resize_w, int char_resize_h, int timezone_s);
-void rts_osd_init(int chn_id, int char_resize_w, int char_resize_h, int timezone_s);
+enum rts_osd_err_code rts_osd_init(int chn_id, int char_resize_w, int char_resize_h, int timezone_s);
 int rts_osd_text2bmp(char *str, BITMAP_S *pbmp, int ch, int fontlib_idx);
 enum rts_osd_err_code rts_osd_rect_gen_with_txt(BITMAP_S *txt_bitmap, void *buf, int pic_w, int pic_h, struct osd_rect_info_st rect_info, int update_rect);
-int rts_osd_get_timezone();
+enum rts_osd_err_code rts_osd_rect_gen(void *buf, int pic_w, int pic_h, struct osd_rect_info_st rect_info, int update_rect);
+int rts_osd_get_timezone(void);
 void rts_osd_set_timezone(int timezone_s);
-void rts_osd_isp_refresh_datetime();
+void rts_osd_isp_refresh_datetime(void);
 void rts_osd_block_hide(int chn_id, int idx);
 void rts_osd_block_show(int chn_id, int idx);
 void rts_osd_bitmap_update(int ch, rt_osd2_info_st *posd2_pic, BOOL ready2update);
 void rts_osd_hide_bitmap(int ch, rt_osd2_info_st *posd2_pic);
+int  rts_osd_get_status(int chn_id);
+void rts_osd_get_txt_w_h(int chn_id, int *char_resize_w, int *char_resize_h);
+int  rts_osd_release_init_protect(void);
 void rts_osd_deinit(int chn_id);
 void rts_osd_task(void *arg);
 enum rts_osd_err_code rts_set_char_size(int chn_id, int char_resize_w, int char_resize_h);
+enum rts_osd_err_code rts_set_font_char_size(int chn_id, int char_resize_w, int char_resize_h, void *font_eng, void *font_chi);
 void rts_osd_set_log_type(int log_type);
 enum rts_osd_err_code rts_osd_set_frame_size(int chn_id, int frame_w, int frame_h);
 void rts_osd_stroke(uint8_t *dst, uint8_t *src, int width, int height, int ch_color, int stroke_color, enum rts_osd2_blk_fmt blk_fmt);
 void rts_osd_sync_from_sntp(int sntp_en);
+enum rts_osd_err_code rts_osd_get_available_block(int ch, int *num, int *available_block_idx);
 
 #endif	// OSD_API_H

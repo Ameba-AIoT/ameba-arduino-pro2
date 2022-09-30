@@ -902,6 +902,15 @@ int wifi_wowlan_set_wowlan_param(u8  fwdis_period,
 								 u8  l2_keepalive_period);
 #endif
 
+#ifdef CONFIG_ARP_REQUEST_KEEP_ALIVE
+int wifi_wowlan_set_arpreq_keepalive(u8  powerbit,
+									 u8  dtim1to);
+#endif
+
+#ifdef CONFIG_WOWLAN_IO_WDT
+int wifi_wowlan_set_wdt(u8  gpio,
+						u8  interval);
+#endif
 
 // WoWlan related
 //-------------------------------------------------------------//

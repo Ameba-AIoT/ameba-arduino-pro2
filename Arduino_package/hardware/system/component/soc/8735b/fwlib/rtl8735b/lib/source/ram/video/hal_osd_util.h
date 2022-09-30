@@ -260,6 +260,7 @@ typedef struct {
 	int flick_enable;
 	uint32_t show_time;
 	uint32_t hide_time;
+	uint8_t RSVD[12];
 } rt_osd2_info_st;
 
 typedef struct {

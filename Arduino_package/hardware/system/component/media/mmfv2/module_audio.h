@@ -17,6 +17,17 @@
 #define CONFIG_MMF_AUDIO_DEBUG 0
 #define CONFIG_MMF_AUDIO_ATAF 1
 
+#define AUDIO_INF_EN    0
+#if AUDIO_INF_EN
+#define AUDIO_INFO_PREFIX        "[AUDIO Inf]"
+#define AUDIO_INFO(...)													\
+			do {														\
+				printf("\n\r" AUDIO_INFO_PREFIX __VA_ARGS__);			\
+			}while(0)
+#else
+#define AUDIO_INFO(...)
+#endif
+
 
 typedef enum {
 	USE_AUDIO_AMIC = 0,
@@ -65,20 +76,12 @@ typedef enum {
 #define CMD_AUDIO_SET_SPK_ENABLE		MM_MODULE_CMD(0x20)
 
 #endif
-#define CMD_AUDIO_APPLY				MM_MODULE_CMD(0x21)  // for hardware module
+#define CMD_AUDIO_SET_TIMESTAMP_OFFSET	MM_MODULE_CMD(0x21)
+#define CMD_AUDIO_GET_FRAMESIZE_MS     	MM_MODULE_CMD(0x22)
+
+#define CMD_AUDIO_APPLY				    MM_MODULE_CMD(0x30)  // for hardware module
 
 #define USE_DEFAULT_AUDIO_SET			1	//Use the default setting of audio module defined in module_audio.c
-
-#if defined(CONFIG_PLATFORM_8735B)
-typedef struct eq_cof_s {
-	uint32_t eq_enable;
-	uint32_t eq_h0;
-	uint32_t eq_b1;
-	uint32_t eq_b2;
-	uint32_t eq_a1;
-	uint32_t eq_a2;
-} eq_cof_t;
-#endif
 
 #if defined(CONFIG_PLATFORM_8721D)	//amebad
 typedef struct {
@@ -92,60 +95,11 @@ typedef struct audio_param_s {
 	uint32_t mono_stereo;
 	uint32_t direction;
 	uint32_t enable_aec;		// 0
-	uint32_t mix_mode;		// 0
+	uint32_t mix_mode;		    // 0
 } audio_params_t;
-#else	//amebapro and amebapro2
-typedef struct audio_param_s {
-	audio_sr        sample_rate;	// ASR_8KHZ
-	audio_wl        word_length;	// WL_16BIT
-	audio_mic_gain  mic_gain;		// MIC_40DB
-	audio_dmic_gain dmic_l_gain;    // DMIC_BOOST_24DB
-	audio_dmic_gain dmic_r_gain;    // DMIC_BOOST_24DB
-
-	int				channel;		// 1
-	int				enable_aec;		// 0: off  1: on
-	int				enable_ns;		// 0: off, 1: out 2: in 3: in/out
-	int				enable_agc;		// 0: off, 1: output agc
-	int				enable_vad;		// 0: off  1: input vad
-	int				mix_mode;		// 0
-	uint8_t				use_mic_type;   	// 0: AMIC 1: DMIC
-
-#if defined(CONFIG_PLATFORM_8735B) //TODO: test on other platform
-	int			enable_record;
-	int 			NS_level;
-	int 			NS_level_SPK;
-	int 			ADC_gain;
-	int 			DAC_gain;
-	int16_t 		AEC_CNG_EN;			// enable comfortable noise or not
-	int 			AEC_sdelay_ms;			// 0 ~ 500
-	int 			AEC_level;			// 0 ~ 4
-	int 			AGC_mode;			// 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
-	int 			AGC_targetLevelDbfs;		// target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
-	int 			AGC_compression_gain_db;	// 0~60
-	int				AGC_AttackTime ;	//800-2000msec
-	int				AGC_ReleaseTime ;   //800-2000msec
-	int 			AGC_limiter_enable;		// enable limiter (means the boost will be limit in target level)
-	int 			AGC_mode_SPK;			// 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
-	int 			AGC_targetLevelDbfs_SPK;	// target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
-	int 			AGC_compression_gain_db_SPK;	// 0~60
-	int 			AGC_limiter_enable_SPK;		// enable limiter (means the boost will be limit in target level)
-	int				AGC_AttackTime_SPK;	//800-2000msec
-	int				AGC_ReleaseTime_SPK;   //800-2000msec
-	int 			mic_bias; 			// 0:0.9 1:0.86 2:0.75
-	int 			hpf_set; 			// 0~7
-	eq_cof_t        	mic_l_eq[5];
-	eq_cof_t        	mic_r_eq[5];
-	eq_cof_t        	spk_l_eq[5];
-#endif
-	//...
-} audio_params_t;
-#endif
 
 typedef struct audio_ctx_s {
 	void             *parent;
-#if !defined(CONFIG_PLATFORM_8721D)	//amebapro
-	audio_t          *audio;
-#endif
 
 	audio_params_t    params;
 
@@ -174,10 +128,216 @@ typedef struct audio_ctx_s {
 	uint32_t		audio_frame;
 	uint32_t		drop_frame_total;
 	uint32_t		audio_frame_total;
-#if defined(CONFIG_PLATFORM_8735B)
-	void (*mic_record_file)(void *, void *, void *, void *);
-#endif
 } audio_ctx_t;
+#elif defined(CONFIG_PLATFORM_8195BHP) //amebapro
+typedef struct audio_param_s {
+	audio_sr        sample_rate;	// ASR_8KHZ
+	audio_wl        word_length;	// WL_16BIT
+	audio_mic_gain  mic_gain;		// MIC_40DB
+
+	int				channel;		// 1
+	int				mix_mode;		// 0
+	uint8_t			use_mic_type;   // 0: AMIC 1: DMIC
+
+	int			    enable_record;
+
+	int				enable_aec;		// 0: off  1: on
+	int				enable_ns;		// 0: off, 1: out 2: in 3: in/out
+	int				enable_agc;		// 0: off, 1: output agc
+	int				enable_vad;		// 0: off  1: input vad
+	int 			NS_level;
+	int 			NS_level_SPK;
+	int 			ADC_gain;
+	int 			DAC_gain;
+	int16_t 		AEC_CNG_EN;			// enable comfortable noise or not
+	int 			AEC_sdelay_ms;			// 0 ~ 500
+	int 			AEC_level;			// 0 ~ 4
+	int 			AGC_mode;			// 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
+	int 			AGC_targetLevelDbfs;		// target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
+	int 			AGC_compression_gain_db;	// 0~60
+	int 			AGC_limiter_enable;		// enable limiter (means the boost will be limit in target level)
+	int 			AGC_mode_SPK;			// 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
+	int 			AGC_targetLevelDbfs_SPK;	// target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
+	int 			AGC_compression_gain_db_SPK;	// 0~60
+	int 			AGC_limiter_enable_SPK;		// enable limiter (means the boost will be limit in target level)
+	//...
+} audio_params_t;
+
+typedef struct audio_ctx_s {
+	void             *parent;
+
+	audio_t          *audio;
+	audio_params_t    params;
+
+	uint8_t			inited_aec;
+	uint8_t			inited_ns;
+	uint8_t			inited_agc;
+	uint8_t			inited_vad;
+
+	uint8_t			run_aec;
+	uint8_t			run_ns;
+	uint8_t			run_agc;
+	uint8_t			run_vad;
+
+	uint8_t			dmic_pin_set;
+
+	uint32_t		sample_rate;
+	uint8_t			word_length; // Byte
+
+	// for AEC
+	TaskHandle_t		aec_rx_task;
+	xSemaphoreHandle	aec_rx_done_sema;
+
+	//for drop frame debug
+	uint32_t		timer_1;
+	uint32_t		timer_2;
+	uint32_t		drop_frame;
+	uint32_t		audio_frame;
+	uint32_t		drop_frame_total;
+	uint32_t		audio_frame_total;
+	void (*mic_record_file)(void *, void *, void *, void *);
+
+	uint8_t         fcs_avsync_done;
+
+	uint32_t        audio_timestamp_offset;
+} audio_ctx_t;
+#elif defined(CONFIG_PLATFORM_8735B) //amebapro2
+typedef struct eq_cof_s {
+	uint32_t eq_enable;
+	uint32_t eq_h0;
+	uint32_t eq_b1;
+	uint32_t eq_b2;
+	uint32_t eq_a1;
+	uint32_t eq_a2;
+} eq_cof_t;
+#if defined(CONFIG_BUILD_CT) && CONFIG_BUILD_CT //CT AEC library only support on 8735
+typedef struct audio_param_s {
+	audio_sr        sample_rate;	// ASR_8KHZ
+	audio_wl        word_length;	// WL_16BIT
+	audio_mic_gain  mic_gain;		// MIC_40DB
+	audio_dmic_gain dmic_l_gain;    // DMIC_BOOST_24DB
+	audio_dmic_gain dmic_r_gain;    // DMIC_BOOST_24DB
+
+	int				channel;		// 1
+	int				mix_mode;		// 0
+	uint8_t			use_mic_type;   // 0: AMIC 1: DMIC
+	int 			mic_bias; 		// 0:0.9 1:0.86 2:0.75
+	int 			hpf_set; 		// 0~7
+	eq_cof_t        mic_l_eq[5];
+	eq_cof_t        mic_r_eq[5];
+	eq_cof_t        spk_l_eq[5];
+
+	int			    enable_record;
+	uint8_t         fcs_avsync_en;
+	uint32_t        fcs_avsync_vtime;
+
+	int				enable_aec;		// 0: off  1: on
+	int				enable_ns;		// 0: off, 1: out 2: in 3: in/out
+	int				enable_agc;		// 0: off, 1: output agc
+	int				enable_vad;		// 0: off  1: input vad
+	int 			NS_level;
+	int 			NS_level_SPK;
+	int 			ADC_gain;
+	int 			DAC_gain;
+	int16_t 		AEC_CNG_EN;			        // enable comfortable noise or not
+	int16_t 		AEC_CNGInitialLvl;
+	int16_t 		AEC_CNGAdjustLvl;
+	int 			AEC_sdelay_ms;			    // 0 ~ 500
+	int 			AEC_level;			        // 0 ~ 4
+	int 			AGC_mode;			        // 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
+	int 			AGC_targetLevelDbfs;		// target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
+	int 			AGC_compression_gain_db;	// 0~60
+	int				AGC_AttackTime ;	        //800-2000msec
+	int				AGC_ReleaseTime ;           //800-2000msec
+	int 			AGC_mode_SPK;			    // 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
+	int 			AGC_targetLevelDbfs_SPK;	    // target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
+	int 			AGC_compression_gain_db_SPK;	// 0~60
+	int				AGC_AttackTime_SPK;	   //800-2000msec
+	int				AGC_ReleaseTime_SPK;   //800-2000msec
+	//...
+} audio_params_t;
+#else	//amebapro2 with webrtc
+typedef struct audio_param_s {
+	audio_sr        sample_rate;	// ASR_8KHZ
+	audio_wl        word_length;	// WL_16BIT
+	audio_mic_gain  mic_gain;		// MIC_40DB
+	audio_dmic_gain dmic_l_gain;    // DMIC_BOOST_24DB
+	audio_dmic_gain dmic_r_gain;    // DMIC_BOOST_24DB
+
+	int				channel;		// 1
+	int				mix_mode;		// 0
+	uint8_t			use_mic_type;   // 0: AMIC 1: DMIC
+	int 			mic_bias; 		// 0:0.9 1:0.86 2:0.75
+	int 			hpf_set; 		// 0~7
+	eq_cof_t        mic_l_eq[5];
+	eq_cof_t        mic_r_eq[5];
+	eq_cof_t        spk_l_eq[5];
+
+	int			    enable_record;
+	uint8_t         fcs_avsync_en;
+	uint32_t        fcs_avsync_vtime;
+
+	int				enable_aec;		// 0: off  1: on
+	int				enable_ns;		// 0: off, 1: out 2: in 3: in/out
+	int				enable_agc;		// 0: off, 1: output agc
+	int				enable_vad;		// 0: off  1: input vad
+	int 			NS_level;
+	int 			NS_level_SPK;
+	int 			ADC_gain;
+	int 			DAC_gain;
+	int16_t 		AEC_CNG_EN;			    // enable comfortable noise or not
+	int 			AEC_sdelay_ms;			// 0 ~ 500
+	int 			AEC_level;			    // 0 ~ 4
+	int 			AGC_mode;			    // 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
+	int 			AGC_targetLevelDbfs;		// target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
+	int 			AGC_compression_gain_db;	// 0~60
+	int 			AGC_limiter_enable;		// enable limiter (means the boost will be limit in target level)
+	int 			AGC_mode_SPK;			// 0: Unchanged, 1: kAgcModeAdaptiveAnalog, 2: kAgcModeAdaptiveDigital, 3: kAgcModeFixedDigital
+	int 			AGC_targetLevelDbfs_SPK;	    // target output level of AGC 0~31 (set 5 means output compressed to -5dBFS)
+	int 			AGC_compression_gain_db_SPK;	// 0~60
+	int 			AGC_limiter_enable_SPK;		    // enable limiter (means the boost will be limit in target level)
+	//...
+} audio_params_t;
+#endif
+typedef struct audio_ctx_s {
+	void             *parent;
+
+	audio_t          *audio;
+	audio_params_t    params;
+
+	uint8_t			inited_aec;
+	uint8_t			inited_ns;
+	uint8_t			inited_agc;
+	uint8_t			inited_vad;
+
+	uint8_t			run_aec;
+	uint8_t			run_ns;
+	uint8_t			run_agc;
+	uint8_t			run_vad;
+
+	uint8_t			dmic_pin_set;
+
+	uint32_t		sample_rate;
+	uint8_t			word_length; // Byte
+
+	// for AEC
+	TaskHandle_t		aec_rx_task;
+	xSemaphoreHandle	aec_rx_done_sema;
+
+	//for drop frame debug
+	uint32_t		timer_1;
+	uint32_t		timer_2;
+	uint32_t		drop_frame;
+	uint32_t		audio_frame;
+	uint32_t		drop_frame_total;
+	uint32_t		audio_frame_total;
+	void (*mic_record_file)(void *, void *, void *, void *);
+
+	uint8_t         fcs_avsync_done;
+
+	uint32_t        audio_timestamp_offset;
+} audio_ctx_t;
+#endif
 
 extern audio_params_t default_audio_params;
 
