@@ -30,7 +30,7 @@ int check_flash_erase = 0;
 int check_image_upload = 0;
 int check_download_process = 0;
 
-string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed, serial_port, auto_tool_name, flash_tool_name;
+string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed, serial_port, auto_tool_name, flash_tool_name, video_init_user_selection;
 
 void download_process(void) {
     if (check_flash_erase == 100) {
@@ -43,7 +43,11 @@ void download_process(void) {
     }
     if (check_image_upload == 100) {
         cmdss.clear();
-        cmdss << ".\\image_tool\\" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -r ";
+        if (video_init_user_selection == "Enable") {
+            cmdss << ".\\image_tool\\" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -r ";
+        } else {
+            cmdss << ".\\image_tool\\" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -s 0x100000 -r ";
+        }
         getline(cmdss, cmd);
         //cout << cmd << endl;
         system(cmd.c_str());
@@ -92,11 +96,18 @@ int main(int argc, char *argv[]) {
     serial_port = argv[2];
     auto_tool_name = argv[8];
     flash_tool_name = argv[7];
+    video_init_user_selection = argv[9];
+
+    if (argv[9]) {
+        video_init_user_selection = argv[9];
+    } else {
+        video_init_user_selection = "Disable";
+    }
 
     if (auto_user_selection == "Enable") {
         cout << "    Enter Auto Flash Mode!" << endl;
         cmdss.clear();
-        cmdss << ".\\image_tool\\" << argv[8] << " .\\ " << argv[2] <<" 115200";
+        cmdss << ".\\image_tool\\" << auto_tool_name << " .\\ " << serial_port <<" 115200";
         getline(cmdss, cmd);
         //cout << cmd << endl;
         system(cmd.c_str());

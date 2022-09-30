@@ -59,7 +59,7 @@ compiler.ar.flags=rcs
 compiler.ld_flags=
 
 ### this can be overriden in boards.txt
-build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+build.extra_flags=
 
 ###These can be overridden in platform.local.txt
 compiler.c.extra_flags=
@@ -89,8 +89,7 @@ compiler.define=-DARDUINO
 
 # Ameba archive list
 # -------------------
-###"{runtime.platform.path}/variants/common_libs/libsoc_ntz.a"
-compiler.ameba.ar.list= "{runtime.platform.path}/variants/common_libs/libaec.a" "{runtime.platform.path}/variants/common_libs/libfaac.a" "{runtime.platform.path}/variants/common_libs/libfmp4.a" "{runtime.platform.path}/variants/common_libs/libg711.a" "{runtime.platform.path}/variants/common_libs/libhaac.a" "{runtime.platform.path}/variants/common_libs/libhmp3.a" "{runtime.platform.path}/variants/common_libs/libhttp.a" "{runtime.platform.path}/variants/common_libs/liblightsensor.a" "{runtime.platform.path}/variants/common_libs/libmmf.a" "{runtime.platform.path}/variants/common_libs/libmuxer.a" "{runtime.platform.path}/variants/common_libs/libnn.a" "{runtime.platform.path}/variants/common_libs/libopus.a" "{runtime.platform.path}/variants/common_libs/libopusenc.a" "{runtime.platform.path}/variants/common_libs/libopusfile.a" "{runtime.platform.path}/variants/common_libs/libqrcode.a" "{runtime.platform.path}/variants/common_libs/libsdcard.a" "{runtime.platform.path}/variants/common_libs/libusbd.a" "{runtime.platform.path}/variants/common_libs/libvideo_ntz.a" "{runtime.platform.path}/variants/common_libs/libwlan.a" "{runtime.platform.path}/variants/common_libs/libwps.a" "{runtime.platform.path}/variants/common_libs/btgap.a" "{runtime.platform.path}/variants/common_libs/hal_pmc.a" "{runtime.platform.path}/variants/common_libs/libarduino.a"
+compiler.ameba.ar.list= "{runtime.platform.path}/variants/common_libs/libaec.a" "{runtime.platform.path}/variants/common_libs/libfaac.a" "{runtime.platform.path}/variants/common_libs/libfmp4.a" "{runtime.platform.path}/variants/common_libs/libg711.a" "{runtime.platform.path}/variants/common_libs/libhaac.a" "{runtime.platform.path}/variants/common_libs/libhmp3.a" "{runtime.platform.path}/variants/common_libs/libhttp.a" "{runtime.platform.path}/variants/common_libs/liblightsensor.a" "{runtime.platform.path}/variants/common_libs/libmmf.a" "{runtime.platform.path}/variants/common_libs/libmuxer.a" "{runtime.platform.path}/variants/common_libs/libnn.a" "{runtime.platform.path}/variants/common_libs/libopus.a" "{runtime.platform.path}/variants/common_libs/libopusenc.a" "{runtime.platform.path}/variants/common_libs/libopusfile.a" "{runtime.platform.path}/variants/common_libs/libqrcode.a" "{runtime.platform.path}/variants/common_libs/libsdcard.a" "{runtime.platform.path}/variants/common_libs/libusbd.a" "{runtime.platform.path}/variants/common_libs/libvideo_ntz.a" "{runtime.platform.path}/variants/common_libs/libwlan.a" "{runtime.platform.path}/variants/common_libs/libwps.a" "{runtime.platform.path}/variants/common_libs/btgap.a" "{runtime.platform.path}/variants/common_libs/hal_pmc.a" "{runtime.platform.path}/variants/common_libs/libsoc_ntz.a" "{runtime.platform.path}/variants/common_libs/libarduino.a"
 
 
 # USB Flags
@@ -136,7 +135,7 @@ recipe.objcopy.hex.imagepath_appntzmap.windows="{build.path}\application.ntz.map
 recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
-recipe.objcopy.hex.pattern="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}"
+recipe.objcopy.hex.pattern="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.video_init}"
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"
@@ -157,7 +156,7 @@ recipe.output.save_file=flash_ntz.bin
 tools.ameba_pro2_tools.upload.params.verbose=
 tools.ameba_pro2_tools.upload.params.quiet=
 
-tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "{build.video_init}" {upload.verbose}
 
 #tools.ameba_pro2_tools.upload.pattern.linux="{ameba.tools_path}/upload_image_tool_linux" "{ameba.tools_path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "1500000" {upload.verbose}
 
