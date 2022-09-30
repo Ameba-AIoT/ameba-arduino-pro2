@@ -30,10 +30,10 @@ extern "C" {
 
 #include "IPAddress.h"
 //#include "IPv6Address.h"
-//#include "WiFiClient.h"
-//#include "WiFiServer.h"
-//#include "WiFiSSLClient.h"
-//#include "WiFiUdp.h"
+#include "WiFiClient.h"
+#include "WiFiServer.h"
+#include "WiFiSSLClient.h"
+#include "WiFiUdp.h"
 
 class WiFiClass
 {
@@ -243,7 +243,7 @@ class WiFiClass
          */
         uint8_t status();
 
-#if 0
+
         /*
          * Resolve the given hostname to an IP address.
          * param aHostname: Name to be resolved
@@ -253,6 +253,7 @@ class WiFiClass
          */
         int hostByName(const char* aHostname, IPAddress& aResult);
 
+#if 0
         /*
          * Resolve the given hostname to an IPv6 address.
          * param aHostname: Name to be resolved
@@ -261,11 +262,14 @@ class WiFiClass
          *          else return the error code
          */
         int hostByNamev6(const char* aHostname, IPv6Address& aResult);
+#endif
+
 
         int apbegin(char* ssid, char* channel, uint8_t hidden_ssid = 0);
 
         int apbegin(char* ssid, char* password, char* channel, uint8_t hidden_ssid = 0);
 
+#if 0
         int disablePowerSave();
 
         void setHostname(const char* hostname);

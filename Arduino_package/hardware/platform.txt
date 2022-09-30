@@ -7,11 +7,11 @@
 
 name=AmebaPro2 ARM (32-bits) Boards
 version=4.0.X
-toolchian_version=1.0.0
+toolchain_version=1.0.0
 
-toolchian_version_p1={toolchian_version}-p1
-toolchian_version_p2={toolchian_version}-p2
-toolchian_name=ameba_pro2_toolchain-{toolchian_version_p1}
+toolchain_version_p1={toolchain_version}-p1
+toolchain_version_p2={toolchain_version}-p2
+toolchain_name=ameba_pro2_toolchain-{toolchain_version_p1}
 
 # Ameba paths
 # ----------------------
@@ -25,8 +25,8 @@ ameba.proj_app_path={build.system.path}/project/realtek_amebapro2_v0_example/GCC
 ameba.ble_path={build.system.path}/component/bluetooth
 
 ## compiler/toolchain path
-compiler.path={runtime.tools.{toolchian_name}.path}/bin/
-toolchain.path={runtime.tools.{toolchian_name}.path}
+compiler.path={runtime.tools.{toolchain_name}.path}/bin/
+toolchain.path={runtime.tools.{toolchain_name}.path}
 
 ## tools path 
 ameba.tools_path={runtime.tools.ameba_pro2_tools.path}
@@ -101,7 +101,7 @@ build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANU
 
 
 #pre compile 
-recipe.hooks.sketch.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchian_version_p1} {toolchian_version_p2}
+recipe.hooks.sketch.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 
 
 # Ameba compile patterns
