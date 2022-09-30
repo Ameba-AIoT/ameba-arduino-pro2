@@ -187,17 +187,16 @@ uint8_t WiFiClass::status()
     return WiFiDrv::getConnectionStatus();
 }
 
-#if 0
 int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult)
 {
     return WiFiDrv::getHostByName(aHostname, aResult);
 }
 
-int WiFiClass::hostByNamev6(const char* aHostname, IPv6Address& aResult)
-{
-    printf("[INFO]wifi.cpp: hostByNamev6()\n\r");
-    return WiFiDrv::getHostByNamev6(aHostname, aResult);
-}
+//int WiFiClass::hostByNamev6(const char* aHostname, IPv6Address& aResult)
+//{
+//    printf("[INFO]wifi.cpp: hostByNamev6()\n\r");
+//    return WiFiDrv::getHostByNamev6(aHostname, aResult);
+//}
 
 int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid)
 {
@@ -238,6 +237,7 @@ int WiFiClass::apbegin(char* ssid, char* password, char* channel, uint8_t hidden
     return status;
 }
 
+#if 0
 int WiFiClass::disablePowerSave()
 {
     return WiFiDrv::disablePowerSave();

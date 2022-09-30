@@ -1,5 +1,4 @@
 /*
-
  This example connects to a WEP-encrypted Wifi network.
  Then it prints the  MAC address of the Wifi shield,
  the IP address obtained, and other network details.
