@@ -56,6 +56,8 @@
 #define MAX(a, b) (((a) > (b))?(a):(b))
 #endif
 
+#define TUNING_IQ_MAX_SIZE (256 * 1024)
+
 enum tuning_opcode {
 	MEM_READ = 0,
 	MEM_WRITE = 1,
@@ -172,6 +174,38 @@ struct tuning_isp_cmd {
 	uint16_t		param;
 	uint16_t		addr;
 } __attribute__((packed));
+
+enum RTS_USBDEXT_LOG_TYPE {
+	RTS_USBDEXT_LOG_IDX_STATUS = 0,
+	RTS_USBDEXT_LOG_IDX_DATADUMP
+};
+
+#define RTS_USBDEXT_LOG_MASK_IDX_STATUS		(0x1 << RTS_USBDEXT_LOG_IDX_STATUS)
+#define RTS_USBDEXT_LOG_MASK_IDX_DATADUMP	(0x1 << RTS_USBDEXT_LOG_IDX_DATADUMP)
+
+enum RTS_TUNING_LOG_TYPE {
+	RTS_TUNING_LOG_IDX_STATUS = 0,
+	RTS_TUNING_LOG_IDX_XMEM,
+	RTS_TUNING_LOG_IDX_TABLE_STA,
+	RTS_TUNING_LOG_IDX_TABLE_PARA,
+	RTS_TUNING_LOG_IDX_TABLE_IQ
+};
+
+#define RTS_TUNING_LOG_MASK_IDX_STATUS		(0x1 << RTS_TUNING_LOG_IDX_STATUS)
+#define RTS_TUNING_LOG_MASK_IDX_XMEM		(0x1 << RTS_TUNING_LOG_IDX_XMEM)
+#define RTS_TUNING_LOG_MASK_IDX_TABLE_STA	(0x1 << RTS_TUNING_LOG_IDX_TABLE_STA)
+#define RTS_TUNING_LOG_MASK_IDX_TABLE_PARA	(0x1 << RTS_TUNING_LOG_IDX_TABLE_PARA)
+#define RTS_TUNING_LOG_MASK_IDX_TABLE_IQ	(0x1 << RTS_TUNING_LOG_IDX_TABLE_IQ)
+
+
+void tuning_init();
+void tuning_deinit();
+void usbd_ext_init();
+void tuning_set_iq_heap(void *iq_heap);
+void tuning_set_max_resolution(int width, int height);
+void tuning_set_log_level(int level);
+void usbd_set_log_level(int level);
+
 
 static inline int resp_size(struct tuning_cmd *cmd)
 {

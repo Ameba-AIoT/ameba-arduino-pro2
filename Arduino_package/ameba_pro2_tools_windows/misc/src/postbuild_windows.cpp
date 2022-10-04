@@ -17,6 +17,23 @@ mingw32-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
 
 using namespace std;
 
+string fc_data_name, voe_name, iq_name, sensor_name;
+string name_buf[4] = {fc_data_name, voe_name, iq_name, sensor_name};
+
+void readtxt(int line_number)
+{
+    ifstream file("misc/video_img/sensor_bin_name.txt");
+    string str;
+    int str_count = 0;
+    while (std::getline(file, str)) {
+        name_buf[str_count] = str;
+        str_count++;
+        if (str_count == line_number) {
+            break;
+        }
+    }
+}
+
 void replaceAll( string& source, const string& from, const string& to )
 {
     string newString;
@@ -125,7 +142,15 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     if (video_init_user_selection == "Enable") {
-        cmd = "copy misc\\video_img\\voe.bin .\\";
+        readtxt(4);
+
+        //cmd = "copy misc\\video_img\\voe.bin .\\";
+        //cout << cmd << endl;
+        //system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << voe_name << " .\\";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
@@ -141,19 +166,37 @@ int main(int argc, char *argv[]) {
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "copy misc\\video_img\\fcs_data_dummy.bin .\\";
+        //cmd = "copy misc\\video_img\\fcs_data_dummy.bin .\\";
+        //cout << cmd << endl;
+        //system(cmd.c_str());
+
+        //cmd = "copy misc\\video_img\\iq.bin .\\";
+        //cout << cmd << endl;
+        //system(cmd.c_str());
+
+        //cmd = "copy misc\\video_img\\sensor_jxf37.bin .\\";
+        //cout << cmd << endl;
+        //system(cmd.c_str());
+
+        //cmd = "copy misc\\video_img\\sensor_fixp.bin .\\";
+        //cout << cmd << endl;
+        //system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << fc_data_name << " .\\";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "copy misc\\video_img\\iq.bin .\\";
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << iq_name << " .\\";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "copy misc\\video_img\\sensor_jxf37.bin .\\";
-        cout << cmd << endl;
-        system(cmd.c_str());
-
-        cmd = "copy misc\\video_img\\sensor_fixp.bin .\\";
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << sensor_name << " .\\";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
@@ -180,7 +223,7 @@ int main(int argc, char *argv[]) {
     replaceAll(path_arm_none_eabi_gcc, "/", "\\");
 
     cmdss.clear();
-    cmdss << "\"" <<path_arm_none_eabi_gcc << "arm-none-eabi-nm.exe\" application.ntz | sort > application.ntz.nm.map";
+    cmdss << "\"" << path_arm_none_eabi_gcc << "arm-none-eabi-nm.exe\" application.ntz | sort > application.ntz.nm.map";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());

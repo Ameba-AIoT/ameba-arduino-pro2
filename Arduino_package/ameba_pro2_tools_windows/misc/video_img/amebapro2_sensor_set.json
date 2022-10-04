@@ -88,14 +88,14 @@
         }
     },
 	"SENSOR_SET5":{
-        "merge_en": false,
+        "merge_en": true,
         "fcs_data": {
             "source":"binary",
             "file":"fcs_data_dummy.bin"
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"        
+            "file":"iq_ps5258.bin"        
         },
         "sensor_data": {
             "source":"binary",
@@ -110,11 +110,11 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"        
+            "file":"iq_f51.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_jxf51.bin"        
+            "file":"sensor_f51.bin"        
         }
     },
 	"SENSOR_SET7":{
@@ -125,7 +125,7 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"        
+            "file":"iq_sc301.bin"        
         },
         "sensor_data": {
             "source":"binary",
@@ -140,7 +140,7 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"        
+            "file":"iq_gc2053.bin"        
         },
         "sensor_data": {
             "source":"binary",
@@ -155,11 +155,11 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"        
+            "file":"iq_f37.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_fixp.bin"        
+            "file":"sensor_f37.bin"        
         }
     }
 }

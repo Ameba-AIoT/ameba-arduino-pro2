@@ -47,7 +47,7 @@ extern "C" {
 #define MULTI_ENABLE        0x01
 
 #define MULTI_SENSOR  		MULTI_DISABLE
-#define USE_SENSOR      	SENSOR_GC2053
+#define USE_SENSOR      	SENSOR_JXF37
 #define NONE_FCS_MODE       0
 #define FW1_IQ_ADDR        0xF20000
 #define FW2_IQ_ADDR        0xF60000

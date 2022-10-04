@@ -13,6 +13,40 @@
 		{
           "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
           "architecture": "AmebaPro2",
+          "version": "4.0.0-build20221004",
+          "category": "Contributed",
+          "help": {
+            "online": "https://forum.amebaiot.com/"
+          },
+          "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2-4.0.0-build20221004.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.0-build20221004.tar.gz",
+          "checksum": "SHA-256:4428c66ac8ae12132353d862b4484a231d798b50215a8912171e870f4a361e04",
+          "size": "36780479",
+          "boards": [
+            {"name": "AMB82 (RTL8735B)"},
+            {"name": "AMB82-MINI (RTL8735B)"}
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.0-p1"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.0-p2"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_tools",
+              "version": "1.0.4"
+            }
+          ]
+        },
+		{
+          "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
+          "architecture": "AmebaPro2",
           "version": "4.0.0-build20220929",
           "category": "Contributed",
           "help": {
@@ -239,6 +273,19 @@
               "url":"https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_toolchain_windows-1.0.0-p2.tar.bz2",
               "checksum":"SHA-256:2efdb80f1001c7cc3ef926c605e523bdfa6a05d1cef9bed7cfd5d0a214728223",
               "size":"76361876"
+            }
+          ]
+        },
+		{
+          "name": "ameba_pro2_tools",
+          "version": "1.0.4",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.0.4.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.0.4.tar.gz",
+              "checksum": "SHA-256:57c431041d7396b38a519b94af7791d72e4b2cfabac4fb4bdfd6e18df2625d1d",
+              "size": "7290795"
             }
           ]
         },

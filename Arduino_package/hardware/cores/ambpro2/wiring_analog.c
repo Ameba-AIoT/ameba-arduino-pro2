@@ -52,8 +52,8 @@ static int _readResolution = 10;
 extern void *gpio_pin_struct[];
 static int _writeResolution = 8;
 static int _writePeriod = 1000;
-//static uint16_t _offset = 0;
-//static uint16_t _gain = 0;
+static uint16_t _offset = 0;
+static uint16_t _gain = 0;
 
 void analogReadResolution(int res) {
     if (res > 12) {
@@ -95,13 +95,16 @@ uint32_t analogRead(uint32_t ulPin) {
 
     uint16_t ret = 0;
 //    float    voltage;
-//    uint32_t mv;
+    uint32_t mv;
 
 
     if ((g_APinDescription[ulPin].ulPinType & TYPE_ANALOG) != TYPE_ANALOG) {
         printf("%s : ulPin %d wrong\n", __FUNCTION__, ((int)ulPin));
         return 0;
     }
+
+    _offset = 0x83B; // copy from AmbD
+    _gain = 0x2E25;
 
 #if 0
     if ((_offset == 0) || (_gain == 0)) {
@@ -175,7 +178,7 @@ uint32_t analogRead(uint32_t ulPin) {
     adc_obj = (analogin_t *)gpio_pin_struct[ulPin];
     ret = analogin_read_u16(adc_obj);
 
-#if 0
+#if 1
     if (ret < 0xfa) {
         mv = 0; // Ignore persistent low voltage measurement error
     } else {
@@ -184,7 +187,7 @@ uint32_t analogRead(uint32_t ulPin) {
     ret = (mv/3300.0) * (1 << _readResolution); // Return user required resolution
 #endif
 
-    return ret/4;
+    return ret;
 }
 
 void analogOutputInit(void) {
