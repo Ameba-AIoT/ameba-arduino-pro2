@@ -37,7 +37,8 @@ uint32_t    WiFiDrv::_networkEncr[WL_NETWORKS_LIST_MAXNUM] = {0};
 
 static bool init_wlan = false;
 //static int wifi_mode = NULL;
-static int wifi_mode = 0;
+rtw_mode_t wifi_mode = 0;
+struct static_ip_config user_static_ip;
 
 static rtw_network_info_t wifi;
 static rtw_softap_info ap;
