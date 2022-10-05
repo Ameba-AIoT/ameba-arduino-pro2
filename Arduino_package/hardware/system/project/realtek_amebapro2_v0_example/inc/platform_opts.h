@@ -146,8 +146,12 @@
 
 
 /* For LWIP configuration */
+#ifdef ARDUINO_SDK
+#ifdef CONFIG_LWIP_DHCP_COARSE_TIMER
+#undef CONFIG_LWIP_DHCP_COARSE_TIMER
 #define CONFIG_LWIP_DHCP_COARSE_TIMER 60
-
+#endif
+#endif
 
 /****************** For EAP method example *******************/
 //#define CONFIG_EXAMPLE_EAP	0
