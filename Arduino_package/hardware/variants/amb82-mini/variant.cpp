@@ -58,15 +58,15 @@ PinDescription g_APinDescription[TOTAL_GPIO_PIN_NUM]=
     {PA_3,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO | PIO_GPIO_IRQ           | PIO_ADC, MODE_NOT_INITIAL}, // AMB_D22      SERIAL1_RX
     {PF_9,  TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM          , MODE_NOT_INITIAL}, // *AMB_D23     onboard LED blue
     {PE_6,  TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ                    , MODE_NOT_INITIAL}, // *AMB_D24     onboard LED green
-    {PF_10, TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ                    , MODE_NOT_INITIAL}, // *AMB_D25     onboard Button
+    {PF_4,  TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ                    , MODE_NOT_INITIAL}, // *AMB_D25     LOG_TX
 #ifdef A3
     {PF_3,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO | PIO_GPIO_IRQ           | PIO_ADC, MODE_NOT_INITIAL}, //
 #else
     {PF_3,  TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ                    , MODE_NOT_INITIAL}, // *AMB_D26     LOG_RX
 #endif
-    {PF_4,  TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ                    , MODE_NOT_INITIAL}, // *AMB_D27     LOG_TX
+    {PA_1,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO | PIO_GPIO_IRQ           | PIO_ADC, MODE_NOT_INITIAL}, // *AMB_D27     SWD_CLK         *I2C2_SDA
     {PA_0,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO | PIO_GPIO_IRQ           | PIO_ADC, MODE_NOT_INITIAL}, // *AMB_D28     SWD_DATA        *I2C2_CL
-    {PA_1,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO | PIO_GPIO_IRQ           | PIO_ADC, MODE_NOT_INITIAL}  // *AMB_D29     SWD_CLK         *I2C2_SDA
+    {PF_10, TYPE_DIGITAL,               PIO_GPIO | PIO_GPIO_IRQ                    , MODE_NOT_INITIAL}  // *AMB_D29     onboard Button
 };
 
 void *gpio_pin_struct[TOTAL_GPIO_PIN_NUM] = {NULL};

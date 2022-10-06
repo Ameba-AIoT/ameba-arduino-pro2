@@ -73,11 +73,11 @@ extern void wait_for_debug(void);
 
 #define AMB_D23                                 23 // PF_9
 #define AMB_D24                                 24 // PE_6
-#define AMB_D25                                 25 // PF_10
+#define AMB_D25                                 25 // PF_4
 #define AMB_D26                                 26 // PF_3
-#define AMB_D27                                 27 // PF_4
+#define AMB_D27                                 27 // PA_1
 #define AMB_D28                                 28 // PA_0
-#define AMB_D29                                 29 // PA_1
+#define AMB_D29                                 29 // PF_10
 
 /* Analog pin mapping */
 #define A0                                      AMB_D11 // PF_0    3.3V    CH0
@@ -85,7 +85,7 @@ extern void wait_for_debug(void);
 #define A2                                      AMB_D9  // PF_2    3.3V    CH2
 //#define A3                                      AMB_D26 // PF_3    3.3V    CH3    LOG_RX not recomanded to be used as ADC
 #define A4                                      AMB_D28 // PA_0    3.3V    CH4
-#define A5                                      AMB_D29 // PA_1    3.3V    CH5
+#define A5                                      AMB_D27 // PA_1    3.3V    CH5
 #define A6                                      AMB_D21 // PA_2    3.3V    CH6
 #define A7                                      AMB_D22 // PA_3    3.3V    CH7
 
@@ -95,7 +95,7 @@ extern void wait_for_debug(void);
 #define LED_BUILTIN                             LED_B   //  Blue
 
 /* Push button mapping */
-#define PUSH_BTN                                AMB_D25 //
+#define PUSH_BTN                                AMB_D29 //
 
 /* ADC/DAC pin mapping */
 #define FEATURE_ADC
@@ -117,7 +117,7 @@ extern void wait_for_debug(void);
 #define I2C_SCL                                 AMB_D13 // I2C2_SCL     AMB_D13
 #define I2C1_SDA                                AMB_D9  // I2C1_SDA     AMB_D9
 #define I2C1_SCL                                AMB_D10 // I2C1_SCL     AMB_D10
-#define I2C2_SDA                                AMB_D29 // I2C0_SDA     AMB_D29
+#define I2C2_SDA                                AMB_D27 // I2C0_SDA     AMB_D27
 #define I2C2_SCL                                AMB_D28 // I2C0_SCL     AMB_D28
 
 /* IR Device pin mapping */
@@ -129,7 +129,7 @@ extern void wait_for_debug(void);
 #define SERIAL_ONE_UART_MODIFIABLE_BAUD_RATE    1
 #define SERIAL_TWO_UART_MODIFIABLE_BAUD_RATE    1
 #define SERIAL_TRI_UART_MODIFIABLE_BAUD_RATE    1
-#define LOG_TX                                  AMB_D27 // UART1_OUT    AMB_D27 / AMB_D6
+#define LOG_TX                                  AMB_D25 // UART1_OUT    AMB_D25 / AMB_D6
 #define LOG_RX                                  AMB_D26 // UART1_IN     AMB_D26 / AMB_D5
 //#define LOG_CTS                                 AMB_D9  // UART1_CTS AMB_D9
 //#define LOG_RTS                                 AMB_D10 // UART1_RTS AMB_D10
@@ -148,6 +148,6 @@ extern void wait_for_debug(void);
 
 /* SWD pin mapping */
 #define SWD_DATA                                AMB_D28 // AMB_D28
-#define SWD_CLK                                 AMB_D29 // AMB_D29
+#define SWD_CLK                                 AMB_D27 // AMB_D27
 
 #endif /* _VARIANT_ARDUINO_AMEBA_ */

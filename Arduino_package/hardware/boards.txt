@@ -1,6 +1,6 @@
 
 menu.EraseFlash=* Erase Flash
-menu.AutoUploadMode=* Auto Upload Mode
+menu.AutoUploadMode=* Auto Flash Mode
 menu.VideoModeInit=* Video Init
 menu.StdLibInit=* Standard Lib Enable
 
