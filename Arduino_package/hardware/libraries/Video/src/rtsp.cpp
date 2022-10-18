@@ -12,7 +12,9 @@
 #define CAMDBG(fmt, args...)
 #endif
 
-RTSPClass::RTSPClass(){};
+RTSPClass::RTSPClass(){
+    rtspData = NULL;
+};
 RTSPClass::~RTSPClass(){};
 
 /**
@@ -25,7 +27,7 @@ RTSPClass::~RTSPClass(){};
   * @param  none
   * @retval none
   */
-void* RTSPClass::init(void) {
+void RTSPClass::init(void) {
     rtspData = RTSP_Init();
     CAMDBG("RTSP_Init done");
     RTSP_Select_Stream(rtspData->priv, ch_idx);
@@ -34,8 +36,6 @@ void* RTSPClass::init(void) {
     CAMDBG("RTSP_Set_Params done");
     RTSP_Set_Apply(rtspData->priv);
     CAMDBG("RTSP_Set_Apply done");
-
-    return (void *)rtspData;
 }
 
 /**
@@ -43,15 +43,26 @@ void* RTSPClass::init(void) {
   * @param  void pointer to rtsp obj
   * @retval none
   */
-void RTSPClass::open (void *p){
-    mm_context_t *ptr = (mm_context_t *)p;
-    if (ptr->priv == NULL) {
+void RTSPClass::open (){
+    
+    if (rtspData->priv == NULL) {
         CAMDBG("Streaming failed, RTSP not initialised yet.");
     }
     else {
         CAMDBG("Start Streaming");
-        RTSP_Set_Streaming ((void *)ptr, ON);
+        RTSP_Set_Streaming ((void *)rtspData, ON);
     }
+}
+
+
+/**
+  * @brief  Get RTSP data pointer
+  * @param  none
+  * @retval data pointer
+  */
+mm_context_t *RTSPClass::getIO(void) {
+    // TODO : add a if check
+    return rtspData;
 }
 
 
@@ -60,9 +71,8 @@ void RTSPClass::open (void *p){
   * @param  void pointer to rtsp obj
   * @retval none
   */
-void RTSPClass::close(void *p){
-    mm_context_t *ptr = (mm_context_t *)p;
-    RTSP_Set_Streaming(ptr->priv, OFF);
+void RTSPClass::close(){
+    RTSP_Set_Streaming(rtspData->priv, OFF);
 }
 
 /**
@@ -70,9 +80,8 @@ void RTSPClass::close(void *p){
   * @param  void pointer to rtsp obj
   * @retval none
   */
-void RTSPClass::deInit(void *p){
-    mm_context_t *ptr = (mm_context_t *)p;
-    if (RTSP_DeInit(ptr->priv) == NULL) {
+void RTSPClass::deInit(){
+    if (RTSP_DeInit(rtspData->priv) == NULL) {
         CAMDBG("RTSP DeInit.");
     }
     else {

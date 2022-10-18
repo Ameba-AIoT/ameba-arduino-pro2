@@ -119,7 +119,7 @@ void cameraStart(void *p, int channel){
     video_control(p, CMD_VIDEO_APPLY, channel);
 }
 
-mm_context_t *cameraDeInit(void *p){
+mm_context_t *cameraDeInit(mm_context_t *p){
     mm_queue_item_t *tmp_item;
     mm_context_t *video_data = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
 	video_data = p;
