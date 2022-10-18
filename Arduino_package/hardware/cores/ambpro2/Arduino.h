@@ -123,7 +123,7 @@ extern PinDescription g_APinDescription[];
 
 #include "WCharacter.h"
 #include "WString.h"
-////    #include "WMath.h"
+#include "WMath.h"
 //#include "HardwareSerial.h"
 #include "LOGUARTClass.h"
 #include "UARTClassOne.h"

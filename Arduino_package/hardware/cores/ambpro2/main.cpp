@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+extern void voe_t2ff_prealloc(void);
+
 // Weak empty variant initialization function.
 // May be redefined by variant files.
 void initVariant() __attribute__((weak));
@@ -49,6 +51,7 @@ int main(void) {
 
     ameba_init();
     initVariant();
+    voe_t2ff_prealloc();
 
     if (xTaskCreate(main_task, ((const char *)"main task"), MAIN_THREAD_STACK_SIZE, NULL, 1, NULL) != pdPASS) {
         printf("\n\r%s xTaskCreate(main task) failed\n", __FUNCTION__);

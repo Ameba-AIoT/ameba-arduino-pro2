@@ -11,7 +11,7 @@
 #define CMD_VIDEO_SET_HEIGHT		MM_MODULE_CMD(0x02)
 #define CMD_VIDEO_SET_WIDTH			MM_MODULE_CMD(0x03)
 #define CMD_VIDEO_BITRATE			MM_MODULE_CMD(0x04)
-
+#define CMD_VIDEO_FPS				MM_MODULE_CMD(0x05)
 #define CMD_VIDEO_GOP				MM_MODULE_CMD(0x06)
 #define CMD_VIDEO_MEMORY_SIZE		MM_MODULE_CMD(0x07)
 #define CMD_VIDEO_BLOCK_SIZE		MM_MODULE_CMD(0x08)
@@ -21,6 +21,7 @@
 #define CMD_VIDEO_GET_RCPARAM		MM_MODULE_CMD(0x0c)
 #define CMD_VIDEO_INIT_MEM_POOL		MM_MODULE_CMD(0x0d)
 #define CMD_VIDEO_FORCE_IFRAME		MM_MODULE_CMD(0x0e)
+#define CMD_VIDEO_ISPFPS			MM_MODULE_CMD(0x0f)
 #define CMD_VIDEO_SET_RCADVPARAM	MM_MODULE_CMD(0x10)
 #define CMD_VIDEO_GET_RCADVPARAM	MM_MODULE_CMD(0x11)
 #define CMD_VIDEO_SET_ROIPARM		MM_MODULE_CMD(0x12)
@@ -46,6 +47,7 @@
 #define CMD_VIDEO_STREAM_STOP		MM_MODULE_CMD(0x23)  // stop stream
 
 #define CMD_VIDEO_SET_VOE_HEAP      MM_MODULE_CMD(0x24)
+#define CMD_VIDEO_SET_TIMESTAMP_OFFSET      MM_MODULE_CMD(0x25)
 
 #define CMD_SNAPSHOT_ENCODE_CB		MM_MODULE_CMD(0x30)
 
@@ -65,6 +67,7 @@ typedef struct video_ctx_s {
 	int (*snapshot_cb)(uint32_t, uint32_t);
 	void (*change_parm_cb)(void *);
 	video_state_t state;
+	uint32_t timestamp_offset;
 
 } video_ctx_t;
 
@@ -78,5 +81,6 @@ int video_voe_presetting(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_s
 
 void video_voe_release(void);
 void video_set_sensor_id(int SensorName);
+void video_show_fps(int enable);
 
 #endif

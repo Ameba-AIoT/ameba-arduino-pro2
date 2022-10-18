@@ -1,4 +1,42 @@
 --------------------------------------------------------------------------	
+<09/12/2022 17:00 Martin>
+Version : RTL8735B_VOE_1.3.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add Fast OSD for 1st frame OSD ready
+	2. iq: change md, snr, tm item to static array
+	3. ae: fix bug that dyn_fps may be lower than sensor min fps
+	4. update 3Alib because md iq table changed
+	5. add new element mipi_max_short_exp for hdr sensor
+	6. add sensor initial error log
+	
+	Video/ENC related
+	1. Support ENC drop frame flow 
+	2. add get realfps API
+	3. fixed dynamic GOP/BPS/...  output bitrate fail issue
+	4. fixed dynamic FPS VUI update fail issue 
+	
+Reviewer:
+	Martin 
+	
+	--------------------------------------------------------------------------	
+<09/02/2022 15:00 Raymond>
+Version : RTL8735B_VOE_1.2.7.3
+Modified Files:
+All
+Change Notes:
+	Base on voe_1.2.7.2
+
+	Video/ENC related
+	1. fixed dynamic GOP/BPS/...  output bitrate fail issue
+	2. remove support dynamic VUI update for fixed dynamic FPS  
+	
+Reviewer:
+	Raymond 
+--------------------------------------------------------------------------	
 <08/16/2022 15:00 Martin>
 Version : RTL8735B_VOE_1.3.2.1
 Modified Files:

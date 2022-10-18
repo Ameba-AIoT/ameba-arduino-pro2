@@ -267,7 +267,7 @@ class WiFiDrv
          */
         static uint32_t getEncTypeNetworksEx(uint8_t networkItem);
 
-#if 0
+
         /*
          * Resolve the given hostname to an IP address.
          * param aHostname: Name to be resolved
@@ -276,8 +276,8 @@ class WiFiDrv
          *          else error code
          */
         static int getHostByName(const char* aHostname, IPAddress& aResult);
-        static int getHostByNamev6(const char* aHostname, IPv6Address& aResult);
-#endif
+//        static int getHostByNamev6(const char* aHostname, IPv6Address& aResult);
+
 
         /*
          * Get the firmware version
@@ -285,14 +285,15 @@ class WiFiDrv
          */
         static char* getFwVersion();
 
-#if 0
-//        static int8_t apSetNetwork(char* ssid, uint8_t ssid_len);
 
-//        static int8_t apSetPassphrase(const char *passphrase, uint8_t len);
+        static int8_t apSetNetwork(char* ssid, uint8_t ssid_len);
 
-//        static int8_t apSetChannel(const char *channel);
 
-//        static int8_t apActivate(uint8_t hidden_ssid);
+        static int8_t apSetPassphrase(const char *passphrase, uint8_t len);
+
+        static int8_t apSetChannel(const char *channel);
+
+        static int8_t apActivate(uint8_t hidden_ssid);
 
 //        static int disablePowerSave();
 
@@ -301,7 +302,6 @@ class WiFiDrv
 //        static void setHostname(const char* hostname);
 //
 //        static const char* getHostname();
-#endif
 };
 
 extern WiFiDrv wiFiDrv;

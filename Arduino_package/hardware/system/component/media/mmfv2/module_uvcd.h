@@ -16,6 +16,9 @@
 #define BAYER_TYPE_AFTER_LSC    3
 #define BAYER_TYPE_AFTER_DNO    4
 
+#define CMD_UVCD_CALLBACK_SET     	MM_MODULE_CMD(0x00)  // set parameter
+#define CMD_UVCD_CALLBACK_GET     	MM_MODULE_CMD(0x01)  // get parameter
+
 struct uvc_format {
 	int width;
 	int height;

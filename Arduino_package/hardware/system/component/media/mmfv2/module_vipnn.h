@@ -17,6 +17,12 @@
 #define VIPNN_MODEL_FILE 0
 #define VIPNN_MODEL_MEM  1
 
+typedef struct landmark_s {
+	struct __post_s {
+		float x, y;
+	} pos[5];
+} landmark_t;
+
 typedef struct rect_s {
 	int xmin;
 	int ymin;

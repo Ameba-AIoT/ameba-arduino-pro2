@@ -1,7 +1,8 @@
 
-menu.AutoUploadMode=Auto Upload Mode
-menu.EraseFlash=Erase Flash
-menu.VideoModeInit=Video Init
+menu.EraseFlash=* Erase Flash
+menu.AutoUploadMode=* Auto Flash Mode
+menu.VideoModeInit=* Video Init
+menu.StdLibInit=* Standard Lib Enable
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -24,7 +25,7 @@ ameba_rtl8735b.build.f_cpu=500000000L
 ameba_rtl8735b.build.usb_product="AMB82-MINI"
 ameba_rtl8735b.build.board=AMEBA
 ameba_rtl8735b.build.core=ambpro2
-ameba_rtl8735b.build.extra_flags=
+#ameba_rtl8735b.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
 ameba_rtl8735b.build.ldscript=linker_scripts/gcc/rtl8735b_ram.ld
 ameba_rtl8735b.build.variant=amb82-mini
 
@@ -42,4 +43,10 @@ ameba_rtl8735b.menu.VideoModeInit.Enable=Enable
 ameba_rtl8735b.menu.VideoModeInit.Enable.build.video_init=Enable
 ameba_rtl8735b.menu.VideoModeInit.Disable=Disable
 ameba_rtl8735b.menu.VideoModeInit.Disable.build.video_init=Disable
+
+ameba_rtl8735b.menu.StdLibInit.Disable=NA
+ameba_rtl8735b.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+ameba_rtl8735b.menu.StdLibInit.Enable=Arduino_STD_PRINTF
+ameba_rtl8735b.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+
 ##############################################################

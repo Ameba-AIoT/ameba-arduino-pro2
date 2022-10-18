@@ -1,0 +1,39 @@
+#######################################
+# Camera
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+CameraClass			KEYWORD1
+RTSPClass			KEYWORD1
+CameraIOClass		KEYWORD1
+
+#######################################
+# Library (KEYWORD1)
+#######################################
+
+cam			KEYWORD1
+rtsp		KEYWORD1
+camio		KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+init			KEYWORD2
+deInit			KEYWORD2
+open			KEYWORD2
+close			KEYWORD2
+create			KEYWORD2
+registerInput	KEYWORD2
+registerOutput	KEYWORD2
+start			KEYWORD2
+stop			KEYWORD2
+pause			KEYWORD2
+resume			KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################

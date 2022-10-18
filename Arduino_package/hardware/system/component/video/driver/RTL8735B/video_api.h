@@ -9,12 +9,13 @@
 #define VIDEO_FORCE_IFRAME		0x11
 #define VIDEO_BPS               0x12
 #define VIDEO_GOP				0x13
-//#define VIDEO_JPEG_SNAPSHOT     0x14
-//#define VIDEO_YUV_OUTPUT        0x15
+#define VIDEO_ISPFPS			0x14
+#define VIDEO_FPS               0x15
 #define VIDEO_ISP_SET_RAWFMT    0x16
 //#define VIDEO_OSD				0x17
 #define VIDEO_PRINT_INFO        0x18
 #define VIDEO_DEBUG             0x19
+
 
 #define VIDEO_HEVC_OUTPUT       0x20
 #define VIDEO_H264_OUTPUT       0x21
@@ -36,6 +37,7 @@ typedef struct encode_rc_parm_s {
 	unsigned int minQp;		// for CBR/VBR
 	unsigned int minIQp;	// for CBR/VBR
 	unsigned int maxQp;		// for CBR/VBR
+	unsigned int maxIQp;	// for CBR/VBR
 } encode_rc_parm_t;
 
 typedef struct encode_rc_adv_parm_s {
@@ -161,6 +163,28 @@ void video_set_debug_level(int value);//Default level -> VIDEO_LOG_MSG
 void video_set_uvcd_iq(unsigned int addr);
 
 void video_set_framerate(int fps);
+
+unsigned char *video_get_iq_buf();
+
+int video_get_video_sensor_status(void);
+
+int video_fcs_write_sensor_id(int SensorName);
+
+void video_set_video_snesor_info(mult_sensor_info_t *info);
+
+int video_reset_fw(int ch, int id);
+
+int voe_get_sensor_info(int id, int *iq_data, int *sensor_data);
+
+void voe_t2ff_prealloc(void);
+
+int voe_boot_fsc_status(void);
+
+int voe_boot_fsc_id(void);
+
+void video_set_fcs_queue_info(int start_time, int end_time);
+
+void video_get_fcs_queue_info(int *start_time, int *end_time);
 
 //////////////////////
 #define VOE_NOR_REMAP_OFFSET 0xC000000 //enc_remap_addr in encrypt_fw.json

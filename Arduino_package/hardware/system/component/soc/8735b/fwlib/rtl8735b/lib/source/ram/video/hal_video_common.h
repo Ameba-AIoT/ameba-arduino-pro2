@@ -495,7 +495,7 @@ typedef struct {
 
 	/* AmebaPro VOE/buffer control */
 	i32 osd;
-//	i32 obj;
+	//	i32 obj;
 
 	u32 lumaSize;
 	i32	enc_cnt;
@@ -545,7 +545,10 @@ typedef struct {
 
 	u32 all_init_iq_set_flag;
 
-	u32 rsvd[2 + 56];
+	u32 fast_osd_en;
+	u32 *osd_buf;
+
+	u32 rsvd[56];
 
 } __attribute__((aligned(32))) commandLine_s;
 

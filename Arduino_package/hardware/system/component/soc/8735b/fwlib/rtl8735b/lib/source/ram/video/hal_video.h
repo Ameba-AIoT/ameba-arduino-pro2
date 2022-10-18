@@ -202,6 +202,7 @@ typedef struct {
 
 typedef struct {
 	i32 bps;
+	i32 isp_fps;
 	i32 fps;
 	i32 maxqp;
 	i32 minqp;
@@ -413,7 +414,7 @@ int hal_video_peri_update_with_fcs(video_peri_info_t *p_video_peri_info);
 int hal_video_check_fcs_OK(void);
 void hal_video_reset_fcs_OK(void);
 int hal_video_osd_reset(int ch);
-
+int hal_video_get_realfps(int ch, int *isp_fpsx100, int *enc_fpsx100);
 
 
 extern hal_video_adapter_t vv_adapter;

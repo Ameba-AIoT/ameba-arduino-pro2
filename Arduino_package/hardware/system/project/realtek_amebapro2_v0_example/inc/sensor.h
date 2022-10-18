@@ -47,14 +47,14 @@ extern "C" {
 #define MULTI_ENABLE        0x01
 
 #define MULTI_SENSOR  		MULTI_DISABLE
-#define USE_SENSOR      	SENSOR_GC2053
+#define USE_SENSOR      	SENSOR_JXF37
 #define NONE_FCS_MODE       0
 #define FW1_IQ_ADDR        0xF20000
 #define FW2_IQ_ADDR        0xF60000
 #define FW_IQ_SIZE         256*1024
 #define FW_SENSOR_SIZE     16*1024
 #define FW_VOE_SIZE        600*1024
-
+#define VIDEO_MPU_VOE_HEAP  0
 #ifdef __cplusplus
 }
 #endif

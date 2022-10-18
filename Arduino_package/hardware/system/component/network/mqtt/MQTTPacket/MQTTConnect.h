@@ -105,13 +105,14 @@ typedef union {
 	unsigned char all;	/**< all connack flags */
 #if defined(REVERSED)
 	struct {
-		unsigned int sessionpresent : 1;    /**< session present flag */
-		unsigned int : 7;	  	          /**< unused */
-	} bits;
-#else
-	struct {
 		unsigned int : 7;	     			/**< unused */
 		unsigned int sessionpresent : 1;    /**< session present flag */
+	} bits;
+
+#else
+	struct {
+		unsigned int sessionpresent : 1;    /**< session present flag */
+		unsigned int : 7;	  	          /**< unused */
 	} bits;
 #endif
 } MQTTConnackFlags;	/**< connack flags byte */

@@ -269,6 +269,8 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_KEEPALIVE_PARM_ADOPT(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)
 #define SET_H2CCMD_KEEPALIVE_PARM_PKT_TYPE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 2, 1, __Value)
 #define SET_H2CCMD_KEEPALIVE_PARM_CHECK_PERIOD(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
+#define SET_H2CCMD_KEEPALIVE_WATCHDOG_RFE_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+#define SET_H2CCMD_KEEPALIVE_WATCHDOG_INTERVAL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 
 /* _DISCONNECT_DECISION_CMD_0x04 */
 #define SET_H2CCMD_DISCONDECISION_PARM_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
@@ -412,7 +414,10 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_ACTION(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 0, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_FW_PARSING_UNTIL_WAKEUP(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 4, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_POWER_BIT_EN(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 7, 1, __Value)
-#define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_RESPONSE_BLOCK(__pH2CCmd, __Value)    SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 3, 1, __Value)
+#define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_OFLD_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 3, 1, __Value)
+#define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_PWR_BIT(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 4, 1, __Value)
+#define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_DTIM1TO_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 5, 1, __Value)
+#define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_LOC(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+5, 0, 8, __Value)
 
 /* AOAC_GLOBAL_INFO_0x82 */
 #define SET_H2CCMD_AOAC_GLOBAL_INFO_PAIRWISE_ENC_ALG(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)
@@ -469,9 +474,10 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #endif
 
 #ifdef CONFIG_WOWLAN_SSL_KEEP_ALIVE
-#define SET_H2CCMD_MQTT_PUBLISH_WAKE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 2, 1, __Value)/*PUBLISH_WAKE EN*/
 #define SET_H2CCMD_MQTT_SSL_EN(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)/*SSL EN*/
 #define SET_H2CCMD_MQTT_PATTERN_MATCH_EN(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)/*PATTERN_MATCH_EN EN*/
+#define SET_H2CCMD_MQTT_PUBLISH_WAKE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 2, 1, __Value)/*PUBLISH_WAKE EN*/
+#define SET_H2CCMD_TCP_SSL_MODE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 3, 1, __Value)/*Header ignore*/
 #define SET_H2CCMD_SSL_INFO_LOC(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)/*SSL_INFO_LOC*/
 #define SET_H2CCMD_SSL_PATTERN_LOC(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)/*SSL_PATTERN_LOC*/
 #endif

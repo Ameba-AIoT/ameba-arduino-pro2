@@ -256,6 +256,8 @@ struct uvc_dev {
 	isp_usbd_cmd_data isp_data;
 	struct ExtUnitCmd isp_data_pro2;
 	void (*change_parm_cb)(void *);
+	void (*uvcd_ext_get_cb)(void *buf, unsigned int len); //Host get the data from device
+	void (*uvcd_ext_set_cb)(void *buf, unsigned int len); //Host set the data to device
 };
 
 /*-------------------------------------------------------------------------*/
@@ -315,7 +317,6 @@ static struct usb_string
 	{ STRING_SERIALNUMBER,	string_serial, },
 	{ STRING_INTERFACE,		"USB UVC Interface", },
 	{ STRING_UVC,		"USB UVC", },
-	NULL,
 };
 
 static struct usb_gadget_strings webcam_stringtab = {
@@ -1161,7 +1162,7 @@ struct usbd_uvc_buffer *uvc_video_out_stream_queue(struct uvc_dev *uvc_ctx);
 void uvc_video_put_in_stream_queue(struct usbd_uvc_buffer *payload, struct uvc_dev *uvc_ctx);
 void uvc_video_put_out_stream_queue(struct usbd_uvc_buffer *payload, struct uvc_dev *uvc_ctx);
 void uvc_events_process(struct uvc_dev *dev, struct uvc_req_data *uvc_event);
-void composite_setup_complete_1();
+void composite_setup_complete_1(void);
 int set_uvc_string(char *product_name, char *serial_name, unsigned short bcdDevice);
 
 #endif
