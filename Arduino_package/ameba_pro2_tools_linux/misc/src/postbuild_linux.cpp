@@ -20,18 +20,39 @@ using namespace std;
 string fc_data_name, voe_name, iq_name, sensor_name;
 string name_buf[4] = {fc_data_name, voe_name, iq_name, sensor_name};
 
-void readtxt(int line_number)
+int readtxt(int line_number)
 {
-    ifstream file("misc/video_img/sensor_bin_name.txt");
-    string str;
+    ifstream myFile_Handler;
+    string myLine;
+    myFile_Handler.open("misc/video_img/sensor_bin_name.txt");
     int str_count = 0;
-    while (std::getline(file, str)) {
-        name_buf[str_count] = str;
-        str_count++;
-        if (str_count == line_number) {
-            break;
+
+    if(myFile_Handler.is_open())
+    {
+        while (getline(myFile_Handler, myLine))
+        {
+            //cout << myLine << endl;
+            name_buf[str_count] = myLine;
+            str_count++;
+            if (str_count == line_number) {
+                break;
+            } else {
+                name_buf[str_count-1].erase(name_buf[str_count-1].size() - 1);
+            }
         }
+        myFile_Handler.close();
     }
+    else
+    {
+        cout << "Unable to open the file!";
+    }
+
+    fc_data_name = name_buf[0];
+    voe_name = name_buf[1];
+    iq_name = name_buf[2];
+    sensor_name = name_buf[3];
+
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -159,7 +180,7 @@ int main(int argc, char *argv[]) {
 
     // 2. copy elf application.ntz to current folder
     cmdss.clear();
-    cmdss << "cp" << argv[2] << " ./";
+    cmdss << "cp " << argv[2] << " ./";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());

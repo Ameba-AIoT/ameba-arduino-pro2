@@ -447,8 +447,8 @@
               "host": "x86_64-pc-linux-gnu",
               "archiveFileName": "ameba_pro2_tools_linux-1.0.5.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.0.5.tar.gz",
-              "checksum": "SHA-256:725ceac234f107d46e3aa28b3f504f885aecdc8bacd34c68b645a68a46282370",
-              "size": "3921582"
+              "checksum": "SHA-256:ad69a8e74f261f96aabc5161f3292728163275c849d891ee5c722483704a5d04",
+              "size": "3958502"
             }
           ]
         },

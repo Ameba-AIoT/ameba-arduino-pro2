@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
     chdir("..");
 
     cmdss.clear();
-    cmdss << "cp -r ./" << argv[3] << "/* " << argv[2] << " 2> /dev/null " ;
+ //   cmdss << "cp -r ./" << argv[3] << "/* " << argv[2] << " 2> /dev/null " ;
+    cmdss << "find ./ -mindepth 1 -maxdepth 1 -type d -name \"" << argv[3] << "\" | xargs -i cp -r {}" << " ./"<< argv[2];
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
