@@ -164,7 +164,7 @@ void video_set_uvcd_iq(unsigned int addr);
 
 void video_set_framerate(int fps);
 
-unsigned char *video_get_iq_buf();
+unsigned char *video_get_iq_buf(void);
 
 int video_get_video_sensor_status(void);
 

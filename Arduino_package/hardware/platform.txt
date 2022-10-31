@@ -165,5 +165,3 @@ tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.pa
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
-
-

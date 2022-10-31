@@ -82,5 +82,5 @@ int video_voe_presetting(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_s
 void video_voe_release(void);
 void video_set_sensor_id(int SensorName);
 void video_show_fps(int enable);
-
+void video_setup_sensor(void *sensor_setup_cb);
 #endif

@@ -5,6 +5,12 @@ Compile:
 windows:
 mingw32-g++.exe -o prebuild_windows.exe prebuild_windows.cpp -static
 
+linux:
+g++ -o prebuild_linux prebuild_linux.cpp -static
+
+macos:
+g++ -o prebuild__macos prebuild__macos.cpp
+
 */
 
 #include <iostream>

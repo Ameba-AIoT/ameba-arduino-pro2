@@ -4,6 +4,14 @@ Compile:
 windows:
 mingw32-g++.exe -o image_windows.exe image_windows.cpp -static
 i686-w64-mingw32-g++.exe -o image_windows.exe image_windows.cpp -static
+
+linux (ubuntu 20.04 TLS ,64 bits app generated):
+g++ -o image_linux image_linux.cpp -static
+g++ -std=c++11 -lpthread -o image_linux image_linux.cpp
+
+macos:
+g++ -o image_macos image_macos.cpp
+
 */
 
 #include <iostream>

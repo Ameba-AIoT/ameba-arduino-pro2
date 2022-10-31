@@ -13,6 +13,14 @@
 #define NOR_BLOCK_SIZE		4096
 #define NAND_BLOCK_SIZE		(64 * 2048)
 #define HEADER_BAK_LEN		32
+
+#define OTA_FW1		1
+#define OTA_FW2 	2
+#define OTA_BL_PRI 	3
+#define OTA_ISP_IQ 	4
+#define OTA_NN_MDL 	5
+#define OTA_CER 	6
+
 /*******************************************************************/
 
 

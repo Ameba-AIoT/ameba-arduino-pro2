@@ -382,6 +382,7 @@ typedef struct raw_data_desc {
 struct  wifi_user_conf {
 	unsigned char rtw_adaptivity_en;
 	unsigned char rtw_adaptivity_mode;
+	unsigned char rtw_adaptivity_th_l2h_ini;
 
 	unsigned char rtw_tx_pwr_lmt_enable;	// 0: disable, 1: enable, 2: Depend on efuse(flash)
 	unsigned char rtw_tx_pwr_by_rate;	// 0: disable, 1: enable, 2: Depend on efuse(flash)

@@ -1,4 +1,31 @@
 --------------------------------------------------------------------------	
+<10/06/2022 19:00 Martin>
+Version : RTL8735B_VOE_1.3.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. dynamic fps improvement
+	   can change sensor fps high to low
+	   remove the limitation of fixed drop ratio
+	   fps follow original setting
+	2. Fix OSD show/hide error
+	3. update IMX327 sensor driver
+	Video/ENC related
+	1. Support ENC MetaData info
+	2. Support ENC SEI as ENC MetaData info
+	   command line add (-z [size]) (size is metadata size)
+	   added enc2out->meta_offset output metadata offset information
+	3. Support JPEG COM Marker as ENC MetaData info
+	   command line add (-z [size]) (size is metadata size)
+	   added enc2out->meta_offset output metadata offset information
+	4. fixed  hal_video_froce_i -->  hal_video_force_i (typo)
+	5. hal_video_roi_region() check region & match document spec. 
+	6. fixed hal_video_roi_region() delta value < 0 fail 
+Reviewer:
+	 
+--------------------------------------------------------------------------	
 <09/12/2022 17:00 Martin>
 Version : RTL8735B_VOE_1.3.3.0
 Modified Files:

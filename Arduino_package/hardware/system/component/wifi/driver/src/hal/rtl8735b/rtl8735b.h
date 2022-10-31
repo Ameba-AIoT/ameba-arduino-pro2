@@ -115,10 +115,4 @@ void rtl8735b_set_tx_power_index(PADAPTER, u32 powerindex, u8 rfpath, u8 rate);
 //u8 rtl8735b_get_tx_power_index(PADAPTER, u8 rfpath, u8 rate, u8 bandwidth, u8 channel, struct txpwr_idx_comp *tic);
 void rtl8735b_notch_filter_switch(PADAPTER, bool enable);
 
-#define PHY_QueryBBReg(Adapter, RegAddr, BitMask) rtl8735b_read_bb_reg((Adapter), (RegAddr), (BitMask))
-#define PHY_SetBBReg(Adapter, RegAddr, BitMask, Data) rtl8735b_write_bb_reg((Adapter), (RegAddr), (BitMask), (Data))
-#define PHY_QueryRFReg(Adapter, eRFPath, RegAddr, BitMask) rtl8735b_read_rf_reg((Adapter), (eRFPath), (RegAddr), (BitMask))
-#define PHY_SetRFReg(Adapter, eRFPath, RegAddr, BitMask, Data) rtl8735b_write_rf_reg((Adapter), (eRFPath), (RegAddr), (BitMask), (Data))
-#define PHY_SetMacReg	PHY_SetBBReg
-#define PHY_QueryMacReg PHY_QueryBBReg
 #endif /* _RTL8735B_H_ */

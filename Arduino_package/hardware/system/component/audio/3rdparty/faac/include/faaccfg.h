@@ -36,6 +36,8 @@
 #undef LOW
 #define LOW 2
 #endif
+#else
+#define LOW 2
 #endif
 
 #define SSR  3

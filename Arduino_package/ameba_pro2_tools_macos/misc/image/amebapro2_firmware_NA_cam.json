@@ -1,0 +1,72 @@
+{
+    "msg_level":3,
+
+	"PROFILE":["FIRMWARE"],
+	"FIRMWARE":{
+		"manifest":"MANIFEST",
+		"images":[
+			"FW"
+		]
+	},
+	"MANIFEST":{
+		"label":"RTL8735B",
+		"vrf_alg": "NA_VRF_CHECK",
+		"tlv":[
+			{"type":"PK", "length":384, "value":"auto"},
+			{"type":"TYPE_ID", "length":2, "value":"IMG_FWHS_S"},
+			{"type":"VERSION", "length":32, "value":"FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"},
+			{"type":"TIMST", "length":8, "value":"auto"},
+			{"type":"IMGSZ", "length":4, "value":"auto"},
+			{"type":"ENCALG", "length":1, "value":"auto"},
+			{"type":"ENCKN", "length":32, "value":"auto"},
+			{"type":"ENCKS", "length":32, "value":"auto"},
+			{"type":"ENCIV", "length":16, "value":"auto"},
+			{"type":"HSHALG", "length":1, "value":"auto"},
+			{"type":"HSHKN", "length":32, "value":"auto"},
+			{"type":"HSHKS", "length":32, "value":"auto"},
+			{"type":"IE_RESV", "length":32, "value":"auto"},
+			{"type":"HASH", "length":32, "value":"auto"}
+		]
+	},
+	"VOE": {
+		"source":"binary",
+		"header":{
+			"type":"IMG_VOE"
+		},
+        "file":"voe.bin"
+	},
+	"IQ_SENSOR": {
+		"source":"binary",
+		"header":{
+			"type":"IMG_ISP"
+		},
+        "file":"firmware_isp_iq.bin"
+	},
+	"FW": {
+		"source":"application.ntz.axf",
+		"header":{
+			"type":"IMG_FWHS_S",
+			"entry": "__ram_start_table_start__"
+		},
+		"blocks" : ["sram", "ddr"],
+		"sram": {
+			"type":"SIMG_SRAM",
+			"sections":	[
+				".ram.img.signature",
+				".ram.func.table",
+				".ram.data",
+				".ram.code_text",
+				".ram.code_rodata"
+			]
+		},
+		"ddr": {
+			"type":"SIMG_DDR",
+			"sections":	[
+				".ddr.code.text",
+				".ddr.text",
+                ".ddr.data",
+                ".ddr.rodata"
+			]
+		}
+	}
+}

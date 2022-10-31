@@ -810,6 +810,7 @@ struct _ADAPTER {
 
 	u16 fix_rate;
 	u8 fix_bw;
+	u8 fix_vcs;
 	u8 driver_tx_bw_mode;
 
 #ifdef CONFIG_CAC_TEST

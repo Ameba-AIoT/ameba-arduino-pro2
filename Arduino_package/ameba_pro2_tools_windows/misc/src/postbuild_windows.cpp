@@ -5,6 +5,12 @@ Compile:
 windows:
 mingw32-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
 
+linux:
+g++ -o postbuild_linux postbuild_linux.cpp -static
+
+macos:
+g++ -o postbuild_macos postbuild_macos.cpp
+
 */
 
 #include <iostream>
