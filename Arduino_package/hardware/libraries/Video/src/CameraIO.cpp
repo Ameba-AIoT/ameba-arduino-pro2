@@ -5,19 +5,13 @@ extern "C" {
 #endif
 
 #include "siso_drv.h"
-//#include "simo_drv.h"
-//#include "miso_drv.h"
-//#include "mimo_drv.h"
+#include "simo_drv.h"
+#include "miso_drv.h"
+#include "mimo_drv.h"
 
 #ifdef __cplusplus
 }
 #endif
-
-
-#define SIMO 0
-#define MISO 0
-#define MIMO 0
-
 
 CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
 
@@ -25,43 +19,41 @@ CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
         
         if (numOutput > 1){
             //MIMO (Multi Input Multi Output)
-            #if MIMO
             this->create = &mimoCreate;
             this->destroy = &mimoDestroy;
-            this->registerInput = &mimoRegIn;
-            this->registerOutput = &mimoRegOut;
+            this->registerInput1 = &mimoRegIn1;
+            this->registerInput2 = &mimoRegIn2;
+            this->registerOutput1 = &mimoRegOut1;
+            this->registerOutput2 = &mimoRegOut2;
             this->start = &mimoStart;
             this->stop = &mimoStop;
             this->pause = &mimoPause;
             this->resume = &mimoResume;
-            #endif
         }
         else {
             // MISO (Multi Input Single Output)
-            #if MISO
             this->create = &misoCreate;
             this->destroy = &misoDestroy;
-            this->registerInput = &misoRegIn;
+            this->registerInput1 = &misoRegIn1;
+            this->registerInput2 = &misoRegIn2;
             this->registerOutput = &misoRegOut;
             this->start = &misoStart;
             this->stop = &misoStop;
             this->pause = &misoPause;
             this->resume = &misoResume;
-            #endif
         }
     } else {
         if (numOutput > 1){
             //SIMO (Single Input Multi Output)
-            #if SIMO
             this->create = &simoCreate;
             this->destroy = &simoDestroy;
             this->registerInput = &simoRegIn;
-            this->registerOutput = &simoRegOut;
+            this->registerOutput1 = &simoRegOut1;
+            this->registerOutput2= &simoRegOut2;
             this->start = &simoStart;
             this->stop = &simoStop;
             this->pause = &simoPause;
             this->resume = &simoResume;
-            #endif
         }
         else {
             // SISO (Single Input Single Output)
@@ -73,7 +65,8 @@ CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
             this->stop = &sisoStop;
             this->pause = &sisoPause;
             this->resume = &sisoResume;
+            this->setStackSize= &sisoSetStackSize;
+            this->setTaskPriority= &sisoSetTaskPriority;
         }
     }
 }
-
