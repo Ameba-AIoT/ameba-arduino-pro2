@@ -12,34 +12,22 @@ extern "C" {
 }
 #endif
 
-class RTSPClass {
+#include "camera.h"
+
+class RTSPClass : public CameraSetting {
     public:
         RTSPClass(void);
         ~RTSPClass(void);
 
-        void init(void);
+
+        void init(CameraSetting *obj);
         void open(void);
         void close(void);
         void deInit(void);
         mm_context_t *getIO(void);
-
-        int ch_idx = 0;
-
-        uint32_t video_type = AVMEDIA_TYPE_VIDEO;
-        uint32_t fps = 30;
-        uint32_t bps = 2*1024*1024;
-        uint32_t VC = AV_CODEC_ID_H264;
-        
         
     private:
         mm_context_t *rtspData;
-        
-
 };
 
-
-
 #endif
-
-
-

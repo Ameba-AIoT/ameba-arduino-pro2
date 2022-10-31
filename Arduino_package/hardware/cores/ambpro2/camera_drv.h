@@ -7,7 +7,7 @@
 #include <diag.h>
 #include "mmf2_module.h"
 
-int cameraConfig(int enable, int w, int h, int bps, int snapshot);
+int cameraConfig(int enable, int w, int h, int bps, int snapshot, int preset);
 
 mm_context_t *cameraInit(void);
 
