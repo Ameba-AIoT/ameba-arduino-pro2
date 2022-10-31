@@ -73,6 +73,16 @@ void RTSPClass::open (void){
 }
 
 /**
+  * @brief  Get RTSP data pointer
+  * @param  none
+  * @retval data pointer
+  */
+mm_context_t *RTSPClass::getIO(void) {
+    // TODO : add a if check
+    return rtspData;
+}
+
+/**
   * @brief  Stop RTSP streaming
   * @param  none
   * @retval none

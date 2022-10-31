@@ -134,19 +134,16 @@ CameraClass::~CameraClass(){};
   * @param  obj        : object pointer of CameraSetting Class
   * @retval none
   */
-void CameraClass::init(CameraSetting *obj){
 
+void CameraClass::init(CameraSetting *obj) {
     int bps = CAM_BPS;
-
     CAMDBG("H: %d. W: %d. Preset: %d.", obj->_w, obj->_h, obj->_preset);
-
     if(obj->_preset != -1){
         return init(obj->_w, obj->_h, bps, obj->_preset);
     }
     else{
         CAMDBG("[ERROR] Init failed, cannot allocate preset video settings");
     }
-    
 }
 
 /**
@@ -278,6 +275,16 @@ void CameraClass::start(CameraSetting *obj){
         cameraStart(video_data->priv, obj->_preset - 1);
         cameraSnapshot(video_data->priv, obj->_preset - 1);
     }
+}
+
+/**
+  * @brief  Get video data pointer
+  * @param  none
+  * @retval data pointer
+  */
+mm_context_t *CameraClass::getIO(void) {
+    //TODO : add a if check 
+    return video_data;
 }
 
 /**

@@ -127,8 +127,9 @@ class CameraClass{
         void start(CameraSetting *obj);
         void close(void);
         mm_context_t *getIO(void);
-
+   
     private:
         mm_context_t *video_data;
+        
 };
 #endif

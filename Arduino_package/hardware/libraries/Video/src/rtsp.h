@@ -19,6 +19,7 @@ class RTSPClass : public CameraSetting {
         RTSPClass(void);
         ~RTSPClass(void);
 
+
         void init(CameraSetting *obj);
         void open(void);
         void close(void);

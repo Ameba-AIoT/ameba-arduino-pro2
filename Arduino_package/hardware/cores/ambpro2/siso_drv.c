@@ -19,6 +19,7 @@ void sisoCreate(void) {
   * @param  pointer to the siso object
   * @retval none
   */
+
 void sisoDestroy(void) {
     //delete the SISO object created and stop the siso task
     if(NULL != siso_delete(siso_arduino)) {

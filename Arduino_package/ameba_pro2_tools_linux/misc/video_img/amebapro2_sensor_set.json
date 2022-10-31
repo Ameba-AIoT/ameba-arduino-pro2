@@ -1,0 +1,174 @@
+{
+    "msg_level":3,
+
+	"PROFILE":["ISP_SENSOR_SETS"],
+	"ISP_SENSOR_SETS":{
+        "multi_fcs_hdr": "MULTI_FCS_HDR",
+        "multi_fcs_info": "MULTI_FCS_INFO",
+        "sensor_sets":[
+			"SENSOR_SET0",
+			"SENSOR_SET1",
+			"SENSOR_SET2",
+			"SENSOR_SET3",
+			"SENSOR_SET4",
+			"SENSOR_SET5",
+			"SENSOR_SET6",
+			"SENSOR_SET7",
+			"SENSOR_SET8",
+			"SENSOR_SET9"
+		]
+	},
+    "MULTI_FCS_HDR":{
+        "km_init_timeout": 5000
+    },
+	"SENSOR_SET0":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET1":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+    "SENSOR_SET2":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET3":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET4":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET5":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET6":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET7":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET8":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET9":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    }
+}
