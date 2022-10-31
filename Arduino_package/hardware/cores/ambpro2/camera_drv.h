@@ -19,6 +19,9 @@ void cameraStopVideoStream(void *p, int channel);
 
 mm_context_t *cameraDeInit(mm_context_t *);
 
+void cameraSnapshot(void *p, int channel);
+
+
 // Functions externed from module_video
 extern void *video_create(void *parent);
 extern void *video_destroy(void *p);

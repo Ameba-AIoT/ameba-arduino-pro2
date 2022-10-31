@@ -6,17 +6,26 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-CameraClass			KEYWORD1
-RTSPClass			KEYWORD1
+CameraClass		KEYWORD1
+CameraSetting		KEYWORD1
+AudioClass		KEYWORD1
+AACClass		KEYWORD1
+RTSPClass		KEYWORD1
 CameraIOClass		KEYWORD1
 
 #######################################
 # Library (KEYWORD1)
 #######################################
 
+camset			KEYWORD1
 cam			KEYWORD1
-rtsp		KEYWORD1
-camio		KEYWORD1
+rtsp 			KEYWORD1
+audio			KEYWORD1
+aac			KEYWORD1
+camio1_1In1Out		KEYWORD1
+camio2_2In1Out		KEYWORD1
+camio3_1In2Out		KEYWORD1
+camio4_2In2Out		KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -27,8 +36,12 @@ deInit			KEYWORD2
 open			KEYWORD2
 close			KEYWORD2
 create			KEYWORD2
-registerInput	KEYWORD2
-registerOutput	KEYWORD2
+registerInput		KEYWORD2
+registerInput1 		KEYWORD2
+registerInput2		KEYWORD2
+registerOutput		KEYWORD2
+registerOutput1		KEYWORD2
+registerOutput2		KEYWORD2
 start			KEYWORD2
 stop			KEYWORD2
 pause			KEYWORD2

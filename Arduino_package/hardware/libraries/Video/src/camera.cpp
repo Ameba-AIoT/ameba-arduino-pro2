@@ -283,16 +283,6 @@ void CameraClass::start(CameraSetting *obj){
   * @retval data pointer
   */
 mm_context_t *CameraClass::getIO(void) {
-    //TODO : add a if check 
-    return video_data;
-}
-
-/**
-  * @brief  Get video data pointer
-  * @param  none
-  * @retval data pointer
-  */
-mm_context_t *CameraClass::getIO(void) {
     //To check if camera sensor init is done
     if (video_data == NULL){
         printf("\r\nPlease init camera sensor first.\r\n");
