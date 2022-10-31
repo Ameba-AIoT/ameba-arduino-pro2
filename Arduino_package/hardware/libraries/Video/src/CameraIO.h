@@ -1,4 +1,8 @@
 #include "Arduino.h"
+#include "rtsp.h"
+#include "camera.h"
+
+
 
 class CameraIOClass
 {
@@ -9,13 +13,13 @@ public:
     uint8_t numOutput;
 
     // function pointers
-    void *(*create)(void);
-    void (*destroy)(void*);
-    void (*registerInput)(void*, void*);
-    void (*registerOutput)(void*, void*);
-    int  (*start)(void*);
-    void (*stop)(void*);
-    void (*pause)(void*);
-    void (*resume)(void*);
+    void (*create)(void);
+    void (*destroy)(void);
+    void (*registerInput)(mm_context_t*);
+    void (*registerOutput)(mm_context_t*);
+    int  (*start)(void);
+    void (*stop)(void);
+    void (*pause)(void);
+    void (*resume)(void);
 };
 

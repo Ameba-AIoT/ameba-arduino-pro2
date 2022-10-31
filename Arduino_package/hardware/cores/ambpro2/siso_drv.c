@@ -2,7 +2,8 @@
 #include "mmf2_link.h"
 #include "mmf2_siso.h"
 
-mm_siso_t *siso_arduino = NULL;
+
+static mm_siso_t *siso_arduino = NULL;
 
 
 /**
@@ -10,10 +11,9 @@ mm_siso_t *siso_arduino = NULL;
   * @param  none
   * @retval  pointer to the siso object
   */
-void* sisoCreate(void) {
+void sisoCreate(void) {
     //create SISO object to be used across input and output module
     siso_arduino = siso_create();
-    return (void*)siso_arduino;
 }
 
 
@@ -22,9 +22,9 @@ void* sisoCreate(void) {
   * @param  pointer to the siso object
   * @retval none
   */
-void sisoDestroy(void *obj) {
+void sisoDestroy() {
     //delete the SISO object created and stop the siso task
-    if(NULL != siso_delete((mm_siso_t *)obj)) {
+    if(NULL != siso_delete(siso_arduino)) {
         printf("Camera IO linker destroy failed..");
     }
 }
@@ -36,8 +36,8 @@ void sisoDestroy(void *obj) {
   * @param  arg1: this argument is an input source
   * @retval  none
   */
-void sisoRegIn(void *obj, void *arg1) {
-    siso_ctrl((mm_siso_t *)obj, MMIC_CMD_ADD_INPUT, (uint32_t)arg1, 0);
+void sisoRegIn(mm_context_t *arg1) {
+    siso_ctrl(siso_arduino, MMIC_CMD_ADD_INPUT, (uint32_t)arg1, 0);
 }
 
 
@@ -47,8 +47,8 @@ void sisoRegIn(void *obj, void *arg1) {
   * @param  arg1: this argument is output source
   * @retval  none
   */
-void sisoRegOut(void *obj, void *arg1) {
-    siso_ctrl((mm_siso_t *)obj, MMIC_CMD_ADD_OUTPUT, (uint32_t)arg1, 0);
+void sisoRegOut(mm_context_t *arg1) {
+    siso_ctrl(siso_arduino, MMIC_CMD_ADD_OUTPUT, (uint32_t)arg1, 0);
 }
 
 
@@ -57,8 +57,8 @@ void sisoRegOut(void *obj, void *arg1) {
   * @param  obj: pointer to siso object
   * @retval :0 for success, -1 for fail
   */
-int sisoStart(void *obj) {
-    return siso_start((mm_siso_t *)obj);
+int sisoStart(void) {
+    return siso_start(siso_arduino);
 }
 
 
@@ -67,8 +67,8 @@ int sisoStart(void *obj) {
   * @param  pointer to the siso object
   * @retval none
   */
-void sisoStop(void *obj) {
-    siso_stop((mm_siso_t *)obj);
+void sisoStop(void) {
+    siso_stop(siso_arduino);
 }
 
 
@@ -77,8 +77,8 @@ void sisoStop(void *obj) {
   * @param  pointer to the siso object
   * @retval none
   */
-void sisoPause(void *obj) {
-    siso_pause((mm_siso_t *)obj);
+void sisoPause(void) {
+    siso_pause(siso_arduino);
 }
 
 
@@ -88,7 +88,7 @@ void sisoPause(void *obj) {
   * @param  pointer to the siso object
   * @retval none
   */
-void sisoResume(void *obj) {
-    siso_resume((mm_siso_t *)obj);
+void sisoResume(void) {
+    siso_resume(siso_arduino);
 }
 
