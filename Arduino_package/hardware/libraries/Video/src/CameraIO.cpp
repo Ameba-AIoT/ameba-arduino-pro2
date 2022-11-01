@@ -22,7 +22,7 @@ CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
     if (numInput > 1){
         
         if (numOutput > 1){
-            #if MIMO
+#if MIMO
             //MIMO (Multi Input Multi Output)
             this->create = &mimoCreate;
             this->destroy = &mimoDestroy;
@@ -34,7 +34,7 @@ CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
             this->stop = &mimoStop;
             this->pause = &mimoPause;
             this->resume = &mimoResume;
-            #endif
+#endif
         }
         else {
             // MISO (Multi Input Single Output)
@@ -50,7 +50,7 @@ CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
         }
     } else {
         if (numOutput > 1){
-            #if SIMO
+#if SIMO
             //SIMO (Single Input Multi Output)
             this->create = &simoCreate;
             this->destroy = &simoDestroy;
@@ -61,7 +61,7 @@ CameraIOClass::CameraIOClass (uint8_t numInput, uint8_t numOutput ) {
             this->stop = &simoStop;
             this->pause = &simoPause;
             this->resume = &simoResume;
-            #endif
+#endif
         }
         else {
             // SISO (Single Input Single Output)
