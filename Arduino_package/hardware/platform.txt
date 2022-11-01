@@ -46,7 +46,7 @@ compiler.c.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16
 
 compiler.S.flags=
 
-compiler.cpp.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char -Os -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -g -gdwarf-3 -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC
+compiler.cpp.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char -Os -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -g -gdwarf-3 -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wno-unused -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC
 ###-fdiagnostics-color=always -Wundef
 
 compiler.c.elf.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char -Os -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -g -gdwarf-3 -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC 
@@ -165,5 +165,3 @@ tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.pa
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
-
-
