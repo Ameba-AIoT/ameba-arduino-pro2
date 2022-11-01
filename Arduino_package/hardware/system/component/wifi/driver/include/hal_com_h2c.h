@@ -480,6 +480,9 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_TCP_SSL_MODE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 3, 1, __Value)/*Header ignore*/
 #define SET_H2CCMD_SSL_INFO_LOC(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)/*SSL_INFO_LOC*/
 #define SET_H2CCMD_SSL_PATTERN_LOC(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)/*SSL_PATTERN_LOC*/
+#define SET_H2CCMD_TCP_PARM_SERVERTO_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 4, 1, __Value)
+#define SET_H2CCMD_TCP_PARM_SERVER_TIMEOUT_L(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
+#define SET_H2CCMD_TCP_PARM_SERVER_TIMEOUT_H(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 #endif
 
 /* DEFAULT_PORT_CMD_0x2c */

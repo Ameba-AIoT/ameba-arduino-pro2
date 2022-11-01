@@ -55,6 +55,10 @@ extern "C" {
 #define FW_SENSOR_SIZE     16*1024
 #define FW_VOE_SIZE        600*1024
 #define VIDEO_MPU_VOE_HEAP  0
+#define SENSOR_SINGLE_DEFAULT_SETUP     0x00
+#define SENSOR_MULTI_DEFAULT_SETUP      0X01
+#define SENSOR_MULTI_SAVE_VALUE         0X02
+#define SENSOR_MULTI_SETUP_PROCEDURE	0X03
 #ifdef __cplusplus
 }
 #endif

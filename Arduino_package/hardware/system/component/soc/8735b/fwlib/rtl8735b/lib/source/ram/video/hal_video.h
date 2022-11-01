@@ -174,6 +174,7 @@ typedef struct {
 	int cmd;
 	int cmd_status;
 	u32 time_stamp;			// time_stamp current time stamp
+	u32 meta_offset;		// metadata offset size
 
 } __attribute__((aligned(32))) enc2out_t;
 
@@ -356,8 +357,7 @@ int hal_video_out_mode(int ch, int type, int mode);
 int hal_video_release(int ch, int type, int mode);
 
 
-
-int hal_video_froce_i(int ch);
+int hal_video_force_i(int ch);
 int hal_video_set_rc(rate_ctrl_s *rc, int ch);
 
 int hal_video_out_cb(output_callback_t out_cb, u32 out_queue_size, u32 arg, int ch);

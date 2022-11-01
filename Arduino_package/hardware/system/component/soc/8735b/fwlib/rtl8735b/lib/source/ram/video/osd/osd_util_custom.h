@@ -32,18 +32,18 @@ int		osd_text_update_str_custom(osd_text_st *p, char *str, BOOL ready2update);
 int		osd_text_update_font_custom(osd_text_st *p, rt_font_st *font_attr, BOOL ready2update);
 int		osd_text_update_rotate_custom(osd_text_st *p, rt_rotate_t rotate, BOOL ready2update);
 
-int		osd_text_update_custom(osd_text_st *p, BOOL ready2update);
+int		osd_text_update_custom(osd_text_st *p, BOOL ready2update, BOOL fast_start);
 
 int		osd_text_show_custom(osd_text_st *p);
 int		osd_text_hide_custom(osd_text_st *p);
 
 BOOL	osd_text_is_inited_custom(osd_text_st *p);
 
-int		osd_pict_update_custom(osd_pict_st *p, BOOL ready2update);
+int		osd_pict_update_custom(osd_pict_st *p, BOOL ready2update, BOOL fast_start);
 
 int		osd_pict_show_custom(osd_pict_st *p);
 int		osd_pict_hide_custom(osd_pict_st *p);
 
 void *_fontlib_get(fontlib_e n, unsigned char *eng_bin, unsigned char *chi_bin);
-
+void _fontlib_free(fontlib_e n);
 #endif	// OSD_UTIL_CUSTOM_H
