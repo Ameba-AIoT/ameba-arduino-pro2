@@ -2,6 +2,8 @@
 #include "mmf2_link.h"
 #include "mmf2_simo.h"
 
+static mm_simo_t *simo_arduino = NULL;
+
 /**
   * @brief  allocate memory for a simo object
   * @param  none
