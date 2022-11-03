@@ -14,6 +14,8 @@
 #define AUDIO_SAMPLE_RATE 8000
 #define AUDIO_CODEC_ID AV_CODEC_ID_MP4A_LATM
 
+static int AUDIO_EN = 0;
+
 #if DEBUG
 #define CAMDBG(fmt, args...) \
     do {printf("\r\nFunc-[%s]@Line-%d: \r\n" fmt "\r\n", __func__, __LINE__, ## args); } while (0);
@@ -47,14 +49,29 @@ void RTSPClass::init(CameraSetting *obj) {
         AV_Codec_ID = AV_CODEC_ID_MJPEG;
         RTSP_bps = 0; 
     }
-
+    CAMDBG("AUDIO_EN Status: %d", AUDIO_EN);
     RTSPSelectStream(rtspData->priv, VID_CH_IDX);
     RTSPSetParamsVideo(rtspData->priv, RTSP_fps, RTSP_bps, AV_Codec_ID);
     RTSPSetApply(rtspData->priv);
+    if (AUDIO_EN == 1){ 
+        RTSPSelectStream(rtspData->priv,AUDIO_CH_IDX);
+        RTSPSetParamsAudio(rtspData->priv,AUDIO_CH_IDX, AUDIO_SAMPLE_RATE, AUDIO_CODEC_ID);
+        RTSPSetApply(rtspData->priv);
+    }
+}
 
-    RTSPSelectStream(rtspData->priv,AUDIO_CH_IDX);
-    RTSPSetParamsAudio(rtspData->priv,AUDIO_CH_IDX, AUDIO_SAMPLE_RATE, AUDIO_CODEC_ID);
-    RTSPSetApply(rtspData->priv);
+/**
+  * @brief  Deinit and release all the resources set for RTSP 
+  * @param  none
+  * @retval none
+  */
+void RTSPClass::deInit(void){
+    if (RTSPDeInit(rtspData) == NULL) {
+        CAMDBG("RTSP DeInit.\r\n");
+    }
+    else {
+        CAMDBG("RTSP need to be DeInit.\r\n");
+    }
 }
 
 /**
@@ -98,15 +115,12 @@ mm_context_t *RTSPClass::getIO(void) {
 }
 
 /**
-  * @brief  Deinit and release all the resources set for RTSP 
+  * @brief  Enable RTSP settings for Audio Video streaming
   * @param  none
-  * @retval none
+  * @retval AUDIO_EN status as a integer
   */
-void RTSPClass::deInit(void){
-    if (RTSPDeInit(rtspData->priv) == NULL) {
-        CAMDBG("RTSP DeInit.\r\n");
-    }
-    else {
-        CAMDBG("RTSP need to be DeInit.\r\n");
-    }
+int RTSPClass::enableAudio(void){
+    AUDIO_EN = 1;
+    return AUDIO_EN;
 }
+
