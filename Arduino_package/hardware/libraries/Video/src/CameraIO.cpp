@@ -7,8 +7,6 @@ extern "C" {
 #include "siso_drv.h"
 #include "miso_drv.h"
 #include "simo_drv.h"
-
-//#include "simo_drv.h"
 //#include "mimo_drv.h"
 
 #ifdef __cplusplus
