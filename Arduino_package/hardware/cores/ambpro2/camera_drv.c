@@ -35,7 +35,7 @@ static video_params_t video_params = {
     .use_static_addr = 1
 };
 
-int cameraConfig(int enable, int w, int h, int bps, int snapshot, int preset){
+int cameraConfig(int enable, int w, int h, int bps, int snapshot, int preset) {
     int voe_heap_size = 0;
     isp_info_t info;
 
@@ -60,25 +60,22 @@ int cameraConfig(int enable, int w, int h, int bps, int snapshot, int preset){
     info.hdr_enable = 1;
 #endif
     video_set_isp_info(&info);
-    if (preset == 1){ // preset % 4 == 1 
+    if (preset == 1) { // preset % 4 == 1 
         voe_heap_size =  video_buf_calc(enable, w, h, bps, snapshot,
                                         0,0,0,0,0,
                                         0,0,0,0,0,
                                         0,0,0);
-    }
-    else if (preset == 2){
+    } else if (preset == 2) {
         voe_heap_size =  video_buf_calc(0,0,0,0,0,
                                         enable, w, h, bps, snapshot,
                                         0,0,0,0,0,
                                         0,0,0);
-    }
-    else if (preset == 3){
+    } else if (preset == 3) {
         voe_heap_size =  video_buf_calc(0,0,0,0,0,
                                         0,0,0,0,0,
                                         enable, w, h, bps, snapshot,
                                         0,0,0);
-    }
-    else{
+    } else {
         voe_heap_size =  video_buf_calc(0,0,0,0,0,
                                         0,0,0,0,0,
                                         0,0,0,0,0,
@@ -87,15 +84,15 @@ int cameraConfig(int enable, int w, int h, int bps, int snapshot, int preset){
     return voe_heap_size;
 }
 
-mm_context_t *cameraInit(void){
+mm_context_t *cameraInit(void) {
     CAMDBG("cameraInit Starts");
     mm_context_t* videoData = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
     if (!videoData) {
         return NULL;
     }
     memset(videoData, 0, sizeof(mm_context_t));
-    videoData->queue_num = 1;		// default 1 queue, can set multiple queue by command MM_CMD_SET_QUEUE_NUM
-    videoData->module = &video_module; 
+    videoData->queue_num = 1;       // default 1 queue, can set multiple queue by command MM_CMD_SET_QUEUE_NUM
+    videoData->module = &video_module;
     videoData->priv = video_module.create(videoData);
     if (!videoData->priv) {
         CAMDBG("[ERROR] fail------");
@@ -112,7 +109,7 @@ mm_context_t *cameraInit(void){
     return videoData;
 }
 
-void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode){
+void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode) {
     // assign value parsing from user level
     video_params.stream_id = stream_id;
     video_params.type = type;
@@ -142,7 +139,7 @@ void cameraSnapshot(void *p, int channel){
     video_control(p, CMD_VIDEO_SNAPSHOT, channel);
 }
 
-mm_context_t *cameraDeInit(mm_context_t *p){
+mm_context_t *cameraDeInit(mm_context_t *p) {
     mm_queue_item_t *tmp_item;
     mm_context_t *video_data = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
     video_data = p;
@@ -185,10 +182,9 @@ mm_context_t *cameraDeInit(mm_context_t *p){
     CAMDBG("module close - free context");
     CAMDBG("module close - free heap %d", xPortGetFreeHeapSize());
     video_deinit();
-    
     return NULL;
 }
 
-void cameraStopVideoStream(void *p, int channel){
+void cameraStopVideoStream(void *p, int channel) {
     video_control(p, CMD_VIDEO_STREAM_STOP, channel);
 }

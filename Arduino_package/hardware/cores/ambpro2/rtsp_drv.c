@@ -43,28 +43,28 @@ static rtsp2_params_t rtsp_param_audio = {
 };
 
 // RTSP init
-mm_context_t* RTSPInit (void) { 
+mm_context_t* RTSPInit(void) {
     return mm_module_open(&rtsp2_module);
 }
 
 // Select channel index 0 (video) or 1 (audio) etc
-int RTSPSelectStream (void *p, int channel_idx) {
+int RTSPSelectStream(void *p, int channel_idx) {
     return rtsp2_control(p, CMD_RTSP2_SELECT_STREAM, channel_idx);
 }
 
 // Apply parameters set
-int RTSPSetApply (void *p) {
+int RTSPSetApply(void *p) {
     return rtsp2_control(p, CMD_RTSP2_SET_APPLY, 0);
 }
 
 // Decide to on or off streaming
-void RTSPSetStreaming (void *p, int arg) { 
+void RTSPSetStreaming(void *p, int arg) {
     CAMDBG("Set Streaming");
-    mm_module_ctrl((mm_context_t *)p, CMD_RTSP2_SET_STREAMMING, arg);	
+    mm_module_ctrl((mm_context_t *)p, CMD_RTSP2_SET_STREAMMING, arg);
 }
 
 // Set parameters for RTSP Video
-int RTSPSetParamsVideo (void *p, uint32_t RTSP_fps, uint32_t RTSP_bps, uint32_t AV_Codec) {
+int RTSPSetParamsVideo(void *p, uint32_t RTSP_fps, uint32_t RTSP_bps, uint32_t AV_Codec) {
     rtsp_params.u.v.fps = RTSP_fps;
     rtsp_params.u.v.bps = RTSP_bps;
     rtsp_params.u.v.codec_id = AV_Codec;
@@ -73,7 +73,7 @@ int RTSPSetParamsVideo (void *p, uint32_t RTSP_fps, uint32_t RTSP_bps, uint32_t 
 }
 
 // Set parameters for RTSP Audio
-int RTSPSetParamsAudio (void *p, uint32_t channel, uint32_t sample_rate, uint32_t AV_Codec) {
+int RTSPSetParamsAudio(void *p, uint32_t channel, uint32_t sample_rate, uint32_t AV_Codec) {
     rtsp_param_audio.u.a.channel = channel;
     rtsp_param_audio.u.a.samplerate = sample_rate;
     rtsp_param_audio.u.a.codec_id = AV_Codec;
@@ -82,6 +82,13 @@ int RTSPSetParamsAudio (void *p, uint32_t channel, uint32_t sample_rate, uint32_
 }
 
 // deinit and release all resources for RTSP
-mm_context_t* RTSPDeInit (void *p){
+mm_context_t* RTSPDeInit(void *p) {
     return mm_module_close((mm_context_t *)p);
+}
+
+// get port value for RTSP
+int RTSPGetPort(void *p) {
+    rtsp2_ctx_t *ctx = (rtsp2_ctx_t *)p;
+    struct rtsp_context *rtsp = ctx->rtsp;
+    return (rtsp->connect_ctx.server_port);
 }

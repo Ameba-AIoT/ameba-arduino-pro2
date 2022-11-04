@@ -23,7 +23,7 @@ static audio_params_t audio_params = {
     .enable_aec  = 0
 };
 
-static aac_params_t aac_params = {	
+static aac_params_t aac_params = {
     .sample_rate = 0,
     .channel = 0,
     .bit_length = 0,
@@ -34,15 +34,15 @@ static aac_params_t aac_params = {
     .mem_frame_size = 0
 };
 
-mm_context_t* audioInit(void) { 
+mm_context_t* audioInit(void) {
     return mm_module_open(&audio_module);
 }
 
-void audioDeInit(mm_context_t *p) { 
+void audioDeInit(mm_context_t *p) {
     mm_module_ctrl(p, CMD_AUDIO_SET_TRX, 0);
 }
 
-void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, int dmic_l_gain, int dmic_r_gain, int use_mic_type, int channel, int enable_aec){
+void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, int dmic_l_gain, int dmic_r_gain, int use_mic_type, int channel, int enable_aec) {
     audio_params.sample_rate = sample_rate;
     audio_params.word_length = word_length;
     audio_params.mic_gain    = mic_gain;
@@ -51,7 +51,7 @@ void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, 
     audio_params.use_mic_type   = use_mic_type;
     audio_params.channel     = channel;
     audio_params.enable_aec  = enable_aec;
-    
+
     if (p) {
 #if !DEFAULT_AUDIO_SETTINGS
         mm_module_ctrl(p, CMD_AUDIO_SET_PARAMS, (int)&audio_params);
@@ -59,14 +59,13 @@ void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, 
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 6);
         mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
         mm_module_ctrl(p, CMD_AUDIO_APPLY, 0);
-        
         CAMDBG("audio opened");
     } else {
         CAMDBG("audio open fail");
     }
 }
 
-void audioClose(mm_context_t *p){
+void audioClose(mm_context_t *p) {
     mm_module_close(p);
 }
 
@@ -74,7 +73,7 @@ mm_context_t* AACInit(void) {
     return mm_module_open(&aac_module);
 }
 
-void AACOpen(mm_context_t *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_length, uint32_t output_format, uint32_t mpeg_version, uint32_t mem_total_size, uint32_t mem_block_size, uint32_t mem_frame_size){
+void AACOpen(mm_context_t *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_length, uint32_t output_format, uint32_t mpeg_version, uint32_t mem_total_size, uint32_t mem_block_size, uint32_t mem_frame_size) {
     AACSetParams(p->priv,sample_rate,channel,bit_length,output_format,mpeg_version,mem_total_size, mem_block_size, mem_frame_size);
     AACSetQueueLength(p);
     AACInitQueueItems(p);
@@ -82,7 +81,7 @@ void AACOpen(mm_context_t *p, uint32_t sample_rate, uint32_t channel, uint32_t b
     AACApply(p->priv);
 }
 
-int AACSetParams(void *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_length, uint32_t output_format, uint32_t mpeg_version, uint32_t mem_total_size, uint32_t mem_block_size, uint32_t mem_frame_size){
+int AACSetParams(void *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_length, uint32_t output_format, uint32_t mpeg_version, uint32_t mem_total_size, uint32_t mem_block_size, uint32_t mem_frame_size) {
     aac_params.sample_rate = sample_rate;
     aac_params.channel = channel;
     aac_params.bit_length = bit_length;
@@ -91,27 +90,26 @@ int AACSetParams(void *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_l
     aac_params.mem_total_size = mem_total_size;
     aac_params.mem_block_size = mem_block_size;
     aac_params.mem_frame_size = mem_frame_size;
-    
     return aac_control(p, CMD_AAC_SET_PARAMS, (int)&aac_params);
 }
 
-int AACSetQueueLength(void *p){
+int AACSetQueueLength(void *p) {
     return mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 6);
 }
 
-int AACInitQueueItems(void *p){
+int AACInitQueueItems(void *p) {
     return mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
 }
 
-int AACInitMemPool(void *p){
+int AACInitMemPool(void *p) {
     return aac_control(p, CMD_AAC_INIT_MEM_POOL, 0);
 }
 
-int AACApply(void *p){
+int AACApply(void *p) {
     return aac_control(p, CMD_AAC_APPLY, 0);
 }
 
-void AACStop(mm_context_t *p){
+void AACStop(mm_context_t *p) {
     mm_module_ctrl(p, CMD_AUDIO_SET_TRX, 0);
 }
 

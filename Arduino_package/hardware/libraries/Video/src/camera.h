@@ -51,16 +51,16 @@ enum encode_type {
     VIDEO_H264_JPEG
 };
 
-#define	VIDEO_QCIF  0
-#define	VIDEO_CIF   1
-#define	VIDEO_WVGA  2
-#define	VIDEO_VGA   3
-#define	VIDEO_D1    4
-#define	VIDEO_HD    5
-#define	VIDEO_FHD   6
-#define	VIDEO_3M    7
-#define	VIDEO_5M    8
-#define	VIDEO_2K    9
+#define VIDEO_QCIF  0
+#define VIDEO_CIF   1
+#define VIDEO_WVGA  2
+#define VIDEO_VGA   3
+#define VIDEO_D1    4
+#define VIDEO_HD    5
+#define VIDEO_FHD   6
+#define VIDEO_3M    7
+#define VIDEO_5M    8
+#define VIDEO_2K    9
 
 // define video resolution
 //#define VIDEO_2K_WIDTH    2560
@@ -77,7 +77,7 @@ enum encode_type {
 // define video group of pictures
 #define CAM_GOP             30
 // define video bit rate
-#define CAM_BPS             2*1024*1024
+#define CAM_BPS             2 * 1024 * 1024
 // define video rate control
 #define CAM_RCMODE          2 // 1: CBR, 2: VBR
 
@@ -93,7 +93,7 @@ enum encode_type {
 #define VIDEO_CODEC AV_CODEC_ID_H264
 #endif
 
-class CameraSetting{
+class CameraSetting {
     public:
         CameraSetting(void);
         CameraSetting(uint8_t preset);
@@ -106,11 +106,10 @@ class CameraSetting{
         uint8_t _snapshot;
         int _w;
         int _h;
-        
         friend class CameraClass;
 };
 
-class CameraClass{
+class CameraClass {
     public:
         CameraClass(void);
         ~CameraClass();
@@ -118,18 +117,15 @@ class CameraClass{
         void init(CameraSetting *obj);
         void init(int w, int h, int bps, int preset);
         void init(int enable, int w, int h, int bps, int snapshot, int preset);
-
         void deInit(void);
-
         void open(void);
         void open(CameraSetting *obj);
         void open(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode);
         void start(CameraSetting *obj);
         void close(void);
         mm_context_t *getIO(void);
-   
+
     private:
         mm_context_t *video_data;
-        
 };
 #endif

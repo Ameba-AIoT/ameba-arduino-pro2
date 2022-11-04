@@ -24,7 +24,10 @@ class RTSPClass : public CameraSetting {
         void close(void);
         void deInit(void);
         mm_context_t *getIO(void);
+
         int enableAudio(void);
+        int getPort(void);
+
     private:
         mm_context_t *rtspData;
 };

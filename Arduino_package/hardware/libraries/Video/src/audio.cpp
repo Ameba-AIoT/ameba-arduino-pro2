@@ -10,15 +10,15 @@
 #define CAMDBG(fmt, args...)
 #endif
 
-AudioClass::AudioClass(void){
+AudioClass::AudioClass(void) {
     audioData = NULL;
 };
-AudioClass::~AudioClass(){};
+AudioClass::~AudioClass() {};
 
-AACClass::AACClass(void){
+AACClass::AACClass(void) {
     AACData = NULL;
 };
-AACClass::~AACClass(){};
+AACClass::~AACClass() {};
 
 /**
   * @brief  Init audio module
@@ -69,7 +69,7 @@ void AudioClass::open(void) {
             enable_aec  : enable or disable Acoustic Echo Cancelling
   * @retval none
   */
-void AudioClass::open(mm_context_t *p, uint32_t sample_rate, uint32_t word_length, audio_mic_gain mic_gain, audio_dmic_gain dmic_l_gain, audio_dmic_gain dmic_r_gain, uint8_t use_mic_type, int channel, uint32_t enable_aec){
+void AudioClass::open(mm_context_t *p, uint32_t sample_rate, uint32_t word_length, audio_mic_gain mic_gain, audio_dmic_gain dmic_l_gain, audio_dmic_gain dmic_r_gain, uint8_t use_mic_type, int channel, uint32_t enable_aec) {
     audioOpen(p, sample_rate, word_length, mic_gain, dmic_l_gain, dmic_r_gain, use_mic_type, channel, enable_aec);
 }
 
@@ -115,8 +115,7 @@ void AACClass::init(void) {
 void AACClass::deInit(void){
    if (AACDeInit(AACData->priv) == NULL) {
         CAMDBG("AAC DeInit.\r\n");
-    }
-    else {
+    } else {
         CAMDBG("AAC need to be DeInit.\r\n");
     }
 }
@@ -127,7 +126,7 @@ void AACClass::deInit(void){
   * @retval none
   */
 
-void AACClass::close(void){
+void AACClass::close(void) {
     AACStop(AACData);
 }
 
@@ -140,8 +139,7 @@ mm_context_t *AACClass::getIO(void) {
     if (AACData == NULL) {
         printf("[AAC] Failed, please init AAC first.");
         return NULL;
-    }
-    else {
+    } else {
         return AACData;
     }
 }

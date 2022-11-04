@@ -19,7 +19,7 @@ void simoCreate(void) {
   * @param  pointer to the simo object
   * @retval none
   */
-void simoDestroy() {
+void simoDestroy(void) {
     //delete the SIMO object created and stop the simo task
     if(NULL != simo_delete(simo_arduino)) {
         printf("Camera IO linker destroy failed..");
