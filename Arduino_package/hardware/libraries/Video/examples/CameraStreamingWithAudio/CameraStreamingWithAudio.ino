@@ -46,6 +46,7 @@ void setup() {
     aac.init();
 
     // init rtsp
+    rtsp.enableAudio();
     rtsp.init(&camset);
     rtsp.open();
 
