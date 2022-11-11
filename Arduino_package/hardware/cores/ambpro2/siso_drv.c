@@ -101,3 +101,4 @@ void sisoSetStackSize(void) {
 void sisoSetTaskPriority(void) {
     siso_ctrl(siso_arduino, MMIC_CMD_SET_TASKPRIORITY, 3, 0);
 }
+

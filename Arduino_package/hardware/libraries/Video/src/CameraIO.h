@@ -18,6 +18,7 @@ class CameraIOClass
         void (*registerInput)(mm_context_t*);
         void (*registerInput1)(mm_context_t*);
         void (*registerInput2)(mm_context_t*);
+        void (*registerInput3)(mm_context_t*);
         void (*registerOutput)(mm_context_t*);
         void (*registerOutput1)(mm_context_t*);
         void (*registerOutput2)(mm_context_t*);

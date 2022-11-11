@@ -1,16 +1,16 @@
 #include "CameraIO.h"
+#include "WiFi.h"
 #include "camera.h"
 #include "rtsp.h"
-#include "WiFi.h"
 
 CameraSetting camset;
 CameraClass cam;
 RTSPClass rtsp;
-CameraIOClass camio1_1In1Out(1, 1); // Single Input Single Output
+CameraIOClass camio1_1In1Out(1, 1);  // Single Input Single Output
 
-char ssid[] = "yourNetwork";     //  your network SSID (name)
-char pass[] = "password";        // your network password
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
+char ssid[] = "yourNetwork";  //  your network SSID (name)
+char pass[] = "password";     // your network password
+int status = WL_IDLE_STATUS;  // the Wifi radio's status
 
 void setup() {
     Serial.begin(115200);
@@ -18,7 +18,8 @@ void setup() {
     if (WiFi.status() == WL_NO_SHIELD) {
         Serial.println("WiFi shield not present");
         // don't continue:
-        while (true);
+        while (true)
+            ;
     }
 
     // attempt to connect to Wifi network:
@@ -32,23 +33,20 @@ void setup() {
         delay(2000);
     }
 
-    // init camera
-    cam.init(&camset);
-    cam.open(&camset);
+    cam.init(camset);
+    cam.open(camset);
 
-    // init rtsp
-    rtsp.init(&camset);
+    rtsp.init(camset);
     rtsp.open();
 
-    // create camera io linker
     camio1_1In1Out.create();
     camio1_1In1Out.registerInput(cam.getIO());
     camio1_1In1Out.registerOutput(rtsp.getIO());
-    if(camio1_1In1Out.start() != 0) {
+    if (camio1_1In1Out.start() != 0) {
         Serial.println("camera io link start failed");
     }
 
-    cam.start(&camset);
+    cam.start(camset);
 }
 
 void loop() {
