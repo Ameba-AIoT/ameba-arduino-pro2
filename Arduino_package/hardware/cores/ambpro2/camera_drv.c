@@ -10,7 +10,7 @@
 #define OSD_ENABLE      1
 #define MD_ENABLE       1
 #define HDR_ENABLE      1
-#define DEBUG           1
+#define DEBUG           0
 
 #if DEBUG
 #define CAMDBG(fmt, args...) \
@@ -226,9 +226,9 @@ mm_context_t *cameraDeInit(mm_context_t *p) {
             }
             CAMDBG("module close - move item to recycle");
             while (xQueueReceive(video_data->port[i].output_recycle, (void *)&tmp_item, 0) == pdTRUE) {
-                CAMDBG("module close - tmp_item %x",tmp_item);
+                CAMDBG("module close - tmp_item %x",(unsigned int)tmp_item);
                 if (tmp_item) {
-                    CAMDBG("module close - data_addr %x", tmp_item->data_addr);
+                    CAMDBG("module close - data_addr %x", (unsigned int)tmp_item->data_addr);
                     if (i == 0) {
                         if (tmp_item->data_addr) {
                             video_del_item(video_data->priv, (void *)tmp_item->data_addr);
