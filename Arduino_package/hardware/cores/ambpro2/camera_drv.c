@@ -189,7 +189,7 @@ void cameraSnapshot(void *p, int channel) {
 
 int snapshot_cb(uint32_t jpeg_addr, uint32_t jpeg_len) {
     printf("snapshot addr=%d\n\r, snapshot size=%d\n\r", (int)jpeg_addr, (int)jpeg_len);
-    return;
+    return 0;
 }
 
 void snapshot_control_thread(void *param) {
