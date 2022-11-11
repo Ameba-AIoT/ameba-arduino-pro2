@@ -32,8 +32,7 @@ void setup() {
     if (WiFi.status() == WL_NO_SHIELD) {
         Serial.println("WiFi shield not present");
         // don't continue:
-        while (true)
-            ;
+        while (true);
     }
 
     // attempt to connect to Wifi network:
