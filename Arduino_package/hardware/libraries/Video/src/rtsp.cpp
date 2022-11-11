@@ -3,7 +3,7 @@
 
 #define ON  1
 #define OFF 0
-#define DEBUG 0
+#define DEBUG 1
 
 #define VID_CH_IDX 0
 #define RTSP_VIDEO_TYPE AVMEDIA_TYPE_VIDEO
@@ -33,20 +33,34 @@ RTSPClass::~RTSPClass() {};
   * @param  obj  : object pointer to Camera Settings
   * @retval none
   */
-void RTSPClass::init(CameraSetting *obj) {
+void RTSPClass::init(CameraSetting& obj) {
     rtspData = RTSPInit();
     CAMDBG("RTSP_Init done\r\n");
 
-    uint32_t RTSP_fps = obj->_fps;
-    uint32_t AV_Codec_ID = obj->_decoder;
+    uint32_t RTSP_fps;
+    uint32_t AV_Codec_ID;
     uint32_t RTSP_bps = RTSP_BPS;
+    
+    if(obj._resolution) {
+        RTSP_fps = obj._fps;
+        AV_Codec_ID = obj._decoder;
+    }
+    if(obj._v2_resolution) {
+        RTSP_fps = obj._v2_fps;
+        AV_Codec_ID = obj._v2_decoder;
+    }
+    if(obj._v3_resolution) {
+        RTSP_fps = obj._v3_fps;
+        AV_Codec_ID = obj._v3_decoder;
+    }
 
     if (AV_Codec_ID == VIDEO_H264) {
         AV_Codec_ID = AV_CODEC_ID_H264;
     } else if (AV_Codec_ID == VIDEO_JPEG) {
         AV_Codec_ID = AV_CODEC_ID_MJPEG;
-        RTSP_bps = 0;
+        RTSP_bps = 0; 
     }
+    CAMDBG("%d   %d   %d", RTSP_fps, RTSP_bps, AV_Codec_ID);
     CAMDBG("AUDIO_EN Status: %d", AUDIO_EN);
     RTSPSelectStream(rtspData->priv, VID_CH_IDX);
     RTSPSetParamsVideo(rtspData->priv, RTSP_fps, RTSP_bps, AV_Codec_ID);
@@ -59,15 +73,15 @@ void RTSPClass::init(CameraSetting *obj) {
 }
 
 /**
-  * @brief  Deinit and release all the resources set for RTSP 
+  * @brief  deinit and release all the resources set for RTSP 
   * @param  none
   * @retval none
   */
-void RTSPClass::deInit(void) {
+void RTSPClass::deinit(void) {
     if (RTSPDeInit(rtspData) == NULL) {
-        CAMDBG("RTSP DeInit.\r\n");
+        CAMDBG("RTSP deinit.\r\n");
     } else {
-        CAMDBG("RTSP need to be DeInit.\r\n");
+        CAMDBG("RTSP need to be deinit.\r\n");
     }
 }
 
@@ -80,8 +94,8 @@ void RTSPClass::open (void) {
     if (rtspData == NULL) {
         printf("Streaming failed, RTSP not initialised yet.\r\n");
     } else {
-        CAMDBG("Start Streaming\r\n");
         RTSPSetStreaming ((void *)rtspData, ON);
+        CAMDBG("Start Streaming\r\n");
     }
 }
 

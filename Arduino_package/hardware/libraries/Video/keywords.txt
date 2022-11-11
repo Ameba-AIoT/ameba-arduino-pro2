@@ -18,36 +18,50 @@ CameraIOClass		KEYWORD1
 #######################################
 
 camset				KEYWORD1
+camset1				KEYWORD1
+camset2				KEYWORD1
 cam					KEYWORD1
-rtsp 				KEYWORD1
-rtsp1 				KEYWORD1
+cam1				KEYWORD1
+cam2				KEYWORD1
 audio				KEYWORD1
 aac					KEYWORD1
+rtsp 				KEYWORD1
+rtsp1 				KEYWORD1
+rtsp2 				KEYWORD1
 camio1_1In1Out		KEYWORD1
 camio1_2In1Out		KEYWORD1
 camio1_1In2Out		KEYWORD1
 camio1_2In2Out		KEYWORD1
+camio2_2In1Out		KEYWORD1
+camio2_3In2Out		KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
 init				KEYWORD2
-deInit				KEYWORD2
+deinit				KEYWORD2
 open				KEYWORD2
 close				KEYWORD2
-create				KEYWORD2
-registerInput		KEYWORD2
-registerInput1 		KEYWORD2
-registerInput2		KEYWORD2
-registerOutput		KEYWORD2
-registerOutput1		KEYWORD2
-registerOutput2		KEYWORD2
 start				KEYWORD2
 stop				KEYWORD2
 pause				KEYWORD2
 resume				KEYWORD2
 getIO				KEYWORD2
+getP				KEYWORD2
+getPort				KEYWORD2
+setFPS				KEYWORD2
+setStackSize		KEYWORD2
+setTaskPriority		KEYWORD2
+create				KEYWORD2
+registerInput		KEYWORD2
+registerInput1 		KEYWORD2
+registerInput2		KEYWORD2
+registerInput3		KEYWORD2
+registerOutput		KEYWORD2
+registerOutput1		KEYWORD2
+registerOutput2		KEYWORD2
+enableAudio			KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
@@ -56,6 +70,22 @@ getIO				KEYWORD2
 VIDEO_HD			KEYWORD3
 VIDEO_FHD			KEYWORD3
 VIDEO_VGA			KEYWORD3
+VIDEO_JPEG			KEYWORD3
 CAM_FPS				KEYWORD3
 CAM_BPS				KEYWORD3
+CAM_GOP				KEYWORD3
+CAM_RCMODE			KEYWORD3
 VIDEO_H264			KEYWORD3
+VIDEO_JPEG			KEYWORD3
+VIDEO_FHD_WIDTH		KEYWORD3
+VIDEO_FHD_HEIGHT	KEYWORD3
+VIDEO_HD_WIDTH		KEYWORD3
+VIDEO_HD_HEIGHT		KEYWORD3
+VIDEO_H264			KEYWORD3
+VID_CH_IDX			KEYWORD3
+RTSP_VIDEO_TYPE		KEYWORD3
+RTSP_BPS			KEYWORD3
+RTSP_AUDIO_TYPE		KEYWORD3
+AUDIO_CH_IDX		KEYWORD3
+AUDIO_SAMPLE_RATE	KEYWORD3
+AUDIO_CODEC_ID		KEYWORD3

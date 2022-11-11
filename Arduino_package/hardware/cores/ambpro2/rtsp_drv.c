@@ -7,7 +7,7 @@
 #include "module_rtsp2.h"
 #include "queue.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG
 #define CAMDBG(fmt, args...) \
@@ -58,9 +58,10 @@ int RTSPSetApply(void *p) {
 }
 
 // Decide to on or off streaming
-void RTSPSetStreaming(void *p, int arg) {
-    CAMDBG("Set Streaming");
-    mm_module_ctrl((mm_context_t *)p, CMD_RTSP2_SET_STREAMMING, arg);
+void RTSPSetStreaming (void *p, int arg) { 
+    CAMDBG("Set Streaming start");
+    mm_module_ctrl((mm_context_t *)p, CMD_RTSP2_SET_STREAMMING, arg);	
+    CAMDBG("Set Streaming done");
 }
 
 // Set parameters for RTSP Video
@@ -82,8 +83,8 @@ int RTSPSetParamsAudio(void *p, uint32_t channel, uint32_t sample_rate, uint32_t
 }
 
 // deinit and release all resources for RTSP
-mm_context_t* RTSPDeInit(void *p) {
-    return mm_module_close((mm_context_t *)p);
+mm_context_t* RTSPDeInit (mm_context_t *p) {
+    return mm_module_close(p);
 }
 
 // get port value for RTSP

@@ -30,11 +30,11 @@ void AudioClass::init(void) {
 }
 
 /**
-  * @brief  DeInit audio module
+  * @brief  deinit audio module
   * @param  none
   * @retval none
   */
-void AudioClass::deInit(void) {
+void AudioClass::deinit(void) {
     audioDeInit(audioData);
 } 
 
@@ -78,8 +78,8 @@ void AudioClass::open(mm_context_t *p, uint32_t sample_rate, uint32_t word_lengt
   * @param  pointer to audio object 
   * @retval none
   */
-void AudioClass::close(mm_context_t *p) {
-    audioClose(p);
+void AudioClass::close(void) {
+    audioClose(audioData);
 }
 
 /**
@@ -91,8 +91,7 @@ mm_context_t *AudioClass::getIO(void) {
     if (audioData == NULL) {
         printf("Failed, please init audio first.\r\n");	
         return NULL;
-    }
-    else {
+    } else {
         return audioData;
     }
 }
@@ -108,15 +107,15 @@ void AACClass::init(void) {
 }
 
 /**
-  * @brief  Deinit AAC (Advanced Audio Codec) module
+  * @brief  deinit AAC (Advanced Audio Codec) module
   * @param  none
   * @retval none
   */
-void AACClass::deInit(void){
-   if (AACDeInit(AACData->priv) == NULL) {
-        CAMDBG("AAC DeInit.\r\n");
+void AACClass::deinit(void) {
+    if (AACDeInit(AACData) == NULL) {
+        CAMDBG("AAC deinit.\r\n");
     } else {
-        CAMDBG("AAC need to be DeInit.\r\n");
+        CAMDBG("AAC need to be deinit.\r\n");
     }
 }
 
@@ -125,7 +124,6 @@ void AACClass::deInit(void){
   * @param  none
   * @retval none
   */
-
 void AACClass::close(void) {
     AACStop(AACData);
 }
