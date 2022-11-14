@@ -82,7 +82,7 @@ void AACOpen(mm_context_t *p, uint32_t sample_rate, uint32_t channel, uint32_t b
 }
 
 void AACStop(mm_context_t *p) {
-    return mm_module_ctrl(p, CMD_AAC_STOP, 0);
+    mm_module_ctrl(p, CMD_AAC_STOP, 0);
 }
 
 int AACSetParams(void *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_length, uint32_t output_format, uint32_t mpeg_version, uint32_t mem_total_size, uint32_t mem_block_size, uint32_t mem_frame_size) {
