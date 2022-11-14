@@ -52,24 +52,22 @@ void mimoRegIn3(mm_context_t *arg1) {
   * @retval  none
   */
 void mimoRegOut1(mm_context_t *arg1) {
-    if (numIn == 2){
+    if (numIn == 2) {
         printf("2 Inputs /r/n");
         mimo_ctrl(mimo_arduino, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0);
 //        mimo_ctrl(mimo_arduino, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0 | MMIC_DEP_INPUT1);
-    }
-    else if (numIn == 3){
+    } else if (numIn == 3) {
         printf("3 Inputs /r/n");
         mimo_ctrl(mimo_arduino, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0 | MMIC_DEP_INPUT2);
     }
 }
 
 void mimoRegOut2(mm_context_t *arg1) {
-    if (numIn == 2){
+    if (numIn == 2) {
         printf("2 Inputs /r/n");
         mimo_ctrl(mimo_arduino, MMIC_CMD_ADD_OUTPUT1, (uint32_t)arg1, MMIC_DEP_INPUT1);
 //        mimo_ctrl(mimo_arduino, MMIC_CMD_ADD_OUTPUT1,(uint32_t)arg1,  MMIC_DEP_INPUT1 | MMIC_DEP_INPUT0);
-    }
-    else if (numIn == 3){
+    } else if (numIn == 3) {
         printf("3 Inputs /r/n");
         mimo_ctrl(mimo_arduino, MMIC_CMD_ADD_OUTPUT1,(uint32_t)arg1, MMIC_DEP_INPUT1 | MMIC_DEP_INPUT2);
     }
@@ -112,6 +110,6 @@ void mimoResume(void) {
     mimo_resume(mimo_arduino);
 }
 
-void getInput(uint8_t numInput){
+void getInput(uint8_t numInput) {
     numIn = numInput;
 }

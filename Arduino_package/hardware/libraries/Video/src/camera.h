@@ -108,10 +108,10 @@ class CameraSetting {
         CameraSetting(uint8_t resolution, uint8_t fps, uint8_t decoder, uint8_t snapshot);
 
         CameraSetting(uint8_t resolution, uint8_t fps, uint8_t decoder, uint8_t snapshot,
-                            uint8_t v2_resolution, uint8_t v2_fps, uint8_t v2_decoder, uint8_t v2_snapshot,
-                            uint8_t v3_resolution, uint8_t v3_fps, uint8_t v3_decoder, uint8_t v3_snapshot,
-                            uint8_t v4_resolution, uint8_t v4_fps);
-        
+                      uint8_t v2_resolution, uint8_t v2_fps, uint8_t v2_decoder, uint8_t v2_snapshot,
+                      uint8_t v3_resolution, uint8_t v3_fps, uint8_t v3_decoder, uint8_t v3_snapshot,
+                      uint8_t v4_resolution, uint8_t v4_fps);
+
         int8_t _preset = -1;
 
         uint8_t _streaming_id = 0;
@@ -157,13 +157,13 @@ class CameraClass {
         void init(int enable, int w, int h, int bps, int snapshot, int preset);
 
         void init(int v1_w, int v1_h, int v1_bps,
-                         int v2_w, int v2_h, int v2_bps,
-                         int v3_w, int v3_h, int v3_bps,
-                         int v4_w, int v4_h);
+                  int v2_w, int v2_h, int v2_bps,
+                  int v3_w, int v3_h, int v3_bps,
+                  int v4_w, int v4_h);
         void init_new(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot, 
-                               int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot, 
-                               int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot, 
-                               int v4_enable, int v4_w, int v4_h);
+                      int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot, 
+                      int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot, 
+                      int v4_enable, int v4_w, int v4_h);
         void deinit(void);
 
         void open(void);

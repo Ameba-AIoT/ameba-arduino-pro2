@@ -13,12 +13,12 @@
 AudioClass::AudioClass(void) {
     audioData = NULL;
 };
-AudioClass::~AudioClass() {};
+AudioClass::~AudioClass(){};
 
 AACClass::AACClass(void) {
     AACData = NULL;
 };
-AACClass::~AACClass() {};
+AACClass::~AACClass(){};
 
 /**
   * @brief  Init audio module
@@ -36,7 +36,7 @@ void AudioClass::init(void) {
   */
 void AudioClass::deinit(void) {
     audioDeInit(audioData);
-} 
+}
 
 /**
   * @brief  Open audio module, parameters can be adjust in audio.h
@@ -102,7 +102,7 @@ mm_context_t *AudioClass::getIO(void) {
   * @retval none
   */
 void AACClass::init(void) {
-    AACData = AACInit(); 
+    AACData = AACInit();
     AACOpen(AACData, AAC_SAMPLERATE, AAC_CH, AAC_BIT_LENGTH, AAC_OUTPUT_FORMAT, AAC_MPEG_VER, AAC_MEM_TOTAL_SIZE, AAC_MEM_BLOCK_SIZE, AAC_MEM_FRAME_SIZE);
 }
 

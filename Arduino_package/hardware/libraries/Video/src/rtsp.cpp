@@ -3,7 +3,7 @@
 
 #define ON  1
 #define OFF 0
-#define DEBUG 1
+#define DEBUG 0
 
 #define VID_CH_IDX 0
 #define RTSP_VIDEO_TYPE AVMEDIA_TYPE_VIDEO
@@ -26,7 +26,7 @@ static int AUDIO_EN = 0;
 RTSPClass::RTSPClass(void) {
     rtspData = NULL;
 };
-RTSPClass::~RTSPClass() {};
+RTSPClass::~RTSPClass(){};
 
 /**
   * @brief  Initialization for RTSP module by setting up RTSP paramters. 
@@ -41,15 +41,15 @@ void RTSPClass::init(CameraSetting& obj) {
     uint32_t AV_Codec_ID;
     uint32_t RTSP_bps = RTSP_BPS;
     
-    if(obj._resolution) {
+    if (obj._resolution) {
         RTSP_fps = obj._fps;
         AV_Codec_ID = obj._decoder;
     }
-    if(obj._v2_resolution) {
+    if (obj._v2_resolution) {
         RTSP_fps = obj._v2_fps;
         AV_Codec_ID = obj._v2_decoder;
     }
-    if(obj._v3_resolution) {
+    if (obj._v3_resolution) {
         RTSP_fps = obj._v3_fps;
         AV_Codec_ID = obj._v3_decoder;
     }
@@ -116,7 +116,7 @@ void RTSPClass::close(void) {
 mm_context_t *RTSPClass::getIO(void) {
     // To check if rtsp init is done
     if (rtspData == NULL) {
-        printf("Streaming failed, please init RTSP first.\r\n");	
+        printf("Streaming failed, please init RTSP first.\r\n");
         return NULL;
     } else {
         return rtspData;

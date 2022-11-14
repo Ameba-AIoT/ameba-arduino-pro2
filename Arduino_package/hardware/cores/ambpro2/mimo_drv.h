@@ -1,4 +1,7 @@
 // Multiple Input and Multiple Output
+#ifndef mimo_drv_h
+#define mimo_drv_h
+
 #include "Arduino.h"
 #include "mmf2_module.h"
 
@@ -14,3 +17,5 @@ void mimoRegIn3(mm_context_t*);
 void mimoRegOut1(mm_context_t*);
 void mimoRegOut2(mm_context_t*);
 void getInput(uint8_t numInput);
+
+#endif

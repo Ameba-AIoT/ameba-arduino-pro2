@@ -7,15 +7,6 @@
 #include "module_rtsp2.h"
 #include "queue.h"
 
-#define DEBUG 1
-
-#if DEBUG
-#define CAMDBG(fmt, args...) \
-    do {printf("\r\nFunc-[%s]@Line-%d: \r\n" fmt "\r\n", __func__, __LINE__, ## args); } while (0);
-#else
-#define CAMDBG(fmt, args...)
-#endif
-
 extern void rtp_stream_statistics_sync(struct stream_context *stream_ctx);
 
 //video output
@@ -58,10 +49,10 @@ int RTSPSetApply(void *p) {
 }
 
 // Decide to on or off streaming
-void RTSPSetStreaming (void *p, int arg) { 
-    CAMDBG("Set Streaming start");
-    mm_module_ctrl((mm_context_t *)p, CMD_RTSP2_SET_STREAMMING, arg);	
-    CAMDBG("Set Streaming done");
+void RTSPSetStreaming (void *p, int arg) {
+    //printf("Set Streaming start");
+    mm_module_ctrl((mm_context_t *)p, CMD_RTSP2_SET_STREAMMING, arg);
+    //printf("Set Streaming done");
 }
 
 // Set parameters for RTSP Video

@@ -11,7 +11,7 @@ extern "C" {
 }
 #endif
 
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG
 #define CAMDBG(fmt, args...) \
@@ -26,7 +26,7 @@ extern "C" {
   * @param  none
   * @retval none
   */
-CameraSetting :: CameraSetting(void) {
+CameraSetting::CameraSetting(void) {
     _preset         = 1;
     _snapshot       = 0;
     _decoder        = VIDEO_H264;
@@ -41,10 +41,10 @@ CameraSetting :: CameraSetting(void) {
   * @param  preset: select one out of 3 preset video settings
   * @retval none
   */
-CameraSetting :: CameraSetting(uint8_t preset) {
+CameraSetting::CameraSetting(uint8_t preset) {
     _preset = preset;
 
-    switch(_preset) {
+    switch (_preset) {
         case 1: //v1
             _resolution = VIDEO_FHD;
             _fps = CAM_FPS;
@@ -73,8 +73,8 @@ CameraSetting :: CameraSetting(uint8_t preset) {
             printf("Error with preset\r\n");
             break;
    }
-    
-    switch(_resolution) {
+
+    switch (_resolution) {
         case VIDEO_FHD:
             _w = VIDEO_FHD_WIDTH;
             _h = VIDEO_FHD_HEIGHT;
@@ -123,7 +123,7 @@ CameraSetting::CameraSetting(uint8_t resolution, uint8_t fps, uint8_t decoder, u
     _v3_h = VIDEO_FHD_HEIGHT;
 }
 
-CameraClass::CameraClass(){
+CameraClass::CameraClass() {
     video_data = NULL;
 };
 
@@ -137,7 +137,7 @@ CameraClass::~CameraClass(){};
 void CameraClass::init(CameraSetting& obj) {
     int bps = CAM_BPS;
     // update bps for v3
-    if (obj._v3_decoder == VIDEO_JPEG){
+    if (obj._v3_decoder == VIDEO_JPEG) {
         bps = 0;
     }
     CAMDBG("1 %d    %d    %d    %d    %d    %d    %d",obj._resolution,obj._fps,obj._decoder,obj._snapshot,obj._w, obj._h, bps);
@@ -150,7 +150,7 @@ void CameraClass::init(CameraSetting& obj) {
                 obj._v3_w, obj._v3_h, bps,
                 0, 0);
 
-////    if(obj->_preset != -1){
+////    if (obj->_preset != -1) {
 //////        return init(obj->_w, obj->_h, bps, obj->_preset);
 ////        return init(obj->_w, obj->_h, bps,
 ////                    0,0,0,
@@ -163,7 +163,6 @@ void CameraClass::init(CameraSetting& obj) {
 }
 
 
-
 /**
   * @brief  initialization for the camera sensor
   * @param  w       : width
@@ -173,10 +172,10 @@ void CameraClass::init(CameraSetting& obj) {
                       different camera presets
   * @retval  none
   */
-void CameraClass::init(int v1_w, int v1_h, int v1_bps,
-                         int v2_w, int v2_h, int v2_bps,
-                         int v3_w, int v3_h, int v3_bps,
-                         int v4_w, int v4_h) {
+void CameraClass::init (int v1_w, int v1_h, int v1_bps,
+                        int v2_w, int v2_h, int v2_bps,
+                        int v3_w, int v3_h, int v3_bps,
+                        int v4_w, int v4_h) {
     int enable   = VIDEO_ENABLE;
     int snapshot = VIDEO_SNAPSHOT_DISABLE;
     CAMDBG("1 %d    %d    %d    %d    %d",enable, v1_w, v1_h, v1_bps, snapshot);
@@ -262,7 +261,7 @@ void CameraClass::open(CameraSetting& obj) {
     CAMDBG("3 %d    %d    %d    %d    %d    %d    %d",obj._v3_resolution,obj._v3_fps,obj._v3_decoder,obj._v3_snapshot,obj._v3_w, obj._v3_h);
     CAMDBG("Preset: %d",obj._preset);
 
-    if(obj._resolution){
+    if (obj._resolution) {
         CAMDBG("Run open(v1)");
         cameraOpen(video_data, video_data->priv, 
                     obj._streaming_id, 
@@ -277,7 +276,7 @@ void CameraClass::open(CameraSetting& obj) {
                     obj._snapshot);
     }
 
-    if(obj._v2_resolution){
+    if (obj._v2_resolution) {
         CAMDBG("Run open(v2)");
         cameraOpen(video_data, video_data->priv, 
                     obj._v2_streaming_id, 
@@ -292,7 +291,7 @@ void CameraClass::open(CameraSetting& obj) {
                     obj._v2_snapshot);
     }
 
-    if(obj._v3_resolution){
+    if (obj._v3_resolution) {
         CAMDBG("Run open(v3)");
         cameraOpen(video_data, video_data->priv, 
                     obj._v3_streaming_id, 
@@ -349,32 +348,32 @@ void CameraClass::open(mm_context_t *p, void *p_priv, int stream_id, int type, i
   */
 void CameraClass::start(CameraSetting& obj) {
 
-    if(obj._resolution) {
+    if (obj._resolution) {
         cameraStart(video_data->priv, obj._streaming_id);
     }
 
-    if(obj._v2_resolution) {
+    if (obj._v2_resolution) {
         cameraStart(video_data->priv, obj._v2_streaming_id);
     }
 
-    if(obj._v3_resolution) { // V3
+    if (obj._v3_resolution) { // V3
         cameraStart(video_data->priv, obj._v3_streaming_id);
         getP(obj, 0);   // enable snapshot function
     }
 
-    if(obj._resolution && obj._snapshot) { //V1_snapshot
+    if (obj._resolution && obj._snapshot) { //V1_snapshot
         cameraStart(video_data->priv, obj._v3_streaming_id);
         getP(obj, 1);   // enable call back snapshot function
     }
-//    if (obj->_preset == 1){
+//    if (obj->_preset == 1) {
 //        printf("\r\n\r\n1 obj->preset: %d\r\n\r\n", obj->_preset);
 //        cameraStart(video_data->priv, obj->_preset - 1);
 //    } 
-//    else if (obj->_preset == 2){
+//    else if (obj->_preset == 2) {
 //        printf("\r\n\r\n2 obj->preset: %d\r\n\r\n", obj->_preset);
 //        cameraStart(video_data->priv, obj->_preset - 1);
 //    }
-//    else if (obj->_preset == 3){                             // v3: JPEG snapshot
+//    else if (obj->_preset == 3) {                             // v3: JPEG snapshot
 //        cameraStart(video_data->priv, obj->_preset - 1);
 //        //cameraSnapshot(video_data->priv, 2);
 //        getP(obj, 0); // enable snapshot function
@@ -396,7 +395,7 @@ mm_context_t *CameraClass::getIO(void) {
         printf("\r\nPlease init camera sensor first.\r\n");
         return NULL;
     } else {
-         return video_data;
+        return video_data;
     }
 }
 
@@ -416,10 +415,9 @@ void CameraClass::close(void) {
   * @retval none
   */
 void CameraClass::getP(CameraSetting& obj, bool cb_flag) {
-    if (cb_flag == 0){
+    if (cb_flag == 0) {
         CAMDBG("snapshot cb disabled\r\n");
         cameraSnapshot(video_data->priv, obj._v3_streaming_id);
-        
     } else {
         CAMDBG("snapshot cb enabled\r\n");
         cameraSnapshotCB(video_data);
@@ -435,4 +433,3 @@ void CameraClass::getP(CameraSetting& obj, bool cb_flag) {
 void CameraClass::setFPS(int fps) {
     video_set_framerate(fps);
 }
-
