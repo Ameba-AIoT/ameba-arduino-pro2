@@ -15,6 +15,8 @@
 
 #include <WiFi.h>
 
+int status = WL_IDLE_STATUS;
+
 void setup() {
     //Initialize serial and wait for port to open:
     Serial.begin(115200);
@@ -22,12 +24,8 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
 
-    // check for the presence of the shield:
-    if (WiFi.status() == WL_NO_SHIELD) {
-        Serial.println("WiFi shield not present");
-        // don't continue:
-        while (true);
-    }
+    // check for WiFi status:
+    status = WiFi.status();
 
     // Print WiFi MAC address:
     printMacAddress();

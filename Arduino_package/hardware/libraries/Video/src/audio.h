@@ -15,7 +15,7 @@ extern "C" {
 }
 #endif
 
-#include "camera.h"
+#include "video.h"
 
 // define Audio parameters
 // reference to audio_api.h
@@ -37,10 +37,10 @@ extern "C" {
 #define AAC_MEM_BLOCK_SIZE  128
 #define AAC_MEM_FRAME_SIZE  1024
 
-class AudioClass {
+class AudioRawClass {
     public:
-        AudioClass(void);
-        ~AudioClass(void);
+        AudioRawClass(void);
+        ~AudioRawClass(void);
 
         void init(void);
         void deinit(void);

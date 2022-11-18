@@ -23,7 +23,7 @@ void mimoCreate(void) {
 void mimoDestroy(void) {
     //delete the MIMO object created and stop the mimo task
     if(NULL != mimo_delete(mimo_arduino)) {
-        printf("Camera IO linker destroy failed..");
+        printf("Stream IO linker destroy failed..");
     }
 }
 

@@ -1,17 +1,17 @@
 #######################################
-# Camera
+# Video
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-CameraClass			KEYWORD1
+VideoClass			KEYWORD1
 CameraSetting		KEYWORD1
-AudioClass			KEYWORD1
+AudioRawClass			KEYWORD1
 AACClass			KEYWORD1
 RTSPClass			KEYWORD1
-CameraIOClass		KEYWORD1
+StreamIOClass		KEYWORD1
 
 #######################################
 # Library (KEYWORD1)

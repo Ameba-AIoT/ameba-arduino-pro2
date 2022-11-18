@@ -1,16 +1,16 @@
-#include "CameraIO.h"
+#include "StreamIO.h"
 #include "WiFi.h"
 #include "audio.h"
-#include "camera.h"
+#include "video.h"
 #include "rtsp.h"
 
 CameraSetting camset;
-CameraClass cam;
-AudioClass audio;
+VideoClass cam;
+AudioRawClass audio;
 AACClass aac;
 RTSPClass rtsp;
-CameraIOClass camio1_1In1Out(1, 1); // SISO for Audio -> AAC
-CameraIOClass camio2_2In1Out(2, 1); // MISO for Video + Audio -> RTSP
+StreamIOClass camio1_1In1Out(1, 1); // SISO for Audio -> AAC
+StreamIOClass camio2_2In1Out(2, 1); // MISO for Video + Audio -> RTSP
 
 char ssid[] = "yourNetwork";  //  your network SSID (name)
 char pass[] = "password";     // your network password
@@ -19,11 +19,8 @@ int status = WL_IDLE_STATUS;  // the Wifi radio's status
 void setup() {
     Serial.begin(115200);
 
-    if (WiFi.status() == WL_NO_SHIELD) {
-        Serial.println("WiFi shield not present");
-        // don't continue:
-        while (true);
-    }
+    // check for WiFi status:
+    status = WiFi.status();
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
@@ -51,7 +48,7 @@ void setup() {
     camio1_1In1Out.registerInput(audio.getIO());
     camio1_1In1Out.registerOutput(aac.getIO());
     if (camio1_1In1Out.start() != 0) {
-        Serial.println("camera io link 1 start failed");
+        Serial.println("stream io link 1 start failed");
     }
 
     camio2_2In1Out.create();
@@ -59,7 +56,7 @@ void setup() {
     camio2_2In1Out.registerInput2(aac.getIO());
     camio2_2In1Out.registerOutput(rtsp.getIO());
     if (camio2_2In1Out.start() != 0) {
-        Serial.println("camera io link 2 start failed");
+        Serial.println("stream io link 2 start failed");
     }
 
     cam.start(camset);

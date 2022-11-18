@@ -10,10 +10,10 @@
 #define CAMDBG(fmt, args...)
 #endif
 
-AudioClass::AudioClass(void) {
+AudioRawClass::AudioRawClass(void) {
     audioData = NULL;
 };
-AudioClass::~AudioClass(){};
+AudioRawClass::~AudioRawClass(){};
 
 AACClass::AACClass(void) {
     AACData = NULL;
@@ -25,7 +25,7 @@ AACClass::~AACClass(){};
   * @param  none
   * @retval none
   */
-void AudioClass::init(void) {
+void AudioRawClass::init(void) {
     audioData = audioInit();
 }
 
@@ -34,7 +34,7 @@ void AudioClass::init(void) {
   * @param  none
   * @retval none
   */
-void AudioClass::deinit(void) {
+void AudioRawClass::deinit(void) {
     audioDeInit(audioData);
 }
 
@@ -43,7 +43,7 @@ void AudioClass::deinit(void) {
   * @param  none
   * @retval none
   */
-void AudioClass::open(void) {
+void AudioRawClass::open(void) {
     int channel = AUDIO_CH;
     uint8_t use_mic_type        = AUDIO_MIC_TYPE;
     uint32_t enable_aec         = AUDIO_AEC_FLAG; 
@@ -69,7 +69,7 @@ void AudioClass::open(void) {
             enable_aec  : enable or disable Acoustic Echo Cancelling
   * @retval none
   */
-void AudioClass::open(mm_context_t *p, uint32_t sample_rate, uint32_t word_length, audio_mic_gain mic_gain, audio_dmic_gain dmic_l_gain, audio_dmic_gain dmic_r_gain, uint8_t use_mic_type, int channel, uint32_t enable_aec) {
+void AudioRawClass::open(mm_context_t *p, uint32_t sample_rate, uint32_t word_length, audio_mic_gain mic_gain, audio_dmic_gain dmic_l_gain, audio_dmic_gain dmic_r_gain, uint8_t use_mic_type, int channel, uint32_t enable_aec) {
     audioOpen(p, sample_rate, word_length, mic_gain, dmic_l_gain, dmic_r_gain, use_mic_type, channel, enable_aec);
 }
 
@@ -78,7 +78,7 @@ void AudioClass::open(mm_context_t *p, uint32_t sample_rate, uint32_t word_lengt
   * @param  pointer to audio object 
   * @retval none
   */
-void AudioClass::close(void) {
+void AudioRawClass::close(void) {
     audioClose(audioData);
 }
 
@@ -87,7 +87,7 @@ void AudioClass::close(void) {
   * @param  none
   * @retval pointer to Audio module
   */
-mm_context_t *AudioClass::getIO(void) {
+mm_context_t *AudioRawClass::getIO(void) {
     if (audioData == NULL) {
         printf("Failed, please init audio first.\r\n");	
         return NULL;

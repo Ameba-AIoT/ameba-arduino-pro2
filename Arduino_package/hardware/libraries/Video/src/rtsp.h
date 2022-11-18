@@ -12,7 +12,7 @@ extern "C" {
 }
 #endif
 
-#include "camera.h"
+#include "video.h"
 
 class RTSPClass   {
 

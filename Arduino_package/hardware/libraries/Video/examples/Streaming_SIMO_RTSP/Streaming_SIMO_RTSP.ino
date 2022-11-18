@@ -1,11 +1,11 @@
-#include "CameraIO.h"
+#include "StreamIO.h"
 #include "WiFi.h"
-#include "camera.h"
+#include "video.h"
 #include "rtsp.h"
 
 CameraSetting camset;
-CameraClass cam;
-CameraIOClass camio1_1In2Out(1, 2);  // Single Input Multiple Output
+VideoClass cam;
+StreamIOClass camio1_1In2Out(1, 2);  // Single Input Multiple Output
 RTSPClass rtsp;
 RTSPClass rtsp1;
 
@@ -16,11 +16,8 @@ int status = WL_IDLE_STATUS;  // the Wifi radio's status
 void setup() {
     Serial.begin(115200);
 
-    if (WiFi.status() == WL_NO_SHIELD) {
-        Serial.println("WiFi shield not present");
-        // don't continue:
-        while (true);
-    }
+    // check for WiFi status:
+    status = WiFi.status();
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
@@ -46,7 +43,7 @@ void setup() {
     camio1_1In2Out.registerOutput1(rtsp.getIO());
     camio1_1In2Out.registerOutput2(rtsp1.getIO());
     if (camio1_1In2Out.start() != 0) {
-        Serial.println("camera io link start failed");
+        Serial.println("stream io link start failed");
     }
 
     cam.start(camset);

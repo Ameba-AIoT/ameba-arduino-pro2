@@ -22,7 +22,7 @@ void misoCreate(void) {
 void misoDestroy(void) {
     //delete the MISO object created and stop the miso task
     if(NULL != miso_delete(miso_arduino)) {
-        printf("Camera IO linker destroy failed..");
+        printf("Stream IO linker destroy failed..");
     }
 }
 

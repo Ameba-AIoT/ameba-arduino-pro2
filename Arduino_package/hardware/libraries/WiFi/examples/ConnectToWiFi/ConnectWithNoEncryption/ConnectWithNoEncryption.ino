@@ -23,12 +23,9 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
 
-    // check for the presence of the shield:
-    if (WiFi.status() == WL_NO_SHIELD) {
-        Serial.println("WiFi shield not present");
-        // don't continue:
-        while (true);
-    }
+    // check for WiFi status:
+    status = WiFi.status();
+
     WiFi.begin(ssid);
 
     // attempt to connect to Wifi network:
@@ -55,7 +52,7 @@ void loop() {
 }
 
 void printWifiData() {
-    //print your WiFi shield's IP address:
+    //print your WiFi IP address:
     IPAddress ip = WiFi.localIP();
     Serial.print("IP Address: ");
     Serial.println(ip);

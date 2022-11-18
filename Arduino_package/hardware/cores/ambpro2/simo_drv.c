@@ -22,7 +22,7 @@ void simoCreate(void) {
 void simoDestroy(void) {
     //delete the SIMO object created and stop the simo task
     if (NULL != simo_delete(simo_arduino)) {
-        printf("Camera IO linker destroy failed..");
+        printf("Stream IO linker destroy failed..");
     }
 }
 

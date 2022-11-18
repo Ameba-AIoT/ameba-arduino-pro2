@@ -23,7 +23,7 @@ void sisoCreate(void) {
 void sisoDestroy(void) {
     //delete the SISO object created and stop the siso task
     if (NULL != siso_delete(siso_arduino)) {
-        printf("Camera IO linker destroy failed..");
+        printf("Stream IO linker destroy failed..");
     }
 }
 
