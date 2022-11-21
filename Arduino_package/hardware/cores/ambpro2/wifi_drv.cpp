@@ -20,7 +20,7 @@ extern "C" {
 #include "lwip/err.h"
 // modifed here
 #include "lwip/netif.h"
-//#include "lwip/api.h"
+#include "lwip/api.h"
 #include <dhcp/dhcps.h>
 #include "ard_socket.h"
 
@@ -96,7 +96,7 @@ void WiFiDrv::wifiDriverInit()
 int8_t WiFiDrv::wifiSetNetwork(char* ssid, uint8_t ssid_len) {
     int ret;
     uint8_t dhcp_result;
-   
+
     memset(wifi.bssid.octet, 0, ETH_ALEN);
     memcpy(wifi.ssid.val, ssid, ssid_len);
     wifi.ssid.len = ssid_len;
@@ -134,7 +134,7 @@ int8_t WiFiDrv::wifiSetNetwork(char* ssid, uint8_t ssid_len) {
 //            }
             return WL_SUCCESS;
         } else {
-            //netif_set_hostname(&xnetif[0], getHostname());
+            netif_set_hostname(&xnetif[0], getHostname());
             dhcp_result = LwIP_DHCP(0, DHCP_START);
             if (dhcp_result == DHCP_ADDRESS_ASSIGNED) {
                 return WL_SUCCESS;
@@ -192,7 +192,7 @@ int8_t WiFiDrv::wifiSetPassphrase(char* ssid, uint8_t ssid_len, const char* pass
 //            }
             return WL_SUCCESS;
         } else {
-//            netif_set_hostname(&xnetif[0], getHostname());
+            netif_set_hostname(&xnetif[0], getHostname());
             dhcp_result = LwIP_DHCP(0, DHCP_START);
             if (dhcp_result == DHCP_ADDRESS_ASSIGNED) {
                 return WL_SUCCESS;
@@ -278,7 +278,7 @@ int8_t WiFiDrv::wifiSetKey(char* ssid, uint8_t ssid_len, uint8_t key_idx, const 
 //            }
             return WL_SUCCESS;
         } else {
-//            netif_set_hostname(&xnetif[0], getHostname());
+            netif_set_hostname(&xnetif[0], getHostname());
             dhcp_result = LwIP_DHCP(0, DHCP_START);
             if (dhcp_result == DHCP_ADDRESS_ASSIGNED) {
                 return WL_SUCCESS;
@@ -292,7 +292,6 @@ int8_t WiFiDrv::wifiSetKey(char* ssid, uint8_t ssid_len, uint8_t key_idx, const 
         return WL_FAILURE;
     }
 }
-
 
 int8_t WiFiDrv::apSetNetwork(char* ssid, uint8_t ssid_len)
 {
@@ -423,14 +422,12 @@ exit:
     return ret;
 }
 
-#if 0
 
 int8_t WiFiDrv::disconnect()
 {
     wifi_disconnect();
     return WL_DISCONNECTED;
 }
-#endif
 
 uint8_t WiFiDrv::getConnectionStatus()
 {
@@ -652,10 +649,11 @@ int WiFiDrv::getHostByNamev6(const char* aHostname, IPv6Address& aResult) {
         return WL_SUCCESS;
     }
 }
+#endif 
 
 int WiFiDrv::disablePowerSave()
 {
-    return wifi_disable_powersave();
+    return wifi_set_powersave_mode(1, 1);
 }
 
 void WiFiDrv::config(uint8_t validParams, IPAddress local_ip, IPAddress gateway, IPAddress subnet) {
@@ -694,18 +692,19 @@ void WiFiDrv::setDNS(uint8_t validParams, IPAddress dns_server1, IPAddress dns_s
         return;
     }
 
-    if(getIPv6Status()==0){
+//    if(getIPv6Status()==0){
         IP4_ADDR(ip_2_ip4(&dns), _arduinoDns1[0], _arduinoDns1[1], _arduinoDns1[2], _arduinoDns1[3]);
-    }
-    else{
-        IP6_ADDR(ip_2_ip6(&dns), _arduinoDns1[0], _arduinoDns1[1], _arduinoDns1[2], _arduinoDns1[3]);
-    }
+//    } else{
+//          IP6_ADDR(ip_2_ip6(&dns), _arduinoDns1[0], _arduinoDns1[1], _arduinoDns1[2], _arduinoDns1[3]);
+//    }
     LwIP_SetDNS(&dns);
 }
 
+#if 0
 int WiFiDrv::getIPv6Status(){
     return get_ipv6_status();
 }
+#endif
 
 void WiFiDrv::setHostname(const char* hostname) {
     if(hostname){
@@ -721,6 +720,5 @@ const char* WiFiDrv::getHostname() {
     }
     return (const char *)_hostname;
 }
-#endif
 
 WiFiDrv wiFiDrv;

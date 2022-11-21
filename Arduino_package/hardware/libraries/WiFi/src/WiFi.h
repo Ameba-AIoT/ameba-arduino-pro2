@@ -72,7 +72,7 @@ class WiFiClass
          */
         int begin(char* ssid, const char *passphrase);
 
-#if 0
+
         /* Change Ip configuration settings disabling the dhcp client
          *
          * param local_ip:   Static ip configuration
@@ -123,7 +123,6 @@ class WiFiClass
          * return: one value of wl_status_t enum
          */
         int disconnect(void);
-#endif
 
         /*
          * Get the interface MAC address.
@@ -187,7 +186,7 @@ class WiFiClass
          * Return the Encryption Type associated with the network
          *
          * return: one value of wl_enc_type enum
-//         */
+        */
         uint8_t	encryptionType();
 
         /*
@@ -264,17 +263,15 @@ class WiFiClass
 
         int apbegin(char* ssid, char* password, char* channel, uint8_t hidden_ssid = 0);
 
-#if 0
         int disablePowerSave();
 
         void setHostname(const char* hostname);
 
         const char* getHostname();
 
-//        friend class WiFiClient;
-//        friend class WiFiServer;
-//        friend class WiFiSSLClient;
-#endif
+        friend class WiFiClient;
+        friend class WiFiServer;
+        friend class WiFiSSLClient;
 };
 
 extern WiFiClass WiFi;

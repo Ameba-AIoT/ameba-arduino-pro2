@@ -82,12 +82,10 @@ int WiFiClass::begin(char* ssid, const char *passphrase)
     return status;
 }
 
-#if 0 
 int WiFiClass::disconnect()
 {
     return WiFiDrv::disconnect();
 }
-#endif
 
 uint8_t* WiFiClass::macAddress(uint8_t* mac)
 {
@@ -237,7 +235,7 @@ int WiFiClass::apbegin(char* ssid, char* password, char* channel, uint8_t hidden
     return status;
 }
 
-#if 0
+
 int WiFiClass::disablePowerSave()
 {
     return WiFiDrv::disablePowerSave();
@@ -277,6 +275,5 @@ void WiFiClass::setHostname(const char* hostname) {
 const char* WiFiClass::getHostname() {
     return WiFiDrv::getHostname();
 }
-#endif
 
 WiFiClass WiFi;
