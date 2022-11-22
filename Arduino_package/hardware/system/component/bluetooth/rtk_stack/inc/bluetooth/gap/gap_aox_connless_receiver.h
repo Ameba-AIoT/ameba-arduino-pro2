@@ -185,8 +185,8 @@ T_GAP_CAUSE le_aox_connless_receiver_set_iq_sampling_enable(uint8_t sync_id,
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

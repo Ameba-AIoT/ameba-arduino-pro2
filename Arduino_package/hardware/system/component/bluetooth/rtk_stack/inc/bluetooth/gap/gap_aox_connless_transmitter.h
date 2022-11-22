@@ -322,8 +322,8 @@ T_GAP_CAUSE le_aox_connless_transmitter_set_cte_transmit_enable(uint8_t adv_hand
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

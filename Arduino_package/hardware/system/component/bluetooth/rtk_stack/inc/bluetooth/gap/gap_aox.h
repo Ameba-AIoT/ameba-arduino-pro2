@@ -382,8 +382,8 @@ T_GAP_CAUSE le_aox_read_antenna_information(void);
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

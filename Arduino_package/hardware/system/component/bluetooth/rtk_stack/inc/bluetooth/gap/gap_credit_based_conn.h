@@ -35,26 +35,30 @@
 /** @addtogroup GAP_LE_CREDIT_BASED_CONN GAP LE Credit Based Connection Module
   * @{
   */
-typedef enum {
+typedef enum
+{
 	GAP_CHANN_STATE_DISCONNECTED, //!< Disconnected.
 	GAP_CHANN_STATE_CONNECTING,   //!< Connecting.
 	GAP_CHANN_STATE_CONNECTED,    //!< Connected.
 	GAP_CHANN_STATE_DISCONNECTING //!< Disconnecting.
 } T_GAP_CHANN_STATE;
 
-typedef enum {
+typedef enum
+{
 	COC_PARAM_CREDITS_THRESHOLD                = 0x400,
 	COC_PARAM_LOCAL_MTU                        = 0x401,
 } T_LE_COC_PARAM_TYPE;
 
-typedef enum {
+typedef enum
+{
 	COC_CHANN_PARAM_CUR_CREDITS                = 0x410,
 	COC_CHANN_PARAM_MAX_CREDITS                = 0x411,
 	COC_CHANN_PARAM_MTU                        = 0x412,
 } T_LE_COC_CHANN_PARAM_TYPE;
 
 /** @brief Definition of LE security requirement*/
-typedef enum {
+typedef enum
+{
 	LE_COC_SECURITY_NONE,              /**< Security None */
 	LE_COC_SECURITY_UNAUTHEN_ENCRYT,   /**< Security unauthenticated encryption */
 	LE_COC_SECURITY_AUTHEN_ENCRYT,     /**< Security authenticated encryption */
@@ -63,21 +67,24 @@ typedef enum {
 	LE_COC_SECURITY_AUTHOR             /**< Security authorized */
 } T_LE_COC_SECURITY_MODE;
 
-typedef struct {
+typedef struct
+{
 	uint8_t         conn_id;        /**<  local link ID.  */
 	uint16_t        cid;            /**<  channel ID  */
 	uint16_t        value_len;      /**<  value length  */
 	uint8_t         *p_data;
 } T_LE_COC_RECEIVE_DATA;
 
-typedef struct {
+typedef struct
+{
 	uint8_t         conn_id;        /**<  local link ID.  */
 	uint16_t        cid;            /**<  channel ID  */
 	uint16_t        cause;      /**<  value length  */
 	uint8_t         credit;
 } T_LE_COC_SEND_DATA;
 
-typedef struct {
+typedef struct
+{
 	uint8_t         conn_id;
 	uint16_t        cid;
 	T_GAP_CHANN_STATE conn_state;
@@ -85,12 +92,14 @@ typedef struct {
 } T_LE_COC_CHANN_STATE;
 
 /** @brief Response of le credit based security register request.*/
-typedef struct {
+typedef struct
+{
 	uint16_t        cause;
 } T_LE_COC_CREDIT_BASED_SECURITY_REG_RSP;
 
 /** @brief Response of le credit based psm register request.*/
-typedef struct {
+typedef struct
+{
 	uint16_t        le_psm;
 	uint16_t        cause;
 } T_LE_COC_CREDIT_BASED_PSM_REG_RSP;
@@ -101,7 +110,8 @@ typedef struct {
 #define GAP_COC_MSG_LE_SEND_DATA            0x04
 #define GAP_COC_MSG_LE_RECEIVE_DATA         0x05
 
-typedef union {
+typedef union
+{
 	T_LE_COC_CHANN_STATE                            *p_le_chann_state;
 	T_LE_COC_RECEIVE_DATA                           *p_le_receive_data;
 	T_LE_COC_SEND_DATA                              *p_le_send_data;
@@ -143,6 +153,7 @@ T_GAP_CAUSE le_coc_set_psm_security(uint16_t le_psm, bool active, T_LE_COC_SECUR
   * @}
   */
 #endif
+
 
 #endif
 

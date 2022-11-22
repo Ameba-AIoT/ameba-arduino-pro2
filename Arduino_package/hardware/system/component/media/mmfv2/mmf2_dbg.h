@@ -4,11 +4,12 @@
 #include <stdint.h>
 
 // Define debug group
-#define	_MMF_DBG_RTSP_          	0x00000001
-#define	_MMF_DBG_RTP_          		0x00000002
-#define	_MMF_DBG_ISP_			    0x00000004
-#define	_MMF_DBG_ENCODER_			0x00000008
-#define	_MMF_DBG_VIDEO_			    0x00000010
+#define	_MMF_DBG_RTSP_              0x00000001
+#define	_MMF_DBG_RTP_               0x00000002
+#define	_MMF_DBG_ISP_               0x00000004
+#define	_MMF_DBG_ENCODER_           0x00000008
+#define	_MMF_DBG_VIDEO_             0x00000010
+#define	_MMF_DBG_AUDIO_             0x00000020
 
 extern uint32_t ConfigDebugMmfErr;
 extern uint32_t ConfigDebugMmfWarn;
@@ -61,6 +62,16 @@ extern uint32_t ConfigDebugMmfInfo;
 #define VIDEO_INFO_PREFIX        "[VID Inf]"
 #endif
 
+#ifndef AUDIO_ERR_PREFIX
+#define AUDIO_ERR_PREFIX         "[AUD Err]"
+#endif
+#ifndef AUDIO_WARN_PREFIX
+#define AUDIO_WARN_PREFIX        "[AUD Wrn]"
+#endif
+#ifndef AUDIO_INFO_PREFIX
+#define AUDIO_INFO_PREFIX        "[AUD Inf]"
+#endif
+
 #define MMF_PRINTK      printf
 
 #define RTSP_DBG_ERROR(...)													\
@@ -89,8 +100,13 @@ extern uint32_t ConfigDebugMmfInfo;
 
 #define VIDEO_DBG_ERROR(...)												\
 			do {															\
-				if (ConfigDebugMmfErr&_MMF_DBG_ENCODER_)					\
-					MMF_PRINTK("\n\r" ENCODER_ERR_PREFIX __VA_ARGS__);		\
+				if (ConfigDebugMmfErr&_MMF_DBG_VIDEO_)					\
+					MMF_PRINTK("\n\r" VIDEO_ERR_PREFIX __VA_ARGS__);		\
+			}while(0)
+#define AUDIO_DBG_ERROR(...)												\
+			do {															\
+				if (ConfigDebugMmfErr&_MMF_DBG_AUDIO_)					\
+					MMF_PRINTK("\n\r" AUDIO_ERR_PREFIX __VA_ARGS__);		\
 			}while(0)
 
 // DBG_WARNING
@@ -119,6 +135,11 @@ extern uint32_t ConfigDebugMmfInfo;
 				if (ConfigDebugMmfWarn&_MMF_DBG_VIDEO_)					\
 					MMF_PRINTK("\n\r" VIDEO_WARN_PREFIX __VA_ARGS__);		\
 			}while(0)
+#define AUDIO_DBG_WARNING(...)											\
+			do {															\
+				if (ConfigDebugMmfWarn&_MMF_DBG_AUDIO_)					\
+					MMF_PRINTK("\n\r" AUDIO_WARN_PREFIX __VA_ARGS__);		\
+			}while(0)
 
 // DBG_INFO
 #define RTSP_DBG_INFO(...)													\
@@ -145,5 +166,10 @@ extern uint32_t ConfigDebugMmfInfo;
 #define VIDEO_DBG_INFO(...)											\
 			do {															\
 				if (ConfigDebugMmfInfo&_MMF_DBG_VIDEO_)					\
-					MMF_PRINTK("\n\r" VIDEO_WARN_PREFIX __VA_ARGS__);		\
+					MMF_PRINTK("\n\r" VIDEO_INFO_PREFIX __VA_ARGS__);		\
+			}while(0)
+#define AUDIO_DBG_INFO(...)											\
+			do {															\
+				if (ConfigDebugMmfInfo&_MMF_DBG_AUDIO_)					\
+					MMF_PRINTK("\n\r" AUDIO_INFO_PREFIX __VA_ARGS__);		\
 			}while(0)

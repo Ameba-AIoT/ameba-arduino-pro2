@@ -11,10 +11,10 @@
 #define TUNING_SRV_VERSION_MAJOR	0x0001
 #endif
 #ifndef TUNING_SRV_VERSION_MINOR
-#define TUNING_SRV_VERSION_MINOR	0x0001
+#define TUNING_SRV_VERSION_MINOR	0x0002
 #endif
 #ifndef TUNING_SRV_VERSION_BUILD
-#define TUNING_SRV_VERSION_BUILD	0x0000
+#define TUNING_SRV_VERSION_BUILD	0x0001
 #endif
 
 #define TCP_LISTEN_PORT			6666
@@ -57,6 +57,7 @@
 #endif
 
 #define TUNING_IQ_MAX_SIZE (256 * 1024)
+#define TUNING_IQ_MIN_SIZE (10  * 1024)
 
 enum tuning_opcode {
 	MEM_READ = 0,
@@ -96,6 +97,7 @@ enum tuning_opcode {
 	ISP_CTRL_READ = 30,
 	ISP_CTRL_WRITE = 31,
 	BAYER_MODE_CMD = 32,
+	ERRCODE_READ = 33,
 };
 
 #define UVC_MEM_READ 0xC2
@@ -122,6 +124,7 @@ enum tuning_opcode {
 #define UVC_ISP_ALGO_PARAM_SIZE 0xF1
 #define UVC_ISP_STATIS_SIZE 0xF2
 #define UVC_ISP_IQ_FW_SIZE 0xF3
+#define UVC_ERRCODE_READ 0xFB
 
 #define UVC_MCU_ISP_CMD 0xFF
 //1. MEM_READ                        (bySubCmd : 0xC2, addr : 0xD100)

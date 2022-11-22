@@ -284,7 +284,8 @@ extern "C"
 
 /** @brief GAP gatt cccd not check. */
 #if F_BT_LE_GATT_SERVER_SUPPORT
-typedef enum {
+typedef enum
+{
 	CONFIG_GATT_CCCD_CHECK,         /**< Check cccd when server sends notification or indication. */
 	CONFIG_GATT_CCCD_NOT_CHECK,     /**< Not check cccd when server sends notification or indication. */
 } T_GAP_CONFIG_GATT_CCCD_NOT_CHECK;
@@ -454,6 +455,24 @@ void gap_config_max_le_paired_device(uint8_t max_le_paired_device);
  */
 void gap_config_max_le_link_num(uint8_t le_link_num);
 
+/**
+ * @brief   Configure LE credits number.
+ *
+ *          NOTE: Default value is 10.
+ *                This function shall be called before @ref bte_init is invoked.
+ *
+ * @param[in]      credits_num   LE credits number, range: 2 ~ 15. NOTE: The range may be changed in future version.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+    void bt_stack_config_init(void)
+    {
+        gap_config_credits_num(9);
+    }
+ * \endcode
+ */
+bool gap_config_credits_num(uint8_t credits_num);
+
 /** End of GAP_LE_CONFIG_Exported_Functions
   * @}
   */
@@ -477,3 +496,4 @@ void gap_config_max_le_link_num(uint8_t le_link_num);
 #endif
 
 #endif /* GAP_CONFIG_H */
+

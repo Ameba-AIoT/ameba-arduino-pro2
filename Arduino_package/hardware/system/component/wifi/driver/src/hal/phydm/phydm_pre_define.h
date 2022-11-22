@@ -312,6 +312,7 @@ enum phydm_ctrl_info_rate {
 	ODM_RATEVHTSS4MCS7	= 0x51,
 	ODM_RATEVHTSS4MCS8	= 0x52,
 	ODM_RATEVHTSS4MCS9	= 0x53,
+	ODM_MAXRATE		= 0xFF
 };
 
 enum phydm_legacy_spec_rate {

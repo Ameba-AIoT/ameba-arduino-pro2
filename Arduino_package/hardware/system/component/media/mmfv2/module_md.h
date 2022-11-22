@@ -15,13 +15,11 @@
 #define CMD_MD_SET_OUTPUT				MM_MODULE_CMD(0x06)
 #define CMD_MD_SET_DISPPOST				MM_MODULE_CMD(0x07)
 #define CMD_MD_SET_TRIG_BLK				MM_MODULE_CMD(0x08)
+#define CMD_MD_SET_AE_STABLE			MM_MODULE_CMD(0x09)
+#define CMD_MD_SET_DYN_THR 				MM_MODULE_CMD(0x10)
+#define CMD_MD_SET_DETECT_INTERVAL		MM_MODULE_CMD(0x11)
 
 typedef void (*md_disp_postprcess)(void *);
-
-typedef struct md_param_s {
-	int width;
-	int height;
-} md_param_t;
 
 typedef struct md_ctx_s {
 	void *parent;

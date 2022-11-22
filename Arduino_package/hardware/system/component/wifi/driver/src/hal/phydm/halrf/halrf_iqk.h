@@ -166,20 +166,19 @@ struct dm_iqk_info {
 	u32 rxk1_xym[2][6];
 	u32 nbtxk_1b38[2];
 	u32 nbrxk_1b3c[2];
-	u32 txxy[2][2];
-	u32 rxxy[2][2];
 	u32 cfir_en[2][2];
 	u32 iqk_tab[2];
 #endif
-#if (RTL8710C_SUPPORT == 1 || RTL8197G_SUPPORT == 1 || RTL8730A_SUPPORT == 1)
+#if (RTL8710C_SUPPORT == 1 || RTL8197G_SUPPORT == 1 || RTL8730A_SUPPORT == 1 ||\
+	RTL8822E_SUPPORT == 1)
 	u32 txxy[2][2];
 	u32 rxxy[2][2];
 #endif
-#if (RTL8723F_SUPPORT == 1 || RTL8735B_SUPPORT == 1)
-	u32 txxy[2][2];
-	u32 rxxy[2][2][2];
-#endif
 
+#if (RTL8723F_SUPPORT == 1 || RTL8735B_SUPPORT == 1)
+	u32 txxy_new[2][2];
+	u32 rxxy_new[2][2][2];
+#endif
 #endif
 };
 

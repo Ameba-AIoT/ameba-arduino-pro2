@@ -19,6 +19,7 @@
 #define F_BT_LE_GATT_CLIENT_SUPPORT              (F_BT_LE_SUPPORT && 1)
 #define F_BT_LE_GATT_SERVER_SUPPORT              (F_BT_LE_SUPPORT && 1)
 #define F_BT_LE_SMP_OOB_SUPPORT                  (F_BT_LE_SUPPORT && 1)
+#define F_BT_LE_BOND_KEY_REQ_SUPPORT             (F_BT_LE_SUPPORT && 0)
 
 //BT 4.0
 #define F_BT_LE_READ_REMOTE_FEATS                (F_BT_LE_SUPPORT && 1)

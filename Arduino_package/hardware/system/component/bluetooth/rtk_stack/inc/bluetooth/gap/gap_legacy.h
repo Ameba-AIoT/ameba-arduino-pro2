@@ -117,7 +117,8 @@ extern "C" {
  *
  * \ingroup     GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_BT_MODE_21DISABLED,    /**< Disable all Bluetooth 2.1 functionality. */
 	GAP_BT_MODE_21ENABLED      /**< Enable Bluetooth 2.1 functionality. */
 } T_GAP_BT_MODE;
@@ -129,7 +130,8 @@ typedef enum {
  *
  * \ingroup     GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_RADIO_MODE_VISIABLE_CONNECTABLE = 0x01,  /**< Enable both inquiry scan and page scan. */
 	GAP_RADIO_MODE_VISIABLE             = 0x02,  /**< Only enable inquiry scan. */
 	GAP_RADIO_MODE_CONNECTABLE          = 0x03,  /**< Only enable page scan. */
@@ -143,7 +145,8 @@ typedef enum {
  *
  * \ingroup     GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_PAGE_SCAN_TYPE_STANDARD  = 0,    /**< BR/EDR page scan type standard. */
 	GAP_PAGE_SCAN_TYPE_INTERLACED,       /**< BR/EDR page scan type interlaced. */
 } T_GAP_PAGE_SCAN_TYPE;
@@ -155,7 +158,8 @@ typedef enum {
  *
  * \ingroup     GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_INQUIRY_SCAN_TYPE_STANDARD = 0,  /**< BR/EDR inquiry scan type standard. */
 	GAP_INQUIRY_SCAN_TYPE_INTERLACED,    /**< BR/EDR inquiry scan type interlaced. */
 } T_GAP_INQUIRY_SCAN_TYPE;
@@ -167,7 +171,8 @@ typedef enum {
  *
  * \ingroup     GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_INQUIRY_MODE_STANDARD_RESULT = 0, /**< Inquiry reusult standard format. */
 	GAP_INQUIRY_MODE_RESULT_WITH_RSSI,    /**< Inquiry result format with RSSI. */
 	GAP_INQUIRY_MODE_EXTENDED_RESULT,     /**< Inquiry result with RSSI format or Extended inquiry result format. */
@@ -180,7 +185,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_PARAM_BT_MODE,                /**< Bluetooth mode. <b>Write only. Parameter type is uint8_t. Valid values are \ref T_GAP_BT_MODE. Default value is \ref GAP_BT_MODE_21ENABLED.</b> */
 	GAP_PARAM_LEGACY_NAME,            /**< BR/EDR name. <b>Write only. Name string length is \ref GAP_DEVICE_NAME_LEN.</b> */
 	GAP_PARAM_COD,                    /**< Class of device. <b>Write only. Parameter type is uint32_t. Default value is 0x000900.</b> */
@@ -208,7 +214,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_BR_LINK_ROLE_MASTER,   /**< BR/EDR link role master. */
 	GAP_BR_LINK_ROLE_SLAVE     /**< BR/EDR link role slave. */
 } T_GAP_BR_LINK_ROLE;
@@ -222,7 +229,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< Result of start inquiry */
 } T_GAP_INQUIRY_RSP;
 
@@ -235,7 +243,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6];                 /**< Bluetooth address of device found when inquiry */
 	uint32_t    cod;                        /**< Class of device of device found when inquiry */
 	int8_t      rssi;                       /**< RSSI of device found when inquiry */
@@ -253,7 +262,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< Status of inquiry procedure */
 } T_GAP_INQUIRY_CMPL_INFO;
 
@@ -266,7 +276,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< Result of cancel inquiry */
 } T_GAP_INQUIRY_CANCEL_RSP;
 
@@ -279,7 +290,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6];     /**< Bluetooth address of remote device */
 	uint16_t        cause;          /**< Result of starting SDP discovery */
 } T_GAP_SDP_DISCOV_RSP;
@@ -291,7 +303,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_UUID16,    /**< UUID type 16 bits */
 	GAP_UUID32,    /**< UUID type 32 bits */
 	GAP_UUID128    /**< UUID type 128 bits */
@@ -304,7 +317,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef union {
+typedef union
+{
 	uint16_t    uuid_16;        /**< UUID data in 16 bits */
 	uint32_t    uuid_32;        /**< UUID data in 32 bits */
 	uint8_t     uuid_128[16];   /**< UUID data in 128 bits */
@@ -319,7 +333,8 @@ typedef union {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                 bd_addr[6];          /**< Bluetooth address of remote device */
 	uint8_t                 server_channel;      /**< Server channel number */
 	uint8_t                 supported_repos;     /**< Supported repositories */
@@ -341,7 +356,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t        specific_id; /**< Specific ID of remote device */
 	uint16_t        vendor_id;   /**< Vendor ID of remote device */
 	uint16_t        vendor_src;  /**< Verndor source of remote device */
@@ -359,7 +375,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6];  /**< Bluetooth address of remote device */
 	uint16_t        cause;       /**< Status of SDP discovery procedure */
 } T_GAP_SDP_DISCOV_CMPL_INFO;
@@ -373,7 +390,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6];  /**< Bluetooth address of remote device */
 	uint16_t        cause;       /**< Result of stop SDP discovey */
 } T_GAP_STOP_SDP_DISCOV_RSP;
@@ -387,7 +405,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t  bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint8_t  is_esco;    /**< Connection type remote device want to create. 1 for eSCO and 0 for SCO. */
 } T_GAP_SCO_CONN_IND;
@@ -401,7 +420,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t    cause;      /**< Result of starting a SCO/eSCO connection. */
 } T_GAP_SCO_CONN_RSP;
@@ -415,7 +435,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t    cause;      /**< Result of establishing the SCO/eSCO link. */
 	uint16_t    handle;     /**< Connection handle of the SCO/eSCO link. */
@@ -432,7 +453,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_SCO_PKT_STATUS_OK           = 0,   /**< SCO packet status for correctly received data */
 	GAP_SCO_PKT_STATUS_INVALID      = 1,   /**< SCO packet status for invalid data */
 	GAP_SCO_PKT_STATUS_NO_DATA      = 2,   /**< SCO packet status for no data received */
@@ -446,7 +468,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_ACL_REJECT_LIMITED_RESOURCE = 0x0D,
 	GAP_ACL_REJECT_SECURITY_REASON = 0x0E,
 	GAP_ACL_REJECT_UNACCEPTABLE_ADDR = 0x0F
@@ -461,7 +484,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint32_t                bt_clock;   /**< Bluetooth native clock. */
 	uint8_t                 bd_addr[6]; /**< Bluetooth address of remote device. */
 	T_GAP_SCO_PKT_STATUS    status;     /**< Status of the SCO/eSCO data. */
@@ -479,7 +503,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t    cause;      /**< Disconnect reason for the SCO/eSCO link. */
 } T_GAP_SCO_DISCONN_IND;
@@ -493,7 +518,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t    cause;      /**< Result of disconnecting the SCO/eSCO link. */
 	uint16_t    reason;     /**< Disconnect reason for the SCO/eSCO link. */
@@ -508,7 +534,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t    cause;      /**< Result of change a SCO/eSCO link parameters. */
 } T_GAP_SCO_PARAM_CHANGE_RSP;
@@ -522,7 +549,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t    cause;          /**< Result of SCO/eSCO link parameters change procedure. */
 	uint16_t    tx_length;      /**< Length of the eSCO payload in transmit direction. */
@@ -540,7 +568,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;                      /**< Result of getting remote device's name */
 	uint8_t     bd_addr[6];                 /**< Bluetooth address of remote device */
 	uint8_t     name[GAP_DEVICE_NAME_LEN];  /**< Name of remote device */
@@ -554,7 +583,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link policy. */
 	uint16_t        link_policy;/**< Current link policy. */
@@ -568,7 +598,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link supervision timeout. */
 } T_GAP_ACL_CFG_LINK_SUPV_TOUT_RSP;
@@ -581,7 +612,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link role. */
 } T_GAP_ACL_CFG_LINK_ROLE_RSP;
@@ -594,7 +626,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link packet type. */
 } T_GAP_ACL_CFG_PKT_TYPE_RSP;
@@ -607,7 +640,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link flush timeout. */
 } T_GAP_ACL_CFG_FLUSH_TOUT_RSP;
@@ -620,7 +654,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link to enter sniff mode. */
 } T_GAP_ACL_ENTER_SNIFF_RSP;
@@ -633,7 +668,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint16_t        cause;      /**< Result of configuring ACL link to exit sniff mode. */
 } T_GAP_ACL_EXIT_SNIFF_RSP;
@@ -645,7 +681,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	GAP_ACL_CONN_ACTIVE        = 0x01,  /**< ACL link in active mode. */
 	GAP_ACL_CONN_SNIFF         = 0x02,  /**< ACL link in sniff mode. */
 	GAP_ACL_AUTHEN_START       = 0x03,  /**< ACL link authentication start. */
@@ -674,7 +711,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	T_GAP_KEY_TYPE      key_type;       /**< Key type of the link. */
 	uint8_t             key_size;       /**< Key size of the link. */
 	uint8_t             encrypt_type;   /**< Encryption type of the link. */
@@ -689,7 +727,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t             cause;         /**< BR/EDR Secure Connections information exchange result. */
 } T_GAP_ACL_STATUS_PARAM_BR_SC_CMPL;
 
@@ -701,7 +740,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                 bd_addr[6];         /**< Remote address. */
 	T_GAP_REMOTE_ADDR_TYPE  remote_addr_type;   /**< Remote address type. */
 } T_GAP_ACL_STATUS_PARAM_RESOLVE;
@@ -714,7 +754,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    interval;           /**< Sniff interval of the ACL link. */
 } T_GAP_ACL_STATUS_PARAM_SNIFF;
 
@@ -726,7 +767,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    max_tx_latency;  /**< Maximum latency for data transmitted to remote device. */
 	uint16_t    max_rx_latency;  /**< Maximum latency for data received from remote device. */
 	uint16_t    min_remote_tout; /**< Base sniff subrate timeout remote device shall use. */
@@ -741,7 +783,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< ACL link disconnect reason. */
 } T_GAP_ACL_CONNECTION_DISCONNECT;
 
@@ -753,7 +796,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< ACL link establish fail reason. */
 } T_GAP_ACL_CONNECTION_FAIL;
 
@@ -765,7 +809,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    handle;     /**< ACL link handle. */
 } T_GAP_ACL_CONNECTION_SUCCESS;
 
@@ -777,7 +822,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    handle;     /**< ACL link handle. */
 } T_GAP_ACL_CONNECTION_READY;
 
@@ -788,7 +834,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef union {
+typedef union
+{
 	T_GAP_ACL_CONNECTION_SUCCESS         conn_success; /**< Parameter for link success to establish. */
 	T_GAP_ACL_CONNECTION_READY           conn_ready;   /**< Parameter for link ready to be used. */
 	T_GAP_ACL_CONNECTION_FAIL            conn_fail;    /**< Parameter for link fail to establish. */
@@ -808,7 +855,8 @@ typedef union {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                    bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE     remote_addr_type;   /**< Address type of remote device. */
 	T_GAP_ACL_STATUS           status;             /**< ACL status information type. */
@@ -824,7 +872,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;  /**< Result of setup QOS for the ACL link. */
 	uint16_t    handle; /**< Connection handle of the ACL link. */
 } T_GAP_SETUP_QOS_RSP;
@@ -838,7 +887,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< Result of disconnecting ACL link. */
 	uint16_t    reason;     /**< Disconnect reason for the ACL link. */
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
@@ -852,7 +902,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                 bd_addr[6];       /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE  remote_addr_type; /**< Address type of remote device. */
 	uint16_t                cause;            /**< Result of reading RSSI. */
@@ -868,7 +919,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6]; /**< Bluetooth address of remote device. */
 	uint32_t    cod;
 } T_GAP_ACL_CONN_IND;
@@ -882,7 +934,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;  /**< Response status of set page with page scan simultaneous.*/
 } T_GAP_SET_PAGE_WITH_SCAN_RSP;
 
@@ -895,7 +948,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< Result of set radio mode */
 } T_GAP_RADIO_MODE_SET_RSP;
 
@@ -909,7 +963,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t                cause;  /**< Device configuration result. */
 } T_GAP_DEV_CFG_RSP;
 
@@ -922,7 +977,8 @@ typedef struct {
  *
  * \ingroup  GAP_LEGACY
  */
-typedef struct {
+typedef struct
+{
 	uint16_t                cause;  /**< Add SDP record result. */
 	uint8_t                *p_buf;
 } T_GAP_ADD_SDP_RECORD_RSP;
@@ -936,7 +992,8 @@ typedef struct {
  *
  * \ingroup  GAP_LEGACY
  */
-typedef struct {
+typedef struct
+{
 	uint16_t                cause;  /**< Delete SDP record result. */
 	uint8_t                *p_buf;
 } T_GAP_DEL_SDP_RECORD_RSP;
@@ -948,30 +1005,36 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;  /**< Response status of set page with page scan simultaneous.*/
 } T_LEGACY_SET_PAGE_WITH_SCAN_RSP;
 
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;
 	uint8_t     lt_addr;
 } T_GAP_LT_ADDR_SET_RSP;
 
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;
 	uint8_t     lt_addr;
 } T_GAP_LT_ADDR_DEL_RSP;
 
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;
 	uint16_t    interval;
 } T_GAP_SYNC_TRAIN_PARAM_SET_RSP;
 
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;
 } T_GAP_SYNC_TRAIN_RSP;
 
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;
 } T_GAP_SYNC_TRAIN_CMPL_INFO;
 
@@ -990,7 +1053,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR
  */
-typedef enum {
+typedef enum
+{
 	PROTO_REG_CMPL              = (LEGACY_MSG_GROUP_DEV_CFG | 0x00),    /**< BR/EDR protocol register completely. This message should be the first one indicated to APP, meaning that BR/EDR role init successfully.*/
 	SET_DEV_NAME_RSP            = (LEGACY_MSG_GROUP_DEV_CFG | 0x01),    /**< Response of set local device name. Message data is \ref T_GAP_DEV_CFG_RSP. */
 	SET_RADIO_MODE_RSP          = (LEGACY_MSG_GROUP_DEV_CFG | 0x02),    /**< Response of set radio mode. Message data is \ref T_GAP_RADIO_MODE_SET_RSP. */
@@ -4547,17 +4611,20 @@ T_GAP_CAUSE legacy_set_sync_train_rcv(uint8_t *bd_addr, uint16_t sync_scan_tout,
 * @}
 */
 
-typedef enum {
+typedef enum
+{
 	LEGACY_FIX_CHANN_REG_RSP,
 	LEGACY_FIX_CHANN_DATA_IND
 } T_LEGACY_FIX_CHANN_MSG;
 
-typedef struct {
+typedef struct
+{
 	uint16_t        cid;
 	uint16_t        cause;
 } T_LEGACY_FIX_CHANN_REG_RSP;
 
-typedef struct {
+typedef struct
+{
 	uint8_t     bd_addr[6];
 	uint16_t    cid;
 	uint8_t    *p_data;
@@ -4585,7 +4652,6 @@ T_GAP_CAUSE legacy_set_conn_encryption(uint16_t handle, bool enable);
 
 T_GAP_CAUSE legacy_vendor_set_monitor(uint16_t handle, uint8_t type, bool enable, uint16_t period);
 #endif
-
 #ifdef __cplusplus
 }
 #endif    /*  __cplusplus */

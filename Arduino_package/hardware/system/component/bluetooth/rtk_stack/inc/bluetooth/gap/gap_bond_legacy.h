@@ -35,7 +35,8 @@ extern "C"
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef enum {
+typedef enum
+{
 	LINK_KEY_TYPE_COMBINATION           = 0x00, /**< Combination key. */
 	LINK_KEY_TYPE_LOCAL_UNIT            = 0x01, /**< Local unit key. */
 	LINK_KEY_TYPE_REMOTE_UNIT           = 0x02, /**< Remote unit key. */
@@ -56,7 +57,8 @@ typedef enum {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6]; /**< Bluetooth address of remote device */
 	uint16_t        cause;      /**< Result of authentication procedure */
 } T_GAP_AUTHEN_RSP;
@@ -70,7 +72,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint16_t    cause;      /**< Result of user passkey request reply. */
 } T_GAP_USER_PASSKEY_REQ_REPLY_RSP;
 
@@ -83,7 +86,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint16_t                    cause;              /**< Keypress notification result. */
 	uint8_t                     bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;   /**< Address type of remote device. */
@@ -98,7 +102,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                     bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;   /**< Address type of remote device. */
 	T_GAP_KEYPRESS_NOTIF_TYPE   event_type;         /**< Keypress notification type. */
@@ -113,7 +118,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         bd_addr[6];     /**< Bluetooth address of remote device */
 } T_GAP_LEGACY_REMOTE_OOB_REQ_IND;
 
@@ -126,7 +132,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                     bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;   /**< Address type of remote device. */
 	uint32_t                    display_value;      /**< Numeric value to be displayed. */
@@ -141,7 +148,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                     bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;   /**< Address type of remote device. */
 	bool                        key_press;          /**< Whether keypress is needed. */
@@ -156,7 +164,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                     bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_REMOTE_ADDR_TYPE      remote_addr_type;   /**< Address type of remote device. */
 	uint32_t                    display_value;      /**< Passkey value. */
@@ -171,7 +180,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t         data_c[16];     /**< OOB data simple pairing hash C. */
 	uint8_t         data_r[16];     /**< OOB data simple pairing randonizer R. */
 	uint16_t        cause;          /**< Result of getting local OOB data. */
@@ -186,7 +196,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                 bd_addr[6];         /**< Bluetooth address of remote device. */
 	T_GAP_LINK_KEY_TYPE     key_type;           /**< Link key type. */
 	uint8_t                 link_key[16];       /**< Link key value. */
@@ -201,7 +212,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                 bd_addr[6];         /**< Bluetooth address of remote device. */
 } T_GAP_LINK_KEY_REQ_IND;
 
@@ -214,7 +226,8 @@ typedef struct {
  *
  * \ingroup  GAP_BREDR_BOND
  */
-typedef struct {
+typedef struct
+{
 	uint8_t                 bd_addr[6];         /**< Bluetooth address of remote device. */
 } T_GAP_PIN_CODE_REQ_IND;
 
@@ -600,7 +613,6 @@ T_GAP_CAUSE legacy_bond_link_key_cfm(uint8_t *bd_addr, bool found,
  */
 T_GAP_CAUSE legacy_pin_code_req_cfm(uint8_t *bd_addr, uint8_t *pin_code, uint8_t len, bool accept);
 #endif
-
 #ifdef __cplusplus
 }
 #endif

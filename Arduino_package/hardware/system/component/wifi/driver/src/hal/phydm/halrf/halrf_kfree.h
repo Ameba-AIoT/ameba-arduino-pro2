@@ -304,26 +304,26 @@
 #define TSSI_5GH2_TXA_30A 0x7bc
 
 /*8822E*/
-#define PPG_THERMAL_A_OFFSET_22E 0x1ef
-#define PPG_THERMAL_B_OFFSET_22E 0x1b0
-#define PPG_2GL_TXAB_22E 0x1d4
-#define PPG_2GM_TXAB_22E 0x1ee
-#define PPG_2GH_TXAB_22E 0x1d2
-#define PPG_5GL1_TXA_22E 0x1ec
-#define PPG_5GL1_TXB_22E 0x1eb
-#define PPG_5GL2_TXA_22E 0x1e8
-#define PPG_5GL2_TXB_22E 0x1e7
-#define PPG_5GM1_TXA_22E 0x1e4
-#define PPG_5GM1_TXB_22E 0x1e3
-#define PPG_5GM2_TXA_22E 0x1e0
-#define PPG_5GM2_TXB_22E 0x1df
-#define PPG_5GH1_TXA_22E 0x1dc
-#define PPG_5GH1_TXB_22E 0x1db
+#define PPG_THERMAL_A_OFFSET_22E 0x5df
+#define PPG_THERMAL_B_OFFSET_22E 0x5a0
+#define PPG_2GL_TXAB_22E 0x5c4
+#define PPG_2GM_TXAB_22E 0x5de
+#define PPG_2GH_TXAB_22E 0x5c2
+#define PPG_5GL1_TXA_22E 0x5dc
+#define PPG_5GL1_TXB_22E 0x5db
+#define PPG_5GL2_TXA_22E 0x5d8
+#define PPG_5GL2_TXB_22E 0x5d7
+#define PPG_5GM1_TXA_22E 0x5d4
+#define PPG_5GM1_TXB_22E 0x5d3
+#define PPG_5GM2_TXA_22E 0x5d0
+#define PPG_5GM2_TXB_22E 0x5cf
+#define PPG_5GH1_TXA_22E 0x5cc
+#define PPG_5GH1_TXB_22E 0x5cb
 
-#define PPG_PABIAS_2GA_22E 0x1d6
-#define PPG_PABIAS_2GB_22E 0x1d5
-#define PPG_PABIAS_5GA_22E 0x1d8
-#define PPG_PABIAS_5GB_22E 0x1d7
+#define PPG_PABIAS_2GA_22E 0x5c6
+#define PPG_PABIAS_2GB_22E 0x5c5
+#define PPG_PABIAS_5GA_22E 0x5c8
+#define PPG_PABIAS_5GB_22E 0x5c7
 
 #define TSSI_2GM_TXA_22E 0x1c0
 #define TSSI_2GM_TXB_22E 0x1bf

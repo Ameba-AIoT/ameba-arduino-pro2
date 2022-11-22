@@ -492,8 +492,8 @@ void le_ext_scan_gap_msg_info_way(bool use_msg);
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

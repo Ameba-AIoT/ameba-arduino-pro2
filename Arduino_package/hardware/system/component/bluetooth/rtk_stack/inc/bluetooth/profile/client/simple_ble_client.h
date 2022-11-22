@@ -549,6 +549,7 @@ bool simp_ble_client_set_hdl_cache(uint8_t conn_id, uint16_t *p_hdl_cache, uint8
 
 /** @} End of SIMP_Client */
 
+
 #ifdef  __cplusplus
 }
 #endif      /*  __cplusplus */

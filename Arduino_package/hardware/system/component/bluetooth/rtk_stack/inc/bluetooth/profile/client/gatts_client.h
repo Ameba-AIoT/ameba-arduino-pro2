@@ -341,6 +341,7 @@ bool gatts_set_hdl_cache(uint8_t conn_id, uint16_t *p_hdl_cache, uint8_t len);
 
 /** @} End of GATTS_Client */
 
+
 #ifdef  __cplusplus
 }
 #endif      /*  __cplusplus */

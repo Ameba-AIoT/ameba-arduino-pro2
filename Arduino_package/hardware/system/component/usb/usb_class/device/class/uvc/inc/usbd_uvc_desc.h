@@ -70,7 +70,7 @@ struct uvc_video;
 //Tuning tool
 #define VendorCommand   0X0A
 #define VendorData      0X0B
-#define VendorLength    0X08
+#define VendorLength    0X40
 #define UserDefineCommand  0X0C
 #define UserDefineData     0X0D
 #define UserDefineLength   0X40

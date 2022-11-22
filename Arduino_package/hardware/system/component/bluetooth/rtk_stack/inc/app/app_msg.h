@@ -85,6 +85,7 @@ typedef enum {
 	IO_MSG_TYPE_KEYBOARD_BUTTON, /**< subtype to be defined */
 	IO_MSG_TYPE_ANCS,            /**< ANCS message*/
 	IO_MSG_TYPE_AT_CMD,     /**< AT cmd message*/
+	IO_MSG_TYPE_API_SYS_CALL,
 	IO_MSG_TYPE_ADV,
 } T_IO_MSG_TYPE;
 
@@ -203,7 +204,8 @@ extern "C" {
  *            0x2: from audio lib
  *            0xA: from instructment
  */
-typedef enum {
+typedef enum
+{
 	EVENT_GROUP_STACK = 0,        /**< message group from BT layer */
 	EVENT_GROUP_IO = 1,           /**< message group from IO layer */
 	EVENT_GROUP_FRAMEWORK = 2,     /**< message group from Framework layer */
@@ -212,7 +214,8 @@ typedef enum {
 
 /**  @brief     Event type definitions.
 */
-typedef enum {
+typedef enum
+{
 	EVENT_GAP_MSG = 0x01,  /**< message from gap layer for stack */
 	EVENT_GAP_TIMER = 0x02, /**< message from gap layer for timer */
 	EVENT_HCI_MSG   = 0x03, /**< message from HCI layer for test */
@@ -231,7 +234,8 @@ typedef enum {
 #define EVENT_GROUP(event_code) (event_code >> 4)
 
 /**  @brief IO type definitions for IO message, may extend as requested */
-typedef enum {
+typedef enum
+{
 	IO_MSG_TYPE_BT_STATUS,  /**< BT status change with subtype @ref GAP_MSG_TYPE */
 	IO_MSG_TYPE_KEYSCAN,    /**< Key scan message with subtype @ref T_IO_MSG_KEYSCAN */
 	IO_MSG_TYPE_QDECODE,    /**< subtype to be defined */
@@ -257,7 +261,8 @@ typedef enum {
 } T_IO_MSG_TYPE;
 
 /**  @brief IO subtype definitions for @ref T_IO_CONSOLE type */
-typedef enum {
+typedef enum
+{
 	IO_MSG_CONSOLE_STRING_RX    = 0x01, /**< Console CLI RX event */
 	IO_MSG_CONSOLE_STRING_TX    = 0x02, /**< Console CLI TX event */
 	IO_MSG_CONSOLE_BINARY_RX    = 0x03, /**< Console protocol RX event */
@@ -265,7 +270,8 @@ typedef enum {
 } T_IO_CONSOLE;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_KEYSCAN type */
-typedef enum {
+typedef enum
+{
 	IO_MSG_KEYSCAN_RX_PKT        = 1, /**< Keyscan RX data event */
 	IO_MSG_KEYSCAN_MAX           = 2, /**<  */
 	IO_MSG_KEYSCAN_ALLKEYRELEASE = 3, /**< All keys are released event */
@@ -273,14 +279,16 @@ typedef enum {
 } T_IO_MSG_KEYSCAN;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_UART type */
-typedef enum {
+typedef enum
+{
 	IO_MSG_UART_RX              = 0x10, /**< UART RX event */
 
 	IO_MSG_UART_TX              = 0x20, /**< UART TX event */
 } T_IO_MSG_UART;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_GPIO type */
-typedef enum {
+typedef enum
+{
 	IO_MSG_GPIO_KEY,               /**< KEY GPIO event */
 	IO_MSG_GPIO_UART_WAKE_UP,      /**< UART WAKE UP event */
 	IO_MSG_GPIO_CHARGER,           /**< CHARGER event */
@@ -296,13 +304,15 @@ typedef enum {
 } T_IO_MSG_GPIO;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_TIMER type */
-typedef enum {
+typedef enum
+{
 	IO_MSG_TIMER_ALARM,
 	IO_MSG_TIMER_RWS
 } T_IO_MSG_TIMER;
 
 /**  @brief IO subtype definitions for @ref IO_MSG_TYPE_WRISTBNAD type */
-typedef enum {
+typedef enum
+{
 	IO_MSG_BWPS_TX_VALUE            = 1,
 	IO_MSG_OS_TIMEROUT_SEND_DATA    = 2,
 	IO_MSG_OS_TIMEROUT_SEND_DELAY   = 3,
@@ -333,14 +343,17 @@ typedef enum {
 } T_IO_MSG_WRISTBAND;
 
 /**  @brief IO message definition for communications between tasks*/
-typedef struct {
+typedef struct
+{
 	uint16_t type;
 	uint16_t subtype;
-	union {
+	union
+	{
 		uint32_t  param;
 		void     *buf;
 	} u;
 } T_IO_MSG;
+
 
 /** @} */ /* End of group APP_MSG_Exported_Types */
 

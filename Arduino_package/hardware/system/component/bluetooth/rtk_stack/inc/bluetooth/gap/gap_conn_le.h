@@ -751,7 +751,8 @@ extern "C"
   */
 #if F_BT_LE_GAP_CENTRAL_SUPPORT
 /** @brief GAP connection phy types*/
-typedef enum {
+typedef enum
+{
 	GAP_CONN_PARAM_1M = 0,
 #if F_BT_LE_5_0_AE_ADV_SUPPORT
 	GAP_CONN_PARAM_2M = 1,
@@ -761,14 +762,16 @@ typedef enum {
 #endif
 
 /** @brief GAP link roles */
-typedef enum {
+typedef enum
+{
 	GAP_LINK_ROLE_UNDEFINED,    //!< Unknown.
 	GAP_LINK_ROLE_MASTER,       //!< Role is master.
 	GAP_LINK_ROLE_SLAVE         //!< Role is slave.
 } T_GAP_ROLE;
 
 /** @brief LE connection parameter types */
-typedef enum {
+typedef enum
+{
 	GAP_PARAM_CONN_BD_ADDR         = 0x270,//!< Address of connected device. Read only. Size is uint8[B_MAX_ADV_LEN]. Set to all zeros when not connected.
 	GAP_PARAM_CONN_BD_ADDR_TYPE    = 0x271,//!< Address type of connected device. Read only. Size is uint8. Set to zero when not connected.
 	GAP_PARAM_CONN_INTERVAL        = 0x272,//!< Current connection interval.  Read only. Size is uint16.  Range is 7.5ms to 4 seconds (0x0006 to 0x0C80).  Default is 0 (no connection).
@@ -788,7 +791,8 @@ typedef enum {
 } T_LE_CONN_PARAM_TYPE;
 
 /** @brief  Connected device information.*/
-typedef struct {
+typedef struct
+{
 	T_GAP_CONN_STATE conn_state;             //!< Connection state
 	T_GAP_ROLE       role;                   //!< Device role
 	uint8_t          remote_bd[GAP_BD_ADDR_LEN];  //!< Remote address
@@ -797,7 +801,8 @@ typedef struct {
 
 #if F_BT_LE_GAP_CENTRAL_SUPPORT
 /** @brief  Definition of LE connection request parameter.*/
-typedef struct {
+typedef struct
+{
 	uint16_t scan_interval;/**< Time interval from when the Controller started its last scan
                                 until it begins the subsequent scan on the primary advertising channel.
 
@@ -1567,3 +1572,5 @@ T_GAP_CAUSE le_update_conn_param(uint8_t   conn_id,
 #endif
 
 #endif /* GAP_CONN_LE_H */
+
+

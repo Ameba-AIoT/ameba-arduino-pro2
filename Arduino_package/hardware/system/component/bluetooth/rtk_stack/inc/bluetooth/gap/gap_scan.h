@@ -336,7 +336,8 @@ extern "C"
   */
 
 /** @brief LE scan parameter type */
-typedef enum {
+typedef enum
+{
 	GAP_PARAM_SCAN_LOCAL_ADDR_TYPE   = 0x240,  //!< The type of address being used in the scan request packets. Read/Write.
 	GAP_PARAM_SCAN_MODE              = 0x241,  //!< Scan mode. Read/Write. Size is uint8. Default is GAP_SCAN_MODE_ACTIVE (@ref T_GAP_SCAN_MODE).
 	GAP_PARAM_SCAN_INTERVAL          = 0x242,  //!< Scan Interval. Read/Write. Size is uint16_t. Default is 0x10. Value range: 0x0004 - 0x4000 (2.5ms - 10240ms 0.625ms/step).
@@ -588,7 +589,6 @@ T_GAP_CAUSE le_scan_stop(void);
   */
 bool le_scan_info_filter(bool enable, uint8_t offset, uint8_t len, uint8_t *p_filter);
 #endif
-
 /** @} */ /* End of group Observer_Exported_Functions */
 /** @} */ /* End of group Observer_Role */
 #endif

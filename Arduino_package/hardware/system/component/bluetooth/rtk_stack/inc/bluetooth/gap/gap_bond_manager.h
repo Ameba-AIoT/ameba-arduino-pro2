@@ -248,7 +248,6 @@ bool gap_update_cccd_info(uint16_t conn_handle, uint8_t data_len, uint8_t *data)
   */
 
 #endif
-
 #ifdef __cplusplus
 }
 #endif

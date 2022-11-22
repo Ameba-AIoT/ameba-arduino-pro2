@@ -400,6 +400,7 @@ enum odm_cmninfo {
 	ODM_CMNINFO_MP_TEST_CHIP,
 	ODM_CMNINFO_IC_TYPE,
 	ODM_CMNINFO_CUT_VER,
+	ODM_CMNINFO_IC_VER,
 	ODM_CMNINFO_FAB_VER,
 	ODM_CMNINFO_FW_VER,
 	ODM_CMNINFO_FW_SUB_VER,
@@ -806,6 +807,7 @@ struct dm_struct {
 	boolean		is_init_hw_info_by_rfe;
 	boolean         is_R2R_CCA_MASKT_TIME_SHORT;
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
+	u32			is_watchdog;
 	u32			rts_drop_cnt;
 	u32			low_rate_tx_fail_cnt;
 	u32			low_rate_tx_ok_cnt;
@@ -838,6 +840,7 @@ struct dm_struct {
 	u8			ic_ip_series;		/*N/AC/JGR3*/
 	enum phydm_phy_sts_type	ic_phy_sts_type;	/*@Type1/type2/type3*/
 	u8			cut_version;		/*@cut version TestChip/A-cut/B-cut... = 0/1/2/3/...*/
+	u8			ic_version;
 	u8			fab_version;		/*@Fab version TSMC/UMC = 0/1*/
 	u8			fw_version;
 	u8			fw_sub_version;
@@ -909,6 +912,7 @@ struct dm_struct {
 	#if (RTL8822E_SUPPORT)
 	boolean			bt_is_linked;
 	#endif
+	boolean			is_nbi_csi;
 	char			dbg_buf[PHYDM_SNPRINT_SIZE];
 /*@-----------HOOK BEFORE REG INIT-----------*/
 /*@===========================================================*/

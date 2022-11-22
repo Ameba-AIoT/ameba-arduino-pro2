@@ -1,17 +1,8 @@
 #ifndef MD_API_H
 #define MD_API_H
 
-#define md_col 16
-#define md_row 16
-
-//motion detect every n frames
-#define MOTION_DETECT_INTERVAL 2
-
-//enable dynamic threshold or not
-#define DYNAMIC_THRESHOLD 0
-
-//start MD after AE stable
-#define MD_AFTER_AE_STABLE 1
+#define MD_MAX_ROW 32 //fix value
+#define MD_MAX_COL 32 //fix value
 
 //dynamic increase sensitivity when too light or too dark
 #define  BRIGHT_THRESHOLD  180
@@ -21,7 +12,7 @@
 #endif
 
 //turn off motion detect while too dark
-#define  TURN_OFF_THRESHOLD 0
+#define TURN_OFF_THRESHOLD 0
 
 typedef struct motion_detect_threshold_s {
 	//motion detect base threshold : smaller value, higher sensitive
@@ -31,29 +22,39 @@ typedef struct motion_detect_threshold_s {
 } motion_detect_threshold_t;
 
 typedef struct motion_detect_YRBG_data_s {
-	unsigned char RValueNow[md_col * md_row];
-	unsigned char GValueNow[md_col * md_row];
-	unsigned char BValueNow[md_col * md_row];
-	unsigned char YValueNow[md_col * md_row];
+	unsigned char RValueNow[MD_MAX_COL * MD_MAX_ROW];
+	unsigned char GValueNow[MD_MAX_COL * MD_MAX_ROW];
+	unsigned char BValueNow[MD_MAX_COL * MD_MAX_ROW];
+	unsigned char YValueNow[MD_MAX_COL * MD_MAX_ROW];
 } motion_detect_YRBG_data_t;
 
 typedef struct motion_detect_bgmodel_s {
-	float RValue[md_col * md_row];
-	float GValue[md_col * md_row];
-	float BValue[md_col * md_row];
-	float YValue[md_col * md_row];
+	float RValue[MD_MAX_COL * MD_MAX_ROW];
+	float GValue[MD_MAX_COL * MD_MAX_ROW];
+	float BValue[MD_MAX_COL * MD_MAX_ROW];
+	float YValue[MD_MAX_COL * MD_MAX_ROW];
 } motion_detect_bgmodel_t;
+
+typedef struct md_param_s {
+	int image_width;
+	int image_height;
+	int md_row;
+	int md_col;
+} md_param_t;
 
 typedef struct md_context_s {
 	int count;
+	int detect_interval;
 	int left_motion;
 	int right_motion;
 	int middle_motion;
+	int en_AE_stable;
 	int AE_stable;
+	int en_dyn_thr_flag;
 	float max_threshold_shift;
 	float max_turn_off;
-	char md_result[md_col * md_row];
-	char md_mask[md_col * md_row];
+	char md_result[MD_MAX_COL * MD_MAX_ROW];
+	char md_mask[MD_MAX_COL * MD_MAX_ROW];
 	int md_trigger_block_threshold;
 	float Tauto;
 	motion_detect_bgmodel_t md_bgmodel;
@@ -61,8 +62,8 @@ typedef struct md_context_s {
 	motion_detect_threshold_t *md_threshold;
 } md_context_t;
 
-void md_get_YRGB_value(md_context_t *md_ctx, int pic_width, int pic_height, unsigned char *RGB_buffer);
-void initial_bgmodel(md_context_t *md_ctx);
-void motion_detect(md_context_t *md_ctx);
+void md_initial_bgmodel(md_context_t *md_ctx, md_param_t *md_param);
+void md_get_YRGB_value(md_context_t *md_ctx, md_param_t *md_param, unsigned char *RGB_buffer);
+void motion_detect(md_context_t *md_ctx, md_param_t *md_param);
 
 #endif	// MD_API_H

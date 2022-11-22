@@ -115,4 +115,7 @@ void rtl8735b_set_tx_power_index(PADAPTER, u32 powerindex, u8 rfpath, u8 rate);
 //u8 rtl8735b_get_tx_power_index(PADAPTER, u8 rfpath, u8 rate, u8 bandwidth, u8 channel, struct txpwr_idx_comp *tic);
 void rtl8735b_notch_filter_switch(PADAPTER, bool enable);
 
+/* rtl8735b_dm.c */
+void rtl8735b_query_phy_statistic(PADAPTER padapter, rtw_phy_statistics_t *statistic);
+
 #endif /* _RTL8735B_H_ */

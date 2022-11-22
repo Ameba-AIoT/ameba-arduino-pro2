@@ -84,7 +84,8 @@ typedef void (*P_FUN_EXT_DISCONNECT_CB)(uint16_t conn_handle, uint16_t cid);
 /** @defgroup T_FUN_EXT_CLIENT_CBS Specific Client Extension Callback Functions Struct
   * @{
   */
-typedef struct {
+typedef struct
+{
 	P_FUN_EXT_DISCOVER_STATE_CB    discover_state_cb;   //!< Discovery state callback function pointer
 	P_FUN_EXT_DISCOVER_RESULT_CB   discover_result_cb;  //!< Discovery result callback function pointer
 	P_FUN_EXT_READ_RESULT_CB       read_result_cb;      //!< Read response callback function pointer
@@ -342,6 +343,40 @@ T_GAP_CAUSE client_ext_attr_write(uint16_t conn_handle, uint16_t cid, T_CLIENT_I
   */
 T_GAP_CAUSE client_ext_attr_ind_confirm(uint16_t conn_handle, uint16_t cid);
 
+/**
+ * @brief Send the exchange MTU request.
+ *
+ * @param[in]  conn_handle    Connection handle of the ACL link. Only for LE ACL link.
+ * @retval GAP_CAUSE_SUCCESS: Exchange MTU request success.
+ * @retval other: Exchange MTU request failed.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+    static T_USER_CMD_PARSE_RESULT cmd_send_mtu_req(T_USER_CMD_PARSED_VALUE *p_parse_value)
+    {
+      T_GAP_CAUSE cause;
+      uint16_t conn_handle = p_parse_value->dw_param[0];
+
+      cause = client_ext_send_exchange_mtu_req(conn_handle);
+      return (T_USER_CMD_PARSE_RESULT)cause;
+    }
+    void app_handle_gap_msg(T_IO_MSG *p_gap_msg)
+    {
+        T_LE_GAP_MSG gap_msg;
+        memcpy(&gap_msg, &p_gap_msg->u.param, sizeof(p_gap_msg->u.param));
+        switch (p_gap_msg->subtype)
+        {
+            case GAP_MSG_LE_CONN_MTU_INFO:
+            {
+                app_handle_conn_mtu_info_evt(gap_msg.msg_data.gap_conn_mtu_info.conn_id,
+                                            gap_msg.msg_data.gap_conn_mtu_info.mtu_size);
+            }
+            break;
+        }
+    }
+ * \endcode
+ */
+T_GAP_CAUSE client_ext_send_exchange_mtu_req(uint16_t conn_handle);
 
 #if F_BT_ATT_READ_MULTIPLE_VARIABLE
 /**
@@ -434,6 +469,7 @@ T_GAP_CAUSE client_ext_attr_read_multi_variable(uint16_t conn_handle, uint16_t c
 */
 #endif
 
+
 #ifdef  __cplusplus
 }
 #endif      /*  __cplusplus */
@@ -441,3 +477,4 @@ T_GAP_CAUSE client_ext_attr_read_multi_variable(uint16_t conn_handle, uint16_t c
 #endif
 
 #endif /* PROFILE_CLIENT_EXT_H */
+

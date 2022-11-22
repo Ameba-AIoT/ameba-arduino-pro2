@@ -324,7 +324,8 @@ extern "C" {
   */
 
 /** @brief GAPS parameter type */
-typedef enum {
+typedef enum
+{
 	GAPS_PARAM_DEVICE_NAME = 0x00,
 	GAPS_PARAM_APPEARANCE  = 0x01,
 #if F_BT_LE_PRIVACY_SUPPORT
@@ -335,14 +336,16 @@ typedef enum {
 } T_GAPS_PARAM_TYPE;
 
 /** @brief Builtin services data struct for notification data to application. */
-typedef struct {
+typedef struct
+{
 	uint8_t  opcode; //!< ref: @ref GAPS_WRITE_TYPE
 	uint16_t len;
 	uint8_t  *p_value;
 } T_GAPS_UPSTREAM_MSG_DATA;
 
 /** @brief Builtin services callback data to inform application */
-typedef struct {
+typedef struct
+{
 	T_SERVICE_CALLBACK_TYPE     msg_type;
 	uint8_t
 	conn_id;     //!< This parameter can use when parameter use_ext of the server_cfg_use_ext_api is false.
@@ -550,6 +553,7 @@ bool gatts_ext_service_changed_indicate(uint16_t conn_handle, uint16_t cid, uint
 /** End of GAP_GATT_SERVICE
 * @}
 */
+
 
 #ifdef  __cplusplus
 }

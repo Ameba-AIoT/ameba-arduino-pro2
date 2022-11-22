@@ -143,6 +143,7 @@ struct dm_rf_calibration_struct {
 	u8	thermal_value_avg_index;
 	u8	thermal_value_avg_index_path[MAX_RF_PATH];
 	u8	thermal_value_rx_gain;
+	u8	thermal_value_avg_pwrtrk[MAX_RF_PATH];
 
 
 	boolean	is_reloadtxpowerindex;

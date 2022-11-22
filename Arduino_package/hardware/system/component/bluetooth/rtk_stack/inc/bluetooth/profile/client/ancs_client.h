@@ -520,7 +520,6 @@ uint16_t ancs_search_handle(uint8_t conn_id, T_ANCS_HANDLE_TYPE handle_type);
 /** @} End of ANCS_CLIENT_Exported_Functions */
 
 /** @} End of ANCS_CLIENT */
-
 #endif
 
 #ifdef  __cplusplus

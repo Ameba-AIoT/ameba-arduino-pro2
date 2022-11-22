@@ -27,6 +27,7 @@
 #define __HALRF_DPK_H__
 
 /*@--------------------------Define Parameters-------------------------------*/
+#define LBK_RXIQK 0
 #define GAIN_LOSS 1
 #define DO_DPK 2
 #define DPK_ON 3
@@ -36,6 +37,8 @@
 #define DPK_LOK 4
 #define DPK_TXK 5
 #define DAGC 4
+#define SYNC_DC 5
+#define MDPK_DC 6
 #define LOSS_CHK 0
 #define GAIN_CHK 1
 #define SYNC_CHK 3
@@ -105,6 +108,8 @@ struct dm_dpk_info {
 	u32	coef[2][20];			/*path/MDPD coefficient*/
 	u16	dpk_gs[2];			/*MDPD coef gs*/
 	u8	thermal_dpk_delta[2];		/*path*/
+	u32	dpk_lms_err[2];			/*path*/
+	u32	dpk_data[11];			/*path/MDPD coefficient*/
 #endif
 
 #if (RTL8198F_SUPPORT == 1 || RTL8192F_SUPPORT == 1 || RTL8197F_SUPPORT == 1 ||\

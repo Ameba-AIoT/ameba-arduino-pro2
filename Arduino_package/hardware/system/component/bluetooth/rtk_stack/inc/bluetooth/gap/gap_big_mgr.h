@@ -1660,7 +1660,6 @@ T_GAP_CAUSE gap_big_mgr_read_test_counters(uint16_t bis_conn_handle);
 /** End of GAP
   * @}
   */
- 
 #ifdef __cplusplus
 }
 #endif

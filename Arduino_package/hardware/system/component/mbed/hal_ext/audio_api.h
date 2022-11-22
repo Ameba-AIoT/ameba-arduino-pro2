@@ -539,6 +539,15 @@ void audio_adda_loopback(audio_t *obj, BOOL en);
 void audio_dmic_pinmux(audio_t *obj, PinName dmic_clk, PinName dmic_data);
 
 /**
+  * @brief  Make ADC data to DAC data.
+  * @param  obj: Audio object define in application software.
+  * @param  dmic_clk: PE_0 or PE_2
+  * @param  dmic_data: PE_4
+  * @retval none
+  */
+
+void audio_dmic_depinmux(audio_t *obj, PinName dmic_clk, PinName dmic_data);
+/**
   * @brief  Make TX and RX different rate.
   * @param  obj: Audio object define in application software.
   * @param  diff_para: Set parameters.
@@ -622,6 +631,24 @@ void audio_input_r_eq(audio_t *obj, audio_eq eq, BOOL en, u32 h0, u32 b0, u32 b1
  *  @retval none
  */
 void audio_output_l_eq(audio_t *obj, audio_eq eq, BOOL en, u32 h0, u32 b0, u32 b1, u32 a0, u32 a1);
+
+/**
+  * @brief  Control left channel digital microphone gain .
+  * @param  obj: Audio object define in application software.
+  * @param  dmic_gain: 0,12,24,36 dB
+  * @retval none
+  */
+void audio_l_dmic_gain(audio_t *obj, audio_dmic_gain dmic_gain);
+
+/**
+  * @brief  Control right channel digital microphone gain .
+  * @param  obj: Audio object define in application software.
+  * @param  dmic_gain: 0,12,24,36 dB
+  * @retval none
+  */
+void audio_r_dmic_gain(audio_t *obj, audio_dmic_gain dmic_gain);
+
+void audio_set_param_adv(audio_t *obj, audio_sr sample_rate, audio_wl word_length, audio_ch tx_ch, audio_ch rx_ch);
 #endif
 
 

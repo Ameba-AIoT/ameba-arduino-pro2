@@ -215,7 +215,12 @@ struct ra_table {
 	void (*record_ra_info)(void *dm_void, u8 macid,
 			       struct cmn_sta_info *sta, u64 ra_mask);
 	u8	ra_mask_rpt_stamp;
-	u8 	ra_mask_buf[8];
+	u8	ra_mask_buf[8];
+	u8	ra_mask_force_update;
+	enum phydm_ctrl_info_rate max_sup_rate;
+	u8	ra_tssi_dyn_avg_en;
+	u8	ra_tssi_dyn_avg_num;
+	u8	ra_ramask_byrssi;
 };
 
 struct ra_mask_rpt_trig {
@@ -320,6 +325,12 @@ void phydm_ra_registed(void *dm_void, u8 macid, u8 rssi_from_assoc);
 void phydm_ra_offline(void *dm_void, u8 macid);
 
 void phydm_ra_mask_watchdog(void *dm_void);
+
+void phydm_set_max_sup_rate(void *dm_void, u8 en, u8 max_rate);
+
+void phydm_set_ramask_byrssi(void *dm_void, u8 en);
+
+void phydm_fw_fix_rate_once(void *dm_void, u8 macid, u8 bw, u8 rate);
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 void odm_refresh_basic_rate_mask(

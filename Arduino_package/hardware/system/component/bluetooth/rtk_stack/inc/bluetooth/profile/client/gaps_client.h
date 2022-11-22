@@ -526,6 +526,7 @@ bool gaps_check_resolvable_private_addr_only_char(uint8_t conn_id, bool *p_is_ex
 
 /** @} End of GAPS_Client */
 
+
 #ifdef  __cplusplus
 }
 #endif      /*  __cplusplus */

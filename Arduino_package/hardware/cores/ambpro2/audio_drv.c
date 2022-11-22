@@ -20,7 +20,9 @@ static audio_params_t audio_params = {
     .dmic_r_gain    = 0,
     .use_mic_type   = 0,
     .channel     = 0,
-    .enable_aec  = 0
+    .ADC_gain = 0x64
+//    ,
+//    .enable_aec  = 0
 };
 
 static aac_params_t aac_params = {
@@ -50,7 +52,8 @@ void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, 
     audio_params.dmic_r_gain    = dmic_r_gain;
     audio_params.use_mic_type   = use_mic_type;
     audio_params.channel     = channel;
-    audio_params.enable_aec  = enable_aec;
+//    audio_params.enable_aec  = enable_aec;
+    (void)enable_aec; // TBD
 
     if (p) {
 #if !DEFAULT_AUDIO_SETTINGS

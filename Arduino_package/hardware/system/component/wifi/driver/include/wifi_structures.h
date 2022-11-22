@@ -363,7 +363,9 @@ typedef struct phy_statistics {
 	unsigned int false_alarm_ofdm;
 	unsigned int cca_cck;
 	unsigned int cca_ofdm;
+	unsigned int tx_total;
 	unsigned int tx_retry;
+	unsigned short tx_ok;
 	unsigned short tx_drop;
 	unsigned int rx_drop;
 } rtw_phy_statistics_t;

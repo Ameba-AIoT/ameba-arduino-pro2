@@ -782,6 +782,12 @@ typedef struct {
 	T_LE_REMOTE_BD resolved_remote_bd;
 } T_LE_KEY_ENTRY;
 
+typedef struct {
+	uint8_t link_key_length;
+	uint8_t padding[3];
+	uint8_t key[28];
+} T_LE_LTK;
+
 /** End of GAP_LE_STORAGE_Exported_Types
   * @}
   */

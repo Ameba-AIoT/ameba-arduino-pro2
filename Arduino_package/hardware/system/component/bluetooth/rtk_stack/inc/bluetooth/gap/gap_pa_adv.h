@@ -377,8 +377,8 @@ T_GAP_CAUSE le_pa_adv_set_periodic_adv_enable(uint8_t adv_handle, uint8_t enable
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

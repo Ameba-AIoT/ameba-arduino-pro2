@@ -121,6 +121,7 @@ extern bool btx_vendor_get_response(uint8_t *data, uint8_t len);
 
 /** @} */ /* End of group CRC_FCS_Exported_Macros */
 
+
 /** @} */ /* End of group CRC_FCS */
 
 #endif
@@ -128,3 +129,4 @@ extern bool btx_vendor_get_response(uint8_t *data, uint8_t len);
 #endif  /**< #if ! defined (__CRC16BTX_H) */
 
 /** End of CRC16BTX.H */
+

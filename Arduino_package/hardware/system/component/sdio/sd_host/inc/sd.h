@@ -41,6 +41,8 @@ SD_RESULT SD_GetCapacity(u32 *sector_count);    // read sd card Capacity
 SD_RESULT SD_ReadBlocks(u32 sector, u8 *data, u32 count); //read multi sector
 SD_RESULT SD_WriteBlocks(u32 sector, const u8 *data, u32 count); //write multi sector
 
+int check_sdcard_exist(void);//Check if the sd card is exist
+
 #endif
 
 #endif

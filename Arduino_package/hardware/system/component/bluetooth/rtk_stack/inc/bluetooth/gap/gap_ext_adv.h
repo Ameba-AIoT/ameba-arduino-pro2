@@ -211,29 +211,6 @@ T_GAP_CAUSE le_ext_adv_get_param(T_LE_EXT_ADV_PARAM_TYPE param, void *p_value);
 uint8_t le_ext_adv_create_adv_handle(void);
 
 /**
- * @brief  Get the connection ID from the adv handle.
- *
- *         If the advertising ends because a connection was created,
- *         application can call le_ext_adv_get_conn_id_by_adv_handle() to get the connection ID
- *         when the advertising set state switches to EXT_ADV_STATE_IDLE.
- *
- * @param[in]   adv_handle Identify an advertising set, which is assigned by @ref le_ext_adv_create_adv_handle.
- * @return Connection ID.
- * @retval 0-0xFE  Operation success.
- * @retval 0xFF Operation failure, Get connection ID failed.
- *
- * <b>Example usage</b>
- * \code{.c}
-    void test(void)
-    {
-        uint8_t conn_id;
-        conn_id = le_ext_adv_get_conn_id_by_adv_handle(adv_handle);
-    }
- * \endcode
- */
-uint8_t le_ext_adv_get_conn_id_by_adv_handle(uint8_t adv_handle);
-
-/**
  * @brief  Get adv handle from connection ID.
  *
  *         If the advertising ends because a connection was created,
@@ -912,8 +889,8 @@ void le_ext_adv_gap_msg_info_way(bool use_msg);
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

@@ -54,7 +54,8 @@ extern "C" {
   * @{
   */
 /** @brief The callback data of PROFILE_EVT_SEND_DATA_COMPLETE */
-typedef struct {
+typedef struct
+{
 	uint16_t        credits;
 	uint16_t        conn_handle;
 	uint16_t        cid;
@@ -64,13 +65,15 @@ typedef struct {
 } T_EXT_SEND_DATA_RESULT;
 
 /** @brief Service callback data */
-typedef union {
+typedef union
+{
 	T_SERVER_RESULT     service_reg_result;
 	T_EXT_SEND_DATA_RESULT  send_data_result;
 	T_SERVER_REG_AFTER_INIT_RESULT    server_reg_after_init_result;
 } T_SERVER_EXT_CB_DATA;
 
-typedef struct {
+typedef struct
+{
 	T_SERVER_CB_TYPE   eventId;    /**<  @brief EventId defined upper */
 	T_SERVER_EXT_CB_DATA   event_data; /**<  @brief Event data */
 } T_SERVER_EXT_APP_CB_DATA;
@@ -113,7 +116,8 @@ typedef T_APP_RESULT(*P_FUN_EXT_SERVER_GENERAL_CB)(T_SERVER_ID service_id, void 
 
 
 /** @brief GATT extension service callbacks */
-typedef struct {
+typedef struct
+{
 	P_FUN_GATT_EXT_READ_ATTR_CB read_attr_cb;     /**< Read callback function pointer.
                                                    Return value: @ref T_APP_RESULT. */
 	P_FUN_GATT_EXT_WRITE_ATTR_CB write_attr_cb;   /**< Write callback function pointer.
@@ -382,7 +386,6 @@ bool server_ext_get_cccd_info(uint16_t conn_handle, T_SERVER_ID service_id, uint
 
 /** @} End of GATT_SERVER_API */
 #endif
-
 #endif
 
 #ifdef  __cplusplus

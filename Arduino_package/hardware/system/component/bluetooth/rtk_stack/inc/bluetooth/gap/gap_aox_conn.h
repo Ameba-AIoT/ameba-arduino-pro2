@@ -366,8 +366,8 @@ T_GAP_CAUSE le_aox_conn_cte_response_enable(uint8_t conn_id,
   * @}
   */
 
-#endif
 
+#endif
 #ifdef __cplusplus
 }
 #endif

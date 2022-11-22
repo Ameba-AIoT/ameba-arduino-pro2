@@ -586,6 +586,11 @@ struct	xmit_priv	{
 	u64	tx_drop;
 	u64	last_tx_bytes;
 	u64	last_tx_pkts;
+	u16 phy_tx_total;
+	u16 phy_tx_retry;
+	u16 phy_tx_ok;
+	u16 phy_tx_drop;
+	u8 phy_data_ready;
 
 	struct hw_xmit *hwxmits;
 	u8	hwxmit_entry;
