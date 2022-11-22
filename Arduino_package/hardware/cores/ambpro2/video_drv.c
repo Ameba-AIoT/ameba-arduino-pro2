@@ -36,58 +36,9 @@ static video_params_t video_params = {
     .use_static_addr = 1
 };
 
-int cameraConfig(int enable, int w, int h, int bps, int snapshot, int preset) {
-    int voe_heap_size = 0;
-    isp_info_t info;
-
-    if (USE_SENSOR == SENSOR_GC4653) {
-        info.sensor_width = 2560;
-        info.sensor_height = 1440;
-        info.sensor_fps = 15;
-    } else {
-        info.sensor_width = 1920;
-        info.sensor_height = 1080;
-        info.sensor_fps = 30;
-    }
-#if OSD_ENABLE
-    info.osd_enable = 1;
-#endif
-
-#if MD_ENABLE
-    info.md_enable = 1;
-#endif
-
-#if HDR_ENABLE
-    info.hdr_enable = 1;
-#endif
-    video_set_isp_info(&info);
-    if (preset % 4 == 1) { // preset % 4 == 1 
-        voe_heap_size =  video_buf_calc(enable, w, h, bps, snapshot,
-                                        0,0,0,0,0,
-                                        0,0,0,0,0,
-                                        0,0,0);
-    } else if (preset == 2) {
-        voe_heap_size =  video_buf_calc(0,0,0,0,0,
-                                        enable, w, h, bps, snapshot,
-                                        0,0,0,0,0,
-                                        0,0,0);
-    } else if (preset == 3) {
-        voe_heap_size =  video_buf_calc(0,0,0,0,0,
-                                        0,0,0,0,0,
-                                        enable, w, h, bps, snapshot,
-                                        0,0,0);
-    } else {
-        voe_heap_size =  video_buf_calc(0,0,0,0,0,
-                                        0,0,0,0,0,
-                                        0,0,0,0,0,
-                                        enable, w, h);
-    }
-    return voe_heap_size;
-}
-
-int cameraConfigNew(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot, 
-                        int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot, 
-                        int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot, 
+int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
+                        int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,
+                        int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot,
                         int v4_enable, int v4_w, int v4_h) {
 
     int voe_heap_size = 0;
@@ -189,33 +140,29 @@ void cameraSnapshot(void *p, int channel) {
 
 int snapshot_cb(uint32_t jpeg_addr, uint32_t jpeg_len) {
     printf("snapshot addr=%d\n\r, snapshot size=%d\n\r", (int)jpeg_addr, (int)jpeg_len);
+    uint8_t* addr = (uint8_t*)jpeg_addr;
+    for (int i = 0; i < jpeg_len; i++) {
+        if (i % 16 == 0) {
+            printf("\r\n");
+        }
+        printf("%02x", addr[i]);
+    }
     return 0;
 }
 
-void snapshot_control_thread(void *param) {
-//    mm_context_t *packet = (mm_context_t*)param;
-//    printf("state: %d\r\n", packet->state);
-//    printf("curr_queue: %d\r\n", packet->curr_queue);
-//    printf("item_num: %d\r\n", packet->item_num);
-
-    while (1) {
-        vTaskDelay(10000);
-        mm_module_ctrl((mm_context_t*)param, CMD_VIDEO_SNAPSHOT, 1);
-    }
-}
-
 void cameraSnapshotCB(mm_context_t *p) {
+    mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 1);
     mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT_CB, (int)snapshot_cb);
     
-    if (xTaskCreate(snapshot_control_thread, ((const char *)"snapshot_store"), 512, (void *)p, tskIDLE_PRIORITY + 1, &snapshot_thread) != pdPASS) {
-        printf("\n\r%s xTaskCreate failed", __FUNCTION__);
-    }
-    else{
-        printf("\n\r%s xTaskCreate success", __FUNCTION__);
-    }
+//    if (xTaskCreate(snapshot_control_thread, ((const char *)"snapshot_store"), 512, (void *)p, tskIDLE_PRIORITY + 1, &snapshot_thread) != pdPASS) {
+//        printf("\n\r%s xTaskCreate failed", __FUNCTION__);
+//    }
+//    else{
+//        printf("\n\r%s xTaskCreate success", __FUNCTION__);
+//    }
 }
 
-mm_context_t *cameraDeInit(mm_context_t *p) {
+mm_context_t *cameraDeinit(mm_context_t *p) {
     mm_queue_item_t *tmp_item;
     mm_context_t *video_data = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
     video_data = p;

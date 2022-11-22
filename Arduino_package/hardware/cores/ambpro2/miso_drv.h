@@ -5,14 +5,14 @@
 #include "Arduino.h"
 #include "mmf2_module.h"
 
-void misoCreate(void);
-void misoDestroy(void);
-int  misoStart(void);
-void misoStop(void);
-void misoPause(void);
-void misoResume(void);
-void misoRegIn1(mm_context_t*);
-void misoRegIn2(mm_context_t*);
-void misoRegOut(mm_context_t*);
+uint32_t misoCreate(void);
+void misoDestroy(void *);
+int  misoStart(void *);
+void misoStop(void *);
+void misoPause(void *);
+void misoResume(void *);
+void misoRegIn1(void *, mm_context_t *);
+void misoRegIn2(void *, mm_context_t *);
+void misoRegOut(void *, mm_context_t *);
 
 #endif

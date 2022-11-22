@@ -2,16 +2,19 @@
 #include "mmf2_link.h"
 #include "mmf2_miso.h"
 
-static mm_miso_t *miso_arduino = NULL;
-
 /**
   * @brief  allocate memory for a miso object
   * @param  none
   * @retval  pointer to the miso object
   */
-void misoCreate(void) {
+uint32_t misoCreate(void) {
     //create MISO object to be used across input and output module
-    miso_arduino = miso_create();
+    mm_miso_t *context = NULL;
+    context  = miso_create();
+    if (context == NULL) {
+        printf("MISO create failed/r/n");
+    }
+    return ((uint32_t)context);
 }
 
 /**
@@ -19,35 +22,11 @@ void misoCreate(void) {
   * @param  pointer to the miso object
   * @retval none
   */
-void misoDestroy(void) {
+void misoDestroy(void *ctx) {
     //delete the MISO object created and stop the miso task
-    if(NULL != miso_delete(miso_arduino)) {
-        printf("Stream IO linker destroy failed..");
+    if(NULL != miso_delete((mm_miso_t *)ctx)) {
+        printf("Camera IO linker destroy failed..");
     }
-}
-
-/**
-  * @brief  api to register input source to MISO
-  * @param  obj: miso object
-  * @param  arg1: this argument is an input source
-  * @retval  none
-  */
-void misoRegIn1(mm_context_t *arg1) {
-    miso_ctrl(miso_arduino, MMIC_CMD_ADD_INPUT0, (uint32_t)arg1, 0);
-}
-
-void misoRegIn2(mm_context_t *arg1) {
-    miso_ctrl(miso_arduino, MMIC_CMD_ADD_INPUT1, (uint32_t)arg1, 0);
-}
-
-/**
-  * @brief  api to register output sources to MISO
-  * @param  obj: miso object
-  * @param  arg1: this argument is output source
-  * @retval  none
-  */
-void misoRegOut(mm_context_t *arg1) {
-    miso_ctrl(miso_arduino, MMIC_CMD_ADD_OUTPUT, (uint32_t)arg1, 0);
 }
 
 /**
@@ -55,8 +34,8 @@ void misoRegOut(mm_context_t *arg1) {
   * @param  obj: pointer to miso object
   * @retval :0 for success, -1 for fail
   */
-int misoStart(void) {
-    return miso_start(miso_arduino);
+int misoStart(void *ctx) {
+    return miso_start((mm_miso_t *)ctx);
 }
 
 /**
@@ -64,8 +43,8 @@ int misoStart(void) {
   * @param  pointer to the miso object
   * @retval none
   */
-void misoStop(void) {
-    miso_stop(miso_arduino);
+void misoStop(void *ctx) {
+    miso_stop((mm_miso_t *)ctx);
 }
 
 /**
@@ -73,8 +52,8 @@ void misoStop(void) {
   * @param  pointer to the miso object
   * @retval none
   */
-void misoPause(void) {
-    miso_pause(miso_arduino, MM_OUTPUT);
+void misoPause(void *ctx) {
+    miso_pause((mm_miso_t *)ctx, MM_OUTPUT);
 }
 
 /**
@@ -83,6 +62,30 @@ void misoPause(void) {
   * @param  pointer to the miso object
   * @retval none
   */
-void misoResume(void) {
-    miso_resume(miso_arduino);
+void misoResume(void *ctx) {
+    miso_resume((mm_miso_t *)ctx);
+}
+
+/**
+  * @brief  api to register input source to MISO
+  * @param  obj: miso object
+  * @param  arg1: this argument is an input source
+  * @retval  none
+  */
+void misoRegIn1(void *ctx, mm_context_t *arg1) {
+    miso_ctrl((mm_miso_t *)ctx, MMIC_CMD_ADD_INPUT0, (uint32_t)arg1, 0);
+}
+
+void misoRegIn2(void *ctx, mm_context_t *arg1) {
+    miso_ctrl((mm_miso_t *)ctx, MMIC_CMD_ADD_INPUT1, (uint32_t)arg1, 0);
+}
+
+/**
+  * @brief  api to register output sources to MISO
+  * @param  obj: miso object
+  * @param  arg1: this argument is output source
+  * @retval  none
+  */
+void misoRegOut(void *ctx, mm_context_t *arg1) {
+    miso_ctrl((mm_miso_t *)ctx, MMIC_CMD_ADD_OUTPUT, (uint32_t)arg1, 0);
 }

@@ -38,7 +38,7 @@ ENCODE TYPE
    3:NV12 
    4:RGB 
    5:HEVC+JPEG 
-   6:H264+JPEGF
+   6:H264+JPEG
 *****************************************************************************/
 enum encode_type {
     VIDEO_HEVC = 0,
@@ -89,6 +89,12 @@ enum encode_type {
 // define video rate control
 #define CAM_RCMODE          2 // 1: CBR, 2: VBR
 
+// define stream id
+#define v1_STREAMING_ID 0
+#define v2_STREAMING_ID 1
+#define v3_STREAMING_ID 2
+#define v4_STREAMING_ID 4
+
 // define video codec
 #define USE_H265 0
 #if USE_H265
@@ -101,81 +107,67 @@ enum encode_type {
 #define VIDEO_CODEC AV_CODEC_ID_H264
 #endif
 
-class CameraSetting {
+class MMFModule {
+    friend class StreamIO;
+    friend class Video;
+
     public:
-        CameraSetting(void);
-        CameraSetting(uint8_t preset);
-        CameraSetting(uint8_t resolution, uint8_t fps, uint8_t decoder, uint8_t snapshot);
 
-        CameraSetting(uint8_t resolution, uint8_t fps, uint8_t decoder, uint8_t snapshot,
-                      uint8_t v2_resolution, uint8_t v2_fps, uint8_t v2_decoder, uint8_t v2_snapshot,
-                      uint8_t v3_resolution, uint8_t v3_fps, uint8_t v3_decoder, uint8_t v3_snapshot,
-                      uint8_t v4_resolution, uint8_t v4_fps);
+    protected:
+        mm_context_t* _p_mmf_context = NULL;
+};
 
+class VideoSetting {
+    friend class Video;
+
+    public:
+        VideoSetting(uint8_t preset = 0);
+        VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot);
         int8_t _preset = -1;
 
-        uint8_t _streaming_id = 0;
         uint8_t _resolution;
-        uint8_t _fps;
-        uint8_t _decoder;
+        uint16_t _w;
+        uint16_t _h;
+        uint16_t _fps;
+        uint32_t _bps;
+        uint8_t _encoder;
         uint8_t _snapshot;
-        int _w;
-        int _h;
-
-        uint8_t _v2_streaming_id = 1;
-        uint8_t _v2_resolution;
-        uint8_t _v2_fps;
-        uint8_t _v2_decoder;
-        uint8_t _v2_snapshot;
-        int _v2_w;
-        int _v2_h;
-
-        uint8_t _v3_streaming_id = 2;
-        uint8_t _v3_resolution;
-        uint8_t _v3_fps;
-        uint8_t _v3_decoder;
-        uint8_t _v3_snapshot;
-        int _v3_w;
-        int _v3_h;
-
-        uint8_t _v4_streaming_id = 4;
-        uint8_t _v4_resolution;
-        uint8_t _v4_fps;
-        int _v4_w;
-        int _v4_h;
-
-        friend class VideoClass;
-};
-
-class VideoClass {
-    public:
-        VideoClass(void);
-        ~VideoClass();
-
-        void init(CameraSetting& obj);
-        void init(int w, int h, int bps, int preset);
-        void init(int enable, int w, int h, int bps, int snapshot, int preset);
-
-        void init(int v1_w, int v1_h, int v1_bps,
-                  int v2_w, int v2_h, int v2_bps,
-                  int v3_w, int v3_h, int v3_bps,
-                  int v4_w, int v4_h);
-        void init_new(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot, 
-                      int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot, 
-                      int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot, 
-                      int v4_enable, int v4_w, int v4_h);
-        void deinit(void);
-
-        void open(void);
-        void open(CameraSetting& obj);
-        void open(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot);
-        void start(CameraSetting& obj);
-        void close(void);
-        mm_context_t *getIO(void);
-        void getP(CameraSetting& obj, bool cb_flag);
-        void setFPS(int fps);
 
     private:
-        mm_context_t *video_data;
+
 };
+
+class Video {
+    public:
+        void configVideoChannel(int ch, VideoSetting& config);
+        void videoInit(void);
+        void videoDeinit(void);
+        void channelBegin(int ch = 0);
+        void channelEnd(int ch = 0);
+        MMFModule getStream(int ch = 0);
+
+        void getImage(bool cb_flag);
+        void setFPS(int fps);
+        void printInfo(void);
+
+    private:
+        MMFModule videoModule[4];
+
+        int channelEnable[4] = {0};
+        const int channel[4] = {v1_STREAMING_ID, v2_STREAMING_ID, v3_STREAMING_ID, v4_STREAMING_ID};
+        int resolution[4] = {0};
+        uint16_t w[4] = {0};
+        uint16_t h[4] = {0};
+        uint16_t fps[4] = {0};
+        uint32_t bps[4] = {0};
+        uint8_t encoder[4] = {0};
+        uint8_t snapshot[4] = {0};
+        
+        String encoderArray [7] = {"HEVC", "H264", "JPEG","NV12", "RGB", "HEVC+JPEG", "H264+JPEG"};
+        String resolutionArray [10] = {"VIDEO_QCIF", "VIDEO_CIF", "VIDEO_WVGA","VIDEO_VGA", "VIDEO_D1", "VIDEO_HD", "VIDEO_FHD", "VIDEO_3M", "VIDEO_5M", "VIDEO_2K"};
+        String enablesnapshotArray[2] = {"Disabled", "Enabled"};
+};
+
+extern Video Camera;
+
 #endif

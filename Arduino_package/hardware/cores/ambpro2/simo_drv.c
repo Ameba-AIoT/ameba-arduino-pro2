@@ -2,16 +2,19 @@
 #include "mmf2_link.h"
 #include "mmf2_simo.h"
 
-static mm_simo_t *simo_arduino = NULL;
-
 /**
   * @brief  allocate memory for a simo object
   * @param  none
   * @retval  pointer to the simo object
   */
-void simoCreate(void) {
+uint32_t simoCreate(void) {
     //create SIMO object to be used across input and output module
-    simo_arduino = simo_create();
+    mm_simo_t *context = NULL;
+    context  = simo_create();
+    if (context == NULL) {
+        printf("SIMO create failed/r/n");
+    }
+    return ((uint32_t)context);
 }
 
 /**
@@ -19,35 +22,11 @@ void simoCreate(void) {
   * @param  pointer to the simo object
   * @retval none
   */
-void simoDestroy(void) {
+void simoDestroy(void *ctx) {
     //delete the SIMO object created and stop the simo task
-    if (NULL != simo_delete(simo_arduino)) {
-        printf("Stream IO linker destroy failed..");
+    if(NULL != simo_delete((mm_simo_t *)ctx)) {
+        printf("Camera IO linker destroy failed..");
     }
-}
-
-/**
-  * @brief  api to register input source to SIMO
-  * @param  obj: simo object
-  * @param  arg1: this argument is an input source
-  * @retval  none
-  */
-void simoRegIn(mm_context_t *arg1) {
-    simo_ctrl(simo_arduino, MMIC_CMD_ADD_INPUT, (uint32_t)arg1, 0);
-}
-
-/**
-  * @brief  api to register output sources to SIMO
-  * @param  obj: simo object
-  * @param  arg1: this argument is output source
-  * @retval  none
-  */
-void simoRegOut1(mm_context_t *arg1) {
-    simo_ctrl(simo_arduino, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, 0);
-}
-
-void simoRegOut2(mm_context_t *arg1) {
-    simo_ctrl(simo_arduino, MMIC_CMD_ADD_OUTPUT1, (uint32_t)arg1, 0);
 }
 
 /**
@@ -55,8 +34,8 @@ void simoRegOut2(mm_context_t *arg1) {
   * @param  obj: pointer to simo object
   * @retval :0 for success, -1 for fail
   */
-int simoStart(void) {
-    return simo_start(simo_arduino);
+int simoStart(void *ctx) {
+    return simo_start((mm_simo_t *)ctx);
 }
 
 /**
@@ -64,8 +43,8 @@ int simoStart(void) {
   * @param  pointer to the simo object
   * @retval none
   */
-void simoStop(void) {
-    simo_stop(simo_arduino);
+void simoStop(void *ctx) {
+    simo_stop((mm_simo_t *)ctx);
 }
 
 /**
@@ -73,9 +52,9 @@ void simoStop(void) {
   * @param  pointer to the simo object
   * @retval none
   */
-void simoPause(void) {
-    simo_pause(simo_arduino, MM_OUTPUT0);
-    simo_pause(simo_arduino, MM_OUTPUT1);
+void simoPause(void *ctx) {
+    simo_pause((mm_simo_t *)ctx, MM_OUTPUT0);
+    simo_pause((mm_simo_t *)ctx, MM_OUTPUT1);
 }
 
 /**
@@ -84,6 +63,30 @@ void simoPause(void) {
   * @param  pointer to the simo object
   * @retval none
   */
-void simoResume(void) {
-    simo_resume(simo_arduino);
+void simoResume(void *ctx) {
+    simo_resume((mm_simo_t *)ctx);
+}
+
+/**
+  * @brief  api to register input source to SIMO
+  * @param  obj: simo object
+  * @param  arg1: this argument is an input source
+  * @retval  none
+  */
+void simoRegIn(void *ctx, mm_context_t *arg1) {
+    simo_ctrl((mm_simo_t *)ctx, MMIC_CMD_ADD_INPUT, (uint32_t)arg1, 0);
+}
+
+/**
+  * @brief  api to register output sources to SIMO
+  * @param  obj: simo object
+  * @param  arg1: this argument is output source
+  * @retval  none
+  */
+void simoRegOut1(void *ctx, mm_context_t *arg1) {
+    simo_ctrl((mm_simo_t *)ctx, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, 0);
+}
+
+void simoRegOut2(void *ctx, mm_context_t *arg1) {
+    simo_ctrl((mm_simo_t *)ctx, MMIC_CMD_ADD_OUTPUT1, (uint32_t)arg1, 0);
 }
