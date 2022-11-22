@@ -38,6 +38,11 @@ mm_context_t* RTSPInit(void) {
     return mm_module_open(&rtsp2_module);
 }
 
+// deinit and release all resources for RTSP
+mm_context_t* RTSPDeinit(mm_context_t *p) {
+    return mm_module_close(p);
+}
+
 // Select channel index 0 (video) or 1 (audio) etc
 int RTSPSelectStream(void *p, int channel_idx) {
     return rtsp2_control(p, CMD_RTSP2_SELECT_STREAM, channel_idx);
@@ -71,11 +76,6 @@ int RTSPSetParamsAudio(void *p, uint32_t channel, uint32_t sample_rate, uint32_t
     rtsp_param_audio.u.a.codec_id = AV_Codec;
 
     return rtsp2_control(p, CMD_RTSP2_SET_PARAMS, (int)&rtsp_param_audio);
-}
-
-// deinit and release all resources for RTSP
-mm_context_t* RTSPDeInit (mm_context_t *p) {
-    return mm_module_close(p);
 }
 
 // get port value for RTSP

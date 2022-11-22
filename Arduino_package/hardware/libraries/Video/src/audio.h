@@ -37,34 +37,48 @@ extern "C" {
 #define AAC_MEM_BLOCK_SIZE  128
 #define AAC_MEM_FRAME_SIZE  1024
 
-class AudioRawClass {
-    public:
-        AudioRawClass(void);
-        ~AudioRawClass(void);
+class AudioSetting {
+    friend class Audio;
 
-        void init(void);
-        void deinit(void);
-        void open(void);
-        void open(mm_context_t *p, uint32_t sample_rate, uint32_t word_length, audio_mic_gain mic_gain, audio_dmic_gain dmic_l_gain, audio_dmic_gain dmic_r_gain, uint8_t use_mic_type, int channel, uint32_t enable_aec);
-        void close(void);
-        mm_context_t *getIO(void);
+    public:
+        AudioSetting(uint8_t preset = 0);
+        int8_t _preset = -1;
 
     private:
-        mm_context_t *audioData;
 };
 
-class AACClass {
+class Audio:public MMFModule {
     public:
-        AACClass(void);
-        ~AACClass(void);
+        Audio(void);
+        ~Audio(void);
 
-        void init(void);
-        void deinit(void);
-        void close(void);
-        mm_context_t *getIO(void);
+        void configAudio(AudioSetting& config);
+        void begin(void);
+        void begin(mm_context_t *p, uint32_t sample_rate, uint32_t word_length, audio_mic_gain mic_gain, audio_dmic_gain dmic_l_gain, audio_dmic_gain dmic_r_gain, uint8_t use_mic_type, int channel, uint32_t enable_aec);
+        void end(void);
+        void printInfo(void);
 
+        String micTypeArray[4] = {"USE_AUDIO_AMIC", "USE_AUDIO_LEFT_DMIC", "USE_AUDIO_RIGHT_DMIC", "USE_AUDIO_STEREO_DMIC"};
+        String sampleRateArray[7] = {"8kHz", "16kHz", "32kHz", "44.1kHz", "88.2kHz", "96kHz"};
+        String wordLengthArray[2] = {"16 bit", "24 bit"};
+        String micGainArray[4] = {"0dB", "20dB", "30dB", "40dB"};
+        String dMicBoostArray[4] = {"0dB", "12dB", "24dB", "36dB"};
     private:
-        mm_context_t *AACData;
+};
+
+class AAC:public MMFModule {
+    public:
+        AAC(void);
+        ~AAC(void);
+
+        void configAudio(AudioSetting& config);
+        void begin(void);
+        void end(void);
+        void printInfo(void);
+
+        String AACBitLengthArray[5] = {"0 bit", "16 bit", "24 bit", "32 bit", "Float"};
+        String AACMpegVerArray[2] = {"MPEG4", "MPEG2"};
+    private:
 };
 
 #endif

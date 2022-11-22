@@ -13,23 +13,23 @@ extern "C" {
 #endif
 
 #include "video.h"
+#include "audio.h"
 
-class RTSPClass   {
-
+class RTSP:public MMFModule {
     public:
-        RTSPClass(void);
-        ~RTSPClass(void);
+        RTSP(void);
+        ~RTSP(void);
 
-        void init(CameraSetting& obj);
-        void open(void);
-        void close(void);
-        void deinit(void);
-        mm_context_t *getIO(void);
+        void configVideo(VideoSetting& config);
+        void configAudio(AudioSetting& config);
+        void begin(void);
+        void end(void);
+
         int enableAudio(void);
         int getPort(void);
+        int printInfo (void);
 
     private:
-        mm_context_t *rtspData;
 };
 
 #endif

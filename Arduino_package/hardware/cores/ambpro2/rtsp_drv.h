@@ -9,6 +9,8 @@
 
 mm_context_t* RTSPInit(void);
 
+mm_context_t* RTSPDeinit(mm_context_t *p);
+
 int RTSPSelectStream(void *p, int arg);
 
 int RTSPSetApply(void *p);
@@ -18,8 +20,6 @@ void RTSPSetStreaming(void *p, int arg);
 int RTSPSetParamsVideo(void *p, uint32_t RTSP_fps, uint32_t RTSP_bps, uint32_t AV_Codec);
 
 int RTSPSetParamsAudio(void *p, uint32_t channel, uint32_t sample_rate, uint32_t AV_Codec);
-
-mm_context_t* RTSPDeInit (mm_context_t *p);
 
 int RTSPGetPort(void *p);
 

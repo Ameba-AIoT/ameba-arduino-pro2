@@ -19,10 +19,9 @@ static audio_params_t audio_params = {
     .dmic_l_gain    = 0,
     .dmic_r_gain    = 0,
     .use_mic_type   = 0,
-    .channel     = 0,
-    .ADC_gain = 0x64
-//    ,
-//    .enable_aec  = 0
+    .channel     = 0
+    // ,
+    //.enable_aec  = 0
 };
 
 static aac_params_t aac_params = {
@@ -40,6 +39,10 @@ mm_context_t* audioInit(void) {
     return mm_module_open(&audio_module);
 }
 
+mm_context_t* audioDeinit (mm_context_t *p) {
+    return mm_module_close(p);
+}
+
 void audioClose(mm_context_t *p) {
     mm_module_ctrl(p, CMD_AUDIO_SET_TRX, 0);
 }
@@ -52,7 +55,7 @@ void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, 
     audio_params.dmic_r_gain    = dmic_r_gain;
     audio_params.use_mic_type   = use_mic_type;
     audio_params.channel     = channel;
-//    audio_params.enable_aec  = enable_aec;
+    //audio_params.enable_aec  = enable_aec;
     (void)enable_aec; // TBD
 
     if (p) {
@@ -68,12 +71,12 @@ void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, 
     }
 }
 
-mm_context_t* audioDeInit (mm_context_t *p) {
-    return mm_module_close(p);
-}
-
 mm_context_t* AACInit(void) { 
     return mm_module_open(&aac_module);
+}
+
+mm_context_t* AACDeinit(void *p) {
+    return mm_module_close ((mm_context_t *)p);
 }
 
 void AACOpen(mm_context_t *p, uint32_t sample_rate, uint32_t channel, uint32_t bit_length, uint32_t output_format, uint32_t mpeg_version, uint32_t mem_total_size, uint32_t mem_block_size, uint32_t mem_frame_size) {
@@ -114,8 +117,4 @@ int AACInitMemPool(void *p) {
 
 int AACApply(void *p) {
     return aac_control(p, CMD_AAC_APPLY, 0);
-}
-
-mm_context_t* AACDeInit(void *p) {
-    return mm_module_close ((mm_context_t *)p);
 }
