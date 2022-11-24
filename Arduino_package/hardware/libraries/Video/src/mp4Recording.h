@@ -4,8 +4,8 @@
 #include "mmf2_module.h"
 #include "mp4_muxer.h"
 
-#include "video.h"
-#include "audio.h"
+#include "Video.h"
+#include "Audio.h"
 
 class MP4Recording:public MMFModule {
     public:

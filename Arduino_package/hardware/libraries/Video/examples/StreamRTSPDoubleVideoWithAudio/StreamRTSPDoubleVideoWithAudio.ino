@@ -1,8 +1,8 @@
 #include "WiFi.h"
 #include "StreamIO.h"
-#include "video.h"
-#include "audio.h"
-#include "rtsp.h"
+#include "Video.h"
+#include "Audio.h"
+#include "RTSP.h"
 
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264

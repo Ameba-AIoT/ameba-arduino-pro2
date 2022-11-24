@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "rtsp.h"
+#include "RTSP.h"
 
 #define ON  1
 #define OFF 0

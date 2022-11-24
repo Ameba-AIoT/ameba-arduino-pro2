@@ -12,8 +12,8 @@ extern "C" {
 }
 #endif
 
-#include "video.h"
-#include "audio.h"
+#include "Video.h"
+#include "Audio.h"
 
 class RTSP:public MMFModule {
     public:

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "video.h"
+#include "Video.h"
 
 #ifdef __cplusplus
 extern "C" {

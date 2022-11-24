@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "audio.h"
+#include "Audio.h"
 
 #define DEBUG 0
 
@@ -117,6 +117,11 @@ void Audio::end(void) {
     audioClose(_p_mmf_context);
 }
 
+/**
+  * @brief  Print out current configuration of an audio channel.
+  * @param  none
+  * @retval none
+  */
 void Audio::printInfo(void) {
     uint8_t use_mic_type        = AUDIO_MIC_TYPE;
     uint32_t sample_rate        = AUDIO_SAMPLERATE;
@@ -208,7 +213,7 @@ void AAC::end(void) {
 }
 
 /**
-  * @brief  Print out current configuration of audio channel.
+  * @brief  Print out current configuration of ACC encoder.
   * @param  none
   * @retval none
   */

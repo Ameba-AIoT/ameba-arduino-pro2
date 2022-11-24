@@ -1,6 +1,6 @@
 #include "StreamIO.h"
-#include "video.h"
-#include "mp4Recording.h"
+#include "Video.h"
+#include "MP4Recording.h"
 
 #define CHANNEL 0
 
