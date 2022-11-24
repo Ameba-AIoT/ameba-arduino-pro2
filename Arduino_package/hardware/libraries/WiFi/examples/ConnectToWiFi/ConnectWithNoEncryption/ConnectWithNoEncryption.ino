@@ -23,9 +23,6 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
 
-    // check for WiFi status:
-    status = WiFi.status();
-
     WiFi.begin(ssid);
 
     // attempt to connect to Wifi network:

@@ -17,9 +17,6 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
 
-    // check for WiFi status:
-    status = WiFi.status();
-
     // attempt to start AP:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to start AP with SSID: ");
