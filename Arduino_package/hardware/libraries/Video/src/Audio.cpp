@@ -67,7 +67,7 @@ void Audio::configAudio(AudioSetting& config) {
 }
 
 /**
-  * @brief  Open audio module, parameters can be adjusted in audio.h
+  * @brief  Open audio module, parameters can be adjusted in Audio.h
   * @param  none
   * @retval none
   */
