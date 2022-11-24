@@ -16,7 +16,7 @@ RTSP	KEYWORD1
 MP4Recording	KEYWORD1
 
 #######################################
-# audio.h Methods (KEYWORD2) & Constants (LITERAL1)
+# Audio.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configAudio	KEYWORD2
@@ -55,7 +55,7 @@ USE_AUDIO_RIGHT_DMIC	LITERAL1
 USE_AUDIO_STEREO_DMIC	LITERAL1
 
 #######################################
-# video.h Methods (KEYWORD2) & Constants (LITERAL1)
+# Video.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configVideoChannel	KEYWORD2
@@ -89,7 +89,7 @@ VIDEO_HEVC_JPEG	LITERAL1
 VIDEO_H264_JPEG	LITERAL1
 
 #######################################
-# mp4Recording.h Methods (KEYWORD2) & Constants (LITERAL1)
+# MP4Recording.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configVideo	KEYWORD2
@@ -116,7 +116,7 @@ AUDIO_ULAW	LITERAL1
 AUDIO_ALAW	LITERAL1
 
 #######################################
-# rtsp.h Methods (KEYWORD2) & Constants (LITERAL1)
+# RTSP.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configVideo	KEYWORD2

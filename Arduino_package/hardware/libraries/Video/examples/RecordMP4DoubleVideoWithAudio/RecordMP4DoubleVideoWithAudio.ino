@@ -1,7 +1,7 @@
 #include "StreamIO.h"
-#include "audio.h"
-#include "video.h"
-#include "mp4Recording.h"
+#include "Audio.h"
+#include "Video.h"
+#include "MP4Recording.h"
 
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264

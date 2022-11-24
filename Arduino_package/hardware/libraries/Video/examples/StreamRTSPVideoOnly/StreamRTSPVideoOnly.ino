@@ -1,7 +1,7 @@
 #include "WiFi.h"
 #include "StreamIO.h"
-#include "video.h"
-#include "rtsp.h"
+#include "Video.h"
+#include "RTSP.h"
 
 #define CHANNEL 0
 

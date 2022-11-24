@@ -15,7 +15,7 @@ extern "C" {
 }
 #endif
 
-#include "video.h"
+#include "Video.h"
 
 // define Audio parameters
 // reference to audio_api.h
