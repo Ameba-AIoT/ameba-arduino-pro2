@@ -32,9 +32,6 @@ void setup() {
         ; // wait for serial port to connect. Needed for native USB port only
     }
 
-    // check for WiFi status:
-    status = WiFi.status();
-
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");

@@ -17,9 +17,6 @@ void setup() {
     Serial.begin(115200);         // initialize serial communication
     pinMode(LED_PIN, OUTPUT);        // set the LED pin mode
 
-    // check for WiFi status:
-    status = WiFi.status();
-
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to Network named: ");
