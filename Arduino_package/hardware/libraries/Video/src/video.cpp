@@ -121,6 +121,23 @@ void Video::configVideoChannel(int ch, VideoSetting& config) {
    CAMDBG("3 %d    %d    %d    %d    %d    %d", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
 }
 
+/**
+  * @brief  initialization of camera sensor using existing configurations
+  * @param  none
+  * @retval none
+  */
+void Video::camInit(CameraSetting& config) {
+    // To be done
+}
+
+/**
+  * @brief  Deinitialization of camera sensor
+  * @param  none
+  * @retval none
+  */
+void Video::camDeinit(void) {
+    // To be done
+}
 
 /**
   * @brief  initialization of video streams from camera using existing configurations
@@ -213,7 +230,7 @@ void Video::channelBegin(int ch) {
         }
         case 2: {
             cameraStart(videoModule[ch]._p_mmf_context->priv, channel[ch]);
-            getImage(1);   // enable snapshot function and cb func
+            getImage();   // enable snapshot function and cb func
             break;
         }
         default: {
@@ -252,14 +269,9 @@ MMFModule Video::getStream(int ch) {
             cb_flag : whether enable snapshot call back function
   * @retval none
   */
-void Video::getImage(bool cb_flag) {
-    if (cb_flag == 0) {
-        CAMDBG("snapshot cb disabled\r\n");
-        cameraSnapshot(videoModule[2]._p_mmf_context->priv, channel[2]);
-    } else {
-        CAMDBG("snapshot cb enabled\r\n");
-        cameraSnapshotCB(videoModule[2]._p_mmf_context);
-    }
+void Video::getImage(void) {
+    printf("SS Enabled\r\n");
+    cameraSnapshotCB(videoModule[2]._p_mmf_context);
 }
 
 /**
@@ -271,6 +283,11 @@ void Video::setFPS(int fps) {
     video_set_framerate(fps);
 }
 
+/**
+  * @brief  Print out current configuration of video channels.
+  * @param  none
+  * @retval none
+  */
 void Video::printInfo(void) {
     for (int ch = 0; ch < 4; ch++) {
         if (channelEnable[ch] == 1) {

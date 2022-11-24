@@ -27,7 +27,7 @@ class RTSP:public MMFModule {
 
         int enableAudio(void);
         int getPort(void);
-        int printInfo (void);
+        void printInfo(void);
 
     private:
 };

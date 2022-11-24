@@ -24,8 +24,6 @@ void cameraSnapshotCB(mm_context_t *p);
 
 int snapshot_cb(uint32_t jpeg_addr, uint32_t jpeg_len);
 
-//void snapshot_control_thread(void *param);
-
 void cameraStopVideoStream(void *p, int channel);
 
 mm_context_t *cameraDeinit(mm_context_t *);

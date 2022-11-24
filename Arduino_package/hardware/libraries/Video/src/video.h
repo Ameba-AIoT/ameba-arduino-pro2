@@ -117,6 +117,10 @@ class MMFModule {
         mm_context_t* _p_mmf_context = NULL;
 };
 
+class CameraSetting {
+    // To be done
+};
+
 class VideoSetting {
     friend class Video;
 
@@ -140,13 +144,15 @@ class VideoSetting {
 class Video {
     public:
         void configVideoChannel(int ch, VideoSetting& config);
+        void camInit(CameraSetting& config);
+        void camDeinit(void);
         void videoInit(void);
         void videoDeinit(void);
         void channelBegin(int ch = 0);
         void channelEnd(int ch = 0);
         MMFModule getStream(int ch = 0);
 
-        void getImage(bool cb_flag);
+        void getImage(void);
         void setFPS(int fps);
         void printInfo(void);
 

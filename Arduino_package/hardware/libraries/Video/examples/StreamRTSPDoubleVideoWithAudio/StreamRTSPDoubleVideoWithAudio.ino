@@ -97,13 +97,12 @@ void printInfo(void) {
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");
-    Serial.println(rtsp1.printInfo());
+    rtsp1.printInfo();
     
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");
-    Serial.println(rtsp2.printInfo());
-    Serial.println("");
+    rtsp2.printInfo();
 
     Serial.println("- Audio Information -");
     audio.printInfo();

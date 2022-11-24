@@ -24,9 +24,9 @@ class MP4Recording:public MMFModule {
         void setLoopRecording(int enable);
         void setRecordingDataType(uint8_t type);
 
-        String getRecordingFileName();
-        uint32_t getRecordingDuration();
-        uint32_t getRecordingFileCount();
+        String getRecordingFileName(void);
+        uint32_t getRecordingDuration(void);
+        uint32_t getRecordingFileCount(void);
         uint8_t getRecordingState(void);
 
          void printInfo(void);

@@ -19,7 +19,8 @@ static audio_params_t audio_params = {
     .dmic_l_gain    = 0,
     .dmic_r_gain    = 0,
     .use_mic_type   = 0,
-    .channel     = 0
+    .channel     = 0,
+    .ADC_gain = 0x64
     // ,
     //.enable_aec  = 0
 };

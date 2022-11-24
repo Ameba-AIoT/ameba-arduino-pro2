@@ -70,5 +70,5 @@ void printInfo(void) {
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");
-    Serial.println(rtsp.printInfo());
+    rtsp.printInfo();
 }

@@ -20,7 +20,6 @@ StreamIO avMixStreamer(2, 1); // 2 Input Video + Audio -> 1 Output RTSP
 
 char ssid[] = "yourNetwork";     //  your network SSID (name)
 char pass[] = "password";  	// your network password
-
 int status = WL_IDLE_STATUS;  // the Wifi radio's status
 
 void setup() {
@@ -89,8 +88,7 @@ void printInfo(void) {
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");
-    Serial.println(rtsp.printInfo());
-    Serial.println("");
+    rtsp.printInfo();
 
     Serial.println("- Audio -");
     audio.printInfo();
