@@ -70,7 +70,7 @@ void MP4Recording::configVideo(VideoSetting& config) {
   * @param  config : AudioSetting object
   * @retval none
   */
-void MP4Recording::configAudio() {
+void MP4Recording::configAudio(void) {
     // RTSPInit if not previously done so
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mp4Init();
@@ -171,7 +171,7 @@ void MP4Recording::setRecordingDataType(uint8_t type) {
   * @param  none
   * @retval String class object containing filename
   */
-String MP4Recording::getRecordingFileName() {
+String MP4Recording::getRecordingFileName(void) {
     return String(mp4Params.record_file_name);
 }
 
@@ -180,7 +180,7 @@ String MP4Recording::getRecordingFileName() {
   * @param  none
   * @retval maximum recording duration expressed in seconds
   */
-uint32_t MP4Recording::getRecordingDuration() {
+uint32_t MP4Recording::getRecordingDuration(void) {
     return (mp4Params.record_length);
 }
 
@@ -189,7 +189,7 @@ uint32_t MP4Recording::getRecordingDuration() {
   * @param  count : total number of recording files
   * @retval none
   */
-uint32_t MP4Recording::getRecordingFileCount() {
+uint32_t MP4Recording::getRecordingFileCount(void) {
     return (mp4Params.record_file_num);
 }
 
@@ -206,6 +206,11 @@ uint8_t MP4Recording::getRecordingState(void) {
     return mp4RecordingState(_p_mmf_context->priv);
 }
 
+/**
+  * @brief  Print out current configuration of MP4 recording.
+  * @param  none
+  * @retval none
+  */
 void MP4Recording::printInfo (void) {
     printf("Recording file name: %s\r\n", getRecordingFileName().c_str());
     printf("Recording duration: %d seconds\r\n", getRecordingDuration());

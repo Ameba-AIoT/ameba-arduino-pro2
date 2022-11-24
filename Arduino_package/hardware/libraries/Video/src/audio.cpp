@@ -207,6 +207,11 @@ void AAC::end(void) {
     AACStop(_p_mmf_context);
 }
 
+/**
+  * @brief  Print out current configuration of audio channel.
+  * @param  none
+  * @retval none
+  */
 void AAC::printInfo(void) {
     printf("Sample rate: %d Hz\r\n", AAC_SAMPLERATE);
     printf("AAC Bit Length: %s\r\n", AACBitLengthArray[AAC_BIT_LENGTH].c_str());
@@ -216,4 +221,3 @@ void AAC::printInfo(void) {
     printf("Total AAC memory frame size: %d\r\n", AAC_MEM_FRAME_SIZE);
     printf("\r\n");
 }
-

@@ -140,26 +140,19 @@ void cameraSnapshot(void *p, int channel) {
 
 int snapshot_cb(uint32_t jpeg_addr, uint32_t jpeg_len) {
     printf("snapshot addr=%d\n\r, snapshot size=%d\n\r", (int)jpeg_addr, (int)jpeg_len);
-    uint8_t* addr = (uint8_t*)jpeg_addr;
-    for (int i = 0; i < jpeg_len; i++) {
-        if (i % 16 == 0) {
-            printf("\r\n");
-        }
-        printf("%02x", addr[i]);
-    }
+//    uint8_t* addr = (uint8_t*)jpeg_addr;
+//    for (int i = 0; i < jpeg_len; i++) {
+//        if (i % 16 == 0) {
+//            printf("\r\n");
+//        }
+//        printf("%02x", addr[i]);
+//    }
     return 0;
 }
 
 void cameraSnapshotCB(mm_context_t *p) {
     mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 1);
     mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT_CB, (int)snapshot_cb);
-    
-//    if (xTaskCreate(snapshot_control_thread, ((const char *)"snapshot_store"), 512, (void *)p, tskIDLE_PRIORITY + 1, &snapshot_thread) != pdPASS) {
-//        printf("\n\r%s xTaskCreate failed", __FUNCTION__);
-//    }
-//    else{
-//        printf("\n\r%s xTaskCreate success", __FUNCTION__);
-//    }
 }
 
 mm_context_t *cameraDeinit(mm_context_t *p) {

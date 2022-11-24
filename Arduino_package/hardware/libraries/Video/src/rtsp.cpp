@@ -145,6 +145,13 @@ int RTSP::getPort(void) {
     return port_val;
 }
 
-int RTSP::printInfo(void) {
-    return getPort();
+/**
+  * @brief  Print out current configuration of RTSP.
+  * @param  none
+  * @retval none
+  */
+void RTSP::printInfo(void) {
+    int port = getPort();
+    printf("%d\r\n", port);
+    printf("\r\n");
 }
