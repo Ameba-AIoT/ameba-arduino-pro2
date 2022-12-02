@@ -6,11 +6,7 @@
 #define DEBUG 0
 
 #define VID_CH_IDX 0
-#define RTSP_VIDEO_TYPE AVMEDIA_TYPE_VIDEO
-#define RTSP_BPS CAM_BPS
-
 #define AUDIO_CH_IDX 1
-#define RTSP_AUDIO_TYPE AVMEDIA_TYPE_AUDIO
 #define AUDIO_SAMPLE_RATE 8000
 #define AUDIO_CODEC_ID AV_CODEC_ID_MP4A_LATM
 
@@ -61,11 +57,11 @@ void RTSP::configVideo(VideoSetting& config) {
     AV_Codec_ID = config._encoder;
     RTSP_bps = config._bps;
 
-    if (AV_Codec_ID == VIDEO_H264) {
-        AV_Codec_ID = AV_CODEC_ID_H264;
-    } else if (AV_Codec_ID == VIDEO_JPEG) {
+    if (AV_Codec_ID == VIDEO_JPEG) {
         AV_Codec_ID = AV_CODEC_ID_MJPEG;
         RTSP_bps = 0; 
+    } else {
+        AV_Codec_ID = AV_CODEC_ID_H264;
     }
     CAMDBG("%d   %d   %d", RTSP_fps, RTSP_bps, AV_Codec_ID);
     CAMDBG("AUDIO_EN Status: %d", AUDIO_EN);

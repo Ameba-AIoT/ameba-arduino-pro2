@@ -151,9 +151,13 @@ class Video {
         void channelBegin(int ch = 0);
         void channelEnd(int ch = 0);
         MMFModule getStream(int ch = 0);
+		
+        void setSnapshotCallback(int ch);
+        static int snapshotCB(uint32_t jpeg_addr, uint32_t jpeg_len);
+        void getImage(int ch);
 
-        void getImage(void);
         void setFPS(int fps);
+        void printSnapshotInfo(void);
         void printInfo(void);
 
     private:
@@ -168,10 +172,12 @@ class Video {
         uint32_t bps[4] = {0};
         uint8_t encoder[4] = {0};
         uint8_t snapshot[4] = {0};
-        
-        String encoderArray [7] = {"HEVC", "H264", "JPEG","NV12", "RGB", "HEVC+JPEG", "H264+JPEG"};
+
+        String encoderArray [8] = {"HEVC", "H264", "JPEG","NV12", "RGB","NV16", "HEVC+JPEG", "H264+JPEG"};
         String resolutionArray [10] = {"VIDEO_QCIF", "VIDEO_CIF", "VIDEO_WVGA","VIDEO_VGA", "VIDEO_D1", "VIDEO_HD", "VIDEO_FHD", "VIDEO_3M", "VIDEO_5M", "VIDEO_2K"};
-        String enablesnapshotArray[2] = {"Disabled", "Enabled"};
+
+        static uint32_t image_addr;
+        static uint32_t image_len;   
 };
 
 extern Video Camera;
