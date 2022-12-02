@@ -21,7 +21,9 @@
 
 extern int incb[5];
 extern int enc_queue_cnt[5];
-TaskHandle_t snapshot_thread = NULL;
+
+uint32_t image_addr = 0;
+uint32_t image_len = 0;
 
 static video_params_t video_params = {
     .stream_id      = 0, 
@@ -112,18 +114,12 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     video_params.rc_mode = rc_mode;
 
     CAMDBG("2 %d    %d    %d    %d    %d    %d    %d    %d    %d",stream_id, type, res, w, h, bps, fps, gop, rc_mode);
-    if(stream_id == 2) {
-        
-    }
 
     if (p) {
         video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_params);
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, fps*3);
         mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
-        if (snapshot == 1) {
-            CAMDBG("parse 0 to snapshot");
-            mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 0);
-        }
+        mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 0);
         CAMDBG("cameraOpen done");
     } else {
         CAMDBG("cameraOpen fail");
@@ -134,25 +130,12 @@ void cameraStart(void *p, int channel) {
     video_control(p, CMD_VIDEO_APPLY, channel);
 }
 
-void cameraSnapshot(void *p, int channel) {
-    video_control(p, CMD_VIDEO_SNAPSHOT, channel);
+void cameraSnapshot(void *p, int arg) {
+    video_control(p, CMD_VIDEO_SNAPSHOT, arg);
 }
 
-int snapshot_cb(uint32_t jpeg_addr, uint32_t jpeg_len) {
-    printf("snapshot addr=%d\n\r, snapshot size=%d\n\r", (int)jpeg_addr, (int)jpeg_len);
-//    uint8_t* addr = (uint8_t*)jpeg_addr;
-//    for (int i = 0; i < jpeg_len; i++) {
-//        if (i % 16 == 0) {
-//            printf("\r\n");
-//        }
-//        printf("%02x", addr[i]);
-//    }
-    return 0;
-}
-
-void cameraSnapshotCB(mm_context_t *p) {
-    mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 1);
-    mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT_CB, (int)snapshot_cb);
+void cameraSnapshotRegCB(mm_context_t *p, int (*ssCB)(uint32_t, uint32_t)) {
+    mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT_CB, (int)ssCB);
 }
 
 mm_context_t *cameraDeinit(mm_context_t *p) {

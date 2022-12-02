@@ -18,11 +18,9 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
 
 void cameraStart(void *p, int channel);
 
-void cameraSnapshot(void *p, int channel);
+void cameraSnapshot(void *p, int arg);
 
-void cameraSnapshotCB(mm_context_t *p);
-
-int snapshot_cb(uint32_t jpeg_addr, uint32_t jpeg_len);
+void cameraSnapshotRegCB(mm_context_t *p, int (*ssCB)(uint32_t, uint32_t));
 
 void cameraStopVideoStream(void *p, int channel);
 
