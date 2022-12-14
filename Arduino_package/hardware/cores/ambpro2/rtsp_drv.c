@@ -21,7 +21,14 @@ static rtsp2_params_t rtsp_params = {
     }
 };
 
-            rtsp2_module.destroy(rtsp_data->priv);
+//audio output
+static rtsp2_params_t rtsp_param_audio = {
+    .type = AVMEDIA_TYPE_AUDIO,
+    .u = {
+        .a = {
+            .codec_id   = 0,
+            .channel    = 0,
+            .samplerate = 0
         }
     }
 };
