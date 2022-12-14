@@ -1,12 +1,12 @@
 # Ameba Arduino SDK (ambpro2_arduino)
 
 
-## 1. About `dev` & `master` branch
+## 1. About `dev` & `main` branch
 
 |Branch|Usage|Remarks|
 |:-----|:-----|:-----|
-|`dev`| merge `PR` & early release| `dev` branch is open to `Pull Request`(PR) for ***feature addition*** and ***bug fix***. It will also have the latest features which you can access via this link https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek.com_amebapro2_early_index.json (refer below for steps to install early release on Arduino IDE, but please be noted that as this is a **early release**, bugs and/or performance issue might occur and break your program) |
-|`master` | stable release| `master` branch is only for hosting stable release, no `PR` will be merged, refer to the following steps to use the stable release |
+|`dev`| merge `PR` & early release| `dev` branch is open to `Pull Request`(PR) for ***feature addition*** and ***bug fix***. It will also have the latest features which you can access via this link https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek.com_amebapro2_early_index.json (refer below for steps to install early release on Arduino IDE, please be noted that as this is a **early release**, bugs and/or performance issue might occur and break your program) |
+|`main` | stable release| `main` branch is only for hosting stable release, no `PR` will be merged, refer to the following steps to use the stable release |
 
 
 For all `release` information, please visit this [link](https://github.com/ambiot/ambpro2_arduino/releases).
@@ -15,7 +15,7 @@ For all `release` information, please visit this [link](https://github.com/ambio
 
 ## 2. How to add Realtek Ameba Arduino package to `Arduino IDE`:
 
-> You can refer to this link to get started: TBD (getting start link)
+> You can refer to this link to get started: https://www.amebaiot.com/en/amebad-amb82-mini-arduino-getting-started/
 > , or follow the steps below.
 
 1. **Add Ameba Arduino SDK link to *Arduino IDE Additional Boards Manager***
@@ -26,9 +26,9 @@ For all `release` information, please visit this [link](https://github.com/ambio
     
     **"File" -> "Preferences" -> "Additional Boards Manager URLs:"**
 
-    Simply copy and paste the following link into the field and click "OK",
+    Copy and paste the following link into the field and click "OK",
 
-     TBD
+    https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek.com_amebapro2_index.json
 
     > We also suggest to enable "Show verbose output" options on "compilation" and "upload" in Preference for easier debugging.
     
