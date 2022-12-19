@@ -17,6 +17,9 @@ typedef struct
     /* UART Close */
     uint8_t (*close)(void);
 
+    /* UART Free */
+    uint8_t (*free_ops)(void);
+
     /* UART Send */
     uint16_t (*send)(uint8_t *buf, uint16_t len);
 
@@ -66,6 +69,11 @@ static inline uint8_t hci_uart_open(void)
 static inline uint8_t hci_uart_close(void)
 {
     return hci_uart_ops.close();
+}
+
+static inline uint8_t hci_uart_free(void)
+{
+    return hci_uart_ops.free_ops();
 }
 
 static inline void hci_uart_bridge_open(bool flag)

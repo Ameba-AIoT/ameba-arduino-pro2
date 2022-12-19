@@ -48,6 +48,6 @@ enum halbb_pmac_mode {
 struct bb_info;
 
 void halbb_pmac_tx_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 
 #endif

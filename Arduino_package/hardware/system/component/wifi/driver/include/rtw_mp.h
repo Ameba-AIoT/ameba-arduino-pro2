@@ -148,14 +148,16 @@ typedef struct _RT_PMAC_PKT_INFO {
 	UCHAR			Nsts;
 	UINT			N_sym;
 	UCHAR			SIGA2B3;
+	UCHAR			PPDU_Type;
+	UCHAR			HE_ERSU_RU106;
 } RT_PMAC_PKT_INFO, *PRT_PMAC_PKT_INFO;
 
 typedef struct _RT_PMAC_TX_INFO {
 	u8			bEnPMacTx: 1;		/* 0: Disable PMac 1: Enable PMac */
 	u8			Mode: 3;				/* 0: Packet TX 3:Continuous TX */
 	u8			Ntx: 4;				/* 0-7 */
-	u8			TX_RATE;			/* MPT_RATE_E */
-	u8			TX_RATE_HEX;
+	u16			TX_RATE;			/* MPT_RATE_E */
+	u16			TX_RATE_HEX;
 	u8			TX_SC;
 	u8			bSGI: 1;
 	u8			bSPreamble: 1;
@@ -180,6 +182,7 @@ typedef struct _RT_PMAC_TX_INFO {
 	u8			VHT_SIG_B_CRC;
 	u8			VHT_Delimiter[4];
 	u8			MacAddress[6];
+	u16			RU_Alloc;
 } RT_PMAC_TX_INFO, *PRT_PMAC_TX_INFO;
 
 typedef void (*MPT_WORK_ITEM_HANDLER)(IN void *Adapter);
@@ -279,7 +282,7 @@ typedef struct _MPT_CONTEXT {
 	u8          btInBuf[100];
 	u32			mptOutLen;
 	u8          mptOutBuf[100];
-#if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || defined(CONFIG_RTL8720E)
+#if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 	RT_PMAC_TX_INFO		PMacTxInfo;
 	RT_PMAC_PKT_INFO	PMacPktInfo;
 #endif
@@ -331,7 +334,9 @@ enum {
 	MP_DPK,
 	MP_GET_TSSIDE,
 	MP_SET_TSSIDE,
-	MP_PHYDM
+	MP_PHYDM,
+	MP_TX_PLCP_USER,
+	MP_TX_PLCP_DATA
 };
 
 struct mp_priv {
@@ -368,7 +373,7 @@ struct mp_priv {
 	u8 prime_channel_offset;
 	u8 txpoweridx;
 	u8 txpoweridx_b;
-	u8 rateidx;
+	u8 rateidx; /*in MGN_RATE format */
 	u32 preamble;
 //	u8 modem;
 	u32 CrystalCap;
@@ -377,6 +382,12 @@ struct mp_priv {
 	u16 antenna_tx;
 	u16 antenna_rx;
 //	u8 curr_rfpath;
+
+	/* add for support pmac tx: start */
+	u8 ppdu_type;  //0:cck;1:legacy;2:ht_mf;3:ht_gf;4:vht;5:he_su;6:he_er_su;7:he_mu_ofdma;8:he_tb
+	u8 er_su_ru_106_en;  //he_er_su:0-242tone;1-106tone
+	u16 ru_alloc;
+	/* add for support pmac tx: end */
 
 	u8 check_mp_pkt;
 	u32 rssi_avg_cal;
@@ -564,6 +575,18 @@ typedef enum _MPT_RATE_INDEX {
 	MPT_RATE_VHT4SS_MCS7,
 	MPT_RATE_VHT4SS_MCS8,
 	MPT_RATE_VHT4SS_MCS9,
+	MPT_RATE_HE1SS_MCS0,
+	MPT_RATE_HE1SS_MCS1,
+	MPT_RATE_HE1SS_MCS2,
+	MPT_RATE_HE1SS_MCS3,
+	MPT_RATE_HE1SS_MCS4,
+	MPT_RATE_HE1SS_MCS5,
+	MPT_RATE_HE1SS_MCS6,
+	MPT_RATE_HE1SS_MCS7,
+	MPT_RATE_HE1SS_MCS8,
+	MPT_RATE_HE1SS_MCS9,
+	MPT_RATE_HE1SS_MCS10,
+	MPT_RATE_HE1SS_MCS11,/* 151 */
 	MPT_RATE_LAST
 } MPT_RATE_E, *PMPT_RATE_E;
 
@@ -643,6 +666,30 @@ typedef enum _OFDM_TX_MODE {
 	OFDM_SingleTone 	= 4,
 } OFDM_TX_MODE;
 
+typedef enum _MP_PPDU_TYPE {
+	RTW_MP_TYPE_CCK = 0,
+	RTW_MP_TYPE_LEGACY,
+	RTW_MP_TYPE_HT_MF,
+	RTW_MP_TYPE_HT_GF,
+	RTW_MP_TYPE_VHT,
+	RTW_MP_TYPE_HE_SU,
+	RTW_MP_TYPE_HE_ER_SU,
+	RTW_MP_TYPE_HE_MU_OFDMA,
+	RTW_MP_TYPE_HE_TB
+} PPDU_TYPE;
+
+#define PPDU_TYPE_STR(idx)\
+	(idx == RTW_MP_TYPE_CCK) ? "CCK" :\
+	(idx == RTW_MP_TYPE_LEGACY) ? "LEGACY" :\
+	(idx == RTW_MP_TYPE_HT_MF) ? "HT_MF" :\
+	(idx == RTW_MP_TYPE_HT_GF) ? "HT_GF" :\
+	(idx == RTW_MP_TYPE_VHT) ? "VHT" :\
+	(idx == RTW_MP_TYPE_HE_SU) ? "HE_SU" :\
+	(idx == RTW_MP_TYPE_HE_ER_SU) ? "HE_ER_SU" :\
+	(idx == RTW_MP_TYPE_HE_MU_OFDMA) ? "HE_MU" :\
+	(idx == RTW_MP_TYPE_HE_TB) ? "HE_TB" :\
+	"UNknow"
+
 #define MPT_IS_CCK_RATE(_value)		(MPT_RATE_1M <= _value && _value <= MPT_RATE_11M)
 #define MPT_IS_OFDM_RATE(_value)	(MPT_RATE_6M <= _value && _value <= MPT_RATE_54M)
 #define MPT_IS_HT_RATE(_value)		(MPT_RATE_MCS0 <= _value && _value <= MPT_RATE_MCS31)
@@ -656,6 +703,8 @@ typedef enum _OFDM_TX_MODE {
 #define MPT_IS_VHT_2S_RATE(_value)	(MPT_RATE_VHT2SS_MCS0 <= _value && _value <= MPT_RATE_VHT2SS_MCS9)
 #define MPT_IS_VHT_3S_RATE(_value)	(MPT_RATE_VHT3SS_MCS0 <= _value && _value <= MPT_RATE_VHT3SS_MCS9)
 #define MPT_IS_VHT_4S_RATE(_value)	(MPT_RATE_VHT4SS_MCS0 <= _value && _value <= MPT_RATE_VHT4SS_MCS9)
+
+#define MPT_IS_HE_1S_RATE(_value)	(MPT_RATE_HE1SS_MCS0 <= _value && _value <= MPT_RATE_HE1SS_MCS11)
 
 #define MPT_IS_2SS_RATE(_rate) ((MPT_RATE_MCS8 <= _rate && _rate <= MPT_RATE_MCS15) || \
 	(MPT_RATE_VHT2SS_MCS0 <= _rate && _rate <= MPT_RATE_VHT2SS_MCS9))
@@ -761,6 +810,6 @@ extern void _rtw_mp_xmit_priv(struct xmit_priv *pxmitpriv);
 extern void MP_PHY_SetRFPathSwitch(_adapter *pAdapter, BOOLEAN bMain);
 extern u32 mpt_ProQueryCalTxPower(_adapter *pAdapter, u8 RfPath);
 extern void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart);
-
+extern u8 MgntRateToMPTRate(u8 rate);
 #endif //_RTW_MP_H_
 

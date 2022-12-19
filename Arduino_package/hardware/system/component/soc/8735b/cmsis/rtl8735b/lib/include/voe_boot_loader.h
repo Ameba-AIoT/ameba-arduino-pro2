@@ -1,8 +1,8 @@
 /**************************************************************************//**
- * @file     hal_pinmux.h
+ * @file     voe_boot_loader.h
  * @brief    The HAL API implementation for the pin mux managemment.
  * @version  V1.00
- * @date     2022-07-08
+ * @date     2022-09-13
  *
  * @note
  *
@@ -111,14 +111,20 @@ typedef struct voe_fcs_peri_info_s {
 
 } voe_fcs_peri_info_t, *pvoe_fcs_peri_info_t;
 
-
+typedef struct voe_isp_img_reld_info_type_s {
+	uint32_t fcs_hdr_start;
+	uint32_t ispiq_img_start_addr;
+	uint32_t resv_offset;
+	uint32_t voe_offset;        // ref load fw img start addr
+} voe_isp_img_reld_info_type_t, *pvoe_isp_img_reld_info_type_t;
 
 typedef struct voe_img_ld_info_type_s {
 	dev_part_record_ld_t part_record;       // provide img manifest location
 	uint32_t img_hdr_offset;                // img_hdr_offset
 	uint32_t voe_data_offset;               // voe_data_offset
 	uint32_t voe_data_len;                  // voe_data_len
-	uint32_t resv[5];
+	voe_isp_img_reld_info_type_t reld_info;
+	uint32_t resv;
 	uint8_t digest[BOOT_LD_VOE_LD_INFO_DIGEST_MAX];
 } voe_img_ld_info_type_t, *pvoe_img_ld_info_type_t;
 

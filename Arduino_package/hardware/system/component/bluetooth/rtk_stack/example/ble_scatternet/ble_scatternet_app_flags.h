@@ -33,7 +33,7 @@
  *============================================================================*/
 
 /** @brief  Config APP LE link number */
-#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B)
+#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B) || defined(CONFIG_PLATFORM_AMEBALITE)
 #define BLE_SCATTERNET_APP_MAX_LINKS  4
 #define BLE_SCATTERNET_PERIPHERAL_APP_MAX_LINKS   1 //for max slave link num
 #define BLE_SCATTERNET_CENTRAL_APP_MAX_LINKS      3 //for max master link num

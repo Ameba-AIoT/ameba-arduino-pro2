@@ -22,9 +22,7 @@
 #define CONFIG_AYNSC_HCI_INTF
 
 /**************************** About HCI Driver ********************************/
-//#define CONFIG_HCI_FT_MODE
 #define CONFIG_HCI_RESET
-//#define CONFIG_HCI_READ_BDADDR
 #define CONFIG_HCI_RX_PRIO        5
 #define CONFIG_HCI_RX_STACK_SIZE  (2*1024)
 #define CONFIG_HCI_RX_BUF_LEN     258
@@ -34,9 +32,7 @@
 /**************************** About Stack and HCI *****************************/
 
 /**************************** About HCI Driver ********************************/
-//#define CONFIG_HCI_FT_MODE
 //#define CONFIG_HCI_RESET
-//#define CONFIG_HCI_READ_BDADDR
 #define CONFIG_HCI_RX_PRIO        5
 #define CONFIG_HCI_RX_STACK_SIZE  (1024)
 #define CONFIG_HCI_RX_BUF_LEN     258

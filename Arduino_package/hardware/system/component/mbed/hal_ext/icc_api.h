@@ -8,8 +8,9 @@
  * @note
  *
  ******************************************************************************
+ * @attention
  *
- * Copyright(c) 2007 - 2017 Realtek Corporation. All rights reserved.
+ * Copyright(c) 2007 - 2022 Realtek Corporation. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -25,7 +26,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- ******************************************************************************/
+ ******************************************************************************
+ */
 
 #ifndef MBED_ICC_API_H
 #define MBED_ICC_API_H

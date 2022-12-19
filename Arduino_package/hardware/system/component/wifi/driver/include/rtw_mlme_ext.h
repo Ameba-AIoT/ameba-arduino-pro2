@@ -34,12 +34,15 @@
 //TODO
 #define FAST_SURVEY_TO	(25) //Fast connection time, scan only partial channel
 #define SURVEY_TO		(100) //Reduce connection time
+#define MAX_CNT_SCAN_TIMES	(1) //Max all-channel loop scan times when connect to but fail scan the target ap
+#define MAX_CNT_AUTH_TIMES	(3) //Max connect times in case of receiving deauth/deassoc during auth&&assoc procedure and not reporting disconnect event
 #define PASSIVE_SURVEY_TO		(110) //Passive scan should > 102.4ms
 //#define SURVEY_TO		(300) //Increase time to stay each channel - Alex Fang
 #define REAUTH_TO		(800) //(50)
 #define REASSOC_TO		(300) //(50)
 //#define DISCONNECT_TO	(3000)
 #define ADDBA_TO			(2000)
+#define DEFRAG_TO (2000)
 
 #define LINKED_TO (1) //unit:2 sec, 1x2=2 sec
 
@@ -272,6 +275,10 @@ typedef enum _RT_CHANNEL_DOMAIN_5G {
 	RTW_RD_5G_48 = 48,		/*Japan*/
 	RTW_RD_5G_49 = 49,		/**/
 	RTW_RD_5G_50 = 50,		/*Russia*/
+	RTW_RD_5G_51 = 51,		/*Tunisia*/
+	RTW_RD_5G_52 = 52,		/*US (include Ch144)(2018 Dec 05 New standard, include ch144)Add FCC 5.9G Channel*/
+	RTW_RD_5G_53 = 53,		/*Korea*/
+	RTW_RD_5G_54 = 54,
 	//===== Add new channel plan above this line===============//
 	RT_CHANNEL_DOMAIN_5G_MAX
 } RT_CHANNEL_DOMAIN_5G, *PRT_CHANNEL_DOMAIN_5G;
@@ -498,12 +505,20 @@ struct mlme_ext_info {
 	u8	bwmode_updated;
 	u8	hidden_ssid_mode;
 
-	u8 HE_enable;
 
 	struct ADDBA_request		ADDBA_req;
 	struct WMM_para_element	WMM_param;
 	struct HT_caps_element	HT_caps;
 	struct HT_info_element		HT_info;
+
+#ifdef CONFIG_80211AX_HE
+	u8 HE_enable;
+	u8 HE_caps_enable;
+	struct HE_caps_element		HE_caps;
+	unsigned char					HE_op[HE_OP_ELE_MAX_LEN];
+	struct HE_mu_edca_element		HE_mu_edca;
+#endif
+
 #ifdef CONFIG_MCC_MODE
 	WLAN_BSSID_EX
 	network;	//join network or bss_network, if in ap mode, it is the same to cur_network.network. //use mlme_priv->cur_network.network. YJ,del,140408
@@ -989,7 +1004,6 @@ void update_sta_info(_adapter *padapter, struct sta_info *psta);
 unsigned int update_basic_rate(unsigned char *ptn, unsigned int ptn_sz);
 unsigned int update_supported_rate(unsigned char *ptn, unsigned int ptn_sz);
 unsigned int update_MCS_rate(struct HT_caps_element *pHT_caps);
-void Update_RA_Entry(_adapter *padapter, struct sta_info *psta);
 void set_sta_rate(_adapter *padapter, struct sta_info *psta);
 
 unsigned int receive_disconnect(_adapter *padapter, unsigned char *MacAddr, unsigned short reason);
@@ -1078,8 +1092,10 @@ unsigned int OnAction_wnm(_adapter *adapter, union recv_frame *precv_frame);
 unsigned int OnAction_wmm(_adapter *padapter, union recv_frame *precv_frame);
 unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame);
 unsigned int OnAction_csa(_adapter *padapter, union recv_frame *precv_frame);
-
-
+#ifdef CONFIG_TWT
+void issue_action_twt(_adapter *padapter, u8 setup, struct twt_ie_t *twt_ie);
+unsigned int OnAction_twt(_adapter *padapter, union recv_frame *precv_frame);
+#endif
 void mlmeext_joinbss_event_callback(_adapter *padapter, int join_res);
 void mlmeext_sta_del_event_callback(_adapter *padapter);
 void mlmeext_sta_add_event_callback(_adapter *padapter, struct sta_info *psta);
@@ -1098,13 +1114,11 @@ void sa_query_timer_hdl(struct sta_info *psta);
 
 #define set_survey_timer(mlmeext, ms) \
 	do { \
-		/*DBG_871X("%s set_survey_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms));*/ \
 		rtw_set_timer(&(mlmeext)->survey_timer, (ms)); \
 	} while(0)
 
 #define set_link_timer(mlmeext, ms) \
 	do { \
-		/*DBG_871X("%s set_link_timer(%p, %d)\n", __FUNCTION__, (mlmeext), (ms));*/ \
 		rtw_set_timer(&(mlmeext)->link_timer, (ms)); \
 	} while(0)
 

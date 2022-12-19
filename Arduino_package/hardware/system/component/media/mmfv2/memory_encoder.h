@@ -26,8 +26,8 @@ struct encoder_buffer {
 
 void *memory_init(int size, int block_size);
 void memory_deinit(void *ctx);
-//u8* _memory_realloc(struct encoder_buffer *eb,uint8_t *addr,uint32_t size);
-u8 *memory_realloc(void *ctx, uint8_t *addr, uint32_t size);
+//uint8_t* _memory_realloc(struct encoder_buffer *eb,uint8_t *addr,uint32_t size);
+uint8_t *memory_realloc(void *ctx, uint8_t *addr, uint32_t size);
 void memory_free(void *ctx, uint8_t *addr);
 void *memory_alloc(void *ctx, uint32_t size);
 void dump_info(void *ctx);

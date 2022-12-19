@@ -32,7 +32,7 @@
 #define USBD_VENDOR_CONFIG_DESC_SIZE                    69U
 #define USBD_VENDOR_LANGID_STRING                       0x0409U
 #define USBD_VENDOR_MFG_STRING_DESC_SIZE                16U
-#define USBD_VENDOR_PRODUCT_STRING_DESC_SIZE            37U
+#define USBD_VENDOR_PRODUCT_STRING_DESC_SIZE            40U
 #define USBD_VENDOR_SN_STRING_DESC_SIZE                 26U
 #define USBD_VENDOR_SELF_POWERED						1U
 

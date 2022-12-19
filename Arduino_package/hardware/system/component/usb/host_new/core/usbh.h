@@ -182,10 +182,12 @@ typedef struct _usb_host_t {
 u8 usbh_init(usbh_config_t *cfg, usbh_user_cb_t *cb);
 /* De-init */
 u8 usbh_deinit(void);
+/* USB debug init */
+void usbh_debug_init(u8 enable);
 /* Re-enumerate */
 u8 usbh_reenumerate(void);
 /* Get device connection status: 0 - Disconnected 1 - Connected */
-u8 usbh_get_connect_status(void);
+u8 usbh_get_status(void);
 
 /*
  * API for class

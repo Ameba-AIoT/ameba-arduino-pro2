@@ -53,12 +53,12 @@ enum rua_cfg_sel {
 
 
 /*@--------------------------[Structure]-------------------------------------*/
-
+ 
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct bb_info;
 void halbb_rua_tbl_init(struct bb_info *bb);
 void halbb_rua_tbl_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+			 char *output, u32 *_out_len);
 #endif /* HALBB_RUA_SUPPORT */
 
 #endif

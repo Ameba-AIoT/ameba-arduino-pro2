@@ -66,13 +66,13 @@ struct bb_spur_info {
 };
 
 void halbb_csi_tone_idx(struct bb_info *bb, u8 central_ch,
-						enum channel_width bw, enum band_type band,
-						enum phl_phy_idx phy_idx);
+                        enum channel_width bw, enum band_type band,
+                        enum phl_phy_idx phy_idx);
 void halbb_nbi_tone_idx(struct bb_info *bb, u8 central_ch, u8 pri_ch,
-						enum channel_width bw, enum band_type band,
-						enum rf_path path);
+                        enum channel_width bw, enum band_type band,
+                        enum rf_path path);
 void halbb_cr_cfg_spur_init(struct bb_info *bb);
 void halbb_spur_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					char *output, u32 *_out_len);
+                    char *output, u32 *_out_len);
 #endif
 

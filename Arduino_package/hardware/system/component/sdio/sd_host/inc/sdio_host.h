@@ -30,8 +30,8 @@ u32 sdio_sd_getCapacity(void);
 s8 sdio_sd_getProtection(void);
 s8 sdio_sd_setProtection(bool protection);
 s8 sdio_sd_getCSD(u8 *CSD);
-s8 sdio_sd_isReady();
-
+s8 sdio_sd_isReady(void);
+int sdio_set_init_retry_time(int value);
 #if defined(CONFIG_PLATFORM_8195BHP)
 uint32_t sdio_read_blocks(hal_sdio_host_adapter_t *psdioh_adapter, u64 sector,  u16 count, u8 *buffer);
 uint32_t sdio_write_blocks(hal_sdio_host_adapter_t *psdioh_adapter, u64 sector, u16 count, const u8 *buffer);

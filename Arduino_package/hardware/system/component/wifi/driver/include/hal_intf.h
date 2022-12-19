@@ -56,6 +56,7 @@ enum _CHIP_TYPE {
 	RTL8730A_SOC,
 	RTL8735B_SOC,
 	RTL8720E_SOC,  // TBD by swq
+	RTL8730E_SOC,
 	MAX_CHIP_TYPE
 };
 
@@ -85,10 +86,6 @@ typedef enum _HW_VARIABLES {
 	HW_VAR_SEC_DK_CFG,
 	HW_VAR_BCN_VALID,
 	HW_VAR_RF_TYPE,
-	HW_VAR_DM_FLAG,
-	HW_VAR_DM_FUNC_OP,
-	HW_VAR_DM_FUNC_SET,
-	HW_VAR_DM_FUNC_CLR,
 	HW_VAR_CAM_EMPTY_ENTRY,
 	HW_VAR_CAM_INVALID_ALL,
 	HW_VAR_CAM_WRITE,
@@ -196,6 +193,11 @@ typedef enum _HW_VARIABLES {
 	HW_VAR_PORT1_NETTYPE,
 	HW_VAR_TX_AGG_MAX_NUM,
 	HW_VAR_CCA_EDCCA,
+	HW_VAR_TXBUF_PKT_NUM,
+
+	/* add for 11ax support: start */
+	HW_VAR_BSS_COLOR,
+	/* add for 11ax support: end */
 	HW_VAR_SET_ANTENNA_DIVERSITY,
 	HW_VAR_GET_THERMAL,
 } HW_VARIABLES;
@@ -214,6 +216,9 @@ typedef enum _HAL_DEF_VARIABLE {
 	HAL_DEF_DBG_DM_FUNC,//for dbg
 	HAL_DEF_RA_DECISION_RATE,
 	HAL_DEF_RA_SGI,
+	HAL_DEF_RA_START_RATE,
+	HAL_DEF_RA_MAX_RATE,
+	HAL_DEF_RA_MASK_EN,
 	HAL_DEF_PT_PWR_STATUS,
 	HAL_DEF_TX_LDPC,				/* LDPC support */
 	HAL_DEF_RX_LDPC,				/* LDPC support */
@@ -306,6 +311,7 @@ struct hal_ops {
 
 	void	(*dm_init)(_adapter *padapter);
 	void	(*dm_deinit)(_adapter *padapter);
+	void	(*dm_timer_cancel)(_adapter *padapter);
 	void	(*read_chip_version)(_adapter *padapter);
 
 	void	(*init_default_value)(_adapter *padapter);
@@ -338,6 +344,8 @@ struct hal_ops {
 #endif
 	void	(*SetHwRegHandler)(_adapter *padapter, u8	variable, u8 *val);
 	void	(*GetHwRegHandler)(_adapter *padapter, u8	variable, u8 *val);
+
+	void	(*SetMUEDCAParam)(_adapter *padapter, u32 *val, u8 first);
 
 	u8(*GetHalDefVarHandler)(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
 	u8(*SetHalDefVarHandler)(_adapter *padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue);
@@ -398,7 +406,7 @@ struct hal_ops {
 	void (*fill_fake_txdesc)(PADAPTER, u8 *pDesc, u32 BufferLen,
 							 u8 IsPsPoll, u8 IsBTQosNull, u8 bDataFrame);
 	u8(*hal_get_tx_buff_rsvd_page_num)(_adapter *adapter, bool wowlan);
-#if defined(RTL8730A_WIFI_TEST) || defined(RTL8720E_WIFI_TEST)  //MBSSID test
+#ifdef CONFIG_MBSSID_AX
 	void (*hal_mbssid_cfg)(u8 enable, mbssid_info_t mbssid_info);
 #endif
 #ifdef CONFIG_DFS_MASTER
@@ -408,6 +416,20 @@ struct hal_ops {
 	void (*phy_statistic_query)(_adapter *padapter, rtw_phy_statistics_t *phy_statistic);
 	void (*init_phl_stainfo)(_adapter *padapter, struct sta_info *psta);
 	void (*deinit_phl_stainfo)(_adapter *padapter, struct sta_info *psta);
+	void (*add_bb_sta)(_adapter *padapter, struct sta_info *psta);
+	void (*del_bb_sta)(_adapter *padapter, struct sta_info *psta);
+	void (*phydm_cmd)(_adapter *padapter, char *input, char *output, u32 out_len);
+	void (*set_TXOP_thres)(_adapter *padapter, u16 rts_th, u8 enable);
+	u8(*set_bss_color)(_adapter *padapter, u8 bss_color, enum phl_phy_idx phy_idx);
+#ifdef CONFIG_CSI
+	s32(*csi_en)(_adapter *padapter, rtw_csi_action_parm_t *act_param);
+	s32(*csi_cfg)(_adapter *padapter, rtw_csi_action_parm_t *act_param);
+	s32(*csi_report)(_adapter *padapter, u32 plen, u8 *pbuf, u32 *len, rtw_csi_header_t *csi_hdr);
+#endif
+#ifdef CONFIG_TWT
+	u8(*hal_twt_para_set)(_adapter *padapter, twt_para_t twt_para, u8 enable);
+#endif
+	void	(*SetSpatialReuse)(_adapter *padapter, u8 *val, u8 enable, u8 first);
 };
 
 typedef	enum _RT_EEPROM_TYPE {
@@ -486,6 +508,7 @@ typedef enum _HARDWARE_TYPE {
 	HARDWARE_TYPE_RTL8730A,
 	HARDWARE_TYPE_RTL8735B,
 	HARDWARE_TYPE_RTL8720E,  // TBD by swq
+	HARDWARE_TYPE_RTL8730E,
 	HARDWARE_TYPE_MAX,
 } HARDWARE_TYPE;
 
@@ -609,7 +632,9 @@ typedef enum _HARDWARE_TYPE {
 
 #define IS_HARDWARE_TYPE_8730A(_Adapter)		(((_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8730A)
 
-#define IS_HARDWARE_TYPE_RTL8720E(_Adapter)		(((_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8720E)  // TBD by swq
+#define IS_HARDWARE_TYPE_8720E(_Adapter)		(((_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8720E)   // TBD by swq
+
+#define IS_HARDWARE_TYPE_8730E(_Adapter)		(((_adapter *)_Adapter)->HardwareType==HARDWARE_TYPE_RTL8730E)
 
 typedef struct eeprom_priv EEPROM_EFUSE_PRIV, *PEEPROM_EFUSE_PRIV;
 #define GET_EEPROM_EFUSE_PRIV(adapter) (&adapter->eeprompriv)
@@ -667,6 +692,7 @@ void	rtw_hal_free_data(_adapter *padapter);
 
 void rtw_hal_dm_init(_adapter *padapter);
 void rtw_hal_dm_deinit(_adapter *padapter);
+void rtw_hal_dm_cancel_timer(_adapter *padapter);
 #if 0
 void rtw_hal_sw_led_init(_adapter *padapter);
 void rtw_hal_sw_led_deinit(_adapter *padapter);
@@ -677,6 +703,8 @@ uint rtw_hal_deinit(_adapter *padapter);
 void rtw_hal_stop(_adapter *padapter);
 void rtw_hal_set_hwreg(PADAPTER padapter, u8 variable, u8 *val);
 void rtw_hal_get_hwreg(PADAPTER padapter, u8 variable, u8 *val);
+
+void rtw_hal_set_mu_edca_param(_adapter *padapter, u32 *val, u8 first);
 
 void rtw_hal_chip_configure(_adapter *padapter);
 void rtw_hal_read_chip_info(_adapter *padapter);
@@ -713,7 +741,6 @@ s32	rtw_hal_init_recv_priv(_adapter *padapter);
 void	rtw_hal_free_recv_priv(_adapter *padapter);
 #endif
 
-void rtw_hal_update_ra_mask(struct sta_info *psta, u8 rssi_level);
 void	rtw_hal_add_ra_tid(_adapter *padapter, u32 bitmap, u8 *arg, u8 rssi_level);
 void	rtw_hal_clone_data(_adapter *dst_padapter, _adapter *src_padapter);
 void rtw_hal_bcn_related_reg_setting(_adapter *padapter);
@@ -800,6 +827,9 @@ u32 rtl8730aa_set_hal_ops(_adapter *padapter);
 #elif defined(CONFIG_RTL8720E)
 u32 rtl8720ea_set_hal_ops(_adapter *padapter);
 #define hal_set_hal_ops rtl8720ea_set_hal_ops
+#elif defined(CONFIG_RTL8730E)
+u32 rtl8730ea_set_hal_ops(_adapter *padapter);
+#define hal_set_hal_ops rtl8730ea_set_hal_ops
 #elif defined(CONFIG_RTL8195B)
 void rtl8195b_set_hal_ops(PADAPTER);
 u8 rtl8195ba_set_hal_ops(PADAPTER);
@@ -814,7 +844,7 @@ u8 rtl8735ba_set_hal_ops(PADAPTER);
 #define hal_set_hal_ops(__adapter) rtl8735ba_set_hal_ops(__adapter)
 #endif
 
-#if defined(RTL8730A_WIFI_TEST) || defined(RTL8720E_WIFI_TEST)  //MBSSID test
+#ifdef CONFIG_MBSSID_AX
 void rtw_hal_mbssid_sta_cfg(_adapter *padapter, u8 enable, mbssid_info_t mbssid_info);
 #endif
 
@@ -824,6 +854,22 @@ void rtw_hal_resume_tx_beacon(_adapter *padapter);
 #endif /* CONFIG_DFS_MASTER */
 
 void rtw_hal_phy_statistic_query(_adapter *padapter, rtw_phy_statistics_t *phy_statistic);
+void rtw_hal_dm_cmd(_adapter *padapter, char *input, char *output, u32 out_len);
+
+void rtw_hal_add_bb_sta(_adapter *padapter, struct sta_info *psta);
+void rtw_hal_del_bb_sta(_adapter *padapter, struct sta_info *psta);
+void rtw_hal_set_bss_color(_adapter *padapter, u8 bss_color, enum phl_phy_idx phy_idx);
+
+#ifdef CONFIG_CSI
+u8 rtw_hal_csi_en(_adapter *padapter, rtw_csi_action_parm_t *act_param);
+u8 rtw_hal_csi_cfg(_adapter *padapter, rtw_csi_action_parm_t *act_param);
+u8 rtw_hal_csi_report(_adapter *padapter, u32 buf_len, u8 *csi_buf, u32 *len, rtw_csi_header_t *csi_hdr);
+#endif /* CONFIG_CSI */
+
+#ifdef CONFIG_TWT
+u32 rtw_hal_twt_para_set(_adapter *padapter, twt_para_t twt_para, u8 enable);
+#endif
+void rtw_hal_set_spatial_reuse(_adapter *padapter, u8 *val, u8 enable, u8 first);
 
 #endif //__HAL_INTF_H__
 

@@ -2,7 +2,7 @@
  * @file     rtl8710c_eddsa_ctrl.h
  * @brief    This file defines adapter,rom stubs structure and other related common MACRO_VARs for EdDSA.
  * @version  v1.00
- * @date     2022/04/11
+ * @date     2022/07/19
  *
  * @note
  *
@@ -281,7 +281,7 @@ void hal_rtl_eddsa_hook_sign_vrf_hash_op_f(hal_crypto_eddsa_t *peddsa_adtr, edds
 int hal_rtl_eddsa_sign_verify_autoflow(phal_crypto_eddsa_t peddsa_adapter);
 int hal_rtl_eddsa_sign_verify_semi_auto(phal_crypto_eddsa_t peddsa_adapter);
 int hal_rtl_eddsa_sign_verify_steps(phal_crypto_eddsa_t peddsa_adapter);
-int hal_rtl_eddsa_deinit(phal_crypto_eddsa_t adtr);
+int hal_rtl_eddsa_deinit(phal_crypto_eddsa_t peddsa_adtr);
 void hal_rtl_eddsa_get_enc_Rplus(const uint32_t base_addr, unsigned char *s_value);
 void hal_rtl_eddsa_get_Rplus(const uint32_t base_addr, unsigned char *s_x_value, unsigned char *s_y_value);
 

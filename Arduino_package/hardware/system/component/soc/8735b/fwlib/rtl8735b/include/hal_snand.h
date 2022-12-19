@@ -38,6 +38,7 @@ extern "C"
 #endif
 
 #define HAL_NAND_PAGE_PER_BLK           0x40
+/// Page index of calibration page inside NAND control info block
 #define HAL_NAND_CALIBR_PTN_PAGE        0x1
 
 /**
@@ -53,17 +54,17 @@ extern "C"
         @{
 */
 
-extern u8 snand_memcpy_buf[NAND_PAGE_MAX_LEN] __ALIGNED(32);
-
+/// Adapter to use partition related API
 typedef struct hal_snand_part_adpt {
-	hal_snafc_adaptor_t *adpt;
-	snand_vmap_t vmap;
+	hal_snafc_adaptor_t *adpt;          ///< SNAFC adapter
+	snand_vmap_t vmap;                  ///< Partition virtual map
 } hal_snand_part_adpt_t;
 
+/// The NAND flash infomation
 typedef struct hal_snand_layout_info {
-	snand_ctrl_info_t ctrl_info;
-	snand_partition_tbl_t part_tbl;
-	BOOL inited;
+	snand_ctrl_info_t ctrl_info;        ///< NAND control info
+	snand_partition_tbl_t part_tbl;     ///< NAND partition table
+	BOOL inited;                        ///< Whether this object is initialized
 } hal_snand_layout_info_t;
 
 void hal_snand_init(hal_snafc_adaptor_t *pAdaptor);

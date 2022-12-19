@@ -2,7 +2,7 @@
  * @file     verify_conf.h
  * @brief    The configuration for AmebaPro2 verify code.
  * @version  V1.00
- * @date     2020-04-26
+ * @date     2022-05-05
  *
  * @note
  *
@@ -83,18 +83,9 @@
 #define CONFIG_VERIFY_TRNG                      0
 #define CONFIG_VERIFY_RTC                       0
 #define CONFIG_VERIFY_FS                        0
+#define CONFIG_VERIFY_BSP                       0
 
 // Verify dependency
-#if CONFIG_VERIFY_ENC
-//#undef CONFIG_VERIFY_ISP
-//#define CONFIG_VERIFY_ISP                   0
-//#undef CONFIG_VERIFY_VIDEO
-//#define CONFIG_VERIFY_VIDEO                 0
-#endif
-
-// No longer maintained
-//#define CONFIG_VERIFY_ISP                       0
-//#define CONFIG_VERIFY_ISP_SDK                   0
 
 // OLT verification needs many IPs.
 //And remember to open CONFIG_CMSIS_DSP_EN.

@@ -2,7 +2,7 @@
  * @file     sw_feature_conf.h
  * @brief    The configuration for AmebaPro2 sw feature.
  * @version  V1.00
- * @date     2022-02-18
+ * @date     2022-07-01
  *
  * @note
  *
@@ -28,8 +28,6 @@
 
 #ifndef _SW_FEATURE_CONF_H_
 #define _SW_FEATURE_CONF_H_
-
-#include "platform_conf.h"
 #include "verify_conf.h"
 
 /***************** Dependent Toggle ***********/
@@ -39,13 +37,23 @@
 
 #if defined(CONFIG_OTG_EN) && CONFIG_OTG_EN == 1
 
-#if 0                   //host
-#undef DWC_DEVICE_ONLY
-#define DWC_HOST_ONLY
-#else                   //device
+/*
+  OTG operate three mode
+  1) #define DWC_DEVICE_ONLY
+      -> only device code.
 
-#define DWC_DEVICE_ONLY
-#undef DWC_HOST_ONLY
+  2)#define DWC_HOST_ONLY
+      -> only host code.
+
+  3) no define both (DWC_DEVICE_ONLY & DWC_HOST_ONLY).   (default)
+      -> two mode support,
+          which mode is judge by the global variable "gOtgHostMode", which is located in <dwc_otg_driver.c> file.
+          if variable "gOtgHostMode"=1, the otg is in HOST mode.
+          if variable "gOtgHostMode"=0, the otg is in DEVICE mode.
+
+*/
+//#define DWC_DEVICE_ONLY
+//#define DWC_HOST_ONLY
 
 #if defined(CONFIG_VERIFY_VIDEO_FEATURE) && CONFIG_VERIFY_VIDEO_FEATURE == 1
 // Turn on USB MSC for video
@@ -56,7 +64,6 @@
 #define CONFIG_USB_VENDOR_EN                1
 
 #endif  // end of "#if defined(CONFIG_VERIFY_OTG) && CONFIG_VERIFY_OTG == 1"
-#endif  // end of #if 0 else
 #endif  // end of "#if defined(CONFIG_OTG_EN)"
 
 

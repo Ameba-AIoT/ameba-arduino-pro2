@@ -130,6 +130,7 @@ enum halrf_dbg_comp {
 	DBG_RF_PABIAS_TRIM = BIT(RF14_PABIAS_TRIM),
 	DBG_RF_TSSI_TRIM = BIT(RF15_TSSI_TRIM),
 	DBG_RF_PSD = BIT(RF16_PSD),
+	DBG_RF_TSSI_TRK = BIT(RF17_TSSI_TRK),
 	DBG_RF_XTAL_TRACK = BIT(RF18_XTAL_TRK),
 	DBG_RF_FW = BIT(28),
 	DBG_RF_MP = BIT(29),
@@ -163,9 +164,10 @@ struct halrf_fem_info {
 #define RF_BACKUP_MAC_REG_MAX_NUM (16)
 #define RF_BACKUP_BB_REG_MAX_NUM (16)
 #define RF_BACKUP_RF_REG_MAX_NUM (16)
+#define RF_BACKUP_KIP_REG_MAX_NUM (16)
 
 struct halrf_iqk_ops {
-	u8(*iqk_kpath)(struct rf_info *rf, enum phl_phy_idx phy_idx);
+	u8 (*iqk_kpath)(struct rf_info *rf, enum phl_phy_idx phy_idx);
 	bool (*iqk_mcc_page_sel)(struct rf_info *rf, enum phl_phy_idx phy,  u8 path);
 	void (*iqk_get_ch_info)(struct rf_info *rf, enum phl_phy_idx phy,  u8 path);
 	void (*iqk_preset)(struct rf_info *rf, u8 path);
@@ -209,6 +211,7 @@ struct halrf_rx_dck_info {
 	bool is_afe;
 	struct rfk_location loc[KPATH]; /*max RF path*/
 	u32 rxdck_time;
+	bool is_auto_res;
 };
 
 struct halrf_mcc_info {
@@ -243,14 +246,17 @@ struct rf_info {
 	/*[BTC / RFK Info ]*/
 	bool 			rfk_is_processing;
 	bool			is_bt_iqk_timeout;
+	bool			is_chl_rfk;
 	/*[initial]*/
 	u8 		pre_rxbb_bw[KPATH];
 	/*[TSSI Info]*/
-	bool		is_tssi_mode[4]; /*S0/S1*/
+	bool		is_tssi_mode[KPATH]; /*S0/S1*/
+	u8		tssi_slope_type[KPATH];
 	/*[Thermal]*/
 	bool		is_thermal_trigger;
 	u8		cur_ther_s0;
 	u8		cur_ther_s1;
+	u8		ther_ofst_lsb;
 	/*LCK*/
 	u8		lck_ther_s0;
 	u8		lck_ther_s1;

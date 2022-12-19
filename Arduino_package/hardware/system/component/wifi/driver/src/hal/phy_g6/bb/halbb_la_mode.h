@@ -429,5 +429,5 @@ void halbb_la_io_en(struct bb_info *bb);
 void halbb_la_timer_init(struct bb_info *bb);
 void halbb_la_callback(void *context);
 void halbb_la_cmd_dbg(struct bb_info *bb, char input[][16], u32 *_used, char *output,
-					  u32 *_out_len);
+		  u32 *_out_len);
 #endif

@@ -62,6 +62,14 @@ int ir_ctrl_init(void *param);
 int ir_ctrl_set_brightness(float brightness);
 
 /**
+ * Adjust IR LED dbrightness
+ *
+ * @param brightness range:0.0~1.0
+ * @return 0 for success
+ */
+int ir_ctrl_set_brightness_d(int dbrightness);
+
+/**
  * enable/disable gray mode
  *
  * In low light situation, we can turn on IR LED to get enough light.
@@ -80,6 +88,6 @@ int sensor_external_set_gray_mode(int enable);
  *
  * @return 0 for success
  */
-int sensor_external_loop();
+int sensor_external_loop(void);
 
 #endif

@@ -32,6 +32,9 @@
 #if (RTL8720E_SUPPORT == 1)
 #include "ameba_soc.h"
 #endif
+#if (RTL8730E_SUPPORT == 1)
+#include "ameba_soc.h"
+#endif
 /*--------------------------Define efuse Parameters-------------------------*/
 #define	EFUSE_ERROE_HANDLE		1
 

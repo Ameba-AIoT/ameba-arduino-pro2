@@ -5,6 +5,12 @@
 #include "usb_gadget.h"
 #include "core/inc/usb_composite.h"
 
+#define ACM_APP_ECHO_SYNC                     0     // Echo synchronously in USB IRQ thread, for ACM_BULK_XFER_SIZE <= ACM_BULK_IN_BUF_SIZE
+#define ACM_APP_ECHO_ASYNC                    1     // Echo asynchronously in dedicated USB CDC ACM bulk in thread (USBD_CDC_ACM_USE_BULK_IN_THREAD == 1), for ACM_BULK_XFER_SIZE > ACM_BULK_IN_BUF_SIZE
+#define ACM_APP_LOOPBACK				2 	//loopback with AmebD usb cdc acm host
+
+#define CONFIG_USDB_CDC_ACM_APP              (ACM_APP_ECHO_SYNC)
+
 // Use thread for bulk in transfer, turn it on when using usbd_cdc_acm_async_transmit_data API to transfer large data,
 // which can not be transfered via single bulk in transfer, i.e. the transfer size is larger than bulk_in_buf_size.
 #define USBD_CDC_ACM_USE_BULK_IN_THREAD          1
@@ -513,4 +519,5 @@ int usbd_cdc_init(void);
 void usbd_cdc_deinit(void);
 int cdc_port_status(void);
 int usb_insert_status(void);
+int usbd_cdc_acm_sync_transmit_data(void *buf, u16 length);
 #endif

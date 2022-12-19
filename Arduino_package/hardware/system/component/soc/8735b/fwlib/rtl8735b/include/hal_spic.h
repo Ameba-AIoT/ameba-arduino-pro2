@@ -2,7 +2,7 @@
  * @file     hal_spic.h
  * @brief    The header file of hal_spic.c
  * @version  1.00
- * @date     2021-11-22
+ * @date     2022-10-19
  *
  * @note
  *
@@ -36,6 +36,9 @@ extern "C"
 #endif
 
 #define HIGH_SPEED_FLASH 0 //1:flash max speed is 100 MHz, 0:flash max speed is 62.5 MHz
+
+#define SPIC_BIT_MODE_SETTING SpicQpiMode  // Default for ram code using is qpi mode
+
 /**
 
         \addtogroup hs_hal_spic Flash Controller

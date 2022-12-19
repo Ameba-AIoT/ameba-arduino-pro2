@@ -40,6 +40,8 @@
 #define ID_TX_PAD_GainGapK 0xe
 #define ID_TX_PA_GainGapK 0xf
 #define ID_IQK_Restore 0x10
+#define ID_TX_TIA_coarse 0x11
+#define ID_TX_TIA_fine 0x12
 
 /*@-----------------------End Define Parameters-----------------------*/
 

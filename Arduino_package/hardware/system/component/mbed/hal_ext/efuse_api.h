@@ -7,11 +7,22 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015, Realtek Semiconductor Corp.
-  * All rights reserved.
+  * Copyright(c) 2006 - 2022 Realtek Corporation. All rights reserved.
   *
-  * This module is a confidential and proprietary property of RealTek and
-  * possession or use of this module requires written permission of RealTek.
+  * SPDX-License-Identifier: Apache-2.0
+  *
+  * Licensed under the Apache License, Version 2.0 (the License); you may
+  * not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -246,6 +257,28 @@ int efuse_ns_jtag_key_write(u8 *buf);
 int efuse_lock_susec_key(void);
 ///@}
 #endif  // end of "#if defined(CONFIG_PLATFORM_8710C)"
+
+#if (defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1))
+/**
+  * @brief  Get crytpo key from efuse
+  * @param  pkey:
+  * @param  key_num:
+  * @retval 0: Success
+  * @retval -1: Failure
+  */
+int efuse_crypto_key_get(uint8_t *pkey, uint8_t key_num);
+
+/**
+  * @brief  Get crytpo key from efuse
+  * @param  pkey:
+  * @param  key_num:
+  * @param  w_lock_en:
+  * @retval 0: Success
+  * @retval -1: Failure
+  */
+int efuse_crypto_key_write(uint8_t *pkey, uint8_t key_num, uint8_t w_lock_en);
+///@}
+#endif  // end of "#if (defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1))"
 
 /*\@}*/
 

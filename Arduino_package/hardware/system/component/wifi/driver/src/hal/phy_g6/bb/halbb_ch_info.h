@@ -37,9 +37,12 @@ enum bb_ch_info_state_type {
 /*@--------------------------[Structure]-------------------------------------*/
 struct bb_ch_info_physts_info {
 	enum bb_ch_info_state_type ch_info_state;
+	bool get_ch_rpt_success;
 	u16 force_bitmap_type; /*force setting*/
 	u16 bitmap_type_rpt; /*report*/
 	bool valid_ch_info_only_en;
+	bool filter_rxsc_en;
+	u8 filter_rxsc_tgrt_idx;
 	bool bitmap_type_auto_en;
 	u8 rxsc;
 	u8 n_rx;
@@ -69,12 +72,11 @@ struct bb_ch_info_cr_info {
 
 struct bb_ch_rpt_info {
 	u8 seg_idx_pre;
-	u8 seg_total_num;
-	u32 total_len;  /*Raw data length(Unit: byte) = total_len - 16*/
+	u32 csi_raw_data_total_len;  /*Raw data length(Unit: byte) = total_len - 16*/
 	u32 total_len_remnant;
 	u16 ch_rpt_hdr_len;
 	u16 phy_info_len;
-	bool skip_ch_info;
+	bool skip_ch_info; /*wait for seg_0*/
 	u32 raw_data_len_acc;
 	u8 *test_buf;
 	u8 *test_buf_curr;
@@ -89,10 +91,11 @@ struct bb_ch_rpt_info {
 
 struct bb_info;
 /*@--------------------------[Prptotype]-------------------------------------*/
+bool halbb_ch_info_valid_chk_8852a(struct bb_info *bb, struct physts_rxd *desc);
 void halbb_ch_info_buf_rls(struct bb_info *bb);
 bool halbb_ch_info_buf_alloc(struct bb_info *bb);
 void halbb_ch_info_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 void halbb_ch_info_deinit(struct bb_info *bb);
 void halbb_ch_info_init(struct bb_info *bb);
 void halbb_cr_cfg_ch_info_init(struct bb_info *bb);

@@ -2,7 +2,7 @@
  * @file     otp_boot_cfg.h
  * @brief    Define the structure types for boot flow configuration those from OTP.
  * @version  V1.00
- * @date     2022-06-21
+ * @date     2022-07-27
  *
  * @note
  *
@@ -68,6 +68,7 @@ extern "C" {
 
 #define OTP_PHY_CTRL_TEST_M_FUNC_ADDR       (0x5B0)
 #define OTP_PHY_CTRL_NORM_M_FUNC_ADDR       (0x5B4)
+#define OTP_PHY_CTRL_NORM_M_CUST_FUNC_ADDR  (0x5B5)
 
 #define OTP_KC_VANTI_ADDR                   (0x548)
 #define OTP_BL_VANTI_ADDR                   (0x550)

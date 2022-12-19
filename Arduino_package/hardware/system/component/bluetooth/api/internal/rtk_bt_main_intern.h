@@ -27,7 +27,8 @@ typedef enum {
  * @brief     Action of BT IPC main message
  */
 enum {
-    RTK_BT_MAIN_IPC_ACT_ENABLE =1,
+    RTK_BT_MAIN_IPC_ACT_PRE_ENABLE = 1,
+    RTK_BT_MAIN_IPC_ACT_ENABLE,
     RTK_BT_MAIN_IPC_ACT_DISABLE,
 };
 

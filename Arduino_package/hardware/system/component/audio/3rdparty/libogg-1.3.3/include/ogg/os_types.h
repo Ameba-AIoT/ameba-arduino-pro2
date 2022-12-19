@@ -17,8 +17,13 @@
 #ifndef _OS_TYPES_H
 #define _OS_TYPES_H
 #include <platform_stdlib.h>
+#if (defined(CONFIG_PLATFORM_AMEBAD2)) //amebaD2,malloc will redirect in ld status  @20220428
+#define RAM  1
+#define PSRAM 0
+#else
 #define RAM  0
 #define PSRAM 1
+#endif
 /* make it easy on the folks that want to compile the libs with a
    different malloc than stdlib */
 #if RAM

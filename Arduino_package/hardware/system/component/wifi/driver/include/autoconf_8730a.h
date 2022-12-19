@@ -44,13 +44,6 @@
 #define CONFIG_EAP
 /* For phydm configurations */
 #define CONFIG_FW_C2H_PKT
-#define PHYDM_LINUX_CODING_STYLE 1
-#define PHYDM_NEW_INTERFACE 1
-
-/*testchip use phydm, mpchip use halbb halrf*/
-#ifdef CONFIG_RL6678_A_CUT
-#define USE_HALBB_HALRF	1
-#endif
 
 #define CONFIG_BT_COEXIST
 //#define RX_SHORTCUT
@@ -65,10 +58,26 @@
 //Decrease STA due to memory limitation - Alex Fang
 #define NUM_STA (2 + AP_STA_NUM)	//2 + supported clients
 
-//#define CONFIG_80211AX_HE
+/*testchip use phydm, mpchip use halbb halrf*/
+#ifdef CONFIG_RLE1080_A_CUT
+#define PHYDM_VERSION	2 /*phydm trunk*/
+#else
+#define PHYDM_VERSION	3 /*halbb halrf*/
+#define DRV_BB_RUA_DISABLE
+#define PHL_MAX_STA_NUM AP_STA_NUM
+#define PLATFOM_IS_LITTLE_ENDIAN	1/*for halbb use*/
+#define CONFIG_80211AX_HE
 #ifdef CONFIG_80211AX_HE
-#define MBSSID_SUPPORT
+//#define CONFIG_MBSSID_AX
 #endif
+#endif
+
+#if WIFI_LOGO_CERTIFICATION
+#ifdef CONFIG_80211AX_HE
+#define CONFIG_MBSSID_AX
+#endif
+#endif
+
 
 #ifdef CONFIG_WIFI_VERIFY
 #define DISABLE_BB_RF 1
@@ -85,11 +94,25 @@
 #endif
 
 #define CONFIG_REG_ENABLE_KFREE 0	// 0: Depend on efuse(flash), 1: enable, 2: disable
-
-/* For FPGA and PXP test code */
-#if (!defined(CONFIG_RLE1080_A_CUT) && defined(CONFIG_WIFI_VERIFY))
-#define RTL8730A_WIFI_TEST	1// remove this when verification complete
+/* debug log level */
+#ifdef RELEASE_VERSION
+#define RTW_MSG_LEVEL    RTW_MSG_ERROR
+#else
+#define RTW_MSG_LEVEL    RTW_MSG_WARNING
 #endif
+
+/*************************** Config for MP_MODE *******************************/
+//#define CONFIG_MP_INCLUDED
+#ifdef CONFIG_MP_INCLUDED
+#define MP_DRIVER 1
+#undef CONFIG_ANTENNA_DIVERSITY
+#undef CONFIG_BT_COEXIST_SOC
+#undef CONFIG_REG_ENABLE_KFREE
+#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
+#else /* undef CONFIG_MP_INCLUDED  */
+#define MP_DRIVER 0
+#endif /* #ifdef CONFIG_MP_INCLUDED */
+/************************* Config for MP_MODE end *****************************/
 
 #endif /*#ifndef AUTOCONF_8730A_H */
 

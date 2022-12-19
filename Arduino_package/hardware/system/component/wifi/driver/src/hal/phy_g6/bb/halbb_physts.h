@@ -34,7 +34,7 @@
 
 #define IE11_PKT_INFO_LEN 10
 
-enum bb_physts_bw_info {
+enum bb_physts_bw_info{
 	PSTS_BW5 	= 0,
 	PSTS_BW10 	= 1,
 	PSTS_BW20 	= 2,
@@ -83,7 +83,7 @@ enum bb_physts_ie_t {
 
 struct bb_info;
 
-static const char bb_physts_bitmap_type_t[][9] = {
+static const char bb_physts_bitmap_type_t[][10] = {
 	"SRH_FAIL",
 	"BRK_BY_TX",
 	"CCA_SPF",
@@ -233,7 +233,7 @@ struct bb_physts_rslt_11_info {
 	u8 tx_pkt_info_idx;
 };
 
-struct bb_physts_user_info_ie_12 {
+struct bb_physts_user_info_ie_12{
 	u8 sig_val_ss0_seg_cr_user_i;
 	u8 sig_val_ss1_seg_cr_user_i;
 	u8 sig_val_ss2_seg_cr_user_i;
@@ -248,7 +248,7 @@ struct bb_physts_rslt_12_info {
 	struct bb_physts_user_info_ie_12 bb_physts_uer_info[MU_USER_MAX];
 };
 
-struct bb_physts_user_info_ie_13 {
+struct bb_physts_user_info_ie_13{
 	u8 is_bf;
 	u8 fec_type;
 	u8 mcs;
@@ -275,7 +275,7 @@ struct bb_physts_rslt_13_info {
 	u8 n_not_sup_sta;
 };
 
-struct bb_physts_user_info_ie_14 {
+struct bb_physts_user_info_ie_14{
 	u8 cqi_bitmap_ul_tb;
 	u8 cqi_raw_len_ul_tb;
 	u8 *cqi_raw_ul_tb_addr;
@@ -286,15 +286,15 @@ struct bb_physts_rslt_14_info {
 	u8 rxinfo_ndp_en;
 	u8 n_user;
 	struct bb_physts_user_info_ie_14 bb_physts_uer_info[MU_USER_MAX];
-
+	
 };
 
-struct bb_physts_user_info_ie_15 {
+struct bb_physts_user_info_ie_15{
 	/* 64bit cmn_info */
 	u8 mcs;
 	u8 fec_type;
 	u8 is_bf;
-
+	
 	u8 n_sts_ru_total;
 	u8 n_sts;
 	u8 pilot_exist;
@@ -322,7 +322,7 @@ struct bb_physts_rslt_15_info {
 	u8 *ie_15_addr;
 	u8 n_user;
 	struct bb_physts_user_info_ie_15 bb_physts_uer_info[MU_USER_MAX];
-
+	
 };
 
 struct bb_physts_rslt_16_info {
@@ -346,14 +346,14 @@ struct bb_physts_cmn_info_ie_17 {
 	bool ndp;
 	u8 pri_exp_rssi_dbm;
 	u8 dbw_idx;
-
+	
 	u8 rsvd;
-
+		
 	u16 rxtime;
 };
 
 struct bb_physts_user_info_ie_17 {
-	u8 u_id;
+	u8 u_id;	
 	u8 ru_alloc;
 	u8 n_sts_ru_tot;
 
@@ -367,7 +367,7 @@ struct bb_physts_user_info_ie_17 {
 	u8 rsvd2;
 
 	bool dcm_en;
-
+	
 	u8 rsvd3;
 };
 
@@ -750,15 +750,15 @@ void halbb_physts_cvrt_2_mp(struct bb_info *bb);
 void halbb_physts_ie_bitmap_set(struct bb_info *bb, u32 ie_page, u32 bitmap);
 u32 halbb_physts_ie_bitmap_get(struct bb_info *bb, u32 ie_page);
 void halbb_physts_ie_bitmap_en(struct bb_info *bb, enum bb_physts_bitmap_t type,
-							   enum bb_physts_ie_t ie, bool en);
+			       enum bb_physts_ie_t ie, bool en);
 void halbb_phy_sts_manual_trig(struct bb_info *bb, enum bb_mode_type mode, u8 ss);
 void halbb_physts_watchdog(struct bb_info *bb);
 void halbb_physts_parsing_init(struct bb_info *bb);
 
-void halbb_physts_brk_fail_rpt_en(struct bb_info *bb, bool enable, enum phl_phy_idx phy_idx);
+void halbb_physts_brk_fail_rpt_en(struct bb_info* bb, bool enable, enum phl_phy_idx phy_idx);
 
 void halbb_physts_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					  char *output, u32 *_out_len);
+		  char *output, u32 *_out_len);
 void halbb_cr_cfg_physts_init(struct bb_info *bb);
 
 #endif

@@ -4,7 +4,7 @@
  *           API ROM functions.
  *
  * @version  V1.00
- * @date     2022-01-27
+ * @date     2022-07-29
  *
  * @note
  *
@@ -149,7 +149,10 @@ int boot_verify_manif_f(const uint8_t *img_offset, const uint8_t info_type, sec_
 __STATIC_INLINE
 void boot_load_img_hdr_f(const uint8_t *img_offset, fw_img_hdr_t *img_hdr_buf, const uint8_t sel_img_load)
 {
-	hal_flash_boot_tlv_stubs.load_img_hdr_f(img_offset, img_hdr_buf, sel_img_load);
+	uint8_t *ptr = (uint8_t *)img_offset;
+	fw_img_hdr_t *pimg_hdr = img_hdr_buf;
+	// set img hdr data
+	BOOT_RAM_SAFE_LOAD_DEVICE_TO_MEM((void *)pimg_hdr, (void *)ptr, sizeof(fw_img_hdr_t), FW_IMG_HDR_MAX_SIZE);
 	return;
 }
 

@@ -12,7 +12,7 @@
 #endif
 #define mm_printf rt_printf
 #else
-#define mm_printf(...) do{ __disable_irq(); rt_printf(__VA_ARGS__); __enable_irq();}while(0)
+#define mm_printf(...) do{rt_printf(__VA_ARGS__);}while(0)
 #endif
 
 // MM : media module
@@ -38,7 +38,8 @@
 #define MM_CMD_SET_QUEUE_LEN		0x01  // set one queue's length
 #define MM_CMD_SET_QUEUE_NUM		0x02  // set number of queue (multiple queue)
 #define MM_CMD_SELECT_QUEUE			0x03  // select queue from queue0 ~ queue3
-#define MM_CMD_CLEAR_QUEUE_ITEMS     0x04  // clear queue item 
+#define MM_CMD_CLEAR_QUEUE_ITEMS    0x04  // clear queue item 
+#define MM_CMD_SET_DATAGROUP		0x05  // set data group 
 
 
 #define MM_CMD_MODULE_BASE			0x80
@@ -50,6 +51,9 @@
 #define MM_STAT_ERR_MALLOC			0x11
 #define MM_STAT_ERR_QUEUE			0x12
 #define MM_STAT_ERR_NEWITEM			0x13
+
+#define MM_GROUP_START				0x01
+#define MM_GROUP_END				0x02
 
 typedef struct mm_module_s {
 	void *(*create)(void *);
@@ -64,7 +68,7 @@ typedef struct mm_module_s {
 
 	uint32_t        output_type;
 	uint32_t        module_type;
-	char *name;
+	const char 		*name;
 } mm_module_t;
 
 typedef struct mm_conveyor_s {
@@ -88,6 +92,9 @@ typedef struct mm_contex_s {
 	// private data structure for created instance
 	void *priv;
 
+	// data share group flag
+	int group_role;
+
 	// module state
 	uint32_t state;
 	int32_t queue_num;			// number of queue
@@ -101,7 +108,10 @@ typedef struct mm_contex_s {
 
 typedef struct mm_queue_item_s {
 	uint32_t flag;
-	uint32_t data_addr;    // store data address
+	uint32_t data_addr;     // store data address
+
+	void *sema[4];			// mutex for data_addr
+	void **ref_sema;		// mutex point to source mutex
 
 	uint32_t timestamp;
 	uint32_t hw_timestamp;
@@ -112,6 +122,7 @@ typedef struct mm_queue_item_s {
 		uint32_t priv_data;
 	};
 	uint32_t in_idx;		// input index
+	char name[256];
 } mm_queue_item_t;
 
 

@@ -3,7 +3,7 @@
 * @brief       The HAL Non-secure callable API implementation for the EFUSE
 *
 * @version     V1.00
-* @date        2022-01-25
+* @date        2022-11-15
 *
 * @note
 *
@@ -62,6 +62,7 @@ uint8_t NS_ENTRY hal_sys_get_ld_fw_idx_nsc(void);
 void NS_ENTRY hal_sys_get_fw_version_raw_nsc(const uint8_t ld_img_idx, uint8_t *pver_raw_buf);
 uint32_t NS_ENTRY hal_sys_get_fw_timest_nsc(const uint8_t ld_img_idx);
 uint32_t NS_ENTRY hal_sys_get_ld_fw_img_dev_nor_offset_nsc(void);
+hal_status_t NS_ENTRY hal_sys_get_video_img_ld_offset_nsc(void *ctrl_obj_info, const uint8_t ctrl_obj);
 void NS_ENTRY hal_sys_get_chip_id_nsc(uint32_t *pchip_id);
 uint8_t NS_ENTRY hal_sys_get_rma_state_nsc(void);
 void NS_ENTRY hal_sys_set_system_reset_nsc(void);
@@ -70,6 +71,7 @@ hal_status_t NS_ENTRY hal_sys_dbg_port_cfg_nsc(dbg_port_mode_t dbg_mode, dbg_por
 hal_status_t NS_ENTRY hal_sys_dbg_port_en_ctrl_nsc(dbg_port_mode_t dbg_mode, dbg_port_pin_sel_t pin_sel);
 void NS_ENTRY hal_sys_sjtag_non_fixed_key_set_nsc(uint8_t set_sjtag_obj, uint8_t *pkey);
 uint32_t NS_ENTRY hal_sys_get_video_info_nsc(uint8_t idx);
+hal_status_t NS_ENTRY hal_sys_cust_pws_val_ctrl_nsc(uint8_t op, uint16_t *data_buf);
 hal_status_t NS_ENTRY hal_sys_adc_vref_setting_nsc(uint8_t set_value);
 void NS_ENTRY hal_pll_98p304_ctrl_nsc(u8 en, u8 clk_src);
 void NS_ENTRY hal_pll_45p158_ctrl_nsc(u8 en, u8 clk_src);
@@ -100,6 +102,7 @@ uint8_t hal_sys_get_ld_fw_idx_nsc(void);
 void hal_sys_get_fw_version_raw_nsc(const uint8_t ld_img_idx, uint8_t *pver_raw_buf);
 uint32_t hal_sys_get_fw_timest_nsc(const uint8_t ld_img_idx);
 uint32_t hal_sys_get_ld_fw_img_dev_nor_offset_nsc(void);
+hal_status_t hal_sys_get_video_img_ld_offset_nsc(void *ctrl_obj_info, const uint8_t ctrl_obj);
 void hal_sys_get_chip_id_nsc(uint32_t *pchip_id);
 uint8_t hal_sys_get_rma_state_nsc(void);
 void hal_sys_set_system_reset_nsc(void);
@@ -108,6 +111,7 @@ hal_status_t hal_sys_dbg_port_cfg_nsc(dbg_port_mode_t dbg_mode, dbg_port_pin_sel
 hal_status_t hal_sys_dbg_port_en_ctrl_nsc(dbg_port_mode_t dbg_mode, dbg_port_pin_sel_t pin_sel);
 void hal_sys_sjtag_non_fixed_key_set_nsc(uint8_t set_sjtag_obj, uint8_t *pkey);
 uint32_t hal_sys_get_video_info_nsc(uint8_t idx);
+hal_status_t hal_sys_cust_pws_val_ctrl_nsc(uint8_t op, uint16_t *data_buf);
 hal_status_t hal_sys_adc_vref_setting_nsc(uint8_t set_value);
 void hal_pll_98p304_ctrl_nsc(u8 en, u8 clk_src);
 void hal_pll_45p158_ctrl_nsc(u8 en, u8 clk_src);
@@ -144,6 +148,7 @@ void hal_sys_save_dev_adtr_nsc(void *padatr);
 #define hal_sys_get_ld_fw_idx                 hal_sys_get_ld_fw_idx_nsc
 #define hal_sys_get_fw_version_raw            hal_sys_get_fw_version_raw_nsc
 #define hal_sys_get_fw_timest                 hal_sys_get_fw_timest_nsc
+#define hal_sys_get_video_img_ld_offset       hal_sys_get_video_img_ld_offset_nsc
 #endif
 #define hal_sys_get_ld_fw_img_dev_nor_offset  hal_sys_get_ld_fw_img_dev_nor_offset_nsc
 #if !defined(ENABLE_SECCALL_PATCH)
@@ -158,6 +163,7 @@ void hal_sys_save_dev_adtr_nsc(void *padatr);
 #define hal_sys_dbg_port_en_ctrl              hal_sys_dbg_port_en_ctrl_nsc
 #if !defined(ENABLE_SECCALL_PATCH)
 #define hal_sys_get_video_info                hal_sys_get_video_info_nsc
+#define hal_sys_cust_pws_val_ctrl             hal_sys_cust_pws_val_ctrl_nsc
 #endif
 #define hal_sys_adc_vref_setting              hal_sys_adc_vref_setting_nsc
 #if !defined(ENABLE_SECCALL_PATCH)

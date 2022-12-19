@@ -36,16 +36,18 @@ extern "C"
 #endif
 
 /**
- * @addtogroup hal_sdhost HAL SDHOST
- * @{
- *
- *  The SD Host HAL RAM APIs for user application to control the SD Host hardware.
- *
+ * @defgroup hal_sdhost SD HOST
+ * @ingroup 8735b_hal
+ * @brief The SD Host HAL APIs for user application to control the SD Host hardware.
  */
 
+/**
+ * @addtogroup hal_sdhost
+ * @{
+ */
 
 /**
-  \brief  Defines SD CID register content (check SD spec for detail).
+  \brief  Defines SD CID (Card IDentification) register format.
 */
 typedef struct hal_sdhost_cid {
 	u8 crc;                 ///< CRC7 checksum of reset of the struct
@@ -62,13 +64,13 @@ STATIC_ASSERT(sizeof(hal_sdhost_cid_t) == SD_CID_LEN, sd_cid_sz);
 /// @endcond
 
 /**
- *  @brief To reg irq of the SD host controller.
+ *  @brief Register IRQ of the SD host controller.
  *
  *  @param[in]  irq_handler The SD host irq handler
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_irq_reg(irq_handler_t irq_handler)
 {
 	hal_sdhost_stubs.hal_sdhost_irq_reg(irq_handler);
@@ -76,58 +78,58 @@ void hal_sdhost_irq_reg(irq_handler_t irq_handler)
 
 
 /**
- *  @brief To unreg irq of the SD host controller.
+ *  @brief Unregister IRQ of the SD host controller.
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_irq_unreg(void)
 {
 	hal_sdhost_stubs.hal_sdhost_irq_unreg();
 }
 
 /**
- *  @brief To read data from the SD card.
+ *  @brief Read data from the SD card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
- *  @param[in]  sd_blk_idx The start address to begin reading from the card.
- *  @param[in]  blk_cnt The block count.
- *  @param[in]  rbuf_32align The buffer to read data blocks (must be 32-Byte alignment).
+ *  @param[in]  sd_blk_idx The start block address to begin reading.
+ *  @param[in]  blk_cnt Data size in blocks.
+ *  @param[in]  rbuf_32align The buffer to store data (must be 32-byte alignment).
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_read_data(hal_sdhost_adapter_t *psdhost_adapter, u32 sd_blk_idx, u16 blk_cnt, u8 *rbuf_32align)
 {
 	return hal_sdhost_stubs.hal_sdhost_read_data(psdhost_adapter, sd_blk_idx, blk_cnt, rbuf_32align);
 }
 
 /**
- *  @brief To write data to the SD card.
+ *  @brief Write data to the SD card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
- *  @param[in]  sd_blk_idx The start address to begin writing to the card.
- *  @param[in]  blk_cnt The block count.
- *  @param[in]  wbuf_32align The buffer to write data blocks (must be 32-Byte alignment).
+ *  @param[in]  sd_blk_idx The start block address to begin writing.
+ *  @param[in]  blk_cnt Data size in blocks.
+ *  @param[in]  wbuf_32align The buffer stored data (must be 32-byte alignment).
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_write_data(hal_sdhost_adapter_t *psdhost_adapter, u32 sd_blk_idx, u16 blk_cnt, const u8 *wbuf_32align)
 {
 	return hal_sdhost_stubs.hal_sdhost_write_data(psdhost_adapter, sd_blk_idx, blk_cnt, wbuf_32align);
 }
 
 /**
- *  @brief To erase data in the SD card.
+ *  @brief Erase data blocks in the SD card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
- *  @param[in]  start_blk_idx The start block to erase.
- *  @param[in]  end_blk_idx The end block to erase.
+ *  @param[in]  start_blk_idx The start block address to be erased.
+ *  @param[in]  end_blk_idx The last block to be erased (Included).
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_erase(hal_sdhost_adapter_t *psdhost_adapter, u32 start_blk_idx, u32 end_blk_idx)
 {
 	return hal_sdhost_stubs.hal_sdhost_erase(psdhost_adapter, start_blk_idx, end_blk_idx);
@@ -135,13 +137,13 @@ hal_status_t hal_sdhost_erase(hal_sdhost_adapter_t *psdhost_adapter, u32 start_b
 
 
 /**
- *  @brief To stop the SD bus transmission.
+ *  @brief Stop the SD bus transmission.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_stop_transmission(hal_sdhost_adapter_t *psdhost_adapter)
 {
 	return hal_sdhost_stubs.hal_sdhost_stop_transmission(psdhost_adapter);
@@ -150,14 +152,14 @@ hal_status_t hal_sdhost_stop_transmission(hal_sdhost_adapter_t *psdhost_adapter)
 
 
 /**
- *  @brief To get the current state of the SD card.
+ *  @brief Get the card status of the SD card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
- *  @param[out] status_buf Return card status register if not NULL.
+ *  @param[out] status_buf Return card status if not NULL.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_get_card_status(hal_sdhost_adapter_t *psdhost_adapter,
 										hal_sdhost_card_stat_t *status_buf)
 {
@@ -166,14 +168,14 @@ hal_status_t hal_sdhost_get_card_status(hal_sdhost_adapter_t *psdhost_adapter,
 
 
 /**
- *  @brief To get the SD status from the SD card.
+ *  @brief Get the SD status from the SD card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[out]  sd_stat Return the SD status if not NULL.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_get_sd_status(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_sd_stat_t *sd_stat)
 {
 	return hal_sdhost_stubs.hal_sdhost_get_sd_status(psdhost_adapter, sd_stat);
@@ -181,14 +183,14 @@ hal_status_t hal_sdhost_get_sd_status(hal_sdhost_adapter_t *psdhost_adapter, hal
 
 
 /**
- *  @brief To get the SCR register from the SD card.
+ *  @brief Get the SCR (Card Configuration Register) from the SD card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[out] scr Return the SCR content if not NULL.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_get_scr(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_scr_t *scr)
 {
 	return hal_sdhost_stubs.hal_sdhost_get_scr(psdhost_adapter, scr);
@@ -196,13 +198,13 @@ hal_status_t hal_sdhost_get_scr(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhos
 
 
 /**
- *  @brief To get the current signaling level.
+ *  @brief Get the current signal voltage level.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *
- *  @returns    The signaling level (1: 1.8V, 0: 3.3V).
+ *  @returns    The signal voltage level (1: 1.8V, 0: 3.3V).
  */
-__STATIC_FORCEINLINE
+static inline
 u8 hal_sdhost_get_curr_signal_level(hal_sdhost_adapter_t *psdhost_adapter)
 {
 	return hal_sdhost_stubs.hal_sdhost_get_curr_signal_level(psdhost_adapter);
@@ -210,14 +212,14 @@ u8 hal_sdhost_get_curr_signal_level(hal_sdhost_adapter_t *psdhost_adapter)
 
 
 /**
- *  @brief To get the speed mode supported by the card.
+ *  @brief Get the speed modes supported by the card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
- *  @param[out] speeds Bitwise-OR result of every supported mode in current signal level.
+ *  @param[out] speeds Bitwise-OR result of every supported mode.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_get_supported_speed(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_speed_t *speeds)
 {
 	return hal_sdhost_stubs.hal_sdhost_get_supported_speed(psdhost_adapter, speeds);
@@ -225,7 +227,7 @@ hal_status_t hal_sdhost_get_supported_speed(hal_sdhost_adapter_t *psdhost_adapte
 
 
 /**
- *  @brief To hook a callback function for SD card insertion interrupt.
+ *  @brief Hook a callback function for SD card insertion interrupt.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[in]  pcallback The callback function.
@@ -233,7 +235,7 @@ hal_status_t hal_sdhost_get_supported_speed(hal_sdhost_adapter_t *psdhost_adapte
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_card_insert_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t pcallback, void *pdata)
 {
 	hal_sdhost_stubs.hal_sdhost_card_insert_hook(psdhost_adapter, pcallback, pdata);
@@ -241,7 +243,7 @@ void hal_sdhost_card_insert_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_p
 
 
 /**
- *  @brief To hook a callback function for SD card removal interrupt.
+ *  @brief Hook a callback function for SD card removal interrupt.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[in]  pcallback The callback function.
@@ -249,7 +251,7 @@ void hal_sdhost_card_insert_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_p
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_card_remove_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t pcallback, void *pdata)
 {
 	hal_sdhost_stubs.hal_sdhost_card_remove_hook(psdhost_adapter, pcallback, pdata);
@@ -257,8 +259,8 @@ void hal_sdhost_card_remove_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_p
 
 
 /**
- *  @brief To hook a callback function that will be called while waiting for card busy read/write.
- *         Use hal_sdhost_transfer_done_int_hook() to get informed when read/write finish
+ *  @brief Hook a callback function that will be called while waiting for card starts busy read/write.
+ *         Use hal_sdhost_transfer_done_int_hook() to get informed when the operation finish.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[in]  task_yield The callback function.
@@ -266,14 +268,14 @@ void hal_sdhost_card_remove_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_p
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_task_yield_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t task_yield, void *pdata)
 {
 	hal_sdhost_stubs.hal_sdhost_task_yield_hook(psdhost_adapter, task_yield, pdata);
 }
 
 /**
- *  @brief To hook a callback function when read/write finish.
+ *  @brief Hook a callback function when read/write finish.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[in]  pcallback The callback function.
@@ -281,45 +283,45 @@ void hal_sdhost_task_yield_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_pa
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_transfer_done_int_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t pcallback, void *pdata)
 {
 	hal_sdhost_stubs.hal_sdhost_transfer_done_int_hook(psdhost_adapter, pcallback, pdata);
 }
 
 /**
- *  @brief To force card identification with 3.3V.
+ *  @brief Force card identification keep in 3.3V signal.
  *         This should be used before hal_sdhost_init_card().
  *
  *  @param[in]  adpt The SD host HAL adapter.
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_force33v(hal_sdhost_adapter_t *adpt)
 {
 	adpt->force_33v = 1;
 }
 
 /**
- *  @brief To initialize the SD host controller and the adapter.
- *         This should be called before any other API.
+ *  @brief Initialize the SD host controller and the adapter.
+ *         This should be called before any other SDHOST APIs.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
 hal_status_t hal_sdhost_init_host(hal_sdhost_adapter_t *psdhost_adapter);
 
 
 /**
- *  @brief To initialize the SD memory card.
+ *  @brief Initialize and identify the SD memory card.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_init_card(hal_sdhost_adapter_t *psdhost_adapter)
 {
 	return hal_sdhost_stubs.hal_sdhost_init_card(psdhost_adapter);
@@ -327,50 +329,53 @@ hal_status_t hal_sdhost_init_card(hal_sdhost_adapter_t *psdhost_adapter)
 
 
 /**
- *  @brief To switch the SD bus speed.
+ *  @brief Switch the current SD bus speed to the specified one.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *  @param[in]  speed The specified bus speed.
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_switch_bus_speed(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_speed_t speed)
 {
 	return hal_sdhost_stubs.hal_sdhost_switch_bus_speed(psdhost_adapter, speed);
 }
 
 /**
- *  @brief To de-initialize the SD host controller.
+ *  @brief De-initialize the SD host controller and the adapter.
  *
  *  @param[in]  psdhost_adapter The SD host HAL adapter.
  *
  *  @returns    void.
  */
-__STATIC_FORCEINLINE
+static inline
 void hal_sdhost_deinit(hal_sdhost_adapter_t *psdhost_adapter)
 {
 	return hal_sdhost_stubs.hal_sdhost_deinit(psdhost_adapter);
 }
 
 /**
- *  @brief To tune best clock phase for SDR50.
+ *  @brief Tune the clock phase shift to the best phase (only for SDR50 mode).
+ *         High speed mode requires decent clock phases to tolerate transfer error.
+ *         To test read/write golden pattern, one block should be used for tuning.
+ *         The data will be saved and restored.
  *
  *  @param[in]  adpt The SD host HAL adapter.
- *  @param[in]  buf_3blk_32align The buffer to store temprary data, required at least 3 block size and 32-byte aligned.
- *  @param[in]  buf_size The size of buf_3blk_32align.
- *  @param[in]  tuning_blk SD block address will be used for tuning (data might lost).
+ *  @param[in]  buf_3blk_32align The buffer to store backup data, required at least 3 block size and 32-byte aligned.
+ *  @param[in]  buf_size The size of the backup data buffer.
+ *  @param[in]  tuning_blk SD block address will be used for tuning (at risk of data lost).
  *
- *  @returns    The result.
+ *  @returns    The result status.
  */
-__STATIC_FORCEINLINE
+static inline
 hal_status_t hal_sdhost_clk_finetune(hal_sdhost_adapter_t *adpt, u8 *buf_3blk_32align, u32 buf_size, u32 tuning_blk)
 {
 	return hal_sdhost_stubs.hal_sdhost_clk_finetune(adpt, buf_3blk_32align, buf_size, tuning_blk);
 }
 
 /**
- *  @brief To get CSD register content from the SD card.
+ *  @brief Get the CSD (Card Specific Data) register content from the SD card.
  *
  *  @param[in]  adpt The SD host HAL adapter.
  *  @param[out] csd The buffer to store output.
@@ -381,7 +386,7 @@ hal_status_t hal_sdhost_get_csd(hal_sdhost_adapter_t *adpt, hal_sdhost_csd_t *cs
 
 
 /**
- *  @brief To get CID register content from the SD card.
+ *  @brief Get CID (Card IDentification) register content from the SD card.
  *
  *  @param[in]  adpt The SD host HAL adapter.
  *  @param[out] cid The buffer to store output.
@@ -390,7 +395,15 @@ hal_status_t hal_sdhost_get_csd(hal_sdhost_adapter_t *adpt, hal_sdhost_csd_t *cs
  */
 hal_status_t hal_sdhost_get_cid(hal_sdhost_adapter_t *adpt, hal_sdhost_cid_t *cid);
 
-/** @} */ /* End of group hs_hal_sdhost_ */
+
+static inline
+hal_status_t hal_sdhost_switch_freq(hal_sdhost_adapter_t *adpt, hal_sdhost_freq_t freq)
+{
+	return hal_sdhost_stubs.hal_sdhost_switch_freq(adpt, freq);
+}
+
+
+/** @} */ /* End of group hal_sdhost */
 
 #ifdef  __cplusplus
 }

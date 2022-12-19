@@ -451,34 +451,34 @@ struct bb_info;
 
 #ifdef CLM_SUPPORT
 void halbb_clm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-				   char *output, u32 *_out_len);
+		   char *output, u32 *_out_len);
 #endif
 #ifdef NHM_SUPPORT
 void halbb_nhm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-				   char *output, u32 *_out_len);
+		   char *output, u32 *_out_len);
 #endif
 #ifdef IFS_CLM_SUPPORT
 void halbb_ifs_clm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 #endif
 #ifdef FAHM_SUPPORT
 bool halbb_fahm_trigger(struct bb_info *bb, struct fahm_para_info *para,
-						struct fahm_trig_report *trig_rpt);
+			struct fahm_trig_report *trig_rpt);
 bool halbb_fahm_result(struct bb_info *bb, struct fahm_report *rpt);
 void halbb_fahm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					char *output, u32 *_out_len);
+		    char *output, u32 *_out_len);
 #endif
 #ifdef EDCCA_CLM_SUPPORT
 void halbb_edcca_clm_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-						 char *output, u32 *_out_len);
+			 char *output, u32 *_out_len);
 #endif
 u32 halbb_ccx_idx_cnt_2_us(struct bb_info *bb, u16 idx_cnt);
 void halbb_env_mntr_log(struct bb_info *bb, u32 dbg_comp);
 void halbb_idle_time_pwr_physts(struct bb_info *bb, struct physts_rxd *desc,
-								bool is_cck_rate);
+				bool is_cck_rate);
 void halbb_env_mntr(struct bb_info *bb);
 void halbb_env_mntr_init(struct bb_info *bb);
 void halbb_env_mntr_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-						char *output, u32 *_out_len);
+			char *output, u32 *_out_len);
 void halbb_cr_cfg_env_mntr_init(struct bb_info *bb);
 #endif

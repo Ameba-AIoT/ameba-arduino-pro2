@@ -24,14 +24,15 @@ long long int fatfs_get_free_space_byte(void);
 void fatfs_list_files(void);
 void sd_reset_procedure(int reason);
 void sd_gpio_init(void);
+void sd_gpio_deinit(void);
 void sd_gpio_power_reset(void);
 void sd_gpio_power_off(void);
 void sd_gpio_power_on(void);
 
 int usb_sd_init(void);
 int usb_sd_deinit(void);
-int usb_sd_getcapacity(u32 *sector_count);
-int usb_sd_readblocks(u32 sector, u8 *data, u32 count);
-int usb_sd_writeblocks(u32 sector, const u8 *data, u32 count);
+int usb_sd_getcapacity(uint32_t *sector_count);
+int usb_sd_readblocks(uint32_t sector, uint8_t *data, uint32_t count);
+int usb_sd_writeblocks(uint32_t sector, const uint8_t *data, uint32_t count);
 
 #endif //_FATFS_SDCARD_API_H

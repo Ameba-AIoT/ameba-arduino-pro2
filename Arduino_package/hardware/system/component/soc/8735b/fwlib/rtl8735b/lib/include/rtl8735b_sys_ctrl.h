@@ -3,7 +3,7 @@
 * @brief       The HAL API implementation for SYSTEM CONTROL
 *
 * @version     V1.00
-* @date        2022-06-23
+* @date        2022-07-22
 *
 * @note
 *
@@ -40,6 +40,8 @@ extern "C"
 {
 #endif
 
+#define BOOT_LOAD_IMG_VRF_HASH_DIGEST_SIZE      (32)
+#define BOOT_CUSTOM_UID_DERIVED_SIZE            (32)
 #define BOOT_INFO_SW_RESV_MAX_SIZE              (5)
 #define OTP_CHIP_ID_MAX_SIZE                    (4)
 #define OTP_UUID_MAX_DATA_SIZE                  (4)
@@ -72,7 +74,7 @@ typedef enum {
 	LFC_DEVICE_DEPOLYED_ID   = 0x3C,
 	LFC_DEVICE_RMA1_ID       = 0x18,
 	LFC_DEVICE_RMA2_ID       = 0x0,
-	LFC_UNKNOWN_ID           = 0x5E
+	LFC_PROT_DEVICE_DEPY_ID  = 0x5E
 
 } DEVICE_LFC_STS_T;
 
@@ -501,6 +503,11 @@ typedef struct hal_sys_ctrl_high_val_prot_func_stubs_s {
 	void (*hal_sys_high_val_mem_protect_ld)(void *s1, const void *s2, size_t ld_size);
 } hal_sys_ctrl_high_val_prot_func_stubs_t;
 
+typedef struct hal_sys_ctrl_extend_func_stubs_s {
+	uint8_t *pld_img_bl_vrf_digest;
+	uint8_t *pcust_uid_derived;
+	uint32_t reserved[30];  // reserved space for next ROM code version function table extending.
+} hal_sys_ctrl_extend_func_stubs_t;
 
 /** @} */ /* End of group hs_hal_efuse */
 

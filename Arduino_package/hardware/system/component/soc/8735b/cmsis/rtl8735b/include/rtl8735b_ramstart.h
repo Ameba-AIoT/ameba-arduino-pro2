@@ -2,7 +2,7 @@
  * @file     rtl8195bhp_ramstart.h
  * @brief    The data type definition for RAM code entry functions.
  * @version  V1.00
- * @date     2022-02-16
+ * @date     2022-11-16
  *
  * @note
  *
@@ -65,6 +65,7 @@ typedef union {
 		uint8_t flash_inited    : 1;            /*!< [2..2] the SPIC Flash controller is initialed */
 		uint8_t wdt_disabled    : 1;            /*!< [3..3] the VNDR WDT is disabled */
 		uint8_t xip_img_enable  : 1;            /*!< [4..4] the XIP IMG is enabled */
+		uint8_t nor_flh_bit_mode: 3;            /*!< [7..5] the nor flash bit mode select */
 	} b;                                        /*!< bit fields for flags */
 } boot_init_flags_t, *pboot_init_flags_t;
 

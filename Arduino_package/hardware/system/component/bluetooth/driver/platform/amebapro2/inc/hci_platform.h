@@ -45,4 +45,5 @@ uint8_t hci_platform_get_patch_cmd_buf(uint8_t *cmd_buf, uint8_t cmd_len);
 uint8_t hci_platform_init(void);
 uint8_t hci_platform_deinit(void);
 
+bool rtk_bt_pre_enable(void);
 #endif

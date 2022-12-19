@@ -26,7 +26,7 @@
 #define __HALBB_DBCC_H__
 #ifdef HALBB_DBCC_SUPPORT
 /*@--------------------------[Define] ---------------------------------------*/
-#define	HALBB_GET_PHY_PTR(bb, bb_out, phy_idx)\
+	#define	HALBB_GET_PHY_PTR(bb, bb_out, phy_idx)\
 	do {								\
 		if ((bb->bb_phy_hooker) && (phy_idx != bb->bb_phy_idx) && (bb->phl_com->dev_cap.dbcc_sup))	\
 				bb_out = bb->bb_phy_hooker;		\
@@ -35,7 +35,7 @@
 	} while (0)
 
 /*@--------------------------[Enum]------------------------------------------*/
-
+ 
 /*@--------------------------[Structure]-------------------------------------*/
 struct bb_dbcc_info {
 	bool ic_dbcc_support;
@@ -46,9 +46,9 @@ struct bb_info;
 enum bb_path halbb_get_cur_phy_valid_path(struct bb_info *bb);
 void halbb_dbcc_early_init(struct bb_info *bb);
 void halbb_dbcc_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 struct bb_info *halbb_get_curr_bb_pointer(struct bb_info *bb,
-		enum phl_phy_idx phy_idx);
+					  enum phl_phy_idx phy_idx);
 u32 halbb_buffer_init_phy1(struct bb_info *bb_phy_0);
 #endif
 #endif

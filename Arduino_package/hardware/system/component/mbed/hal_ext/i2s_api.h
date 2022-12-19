@@ -7,11 +7,22 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015, Realtek Semiconductor Corp.
-  * All rights reserved.
+  * Copyright(c) 2006 - 2022 Realtek Corporation. All rights reserved.
   *
-  * This module is a confidential and proprietary property of RealTek and
-  * possession or use of this module requires written permission of RealTek.
+  * SPDX-License-Identifier: Apache-2.0
+  *
+  * Licensed under the Apache License, Version 2.0 (the License); you may
+  * not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -108,18 +119,80 @@ enum {
 
 enum {
 	WL_16b = SP_TXWL_16,
-	WL_24b = SP_TXWL_24
+	WL_24b = SP_TXWL_24,
+	WL_32b = SP_TXWL_32,
+	WL_RX_16b = SP_RXWL_16,
+	WL_RX_24b = SP_RXWL_24,
+	WL_RX_32b = SP_RXWL_32
 };
 
 enum {
 	CL_16b = SP_TXCL_16,
 	CL_24b = SP_TXCL_24,
-	CL_32b = SP_TXCL_32
+	CL_32b = SP_TXCL_32,
+	CL_RX_16b = SP_RXCL_16,
+	CL_RX_24b = SP_RXCL_24,
+	CL_RX_32b = SP_RXCL_32
 };
 
 enum {
 	I2S_IDX1 = I2S2,
 	I2S_IDX2 = I2S3
+};
+
+enum {
+	I2S_DIR_RX   = SP_DIR_RX,    // Rx Only
+	I2S_DIR_TX   = SP_DIR_TX,    // Tx Only
+	//I2S_DIR_TXRX = I2S_TXRX     // Tx & Rx (BiDirection)
+};
+
+#elif (defined(CONFIG_PLATFORM_AMEBALITE) && (CONFIG_PLATFORM_AMEBALITE == 1))
+// AmebaD2
+enum {
+	SR_8KHZ = SP_8K,
+	SR_12KHZ = SP_12K,
+	SR_16KHZ = SP_16K,
+	SR_24KHZ = SP_24K,
+	SR_32KHZ = SP_32K,
+	SR_48KHZ = SP_48K,
+	SR_96KHZ = SP_96K,
+	SR_192KHZ = SP_192K,
+	SR_384KHZ = SP_384K,
+
+	SR_11p02PKHZ = SP_11P025K,
+	SR_22P05KHZ = SP_22P05K,
+	SR_44P1KHZ = SP_44P1K,
+	SR_88P2KHZ = SP_88P2K,
+	SR_176P4KHZ = SP_176P4K
+};
+
+enum {
+	CH_STEREO = SP_CH_STEREO,
+	CH_MONO = SP_CH_MONO
+};
+
+enum {
+	WL_16b = SP_TXWL_16,
+	WL_24b = SP_TXWL_24,
+	WL_32b = SP_TXWL_32,
+	WL_RX_16b = SP_RXWL_16,
+	WL_RX_24b = SP_RXWL_24,
+	WL_RX_32b = SP_RXWL_32
+};
+
+enum {
+	CL_16b = SP_TXCL_16,
+	CL_24b = SP_TXCL_24,
+	CL_32b = SP_TXCL_32,
+	CL_RX_16b = SP_RXCL_16,
+	CL_RX_24b = SP_RXCL_24,
+	CL_RX_32b = SP_RXCL_32
+};
+
+
+enum {
+	I2S_IDX1 = I2S0,
+	I2S_IDX2 = I2S1
 };
 
 enum {

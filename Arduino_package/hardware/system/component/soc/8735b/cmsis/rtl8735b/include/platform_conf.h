@@ -2,7 +2,7 @@
  * @file     platform_conf.h
  * @brief    The configuration for AmebaPro2 (TM9) platform.
  * @version  V1.00
- * @date     2022-06-09
+ * @date     2022-07-27
  *
  * @note
  *
@@ -198,7 +198,10 @@
 #if CONFIG_ASIC  // ASIC(Default not run PXP DDR Init flow)
 #define SIMU_DDR_PXP_INIT_FLOW_EN           (0)   // is enable to run PXP DDR init flow
 #define POST_SIMU_ADJUST_FLOW_EN            (0)   // is enable to run post-simu related flow
+
 #endif
+
+#define FCS_SIMU_DISABLE_KM_BLDR_INIT_EN    (0)   // is enable to skip boot loader voe ram init process
 
 #if IS_CUT_TEST(CONFIG_CHIP_VER)    // Test-chip
 #define LOAD_FLAH_IMG_NEW_FORMAT            (0)   // IMG new format(TLV), Default Disable for test-chip
@@ -213,6 +216,7 @@
 #if CONFIG_FPGA
 #define LOAD_RMA0_PTN_EN                        (0)   // Load RMA0 PTN, Default Disable
 #define LOAD_RMA_SIMU_EN                        (0)   // Load RMA SIMU, Default Disable
+#define LOAD_CUST_UID_PTN_DIS                   (0)   // Load Customer uid derived huk PTN, Default Not Disable
 #endif
 
 

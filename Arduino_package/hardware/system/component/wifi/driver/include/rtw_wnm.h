@@ -3,7 +3,7 @@
 
 #define WNM_SUPPORT_IWPRIV_DBG 1
 #define RTW_RRM_NB_RPT_EN		BIT(1)
-#define RTW_MAX_NB_RPT_NUM	8
+#define RTW_MAX_NB_RPT_NUM	16
 
 #define rtw_roam_busy_scan(a, nb)	\
 	(nb && ((a)->mlmepriv.LinkDetectInfo.bBusyTraffic == _TRUE) && \

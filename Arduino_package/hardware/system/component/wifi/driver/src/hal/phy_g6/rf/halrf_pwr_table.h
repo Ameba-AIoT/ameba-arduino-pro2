@@ -18,18 +18,23 @@
 /*@--------------------------Define Parameters-------------------------------*/
 #define TX_PWR_BY_RATE_NUM_RF 4
 
-#define PW_LMT_MAX_2G_BANDWITH_NUM 2
 #define PW_LMT_MAX_CHANNEL_NUMBER_2G 14
 #define PW_LMT_MAX_CHANNEL_NUMBER_5G 53
 #define PW_LMT_MAX_CHANNEL_NUMBER_6G 120
 
-#define TX_PWR_BY_RATE_NUM_MAC 44
 #define TX_PWR_LIMIT_NUM_MAC 80
 #define TX_PWR_LIMIT_RU_NUM_MAC 30
 
 #define RADIO_TO_FW_PAGE_SIZE 6
 #define RADIO_TO_FW_DATA_SIZE 500
 
+#if !defined(RF_8730E_SUPPORT) && !defined(RF_8720E_SUPPORT)
+#define PW_LMT_MAX_2G_BANDWITH_NUM 2
+#define TX_PWR_BY_RATE_NUM_MAC 44
+#else
+#define PW_LMT_MAX_2G_BANDWITH_NUM 1
+#define TX_PWR_BY_RATE_NUM_MAC 28 /*cck(4) + ofdm(8) + MCS0~MCS11(12) + {dcm_0,1,3,4} = 28*/
+#endif
 
 /*@-----------------------End Define Parameters-----------------------*/
 /*power by rate*/
@@ -111,7 +116,7 @@ enum halrf_pw_lmt_regulation_type {
 	PW_LMT_REGU_EXT_PWR,
 	PW_LMT_REGU_PREDEF_NUM,
 	PW_LMT_REGU_NULL, /* declare this to PW_LMT_MAX_REGULATION_NUM after limit array remove usage of PW_LMT_REGU_NULL */
-	PW_LMT_MAX_REGULATION_NUM = 32
+	PW_LMT_MAX_REGULATION_NUM
 };
 
 enum halrf_tx_shape_modu_type {
@@ -122,9 +127,13 @@ enum halrf_tx_shape_modu_type {
 
 enum halrf_pw_lmt_band_type {
 	PW_LMT_BAND_2_4G = 0,
-	PW_LMT_BAND_5G = 1,
-	PW_LMT_BAND_6G = 2,
-	PW_LMT_MAX_BAND = 3
+#ifndef RF_5G_NOT_SUPPORT
+	PW_LMT_BAND_5G,
+#endif
+#ifndef RF_6G_NOT_SUPPORT
+	PW_LMT_BAND_6G,
+#endif
+	PW_LMT_MAX_BAND
 };
 
 enum halrf_pw_lmt_bandwidth_type {
@@ -154,8 +163,10 @@ enum halrf_pw_lmt_rfpath_type {
 
 enum halrf_pw_lmt_beamforming_type {
 	PW_LMT_NONBF = 0,
-	PW_LMT_BF = 1,
-	PW_LMT_MAX_BF_NUM = 2
+#ifndef RF_NONBF
+	PW_LMT_BF,
+#endif
+	PW_LMT_MAX_BF_NUM 
 };
 
 enum halrf_data_rate {
@@ -315,34 +326,37 @@ struct halrf_pwr_info {
 
 	bool regulation[PW_LMT_MAX_BAND][PW_LMT_MAX_REGULATION_NUM];
 	u8 tx_shap_idx[PW_LMT_MAX_BAND][TX_SHAPE_MAX][PW_LMT_MAX_REGULATION_NUM];
+	u8 tx_shap_idx_ru[PW_LMT_MAX_BAND][TX_SHAPE_MAX][PW_LMT_MAX_REGULATION_NUM];
 	s8 tx_pwr_by_rate[PW_LMT_MAX_BAND][HALRF_DATA_RATE_MAX];
 
 	s8 tx_pwr_limit_2g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_MAX_2G_BANDWITH_NUM]
-	[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_BF_NUM][PW_LMT_MAX_CHANNEL_NUMBER_2G][MAX_HALRF_PATH];
-
-	s8 tx_pwr_limit_5g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_MAX_BANDWIDTH_NUM]
-	[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_BF_NUM][PW_LMT_MAX_CHANNEL_NUMBER_5G][MAX_HALRF_PATH];
-
-	s8 tx_pwr_limit_6g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_MAX_BANDWIDTH_NUM]
-	[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_BF_NUM][PW_LMT_MAX_CHANNEL_NUMBER_6G][MAX_HALRF_PATH];
+			[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_BF_NUM][PW_LMT_MAX_CHANNEL_NUMBER_2G][MAX_HALRF_PATH];
 
 	s8 tx_pwr_limit_ru_2g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_RU_BW_NULL]
-	[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_CHANNEL_NUMBER_2G][MAX_HALRF_PATH];
+			[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_CHANNEL_NUMBER_2G][MAX_HALRF_PATH];
+
+#ifndef RF_5G_NOT_SUPPORT
+	s8 tx_pwr_limit_5g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_MAX_BANDWIDTH_NUM]
+			[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_BF_NUM][PW_LMT_MAX_CHANNEL_NUMBER_5G][MAX_HALRF_PATH];
 
 	s8 tx_pwr_limit_ru_5g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_RU_BW_NULL]
-	[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_CHANNEL_NUMBER_5G][MAX_HALRF_PATH];
+			[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_CHANNEL_NUMBER_5G][MAX_HALRF_PATH];
+#endif
+#ifndef RF_6G_NOT_SUPPORT
+	s8 tx_pwr_limit_6g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_MAX_BANDWIDTH_NUM]
+			[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_BF_NUM][PW_LMT_MAX_CHANNEL_NUMBER_6G][MAX_HALRF_PATH];
 
 	s8 tx_pwr_limit_ru_6g[PW_LMT_MAX_REGULATION_NUM][PW_LMT_RU_BW_NULL]
-	[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_CHANNEL_NUMBER_6G][MAX_HALRF_PATH];
-
+			[PW_LMT_MAX_RS_NUM][PW_LMT_MAX_CHANNEL_NUMBER_6G][MAX_HALRF_PATH];
+#endif
+#ifndef IOT_SMALL_RAM
 	s8 tx_pwr_by_rate_mac[HW_PHY_MAX][TX_PWR_BY_RATE_NUM_MAC];
-
 	s8 tx_pwr_limit_mac[HW_PHY_MAX][TX_PWR_LIMIT_NUM_MAC];
-
 	s8 tx_pwr_limit_ru_mac[HW_PHY_MAX][TX_PWR_LIMIT_RU_NUM_MAC];
 	s16 tx_pwr_limit_ru26_mac[HW_PHY_MAX];
 	s16 tx_pwr_limit_ru52_mac[HW_PHY_MAX];
 	s16 tx_pwr_limit_ru106_mac[HW_PHY_MAX];
+#endif
 	bool coex_pwr_ctl_enable;
 	bool dpk_pwr_ctl_enable;
 	s32 coex_pwr;
@@ -355,9 +369,11 @@ struct halrf_pwr_info {
 	bool set_tx_ptrn_shap_en;
 	u8 set_tx_ptrn_shap_idx[PW_LMT_MAX_BAND][TX_SHAPE_MAX];
 	u16 extra_regd_idx;
+	u8 power_constraint[HW_PHY_MAX];
+	s8 dpk_mcc_power;
 };
 
-extern const char *const _pw_lmt_regu_type_str[PW_LMT_MAX_REGULATION_NUM];
+extern const char * const _pw_lmt_regu_type_str[PW_LMT_MAX_REGULATION_NUM];
 #define pw_lmt_regu_type_str(lmt) ((lmt) < PW_LMT_MAX_REGULATION_NUM ? _pw_lmt_regu_type_str[(lmt)] : NULL)
 
 extern const enum halrf_pw_lmt_regulation_type _regulation_to_pw_lmt_regu_type[REGULATION_MAX];
@@ -369,19 +385,28 @@ extern const enum halrf_pw_lmt_regulation_type _tpo_to_pw_lmt_regu_type[TPO_NA];
 u8 halrf_get_regulation_info(struct rf_info *rf, u8 band);
 
 void halrf_power_by_rate_store_to_array(struct rf_info *rf,
-										u32 band, u32 tx_num, u32 rate_id, u32 data);
+			u32 band, u32 tx_num, u32 rate_id, u32 data);
 void halrf_power_limit_store_to_array(struct rf_info *rf,
-									  u8 regulation, u8 band, u8 bandwidth, u8 rate,
-									  u8 tx_num, u8 beamforming, u8 chnl, s8 val);
+			u8 regulation, u8 band, u8 bandwidth, u8 rate,
+			u8 tx_num, u8 beamforming, u8 chnl, s8 val);
 void halrf_power_limit_set_worldwide(struct rf_info *rf);
 void halrf_power_limit_ru_store_to_array(struct rf_info *rf,
-		u8 band, u8 bandwidth, u8 tx_num, u8 rate,
-		u8 regulation, u8 chnl, s8 val);
+			u8 band, u8 bandwidth, u8 tx_num, u8 rate,
+			u8 regulation, u8 chnl, s8 val);
 void halrf_power_limit_ru_set_worldwide(struct rf_info *rf);
 
-#ifndef RF_8730A_SUPPORT
+#if (!defined(RF_8730E_SUPPORT) && !defined(RF_8720E_SUPPORT))
 const char *halrf_get_pw_lmt_regu_type_str_extra(struct rf_info *rf, u8 band);
 u8 halrf_get_power_limit_extra(struct rf_info *rf);
 #endif
+
+void halrf_modify_pwr_table_bitmask(struct rf_info *rf,
+	enum phl_phy_idx phy, enum phl_pwr_table pwr_table);
+
+s8 halrf_get_pwr_control(struct rf_info *rf, enum phl_phy_idx phy);
+
+bool halrf_pwr_is_minus(struct rf_info *rf, u32 reg_tmp);
+
+s32 halrf_show_pwr_table(struct rf_info *rf, u32 reg_tmp);
 
 #endif

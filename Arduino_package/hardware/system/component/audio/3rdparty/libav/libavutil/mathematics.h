@@ -40,7 +40,7 @@
 #define INFINITY       av_int2float(0x7f800000)
 #endif
 
-#if defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)
+#if defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2)
 #ifndef M_SQRT2
 #define M_SQRT2 1.41421356237309504880
 #endif

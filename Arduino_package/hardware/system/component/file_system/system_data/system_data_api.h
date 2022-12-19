@@ -24,7 +24,7 @@
 //Function
 int sys_write_wlan_data_to_flash(u8 *data, uint32_t len);
 int sys_write_bt_data_to_flash(u8 *data, uint32_t len);
-int sys_read_wlan_data_from_flash(u8 *data);
+int sys_read_wlan_data_from_flash(u8 *data, uint32_t len);
 int sys_read_bt_data_from_flash(u8 *data);
 int sys_erase_system_data(void);
 

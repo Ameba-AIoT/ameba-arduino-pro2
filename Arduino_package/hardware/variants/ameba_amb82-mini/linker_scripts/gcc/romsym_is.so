@@ -84,6 +84,10 @@ SECTIONS
 	hal_flash_sec_ext_stubs = 0x10001130;
 	__rom_stubs_snand_boot = 0x10001180;
 	hal_snand_boot_stubs = 0x10001180;
+	__rom_stubs_hal_trng_sec = 0x10001240;
+	hal_trng_sec_stubs = 0x10001240;
+	__rom_stubs_hal_sys_ctrl_hgih_val_prot = 0x100012a0;
+	hal_sys_ctrl_high_val_prot_stubs = 0x100012a0;
 	__rom_stubs_hal_crypto_ns = 0x100bc030;
 	Image$$_STUB_CRYPTONS$$Base = 0x100bc030;
 	hal_crypto_stubs_ns = 0x100bc030;

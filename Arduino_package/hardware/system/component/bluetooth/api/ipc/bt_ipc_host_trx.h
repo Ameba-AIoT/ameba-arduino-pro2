@@ -18,6 +18,10 @@
 #include <stdint.h>
 #include "ameba.h"
 #include "bt_ipc_profile_config.h"
+#include "rtk_bt_a2dp.h"
+
+#define IPC_HOST_TRX_PARAM_MAX    80 //param of data struct
+#define IPC_HOST_TRX_DATA_MAX     1024 //data
 
 /* ------------------------------- Data Types ------------------------------- */
 
@@ -31,12 +35,15 @@ struct bt_ipc_host_trx_task_struct {
 
 typedef struct bt_ipc_host_tx_message {
     uint32_t    PROFILE_ID;
-	uint32_t	TX_EVENT;
-	uint32_t	param_buf[20];
+	uint32_t    TX_EVENT;
+	uint8_t     data[IPC_HOST_TRX_PARAM_MAX + IPC_HOST_TRX_DATA_MAX];//buffer for tx data;
 	int	        ret[4]; //for multiple return values
-	uint8_t     data[1024];//buffer for tx data;
     uint8_t     dummy[24];//add for 64B size alignment
 } bt_ipc_host_tx_message;
+
+void bt_ipc_host_register_a2dp_trx_cb(rtk_bt_a2dp_cb_t cb);
+
+void bt_ipc_host_unregister_a2dp_trx_cb(void);
 
 /**
  * @brief  to initialize the ipc host for bt api.
@@ -57,11 +64,10 @@ void bt_ipc_trx_deinit_host(void);
  * @param  profile_id[in]: mesh/peripheral/central ...
  * @param  tx_event[in]: BT_HOST_TX_EVENT.
  * @param  param_buf[in]: pointer to BT_HOST_TX_EVENT parameter.
- * @param  data[in]: pointer to data.
- * @param  size[in]: data size.
+ * @param  buf_len[in]: buffer size.
  * @return pointer to result of BT_HOST_TX_EVENT.
  */
-int *bt_ipc_trx_host_message_send(uint32_t profile_id, uint32_t tx_event, uint32_t *param_buf, uint32_t buf_len, uint8_t *data, uint32_t size);
+int *bt_ipc_trx_host_message_send(uint32_t profile_id, uint32_t tx_event, uint32_t *param_buf, uint32_t buf_len);
 
 #endif /* _BT_IPC_HOST_TRX_H_ */
 

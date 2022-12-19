@@ -81,7 +81,7 @@ enum HALBB_CMD_ID {
 };
 
 /*@--------------------------[Structure]-------------------------------------*/
-
+ 
 struct halbb_cmd_info {
 	char name[16];
 	u8 id;
@@ -117,7 +117,7 @@ static const struct halbb_cmd_info halbb_cmd_i[] = {
 	{"ifs_clm", HALBB_IFS_CLM},
 	{"fahm", HALBB_FAHM},
 	{"edcca_clm", HALBB_EDCCA_CLM},
-	{"edcca", HALBB_EDCCA},
+	{"edcca", HALBB_EDCCA},	
 	{"env_mntr", HALBB_ENV_MNTR},
 	//{"bbinfo", HALBB_BB_INFO},
 	//{"h2c", HALBB_H2C},
@@ -142,7 +142,7 @@ static const struct halbb_cmd_info halbb_cmd_i[] = {
 	{"txinfo", HALBB_TX_INFO},
 	{"dyn_1r_cca", HALBB_DYN_1R_CCA},
 	{"cmn_info", HALBB_CMN_INFO}
-};
+	};
 
 /*@--------------------------[Prptotype]-------------------------------------*/
 

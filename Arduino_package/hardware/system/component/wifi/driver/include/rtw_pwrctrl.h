@@ -405,6 +405,7 @@ struct pwrctrl_priv {
 	u8  serverkeepalive_enable;
 	u8  serverkeepalive_timeout_l;
 	u8  serverkeepalive_timeout_h;
+	u8  patternoffset;
 #endif
 };
 

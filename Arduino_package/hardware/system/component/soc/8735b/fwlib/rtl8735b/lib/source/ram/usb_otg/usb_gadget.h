@@ -28,15 +28,6 @@
 #include "usb.h"
 #include "dwc_list.h"
 typedef unsigned  int   gfp_t;
-
-#ifdef SD9_OTG_CDC_PATCH
-/*
- * USB function drivers should return USB_GADGET_DELAYED_STATUS if they
- * wish to delay the data/status stages of the control transfer till they
- * are ready.
- */
-#define USB_GADGET_DELAYED_STATUS   0x7FFF
-#endif
 //struct usb_ep;
 /**
  * struct usb_ep - device side representation of USB endpoint

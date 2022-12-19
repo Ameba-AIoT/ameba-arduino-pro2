@@ -3,7 +3,7 @@
  * @brief    Declare the booting from nand flash.
  *
  * @version  V1.00
- * @date     2021-07-26
+ * @date     2022-07-29
  *
  * @note
  *
@@ -240,6 +240,13 @@ typedef struct hal_snand_boot_stubs {
 	u32 rsvd[38];
 } hal_snand_boot_stubs_t;
 
+typedef struct snand_sect_cipher_info_s {
+	snand_vaddr_t *cur_addr;
+	snand_vaddr_t *pgcm_tag_addr;
+	uint32_t dec_base;
+	uint32_t resv;
+} snand_sect_cipher_info_t, *psnand_sect_cipher_info_t;
+
 STATIC_ASSERT(sizeof(hal_snand_boot_stubs_t) == (48 * 4), stub_sz_changed);
 
 extern const hal_snand_boot_stubs_t hal_snand_boot_stubs;
@@ -251,6 +258,8 @@ extern snand_ctrl_info_t rom_snand_ctrl_info;
 extern u8 rom_snand_boot;
 extern snand_partition_tbl_t snand_part_tbl;
 extern u8 snand_page_buf[NAND_PAGE_MAX_LEN]; // must > 4K to store manifest
+extern u8 mfst_buf[sizeof(img_manifest_t)];
+extern snand_vaddr_t sim_memcpy_start_addr;
 extern hal_snafc_adaptor_t boot_snafc_adpt;
 
 hal_status_t fw_spic_pinmux_ctl(phal_spic_adaptor_t, flash_pin_sel_t *, u8);
@@ -258,6 +267,8 @@ hal_status_t fw_snafc_deinit(hal_snafc_adaptor_t *pSnafcAdaptor);
 s32 snand_flash_boot(PRAM_FUNCTION_START_TABLE *pram_start_func);
 void init_ctrl_info(snand_ctrl_info_t *info);
 
+s32 snand_vaddr_init(hal_snafc_adaptor_t *adpt, snand_vaddr_t *addr,
+					 const snand_part_entry_t *entry, snand_glb_vmap_slot_t slot);
 hal_status_t snand_memcpy(hal_snafc_adaptor_t *snafc_adpt, void *dest, const snand_addr_t *snand_addr, u32 size);
 hal_status_t snand_memcpy_update(hal_snafc_adaptor_t *snafc_adpt, void *dest, snand_addr_t *snand_addr, u32 size);
 void snand_offset(snand_addr_t *snand_addr, u32 offset);
@@ -269,6 +280,8 @@ s32 sb_snand_hash_update(hal_crypto_adapter_t *crypto_adtr, uint32_t msglen, uin
 s32 snand_img_sel(snand_partition_tbl_t *part_tbl, const u8 img_obj, const u8 img_sel_op);
 hal_status_t fw_snafc_init_core(hal_snafc_adaptor_t *snafc_adpt, u8 spic_bit_mode, u8 io_pin_sel, u8 do_protect);
 s32 snand_load_ctrl_info(hal_crypto_adapter_t *crypto_adpt);
+s32 snand_load_cipher_data(sect_hdr_t *sect_hdr, snand_vaddr_t *cur_addr,
+						   snand_vaddr_t *gcm_tag_addr, sec_boot_info_t *sb_info, const u32 dec_base);
 
 __STATIC_FORCEINLINE
 hal_status_t fw_snafc_init_wr(hal_snafc_adaptor_t *snafc_adpt, u8 spic_bit_mode, u8 io_pin_sel)
@@ -283,6 +296,11 @@ hal_status_t fw_snafc_init(hal_snafc_adaptor_t *snafc_adpt, u8 spic_bit_mode, u8
 	return fw_snafc_init_core(snafc_adpt, spic_bit_mode, io_pin_sel, ENABLE);
 }
 
+__STATIC_FORCEINLINE void snand_vaddr_clone(snand_vaddr_t *dest, const snand_vaddr_t *src)
+{
+	_memcpy(dest, src, sizeof(snand_vaddr_t));
+}
+
 #elif defined(CONFIG_BUILD_BOOT) && (CONFIG_BUILD_BOOT == 1) // Boot loader only
 
 #define NAND_CTRL_INFO              snand_ctrl_info
@@ -291,6 +309,7 @@ extern snand_ctrl_info_t            snand_ctrl_info;
 
 extern hal_snafc_adaptor_t boot_snafc_adpt;
 extern u8 snand_page_buf[NAND_PAGE_MAX_LEN];
+extern u8 mfst_buf[NAND_PAGE_MAX_LEN];
 extern snand_partition_tbl_t snand_part_tbl;
 
 s32 snand_boot_loader(PRAM_FUNCTION_START_TABLE *ram_start_func);

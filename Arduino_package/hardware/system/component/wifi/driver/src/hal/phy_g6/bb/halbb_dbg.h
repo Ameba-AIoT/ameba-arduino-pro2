@@ -39,43 +39,43 @@
 #define FRC_PRINT_LINE 0xffffffff
 
 #ifdef HALBB_DBG_TRACE_SUPPORT
-#ifdef HALBB_DBCC_SUPPORT
-#define BB_DBG(bb, comp, fmt, ...)     \
+	#ifdef HALBB_DBCC_SUPPORT
+		#define BB_DBG(bb, comp, fmt, ...)     \
 			do {\
 				if(bb->dbg_component & comp) {\
 					_os_dbgdump("[BB][%d]" fmt, bb->bb_phy_idx, ##__VA_ARGS__);\
 				} \
 			} while (0)
 
-#define BB_TRACE1(bb, fmt, ...)     \
+		#define BB_TRACE1(bb, fmt, ...)     \
 			do {\
 				_os_dbgdump("[BB][%d]" fmt, bb->bb_phy_idx, ##__VA_ARGS__);\
 			} while (0)
-#else
-#define BB_DBG(bb, comp, fmt, ...)     \
+	#else
+		#define BB_DBG(bb, comp, fmt, ...)     \
 			do {\
 				if(bb->dbg_component & comp) {\
 					_os_dbgdump("[BB]" fmt, ##__VA_ARGS__);\
 				} \
 			} while (0)
 
-#define BB_TRACE1(bb, fmt, ...)     \
+		#define BB_TRACE1(bb, fmt, ...)     \
 			do {\
 				_os_dbgdump("[BB]" fmt, ##__VA_ARGS__);\
 			} while (0)
-#endif
+	#endif
 
-#define BB_TRACE(fmt, ...)     \
+	#define BB_TRACE(fmt, ...)     \
 		do {\
 			_os_dbgdump("[BB]" fmt, ##__VA_ARGS__);\
 		} while (0)
-
-#define BB_WARNING(fmt, ...)     \
+		
+	#define BB_WARNING(fmt, ...)     \
 		do {\
 			_os_dbgdump("[WARNING][BB]" fmt, ##__VA_ARGS__);\
 		} while (0)
 
-#define	BB_DBG_CNSL2(in_cnsl, max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
+	#define	BB_DBG_CNSL2(in_cnsl, max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
 		do {								\
 			u32 *used_len_tmp = &(used_len);			\
 			u32 len_tmp = 0;					\
@@ -89,11 +89,11 @@
 			}\
 		} while (0)
 #else
-#define BB_DBG
-#define BB_TRACE
-#define BB_TRACE1
-#define BB_WARNING
-#define	BB_DBG_CNSL2(in_cnsl, max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
+	#define BB_DBG
+	#define BB_TRACE
+	#define BB_TRACE1
+	#define BB_WARNING
+	#define	BB_DBG_CNSL2(in_cnsl, max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
 		do {								\
 			u32 *used_len_tmp = &(used_len);				\
 			if (*used_len_tmp < max_buff_len)				\
@@ -119,12 +119,14 @@
 #define	DBGPORT_RELEASE	0	/*@Init value (the lowest priority)*/
 
 /*@--------------------------[Enum]------------------------------------------*/
-enum bb_dbg_devider_len_t {
+enum bb_dbg_devider_len_t
+{
 	BB_DEVIDER_LEN_32 = 0,
 	BB_DEVIDER_LEN_16 = 1,
 };
 
-enum bb_dbg_port_ip_t {
+enum bb_dbg_port_ip_t
+{
 	DBGPORT_IP_TD		= 1,
 	DBGPORT_IP_RX_INNER	= 2,
 	DBGPORT_IP_TX_INNER	= 3,
@@ -140,13 +142,15 @@ enum bb_dbg_port_ip_t {
 	DBGPORT_IP_TST		= 0X1F,
 };
 
-enum bb_frc_phy_dump_reg {
+enum bb_frc_phy_dump_reg
+{
 	FRC_DUMP_PHY0		= 0,
 	FRC_DUMP_PHY1		= 1,
 	FRC_DUMP_ALL
 };
 
-enum bb_basic_dbg_info {
+enum bb_basic_dbg_info
+{
 	BB_BASIC_DBG_01_SYSTEM		= BIT1,
 	BB_BASIC_DBG_02_ENVMNTR		= BIT2,
 	BB_BASIC_DBG_03_PMAC		= BIT3,
@@ -269,7 +273,7 @@ void halbb_release_bb_dbg_port(struct bb_info *bb);
 bool halbb_bb_dbg_port_racing(struct bb_info *bb, u8 curr_dbg_priority);
 u32 halbb_get_bb_dbg_port_val(struct bb_info *bb);
 u16 halbb_rx_utility(struct bb_info *bb, u16 avg_phy_rate, u8 rx_max_ss,
-					 enum channel_width bw);
+		     enum channel_width bw);
 u16 halbb_rx_avg_phy_rate(struct bb_info *bb);
 void halbb_get_tx_dbg_reg(struct bb_info *bb);
 void halbb_basic_dbg_message(struct bb_info *bb);
@@ -279,12 +283,12 @@ void halbb_dump_reg_dbg(struct bb_info *bb, char input[][16], u32 *_used, char *
 void halbb_dd_dump_dbg(struct bb_info *bb, char input[][16], u32 *_used, char *output, u32 *_out_len);
 void halbb_cr_table_dump(struct bb_info *bb, u32 *cr_table, u32 cr_len);
 void halbb_dump_bb_reg(struct bb_info *bb, u32 *_used, char *output,
-					   u32 *_out_len, bool dump_2_buff,
-					   enum bb_frc_phy_dump_reg frc_phy_dump);
+		       u32 *_out_len, bool dump_2_buff,
+		       enum bb_frc_phy_dump_reg frc_phy_dump);
 void halbb_show_rx_rate(struct bb_info *bb, char input[][16], u32 *_used,
-						char *output, u32 *_out_len);
+			      char *output, u32 *_out_len);
 void halbb_tx_info_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 void halbb_cmn_dbg(struct bb_info *bb, char input[][16], u32 *_used, char *output, u32 *_out_len);
 void halbb_dbg_setting_init(struct bb_info *bb);
 void halbb_cr_cfg_dbg_init(struct bb_info *bb);

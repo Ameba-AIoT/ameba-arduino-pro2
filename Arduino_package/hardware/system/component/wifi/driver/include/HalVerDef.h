@@ -50,6 +50,7 @@ typedef enum tag_HAL_IC_Type_Definition {
 	CHIP_8735B =	18,
 	CHIP_8730A = 	19,
 	CHIP_8720E = 	20,
+	CHIP_8730E = 	21,
 } HAL_IC_TYPE_E;
 
 //HAL_CHIP_TYPE_E
@@ -74,6 +75,15 @@ typedef enum tag_HAL_Cut_Version_Definition {
 	K_CUT_VERSION 		=	10,
 } HAL_CUT_VERSION_E;
 
+//HAL_IC_VERSION_E
+typedef enum tag_HAL_IC_Version_Definition {
+	IC_VERSION_0    =  0,
+	IC_VERSION_1    =  1,
+	IC_VERSION_2    =  2,
+	IC_VERSION_3    =  3,
+	IC_VERSION_4    =  4,
+} HAL_IC_VERSION_E;
+
 // HAL_Manufacturer
 typedef enum tag_HAL_Manufacturer_Version_Definition {
 	CHIP_VENDOR_TSMC 	=	0,
@@ -96,6 +106,7 @@ typedef	struct tag_HAL_VERSION {
 	HAL_IC_TYPE_E		ICType;
 	HAL_CHIP_TYPE_E		ChipType;
 	HAL_CUT_VERSION_E	CUTVersion;
+	HAL_IC_VERSION_E    ICVersion;
 	HAL_VENDOR_E		VendorType;
 	HAL_RF_TYPE_E		RFType;
 	u8					ROMVer;

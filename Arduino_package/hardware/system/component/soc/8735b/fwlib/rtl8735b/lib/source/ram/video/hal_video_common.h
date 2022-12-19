@@ -545,7 +545,11 @@ typedef struct {
 	u32 fast_osd_en;
 	u32 *osd_buf;
 
-	u32 rsvd[56];
+	u32 isp_meta_out;
+
+	u32 fast_mask_en;
+
+	u32 rsvd[54];
 
 } __attribute__((aligned(32))) commandLine_s;
 

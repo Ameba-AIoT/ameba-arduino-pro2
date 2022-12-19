@@ -16,8 +16,12 @@
 extern "C" {
 #endif
 
+#define MAX_GATT_SRV_APP_ID 0xFF
+
 typedef enum {
-    SRV_UNREGISTERED = 0,
+    SRV_UNUSED = 0,
+    SRV_ALLOC_FOR_INCLUDE,
+    SRV_WAIT_FOR_REG,
     SRV_REGISTERING,
     SRV_REGISTERED,
 } rtk_bt_gatts_srv_reg_status_t;
@@ -34,13 +38,13 @@ typedef struct {
     rtk_bt_gatts_srv_reg_status_t status;
     /* Service ID designated by APP */
     uint8_t app_id;
+    /* Record the order of wait for resgister service  */
+    // uint8_t wait_srv_order;
     /* Service ID designated by Stack */
     T_SERVER_ID service_id;
     /* The count of this service */
     uint16_t count;
-    /* The pointer of first attribute of this service
-     * not used for now.
-     */
+    /* The pointer of first attribute of this service in T_ATTRIB_APPL */
     void* first_attr;
     /* TODO: Record CCCD value in every service for checking 
      * validity of sending indication and notification.
@@ -70,7 +74,11 @@ typedef rtk_bt_gatts_op_ele_t rtk_bt_gatts_waiting_ntf_t;
  */
 typedef struct {
     /* Registered service control, here use MAX num */
-    rtk_bt_gatts_srv_ctrl_t service[RTK_BT_GATTS_SERVICE_NUM];
+    rtk_bt_gatts_srv_ctrl_t *service[MAX_GATT_SRV_APP_ID + 1];
+    /* number of service that is in status wait_for_register or registring or resgisted */
+    // uint8_t srv_num;
+    /* Whether there is a service is under registery */
+    uint8_t srv_registering;
     /* Indicate ops pending queue, for transaction flow (not sent) */
     rtk_list_t pending_ind_q[GAP_MAX_LINKS];
     /* Current waiting idnicate (been sent, only one) */

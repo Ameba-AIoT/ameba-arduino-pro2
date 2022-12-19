@@ -1,6 +1,7 @@
 #ifndef _FATFS_RAM_API_H
 #define _FATFS_RAM_API_H
 #include "ff.h"
+#include <stdint.h>
 
 typedef struct fatfs_ram_param_s {
 	int drv_num;
@@ -20,7 +21,7 @@ FRESULT fatfs_ram_remove_file(char *name);
 
 int usb_ram_init(void);
 int usb_ram_deinit(void);
-int usb_ram_getcapacity(u32 *sector_count);
-int usb_ram_readblocks(u32 sector, u8 *data, u32 count);
-int usb_ram_writeblocks(u32 sector, const u8 *data, u32 count);
+int usb_ram_getcapacity(uint32_t *sector_count);
+int usb_ram_readblocks(uint32_t sector, uint8_t *data, uint32_t count);
+int usb_ram_writeblocks(uint32_t sector, const uint8_t *data, uint32_t count);
 #endif //_FATFS_RAM_API_H

@@ -15,6 +15,7 @@
 #define RTW_WARN(x,...) do {} while (0)
 #define RTW_INFO(x,...) do {} while (0)
 #define RTW_DBG(x,...) do {} while (0)
+#define RTW_RESIDENT(x,...) do {}while(0)
 #define RTW_PRINT_SEL(x,...) do {} while (0)
 #define _RTW_PRINT(x, ...) do {} while (0)
 #define _RTW_ERR(x, ...) do {} while (0)
@@ -33,6 +34,14 @@
 #define _drv_info_			8
 #define _drv_dump_			9
 #define	_drv_debug_			10
+
+/* 220801 add new definition of debug log level */
+#define RTW_MSG_OFF             1
+#define RTW_MSG_RESIDENT   2
+#define RTW_MSG_ERROR         3
+#define RTW_MSG_WARNING    4
+#define RTW_MSG_INFO            5
+#define RTW_MSG_DBG             6
 
 
 #define _module_rtl871x_xmit_c_		BIT(0)
@@ -68,6 +77,9 @@
 #define _module_efuse_			BIT(29)
 #define _module_rtl8712_recv_c_		BIT(30)
 #define _module_rtl8712_led_c_		BIT(31)
+#define _module_he_connect_			BIT(32)
+#define _module_csi_			BIT(33)
+#define _module_tx_pwr_			BIT(34)
 
 #undef _MODULE_DEFINE_
 
@@ -182,6 +194,36 @@ extern u16 GlobalDebugLevel;
 #else
 #include <diag.h> // for DRIVER_PREFIX
 #endif
+
+/* 220728:add new definition of RTW_ERR\RTW_WARN\RTW_RESIDENT */
+#if defined(_dbgdump_nr) && defined(RTW_MSG_LEVEL)
+
+#undef  RTW_RESIDENT
+#define RTW_RESIDENT(...)   \
+	do { \
+		if (RTW_MSG_LEVEL >= RTW_MSG_RESIDENT) { \
+			_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+			} \
+	} while(0)
+
+
+#undef RTW_ERR
+#define RTW_ERR(...) 	\
+	do {\
+		if (RTW_MSG_LEVEL >= RTW_MSG_ERROR) { \
+			_dbgdump_nr(DRIVER_PREFIX"[ERROR]" __VA_ARGS__);\
+		} \
+	} while(0)
+
+#undef  RTW_WARN
+#define RTW_WARN(...) \
+	do{	\
+		if (RTW_MSG_LEVEL >= RTW_MSG_WARNING) { \
+			_dbgdump_nr(DRIVER_PREFIX"[WARNING]" __VA_ARGS__); \
+		} \
+	} while (0)
+#endif
+
 
 #if 	defined (_dbgdump)
 #undef DBG_871X_LEVEL

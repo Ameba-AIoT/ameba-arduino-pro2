@@ -31,13 +31,16 @@ enum bb_ic_t {
 	BB_RTL8852B	=	BIT(2),
 	BB_RTL8852C	=	BIT(3),
 	BB_RTL8834A	=	BIT(4),
-	BB_RTL8192XB	=	BIT(5)
+	BB_RTL8192XB	=	BIT(5),
+	BB_RTL8730E	=	BIT(6),
+	BB_RTL8720E= 	BIT(7)
 };
 
 enum bb_ic_sub_t {
 	BB_IC_SUB_TYPE_8852B_8852B	=	20,
 	BB_IC_SUB_TYPE_8852B_8852BP,
-
+	BB_IC_SUB_TYPE_8730E_8730E = 30,
+	BB_IC_SUB_TYPE_8720E_8720E = 40,
 	BB_IC_SUB_TYPE_8192XB_8192XB	=	50,
 	BB_IC_SUB_TYPE_8192XB_8832BR,
 	BB_IC_SUB_TYPE_8192XB_8832BR_VT
@@ -59,7 +62,7 @@ enum bb_cr_t {
 #define BB_IC_AC_3SS		0
 #define BB_IC_AC_4SS		0
 
-#define BB_IC_AX_1SS		0
+#define BB_IC_AX_1SS		(BB_RTL8730E | BB_RTL8720E)
 #define BB_IC_AX_2SS		(BB_RTL8852A | BB_RTL8852B | BB_RTL8852C |\
 				 BB_RTL8192XB)
 #define BB_IC_AX_3SS		0
@@ -87,7 +90,7 @@ enum bb_cr_t {
 
 #define BB_IC_AX_AP		(BB_RTL8852A | BB_RTL8834A)
 #define BB_IC_AX_AP2		(BB_RTL8852C | BB_RTL8192XB)
-#define BB_IC_AX_CLIENT		(BB_RTL8852B)
+#define BB_IC_AX_CLIENT		(BB_RTL8852B | BB_RTL8730E | BB_RTL8720E)
 
 /*@==========================================================================*/
 
@@ -99,69 +102,69 @@ enum bb_cr_t {
 
 /*@==========================================================================*/
 #if defined(BB_8852A_2_SUPPORT) || defined(BB_8852C_SUPPORT)
-#define HALBB_COMPILE_IC_DBCC
+	#define HALBB_COMPILE_IC_DBCC
 #endif
 
 #if defined(BB_8852A_2_SUPPORT) || defined(BB_8852B_SUPPORT) || defined(BB_8852C_SUPPORT)
-/* FW OFFLOAD will be used in non-AP-only ICs*/
-#define HALBB_COMPILE_IC_FWOFLD
+	/* FW OFFLOAD will be used in non-AP-only ICs*/
+	#define HALBB_COMPILE_IC_FWOFLD
 #endif
 
-#if defined(RTL8851A_SUPPORT)
-#define HALBB_COMPILE_IC_1SS
+#if defined(RTL8851A_SUPPORT) || defined(BB_8720E_SUPPORT) || defined(BB_8730E_SUPPORT)
+	#define HALBB_COMPILE_IC_1SS
 #endif
 
 #if (defined(BB_8852A_2_SUPPORT) || defined(BB_8852B_SUPPORT) ||\
      defined(BB_8852C_SUPPORT) || defined(BB_8192XB_SUPPORT))
-#define HALBB_COMPILE_IC_2SS
+	#define HALBB_COMPILE_IC_2SS
 #endif
 
 #if defined(RTL8853A_SUPPORT)
-#define HALBB_COMPILE_IC_3SS
+	#define HALBB_COMPILE_IC_3SS
 #endif
 
 #if defined(RTL8834A_SUPPORT)
-#define HALBB_COMPILE_IC_4SS
+	#define HALBB_COMPILE_IC_4SS
 #endif
 
 /*@==========================================================================*/
 #if (defined(HALBB_COMPILE_IC_4SS))
-#define HALBB_COMPILE_ABOVE_4SS
+	#define HALBB_COMPILE_ABOVE_4SS
 #endif
 
 #if (defined(HALBB_COMPILE_IC_3SS) || defined(HALBB_COMPILE_ABOVE_4SS))
-#define HALBB_COMPILE_ABOVE_3SS
+	#define HALBB_COMPILE_ABOVE_3SS
 #endif
 
 #if (defined(HALBB_COMPILE_IC_2SS) || defined(HALBB_COMPILE_ABOVE_3SS))
-#define HALBB_COMPILE_ABOVE_2SS
+	#define HALBB_COMPILE_ABOVE_2SS
 #endif
 
 #if (defined(HALBB_COMPILE_IC_1SS) || defined(HALBB_COMPILE_ABOVE_2SS))
-#define HALBB_COMPILE_ABOVE_1SS
+	#define HALBB_COMPILE_ABOVE_1SS
 #endif
 
 #if (defined(HALBB_COMPILE_ABOVE_4SS))
-#define HALBB_MAX_PATH	4
+	#define HALBB_MAX_PATH	4
 #elif (defined(HALBB_COMPILE_ABOVE_3SS))
-#define HALBB_MAX_PATH	3
+	#define HALBB_MAX_PATH	3
 #elif (defined(HALBB_COMPILE_ABOVE_2SS))
-#define HALBB_MAX_PATH	2
+	#define HALBB_MAX_PATH	2
 #else
-#define HALBB_MAX_PATH	1
+	#define HALBB_MAX_PATH	1
 #endif
 /*@==========================================================================*/
 
 #if (defined(BB_8852A_2_SUPPORT))
-#define HALBB_COMPILE_AP_SERIES
+	#define HALBB_COMPILE_AP_SERIES
 #endif
 
 #if (defined(BB_8852C_SUPPORT) || defined(BB_8192XB_SUPPORT))
-#define HALBB_COMPILE_AP2_SERIES
+	#define HALBB_COMPILE_AP2_SERIES
 #endif
 
-#if (defined(BB_8852B_SUPPORT))
-#define HALBB_COMPILE_CLIENT_SERIES
+#if (defined(BB_8852B_SUPPORT) || defined(BB_8730E_SUPPORT) || defined(BB_8720E_SUPPORT))
+	#define HALBB_COMPILE_CLIENT_SERIES
 #endif
 
 /*@==========================================================================*/
@@ -201,7 +204,7 @@ enum halbb_rate_table {
 	BB_VHT_5SS_MCS0	= 320,
 	BB_VHT_6SS_MCS0	= 336,
 	BB_VHT_7SS_MCS0	= 352,
-	BB_VHT_8SS_MCS0	= 368,
+	BB_VHT_8SS_MCS0	= 368,	
 	BB_HE_1SS_MCS0		= 384,	/*0x3000000*/
 	BB_HE_2SS_MCS0		= 400,
 	BB_HE_3SS_MCS0		= 416,
@@ -209,7 +212,7 @@ enum halbb_rate_table {
 	BB_HE_5SS_MCS0		= 448,
 	BB_HE_6SS_MCS0		= 464,
 	BB_HE_7SS_MCS0		= 480,
-	BB_HE_8SS_MCS0		= 496
+	BB_HE_8SS_MCS0		= 496	
 };
 
 enum halbb_legacy_spec_rate {
@@ -270,21 +273,21 @@ enum halbb_legacy_spec_rate {
 #define	HE_RATE_NUM_1SS		HE_VHT_NUM_MCS
 
 #if (defined(HALBB_COMPILE_ABOVE_4SS))
-#define	HT_RATE_NUM	HT_RATE_NUM_4SS
-#define	VHT_RATE_NUM	VHT_RATE_NUM_4SS
-#define	HE_RATE_NUM	HE_RATE_NUM_4SS
+	#define	HT_RATE_NUM	HT_RATE_NUM_4SS
+	#define	VHT_RATE_NUM	VHT_RATE_NUM_4SS
+	#define	HE_RATE_NUM	HE_RATE_NUM_4SS
 #elif (defined(HALBB_COMPILE_ABOVE_3SS))
-#define	HT_RATE_NUM	HT_RATE_NUM_3SS
-#define	VHT_RATE_NUM	VHT_RATE_NUM_3SS
-#define	HE_RATE_NUM	HE_RATE_NUM_3SS
+	#define	HT_RATE_NUM	HT_RATE_NUM_3SS
+	#define	VHT_RATE_NUM	VHT_RATE_NUM_3SS
+	#define	HE_RATE_NUM	HE_RATE_NUM_3SS
 #elif (defined(HALBB_COMPILE_ABOVE_2SS))
-#define	HT_RATE_NUM	HT_RATE_NUM_2SS
-#define	VHT_RATE_NUM	VHT_RATE_NUM_2SS
-#define	HE_RATE_NUM	HE_RATE_NUM_2SS
+	#define	HT_RATE_NUM	HT_RATE_NUM_2SS
+	#define	VHT_RATE_NUM	VHT_RATE_NUM_2SS
+	#define	HE_RATE_NUM	HE_RATE_NUM_2SS
 #else
-#define	HT_RATE_NUM	HT_RATE_NUM_1SS
-#define	VHT_RATE_NUM	VHT_RATE_NUM_1SS
-#define	HE_RATE_NUM	HE_RATE_NUM_1SS
+	#define	HT_RATE_NUM	HT_RATE_NUM_1SS
+	#define	VHT_RATE_NUM	VHT_RATE_NUM_1SS
+	#define	HE_RATE_NUM	HE_RATE_NUM_1SS
 #endif
 
 #define	LOW_BW_RATE_NUM		HE_RATE_NUM

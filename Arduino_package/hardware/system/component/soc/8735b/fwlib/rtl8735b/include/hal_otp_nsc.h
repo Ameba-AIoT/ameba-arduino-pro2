@@ -115,6 +115,7 @@ uint32_t NS_ENTRY hal_otp_sz_key_lock_nsc(uint8_t sz_key_idx);
 uint32_t NS_ENTRY hal_otp_ssz_key_wr_nsc(uint8_t ssz_key_idx, uint8_t *wr_data);
 uint32_t NS_ENTRY hal_otp_ssz_key_rd_nsc(uint8_t ssz_key_idx, uint8_t *rd_data);
 
+uint16_t NS_ENTRY hal_adc_rd_inter_r_nsc(void);
 int NS_ENTRY hal_user_otp_get_nsc(uint8_t offset, uint8_t len, uint8_t *buf);
 int NS_ENTRY hal_user_otp_set_nsc(uint8_t offset, uint8_t len, uint8_t *buf);
 int NS_ENTRY hal_otp_sb_key_get_nsc(uint8_t *psec_key, uint8_t key_type);
@@ -202,6 +203,7 @@ uint32_t hal_otp_sz_key_lock_nsc(uint8_t sz_key_idx);
 uint32_t hal_otp_ssz_key_wr_nsc(uint8_t ssz_key_idx, uint8_t *wr_data);
 uint32_t hal_otp_ssz_key_rd_nsc(uint8_t ssz_key_idx, uint8_t *rd_data);
 
+uint16_t hal_adc_rd_inter_r_nsc(void);
 int hal_user_otp_get_nsc(uint8_t offset, uint8_t len, uint8_t *buf);
 int hal_user_otp_set_nsc(uint8_t offset, uint8_t len, uint8_t *buf);
 int hal_otp_sb_key_get_nsc(uint8_t *psec_key, uint8_t key_type);
@@ -294,6 +296,7 @@ int hal_otp_ssz_lock_nsc(void);
 #define hal_otp_ssz_key_wr hal_otp_ssz_key_wr_nsc
 #define hal_otp_ssz_key_rd hal_otp_ssz_key_rd_nsc
 
+#define hal_adc_rd_inter_r hal_adc_rd_inter_r_nsc
 #define hal_user_otp_get hal_user_otp_get_nsc
 #define hal_user_otp_set hal_user_otp_set_nsc
 #if !defined(ENABLE_SECCALL_PATCH)

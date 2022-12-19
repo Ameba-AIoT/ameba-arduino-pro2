@@ -119,7 +119,7 @@ typedef struct MOVStreamContext {
     int ctts_sample;
     unsigned int sample_size;
     unsigned int sample_count;
-#if !(defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D))
+#if !(defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2))
     int *sample_sizes;
 #else
     int16_t *sample_sizes;
@@ -158,7 +158,7 @@ typedef struct MOVStreamContext {
     AVStereo3D *stereo3d;
     AVSphericalMapping *spherical;
     size_t spherical_size;
-#if defined(CONFIG_PLATFORM_8195A) || defined(CONFIG_PLATFORM_8721D)
+#if defined(CONFIG_PLATFORM_8195A) || defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2)
     int64_t chunk0_offset;
     int64_t current_pos;
 #endif

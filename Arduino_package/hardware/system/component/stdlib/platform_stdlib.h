@@ -56,11 +56,20 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
 #elif defined (CONFIG_PLATFORM_AMEBALITE)
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include "platform_stdlib_amebalite.h"
+#ifdef __cplusplus
+}
+#endif
+#elif defined (CONFIG_PLATFORM_AMEBADPLUS)
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "platform_stdlib_amebadplus.h"
 #ifdef __cplusplus
 }
 #endif

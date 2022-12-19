@@ -84,5 +84,6 @@ enum rts_osd_err_code rts_osd_set_frame_size(int chn_id, int frame_w, int frame_
 void rts_osd_stroke(uint8_t *dst, uint8_t *src, int width, int height, int ch_color, int stroke_color, enum rts_osd2_blk_fmt blk_fmt);
 void rts_osd_sync_from_sntp(int sntp_en);
 enum rts_osd_err_code rts_osd_get_available_block(int ch, int *num, int *available_block_idx);
+enum rts_osd_err_code rts_osd_update_info(int osd_type, void *osd_info);
 
 #endif	// OSD_API_H

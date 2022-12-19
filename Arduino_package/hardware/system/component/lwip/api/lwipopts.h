@@ -30,8 +30,9 @@
 #define IP_FRAG                 1
 #define ARP_QUEUEING            0
 
+#ifndef CONFIG_LWIP_DHCP_COARSE_TIMER
 #define CONFIG_LWIP_DHCP_COARSE_TIMER		0
-
+#endif
 /**
  * NO_SYS==1: Provides VERY minimal functionality. Otherwise,
  * use lwIP facilities.
@@ -54,12 +55,12 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEM_SIZE                (20*1024) //for ping 10k test
 #elif CONFIG_ETHERNET
 #define MEM_SIZE                (6*1024)  //for iperf test
-#elif defined(CONFIG_HIGH_TP_TEST) && CONFIG_HIGH_TP_TEST
-#define MEM_SIZE                (23*1024)
 #elif defined(CONFIG_PLATFORM_8721D)
 #define MEM_SIZE                (7*1024)
 #elif defined(CONFIG_PLATFORM_AMEBAD2)
 #define MEM_SIZE                (7*1024)
+#elif defined(CONFIG_PLATFORM_AMEBALITE)
+#define MEM_SIZE                 (7*TCP_MSS)
 #elif defined(ENABLE_AMAZON_COMMON)
 #define MEM_SIZE                (10*1024)
 #else
@@ -81,11 +82,8 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_TCP_PCB_LISTEN 5
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#ifdef CONFIG_HIGH_TP_TEST
-#define MEMP_NUM_TCP_SEG        60
-#else
 #define MEMP_NUM_TCP_SEG        20
-#endif
+
 /* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
    timeouts. */
 #define MEMP_NUM_SYS_TIMEOUT    10
@@ -97,8 +95,6 @@ a lot of data that needs to be copied, this should be set high. */
 #if WIFI_LOGO_CERTIFICATION_CONFIG
 #define PBUF_POOL_SIZE          60 //for ping 10k test
 #define IP_REASS_MAXAGE		1
-#elif defined(CONFIG_HIGH_TP_TEST) && CONFIG_HIGH_TP_TEST
-#define PBUF_POOL_SIZE          60
 #elif defined(ENABLE_AMAZON_COMMON)
 #define PBUF_POOL_SIZE          30
 #else
@@ -130,26 +126,19 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_MSS                 (1500 - 40)	  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
 
 /* TCP sender buffer space (bytes). */
-#ifdef CONFIG_HIGH_TP_TEST
-#define TCP_SND_BUF             (10*TCP_MSS)
-#else
 #define TCP_SND_BUF             (5*TCP_MSS)
-#endif
+
 /*  TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
   as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. */
-
-#ifdef CONFIG_HIGH_TP_TEST
-#define TCP_SND_QUEUELEN        (6* TCP_SND_BUF/TCP_MSS)
-#else
 #define TCP_SND_QUEUELEN        (4* TCP_SND_BUF/TCP_MSS)
-#endif
+
 
 /* TCP receive window. */
-#ifdef CONFIG_HIGH_TP_TEST
-#define TCP_WND                 (8*TCP_MSS)
-#elif defined(CONFIG_PLATFORM_8721D)
+#if defined(CONFIG_PLATFORM_8721D)
 #define TCP_WND                 (5*TCP_MSS)
 #elif defined(CONFIG_PLATFORM_AMEBAD2)
+#define TCP_WND                 (5*TCP_MSS)
+#elif defined(CONFIG_PLATFORM_AMEBALITE)
 #define TCP_WND                 (5*TCP_MSS)
 #elif defined(ENABLE_AMAZON_COMMON)
 #define TCP_WND                 (4*TCP_MSS)
@@ -216,6 +205,43 @@ extern unsigned int sys_now(void);
 #define TCP_KEEPIDLE_DEFAULT			10000UL
 #define TCP_KEEPINTVL_DEFAULT			1000UL
 #define TCP_KEEPCNT_DEFAULT			10U
+#endif
+
+#if defined(CONFIG_HIGH_TP_TEST)
+#if defined(CONFIG_PLATFORM_AMEBALITE) && defined (CONFIG_AS_INIC_AP)
+#undef MEM_SIZE
+#define MEM_SIZE                (26*TCP_MSS)
+
+#undef PBUF_POOL_SIZE
+#define PBUF_POOL_SIZE          64
+
+#undef TCP_SND_BUF
+#define TCP_SND_BUF             (24*TCP_MSS)
+
+#undef MEMP_NUM_TCP_SEG
+#define MEMP_NUM_TCP_SEG        (4* TCP_SND_BUF/TCP_MSS)
+
+#undef TCP_WND
+#define TCP_WND                 (16*TCP_MSS)
+#else
+#undef MEM_SIZE
+#define MEM_SIZE                (23*1024)
+
+#undef PBUF_POOL_SIZE
+#define PBUF_POOL_SIZE          60
+
+#undef TCP_SND_BUF
+#define TCP_SND_BUF             (10*TCP_MSS)
+
+#undef TCP_SND_QUEUELEN
+#define TCP_SND_QUEUELEN        (6* TCP_SND_BUF/TCP_MSS)
+
+#undef MEMP_NUM_TCP_SEG
+#define MEMP_NUM_TCP_SEG        60
+
+#undef TCP_WND
+#define TCP_WND                 (8*TCP_MSS)
+#endif
 #endif
 
 #if (defined(SUPPORT_UART_LOG_SERVICE) && (SUPPORT_UART_LOG_SERVICE)) \
@@ -424,7 +450,7 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #define DEFAULT_TCP_RECVMBOX_SIZE       600
 #define DEFAULT_RAW_RECVMBOX_SIZE       600
 #define DEFAULT_ACCEPTMBOX_SIZE         600
-#elif defined(CONFIG_INIC_IPC_HIGH_TP) && CONFIG_INIC_IPC_HIGH_TP
+#elif defined(CONFIG_INIC_IPC_HIGH_TP)
 #define TCPIP_MBOX_SIZE                 30
 #define DEFAULT_UDP_RECVMBOX_SIZE       18
 #define DEFAULT_TCP_RECVMBOX_SIZE       18
@@ -440,6 +466,19 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #endif
 #define DEFAULT_THREAD_STACKSIZE        500
 #define TCPIP_THREAD_PRIO               (configMAX_PRIORITIES - 2)
+
+#if defined(CONFIG_HIGH_TP_TEST)
+#if defined(CONFIG_PLATFORM_AMEBALITE) && defined (CONFIG_AS_INIC_AP)
+#undef TCPIP_MBOX_SIZE
+#define TCPIP_MBOX_SIZE                 20
+#undef DEFAULT_UDP_RECVMBOX_SIZE
+#define DEFAULT_UDP_RECVMBOX_SIZE       16
+#undef DEFAULT_TCP_RECVMBOX_SIZE
+#define DEFAULT_TCP_RECVMBOX_SIZE       16
+#undef MEMP_NUM_TCPIP_MSG_INPKT
+#define MEMP_NUM_TCPIP_MSG_INPKT        16
+#endif
+#endif
 
 /* Added by Realtek. For DHCP server reply unicast DHCP packets before the ip actually assigned. */
 #define ETHARP_SUPPORT_STATIC_ENTRIES   1

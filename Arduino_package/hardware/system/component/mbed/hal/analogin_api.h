@@ -6,20 +6,26 @@
  * @brief   This file provides following mbed Analog_in API
  ******************************************************************************
  * @attention
+ ******************************************************************************
+ * @attention
  *
- * Copyright (c) 2006-2013 ARM Limited
+ * Copyright(c) 2006 - 2022 Realtek Corporation. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ ******************************************************************************
  */
 #ifndef MBED_ANALOGIN_API_H
 #define MBED_ANALOGIN_API_H
@@ -70,6 +76,20 @@ float analogin_read(analogin_t *obj);
   * @retval : 16bit adc channel data(int)
   */
 uint16_t analogin_read_u16(analogin_t *obj);
+
+/**
+  * @brief Get channel voltage in mV according to conversion data from normal channel(0-5 & 7-9).
+  * @param adc_data: ADC conversion data from normal channel.
+  * @return Normal channel voltage in mV.
+  */
+uint32_t analogin_voltage_norm(uint16_t adc_data);
+
+/**
+  * @brief Get channel voltage in mV according to conversion data from VBAT channel(6).
+  * @param adc_data: ADC conversion data from VBAT channel.
+  * @return VBAT channel voltage in mV.
+  */
+uint32_t analogin_voltage_vbat(uint16_t adc_data);
 
 ///@}
 /*\@}*/

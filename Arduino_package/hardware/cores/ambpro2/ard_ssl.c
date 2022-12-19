@@ -248,7 +248,10 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                     break;
                 }
 
-                if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0, mbedtls_ctr_drbg_random, ssl_client->ctr_drbg ) != 0) {
+                // for mbedtls 3.0.0
+                //if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0, mbedtls_ctr_drbg_random, ssl_client->ctr_drbg ) != 0) {
+                // for mbedtls 2.28.1
+                if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0 ) != 0) {
                     printf("ERROR: mbedtls x509 parse client_rsa failed! \r\n");
                     ret = -1;
                     break;
@@ -256,14 +259,15 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                 mbedtls_ssl_conf_own_cert(ssl_client->conf, _cli_crt, _clikey_rsa);
             }
 
-
             if((mbedtls_ssl_setup(ssl_client->ssl, ssl_client->conf)) != 0) {
                 printf("ERROR: mbedtls ssl setup failed!\r\n");
                 ret = -1;
                 break;
             }
 
-            mbedtls_ssl_set_hostname(ssl_client->ssl, SNI_hostname);
+            if (mbedtls_ssl_set_hostname(ssl_client->ssl, SNI_hostname) != 0) {
+                printf("ERROR: mbedtls ssl set hostname failed.");
+            }
 
             ret = mbedtls_ssl_handshake(ssl_client->ssl);
             if (ret < 0) {

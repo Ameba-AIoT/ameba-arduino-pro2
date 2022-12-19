@@ -4,7 +4,7 @@
  *           for secure boot.
  *
  * @version  V1.00
- * @date     2022-07-08
+ * @date     2022-07-29
  *
  * @note
  *
@@ -60,6 +60,8 @@ extern "C"
 #define _ERRNO_BOOT_UNSUPPORT_VRF_ALG                                   (0x1E)
 #define _ERRNO_BOOT_UNSUPPORT_CTRL_OBJ                                  (0x1F)
 #define _ERRNO_BOOT_INVALID_VERSION_ANTI_ROLBK                          (0x20)
+#define _ERRNO_BOOT_ADDR_OUT_OF_RANGE                                   (0x21)
+
 
 /* Secure boot */
 #define _ERRNO_BOOT_SB_IMG_PBK_HASH_VRF_FAIL                            (0x30)
@@ -172,6 +174,58 @@ extern "C"
 #define AES_BLOCK_SIZE              (16)
 
 #define AES_GCM_TAG_SIZE_RATIO      (CACHE_LINE_SIZE_32_BYTE / AES_GCM_TAG_SIZE_4_BYTE)
+
+#define BOOT_DEVICE_NOR_FLSH_START_ADDR     (uint32_t)(0x08000000)
+#define BOOT_DEVICE_NOR_FLSH_LIMIT_ADDR     (uint32_t)(0x10000000)
+#define RAM_FUN_TABLE_VALID_ITCM_START_ADDR    (0x00010000)
+#define RAM_FUN_TABLE_VALID_ITCM_END_ADDR      (0x00030000)
+#define RAM_FUN_TABLE_VALID_DTCM_START_ADDR    (0x20000000)
+#define RAM_FUN_TABLE_VALID_DTCM_END_ADDR      (0x20004000)
+#define RAM_FUN_TABLE_VALID_START_ADDR         (0x20100000)
+#define RAM_FUN_TABLE_VALID_END_ADDR           (0x20180000)
+
+// NOR FLASH REGION CHECK
+#define CHK_BOOT_DEVICE_NOR_FLSH_REGION_VALID(flash_addr, p_valid) \
+    do { \
+        if ((flash_addr >= BOOT_DEVICE_NOR_FLSH_START_ADDR) && (flash_addr < BOOT_DEVICE_NOR_FLSH_LIMIT_ADDR)) { \
+            *(uint8_t *)(p_valid) = ENABLE; \
+        } else { \
+            *(uint8_t *)(p_valid) = DISABLE; \
+        } \
+    } while(0)
+
+// BOOT LOAD DESTINATION REGION CHECK
+#define CHK_BOOT_LOAD_DEST_REGION_VALID(base_addr, end_addr, dest_addr, load_size, p_valid) \
+    do { \
+        if (((dest_addr >= base_addr) && (dest_addr < end_addr)) && \
+            (((dest_addr+load_size) >= base_addr) && ((dest_addr+load_size) < end_addr))) { \
+            *(uint8_t *)(p_valid) = ENABLE; \
+        } else { \
+            *(uint8_t *)(p_valid) = DISABLE; \
+        } \
+    } while(0)
+
+#if defined(ROM_REGION)
+// Boot ROM Device Safe Load
+#define BOOT_ROM_SAFE_LOAD_DEVICE_TO_MEM(dst, src, size, max_size) \
+    do { \
+        if (size > max_size) { \
+            _memcpy(dst, src, max_size); \
+        } else { \
+            _memcpy(dst, src, size); \
+        } \
+    } while(0)
+#else
+// Boot RAM Device Safe Load
+#define BOOT_RAM_SAFE_LOAD_DEVICE_TO_MEM(dst, src, size, max_size) \
+    do { \
+        if (size > max_size) { \
+            memcpy(dst, src, max_size); \
+        } else { \
+            memcpy(dst, src, size); \
+        } \
+    } while(0)
+#endif
 
 // IMG SELECT CORE FUNC
 #define IMG_SELECT_LATEST_LOAD_CORE(img1_ver, img2_ver, img1_timst, img2_timst, img1_idx, img2_idx, img_ld_idx) \
@@ -365,6 +419,7 @@ typedef struct Flash_SEC_CRYPTO_DEC_INFO_s {
 #define SECT_HDR_RESV6_SIZE                         (16)
 #define SECT_HDR_NXTOFFSET_NULL                     (0xFFFFFFFF)
 #define SECT_HDR_LD_VRF_HASH_MAX_SIZE               (64)
+#define SECT_LD_VALID_TYPE_ID_MAX_SIZE              (7)
 
 #define MULTI_SENSOR_SET_INVALID_PTN1               (0xFFFFFFFF)
 #define MULTI_SENSOR_SET_INVALID_PTN2               (0xFEFEFEFE)
@@ -386,6 +441,7 @@ enum {
 	LD_SEL_IMG_FW           =   0x0,
 	LD_SEL_IMG_BOOT         =   0x1,
 	LD_SEL_IMG_KEYCERTI     =   0x2,
+	LD_SEL_IMG_PTBL         =   0x3,
 };
 
 enum {
@@ -718,7 +774,7 @@ typedef struct part_fst_info_s {
 typedef struct part_record_t_s {
 	uint32_t start_addr;        /*!< The start address of the image partition, it should be 4K-bytes aligned */
 	uint32_t length;            /*!< The size of the image partition, it should be times of 4K-bytes */
-	uint16_t type_id;           /*!< t he image type of the partition */
+	uint16_t type_id;           /*!< The image type of the partition */
 	uint8_t  resv1[5];          /*!< reserved */
 	uint8_t  valid;
 	uint8_t  resv2[16];         /*!< reserved */
@@ -732,6 +788,11 @@ typedef struct partition_tbl_s {
 typedef struct part_user_data_s {
 	uint8_t data[PARTITION_TBL_USER_DATA_SIZE];
 } part_user_data_t, *ppart_user_data_t;
+
+typedef struct partition_tbl_user_s {
+	partition_tbl_t     tbl_info;
+	part_user_data_t    user_data;
+} partition_tbl_user_t, *ppartition_tbl_user_t;
 
 typedef struct img_partition_tbl_s {
 	img_manifest_t      manifest;
@@ -1027,6 +1088,13 @@ typedef struct part_tbl_info_s {
 	partition_tbl_t *part_tbl_raw_data;
 
 } part_tbl_info_t, *ppart_tbl_info_t;
+
+typedef struct boot_load_img_cur_info_s {
+	uint8_t sbl_cfg;
+	uint8_t resv1[3];
+	uint8_t *pIMG_data;
+	uint32_t resv2[2];
+} boot_load_img_cur_info_t, *pboot_load_img_cur_info_t;
 
 typedef union {
 	__IOM uint8_t byte;

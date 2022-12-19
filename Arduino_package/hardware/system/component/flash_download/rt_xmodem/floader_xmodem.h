@@ -52,7 +52,9 @@
 #define	XM_TXREG	0x29		/* Write REG or RAM, AZ ACUT ROM not support */
 #define	XM_RXREG	0x31		/* Read REG or RAM, AZ ACUT ROM not support */
 //#define	XM_REDOWNLOAD 0x35
+#define	XM_OTP_RRAW		0x56
 #define	XM_OTP_WRAW		0x57
+#define	XM_OTP_RMAP		0x60
 #define	XM_OTP_WMAP		0x61
 
 

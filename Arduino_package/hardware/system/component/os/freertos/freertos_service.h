@@ -19,7 +19,7 @@ extern "C" {
 //	Platform dependent include file
 // --------------------------------------------
 #if defined(CONFIG_PLATFORM_8735B)
-#include "basic_types.h"
+//#include "basic_types.h"
 #endif
 
 #ifdef __cplusplus
@@ -28,10 +28,10 @@ extern "C" {
 
 #if defined(CONFIG_PLATFORM_8195A) || defined(CONFIG_PLATFORM_8195BHP) || defined(CONFIG_PLATFORM_8710C) || defined(CONFIG_PLATFORM_8735B)
 #include "platform_stdlib.h"
-extern VOID RtlUdelayOS(u32 us);
+//extern VOID RtlUdelayOS(u32 us);
 #elif defined(CONFIG_PLATFORM_8711B)
 #include "platform_stdlib.h"
-#elif defined(CONFIG_PLATFORM_8721D) || (defined CONFIG_PLATFORM_AMEBAD2) || (defined CONFIG_PLATFORM_AMEBALITE)
+#elif defined(CONFIG_PLATFORM_8721D) || (defined CONFIG_PLATFORM_AMEBAD2) || (defined CONFIG_PLATFORM_AMEBALITE) || (defined CONFIG_PLATFORM_AMEBADPLUS)
 #include "platform_stdlib.h"
 #elif defined(CONFIG_HARDWARE_8188F)
 #include "platform_stdlib.h"
@@ -57,7 +57,7 @@ extern "C" {
 
 #if (defined CONFIG_GSPI_HCI || defined CONFIG_SDIO_HCI) || defined(CONFIG_LX_HCI)
 /* For SPI interface transfer and us delay implementation */
-#if !defined(CONFIG_PLATFORM_8195A) && !defined(CONFIG_PLATFORM_8711B) && !defined(CONFIG_PLATFORM_8721D)  && !defined(CONFIG_PLATFORM_8195BHP) && !defined(CONFIG_PLATFORM_8710C) && !defined(CONFIG_PLATFORM_AMEBAD2) && !defined(CONFIG_PLATFORM_AMEBALITE) && !defined(CONFIG_PLATFORM_8735B)
+#if !defined(CONFIG_PLATFORM_8195A) && !defined(CONFIG_PLATFORM_8711B) && !defined(CONFIG_PLATFORM_8721D)  && !defined(CONFIG_PLATFORM_8195BHP) && !defined(CONFIG_PLATFORM_8710C) && !defined(CONFIG_PLATFORM_AMEBAD2) && !defined(CONFIG_PLATFORM_AMEBALITE) && !defined(CONFIG_PLATFORM_AMEBADPLUSs) && !defined(CONFIG_PLATFORM_8735B)
 #include <rtwlan_bsp.h>
 #endif
 #endif
@@ -183,16 +183,21 @@ static __inline _list *get_next(_list	*list)
 	return list->next;
 }
 
+static __inline _list *get_prev(_list	*list)
+{
+	return list->prev;
+}
+
 static __inline _list	*get_list_head(_queue	*queue)
 {
 	return (&(queue->queue));
 }
 
 #define LIST_CONTAINOR(ptr, type, member) \
-	((type *)((char *)(ptr)-(SIZE_T)((char *)&((type *)ptr)->member - (char *)ptr)))
+	((type *)(void*)((char *)(ptr)-(SIZE_T)((char *)&((type *)(void*)ptr)->member - (char *)ptr)))
 //#define container_of(p,t,n) (t*)((p)-&(((t*)0)->n))
 #define container_of(ptr, type, member) \
-			((type *)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))
+			((type *)(void*)((char *)(ptr)-(SIZE_T)(&((type *)0)->member)))
 #define TASK_PRORITY_LOW  				1
 #define TASK_PRORITY_MIDDLE   			2
 #define TASK_PRORITY_HIGH    			3
@@ -282,7 +287,7 @@ void cli(void);
 
 extern int rtw_if_wifi_thread(char *name);
 
-#if (defined CONFIG_PLATFORM_8711B) || (defined CONFIG_PLATFORM_8721D)|| (defined CONFIG_PLATFORM_AMEBAD2) || (defined CONFIG_PLATFORM_AMEBALITE)
+#if (defined CONFIG_PLATFORM_8711B) || (defined CONFIG_PLATFORM_8721D)|| (defined CONFIG_PLATFORM_AMEBAD2) || (defined CONFIG_PLATFORM_AMEBALITE) || (defined CONFIG_PLATFORM_AMEBADPLUS)
 extern u32 random_seed;
 #endif
 

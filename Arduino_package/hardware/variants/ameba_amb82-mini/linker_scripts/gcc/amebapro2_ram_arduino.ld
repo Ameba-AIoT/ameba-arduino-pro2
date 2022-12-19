@@ -1,5 +1,12 @@
 INCLUDE "romsym_is.so"
 
+/* unit - Mega byte */
+DDR_SIZE = 128;
+NN_SIZE = 16;
+
+DDR_END = 0x70000000 + (DDR_SIZE - NN_SIZE)*1024*1024;
+NN_END  = 0x70000000 + (DDR_SIZE)*1024*1024;
+
 /* FPGA Linker script to configure memory regions.  */
 MEMORY
 {
@@ -12,9 +19,12 @@ MEMORY
   
   /* Jump cross 0x20100200 ~ 0x20101200 for NS ROM code used */
   /* Jump cross 0x20101200 ~ 0x20105200 for Bootloader RAM code used */
-  RAM_FUN_TABLE (rwx)   : ORIGIN = 0x20105200, LENGTH = 0x201052F0 - 0x20105200  /* 240B */
-  RAM_IMG_SIGN (rwx)    : ORIGIN = 0x201052F0, LENGTH = 0x20105300 - 0x201052F0  /*  16B */
-  RAM (rwx)             : ORIGIN = 0x20105300, LENGTH = 0x20177B00 - 0x20105300  /* 458KB */
+  /* Jump cross 0x20105200 ~ 0x20106200 for Bootloader RAM BSS  used */
+  RAM_FUN_TABLE (rwx)   : ORIGIN = 0x20106200, LENGTH = 0x201062F0 - 0x20106200  /* 240B */
+  RAM_IMG_SIGN (rwx)    : ORIGIN = 0x201062F0, LENGTH = 0x20106300 - 0x201062F0  /*  16B */
+  RAM_1 (rwx)           : ORIGIN = 0x20106300, LENGTH = 0x20120000 - 0x20106300  /* 107KB */
+  RAM_RETENTION (rwx)   : ORIGIN = 0x20120000, LENGTH = 0x20140000 - 0x20120000  /* 128KB retention data */
+  RAM_2 (rwx)           : ORIGIN = 0x20140000, LENGTH = 0x20177B00 - 0x20140000  /* 222KB */
   RAM_NC (rwx)          : ORIGIN = 0x20177B00, LENGTH = 0x20179800 - 0x20177B00  /*  7KB*/
   /* Jump cross 0x2017BB00 ~ 0x20180000 for S ROM code used*/
   
@@ -22,14 +32,10 @@ MEMORY
 						/* Raymond  workaround for JIRA-537 issue 0x70000000 --> 0x70000040 */
 						  
   VOE    (rwx)          : ORIGIN = 0x70000000, LENGTH = 0x70100000 - 0x70000000	/*  1MB */
-/* DDR 64M */
-  /*DDR    (rwx) 		    : ORIGIN = 0x70100000, LENGTH = 0x73800000 - 0x70100000*/ /* 55MB */
-  /*NN     (rwx)      	: ORIGIN = 0x73800000, LENGTH = 0x74000000 - 0x73800000*/	/* 8MB */
 
-/* DDR 128M */
-  DDR    (rwx) 			: ORIGIN = 0x70100000, LENGTH = 0x77800000 - 0x70100000 /* 55 + 64MB */
-  NN     (rwx)      	: ORIGIN = 0x77800000, LENGTH = 0x78000000 - 0x77800000 /* 8MB */  
-  
+/* DDR */
+  DDR    (rwx) 			: ORIGIN = 0x70100000, LENGTH = DDR_END - 0x70100000 /* 55 + 64MB */
+  NN     (rwx)      	: ORIGIN =    DDR_END, LENGTH = NN_END - DDR_END 	 /* 8MB */  
   
   BTRACE (rx)          : ORIGIN = 0x00800000, LENGTH = 0x00C00000 - 0x00800000	/* Bluetooth Trace */
 }
@@ -74,7 +80,7 @@ ENTRY(Reset_Handler)
 _start_addr = 0x10000000;
 ENTRY(_start_addr)
 
-__sram_end__		= ORIGIN(RAM) + LENGTH(RAM);
+__sram_end__		= ORIGIN(RAM_2) + LENGTH(RAM_2);
 __eram_end__		= ORIGIN(DDR) + LENGTH(DDR);		
 
 __voe_code_size__   = LENGTH(VOE);
@@ -141,16 +147,6 @@ SECTIONS
 
 	} > RAM_FUN_TABLE
 
-	.ddr.bss :
-	{
-		. = ALIGN(4);
-		__eram_bss_start__ = .;	
-		*(.sdram.bss*)
-		*mem.*o*(.bss*)
-		*memp.*o*(.bss*)
-		__eram_bss_end__ = .;			
-	} > DDR	
-    
     /* for C++ supporting */
 	.ddr.code.text : 
     {
@@ -196,7 +192,7 @@ SECTIONS
 			
 		. = ALIGN(4);
 		__ram_code_text_end__ = .;
-	} > RAM
+	} > RAM_1
 
 
 	.ram.data : AT (__etext)
@@ -254,7 +250,7 @@ SECTIONS
 		/* All data end */
 		__data_end__ = .;
 
-	} > RAM
+	} > RAM_1
 
 	.ram.code_rodata : AT (__ram_code_rodata_start__)
 	{
@@ -272,14 +268,18 @@ SECTIONS
 		*(.ram.hal_pmc.rodata*)
 		. = ALIGN(4);
 		__ram_code_rodata_end__ = .;
-	} > RAM
-	
+	} > RAM_1
+
+	.ram.retention.data :
+	{
+		*(.retention.data*)
+	} > RAM_RETENTION
+
 	.ram.bss :
 	{
 		. = ALIGN(4);
 		__bss_start__ = .;
 		//*lib_a*(.bss*)
-		*(.bss*)
 		*(COMMON)
 		*hal_sys_ctrl.*o*(.bss*)
 		*hal_dram*.*o*(.bss*)
@@ -289,7 +289,7 @@ SECTIONS
 		*(.ram.*.bss*)
 		*(.ram.hal_pmc.bss*)
 		*ram_start.*o*(COMMON)
-	} > RAM
+	} > RAM_2
 
 	.non_secure.bss :
 	{
@@ -303,7 +303,7 @@ SECTIONS
 		__bss_end__ = .;
 		__sram_heap_start__ = .;
 		
-	} > RAM
+	} > RAM_2
 
 	/* Non-Cacheable memory, the memory range should be configured by a MPU region */
 	.non_cacheable :
@@ -387,6 +387,15 @@ SECTIONS
 		*(.sdram.data*)
 		*(.ddr.data)
 		__eram_data_end__ = .;
+	} > DDR
+
+	.ddr.bss :
+	{
+		. = ALIGN(4);
+		__eram_bss_start__ = .;
+		*(.bss*)
+		*(.sdram.bss*)
+		__eram_bss_end__ = .;
 		__eram_heap_start__ = .;
 	} > DDR
 
