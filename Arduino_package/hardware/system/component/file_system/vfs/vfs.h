@@ -129,6 +129,7 @@ typedef struct {
 	int (*eof)(vfs_file *file);
 	int (*error)(vfs_file *file); //ferror
 	int (*tell)(vfs_file *file);
+	int (*ftruncate)(vfs_file *file, off_t length);
 	int (*fputc)(int character, vfs_file *file);
 	int (*fputs)(const char *str, vfs_file *file);
 	char *(*fgets)(char *str, int num, vfs_file *file);
@@ -194,6 +195,7 @@ int mkdir(const char *pathname, mode_t mode);
 int access(const char *pathname, int mode);
 int stat(const char *path, struct stat *buf);
 int alphasort(const struct dirent **a, const struct dirent **b);
+int ftruncate(FILE *fd, off_t length);
 
 #ifdef __cplusplus
 }

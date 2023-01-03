@@ -598,6 +598,9 @@ struct mlme_ext_priv {
 	u8	cur_ch_offset;//PRIME_CHNL_OFFSET
 	u8	cur_wireless_mode;	// NETWORK_TYPE
 	u8	max_chan_nums;
+#if defined(CONFIG_FAST_PSCAN_THRESHOLD)
+	int fast_pscan_threshold;
+#endif
 	RT_CHANNEL_INFO		channel_set[MAX_CHANNEL_NUM + 1];
 #ifdef CONFIG_P2P_NEW
 	RT_CHANNEL_INFO		social_channel_set[4];

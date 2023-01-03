@@ -2,7 +2,7 @@
 menu.EraseFlash=* Erase Flash
 menu.AutoUploadMode=* Auto Flash Mode
 menu.UploadModeSelection=* Upload Mode
-menu.UploadVidoeBin=**      Vidoe ISP Bin
+menu.UploadVideoBin=**      Video ISP Bin
 menu.UploadNeuralNetworkBin=**      Neural Network Bin
 menu.StdLibInit=* Standard Lib Enable
 
@@ -46,10 +46,10 @@ Ameba_AMB82-MINI.menu.UploadModeSelection.NormalMode.build.upload_mode=NormalEna
 Ameba_AMB82-MINI.menu.UploadModeSelection.SpeedMode=Speed Mode
 Ameba_AMB82-MINI.menu.UploadModeSelection.SpeedMode.build.upload_mode=SpeedEnable
 
-Ameba_AMB82-MINI.menu.UploadVidoeBin.No=No
-Ameba_AMB82-MINI.menu.UploadVidoeBin.No.build.upload_mode_voe=VOEno
-Ameba_AMB82-MINI.menu.UploadVidoeBin.Yes=Yes
-Ameba_AMB82-MINI.menu.UploadVidoeBin.Yes.build.upload_mode_voe=VOEyes
+Ameba_AMB82-MINI.menu.UploadVideoBin.No=No
+Ameba_AMB82-MINI.menu.UploadVideoBin.No.build.upload_mode_voe=VOEno
+Ameba_AMB82-MINI.menu.UploadVideoBin.Yes=Yes
+Ameba_AMB82-MINI.menu.UploadVideoBin.Yes.build.upload_mode_voe=VOEyes
 
 Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No=No
 Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No.build.upload_mode_nn=NNno

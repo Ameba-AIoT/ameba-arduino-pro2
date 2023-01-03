@@ -362,6 +362,15 @@ SECTIONS
 		*(.rodata*)
 		*(.rodata.str1*)
 		*(.sdram.rodata*)
+		__test_array_start__ = .;
+		KEEP(*(.test_array*))
+		__test_array_end__ = .;
+		__testcmd_first_start__ = .;
+		KEEP(*(.testatcmd.start*))
+		__testcmd_first_end__ = .;	
+		__testcmd_array_start__ = .;
+		KEEP(*(.testatcmd.*))
+		__testcmd_array_end__ = .;			
 		__eram_rodata_end__ = .;
 	} > DDR	
 
@@ -397,6 +406,10 @@ SECTIONS
 		*(.sdram.bss*)
 		__eram_bss_end__ = .;
 		__eram_heap_start__ = .;
+		__used_nn_model_start = .;
+		/* just for post processing */
+		*(.used_nn_model)
+		__used_nn_model_end = .;
 	} > DDR
 
 	.voe :

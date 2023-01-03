@@ -65,6 +65,9 @@
 #define CONFIG_RX_RING_COUNT 32
 #define CONFIG_RX_REORDER_WIN_SIZE 16
 
+/* Configurations for WiFi driver setting */
+#define CONFIG_FAST_PSCAN_THRESHOLD -50
+
 /* Configurations for power saving */
 #define CONFIG_POWER_SAVING
 #ifdef CONFIG_POWER_SAVING
@@ -103,6 +106,7 @@
 #define CONFIG_PNO_CONTROL
 #define CONFIG_SMART_DTIM
 #define CONFIG_WOWLAN_IO_WDT
+#define CONFIG_WOWLAN_CONTROL
 
 /* For efuse or flash config start */
 #define CONFIG_EFUSE_SEPARATE

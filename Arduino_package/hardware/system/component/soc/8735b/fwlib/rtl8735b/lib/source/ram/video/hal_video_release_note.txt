@@ -1,4 +1,27 @@
 --------------------------------------------------------------------------	
+<12/16/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.7.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add larger range protection for interrupt enable/disable
+	2. Add more check rules for frame done/release error handling
+	3. Polish warning logs 
+
+	Video/ENC related
+	1. Add semaphore process when voe cmd timeout cases
+	2. VOE release support without isp source code
+	   old voe release version modify method 
+	   1. remove source/lib_isp source/isp
+	   2. used new release source/Makefile replace old version
+	   3. rebuild voe  
+
+
+	 
+Reviewer:
+--------------------------------------------------------------------------	
 <12/12/2022 15:00 Martin>
 Version : RTL8735B_VOE_1.3.6.2
 Modified Files:
