@@ -122,6 +122,10 @@ typedef struct _ADAPTER _adapter, ADAPTER, *PADAPTER;
 #include <rtw_vht.h>
 #endif
 
+#ifdef CONFIG_80211AX_HE
+#include <rtw_he.h>
+#endif
+
 #ifdef CONFIG_RTK_MESH
 #include <mesh.h>
 #include <hash_table.h>
@@ -132,6 +136,10 @@ typedef struct _ADAPTER _adapter, ADAPTER, *PADAPTER;
 #ifdef CONFIG_SAE_SUPPORT
 #include <mesh_sae.h>
 #endif
+#endif
+
+#ifdef CONFIG_TWT
+#include <rtw_twt.h>
 #endif
 
 #include <wlan_basic_types.h>
@@ -567,7 +575,7 @@ struct dvobj_priv {
 
 	struct mi_state iface_state;
 
-#if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8711B) ||defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || defined(CONFIG_RTL8720E)
+#if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8711B) ||defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 
 	struct macid_ctl_t macid_ctl;
 #endif

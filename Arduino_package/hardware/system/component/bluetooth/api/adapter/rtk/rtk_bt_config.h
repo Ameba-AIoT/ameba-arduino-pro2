@@ -7,19 +7,19 @@
 #ifndef __RTK_BT_CONFIG_H__
 #define __RTK_BT_CONFIG_H__
 
-#if defined(CONFIG_PLATFORM_8710C) || defined(CONFIG_PLATFORM_8721D)
+#include "platform_opts_bt.h"
+#if UPPER_STACK_VERSION == VERSION_2019
 #include <bt_flags.h>
-#define UPPER_STACK_VERSION	VERSION_2019
-#elif defined(CONFIG_PLATFORM_8735B) || defined(CONFIG_PLATFORM_AMEBAD2)
+#elif UPPER_STACK_VERSION == VERSION_2021
 #include "upperstack_config.h"
-#define UPPER_STACK_VERSION	VERSION_2021
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B)
+#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2)      \
+    || defined(CONFIG_PLATFORM_8735B) || defined(CONFIG_PLATFORM_AMEBALITE)
 #define GAP_MAX_LINKS  4
 #elif defined(CONFIG_PLATFORM_8710C)
 #define GAP_MAX_LINKS  2
@@ -27,12 +27,12 @@ extern "C" {
 #define GAP_MAX_LINKS  2
 #endif
 
-/** @brief  Config set physical: 0-Not built in, 1-built in, use user command to set*/
-#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B)
-#define F_BT_LE_5_0_SET_PHY_SUPPORT         1
-#elif defined(CONFIG_PLATFORM_8710C)
-#define F_BT_LE_5_0_SET_PHY_SUPPORT         0
-#endif
+// /** @brief  Config set physical: 0-Not built in, 1-built in, use user command to set*/
+// #if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B)
+// #define F_BT_LE_5_0_SET_PHY_SUPPORT         1
+// #elif defined(CONFIG_PLATFORM_8710C)
+// #define F_BT_LE_5_0_SET_PHY_SUPPORT         0
+// #endif
 
 /**
  * @brief Default TX/RX preferred parameters 
@@ -43,7 +43,7 @@ extern "C" {
 #elif defined(CONFIG_PLATFORM_8721D)
 #define GAP_PHYS_PREFER_TX (GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT)
 #define GAP_PHYS_PREFER_RX (GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT)
-#elif defined(CONFIG_PLATFORM_8735B) || defined(CONFIG_PLATFORM_AMEBAD2)
+#elif defined(CONFIG_PLATFORM_8735B) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_AMEBALITE)
 #define GAP_PHYS_PREFER_TX (GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT | GAP_PHYS_PREFER_CODED_BIT)
 #define GAP_PHYS_PREFER_RX (GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT | GAP_PHYS_PREFER_CODED_BIT)
 #endif
@@ -61,6 +61,33 @@ extern "C" {
 
 #define RTK_BT_GATTS_SERVICE_NUM    12
 #define RTK_BT_GATTS_CCCD_NUM       10
+
+#if defined(CONFIG_PLATFORM_AMEBAD2)
+#if defined(F_BT_BREDR_SUPPORT) && F_BT_BREDR_SUPPORT
+#define RTK_NEW_BREDR_SUPPORT 0
+#else
+#define RTK_NEW_BREDR_SUPPORT 0
+#endif
+
+#if defined(F_BT_LE_5_2_ISOC_CIS_SUPPORT) && F_BT_LE_5_2_ISOC_CIS_SUPPORT
+#define RTK_BLE_ISO_MGR_CIS_SUPPORT 0
+#else
+#define RTK_BLE_ISO_MGR_CIS_SUPPORT 0
+#endif
+
+#if defined(F_BT_LE_5_2_ISOC_BIS_SUPPORT) && F_BT_LE_5_2_ISOC_BIS_SUPPORT
+#define RTK_BLE_ISO_MGR_BIS_SUPPORT 0
+#else
+#define RTK_BLE_ISO_MGR_BIS_SUPPORT 0
+#endif
+
+#if RTK_BLE_ISO_MGR_CIS_SUPPORT || RTK_BLE_ISO_MGR_BIS_SUPPORT
+#define RTK_BLE_ISO_MGR_SUPPORT 1
+#else
+#define RTK_BLE_ISO_MGR_SUPPORT 0
+#endif
+#endif /* CONFIG_PLATFORM_AMEBAD2 */
+
 
 #ifdef __cplusplus
 }

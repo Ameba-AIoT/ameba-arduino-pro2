@@ -567,7 +567,11 @@ static inline int atomic_dec_and_test(atomic_t *v)
  */
 static inline void *kcalloc(size_t n, size_t size, gfp_t flags)
 {
-	return (void *)RtlZmalloc(((n) * (size)));
+	void *tmp = malloc(n * size);
+	if (!tmp) {
+		memset(tmp, 0, n * size);
+	}
+	return tmp;
 }
 
 #ifndef GFP_ATOMIC

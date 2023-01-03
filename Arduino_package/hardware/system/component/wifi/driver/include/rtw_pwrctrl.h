@@ -405,6 +405,11 @@ struct pwrctrl_priv {
 	u8  serverkeepalive_enable;
 	u8  serverkeepalive_timeout_l;
 	u8  serverkeepalive_timeout_h;
+	u8  patternoffset;
+#endif
+
+#ifdef CONFIG_WOWLAN_CONTROL
+	u8  wowlan_disable;
 #endif
 };
 

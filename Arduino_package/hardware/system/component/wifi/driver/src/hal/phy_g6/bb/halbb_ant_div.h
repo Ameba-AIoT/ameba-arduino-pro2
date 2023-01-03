@@ -142,7 +142,7 @@ struct bb_antdiv_rate_info {
 	u16		main_pkt_cnt_vht[VHT_RATE_NUM];
 	/*HE*/
 	u16		main_pkt_cnt_he[HE_RATE_NUM];
-
+	
 	u16		main_max_cnt;
 	u16		main_max_idx;
 	/*====[Phy rate counter] aux ant=============================================*/
@@ -179,40 +179,40 @@ struct bb_antdiv_rate_info {
 };
 
 struct bb_antdiv_cr_info {
-	u32 path0_r_ant_train_en;
-	u32 path0_r_ant_train_en_m;
-	u32 path0_r_tx_ant_sel;
-	u32 path0_r_tx_ant_sel_m;
-	u32 path0_r_rfe_buf_en;
-	u32 path0_r_rfe_buf_en_m;
-	u32 path0_r_lnaon_agc;
-	u32 path0_r_lnaon_agc_m;
-	u32 path0_r_trsw_bit_bt;
-	u32 path0_r_trsw_bit_bt_m;
-	u32 path0_r_trsw_s;
-	u32 path0_r_trsw_s_m;
-	u32 path0_r_trsw_o;
-	u32 path0_r_trsw_o_m;
+	u32 path0_r_ant_train_en;			
+	u32 path0_r_ant_train_en_m;			
+	u32 path0_r_tx_ant_sel;				
+	u32 path0_r_tx_ant_sel_m;			
+	u32 path0_r_rfe_buf_en;				
+	u32 path0_r_rfe_buf_en_m;			
+	u32 path0_r_lnaon_agc;				
+	u32 path0_r_lnaon_agc_m;			
+	u32 path0_r_trsw_bit_bt;			
+	u32 path0_r_trsw_bit_bt_m;			
+	u32 path0_r_trsw_s;					
+	u32 path0_r_trsw_s_m;				
+	u32 path0_r_trsw_o;					
+	u32 path0_r_trsw_o_m;				
 	u32 path0_r_trswb_o;
-	u32 path0_r_trswb_o_m;
-	u32 path0_r_bt_force_antidx;
-	u32 path0_r_bt_force_antidx_m;
-	u32 path0_r_bt_force_antidx_en;
-	u32 path0_r_bt_force_antidx_en_m;
-	u32 path0_r_ant_module_rfe_opt;
-	u32 path0_r_ant_module_rfe_opt_m;
+	u32 path0_r_trswb_o_m;				
+	u32 path0_r_bt_force_antidx;		
+	u32 path0_r_bt_force_antidx_m;		
+	u32 path0_r_bt_force_antidx_en;		
+	u32 path0_r_bt_force_antidx_en_m;	
+	u32 path0_r_ant_module_rfe_opt;		
+	u32 path0_r_ant_module_rfe_opt_m;	
 	u32 path0_r_rfsw_tr;
 	u32 path0_r_rfsw_tr_m;
 	u32 path0_r_antsel;
-	u32 path0_r_antsel_m;
-	u32 path0_r_rfsw_ant_31_0;
-	u32 path0_r_rfsw_ant_31_0_m;
-	u32 path0_r_rfsw_ant_63_32;
-	u32 path0_r_rfsw_ant_63_32_m;
-	u32 path0_r_rfsw_ant_95_64;
-	u32 path0_r_rfsw_ant_95_64_m;
-	u32 path0_r_rfsw_ant_127_96;
-	u32 path0_r_rfsw_ant_127_96_m;
+	u32 path0_r_antsel_m;				
+	u32 path0_r_rfsw_ant_31_0;			
+	u32 path0_r_rfsw_ant_31_0_m;		
+	u32 path0_r_rfsw_ant_63_32;		
+	u32 path0_r_rfsw_ant_63_32_m;		
+	u32 path0_r_rfsw_ant_95_64;		
+	u32 path0_r_rfsw_ant_95_64_m;		
+	u32 path0_r_rfsw_ant_127_96;		
+	u32 path0_r_rfsw_ant_127_96_m;		
 };
 
 struct bb_antdiv_info {
@@ -225,7 +225,7 @@ struct bb_antdiv_info {
 	struct bb_antdiv_rate_info bb_rate_i;
 	/* For RSSI */
 	struct bb_antdiv_rssi_info bb_rssi_i;
-
+	
 	enum	bb_antdiv_mode_t antdiv_mode;
 	enum	bb_antdiv_method_t antdiv_method;
 	enum	bb_antdiv_mode_t pre_antdiv_mode;
@@ -253,7 +253,7 @@ struct bb_antdiv_info {
 	u16 tp_diff_th_high;
 	u16 tp_diff_th_low;
 	u8 evm_diff_th;
-
+	
 	/*Phy-sts related */
 	bool get_stats;
 	bool antdiv_use_ctrl_frame;
@@ -277,8 +277,8 @@ void halbb_antdiv_decision_state(struct bb_info *bb);
 void halbb_evm_based_antdiv(struct bb_info *bb);
 void halbb_antenna_diversity(struct bb_info *bb);
 void halbb_antdiv_phy_sts(struct bb_info *bb, u32 physts_bitmap,
-						  struct physts_rxd *desc);
+		       struct physts_rxd *desc);
 void halbb_antdiv_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					  char *output, u32 *_out_len);
+			      char *output, u32 *_out_len);
 #endif
 

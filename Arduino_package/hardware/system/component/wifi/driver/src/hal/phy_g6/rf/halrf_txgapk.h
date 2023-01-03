@@ -36,7 +36,7 @@ struct halrf_gapk_info {
 	bool is_gapk_enable;
 	u8 band[NUM];
 	u8 ch[NUM];
-	u8 bw[NUM];
+	u8 bw[NUM];	
 	s32 track_d[2][17];
 	s32 track_ta[2][17];
 	s32 power_d[2][17];

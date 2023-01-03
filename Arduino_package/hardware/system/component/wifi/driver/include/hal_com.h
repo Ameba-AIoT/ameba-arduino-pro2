@@ -22,10 +22,11 @@
 
 #include "HalVerDef.h"
 #include "hal_pg.h"
+#include "hal_def.h"
 #include "hal_intf.h"
 #include "hal_phy.h"
 #include "hal_phy_reg.h"
-#ifdef CONFIG_RTL8730A
+#if  defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8730E)
 #include "wififw_reg_rom.h"
 #elif defined(CONFIG_RTL8720E)
 #include "wififw_reg_ram.h"
@@ -38,10 +39,10 @@
 #endif
 #include "hal_wowlan_sd1.h"
 
-#if(PHYDM_LINUX_CODING_STYLE == 1)
+#if(PHYDM_VERSION > 1)
 #include "hal_com_c2h.h"
 #endif
-#include "hal_def.h"
+
 //----------------------------------------------------------------------------
 //       Rate Definition
 //----------------------------------------------------------------------------
@@ -263,7 +264,6 @@ typedef enum _CH_SW_USE_CASE {
 
 void dump_chip_info(HAL_VERSION	ChipVersion);
 
-#if (PHYDM_LINUX_CODING_STYLE==1)
 #define BAND_CAP_BIT_NUM	2
 
 #define BW_CAP_5M		BIT0
@@ -287,9 +287,6 @@ void dump_chip_info(HAL_VERSION	ChipVersion);
 #define WL_FUNC_FTM			BIT3
 #define WL_FUNC_BIT_NUM		4
 
-s8 rtw_get_sta_rx_nss(_adapter *adapter, struct sta_info *psta);
-#endif
-
 enum STAINFO_ITEM {
 	STAINFO_MACID = 0,
 	STAINFO_MACADDR = 1,
@@ -299,11 +296,10 @@ enum STAINFO_ITEM {
 	STAINFO_CHANDEF_OFFSET = 5,
 	STAINFO_CHANDEF_CH = 6,
 	STAINFO_CHANDEF_CENTER_CH = 7,
-	STAINFO_RSSI_STAT = 8,
-	STAINFO_TP_STATS = 9,
-	STAINFO_RAINFO_SGI = 10,
-	STAINFO_RAINFO_VHT = 11,
-	STAINFO_WIRELESS_MODE = 12,
+	STAINFO_TP_STATS = 8,
+	STAINFO_RAINFO_SGI = 9,
+	STAINFO_RAINFO_VHT = 10,
+	STAINFO_WIRELESS_MODE = 11,
 	STAINFO_MAX,
 };
 
@@ -343,6 +339,33 @@ void GetHwReg(PADAPTER padapter, u8 variable, u8 *val);
 void rtw_hal_sta_info_set(struct sta_info *psta, u8 type, u8 *val);
 int rtw_hal_sta_info_get(struct sta_info *psta, u8 type, u8 *val);
 
+/* ra registered after connecting success */
+void rtw_hal_ra_register(struct sta_info *psta, u8 rssi_level);
+
+/* ra  update */
+#if (PHYDM_VERSION == 2)
+void rtw_hal_update_sta_info(_adapter *padapter, struct wlan_network *pnetwork, struct sta_info *psta);
+void rtw_hal_update_sta_ra_info(_adapter *padapter, struct sta_info *psta);
+#define rtw_hal_ra_deregister(padapter, psta, is_connect)
+#define rtw_hal_ra_update(padapter, psta)
+
+#elif (PHYDM_VERSION == 3)
+void rtw_hal_update_sta_info(_adapter *padapter, struct wlan_network *pnetwork, struct sta_info *psta);
+void rtw_hal_ra_deregister(PADAPTER padapter, struct sta_info *psta, bool is_connect);
+void rtw_hal_update_sta_ra_info(_adapter *padapter, struct sta_info *psta);
+void rtw_hal_ra_update(PADAPTER padapter, struct sta_info *psta);
+
+#elif (PHYDM_VERSION == 1)
+#define rtw_hal_update_sta_info(padapter, pnetwork, psta)
+#define rtw_hal_ra_deregister(padapter, psta, is_connect)
+#define rtw_hal_update_sta_ra_info(padapter, psta)
+#define rtw_hal_ra_update(padapter, psta)
+#endif
+
+
+/* ax only, update phl_sta->asoc_cap */
+void rtw_hal_update_asoc_cap(_adapter *padapter, struct sta_info *psta);
+void rtw_hal_update_asoc_cap_apmode(_adapter *padapter, struct sta_info *psta);
 
 #if defined (CONFIG_RTL8188F) ||defined (CONFIG_RTL8192E) ||defined (CONFIG_RTL8723D)|| defined (CONFIG_RTL8711B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8735B)
 typedef enum _RT_MEDIA_STATUS {

@@ -3,7 +3,7 @@
  * @brief    Declare functions for boot from nor flash.
  *
  * @version  V1.00
- * @date     2022-06-19
+ * @date     2022-08-11
  *
  * @note
  *
@@ -31,6 +31,35 @@
 #define _FW_FLASH_BOOT_H_
 
 #include "fw_img_tlv.h"
+
+typedef struct norf_part_record_s {
+	uint32_t start_addr;        /*!< The start address of the image partition, it should be 4K-bytes aligned */
+	uint32_t length;            /*!< The size of the image, it should be times of 4K-bytes */
+	uint16_t type_id;           /*!< the image type of the partition */
+	uint16_t resv1;
+	uint32_t resv2[5];
+} norf_part_record_t, *pnorf_part_record_t;
+
+#define NOR_FLH_BANK_UINT_SHIFT         (24)
+#define NOR_FLH_BANK_UINT_SIZE          (0x1 << NOR_FLH_BANK_UINT_SHIFT)
+
+#define NOR_FLH_BANK_BIT_UINT_SHIFT     (7)
+#define NOR_FLH_BANK_BIT_UINT_SIZE      (0x1 << NOR_FLH_BANK_BIT_UINT_SHIFT)
+#define NOR_FLH_MAX_BANK_SEL            (4)
+
+enum NORFLH_MAX_SIZE_e {
+	NORFLH_MAX_SUP_SIZE_UNDER_16MB      = 0x0,
+	NORFLH_MAX_SUP_SIZE_16MB            = 0x1,
+	NORFLH_MAX_SUP_SIZE_32MB            = 0x2,
+	NORFLH_MAX_SUP_SIZE_64MB            = 0x3,
+};
+
+enum NORFLH_BANK_SEL_CFG_e {
+	NORFLH_BANK_SEL_0TO16MB       = 0x0,
+	NORFLH_BANK_SEL_16TO32MB      = 0x1,
+	NORFLH_BANK_SEL_32TO48MB      = 0x2,
+	NORFLH_BANK_SEL_48TO64MB      = 0x3,
+};
 
 #if defined(ROM_REGION)
 
@@ -94,6 +123,7 @@ int sb_rom_sect_ld_hash_chk_f(uint8_t *p_msg, uint32_t msglen, uint8_t *p_img_di
 int boot_rom_set_sjtag_nonfixed_key(const uint8_t sjtag_obj, sec_boot_info_t *p_sb_info);
 int sec_cfg_f_init(hal_sec_region_cfg_t *psb_sec_cfg_pending);
 uint8_t chk_rom_img_type_id_invalid(const uint16_t type_id);
+uint8_t chk_rom_sect_type_id_invalid(const uint16_t type_id);
 int sec_key_register_key_stg(sec_boot_info_t *p_sb_info);
 void flash_sec_crypto_xor_data(unsigned char *buf1, unsigned char *buf2, uint32_t len, unsigned char *result);
 void flash_sec_crypto_gen_iv(uint32_t flash_addr, uint32_t cahce_line_size, Flash_SEC_IV_Data_t *p_sec_iv, uint32_t iv_len);
@@ -106,7 +136,19 @@ void set_fw_img_rollback_check_en_ctrl(uint8_t en);
 uint8_t get_fw_img_rollback_check_en_ctrl(void);
 void rom_record_fw_ld_info(const uint8_t img_obj, void *pimg_info_export, void *img1_addr, void *img2_addr, img_manifest_ld_sel_t *pld_sel_info);
 void boot_rom_record_isp_iq_ld_fail_sts(uint32_t fail_record_role, int fail_ret);
+int rom_vrf_key_certi_from_device_load(void *device_ctrl_adptr, void *p_part_record, sec_boot_keycerti_t *psb_keycerti,
+									   sec_boot_info_t *p_sb_info, const uint8_t sbl_cfg);
+int sb_preld_img_manifest_data(const uint8_t *ptr, sec_boot_info_t *p_sb_info, void *p_sb_data, const uint8_t info_type);
+int rom_vrf_img_from_device_load(void *device_ctrl_adptr, void *p_part_record, void *p_img_data,
+								 sec_boot_info_t *p_sb_info, const uint8_t sbl_cfg);
+int rom_vrf_dest_sect_load(void *device_ctrl_adptr, void *data_addr, sect_hdr_t *psect_hdr, uint8_t *pimg_load_dest, uint32_t img_load_size,
+						   sec_boot_info_t *p_sb_info);
+int confirm_manif_hdr_f(const uint8_t *ptr, sec_boot_info_t *p_sb_info);
+int confirm_manif_ie4tb_f(const uint8_t *ptr, sec_boot_info_t *p_sb_info);
+int boot_rom_cust_uid_derived(void);
+void boot_rom_set_dbger_nonfixed_key(sec_boot_info_t *p_sb_info);
 
+#if defined(ROM_REGION)
 #define __mem_dump(start,size,prefix) do{ \
     dbg_printf(prefix "\r\n"); \
     dump_for_one_bytes((uint8_t *)start,size); \
@@ -115,14 +157,9 @@ void boot_rom_record_isp_iq_ld_fail_sts(uint32_t fail_record_role, int fail_ret)
 __STATIC_FORCEINLINE
 void ie_rom_safe_load(void *dst, const void *src, const uint32_t size, const uint32_t max_size)
 {
-	uint32_t load_size;
-	if (size > max_size) {
-		load_size = max_size;
-	} else {
-		load_size = size;
-	}
-	_memcpy(dst, src, load_size);
+	BOOT_ROM_SAFE_LOAD_DEVICE_TO_MEM(dst, src, size, max_size);
 }
+#endif
 
 #endif  // end of "ROM_REGION"
 #endif  // end of "#define _FW_FLASH_BOOT_H_"

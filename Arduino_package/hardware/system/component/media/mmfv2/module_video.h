@@ -57,6 +57,28 @@
 #define CMD_VIDEO_MD_START			MM_MODULE_CMD(0x33)
 #define CMD_VIDEO_MD_STOP			MM_MODULE_CMD(0x34)
 
+#define CMD_VIDEO_META_CB		    MM_MODULE_CMD(0x35)
+#define CMD_VIDEO_SET_RATE_CONTROL		MM_MODULE_CMD(0x40)
+#define CMD_VIDEO_GET_CURRENT_BITRATE	MM_MODULE_CMD(0x41)
+#define CMD_VIDEO_GET_REMAIN_QUEUE_LENGTH	MM_MODULE_CMD(0x42)
+#define CMD_VIDEO_GET_MAX_QP		MM_MODULE_CMD(0x43)
+#define CMD_VIDEO_SET_MAX_QP		MM_MODULE_CMD(0x44)
+
+typedef struct rate_control {
+	uint32_t sampling_time;
+	uint32_t maximun_bitrate;
+	uint32_t target_bitrate;
+} rate_ctrl_t;
+
+typedef struct rate_control_param {
+	int rate_ctrl_en;
+	uint32_t sample_bitrate;
+	uint32_t current_bitrate;
+	uint32_t current_framerate;
+	uint32_t current_maxqp;
+	rate_ctrl_t rate_ctrl;
+} rate_ctrl_param_t;
+
 typedef struct video_ctx_s {
 	void *parent;
 
@@ -68,7 +90,8 @@ typedef struct video_ctx_s {
 	void (*change_parm_cb)(void *);
 	video_state_t state;
 	uint32_t timestamp_offset;
-
+	void (*meta_cb)(void *);
+	rate_ctrl_param_t rate_ctrl_p;
 } video_ctx_t;
 
 extern mm_module_t video_module;
@@ -81,6 +104,6 @@ int video_voe_presetting(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_s
 
 void video_voe_release(void);
 void video_set_sensor_id(int SensorName);
-void video_show_fps(int enable);
 void video_setup_sensor(void *sensor_setup_cb);
+void video_show_fps(int enable);
 #endif

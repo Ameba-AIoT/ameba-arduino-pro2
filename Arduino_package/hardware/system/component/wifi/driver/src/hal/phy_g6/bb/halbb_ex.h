@@ -160,7 +160,7 @@ enum halbb_dbg_comp_t {
 
 #if 0
 /*For development use only, and will move to "struct rtw_rssi_info" in near furture*/
-struct bb_rssi_info {
+struct bb_rssi_info{
 	u8 rssi; /*avg RSSI among all RF path, dbm = RSSI - 110*/
 	u16 rssi_acc; /*U(16,4) version of rssi*/
 	u8 rssi_cck; /*instance value of CCK RSSI*/
@@ -176,23 +176,23 @@ struct bb_sta_info {
 
 struct bb_info;
 bool halbb_sta_info_init(struct bb_info *bb,
-						 struct rtw_phl_stainfo_t *phl_sta_info);
+			 struct rtw_phl_stainfo_t *phl_sta_info);
 bool halbb_sta_info_deinit(struct bb_info *bb,
-						   struct rtw_phl_stainfo_t *phl_sta_info);
+			   struct rtw_phl_stainfo_t *phl_sta_info);
 bool halbb_sta_info_add_entry(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_info);
 bool halbb_sta_info_delete_entry(struct bb_info *bb,
-								 struct rtw_phl_stainfo_t *phl_sta_info);
+				 struct rtw_phl_stainfo_t *phl_sta_info);
 void halbb_media_status_update(struct bb_info *bb,
-							   struct rtw_phl_stainfo_t *phl_sta_info,
-							   bool is_connected);
+			       struct rtw_phl_stainfo_t *phl_sta_info,
+			       bool is_connected);
 void halbb_watchdog_reset(struct bb_info *bb);
 void halbb_watchdog(struct bb_info *bb, enum bb_watchdog_mode_t mode,
-					enum phl_phy_idx phy_idx);
+		    enum phl_phy_idx phy_idx);
 u8 halbb_wifi_event_notify(struct bb_info *bb, enum phl_msg_evt_id event, enum phl_phy_idx phy_idx);
 void halbb_bb_cmd_notify(struct bb_info *bb, void *bb_cmd, enum phl_phy_idx phy_idx);
 u8 halbb_pause_func(struct bb_info *bb, enum habb_fun_t pause_func,
-					enum halbb_pause_type pause_type,
-					enum halbb_pause_lv_type lv,
-					u8 val_lehgth,
-					u32 *val_buf, enum phl_phy_idx phy_idx);
+		    enum halbb_pause_type pause_type,
+		    enum halbb_pause_lv_type lv,
+		    u8 val_lehgth,
+		    u32 *val_buf, enum phl_phy_idx phy_idx);
 #endif

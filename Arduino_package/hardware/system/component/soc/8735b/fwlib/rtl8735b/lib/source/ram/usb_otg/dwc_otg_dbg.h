@@ -105,14 +105,15 @@ extern  uint32_t SET_DEBUG_LEVEL(const uint32_t new);
 #define CHK_DEBUG_LEVEL(level) ((level) & g_dbg_lvl)
 #endif
 
-#if 1 //wei add
-//#define DWC_DEBUGPL(lvl, x...)   do{ if ((lvl)&0x40) printf(x); }while(0)
+#if 0 //wei add
+#define DWC_DEBUGPL(lvl, x...)   do{ if ((lvl)&0x40) printf(x); }while(0)
 
-//#define DWC_DEBUGP(x...)  printf( x )
+#define DWC_DEBUGP(x...)  printf( x )
 
-//#define CHK_DEBUG_LEVEL(level) (1)
+#define CHK_DEBUG_LEVEL(level) (1)
 #endif
-#else
+
+#else  //no def DEBUG
 
 # define DWC_DEBUGPL(lvl, x...) do{}while(0)
 # define DWC_DEBUGP(x...)

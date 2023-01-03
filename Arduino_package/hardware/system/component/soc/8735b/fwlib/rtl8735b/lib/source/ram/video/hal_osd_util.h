@@ -88,7 +88,7 @@
 
 #define OSD_TEXT_STR_MAX	32
 
-#define RTS_OSD2_BLK_MAX_NUMBER		6
+#define RTS_OSD2_BLK_MAX_NUMBER		24
 #define RTS_MAX_STM_COUNT		5
 
 enum osd_char_type {

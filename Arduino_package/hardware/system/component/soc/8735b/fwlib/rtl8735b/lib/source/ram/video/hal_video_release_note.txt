@@ -1,4 +1,98 @@
 --------------------------------------------------------------------------	
+<12/16/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.7.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add larger range protection for interrupt enable/disable
+	2. Add more check rules for frame done/release error handling
+	3. Polish warning logs 
+
+	Video/ENC related
+	1. Add semaphore process when voe cmd timeout cases
+	2. VOE release support without isp source code
+	   old voe release version modify method 
+	   1. remove source/lib_isp source/isp
+	   2. used new release source/Makefile replace old version
+	   3. rebuild voe  
+
+
+	 
+Reviewer:
+--------------------------------------------------------------------------	
+<12/12/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.6.2
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. merge pc2 SW
+   		a. iq: fix using wrong index when check dyn_ratio item
+   		b. ygc: fix dyn_ht iq checking
+   		c. wdr: add contrast value, Bump isp_algo_param version to 0x10005
+   		d. rts_camera: Add zoom application
+   		e. iq: apply patch from IQ team
+	2. Add digital zoom interface(hal_video_set_dynamic_zoom)
+
+	Video/ENC related
+	1. fixed reopen issue
+
+	 
+Reviewer:
+
+--------------------------------------------------------------------------	
+<11/28/2022 10:00 Martin>
+Version : RTL8735B_VOE_1.3.6.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add private mask API
+		hal_video_reset_rect_mask_status
+		hal_video_set_mask_color
+		hal_video_config_grid_mask
+		hal_video_config_rect_mask
+		hal_video_set_mask(int ch, BOOL fast_en) 	   
+ 	2. extend osd block num: 6->24
+    3. add awb statis r/g/b mean for meta data and change meta data timing after statis sw
+    4. update iq table for GC2053 version
+  	5. fixed hal_video_get_ae_weight num parameter cache sync issue
+  	6. update 3Alib for 120fps support
+  	7. update SC2310 sensor driver for HDR max_exp_line without 0xfff limitation
+
+	Video/ENC related
+	1. Added JPEG parameter for drop fps
+	   command line add (-j [inputRateNumer])(-n [outputRateNumer])
+	 
+Reviewer:
+
+--------------------------------------------------------------------------	
+<10/26/2022 20:00 Martin>
+Version : RTL8735B_VOE_1.3.5.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add meta data output(with enc2out_t) 
+		isp_statis_meta_t statis_data
+		isp_meta_t isp_meta_data	   	   
+ 	2. add API hal_video_isp_set_isp_meta_out
+	3. [SENSOR] update SC2310 sensor driver
+	4. [SENSOR] update IMX327 HDR sensor driver
+	5. Merge PC2 isp sw for proto 0x1000B
+	6. add API hal_video_get_ae_weight
+			   hal_video_set_ae_weight
+	Video/ENC related
+	1. 
+	2. 
+Reviewer:
+
+--------------------------------------------------------------------------	
 <10/06/2022 19:00 Martin>
 Version : RTL8735B_VOE_1.3.4.0
 Modified Files:

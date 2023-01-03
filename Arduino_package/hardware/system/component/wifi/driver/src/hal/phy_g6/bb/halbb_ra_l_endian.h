@@ -84,49 +84,116 @@ struct bb_fw_cmac_rpt_info {
 };
 
 struct bb_h2c_ra_cfg_info {
-	u8 is_dis_ra: 1;
-	u8 mode_ctrl: 5;
+	u8 is_dis_ra:1;
+	u8 mode_ctrl:5;
 	/*
 	@ Bit0 : CCK
 	@ Bit1 : OFDM
-	@ Bit2 : HT
+	@ Bit2 : HT 
 	@ Bit3 : VHT
 	@ Bit4 : HE
 	*/
-	u8 bw_cap: 2;
-
+	u8 bw_cap:2;
+	
 	u8 macid;
-
-	u8 dcm_cap: 1;
-	u8 er_cap: 1;
-	u8 init_rate_lv: 2;
-	u8 upd_all: 1;
-	u8 en_sgi: 1;
-	u8 ldpc_cap: 1;
-	u8 stbc_cap: 1;
-
-	u8 ss_num: 3;
-	u8 giltf_cap: 3;
-	u8 upd_bw_nss_mask: 1;
-	u8 upd_mask: 1;
+	
+	u8 dcm_cap:1;
+	u8 er_cap:1;
+	u8 init_rate_lv:2;
+	u8 upd_all:1;
+	u8 en_sgi:1;
+	u8 ldpc_cap:1;
+	u8 stbc_cap:1;
+	
+	u8 ss_num:3;
+	u8 giltf_cap:3;
+	u8 upd_bw_nss_mask:1;
+	u8 upd_mask:1;
 
 	u8 ramask[8]; /* ramask[7] bit 7 is for indicate bfee csi rate ctrl */
 
 	/* BFee CSI rate ctrl */
 	u8 band_num;
 
-	u8 ra_csi_rate_en: 1;
-	u8 fixed_csi_rate_en: 1;
-	u8 cr_tbl_sel: 1;
-	u8 fix_giltf_en: 1;
-	u8 fix_giltf: 3;
-	u8 partial_bw_su_er: 1;
+	u8 ra_csi_rate_en:1;
+	u8 fixed_csi_rate_en:1;
+	u8 cr_tbl_sel:1;
+	u8 fix_giltf_en:1;
+	u8 fix_giltf:3;
+	u8 partial_bw_su_er:1;
 
 	u8 fixed_csi_rate_l;
-
-	u8 rsvd0: 7;
-	u8 is_6g: 1;
+#if (defined(BB_8720E_SUPPORT) || defined(BB_8730E_SUPPORT))
+	u8 rsvd0:6;
+	u8 csi_rate_control:1;
+#else
+	u8 rsvd0:7;
+#endif
+	u8 is_6g:1;
 };
+
+#if (defined(BB_8720E_SUPPORT) || defined(BB_8730E_SUPPORT))
+struct fw_h2c_ra_cfg_info_1{
+	/* data0 */
+	u8 is_dis_ra:1;
+	u8 giltf_cap:3;
+	u8 upd_bw_nss_mask:1;
+	u8 upd_mask:1;
+	u8 bw_cap:2;
+	
+	/* data1 */
+	u8 macid;
+	
+	/* data2 */
+	u8 dcm_cap:1;
+	u8 er_cap:1;
+	u8 init_rate_lv:2;
+	u8 upd_all:1;
+	u8 en_sgi:1;
+	u8 ldpc_cap:1;
+	u8 stbc_cap:1;
+	
+	/* data3 */
+	u8 fixed_csi_rate_l;
+	
+	/* data4 */	
+	u8 rsvd0:6;
+	u8 csi_rate_control:1;
+	u8 is_6g:1;
+	
+	/* data5 */	
+	u8 ra_csi_rate_en:1;
+	u8 fixed_csi_rate_en:1;
+	u8 cr_tbl_sel:1;
+	u8 fix_giltf_en:1;
+	u8 fix_giltf:3;
+	u8 partial_bw_su_er:1;
+	
+	/* data6 */		
+	u8 band_num;
+};
+
+struct fw_h2c_ra_cfg_info_2{
+	/* data0 */
+	u8 mode_ctrl:5;
+	/*
+	@ Bit0 : CCK
+	@ Bit1 : OFDM
+	@ Bit2 : HT 
+	@ Bit3 : VHT
+	@ Bit4 : HE
+	*/
+	u8 upd_bw_nss_mask:1;
+	u8 upd_mask:1;
+	u8 upd_all:1;
+
+	/* data1 */	
+	u8 macid;
+	
+	/* data2~5 */		
+	u8 ramask[4]; 
+};
+#endif
 
 struct bb_h2c_rssi_setting {
 	u8 macid;
@@ -137,52 +204,68 @@ struct bb_h2c_rssi_setting {
 	u8 drv_ractrl;
 	/* RSVD */
 
-	u8 is_fixed_rate: 1;
-	u8 fixed_rate: 7;
+	u8 is_fixed_rate:1;
+	u8 fixed_rate:7;
 
-	u8 fixed_rate_md: 2;
-	u8 fixed_giltf: 3;
-	u8 fixed_bw: 2;
-	u8 rsvd2_M: 1;
-
-	u8 rssi_b: 7;
-	u8 endcmd: 1;
+	u8 fixed_rate_md:2;
+	u8 fixed_giltf:3;
+	u8 fixed_bw:2;
+	u8 rsvd2_M:1;
+	
+	u8 rssi_b:7;
+	u8 endcmd:1;
 };
+
+#if (defined(BB_8720E_SUPPORT) || defined(BB_8730E_SUPPORT))
+struct fw_h2c_rssi_setting {
+	u8 macid;
+	u8 rssi_a; /* BIT(7) : parse rssi_b*/
+	u8 bcn_rssi_a; /* BIT(7) : parse bcn_rssi*/
+
+	u8 is_fixed_rate:1;
+	u8 fixed_rate:7;
+
+	u8 fixed_rate_md:2;
+	u8 fixed_giltf:3;
+	u8 fixed_bw:2;
+	u8 rsvd2_M:1;
+};
+#endif
 
 struct bb_h2c_ra_mask {
 	u8 macid;
+	
+	u8 mask_or_reveal:1;
+	u8 mask_rate:7;
 
-	u8 mask_or_reveal: 1;
-	u8 mask_rate: 7;
-
-	u8 mask_rate_md: 2;
-	u8 is_manual_adjust_ra_mask: 1;
-	u8 rsvd1: 5;
+	u8 mask_rate_md:2;
+	u8 is_manual_adjust_ra_mask:1;
+	u8 rsvd1:5;
 
 	u8 rsvd2;
 };
 
 struct bb_h2c_ra_adjust {
 	u8 macid;
-
-	u8 drv_shift_value: 7;
-	u8 drv_shift_en: 1;
+	
+	u8 drv_shift_value:7;
+	u8 drv_shift_en:1;
 };
 
 struct bb_h2c_ra_d_o_timer {
 	u8 macid;
-
-	u8 d_o_timer_value: 7;
-	u8 d_o_timer_en: 1;
+	
+	u8 d_o_timer_value:7;
+	u8 d_o_timer_en:1;
 };
 
 struct bb_h2c_mu_cfg {
 	u8 cmd_type;
 	u8 entry;
 	u8 macid;
-	u8 en_256q: 1;
-	u8 en_1024q: 1;
-	u8 rsvd3: 6;
+	u8 en_256q:1;
+	u8 en_1024q:1;
+	u8 rsvd3:6;
 };
 
 struct halbb_ra_rpt_info {
@@ -231,18 +314,18 @@ struct halbb_txsts_info {
 	u8 tx_retry_vi_m;
 	u8 tx_retry_vo_l;
 	u8 tx_retry_vo_m;
-
+	
 
 	u8 tx_rate_l;
 	u8 tx_rate_m;
 	u8 retry_ratio;
 	u8 rsvd1;
-
+	
 	u8 tx_total_l;
 	u8 tx_total_m;
 	u8 rsvd2;
 	u8 rsvd3;
-
+	
 	u8 rsvd4;
 	u8 rsvd5;
 	u8 rsvd6;

@@ -33,7 +33,7 @@ s32 halbb_cmd(struct bb_info *bb, char *input, char *output, u32 out_len);
 
 
 void halbb_cmd_parser(struct bb_info *bb, char input[][MAX_ARGV],
-					  u32 input_num, char *output, u32 out_len);
+					u32 input_num, char *output, u32 out_len);
 
 
 #endif

@@ -132,9 +132,9 @@ struct bb_cmn_rpt_info {
 struct bb_info;
 /*@--------------------------[Prptotype]-------------------------------------*/
 void halbb_print_hist_2_buf_u8(struct bb_info *bb, u8 *val, u16 len, char *buf,
-							   u16 buf_size);
+			    u16 buf_size);
 void halbb_print_hist_2_buf(struct bb_info *bb, u16 *val, u16 len, char *buf,
-							u16 buf_size);
+			    u16 buf_size);
 u16 halbb_get_plurality_rx_rate_mu(struct bb_info *bb);
 u16 halbb_get_plurality_rx_rate_su(struct bb_info *bb);
 void halbb_basic_dbg_07_hist_su(struct bb_info *bb);

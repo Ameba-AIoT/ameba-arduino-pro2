@@ -126,6 +126,12 @@
 
 #define VOE_ISP_GET_REAL_FPS			 0x24E
 
+#define VOE_ISP_GET_AE_WEIGHT			 0x24F
+#define VOE_ISP_SET_AE_WEIGHT			 0x250
+#define VOE_ISP_SET_MASK				 0x251
+
+#define VOE_ISP_SET_ZOOM_CROP			 0x252
+
 //OSD
 #define VOE_OSD_QUERY                    0x260
 #define VOE_OSD_UPDATE                   0x261

@@ -71,8 +71,8 @@ struct bb_dyncca_info {
 struct bb_dtp_info {
 	/*u8	dyn_tx_power;
 	u8	last_tx_power;*/
-	u8	dyn_tx_pwr_lvl: 4;
-	u8	last_pwr_lvl: 4;
+	u8	dyn_tx_pwr_lvl:4;
+	u8	last_pwr_lvl:4;
 
 	s8	pwr_val[2]; /* S(8,1) */
 	bool	en_pwr[2];
@@ -101,14 +101,14 @@ void halbb_pwr_ctrl(struct bb_info *bb);
 void halbb_pwr_ctrl_init(struct bb_info *bb);
 void halbb_set_pwr_macid_idx(struct bb_info *bb, u16 macid, s8 pwr, bool pwr_en, u8 idx);
 void halbb_pwr_ctrl_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-						char *output, u32 *_out_len);
+		   char *output, u32 *_out_len);
 #endif
 void halbb_macid_ctrl_init(struct bb_info *bb);
 void halbb_tpu_mac_cr_init(struct bb_info *bb, enum phl_phy_idx phy_idx);
 void halbb_tssi_ctrl_mac_cr_init(struct bb_info *bb, enum phl_phy_idx phy_idx);
 void halbb_tssi_ctrl_set_dbw_table(struct bb_info *bb);
 void halbb_tssi_ctrl_set_fast_mode_cfg(struct bb_info *bb, enum phl_band_idx band,
-									   enum tssi_bandedge_cfg bandedge_cfg);
+						enum tssi_bandedge_cfg bandedge_cfg);
 void halbb_pwr_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-				   char *output, u32 *_out_len);
+		   char *output, u32 *_out_len);
 #endif

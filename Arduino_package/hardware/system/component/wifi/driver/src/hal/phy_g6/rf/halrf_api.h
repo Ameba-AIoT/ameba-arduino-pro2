@@ -29,7 +29,8 @@ enum halrf_rfk_type {
 	RF_BTC_TXGAPK		= 3,
 	RF_BTC_DACK		= 4,
 	RF_BTC_RXDCK		= 5,
-	RF_BTC_TSSI		= 6
+	RF_BTC_TSSI		= 6,
+	RF_BTC_CHLK		= 7
 };
 
 enum halrf_rfk_process {
@@ -87,10 +88,10 @@ void halrf_bkprf(struct rf_info *rf, u32 *bp_reg, u32 bp[][4], u32 reg_num, u32 
 void halrf_reload_bkp(struct rf_info *rf, u32 *bp_reg, u32 *bp, u32 reg_num);
 
 void halrf_reload_bkprf(struct rf_info *rf,
-						u32 *bp_reg,
-						u32 bp[][4],
-						u32 reg_num,
-						u8 path_num);
+		       u32 *bp_reg,
+		       u32 bp[][4],
+		       u32 reg_num,
+		       u8 path_num);
 
 u8 halrf_kpath(struct rf_info *rf, enum phl_phy_idx phy_idx);
 
@@ -103,7 +104,7 @@ u8 halrf_only_get_thermal(struct rf_info *rf, enum rf_path path);
 void halrf_thermal_period(struct rf_info *rf);
 
 void halrf_btc_rfk_ntfy(struct rf_info *rf, u8 phy_map, enum halrf_rfk_type type,
-						enum halrf_rfk_process process);
+			enum halrf_rfk_process process);
 void halrf_fcs_init(struct rf_info *rf);
 void halrf_fast_chl_sw_backup(struct rf_info *rf, u8 chl_index, u8 t_index);
 void halrf_fast_chl_sw_reload(struct rf_info *rf, u8 chl_index, u8 t_index);

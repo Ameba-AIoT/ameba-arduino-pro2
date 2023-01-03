@@ -14,13 +14,14 @@
   */
 #ifndef _BLE_MS_ADAPTER__APP_FLAGS_H_
 #define _BLE_MS_ADAPTER__APP_FLAGS_H_
+
 #include <trace_app.h>
-#include "platform_opts_bt.h"
 #if UPPER_STACK_VERSION == VERSION_2019
-#include "bt_flags.h"
+#include <bt_flags.h>
 #elif UPPER_STACK_VERSION == VERSION_2021
 #include "upperstack_config.h"
 #endif
+
 #include <app_common_flags.h>
 
 /** @defgroup  CENTRAL_CLIENT_Config Central Client App Configuration
@@ -40,17 +41,15 @@
 #define BLE_MS_ADAPTER_APP_MAX_LINKS  2
 #define BLE_MS_ADAPTER_PERIPHERAL_APP_MAX_LINKS   1 //for max slave link num
 #define BLE_MS_ADAPTER_CENTRAL_APP_MAX_LINKS      1 //for max master link num
+#elif defined(CONFIG_PLATFORM_AMEBALITE)
+#define BLE_MS_ADAPTER_APP_MAX_LINKS  3
+#define BLE_MS_ADAPTER_PERIPHERAL_APP_MAX_LINKS   1 //for max slave link num
+#define BLE_MS_ADAPTER_CENTRAL_APP_MAX_LINKS      2 //for max master link num
 #endif
+
 
 /** @brief  Config the discovery table number of gcs_client */
 #define BLE_MS_ADAPTER_APP_MAX_DISCOV_TABLE_NUM 40
-
-/** @brief  Config set physical: 0-Not built in, 1-built in, use user command to set*/
-#if defined(CONFIG_PLATFORM_8721D)
-#define F_BT_LE_5_0_SET_PHY_SUPPORT         1
-#elif defined(CONFIG_PLATFORM_8710C)
-#define F_BT_LE_5_0_SET_PHY_SUPPORT         0
-#endif
 
 /** @} */ /* End of group CENTRAL_CLIENT_Config */
 

@@ -45,7 +45,6 @@
  * @file
  * This file contains the interface to the Core Interface Layer.
  */
-//#define DWC_DEVICE_ONLY 0
 
 #ifdef DWC_UTE_CFI
 

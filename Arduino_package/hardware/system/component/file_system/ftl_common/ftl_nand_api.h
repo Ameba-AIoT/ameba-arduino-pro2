@@ -80,7 +80,7 @@ int ftl_get_nand_info(nand_info *value);
 void ftl_info_bbm_dump(void);
 void ftl_info_dump(void);
 void ftl_bad_block_scan(void);
-#if CONFIG_NAND_CB_TEST
+#if defined(CONFIG_NAND_CB_TEST) && CONFIG_NAND_CB_TEST
 void ftl_test_set_make_incorrect_data(bool value);
 void ftl_scan_and_mark_bad_block(uint32_t start, uint32_t end);
 #endif

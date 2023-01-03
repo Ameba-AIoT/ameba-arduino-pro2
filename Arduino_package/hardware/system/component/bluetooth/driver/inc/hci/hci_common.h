@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define HCI_ISO_DATA_PACKET  1
+
 #define HCI_FAIL      0
 #define HCI_SUCCESS   1
 #define HCI_IGNORE    2

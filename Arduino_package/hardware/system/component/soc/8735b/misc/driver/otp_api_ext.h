@@ -60,6 +60,8 @@ u8 otp_byte_write(u32 addr, u8 data);
 
 u8 otp_byte_read(u32 addr);
 
+void otp_get_chip_id(u32 *chip_id);
+
 #ifdef __cplusplus
 }
 #endif

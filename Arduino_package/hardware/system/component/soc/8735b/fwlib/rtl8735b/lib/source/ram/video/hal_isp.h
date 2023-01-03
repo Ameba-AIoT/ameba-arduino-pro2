@@ -228,6 +228,94 @@ typedef struct {
 
 } __attribute__((aligned(32))) awb_statis_t;
 
+typedef struct {
+
+	int exposure_h;
+	int gain_h;
+	int exposure_l;
+	int gain_l;
+
+	int wb_r_gain;
+	int wb_b_gain;
+	int wb_g_gain;
+	int colot_temperature;
+
+	int y_average;
+	uint32_t white_num;
+	uint32_t rg_sum;
+	uint32_t bg_sum;
+
+	int hdr_mode;
+	int sensor_fps;
+	int max_fps;
+	int frame_count;
+
+	u32 time_stamp;
+
+	uint32_t rmean;
+	uint32_t gmean;
+	uint32_t bmean;
+
+} isp_statis_meta_t;
+
+#define ISP_MASK_GRID_NUM 1
+#define ISP_MASK_RECT_NUM 4
+#define ISP_MASK_NUM (ISP_MASK_GRID_NUM + ISP_MASK_RECT_NUM)
+#define ISP_MASK_GRID_COLS 40
+#define ISP_MASK_GRID_ROWS 30
+#define ISP_MASK_GRID_CELLS (ISP_MASK_GRID_COLS * ISP_MASK_GRID_ROWS)
+
+typedef struct {
+	int start_x;
+	int start_y;
+	int cell_w;
+	int cell_h;
+	int cols;
+	int rows;
+} isp_grid_t;
+
+typedef struct {
+
+	int left;
+	int top;
+	int right;
+	int bottom;
+
+} isp_rect_t;
+
+typedef struct {
+
+	int start_x;
+	int start_y;
+	int width;
+	int height;
+
+} isp_crop_t;
+
+
+typedef struct {
+	isp_grid_t grid;
+	uint8_t bitmap[ISP_MASK_GRID_CELLS / 8];
+
+} isp_grid_mask_entry_t;
+
+
+
+enum _isp_mask_action {
+	ISP_MASK_KEEP,
+	ISP_MASK_SET,
+	ISP_MASK_CLEAR
+};
+
+typedef struct {
+	uint32_t color; /* rgb888 */
+	int grid_mask_set_status;
+	isp_grid_mask_entry_t grid_mask;
+	int rect_mask_set_status[ISP_MASK_RECT_NUM];
+	isp_rect_t rect_mask[ISP_MASK_RECT_NUM];
+} __attribute__((aligned(32))) isp_mask_group_t;
+
+
 
 void *isp_soc_start(hal_isp_adapter_t *isp_adpt);
 int isp_open_stream(hal_isp_adapter_t *isp_adpt, uint8_t stream_id);
@@ -258,5 +346,8 @@ int hal_isp_set_init_dn_mode(int dn_mode);
 void hal_isp_set_direct_i2c_mode(uint32_t direct_i2c_mode);
 int hal_isp_set_init_gray_mode(int gray_mode);
 int hal_isp_get_real_fps(int ch, int *fps100);
+int hal_isp_get_ae_weight(uint8_t *weights, int *win_num);
+int hal_isp_set_ae_weight(uint8_t *weights, int win_num);
+int hal_isp_set_mask(isp_mask_group_t *input_mask);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

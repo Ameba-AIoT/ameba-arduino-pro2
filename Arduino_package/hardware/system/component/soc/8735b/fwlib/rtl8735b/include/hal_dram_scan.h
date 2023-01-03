@@ -37,7 +37,6 @@ void dram_calibration_tx_dq_map(void);
 void dram_r480_calibration(u8 dram_type);
 void dram_zq_calibration(u8 dram_type);
 void dram_set_pll_frequency(u32 ddr_freq, unsigned short *pll_table);
-//void dram_init_clk_frequency(uint32_t ddr_freq);
 void dram_init_clk_frequency_dss(uint32_t ddr_freq, uint32_t down_spread_percent);
 #endif
 

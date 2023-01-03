@@ -33,7 +33,8 @@ enum halrf_ic {
 	RF_RTL8832BR	=	BIT(4),
 	RF_RTL8192XB	=	BIT(5),
 	RF_RTL8852BP	=	BIT(6),
-	RF_RTL8730A	=	BIT(7)
+	RF_RTL8730E	=	BIT(7),
+	RF_RTL8720E	=	BIT(8)
 };
 
 #define RF_N_1SS		0
@@ -50,7 +51,7 @@ enum halrf_ic {
 #define RF_AX_2SS		(RF_RTL8852A | RF_RTL8852B | RF_RTL8852C |\
 				 RF_RTL8832BR | RF_RTL8192XB | RF_RTL8852BP)
 #define RF_AX_3SS		0
-#define RF_AX_4SS		(RTL8834A)
+#define RF_AX_4SS		(RF_RTL8834A)
 
 /*@====the following macro DO NOT need to update when adding a new IC======= */
 #define RF_1SS		(RF_N_1SS | RF_AC_1SS | RF_AX_1SS)
@@ -70,6 +71,8 @@ enum halrf_ic {
 #define KIP_REG 3136
 #elif defined (RF_8852B_SUPPORT)
 #define KIP_REG 2048
+#elif defined (RF_8730E_SUPPORT) || defined (RF_8720E_SUPPORT)
+#define KIP_REG 128
 #else
 #define KIP_REG 2048
 #endif

@@ -85,18 +85,20 @@
 #define RTL8188E_SUPPORT 0
 #define RTL8188F_SUPPORT 0
 #define RTL8711B_SUPPORT 0
+#define RTL8720E_SUPPORT 0
 #define RTL8721D_SUPPORT 0
 #define RTL8723D_SUPPORT 0
 #define RTL8195B_SUPPORT 0
 #define RTL8710C_SUPPORT 0
 #define RTL8730A_SUPPORT 0
+#define RTL8730E_SUPPORT 0
 #define RTL8735B_SUPPORT 0
 /************************ config to support chip end **************************/
 
 /******************** Configurations for each platform ************************/
 #if (CONFIG_PLATFORM_AMEBA_X == 1)
 /******************* Ameba Series Common Configurations ***********************/
-#ifdef CONFIG_HIGH_TP_TEST
+#if defined(CONFIG_HIGH_TP_TEST) || defined(CONFIG_INIC_IPC_HIGH_TP)
 #define SKB_PRE_ALLOCATE_RX	1
 #define EXCHANGE_LXBUS_RX_SKB 1
 #else
@@ -107,6 +109,11 @@
 
 #define NOT_SUPPORT_RF_MULTIPATH
 #define USE_XMIT_EXTBUFF 1
+
+/*PHYDM version*/
+#define OUTSRC	1
+#define PHYDM	2
+#define HALBBRF	3
 
 #if defined(CONFIG_PLATFORM_8711B)
 /******************************* AmebaZ (8711B) *******************************/
@@ -124,8 +131,12 @@
 /******************************* AmebaZ2 (8710C) ******************************/
 #include "autoconf_8710c.h"
 #elif defined(CONFIG_PLATFORM_AMEBAD2)
-/******************************* AmebaD2 (8730A) ******************************/
+/******************************* AmebaD2 testchip(8730A)/ mpchip(8730E) ******************************/
+#if defined(CONFIG_RLE1080_A_CUT)
 #include "autoconf_8730a.h"
+#else
+#include "autoconf_8730e.h"
+#endif
 #elif defined(CONFIG_PLATFORM_AMEBALITE)
 /***************************** AmebaLite (8720E) *****************************/
 #include "autoconf_8720e.h"
@@ -160,29 +171,6 @@
 //#define CONFIG_RTW_WNM
 //#define CONFIG_IEEE80211R
 #endif
-
-/*************************** Config for MP_MODE *******************************/
-//#define CONFIG_MP_INCLUDED
-#ifdef CONFIG_MP_INCLUDED
-#define MP_DRIVER 1
-#undef CONFIG_ANTENNA_DIVERSITY
-#undef CONFIG_BT_COEXIST_SOC
-#undef CONFIG_REG_ENABLE_KFREE
-#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
-#else /* undef CONFIG_MP_INCLUDED  */
-#define MP_DRIVER 0
-#endif /* #ifdef CONFIG_MP_INCLUDED */
-/************************* Config for MP_MODE end *****************************/
-
-/******************************** inic config *********************************/
-#if defined(CONFIG_INIC_EN)
-#define CONFIG_LWIP_LAYER 0
-#endif /* defined(CONFIG_INIC_EN) */
-
-#ifndef CONFIG_LWIP_LAYER
-#define CONFIG_LWIP_LAYER 1
-#endif /* ndef CONFIG_LWIP_LAYER */
-/****************************** inic config end *******************************/
 
 #ifdef CONFIG_RTK_MESH
 #define CONFIG_BEACON_PERIOD 1024

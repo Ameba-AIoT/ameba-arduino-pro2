@@ -1877,7 +1877,7 @@ static inline struct usb_driver *interface_to_usbdri(struct usb_interface *intf)
 /*=====================================================*/
 
 
-#ifdef DWC_HOST_ONLY
+#if 0//def DWC_HOST_ONLY
 typedef struct {
 	uByte       bLength;
 	uByte       bDescriptorType;
@@ -1907,7 +1907,7 @@ typedef struct {
 } usb_endpoint_descriptor_t;//UPACKED usb_endpoint_descriptor_t;
 #define USB_ENDPOINT_DESCRIPTOR_SIZE 7
 #endif
-#ifdef DWC_DEVICE_ONLY
+#if 1//def DWC_DEVICE_ONLY
 typedef struct {
 	uByte       bLength;
 	uByte       bDescriptorType;

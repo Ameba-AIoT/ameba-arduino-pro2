@@ -120,13 +120,40 @@ enum {
 #ifndef boolean
 #define		boolean		bool
 #endif
-#define		BTC_COEX_OFFLOAD			0
+#define		BTC_COEX_OFFLOAD		0
 #define		BTC_TMP_BUF_SHORT		20
+#define 	BTC_BB_SPECIFIC			0
 
 extern u1Byte	gl_btc_trace_buf[];
 
 #define COEX_PRINT_DBG			0
 #define COEX_PRINT_PERIODIC		0
+#define COEX_GNTBT_DBG			0
+
+#if (COEX_PRINT_DBG == 0)
+#define		BTC_SPRINTF
+#define		BTC_TRACE(_MSG_)
+
+#elif (COEX_PRINT_DBG == 1)
+#define		BTC_SPRINTF			snprintf
+#define		BTC_TRACE(_MSG_)	\
+					do{			\
+						if(1){	\
+							printf(_MSG_);	\
+							printf("\n\r");	\
+						}				\
+					}while(0)
+
+#elif (COEX_PRINT_DBG == 2)
+#define		BTC_SPRINTF			rsprintf
+#define		BTC_TRACE(_MSG_)\
+					do {\
+						if (GLBtcDbgType[COMP_COEX] & BIT(DBG_LOUD)) {\
+							RTW_INFO("%s", _MSG_);\
+						} \
+					} while (0)
+
+#endif
 
 #if (COEX_PRINT_PERIODIC == 1)
 #define		BTC_SPRINTF_PERIODIC		snprintf
@@ -142,31 +169,7 @@ extern u1Byte	gl_btc_trace_buf[];
 #define		BTC_TRACE_PERIODIC(_MSG_)
 #endif
 
-#if (COEX_PRINT_DBG == 0)
-#define		BTC_SPRINTF
-#define		BTC_TRACE(_MSG_)
-
-#elif (COEX_PRINT_DBG == 1)
-#define		BTC_SPRINTF			rsprintf
-#define		BTC_TRACE(_MSG_)\
-do {\
-	if (GLBtcDbgType[COMP_COEX] & BIT(DBG_LOUD)) {\
-		RTW_INFO("%s", _MSG_);\
-	} \
-} while (0)
-
-#elif (COEX_PRINT_DBG == 2)
-#define		BTC_SPRINTF			snprintf
-#define		BTC_TRACE(_MSG_)	\
-					do{			\
-						if(1){	\
-							printf(_MSG_);	\
-							printf("\n\r");	\
-						}				\
-					}while(0)
-#endif
 #define		BT_PrintData(adapter, _MSG_, len, data)	RTW_DBG_DUMP((_MSG_), data, len)
-
 
 #define		NORMAL_EXEC					FALSE
 #define		FORCE_EXEC						TRUE
@@ -214,30 +217,7 @@ do {\
 /* for common code request */
 #define SYSTEM_CTRL_PAD_BASE_LP			(SYSTEM_CTRL_BASE_LP+0xA00)
 
-#define REG_WL_FUNC_EN			0x0006
-#define REG_LTE_IDR_COEX_CTRL	0x0038
-#define REG_SYS_SDIO_CTRL		0x0070
-#define REG_SYS_SDIO_CTRL3		0x0073
-#define REG_RETRY_LIMIT			0x042a
-#define REG_DARFRC				0x0430		/* Data Auto Rate Fallback Retry Count(Low) */
-#define REG_DARFRCH				0x0434		/* Data Auto Rate Fallback Retry Count(High) */
-#define REG_CCK_CHECK			0x0454
-#define REG_AMPDU_MAX_TIME_V1	0x0456
-#define REG_TX_HANG_CTRL		0x045E
-#define REG_LIFETIME_EN			0x0426
-#define REG_P0_BCN_SPACE		0x0554
-#define REG_BT_COEX_TABLE0		0x06C0
-#define REG_BT_COEX_TABLE1		0x06C4
-#define REG_BT_COEX_BRK_TABLE	0x06C8
-#define REG_BT_COEX_TABLE_H		0x06CC
-#define REG_BT_COEX_ENH			0x0764
-#define REG_BT_ACT_STATISTICS	0x0770
-#define REG_BT_ACT_STATISTICS_1	0x0774
-#define REG_BT_STAT_CTRL		0x0778
-
 #define BIT_EN_GNT_BT_AWAKE	BIT(3)
-#define BIT_EN_BCN_FUNCTION	BIT(3)
-#define BIT_EN_BCN_PKT_REL	BIT(6)
 #define BIT_FEN_BB_GLB_RST	BIT(1)
 #define BIT_FEN_BB_RSTB		BIT(0)
 
@@ -284,6 +264,8 @@ typedef enum _BTC_CHIP_TYPE {
 	BTC_CHIP_RTL8721D		= 9,
 	BTC_CHIP_RTL8710C		= 10,
 	BTC_CHIP_RTL8730A		= 11,
+	BTC_CHIP_RTL8730E		= 12,
+	BTC_CHIP_RTL8720E		= 13,
 	BTC_CHIP_MAX
 } BTC_CHIP_TYPE, *PBTC_CHIP_TYPE;
 
@@ -319,17 +301,16 @@ static const char *const glbt_info_src[] = {
 #define BTC_BTINFO_LENGTH_MAX 10
 
 enum btc_gnt_setup_state {
-	BTC_GNT_SET_SW_LOW	= 0x0,
-	BTC_GNT_SET_SW_HIGH	= 0x1,
-	BTC_GNT_SET_HW_PTA	= 0x2,
-	BTC_GNT_SET_MAX
-};
-
-enum btc_gnt_setup_state_2 {
 	BTC_GNT_HW_PTA		= 0x0,
 	BTC_GNT_SW_LOW		= 0x1,
-	BTC_GNT_SW_HIGH		= 0x3,
+	BTC_GNT_SW_HIGH		= 0x2,
 	BTC_GNT_MAX
+};
+
+enum btc_wl_act_gate {
+	BTC_GATE_TO_LOW		= 0x0,
+	BTC_GATE_OPEN		= 0x1,
+	BTC_GATE_MAX
 };
 
 enum btc_path_ctrl_owner {
@@ -342,6 +323,12 @@ enum btc_gnt_ctrl_type {
 	BTC_GNT_CTRL_BY_PTA	= 0x0,
 	BTC_GNT_CTRL_BY_SW	= 0x1,
 	BTC_GNT_CTRL_MAX
+};
+
+enum btc_direction_offset_type {
+	BTC_DIR_OFFSET_MINUS = 0x0,
+	BTC_DIR_OFFSET_ADD   = 0x1,
+	BTC_DIR_OFFSET_MAX
 };
 
 enum btc_gnt_ctrl_block {
@@ -681,8 +668,9 @@ enum btc_commom_chip_setup {
 	BTC_CSETUP_COEXINFO_HW	= 0x5,
 	BTC_CSETUP_WL_TX_POWER	= 0x6,
 	BTC_CSETUP_WL_RX_GAIN	= 0x7,
-	BTC_CSETUP_WLAN_ACT_IPS = 0x8,
-	BTC_CSETUP_BT_CTRL_ACT	= 0x9,
+	BTC_CSETUP_WLAN_ACT_GATE = 0x8,
+	BTC_CSETUP_GNT_WL		= 0x9,
+	BTC_CSETUP_GNT_BT		= 0xA,
 	BTC_CSETUP_MAX
 };
 
@@ -772,6 +760,8 @@ struct btc_coex_dm {
 	boolean cur_ps_tdma_on;
 	boolean cur_low_penalty_ra;
 	boolean cur_wl_rx_low_gain_en;
+	boolean cur_wl_act_gate;
+	boolean permit_gnt_debug;
 
 	u8	bt_rssi_state[4];
 	u8	wl_rssi_state[4];
@@ -788,6 +778,8 @@ struct btc_coex_dm {
 	u8	wl_chnl_info[3];
 	u8	cur_toggle_para[6];
 	u8	bt_slot_length[20];
+	u8	cur_gnt_wl;
+	u8	cur_gnt_bt;
 	u32	cur_ant_pos_type;
 	u32	cur_switch_status;
 	u32	setting_tdma;
@@ -909,6 +901,7 @@ struct btc_coex_sta {
 	u8	wl_rxagg_size;
 	u8	wl_toggle_para[6];
 	u8	wl_toggle_interval;
+	u8	wl_act_76E_bkp;
 
 	u16	score_board_BW;
 	u32	score_board_WB;
@@ -1018,7 +1011,7 @@ typedef enum _BTC_RSSI_STATE {
 	BTC_RSSI_STATE_HIGH						= 0x0,
 	BTC_RSSI_STATE_MEDIUM					= 0x1,
 	BTC_RSSI_STATE_LOW						= 0x2,
-	BTC_RSSI_STATE_STAY_HIGH					= 0x3,
+	BTC_RSSI_STATE_STAY_HIGH				= 0x3,
 	BTC_RSSI_STATE_STAY_MEDIUM				= 0x4,
 	BTC_RSSI_STATE_STAY_LOW					= 0x5,
 	BTC_RSSI_MAX
@@ -1958,8 +1951,10 @@ struct btc_chip_para {
 	u32				bt_desired_ver;
 	u32				wl_desired_ver;
 	boolean			scbd_support;
-	u32				scbd_reg;
+	u32				scbd_reg_wl2bt;
+	u32				scbd_reg_bt2wl;
 	u8				scbd_bit_num;
+	boolean			break_table_limit;
 	boolean			mailbox_support;
 	boolean			lte_indirect_access;
 	boolean			new_scbd10_def; /* TRUE: 1:fix 2M(8822c) */

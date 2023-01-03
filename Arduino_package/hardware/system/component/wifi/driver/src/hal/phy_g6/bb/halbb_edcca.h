@@ -169,16 +169,16 @@ struct bb_dyn_l2h_info {
 struct bb_info;
 /*@--------------------------[Prptotype]-------------------------------------*/
 void halbb_edcca(struct bb_info *bb);
-void halbb_edcca_thre_calc(struct bb_info *bb);
+void halbb_edcca_thre_calc(struct bb_info * bb);
 void halbb_set_collision_th(struct bb_info *bb);
 void halbb_set_collision_thre(struct bb_info *bb);
 void halbb_set_edcca_pause_val(struct bb_info *bb, u32 *val_buf, u8 val_len);
-void halbb_edcca_event_nofity(struct bb_info *bb, u8 pause_type);
-void halbb_edcca_dev_hw_cap(struct bb_info *bb);
+void halbb_edcca_event_nofity(struct bb_info * bb, u8 pause_type);
+void halbb_edcca_dev_hw_cap(struct bb_info * bb);
 void halbb_edcca_init(struct bb_info *bb);
 void halbb_cr_cfg_edcca_init(struct bb_info *bb);
 void halbb_edcca_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					 char *output, u32 *_out_len);
+			      char *output, u32 *_out_len);
 
 #endif
 

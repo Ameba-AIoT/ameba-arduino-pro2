@@ -26,24 +26,28 @@
 #define __HALBB_CFG_IC_H__
 
 #ifdef CONFIG_RTL8852A
-//#define BB_8852A_CAV_SUPPORT /*CAV*/
-#define BB_8852A_2_SUPPORT /*> CBV*/
+	//#define BB_8852A_CAV_SUPPORT /*CAV*/
+	#define BB_8852A_2_SUPPORT /*> CBV*/
 #endif
 
 #if defined(CONFIG_RTL8852B) || defined(CONFIG_RTL8852BP)
-#define BB_8852B_SUPPORT
+	#define BB_8852B_SUPPORT
 #endif
 
 #ifdef CONFIG_RTL8852C
-#define BB_8852C_SUPPORT
+	#define BB_8852C_SUPPORT
 #endif
 
 #if defined(CONFIG_RTL8192XB) || defined(CONFIG_RTL8832BR)
-#define BB_8192XB_SUPPORT
+	#define BB_8192XB_SUPPORT
 #endif
 
-#ifdef CONFIG_RTL8730A
-#define BB_8730A_SUPPORT
+#ifdef CONFIG_RTL8730E
+#define BB_8730E_SUPPORT
+#endif
+
+#ifdef CONFIG_RTL8720E
+#define BB_8720E_SUPPORT
 #endif
 
 #endif

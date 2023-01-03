@@ -58,11 +58,11 @@ enum bb_band_t {
 struct bb_info;
 void halbb_cfg_bb_rpl_ofst(struct bb_info *bb, enum bb_band_t band, u8 path, u32 addr, u32 data);
 bool halbb_init_cr_default(struct bb_info *bb, bool is_form_folder, u32 folder_len,
-						   u32 *folder_array, enum phl_phy_idx phy_idx);
+			   u32 *folder_array, enum phl_phy_idx phy_idx);
 bool halbb_init_gain_table(struct bb_info *bb, bool is_form_folder, u32 folder_len,
-						   u32 *folder_array, enum phl_phy_idx phy_idx);
-void halbb_rx_gain_table_dbg(struct bb_info *bb, char input[][16],
-							 u32 *_used, char *output, u32 *_out_len);
-void halbb_rx_op1db_table_dbg(struct bb_info *bb, char input[][16],
-							  u32 *_used, char *output, u32 *_out_len);
+				 u32 *folder_array, enum phl_phy_idx phy_idx);
+void halbb_rx_gain_table_dbg(struct bb_info *bb, char input[][16], 
+			     u32 *_used, char *output, u32 *_out_len);
+void halbb_rx_op1db_table_dbg(struct bb_info *bb, char input[][16], 
+			      u32 *_used, char *output, u32 *_out_len);
 #endif

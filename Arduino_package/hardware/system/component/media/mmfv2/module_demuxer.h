@@ -22,7 +22,7 @@
 
 #define CMD_DEMUXER_SET_PARAMS     	    MM_MODULE_CMD(0x00)  // set parameter
 #define CMD_DEMUXER_GET_PARAMS     	    MM_MODULE_CMD(0x01)  // get parameter
-#define CMD_DEMUXER_OPEN     	        MM_MODULE_CMD(0x02)
+
 #define CMD_DEMUXER_SET_FILE_NAME       MM_MODULE_CMD(0x03)
 #define CMD_DEMUXER_MEMORY_SIZE         MM_MODULE_CMD(0x04)
 #define CMD_DEMUXER_BLOCK_SIZE          MM_MODULE_CMD(0x05)

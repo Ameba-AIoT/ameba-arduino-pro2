@@ -34,6 +34,17 @@ extern "C"
 {
 #endif
 
+/**
+ * @defgroup hal_sdhost_rtl SD Host RTL
+ * @ingroup hal_sdhost
+ * @brief Defines the SD Host module hardware control
+ */
+
+/**
+ * @addtogroup hal_sdhost_rtl
+ * @{
+ */
+
 /// Defines the length of CSD register in byte
 #define SD_CSD_LEN                   16
 
@@ -51,9 +62,9 @@ extern "C"
 #define SDHOST_BUS_IDLE_TIMEOUT      100000      // 100ms
 /// Defines the polling time of waiting for bus idel
 #define SDHOST_BUS_IDLE_POLL_INTER   10000       // 10ms
-/// Defines the max. timeout value when checking the process of card initialization
-#define SDHOST_ACMD41_TIMEOUT        1000000     // 1 sec
-/// Defines the time interval when checking the process of card initialization
+/// Defines the max. timeout to wait for ACMD41 busy (card initialization)
+#define SDHOST_ACMD41_TIMEOUT        1000000     // SD Spec: Wait at least 1 sec
+/// Defines the time interval to wait for ACMD41 busy (card initialization)
 #define SDHOST_ACMD41_POLL_INTERVAL  10000       // 10 ms
 /// Defines the erase timeout per block recommanded by SPEC
 #define SDHOST_ERASE_1BLK_TIMEOUT    250000      // 250 ms
@@ -77,17 +88,11 @@ extern "C"
 /// Defines the total number of phases when tuning sample clock
 #define SDHOST_CLK_PHASE_CNT    4
 
-#define SDHOST_INT_CARD_END         BIT1
-#define SDHOST_INT_DMA_END          BIT4
-
+/// Defines the magic number of SD Host adapter
 #define SDHOST_MAGIC_NUM        0x8735b
-#define LDO_VOSEL_3V            0xf
-#define GPIO_CTRL_IMPED         0
-#define GPIO_CTRL_LOW           1
-#define GPIO_CTRL_HIGH          2
-#define GPIO_DRIVING_4mA        0
-#define GPIO_DRIVING_8mA        1
+/// Defines the bus status when idle
 #define SDHOST_BUS_IDLE_STAT    0x1F
+/// Defines the delay time to reset SD Host IP in ms
 #define SDHOST_RST_DELAY        5000        // 5ms
 /// For SDSC, the address should only limit in 23 bits
 #define SDSC_INVALID_ADDR_MASK  0xFFC00000
@@ -95,77 +100,124 @@ extern "C"
 #define FAILED_PHASE_WEIGHT     0xF000000
 /// Retry limit of phase tuning
 #define SDHOST_PHASE_RETRY      3
+/// Defines the timeout to wait for internal clock ready
+#define SDHOST_CLK_TIMEOUT      10000       // 10ms
+/// Defines the number of pins to register for pinmux
+#define PINTAB_SIZE             7
 
-/// Defines the 32 byte align check
+/// Defines the 32-byte alignment check
 #define IS_32BYTE_ALIGN(addr)   (((u32)addr & 0x1f) == 0 ? 1 : 0)
 
-#define SDHOST_CLK_TIMEOUT           10000       // 10ms
+/**
+ * \brief  Defines GPIO pull control level
+ */
+enum SDHOST_GPIO_PULL_CTRL {
+	GPIO_CTRL_IMPED = 0,    ///< GPIO pin is impedance (HighZ)
+	GPIO_CTRL_LOW   = 1,    ///< GPIO pin is pull low
+	GPIO_CTRL_HIGH  = 2,    ///< GPIO pin is pull high
+};
+
+/**
+ * \brief  Defines GPIO driving current
+ */
+enum SDHOST_GPIO_DRIVE_CUR {
+	GPIO_DRIVING_LOW  = 0,  ///< GPIO pin driving is 4mA. (8mA for SD_CLK)
+	GPIO_DRIVING_HIGH = 1,  ///< GPIO pin driving is 8mA. (16mA for SD_CLK)
+};
 
 /**
   \brief  Defines LDO control voltage.
 */
-enum SDHOST_LDO_VOL {
-	SDHOST_LDO_0V,
-	SDHOST_LDO_3V3,
-	SDHOST_LDO_1V8
+typedef enum SDHOST_LDO_VOL {
+	SDHOST_LDO_0V,          ///< Set LDO voltage to 0V
+	SDHOST_LDO_3V3,         ///< Set LDO voltage to 3.3V
+	SDHOST_LDO_1V8,         ///< Set LDO voltage to 1.8V
+} hal_sdhost_ldo_vol_t;
+
+/// Defines the interrupt bits of SD_ISR register
+enum SDHOST_INT {
+	SDHOST_INT_CARD_END = BIT1,         ///< Read/Write finished, SD busy clear
+	SDHOST_INT_DMA_END  = BIT4,         ///< DMA between RAM & module finished
 };
 
+/// Defines the predefined voltage level of LDO control register (this might be inaccurate)
 enum SDHOST_LDO_VOL_REG {
-	SDIO_LDO_VOADJ_1793V = 8,           // voltage selection 1.793V
-	SDIO_LDO_VOADJ_1839V = 9,           // voltage selection 1.839V
-	SDIO_LDO_VOADJ_1887V = 10,          // voltage selection 1.887V
+	SD_LDO_VOADJ_1793V = 8,           ///< voltage selection 1.793V
+	SD_LDO_VOADJ_1839V = 9,           ///< voltage selection 1.839V
+	SD_LDO_VOADJ_1887V = 10,          ///< voltage selection 1.887V
 };
 
-enum SDHOST_PHASE_RESULT {
-	PHASE_PASS = 0,
-	PHASE_CMD13_FAIL,
-	PHASE_CMD19_FAIL,
-	PHASE_READ_FAIL,
-	PHASE_WRITE_FAIL,
-	PHASE_CMP_FAIL,
-	PHASE_NO_VALID,
-};
+/// Defines the result status of phase tuning
+typedef enum SDHOST_PHASE_RESULT {
+	PHASE_PASS = 0,                     ///< tuning pass
+	PHASE_CMD13_FAIL,                   ///< tuning failed by CMD13
+	PHASE_CMD19_FAIL,                   ///< tuning failed by CMD19
+	PHASE_READ_FAIL,                    ///< tuning failed by read single block test
+	PHASE_WRITE_FAIL,                   ///< tuning failed by write single block test
+	PHASE_CMP_FAIL,                     ///< tuning failed by compare RW data
+	PHASE_NO_VALID,                     ///< tuning failed by no valid best phase
+} hal_sdhost_phase_res_t;
 
-enum SDHOST_VP_SEL {
-	SDHOST_VP0 = 0,
-	SDHOST_VP1 = 1,
-};
+/**
+  \brief Defines the internal clock phase
+*/
+typedef enum hal_sdhost_clk_phase {
+	SDHOST_CLK_0d_shift     = 0,        ///< Clock phase is 0 degree shifted
+	SDHOST_CLK_90d_shift    = 1,        ///< Clock phase is 90 degree shifted
+	SDHOST_CLK_180d_shift   = 2,        ///< Clock phase is 180 degree shifted
+	SDHOST_CLK_270d_shift   = 3,        ///< Clock phase is 270 degree shifted
+} hal_sdhost_clk_phase_t;
+
+/**
+  \brief Define the clock phase of internal clock:
+*/
+typedef struct hal_sdhost_clk_phase_set {
+	hal_sdhost_clk_phase_t vp0_phase;   ///< Clock phase of vp0 clock
+	hal_sdhost_clk_phase_t vp1_phase;   ///< Clock phase of vp1 clock
+} hal_sdhost_clk_phase_set_t;
+
+/// Defines the internal clock
+typedef enum SDHOST_INTERN_CLK_SEL {
+	SDHOST_SSC = 0,                     ///< Internal clock without phase shift
+	SDHOST_VP0 = 1,                     ///< Internal clock VP0
+	SDHOST_VP1 = 2,                     ///< Internal clock VP1
+} hal_sdhost_clk_t;
 
 /**
   \brief  Defines CMD6 function group 1 (access mode).
 */
 typedef enum sd_cmd6_33v {
-	SdCmd6SpeedDS           = 0x0,  // 3.3V Function 0
-	SdCmd6SpeedHS           = 0x1,  // 3.3V Function 1
+	SdCmd6SpeedDS           = 0x0,  ///< 3.3V Function 0
+	SdCmd6SpeedHS           = 0x1,  ///< 3.3V Function 1
 
-	SdCmd6SpeedSDR12        = 0x0,  // 1.8V Function 0
-	SdCmd6SpeedSDR25        = 0x1,  // 1.8V Function 1
-	SdCmd6SpeedSDR50        = 0x2,  // 1.8V Function 2
-	SdCmd6SpeedSDR104       = 0x3,  // 1.8V Function 3
-	SdCmd6SpeedDDR50        = 0x4,  // 1.8V Function 4
+	SdCmd6SpeedSDR12        = 0x0,  ///< 1.8V Function 0
+	SdCmd6SpeedSDR25        = 0x1,  ///< 1.8V Function 1
+	SdCmd6SpeedSDR50        = 0x2,  ///< 1.8V Function 2
+	SdCmd6SpeedSDR104       = 0x3,  ///< 1.8V Function 3
+	SdCmd6SpeedDDR50        = 0x4,  ///< 1.8V Function 4
 
 	SdCmd6KeepCurSpd        = 0xF
 } sd_cmd6_arg_t;
 
 /**
-  \brief  Defines SDIO Host DMA transfer type.
+  \brief  Defines SD Host DMA transfer type.
 */
 enum  sdhost_dma_type_e {
-	SdHostDmaNormal  = 0,
-	SdHostDma64b     = 1,
-	SdHostDmaR2      = 2
+	SdHostDmaNormal  = 0,           ///< Normal mode
+	SdHostDma64b     = 1,           ///< For CMD6, read data length is 64 bytes
+	SdHostDmaR2      = 2,           ///< For R2, response will be stored in memory instead of register
 };
 
 /**
-  \brief  Defines SDIO Host DMA operation.
+  \brief  Defines SD Host DMA operation.
 */
 enum  sdhost_dma_op_e {
-	SdHostDmaWrite   = 0,
-	SdHostDmaRead    = 1
+	SdHostDmaWrite   = 0,           ///< DMA write
+	SdHostDmaRead    = 1            ///< DMA read
 };
 
 /**
-  \brief  Defines SDIO Host clock source.
+  \brief  Defines SD Host clock source.
 */
 enum  sdhost_clk_src_e {
 	SdHostSscClk     = 0,
@@ -174,7 +226,7 @@ enum  sdhost_clk_src_e {
 };
 
 /**
-  \brief  Defines SDIO Host clock divider.
+  \brief  Defines SD Host clock divider.
 */
 enum  sdhost_clk_div_e {
 	SdHostClkDiv1    = 0,
@@ -192,7 +244,7 @@ enum  sdhost_sdclk_divider_e {
 };
 
 /**
-  \brief  Defines SDIO Host mode selection.
+  \brief  Defines SD Host mode selection.
 */
 enum  sdhost_mode_sel_e {
 	SdHostModeSd20   = 0,
@@ -201,7 +253,7 @@ enum  sdhost_mode_sel_e {
 };
 
 /**
-  \brief  Defines SDIO Host bus width.
+  \brief  Defines SD Host bus width.
 */
 enum  sdhost_bus_width_e {
 	SdHostBus1bit    = 0,
@@ -209,7 +261,7 @@ enum  sdhost_bus_width_e {
 };
 
 /**
-  \brief  Defines SDIO Host response type.
+  \brief  Defines SD Host response type.
 */
 enum  sdhost_rsp_type_e {
 	SdHostNoRsp      = 0,
@@ -218,7 +270,7 @@ enum  sdhost_rsp_type_e {
 };
 
 /**
-  \brief  Defines SDIO bus status.
+  \brief  Defines SD bus status.
 */
 enum  sdhost_bus_status_e {
 	SdHostBusLow     = 0,
@@ -226,7 +278,7 @@ enum  sdhost_bus_status_e {
 };
 
 /**
-  \brief  Defines SDIO Host command code.
+  \brief  Defines SD Host command code.
 */
 enum  sdhost_cmd_code_e {
 	SdHostCmdNormalWr        = 0,
@@ -314,7 +366,7 @@ enum  sdhost_switch_18v_req_e {
 /**
   \brief  Defines SD card's current state (Card Status bit[12:9]).
 */
-enum  sdhost_card_curr_ste_e {
+typedef enum  sdhost_card_curr_ste_e {
 	SdHostCardSteIdle        = 0,
 	SdHostCardSteReady       = 1,
 	SdHostCardSteIdent       = 2,
@@ -324,21 +376,10 @@ enum  sdhost_card_curr_ste_e {
 	SdHostCardSteRcv         = 6,
 	SdHostCardStePrg         = 7,
 	SdHostCardSteDis         = 8
-};
+} sdhost_card_ste_t;
 
 /**
-  \brief  Defines SD physical layer specification version.
-*/
-enum  sdhost_sd_spec_e {
-	SdHostSdSpecV101         = 0,
-	SdHostSdSpecV110         = 1,
-	SdHostSdSpecV200         = 2,
-	SdHostSdSpecV300         = 3,
-	SdHostSdSpecUnk          = 0xFF
-};
-
-/**
-  \brief  Defines SDIO command index.
+  \brief  Defines SD command index.
 */
 enum  sdhost_cmd_idx_e {
 	SdHostCmdGoIdleSte           = 0,
@@ -373,27 +414,27 @@ enum  sdhost_cmd_idx_e {
 };
 
 /**
-  \brief  The structure of the settings for DMA control.
+  \brief  Defines the information for DMA control.
 */
 typedef struct hal_sdhost_dma_ctrl_s {
-	u32 start_addr;
-	u16 blk_cnt;
-	u8 op;
-	u8 type;
+	u32 start_addr;                 ///< DMA RAM address
+	u16 blk_cnt;                    ///< DMA data size in blocks
+	u8 op;                          ///< DMA operation: ::sdhost_dma_op_e
+	u8 type;                        ///< DMA transfer type: ::sdhost_dma_type_e
 } hal_sdhost_dma_ctrl_t, *phal_sdhost_dma_ctrl_t;
 
 /**
-  \brief  The structure of command attributes.
+  \brief  Defines the information for sending SD command.
 */
 typedef struct hal_sdhost_cmd_attr_s {
-	u32 arg;
-	u8 idx;
-	u8 rsp_type;
-	u8 rsp_crc_chk;
-	u8 data_present;
+	u32 arg;                        ///< Command argument
+	u8 idx;                         ///< Command index: ::sdhost_cmd_idx_e
+	u8 rsp_type;                    ///< Respons type: ::sdhost_rsp_type_e
+	u8 rsp_crc_chk;                 ///< 1: check response crc
+	u8 data_present;                ///< If there is trasfer in DAT lines: ::sdhost_data_present_e
 } hal_sdhost_cmd_attr_t, *phal_sdhost_cmd_attr_t;
 
-// size should be 16 bytes
+/// Raw SD CSD register Verson 1.0 foramt, size should be 16 bytes
 typedef struct sd_csd_v1 {
 	u32 not_used_1      : 1;
 	u32 crc             : 7;
@@ -435,7 +476,7 @@ typedef struct sd_csd_v1 {
 
 STATIC_ASSERT(sizeof(sd_csd_v1_t) == SD_CSD_LEN, sd_csd_v1_sz);
 
-// size should be 16 bytes
+/// Raw SD CSD register Verson 2.0 foramt, size should be 16 bytes
 typedef struct sd_csd_v2 {
 	u32 not_used_1      : 1;
 	u32 crc             : 7;
@@ -472,6 +513,8 @@ typedef struct sd_csd_v2 {
 } __ALIGNED(4) sd_csd_v2_t;
 
 STATIC_ASSERT(sizeof(sd_csd_v2_t) == SD_CSD_LEN, sd_csd_v2_sz);
+
+/** @} */ /* End of group hal_sdhost_rtl */
 
 #ifdef  __cplusplus
 }

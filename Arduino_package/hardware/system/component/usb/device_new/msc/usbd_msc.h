@@ -150,6 +150,5 @@ typedef struct {
 
 int usbd_msc_init(void);
 void usbd_msc_deinit(void);
-void  usbd_msc_send_csw(usb_dev_t *dev, u8 status);
 
 #endif // USBD_MSC_H

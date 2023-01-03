@@ -54,7 +54,7 @@
 #define setsockopt(a, b, c, d, e) setsockopt(a, b, c, (const char*) d, e)
 
 int ff_neterrno(void);
-#elif defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)
+#elif defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2)
 #include <lwipconf.h>
 #define ff_neterrno() AVERROR(errno)
 #else
@@ -190,7 +190,7 @@ int ff_getnameinfo(const struct sockaddr *sa, int salen,
 #define freeaddrinfo ff_freeaddrinfo
 #define getnameinfo ff_getnameinfo
 #else
-#if defined(CONFIG_PLATFORM_8721D)
+#if defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2)
 #define getaddrinfo lwip_getaddrinfo
 #define freeaddrinfo lwip_freeaddrinfo
 #endif

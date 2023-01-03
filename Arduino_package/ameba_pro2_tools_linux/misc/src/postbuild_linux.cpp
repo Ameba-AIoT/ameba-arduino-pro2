@@ -26,6 +26,9 @@ using namespace std;
 string fc_data_name, voe_name, iq_name, sensor_name;
 string name_buf[4] = {fc_data_name, voe_name, iq_name, sensor_name};
 
+string upload_mode_user_selection, upload_mode_user_selection_nn, upload_mode_user_selection_voe;
+string common_nn_models_path;
+
 int readtxt(int line_number)
 {
     ifstream myFile_Handler;
@@ -80,16 +83,19 @@ int main(int argc, char *argv[]) {
 
     size_t pos;
 
-    string video_init_user_selection;
-
-    if (argv[6]) {
-        video_init_user_selection = argv[6];
-    } else {
-        video_init_user_selection = "Disable";
-    }
-
     // 0. change work folder
     chdir(argv[1]);
+
+    //upload_mode_user_selection = argv[6];
+    common_nn_models_path = argv[7];
+    upload_mode_user_selection_nn = argv[8];
+    upload_mode_user_selection_voe = argv[9];
+
+    if (argv[6]) {
+        upload_mode_user_selection = argv[6];
+    } else {
+        upload_mode_user_selection = "NormalEnable";
+    }
 
     // 1. remove previous files
     cmd = "rm -f application.ntz";
@@ -116,6 +122,19 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
+    cmd = "rm -f *.nb";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "cp image_tool/flash_loader_nor.bin ./";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "cp misc/image/ ./";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+#if 0
     cmd = "cp misc/image/boot.bin ./";
     cout << cmd << endl;
     system(cmd.c_str());
@@ -140,16 +159,21 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    if (video_init_user_selection == "Enable") {
+    cmd = "cp misc/image/amebapro2_firmware.json ./";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "cp misc/image/amebapro2_firmware_NA_cam.json ./";
+    cout << cmd << endl;
+    system(cmd.c_str());
+#endif
+
+    if (upload_mode_user_selection_voe == "VOEyes") {
         readtxt(4);
 
         cmdss.clear();
         cmdss << "cp misc/video_img/" << voe_name << " ./";
         getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-
-        cmd = "cp misc/image/amebapro2_firmware.json ./";
         cout << cmd << endl;
         system(cmd.c_str());
 
@@ -178,8 +202,16 @@ int main(int argc, char *argv[]) {
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
-    } else {
-        cmd = "cp misc/image/amebapro2_firmware_NA_cam.json ./";
+    }
+
+    if (upload_mode_user_selection_nn == "NNyes") {
+        cmd = "cp misc/nn_img/amebapro2_nn_model.json ./";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << "cp " << common_nn_models_path << " ./";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
@@ -269,7 +301,8 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     // 8. generate .bin
-    if (video_init_user_selection == "Enable") {
+    // 8.1 firmware_ntz.bin
+    if (upload_mode_user_selection_voe == "VOEyes") {
         cmd = "./misc/elf2bin.linux convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
         cout << cmd << endl;
         system(cmd.c_str());
@@ -287,21 +320,54 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
     }
 
-    if (video_init_user_selection == "Enable") {
-        //cmd = "cp firmware_ntz.bin firmware.bin";
+    if (upload_mode_user_selection_nn == "NNyes") {
+        cmd = "./misc/elf2bin.linux convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "./misc/elf2bin.linux convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+    }
+
+    // 8.1 flash_ntz.bin
+    if (upload_mode_user_selection == "SpeedEnable") {
+        cmd = "cp firmware_ntz.bin flash_ntz.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+    } else {
         cmd = "cp firmware_ntz.bin firmware.bin";
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-    } else {
-        cmd = "cp firmware_ntz.bin flash_ntz.bin";
-        cout << cmd << endl;
-        system(cmd.c_str());
+        if (upload_mode_user_selection_voe == "VOEyes") {
+            if (upload_mode_user_selection_nn == "NNyes") {
+                cmdss.clear();
+                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+                getline(cmdss, cmd);
+                cout << cmd << endl;
+                system(cmd.c_str());
+            } else {
+                cmdss.clear();
+                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+                getline(cmdss, cmd);
+                cout << cmd << endl;
+                system(cmd.c_str());
+            }
+        } else {
+            if (upload_mode_user_selection_nn == "NNyes") {
+                cmdss.clear();
+                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_FCSDATA=boot_fcs.bin";
+                getline(cmdss, cmd);
+                cout << cmd << endl;
+                system(cmd.c_str());
+            } else {
+                cmdss.clear();
+                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+                getline(cmdss, cmd);
+                cout << cmd << endl;
+            }
+        }
     }
 
     return 0;

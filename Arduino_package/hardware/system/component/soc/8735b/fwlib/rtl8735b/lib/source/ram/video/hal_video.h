@@ -147,6 +147,23 @@ enum isp_tuning_param_type {
 
 typedef void (*output_callback_t)(void *, void *, uint32_t);
 
+typedef struct {
+
+	int max_width;
+	int max_height;
+	int out_width;
+	int out_height;
+
+	int crop_x;
+	int crop_y;
+	int crop_width;
+	int crop_height;
+
+	int frame_count;
+	u16 skip_m;
+	u16 skip_n;
+
+} isp_meta_t;
 
 
 typedef struct {
@@ -159,10 +176,12 @@ typedef struct {
 	u32 jpg_len;			// output bit stream size
 	int *enc_addr;			// output bit stream address
 	int *jpg_addr;			// output bit stream address
+
 	int *isp_addr;			// output isp address
 	int qp;					// output frame Encoder QP value
 	int finish;				// output is laster frame
 	int type;				// output type I/P frame	//VCENC_INTRA_FRAME/INTER_FRAME ...
+
 	int enc_used;			// ENC buffer used size
 	int jpg_used;			// JPEG buffer used size
 
@@ -173,8 +192,14 @@ typedef struct {
 	int jpg_time;			// HW JPEG time
 	int cmd;
 	int cmd_status;
+
 	u32 time_stamp;			// time_stamp current time stamp
 	u32 meta_offset;		// metadata offset size
+
+	isp_statis_meta_t statis_data;
+	isp_meta_t isp_meta_data;
+
+
 
 } __attribute__((aligned(32))) enc2out_t;
 
@@ -272,6 +297,8 @@ typedef struct {
 	u32 ctx[MAX_CHANNEL];
 	u32 *load_time;
 	u32 *hal_version;
+
+	isp_mask_group_t *isp_mask_group;
 
 	__attribute__((aligned(32))) volatile int		voe_info;
 
@@ -415,7 +442,12 @@ int hal_video_check_fcs_OK(void);
 void hal_video_reset_fcs_OK(void);
 int hal_video_osd_reset(int ch);
 int hal_video_get_realfps(int ch, int *isp_fpsx100, int *enc_fpsx100);
-
+int hal_video_get_ae_weight(uint8_t *weight_array, int *p_weight_num);
+int hal_video_set_ae_weight(uint8_t *weight_array, int weight_num);
+int hal_video_config_grid_mask(int enable, isp_grid_t grid, uint8_t *bitmap);
+int hal_video_config_rect_mask(int enable, uint32_t id, isp_rect_t rect);
+int hal_video_set_mask(int ch, BOOL fast_en);
+int hal_video_set_dynamic_zoom(int ch, isp_crop_t corp_info);
 
 extern hal_video_adapter_t vv_adapter;
 
@@ -653,6 +685,41 @@ static __inline__ int hal_video_isp_set_init_iq_mode(int ch, int init_iq_mode)
 	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
 	return OK;
 }
+
+
+
+static __inline__ int hal_video_isp_set_isp_meta_out(int ch, int isp_meta_out)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->isp_meta_out = isp_meta_out;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_set_mask_color(uint32_t color)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	v_adp->isp_mask_group->color = color;
+
+	return OK;
+}
+
+static __inline__ int hal_video_reset_mask_status(void)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	v_adp->isp_mask_group->grid_mask_set_status = ISP_MASK_KEEP;
+	for (int i = 0; i < ISP_MASK_RECT_NUM; i++) {
+		v_adp->isp_mask_group->rect_mask_set_status[i] = ISP_MASK_KEEP;
+	}
+	return OK;
+}
+
+
+
+
 
 #endif // #if !defined (CONFIG_VOE_PLATFORM) || !CONFIG_VOE_PLATFORM // Run on TM9
 /** @} */ /* End of group hal_enc */

@@ -17,7 +17,7 @@ void bt_power_on(void);
 void bt_power_off(void);
 int bt_get_mac_address(uint8_t *mac);
 int bt_set_mac_address(uint8_t *mac);
-
+bool rtk_bt_pre_enable(void);
 
 #ifdef __cplusplus
 }

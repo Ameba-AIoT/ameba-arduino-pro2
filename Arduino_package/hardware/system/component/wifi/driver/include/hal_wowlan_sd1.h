@@ -6,7 +6,7 @@
 #include "hal_intf.h"
 #include "hal_phy.h"
 #include "hal_phy_reg.h"
-#ifdef CONFIG_RTL8730A
+#if  defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8730E)
 #include "wififw_reg_rom.h"
 #elif defined(CONFIG_RTL8720E)
 #include "wififw_reg_ram.h"
@@ -18,7 +18,7 @@
 #include "hal_com_c2h.h"
 #endif
 
-#if(PHYDM_LINUX_CODING_STYLE == 1)
+#if(PHYDM_VERSION > 1)
 #include "hal_com_c2h.h"
 #endif
 

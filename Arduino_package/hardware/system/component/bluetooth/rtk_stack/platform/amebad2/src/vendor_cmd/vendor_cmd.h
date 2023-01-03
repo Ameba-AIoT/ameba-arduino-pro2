@@ -1,6 +1,7 @@
 #ifndef VNR_CMD_H
 #define VNR_CMD_H
-
+#include "platform_opts_bt.h"
+#if defined CONFIG_BT && CONFIG_BT
 #include <gap.h>
 
 /** @brief  Supported LE Vendor Commands*/
@@ -107,5 +108,5 @@ T_GAP_CAUSE le_vendor_ignore_bt_high_in_wifi(uint8_t state);
    \endcode
  */
 void vendor_cmd_init(P_FUN_GAP_APP_CB app_cb);
-
+#endif
 #endif /* VNR_CMD_H */

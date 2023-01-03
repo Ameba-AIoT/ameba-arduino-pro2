@@ -113,15 +113,15 @@ void vPortFree( void *pv );
 int GetSRIndex(unsigned int sampleRate);
 int GetMaxPredSfb(int samplingRateIdx);
 unsigned int MaxBitrate(unsigned long sampleRate);
-unsigned int MinBitrate();
+unsigned int MinBitrate(void);
 unsigned int MaxBitresSize(unsigned long bitRate, unsigned long sampleRate);
 unsigned int BitAllocation(float pe, int short_block);
-int getTick();
+int getTick(void);
 
-void reset_timer();
-void start_timer();
-void stop_timer();
-unsigned int getCycles();
+void reset_timer(void);
+void start_timer(void);
+void stop_timer(void);
+unsigned int getCycles(void);
 
 
 #ifdef __cplusplus

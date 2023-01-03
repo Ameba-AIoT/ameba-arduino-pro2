@@ -38,7 +38,7 @@
 /* PHY layer band config end */
 #define CONFIG_FW_C2H_PKT
 /*For phydm configurations*/
-#define PHYDM_NEW_INTERFACE 0
+#define PHYDM_VERSION	1 /*outsrc*/
 /* For DM support */
 #define RATE_ADAPTIVE_SUPPORT 0
 #define TX_CHECK_DSEC_ALWAYS 1
@@ -68,6 +68,26 @@
 #define TDMA_POWER_SAVING
 
 #define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
+
+/*************************** Config for MP_MODE *******************************/
+//#define CONFIG_MP_INCLUDED
+#ifdef CONFIG_MP_INCLUDED
+#define MP_DRIVER 1
+#undef CONFIG_ANTENNA_DIVERSITY
+#undef CONFIG_BT_COEXIST_SOC
+#undef CONFIG_REG_ENABLE_KFREE
+#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
+#else /* undef CONFIG_MP_INCLUDED  */
+#define MP_DRIVER 0
+#endif /* #ifdef CONFIG_MP_INCLUDED */
+/************************* Config for MP_MODE end *****************************/
+
+/* debug log level */
+#ifdef RELEASE_VERSION
+#define RTW_MSG_LEVEL    RTW_MSG_ERROR
+#else
+#define RTW_MSG_LEVEL    RTW_MSG_WARNING
+#endif
 
 #endif /* #ifndef AUTOCONF_8711B_H */
 

@@ -181,7 +181,7 @@ do {\
 
 #if  defined(CONFIG_RTL8812A) || defined(CONFIG_RTL8821A)|| defined(CONFIG_RTL8723B) || defined(CONFIG_RTL8711B) \
 	|| defined(CONFIG_RTL8188F) || defined(CONFIG_RTL8192E) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8730A) \
-	|| defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8723D) || defined(CONFIG_RTL8720E)
+	|| defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8723D) || defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 #define TXDESC_SIZE 40
 #elif defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8735B)
 #define TXDESC_SIZE 48
@@ -200,7 +200,7 @@ do {\
 
 #if defined(CONFIG_PCI_HCI) || defined(CONFIG_LX_HCI) || defined(CONFIG_AXI_HCI)
 #if defined(CONFIG_RTL8711B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || \
-	defined(CONFIG_RTL8720E)  // buffer descriptor architecture
+	defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)// buffer descriptor architecture
 #define TXDESC_OFFSET TXDESC_SIZE
 #else
 #define TXDESC_OFFSET 0
@@ -251,7 +251,7 @@ struct tx_desc {
 
 	unsigned int txdw7;
 #if defined(CONFIG_LX_HCI)||defined(CONFIG_RTL8188F) ||defined(CONFIG_RTL8192E) ||defined(CONFIG_RTL8723D) ||defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8735B) || \
-	defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8720E)
+	defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 	unsigned int txdw8;
 
 	unsigned int txdw9;
@@ -279,7 +279,7 @@ union txdesc {
 #endif
 
 struct rtw_tx_ring {
-#if ((RTL8711B_SUPPORT == 1) || (RTL8721D_SUPPORT == 1) || (RTL8195B_SUPPORT == 1) || (RTL8710C_SUPPORT == 1) || (RTL8730A_SUPPORT == 1) || (RTL8735B_SUPPORT == 1) || (RTL8720E_SUPPORT == 1))
+#if ((RTL8711B_SUPPORT == 1) || (RTL8721D_SUPPORT == 1) || (RTL8195B_SUPPORT == 1) || (RTL8710C_SUPPORT == 1) || (RTL8730A_SUPPORT == 1) || (RTL8735B_SUPPORT == 1) || (RTL8720E_SUPPORT == 1) || (RTL8730E_SUPPORT == 1))
 	struct tx_buf_desc	*desc;
 #else
 	struct tx_desc	*desc;
@@ -501,9 +501,7 @@ struct xmit_frame {
 #ifdef TX_SHORTCUT
 	int tx_shortcut_idx;
 #endif
-#if defined(RTL8730A_WIFI_TEST) || defined(RTL8720E_WIFI_TEST)  //UL MU
-	u8 raw_type;
-#endif
+	u8 raw_type;//Test code construct trigger frame for mu test
 };
 
 struct tx_servq {

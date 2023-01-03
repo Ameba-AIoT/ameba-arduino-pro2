@@ -1,11 +1,11 @@
 /**
 *****************************************************************************************
-*	 Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
+*     Copyright(c) 2017, Realtek Semiconductor Corporation. All rights reserved.
 *****************************************************************************************
-   * @file	  central_client_app.h
-   * @brief	 This file handles BLE central client application routines.
-   * @author	jane
-   * @date	  2017-06-06
+   * @file      central_client_app.h
+   * @brief     This file handles BLE central client application routines.
+   * @author    jane
+   * @date      2017-06-06
    * @version   v1.0
    **************************************************************************************
    * @attention
@@ -20,7 +20,7 @@
 extern "C" {
 #endif
 /*============================================================================*
- *							  Header Files
+ *                              Header Files
  *============================================================================*/
 #include <profile_client.h>
 #include <app_msg.h>
@@ -28,7 +28,7 @@ extern "C" {
 #include <profile_server.h>
 #include "ble_ms_adapter_service.h"
 
-#define BLE_PRINT	printf
+#define BLE_PRINT    printf
 #define BD_ADDR_FMT "%02x:%02x:%02x:%02x:%02x:%02x"
 #define BD_ADDR_ARG(x) (x)[5],(x)[4],(x)[3],(x)[2],(x)[1],(x)[0]
 #define UUID_128_FORMAT "0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X:0x%2X"
@@ -38,9 +38,9 @@ extern "C" {
 
 
 /*============================================================================*
- *							  Variables
+ *                              Variables
  *============================================================================*/
-extern T_CLIENT_ID   ble_ms_adapter_gcs_client_id;		 /**< General Common Services client client id*/
+extern T_CLIENT_ID   ble_ms_adapter_gcs_client_id;         /**< General Common Services client client id*/
 
 typedef enum {
 	BMS_API_MSG_START_ADV,
@@ -65,6 +65,7 @@ typedef enum {
 	//BMS_API_MSG_CLEAR_WHITELIST,
 	BMS_API_MSG_MODIFY_WHITELIST,
 	BMS_API_MSG_SET_DEVICE_NAME,
+	//BMS_API_MSG_SET_DEVICE_APPEAR,
 	BMS_API_MSG_MAX
 } T_BMS_API_MSG_TYPE;
 
@@ -103,13 +104,13 @@ typedef struct {
 } T_BMS_CALLBACK_MSG;
 
 typedef struct {
-	uint8_t	  adv_evt_type;
-	uint32_t	 adv_intv_min;	   /// Minimum advertising interval (in unit of 625us). Must be greater than 20ms
-	uint32_t	 adv_intv_max;	   /// Maximum advertising interval (in unit of 625us). Must be greater than 20ms
+	uint8_t      adv_evt_type;
+	uint32_t     adv_intv_min;       /// Minimum advertising interval (in unit of 625us). Must be greater than 20ms
+	uint32_t     adv_intv_max;       /// Maximum advertising interval (in unit of 625us). Must be greater than 20ms
 	unsigned int adv_datalen;
 	unsigned int scanrsp_datalen;
-	uint8_t	  adv_data[31];
-	uint8_t	  scanrsp_data[31];
+	uint8_t      adv_data[31];
+	uint8_t      scanrsp_data[31];
 } M_ADV_PARAM;
 
 typedef enum {
@@ -190,16 +191,24 @@ typedef struct {
 	uint8_t *device_name;
 } M_SET_DEVICE_NAME;
 
-
+typedef struct save_scan_info_t {
+	struct save_scan_info_t *p_next; // Pointer to the next item, must be the first field.
+	ms_hal_ble_report_type     type;                           // report ad type
+	ms_hal_ble_addr_t     peer_addr;                           // peer addr
+	int8_t                   tx_pwr;                           /// TX power (in dBm)
+	int8_t                     rssi;                           // rssi
+	uint16_t                    len;                           //data len
+	uint8_t                   *data;                           //data
+} M_SAVE_SCAN_INFO;
 
 /*============================================================================*
- *							  Functions
+ *                              Functions
  *============================================================================*/
 
 /**
- * @brief	All the application messages are pre-handled in this function
- * @note	 All the IO MSGs are sent to this function, then the event handling
- *		   function shall be called according to the MSG type.
+ * @brief    All the application messages are pre-handled in this function
+ * @note     All the IO MSGs are sent to this function, then the event handling
+ *           function shall be called according to the MSG type.
  * @param[in] io_msg  IO message data
  * @return   void
  */
@@ -219,10 +228,14 @@ T_APP_RESULT ble_ms_adapter_app_gap_callback(uint8_t cb_type, void *p_cb_data);
  * @param  p_data  pointer to data.
  * @retval   result @ref T_APP_RESULT
  */
+bool ble_ms_adapter_app_send_api_msg(T_BMS_API_MSG_TYPE sub_type, void *buf);
 T_APP_RESULT ble_ms_adapter_gcs_client_callback(T_CLIENT_ID client_id, uint8_t conn_id, void *p_data);
 #if F_BT_GAPS_CHAR_WRITEABLE
 T_APP_RESULT ble_ms_adapter_gap_service_callback(T_SERVER_ID service_id, void *p_para);
 #endif
+
+void ble_ms_adapter_app_handle_callback_msg(T_BMS_CALLBACK_MSG callback_msg);
+
 
 #ifdef __cplusplus
 }

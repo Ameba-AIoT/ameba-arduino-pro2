@@ -178,19 +178,14 @@ extern void restore_flags(void);
 #define MAX_RX_PKT_LIMIT			((WLAN_MAX_PROTOCOL_OVERHEAD + WLAN_MAX_ETHFRM_LEN + 511) / 512) // 4, for lxbus
 #define MAX_RX_PKT_SIZE					MAX_RX_PKT_LIMIT*512	// MAX_SKB_BUF_SIZE = 0+32+40+512*4+0 = 2120
 #else
+// CONFIG_INIC_IPC_HIGH_TP : MAX_RX_PKT_SIZE = 64+1904(1890+14) = 1968
 #define MAX_RX_PKT_SIZE				WLAN_MAX_PROTOCOL_OVERHEAD + WLAN_MAX_ETHFRM_LEN	// MAX_RX_PKT_SIZE = 64+1514 = 1578
 #define MAX_RX_PKT_LIMIT				((MAX_RX_PKT_SIZE + 511) / 512)			// ((1578 + 512)  / 512) = 4
 #endif
-
-
-#if defined(CONFIG_HIGH_TP_TEST) && !defined(CONFIG_INIC_IPC_HIGH_TP)
-#define MAX_SKB_BUF_SIZE			2104
-#else
 #define MAX_SKB_BUF_SIZE			(HAL_INTERFACE_OVERHEAD_SKB_DATA+RX_DRIVER_INFO+\
 												((TXDESC_SIZE>RXDESC_SIZE)? TXDESC_SIZE:RXDESC_SIZE) +\
 												MAX_RX_PKT_SIZE +\
 												SKB_RESERVED_FOR_SAFETY)	// 0+32+40+1578+8 = 1658
-#endif
 
 #else
 #define MAX_SKB_BUF_SIZE	2048
@@ -199,7 +194,7 @@ extern void restore_flags(void);
 #if 0
 struct  sk_buff_head {
 	struct list_head	*next, *prev;
-	u32			qlen;
+	uint32_t			qlen;
 };
 
 struct sk_buff {
@@ -419,15 +414,15 @@ int dev_alloc_name(struct net_device *net_dev, const char *ifname);
 // Timer Operation
 //----- ------------------------------------------------------------------
 void init_timer(struct timer_list *timer);
-void mod_timer(struct timer_list *timer, u32 delay_time_ms);
+void mod_timer(struct timer_list *timer, uint32_t delay_time_ms);
 void  cancel_timer_ex(struct timer_list *timer);
 void del_timer_sync(struct timer_list *timer);
 void init_timer_wrapper(void);
 void deinit_timer_wrapper(void);
 
 void	rtw_init_timer(_timer *ptimer, void *adapter, TIMER_FUN pfunc, void *cntx, const char *name);
-void	rtw_set_timer(_timer *ptimer, u32 delay_time);
-u8		rtw_cancel_timer(_timer *ptimer);
+void	rtw_set_timer(_timer *ptimer, uint32_t delay_time);
+uint8_t		rtw_cancel_timer(_timer *ptimer);
 void	rtw_del_timer(_timer *ptimer);
 
 #endif //__WRAPPER_H__

@@ -33,7 +33,7 @@
 //	Commented by Albert 20101105
 //	Increase the scanning timeout because of increasing the SURVEY_TO value.
 
-#ifdef CONFIG_BT_COEXIST_SOC
+#if defined(CONFIG_BT_COEXIST_SOC) || defined(CONFIG_BT_COEXIST)
 #define 	SCANNING_TIMEOUT 	12000
 #else
 #define 	SCANNING_TIMEOUT 	8000

@@ -142,15 +142,31 @@ static Word64 MADD64(Word64 sum64, int x, int y)
 }
 
 //Reverse byte order (16 bit) //FB
-static unsigned int REV16( unsigned int value)
+static unsigned int REV16_( unsigned int value)
 {
 	return ((value>>8) | (value<<8));
 }
 
 //Reverse byte order (32 bit) //FB
-static unsigned int REV32( unsigned int value)
+static unsigned int REV32_( unsigned int value)
 {
 	return (((value>>24)&0xff) | ((value<<8)&0xff0000) | ((value>>8)&0xff00) | ((value<<24)&0xff000000));
+}
+
+//Reverse byte order (16 bit) //FB
+static unsigned int REV16( unsigned char* value)
+{
+	int tmp;
+	memcpy(&tmp, value, 4);
+	return ((tmp>>8) | (tmp<<8));
+}
+
+static unsigned int REV32( unsigned char* value)
+{
+	int tmp;
+	memcpy(&tmp, value, 4);
+	return (((tmp>>24)&0xff) | ((tmp<<8)&0xff0000) | ((tmp>>8)&0xff00) | ((tmp<<24)&0xff000000));
+	//return ((value[3]) | ((value[1]<<16)) | ((value[2])<<8) | ((value[0]<<24)));
 }
 
 #endif /* _ASSEMBLY_H */

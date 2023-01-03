@@ -169,6 +169,13 @@ struct rx_pkt_attrib	{
 #endif
 
 	struct phydm_phyinfo_struct phy_info;
+#if (PHYDM_VERSION == 3) /*for halbb physts_rxd*/
+	u8 A1_matched;
+	u8 macid_from_rxdesc;
+	u8 frame_type; //subtype not included
+	u8 bc;
+#endif
+
 };
 
 //These definition is used for Rx packet reordering.
@@ -275,10 +282,10 @@ struct recv_priv {
 
 	_adapter	*adapter;
 
-#if (PHYDM_LINUX_CODING_STYLE == 1)
-	u32 is_any_non_be_pkts;
-#else
+#if (PHYDM_VERSION == 1)
 	u32	bIsAnyNonBEPkts;
+#else
+	u32 is_any_non_be_pkts;
 #endif
 	u64	rx_bytes;
 	u64	last_rx_bytes;

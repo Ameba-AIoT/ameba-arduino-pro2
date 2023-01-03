@@ -14,17 +14,19 @@
 extern "C" {
 #endif
 
-#define GATTC_APP_CONN_MAP_SIZE \
+#define GATTC_APP_CONN_MAP_SIZE     \
     (GAP_MAX_LINKS / 8 + 1)
 
-#define RTK_BT_APP_SET_CONN_MAP(map, conn_id, en) \
-    if (en)                                       \
-        map[conn_id / 8] |= (1 << (conn_id % 8)); \
-    else                                          \
-        map[conn_id / 8] &= ~(1 << (conn_id % 8));
+#define RTK_BT_APP_SET_CONN_MAP(map, conn_id, en)       \
+    do {                                                \
+        if (en)                                         \
+            map[conn_id / 8] |= (1 << (conn_id % 8));   \
+        else                                            \
+            map[conn_id / 8] &= ~(1 << (conn_id % 8));  \
+    } while (0)
 
-#define RTK_BT_APP_IS_ON_CONN(map, conn_id) \
-    map[conn_id / 8] & (1 << (conn_id % 8))
+#define RTK_BT_APP_IS_ON_CONN(map, conn_id)         \
+    (map[conn_id / 8] & (1 << (conn_id % 8)))
 
 typedef struct {
     /* Whether in use */

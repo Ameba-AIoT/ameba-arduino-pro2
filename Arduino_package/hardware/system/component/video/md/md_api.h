@@ -42,6 +42,14 @@ typedef struct md_param_s {
 	int md_col;
 } md_param_t;
 
+typedef struct motion_detect_adj_s {
+	int md_adj_threshold_block;
+	int md_adj_map[MD_MAX_COL * MD_MAX_ROW];
+	int md_visited_map[MD_MAX_COL * MD_MAX_ROW];
+	int counter;
+	int point_list[MD_MAX_COL * MD_MAX_ROW * 2];
+} motion_detect_adj_t;
+
 typedef struct md_context_s {
 	int count;
 	int detect_interval;
@@ -57,6 +65,7 @@ typedef struct md_context_s {
 	char md_mask[MD_MAX_COL * MD_MAX_ROW];
 	int md_trigger_block_threshold;
 	float Tauto;
+	motion_detect_adj_t md_adj;
 	motion_detect_bgmodel_t md_bgmodel;
 	motion_detect_YRBG_data_t YRGB_data;
 	motion_detect_threshold_t *md_threshold;

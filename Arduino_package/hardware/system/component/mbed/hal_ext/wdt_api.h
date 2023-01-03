@@ -44,7 +44,7 @@ extern "C" {
 ///@name Ameba Common
 ///@{
 
-typedef void (*wdt_irq_handler)(uint32_t id);
+typedef u32(*wdt_irq_handler)(void *id);
 /**
  * @brief   Initializes the watch dog, include time setting, mode register
  * @param   timeout_ms: the watch-dog timer timeout value, in ms.

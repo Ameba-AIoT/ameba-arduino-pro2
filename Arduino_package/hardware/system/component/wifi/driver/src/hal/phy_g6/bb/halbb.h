@@ -37,9 +37,12 @@
 #define BB_EFUSE_BAND_NUM	5
 #define IC_LNA_NUM		7
 #define IC_TIA_NUM		2
+#define IC_RXBB_NUM 1
 #define IC_LNA_OP1DB_NUM	7
 #define IC_TIA_LNA_OP1DB_NUM	8
 #define EFUSE_OFST_NUM		1
+#define PIN_for_gain_NUM 16
+
 
 /*@--------------------------[Enum]------------------------------------------*/
 
@@ -74,24 +77,24 @@ struct bb_func_hooker_info {
 };
 
 struct	bb_iot_info {
-	u8		is_linked_cmw500: 1;
-	u8		patch_id_00000000: 1;
-	u8		rsvd: 6;
+	u8		is_linked_cmw500:1;
+	u8		patch_id_00000000:1;
+	u8		rsvd:6;
 };
 
 struct bb_path_info {
 	/*[Path info]*/
 	u8			tx_path_en; /*TX path enable*/
 	u8			rx_path_en; /*RX path enable*/
-#ifdef HALBB_COMPILE_ABOVE_4SS
+	#ifdef HALBB_COMPILE_ABOVE_4SS
 	enum bb_path		tx_4ss_path_map; /*@Use N-X for 4STS rate*/
-#endif
-#ifdef HALBB_COMPILE_ABOVE_3SS
+	#endif
+	#ifdef HALBB_COMPILE_ABOVE_3SS
 	enum bb_path		tx_3ss_path_map; /*@Use N-X for 3STS rate*/
-#endif
-#ifdef HALBB_COMPILE_ABOVE_2SS
+	#endif
+	#ifdef HALBB_COMPILE_ABOVE_2SS
 	enum bb_path		tx_2ss_path_map; /*@Use N-X for 2STS rate*/
-#endif
+	#endif
 	enum bb_path		tx_1ss_path_map; /*@Use N-X for 1STS rate*/
 };
 
@@ -163,6 +166,8 @@ struct bb_gain_info {
 	bool bypass_gain_chk;
 	s8 lna_gain[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][IC_LNA_NUM];
 	s8 tia_gain[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][IC_TIA_NUM];
+	s8 rxbb_gain[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][IC_RXBB_NUM];
+	s8 pin_for_gain_idx[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][PIN_for_gain_NUM];
 	s8 lna_gain_bypass[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][IC_LNA_NUM];
 	s8 lna_op1db[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][IC_LNA_NUM];
 	s8 tia_lna_op1db[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][IC_LNA_NUM + 1]; // TIA0_LNA0~6 + TIA1_LNA6
@@ -173,7 +178,7 @@ struct bb_gain_info {
 	s8 rpl_ofst_160[BB_GAIN_BAND_NUM][HALBB_MAX_PATH][BB_RXSC_NUM_160];
 };
 
-struct bb_efuse_info {
+struct bb_efuse_info{
 	bool normal_efuse_check;
 	bool hidden_efuse_check;
 	s8 gain_offset[HALBB_MAX_PATH][BB_BAND_NUM_MAX]; // S(8,0)
@@ -262,7 +267,7 @@ struct halbb_mcc_dm {
  * @brief _mcc_h2c_
  *
  */
-struct mcc_h2c_reg_content {
+ struct mcc_h2c_reg_content {
 	// MCCDM
 	u8 addr_lsb;
 	u8 addr_msb;
@@ -345,6 +350,8 @@ struct bb_info {
 	/*[pmac]*/
 	bool			dyn_pmac_tri_en;
 	bool			pmac_tri_en;
+	u32			pmac_tri_idx;
+	u32			pmac_pwr_ofst;
 
 	/*@=== [HALBB Structure] ============================================*/
 #ifdef BB_8852A_2_SUPPORT
@@ -437,15 +444,15 @@ struct bb_info {
 #endif
 };
 
-
+ 
 /*@--------------------------[Prptotype]-------------------------------------*/
 u8 halbb_get_rssi_min(struct bb_info *bb);
 void halbb_cmn_info_self_reset(struct bb_info *bb);
 void halbb_sta_info_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-						char *output, u32 *_out_len);
+			char *output, u32 *_out_len);
 void halbb_supportability_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-							  char *output, u32 *_out_len);
+			     char *output, u32 *_out_len);
 void halbb_pause_func_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-						  char *output, u32 *_out_len);
+			  char *output, u32 *_out_len);
 void halbb_store_data(struct bb_info *bb);
 #endif

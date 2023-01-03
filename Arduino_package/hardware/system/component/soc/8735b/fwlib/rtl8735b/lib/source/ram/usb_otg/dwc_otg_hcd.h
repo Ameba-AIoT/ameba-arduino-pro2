@@ -744,4 +744,4 @@ void rtw_hcd_remove(VOID);
 #define dwc_sample_frrem(_hcd, _qh, _letter)
 #endif
 #endif
-#endif /* DWC_DEVICE_ONLY */
+#endif

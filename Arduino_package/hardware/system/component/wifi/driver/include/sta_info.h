@@ -92,9 +92,15 @@ struct sta_info {
 	struct sta_xmit_priv sta_xmitpriv;
 	struct sta_recv_priv sta_recvpriv;
 
-	struct cmn_sta_info cmn;
-
+#if (PHYDM_VERSION == 3)
 	struct rtw_phl_stainfo_t *phl_sta;
+#else
+	struct cmn_sta_info cmn;
+#endif
+
+#ifdef CONFIG_TWT
+	u8 twt_id;	/*bit0 represent id0, .......bit7 represent id7*/
+#endif
 
 	_queue sleep_q;
 	unsigned int sleepq_len;
@@ -124,13 +130,14 @@ struct sta_info {
 	u8	cts2self;
 	u8	rtsen;
 
-	u8	raid;
+	u8	raid;	//ax useless
 	u8 	init_rate;
-	u32	ra_mask;
 	struct stainfo_stats sta_stats;
 
 	//for A-MPDU TX, ADDBA timeout check
 	_timer addba_retry_timer;
+	//for empty defrag queue
+	_timer defrag_queue_timer;
 	//for A-MPDU Rx reordering buffer control
 	struct recv_reorder_ctrl recvreorder_ctrl[MAXTID];
 	//for A-MPDU Tx
@@ -305,6 +312,7 @@ struct	sta_priv {
 	_list auth_list;
 	_lock asoc_list_lock;
 	_lock auth_list_lock;
+	_lock expire_lock;
 
 	unsigned int auth_to;  //sec, time to expire in authenticating.
 	unsigned int assoc_to; //sec, time to expire before associating.

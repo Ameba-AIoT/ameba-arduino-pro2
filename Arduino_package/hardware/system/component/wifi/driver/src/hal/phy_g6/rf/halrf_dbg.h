@@ -32,46 +32,46 @@
 
 #define RFDBG_TRACE_EN
 #ifdef RFDBG_TRACE_EN
-#define RF_DBG(rf, comp, fmt, ...)     \
+	#define RF_DBG(rf, comp, fmt, ...)     \
 		do {\
 			if(rf->dbg_component & comp)\
 				_os_dbgdump("[RF]" fmt, ##__VA_ARGS__);\
 		} while (0)
-
-#define RF_TRACE(fmt, ...)     \
+		
+	#define RF_TRACE(fmt, ...)     \
 		do {\
 			_os_dbgdump("[RF]" fmt, ##__VA_ARGS__);\
 		} while (0)
-
-#define RF_WARNING(fmt, ...)     \
+		
+	#define RF_WARNING(fmt, ...)     \
 		do {\
 			_os_dbgdump("[WARNING][RF]" fmt, ##__VA_ARGS__);\
 		} while (0)
 
-#define RF_DBG_VAST(max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
+	#define RF_DBG_VAST(max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
 		do {\
 			_os_dbgdump(fmt, ##__VA_ARGS__);\
 		} while (0)
 
-#define	RF_DBG_CNSL(max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
+	#define	RF_DBG_CNSL(max_buff_len, used_len, buff_addr, remain_len, fmt, ...)\
 		do {									\
 			u32 *used_len_tmp = &(used_len);				\
 			if (*used_len_tmp < max_buff_len)				\
 				*used_len_tmp += _os_snprintf(buff_addr, remain_len, fmt, ##__VA_ARGS__);\
 		} while (0)
 #else
-#define RF_DBG
-#define RF_TRACE
-#define RF_WARNING
-#define RF_DBG_CNSL		/*Print on Consol,CLI */
-#define RF_DBG_VAST		/*Print to Comport, Debug View*/
-#endif
+	#define RF_DBG
+	#define RF_TRACE
+	#define RF_WARNING
+	#define RF_DBG_CNSL		/*Print on Consol,CLI */
+	#define RF_DBG_VAST		/*Print to Comport, Debug View*/
+#endif	
 
 
 /*@--------------------------[Enum]------------------------------------------*/
-
+ 
 /*@--------------------------[Structure]-------------------------------------*/
-
+ 
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct rf_info;
 void halrf_dbg_setting_init(struct rf_info *rf);
@@ -86,11 +86,11 @@ void halrf_rx_dck_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used, char
 void halrf_dack_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used, char *output, u32 *_out_len);
 void halrf_tssi_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used, char *output, u32 *_out_len);
 void halrf_iqk_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 void halrf_iqk_bypass_cmd(struct rf_info *rf, char input[][16], u32 *_used,
-						  char *output, u32 *_out_len);
+			 char *output, u32 *_out_len);
 void halrf_iqk_klog_cmd(struct rf_info *rf, char input[][16], u32 *_used,
-						char *output, u32 *_out_len);
+			 char *output, u32 *_out_len);
 void halrf_pwr_table_dbg_cmd(struct rf_info *rf, char input[][16], u32 *_used, char *output, u32 *_out_len);
 void halrf_rfk_check_reg_cmd(struct rf_info *rf, char input[][16], u32 *_used, char *output, u32 *_out_len);
 void halrf_test_cmd(struct rf_info *rf, char input[][16], u32 *_used,  char *output, u32 *_out_len);

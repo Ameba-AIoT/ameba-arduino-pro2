@@ -30,7 +30,7 @@
 /*@--------------------------[Enum]------------------------------------------*/
 
 /*@--------------------------[Structure]-------------------------------------*/
-
+ 
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct bb_info;
 void halbb_set_reg(struct bb_info *bb, u32 addr, u32 mask, u32 val);
@@ -48,7 +48,9 @@ u8 halbb_set_cmac_antsel_c(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta
 u8 halbb_set_cmac_antsel_d(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i);
 u8 halbb_set_cmac_pwr_tol(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i);
 u8 halbb_set_cmac_databw_er(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i);
+#if !defined(BB_8730E_SUPPORT) && !defined(BB_8720E_SUPPORT)
 enum rtw_hal_status halbb_config_cmac_tbl(struct bb_info *bb, struct rtw_phl_stainfo_t *phl_sta_i,
-		struct rtw_hal_mac_ax_cctl_info *cctrl,
-		struct rtw_hal_mac_ax_cctl_info *cctl_info_mask);
+			struct rtw_hal_mac_ax_cctl_info *cctrl,
+			struct rtw_hal_mac_ax_cctl_info *cctl_info_mask);
+#endif
 #endif

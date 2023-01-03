@@ -14,23 +14,23 @@
 extern "C" {
 #endif
 
-#define RTK_BT_TEST_RETURN_FAIL(condition) \
-    if (condition)                         \
-    {                                      \
-        return RTK_BT_FAIL;                \
-    }
+#define RTK_BT_TEST_RETURN_FAIL(condition)      \
+    do {                                        \
+        if (condition)                          \
+            return RTK_BT_FAIL;                 \
+    } while (0)
 
-#define RTK_BT_TEST_RETURN_NULL(condition) \
-    if (condition)                         \
-    {                                      \
-        return NULL;                       \
-    }
+#define RTK_BT_TEST_RETURN_NULL(condition)      \
+    do {                                        \
+        if (condition)                          \
+            return NULL;                        \
+    } while (0)
 
-#define RTK_BT_TEST_RETURN(condition)      \
-    if (condition)                         \
-    {                                      \
-        return;                            \
-    }
+#define RTK_BT_TEST_RETURN(condition)           \
+    do {                                        \
+        if (condition)                          \
+            return;                             \
+    } while (0)
 
 #define BT_TIMEOUT_NONE        0
 #define BT_TIMEOUT_FORVER      0xffffffffUL

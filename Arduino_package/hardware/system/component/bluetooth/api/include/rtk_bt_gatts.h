@@ -1,255 +1,95 @@
 /**
- * @file      rtk_bt_gatts.h
+ * @file      rtk_bt_gatt.h
  * @author    benling_xu@realsil.com.cn
- * @brief     Bluetooth GATT server part type and function definition
+ * @brief     Bluetooth GATT server part type and function deffinition
  * @copyright Copyright (c) 2022. Realtek Semiconductor Corporation. All rights reserved.
  */
 
 #ifndef __RTK_BT_GATTS_H__
 #define __RTK_BT_GATTS_H__
 
-#include <rtk_bt_defs.h>
-#include <rtk_bt_gatt.h>
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-/**
- * @def       BT_UUID_GATT_PRIMARY_VAL
- * @brief     GATT Primary Service UUID value
- */
-#define BT_UUID_GATT_PRIMARY_VAL			0x2800
+#include <dlist.h>
+#include <rtk_bt_att_defs.h>
+
 
 /**
- * @def       BT_UUID_GATT_PRIMARY
- * @brief     GATT Primary Service
+ * @struct    bt_uuid
+ * @brief     A 'tentative' type definition.
  */
-#define BT_UUID_GATT_PRIMARY \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_PRIMARY_VAL)
-
-/**
- * @def       BT_UUID_GATT_SECONDARY_VAL
- * @brief     GATT Secondary Service UUID value
- */
-#define BT_UUID_GATT_SECONDARY_VAL			0x2801
-
-/**
- * @def       BT_UUID_GATT_SECONDARY
- * @brief     GATT Secondary Service
- */
-#define BT_UUID_GATT_SECONDARY \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_SECONDARY_VAL)
-
-/**
- * @def       BT_UUID_GATT_INCLUDE_VAL
- * @brief     GATT Include Service UUID value
- */
-#define BT_UUID_GATT_INCLUDE_VAL			0x2802
-
-/**
- * @def       BT_UUID_GATT_INCLUDE
- * @brief     GATT Include Service
- */
-#define BT_UUID_GATT_INCLUDE \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_INCLUDE_VAL)
-
-/**
- * @def       BT_UUID_GATT_CHRC_VAL
- * @brief     GATT Characteristic UUID value
- */
-#define BT_UUID_GATT_CHRC_VAL				0x2803
-
-/**
- * @def       BT_UUID_GATT_CHRC
- * @brief     GATT Characteristic
- */
-#define BT_UUID_GATT_CHRC \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_CHRC_VAL)
-
-/**
- * @def       BT_UUID_GATT_CEP_VAL
- * @brief     GATT Characteristic Extended Properties UUID value
- */
-#define BT_UUID_GATT_CEP_VAL				0x2900
-
-/**
- * @def       BT_UUID_GATT_CEP
- * @brief     GATT Characteristic Extended Properties
- */
-#define BT_UUID_GATT_CEP \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_CEP_VAL)
-
-/**
- * @def       BT_UUID_GATT_CUD_VAL
- * @brief     GATT Characteristic User Description UUID value
- */
-#define BT_UUID_GATT_CUD_VAL				0x2901
-
-/**
- * @def       BT_UUID_GATT_CUD
- * @brief     GATT Characteristic User Description
- */
-#define BT_UUID_GATT_CUD \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_CUD_VAL)
-
-/**
- * @def       BT_UUID_GATT_CCC_VAL
- * @brief     GATT Client Characteristic Configuration UUID value
- */
-#define BT_UUID_GATT_CCC_VAL				0x2902
-
-/**
- * @def       BT_UUID_GATT_CCC
- * @brief     GATT Client Characteristic Configuration
- */
-#define BT_UUID_GATT_CCC \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_CCC_VAL)
-
-/**
- * @def       BT_UUID_GATT_SCC_VAL
- * @brief     GATT Server Characteristic Configuration UUID value
- */
-#define BT_UUID_GATT_SCC_VAL 				0x2903
-
-/**
- * @def       BT_UUID_GATT_SCC
- * @brief     GATT Server Characteristic Configuration
- */
-#define BT_UUID_GATT_SCC \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_SCC_VAL)
-
-/**
- * @def       BT_UUID_GATT_CPF_VAL
- * @brief     GATT Characteristic Presentation Format UUID value
- */
-#define BT_UUID_GATT_CPF_VAL				0x2904
-
-/**
- * @def       BT_UUID_GATT_CPF
- * @brief     GATT Characteristic Presentation Format
- */
-#define BT_UUID_GATT_CPF \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_CPF_VAL)
-
-/**
- * @def       BT_UUID_GATT_CAF_VAL
- * @brief     GATT Characteristic Aggregated Format UUID value
- */
-#define BT_UUID_GATT_CAF_VAL 				0x2905
-
-/**
- * @def       BT_UUID_GATT_CAF
- * @brief     GATT Characteristic Aggregated Format
- */
-#define BT_UUID_GATT_CAF \
-	BT_UUID_DECLARE_16(BT_UUID_GATT_CAF_VAL)
-
-/**
- * @def       RTK_BT_GATT_CHRC_BROADCAST
- * @brief     Characteristic broadcast property.
- *            If set, permits broadcasts of the Characteristic Value using Server
- *            Characteristic Configuration Descriptor.
- */
-#define RTK_BT_GATT_CHRC_BROADCAST			0x01
-
-/**
- * @def       RTK_BT_GATT_CHRC_READ
- * @brief     Characteristic read property.
- *            If set, permits reads of the Characteristic Value.
- */
-#define RTK_BT_GATT_CHRC_READ				0x02
-
-/**
- * @def       RTK_BT_GATT_CHRC_WRITE_WITHOUT_RESP
- * @brief     Characteristic write without response property.
- *            If set, permits write of the Characteristic Value without response.
- */
-#define RTK_BT_GATT_CHRC_WRITE_WITHOUT_RESP	0x04
-
-/**
- * @def       RTK_BT_GATT_CHRC_WRITE
- * @brief     Characteristic write with response property.
- *            If set, permits write of the Characteristic Value with response.
- */
-#define RTK_BT_GATT_CHRC_WRITE				0x08
-
-/**
- * @def       RTK_BT_GATT_CHRC_NOTIFY
- * @brief     Characteristic notify property.
- *            If set, permits notifications of a Characteristic Value without acknowledgment.
- */
-#define RTK_BT_GATT_CHRC_NOTIFY				0x10
-
-/**
- * @def       RTK_BT_GATT_CHRC_INDICATE
- * @brief     Characteristic indicate property.
- *            If set, permits indications of a Characteristic Value with acknowledgment.
- */
-#define RTK_BT_GATT_CHRC_INDICATE			0x20
-
-/**
- * @def       RTK_BT_GATT_CHRC_AUTH
- * @brief     Characteristic Authenticated Signed Writes property.
- *            If set, permits signed writes to the Characteristic Value.
- */
-#define RTK_BT_GATT_CHRC_AUTH				0x40
-
-/**
- * @def   	  RTK_BT_GATT_CHRC_EXT_PROP
- * @brief     Characteristic Extended Properties property.
- *            If set, additional characteristic properties are defined in the
- *            Characteristic Extended Properties Descriptor.
- */
-#define RTK_BT_GATT_CHRC_EXT_PROP			0x80
-
-/**
- * @enum  attr_perm_t
- * @brief GATT attribute permission bit field values.
- */
-enum attr_perm_t
+struct bt_uuid
 {
-	RTK_BT_GATT_PERM_NONE          = 0,		/*!< No operations supported, e.g. for notify-only */
-	RTK_BT_GATT_PERM_READ          = BIT(0),/*!< Attribute read permission. */
-	RTK_BT_GATT_PERM_WRITE         = BIT(1),/*!< Attribute write permission. */
-	RTK_BT_GATT_PERM_READ_ENCRYPT  = BIT(2),/*!< Attribute read permission with encryption.*/
-	RTK_BT_GATT_PERM_WRITE_ENCRYPT = BIT(3),/*!< Attribute write permission with encryption. */
-	RTK_BT_GATT_PERM_READ_AUTHEN   = BIT(4),/*!< Attribute read permission with authentication. */
-	RTK_BT_GATT_PERM_WRITE_AUTHEN  = BIT(5),/*!< Attribute write permission with authentication. */
-	RTK_BT_GATT_PERM_PREPARE_WRITE = BIT(6),/*!< Attribute prepare write permission. */
+	uint8_t type;        /*!< UUID type */
 };
 
 /**
- * @struct    rtk_bt_gatt_attr
- * @brief     GATT Attribute structure.
+ * @def       BT_UUID_INIT_16
+ * @brief     Initialize a 16-bit UUID.
+ * @param     value: 16-bit UUID value in host endianness.
  */
-struct rtk_bt_gatt_attr
+#define BT_UUID_INIT_16(value) \
+{                              \
+	.uuid = {BT_UUID_TYPE_16}, \
+	.val = (value),            \
+}
+
+/**
+ * @struct    bt_uuid_16
+ * @brief     UUID16 type definition.
+ */
+struct bt_uuid_16
 {
-	const struct bt_uuid *uuid;				/*!< Attribute UUID */
-	void* read;								/*!< Attribute read callback */
-	void* write;							/*!< Attribute write callback */
-	void *user_data;						/*!< Attribute user data */
-	uint16_t handle;						/*!< Attribute handle */
-	uint8_t perm;							/*!< Attribute permissions */
+	struct bt_uuid uuid; /*!< UUID generic type */
+	uint16_t val;		 /*!< UUID value, 16-bit in host endianness */
 };
 
 /**
- * @struct    rtk_bt_gatt_service
- * @brief     GATT Service structure.
+ * @struct    bt_uuid_128
+ * @brief     UUI128 type definition.
  */
-struct rtk_bt_gatt_service
+struct bt_uuid_128
 {
-	struct rtk_bt_gatt_attr *attrs;			/*!< Service Attributes */
-	size_t attr_count;						/*!< Service Attribute count */
-	/**
-	 * @struct    _snode
-	 */
-	struct _snode
-	{
-		struct _snode *next;				/*!< next node */
-	} node;									/*!< Service Attribute node */
+	struct bt_uuid uuid; /*!< UUID generic type */
+	uint8_t val[16]; /*!< UUID value, 128-bit in host endianness */
 };
+
+/**
+ * @def       CONTAINER_OF
+ * @brief     Get a pointer to a container structure from an element
+ * @param     ptr: pointer to a structure element
+ * @param     type: name of the type that @p ptr is an element of
+ * @param     field: the name of the field within the struct @p ptr points to
+ * @return    a pointer to the structure that contains @p ptr
+ */
+#ifndef CONTAINER_OF
+#define CONTAINER_OF(ptr, type, field) \
+	((type *)(((char *)(ptr)) - offsetof(type, field)))
+#endif
+
+/**
+ * @def       BT_UUID_16
+ * @brief     Helper macro to access the 16-bit UUID from a generic UUID.
+ */
+#define BT_UUID_16(__u) CONTAINER_OF(__u, struct bt_uuid_16, uuid)
+
+/**
+ * @def       BT_UUID_128
+ * @brief     Helper macro to access the 128-bit UUID from a generic UUID.
+ */
+#define BT_UUID_128(__u) CONTAINER_OF(__u, struct bt_uuid_128, uuid)
+
+/**
+ * @def       BT_UUID_DECLARE_16
+ * @brief     Helper to declare a 16-bit UUID inline.
+ * @param     value: 16-bit UUID value in host endianness.
+ * @return    Pointer to a generic UUID.
+ */
+#define BT_UUID_DECLARE_16(value) \
+((struct bt_uuid *)((struct bt_uuid_16[]){BT_UUID_INIT_16(value)}))
 
 /**
  * @struct    rtk_bt_gatt_chrc
@@ -260,56 +100,185 @@ struct rtk_bt_gatt_chrc
 	const struct bt_uuid *uuid;				/*!< Characteristic UUID. */
 	uint16_t value_handle;					/*!< Characteristic Value handle. */
 	uint8_t	properties;						/*!< Characteristic properties. */
-};
+}; 
 
 /**
- * @struct    rtk_bt_gatt_cep
- * @brief     Characteristic Extended Properties Attribute Value.
+ * @def       RTK_BT_GATT_ATTRIBUTE
+ * @brief     Declaration Macro.
+ *            Helper macro to declare an attribute.
+ * @param     _uuid Attribute uuid.
+ * @param     _perm Attribute access permissions.
+ * @param     _user_data Attribute user data.
+ * @param     _len Attribute user data length.
+ * @param     _flag Attribute flag.
  */
-struct rtk_bt_gatt_cep
+#define RTK_BT_GATT_ATTRIBUTE(_uuid, _perm, _user_data, _len, _flag) \
+	{                                                                \
+		.uuid = _uuid,                                               \
+		.perm = _perm,                                               \
+		.user_data = (void*)_user_data,                              \
+		.len = _len,                                                 \
+		.flag = _flag,                                               \
+	}
+
+/**
+ * @def       RTK_BT_GATT_PRIMARY_SERVICE
+ * @brief     Primary Service Declaration Macro.
+ *            Helper macro to declare a primary service attribute.
+ * @param     _service Service attribute value. (struct bt_uuid *)
+ */
+#define RTK_BT_GATT_PRIMARY_SERVICE(_service)                          \
+	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_PRIMARY, RTK_BT_GATT_PERM_READ, \
+						  _service, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_SECONDARY_SERVICE
+ * @brief     Secondary Service Declaration Macro.
+ *            Helper macro to declare a secondary service attribute.
+ * @param     _service Service attribute value. (struct bt_uuid *)
+ */
+#define RTK_BT_GATT_SECONDARY_SERVICE(_service)                          \
+	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_SECONDARY, RTK_BT_GATT_PERM_READ, \
+						  _service, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_INCLUDE_SERVICE
+ * @brief     Include Service Declaration Macro.
+ *            Helper macro to declare database internal include service attribute.
+ * @param     _service_incl Pointer to a struct rtk_bt_gatt_incl (struct rtk_bt_gatt_incl *)
+ */
+#define RTK_BT_GATT_INCLUDE_SERVICE(_service_incl)                     \
+	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_INCLUDE, RTK_BT_GATT_PERM_READ, \
+						  _service_incl, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_CHRC_INIT
+ * @brief     Initialization Macro.
+ *            Helper macro to init an attribute.
+ * @param     _uuid Attribute uuid.
+ * @param     _handle Attribute handle.
+ * @param     _props Attribute access properties.
+ */
+#define RTK_BT_GATT_CHRC_INIT(_uuid, _handle, _props) \
+	{                                                 \
+		.uuid = _uuid,                                \
+		.value_handle = _handle,                      \
+		.properties = _props,                         \
+	}
+
+/**
+ * @def       RTK_BT_GATT_CHARACTERISTIC
+ * @brief     Characteristic and Value Declaration Macro.
+ *            Helper macro to declare a characteristic attribute along with its
+ *            attribute value.
+ * @param     _uuid Characteristic attribute uuid.
+ * @param     _props Characteristic attribute properties.
+ * @param     _perm Characteristic Attribute access permissions.
+ */
+#define RTK_BT_GATT_CHARACTERISTIC(_uuid, _props, _perm)                \
+	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_CHRC, RTK_BT_GATT_PERM_READ,     \
+						  ((struct rtk_bt_gatt_chrc[]){                 \
+							  RTK_BT_GATT_CHRC_INIT(_uuid, 0U, _props), \
+						  }), 0, RTK_BT_GATT_INTERNAL),                 \
+	RTK_BT_GATT_ATTRIBUTE(_uuid, _perm, NULL, 0, RTK_BT_GATT_APP)
+
+/**
+ * @def       RTK_BT_GATT_DESCRIPTOR
+ * @brief     Descriptor Declaration Macro.
+ *            Helper macro to declare a descriptor attribute.
+ * @note      If use RTK_BT_GATT_DESCRIPTOR directly, MUST use _user_data as a raw data!
+ * @param     _uuid Descriptor attribute uuid.
+ * @param     _perm Descriptor attribute access permissions.
+ * @param     _user_data Descriptor attribute user data.
+ * @param     _len Attribute user data length.
+ * @param     _flag Attribute flag.
+ */
+#define RTK_BT_GATT_DESCRIPTOR(_uuid, _perm, _incl_srv, _len, _flag) \
+	RTK_BT_GATT_ATTRIBUTE(_uuid, _perm, _incl_srv, _len, _flag)
+
+/**
+ * @def       RTK_BT_GATT_CEP
+ * @brief     Characteristic Extended Properties Declaration Macro.
+ *            Helper macro to declare a CEP attribute.
+ * @param     _value Pointer to a struct rtk_bt_gatt_cep. (const struct rtk_bt_gatt_cep *)
+ */
+#define RTK_BT_GATT_CEP(_value) \
+	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CEP, RTK_BT_GATT_PERM_READ, (void *)_value, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_CUD
+ * @brief     Characteristic User Format Descriptor Declaration Macro.
+ *            Helper macro to declare a CUD attribute.
+ *
+ * @param     _value User description NULL-terminated C string. (const uint8_t *value)
+ * @param     _perm Descriptor attribute access permissions.
+ */
+#define RTK_BT_GATT_CUD(_value, _perm) \
+	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CUD, _perm, (void *)_value, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_CCC
+ * @brief     Client Characteristic Configuration Declaration Macro.
+ *            Helper macro to declare a CCC attribute.
+ * @note      Although CCCD value read/write will be handled internally, but User APP will be notified
+ * @param     _perm CCC access permissions.
+ */
+#define RTK_BT_GATT_CCC(_perm) \
+	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CCC, _perm, 0, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_SCC
+ * @brief     Server Characteristic Configuration Declaration Macro.
+ *            Helper macro to declare a CCC attribute.
+ * @param     _value Poniter to Server Characteristic Configuration bits. (struct rtk_bt_gatt_scc *)
+ * @param     _perm CCC access permissions.
+ */
+#define RTK_BT_GATT_SCC(_value, _perm) \
+	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_SCC, _perm, (void *)_value, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_CPF
+ * @brief     Characteristic Presentation Format Descriptor Declaration Macro.
+ *            Helper macro to declare a CPF attribute.
+ * @param     _value Pointer to a struct rtk_bt_gatt_cpf. (struct rtk_bt_gatt_cpf*)
+ */
+#define RTK_BT_GATT_CPF(_value) \
+	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CPF, RTK_BT_GATT_PERM_READ, (void *)_value, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_CAF
+ * @brief     Characteristic Aggregate Format Descriptor Declaration Macro.
+ *            Helper macro to declare a CAF attribute.
+ * @param     _value Pointer to a struct rtk_bt_gatt_caf. (struct rtk_bt_gatt_caf*)
+ */
+#define RTK_BT_GATT_CAF(_value) \
+	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CAF, RTK_BT_GATT_PERM_READ, (void *)_value, 0, RTK_BT_GATT_INTERNAL)
+
+/**
+ * @def       RTK_BT_GATT_SERVICE
+ * @brief     Service Structure Declaration Macro.
+ *            Helper macro to declare a service structure.
+ * @param     _attrs Service attributes.
+ * @param     _app_id Service app id.
+ */
+#define RTK_BT_GATT_SERVICE(_attrs, _app_id)                  \
+	{                                                         \
+		.attrs = _attrs,                                      \
+		.attr_count = (sizeof(_attrs) / sizeof((_attrs)[0])), \
+		.app_id = _app_id, 									  \
+	}
+
+/**
+ * @typedef   rtk_bt_gatts_srv_type_t
+ * @brief     Service type.
+ */
+typedef enum
 {
-	uint16_t properties;					/*!< Characteristic Extended properties */
-};
+	GATT_SERVICE_OVER_BREDR,				/*!< 0, Service over BREDR. */
+	GATT_SERVICE_OVER_BLE,					/*!< 1, Service over BLE. */
+	GATT_SERVICE_TYPE_RESERVED,				/*!< 2, RESERVED. */
+} rtk_bt_gatts_srv_type_t;
 
-/**
- * @def       RTK_BT_GATT_CCC_NOTIFY
- * @brief     Client Characteristic Configuration Notification.
- *            If set, changes to Characteristic Value shall be notified.
- */
-#define RTK_BT_GATT_CCC_NOTIFY				0x0001
-
-/**
- * @def       RTK_BT_GATT_CCC_INDICATE
- * @brief     Client Characteristic Configuration Indication.
- *            If set, changes to Characteristic Value shall be indicated.
- */
-#define RTK_BT_GATT_CCC_INDICATE			0x0002
-
-/**
- * @struct    bt_gatt_ccc
- * @brief     Client Characteristic Configuration Attribute Value.
- */
-struct bt_gatt_ccc
-{
-	uint16_t flags;							/*!< Client Characteristic Configuration flags */
-};
-
-/**
- * @def RTK_BT_GATT_SCC_BROADCAST
- * @brief Server Characteristic Configuration Broadcast
- *        If set, the characteristic value shall be broadcast in the advertising data
- *        when the server is advertising.
- */
-#define RTK_BT_GATT_SCC_BROADCAST			0x0001
-
-/**
- * @struct    rtk_bt_gatt_scc
- * @brief     Server Characterestic Configuration Attribute Value.
- */
-struct rtk_bt_gatt_scc
-{
-	uint16_t flags;							/*!< Server Characteristic Configuration flags */
-};
 
 /**
  * @struct    rtk_bt_gatt_cpf
@@ -334,429 +303,196 @@ struct rtk_bt_gatt_caf
 	uint16_t* handles;						/*!< List of Attribute Handles */
 };
 
-/**
- * @def       RTK_BT_GATT_ATTRIBUTE
- * @brief     Declaration Macro.
- *            Helper macro to declare an attribute.
- *  @param    _uuid Attribute uuid.
- *  @param    _perm Attribute access permissions.
- *  @param    _read Attribute read callback.
- *  @param    _write Attribute write callback.
- *  @param    _user_data Attribute user data.
- */
-#define RTK_BT_GATT_ATTRIBUTE(_uuid, _perm, _read, _write, _user_data) \
-	{                                                                  \
-		.uuid = _uuid,                                                 \
-		.read = _read,                                                 \
-		.write = _write,                                               \
-		.user_data = _user_data,                                       \
-		.handle = 0,                                                   \
-		.perm = _perm,                                                 \
-	}
 
 /**
- * @def       RTK_BT_GATT_PRIMARY_SERVICE
- * @brief     Primary Service Declaration Macro.
- *            Helper macro to declare a primary service attribute.
- *  @param    _service Service attribute value. (struct bt_uuid *)
+ * @struct    rtk_bt_gatt_cep
+ * @brief     Characteristic Extended Properties Attribute Value.
  */
-#define RTK_BT_GATT_PRIMARY_SERVICE(_service)                          \
-	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_PRIMARY, RTK_BT_GATT_PERM_READ, \
-						  NULL, NULL, _service)
-
-/**
- * @def       RTK_BT_GATT_SECONDARY_SERVICE
- * @brief     Secondary Service Declaration Macro.
- *            Helper macro to declare a secondary service attribute.
- *  @param    _service Service attribute value. (struct bt_uuid *)
- */
-#define RTK_BT_GATT_SECONDARY_SERVICE(_service)                          \
-	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_SECONDARY, RTK_BT_GATT_PERM_READ, \
-						  NULL, NULL, _service)
-
-/**
- * @def       RTK_BT_GATT_INCLUDE_SERVICE
- * @brief     Include Service Declaration Macro.
- *            Helper macro to declare database internal include service attribute.
- *  @param    _service_incl the first service attribute of service to include (struct rtk_bt_gatt_attr *)
- */
-#define RTK_BT_GATT_INCLUDE_SERVICE(_service_incl)                     \
-	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_INCLUDE, RTK_BT_GATT_PERM_READ, \
-						  NULL, NULL, _service_incl)
-
-/**
- * @def       RTK_BT_GATT_CHRC_INIT
- * @brief     Initialization Macro.
- *            Helper macro to init an attribute.
- *  @param    _uuid Attribute uuid.
- *  @param    _handle Attribute handle.
- *  @param    _props Attribute access properties.
- */
-#define RTK_BT_GATT_CHRC_INIT(_uuid, _handle, _props) \
-	{                                                 \
-		.uuid = _uuid,                                \
-		.value_handle = _handle,                      \
-		.properties = _props,                         \
-	}
-
-/**
- * @def       RTK_BT_GATT_CHARACTERISTIC
- * @brief     Characteristic and Value Declaration Macro.
- *            Helper macro to declare a characteristic attribute along with its
- *            attribute value.
- *  @param    _uuid Characteristic attribute uuid.
- *  @param    _props Characteristic attribute properties.
- *  @param    _perm Characteristic Attribute access permissions.
- */
-#define RTK_BT_GATT_CHARACTERISTIC(_uuid, _props, _perm)                        \
-	RTK_BT_GATT_ATTRIBUTE(BT_UUID_GATT_CHRC, RTK_BT_GATT_PERM_READ, NULL, NULL, \
-						  ((struct rtk_bt_gatt_chrc[]){                         \
-							  RTK_BT_GATT_CHRC_INIT(_uuid, 0U, _props),         \
-						  })),                                                  \
-		RTK_BT_GATT_ATTRIBUTE(_uuid, _perm, NULL, NULL, NULL)
-
-/**
- * @def       RTK_BT_GATT_DESCRIPTOR
- * @brief     Descriptor Declaration Macro.
- *            Helper macro to declare a descriptor attribute.
- *  @param    _uuid Descriptor attribute uuid.
- *  @param    _perm Descriptor attribute access permissions.
- *  @param    _user_data Descriptor attribute user data.
- */
-#define RTK_BT_GATT_DESCRIPTOR(_uuid, _perm, _user_data) \
-	RTK_BT_GATT_ATTRIBUTE(_uuid, _perm, NULL, NULL, _user_data)
-
-/**
- * @def       RTK_BT_GATT_CEP
- * @brief     Characteristic Extended Properties Declaration Macro.
- *            Helper macro to declare a CEP attribute.
- *  @param    _value Pointer to a struct rtk_bt_gatt_cep. (const struct rtk_bt_gatt_cep *)
- */
-#define RTK_BT_GATT_CEP(_value) \
-	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CEP, RTK_BT_GATT_PERM_READ, (void *)_value)
-
-/**
- * @def       RTK_BT_GATT_CUD
- * @brief     Characteristic User Format Descriptor Declaration Macro.
- *            Helper macro to declare a CUD attribute.
- *
- *  @param _value User description NULL-terminated C string. (const uint8_t *value)
- *  @param _perm Descriptor attribute access permissions.
- */
-#define RTK_BT_GATT_CUD(_value, _perm) \
-	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CUD, _perm, (void *)_value)
-
-/**
- * @def       RTK_BT_GATT_CCC
- * @brief     Client Characteristic Configuration Declaration Macro.
- *            Helper macro to declare a CCC attribute.
- *
- *  @param _perm CCC access permissions.
- */
-#define RTK_BT_GATT_CCC(_perm) \
-	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CCC, _perm, 0)
-
-/**
- * @def       RTK_BT_GATT_SCC
- * @brief     Server Characteristic Configuration Declaration Macro.
- *            Helper macro to declare a CCC attribute.
- *  @param    _value Poniter to Server Characteristic Configuration bits. (struct rtk_bt_gatt_scc *)
- *  @param    _perm CCC access permissions.
- */
-#define RTK_BT_GATT_SCC(_value, _perm) \
-	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_SCC, _perm, (void *)_value)
-
-/**
- * @def       RTK_BT_GATT_CPF
- * @brief     Characteristic Presentation Format Descriptor Declaration Macro.
- *            Helper macro to declare a CPF attribute.
- *  @param    _value Pointer to a struct rtk_bt_gatt_cpf. (struct rtk_bt_gatt_cpf*)
- */
-#define RTK_BT_GATT_CPF(_value) \
-	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CPF, RTK_BT_GATT_PERM_READ, (void *)_value)
-
-/**
- * @def       RTK_BT_GATT_CAF
- * @brief     Characteristic Aggregate Format Descriptor Declaration Macro.
- *            Helper macro to declare a CAF attribute.
- *  @param    _value Pointer to a struct rtk_bt_gatt_caf. (struct rtk_bt_gatt_caf*)
- */
-#define RTK_BT_GATT_CAF(_value) \
-	RTK_BT_GATT_DESCRIPTOR(BT_UUID_GATT_CAF, RTK_BT_GATT_PERM_READ, (void *)_value)
-
-/**
- * @def       RTK_BT_GATT_SERVICE
- * @brief     Service Structure Declaration Macro.
- *            Helper macro to declare a service structure.
- *  @param    _attrs Service attributes.
- */
-#define RTK_BT_GATT_SERVICE(_attrs)                           \
-	{                                                         \
-		.attrs = _attrs,                                      \
-		.attr_count = (sizeof(_attrs) / sizeof((_attrs)[0])), \
-	}
-
-/**
- * @def       RTK_BT_GATT_SERVICE_DEFINE
- * @brief     Statically define and register a service.
- *            Helper macro to statically define and register a service.
- *  @param    _name Service name.
- */
-#define RTK_BT_GATT_SERVICE_DEFINE(_name, ...)                    \
-	const struct rtk_bt_gatt_attr attr_##_name[] = {__VA_ARGS__}; \
-	const rtk_bt_gatt_service_static, _name = RTK_BT_GATT_SERVICE(attr_##_name)
-
-/**
- * @typedef   rtk_bt_gatts_srv_type_t
- * @brief     Service type.
- */
-typedef enum
+struct rtk_bt_gatt_cep
 {
-	GATT_SERVICE_OVER_BREDR,				/*!< 0, Service over BREDR. */
-	GATT_SERVICE_OVER_BLE,					/*!< 1, Service over BLE. */
-	GATT_SERVICE_TYPE_RESERVED,				/*!< 2, RESERVED. */
-} rtk_bt_gatts_srv_type_t;
+	uint16_t properties;					/*!< Characteristic Extended properties */
+};
+
 
 /**
- * @struct    rtk_bt_gatts_srv_reg_param_t
- * @brief     Bluetooth GATT server register service paramter definition.
+ * @struct    rtk_bt_gatt_scc
+ * @brief     Server Characterestic Configuration Attribute Value.
+ */
+struct rtk_bt_gatt_scc
+{
+	uint16_t flags;							/*!< Server Characteristic Configuration flags */
+};
+
+/**
+ * @struct    rtk_bt_gatt_attr_t
+ * @brief     GATT Attribute structure.
+ */
+typedef struct {
+	const struct bt_uuid *uuid;				/*!< Attribute UUID */
+	union
+	{
+		void* read;							/*!< Attribute read callback */
+		uint16_t flag;						/*!< Attribute flag (RTK_BT_GATT_INTERNAL/RTK_BT_GATT_APP) */
+	};
+	union
+	{
+		void* write;						/*!< Attribute write callback */
+		uint16_t len;						/*!< Attribute user data length */
+	};
+	void *user_data;						/*!< Attribute user data */
+	uint16_t handle;						/*!< Attribute handle */
+	uint8_t perm;							/*!< Attribute permissions */
+} rtk_bt_gatt_attr_t;
+
+/**
+ * @struct    rtk_bt_gatts_read_resp_param_t
+ * @brief     Bluetooth GATT server response paramter for remote client's read request.
  */
 typedef struct
 {
+	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
 	uint8_t app_id;							/*!< Every service has a app_id. */
-	rtk_bt_gatts_srv_type_t type;			/*!< GATT over which type */
-	struct rtk_bt_gatt_service *srv;		/*!< GATT Service structure */
-	uint8_t is_dynamic;						/*!< Whether service is alloced,
-											* if srv_is_dynamic==1 and auto_free==0,
-											* ONLY when callback tell us registered status CAN free the service! */
-	uint8_t auto_free;						/*!< Whether need auto_free by API */
-} rtk_bt_gatts_srv_reg_param_t;
+	uint16_t conn_handle;					/*!< Connection handle for a client */
+	uint16_t index;							/*!< Attribute index in service */
+	uint8_t err_code;						/*!< Error code, if NOT ERR_RESP, equals 0 */
+	uint16_t len;							/*!< Response Value length, when err_code == 0 */
+	const void *data;						/*!< Response Value data, when err_code == 0 */
+} rtk_bt_gatts_read_resp_param_t;
 
 /**
- * @struct    rtk_bt_gatts_indicate_param_t
+ * @struct    rtk_bt_gatts_write_resp_param_t
+ * @brief     Bluetooth GATT server response paramter for remote client's write request.
+ */
+typedef struct
+{
+	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
+	uint8_t app_id;							/*!< Every service has a app_id. */
+	uint16_t conn_handle;					/*!< Connection handle for a client */
+	uint16_t index;							/*!< Attribute index in service */
+	uint8_t type;							/*!< Write type */
+	uint8_t err_code;						/*!< Error code, if NOT ERR_RESP, equals 0 */
+} rtk_bt_gatts_write_resp_param_t;
+
+/**
+ * @struct    rtk_bt_gatts_ntf_and_ind_param_t
  * @brief     Bluetooth GATT server indicate paramter definition.
  */
 typedef struct
 {
 	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
 	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
+	uint16_t conn_handle;					/*!< Connection handle for a client */
 	uint16_t index;							/*!< Attribute index in service */
 	uint16_t len;							/*!< Indicate Value length */
 	const void *data;						/*!< Indicate Value data */
-} rtk_bt_gatts_indicate_param_t;
+} rtk_bt_gatts_ntf_and_ind_param_t;
 
 /**
- * @typedef   rtk_bt_gatts_notify_param_t
- * @brief     Bluetooth GATT server notify paramter definition.
+ * @struct    rtk_bt_gatt_service
+ * @brief     GATT Service structure.
  */
-typedef rtk_bt_gatts_indicate_param_t rtk_bt_gatts_notify_param_t;
-
-/**
- * @struct    rtk_bt_gatts_resp_read_param_t
- * @brief     Bluetooth GATT server read response paramter definition.
- */
-typedef struct
+struct rtk_bt_gatt_service
 {
-	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
-	uint16_t index;							/*!< Attribute index in service */
-	uint8_t err_code;						/*!< Error code, if NOT ERR_RESP, equals 0 */
-	uint16_t len;							/*!< Response Value length, when err_code == 0 */
-	const void *data;						/*!< Response Value data, when err_code == 0 */
-} rtk_bt_gatts_resp_read_param_t;
-
-/**
- * @typedef   rtk_bt_gatts_write_type_t
- * @brief     Bluetooth GATT server received write request type definition.
- */
-typedef enum
-{
-	RTK_BT_EVT_GATTS_WRITE_REQ,				/*!< GATT client write request */
-	RTK_BT_EVT_GATTS_WRITE_NO_RESP,			/*!< GATT client write cmd */
-	RTK_BT_EVT_GATTS_WRITE_NO_RESP_SIGNED,	/*!< GATT client write cmd (signed) */
-	RTK_BT_EVT_GATTS_WRITE_LONG,			/*!< GATT client write long */
-} rtk_bt_gatts_write_type_t;
-
-/**
- * @struct    rtk_bt_gatts_resp_write_param_t
- * @brief     Bluetooth GATT server response paramter definition for write request.
- */
-typedef struct
-{
-	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
-	uint16_t index;							/*!< Attribute index in service */
-	rtk_bt_gatts_write_type_t type;			/*!< Write type */
-	uint8_t err_code;						/*!< Error code, if NOT ERR_RESP, equals 0 */
-} rtk_bt_gatts_resp_write_param_t;
-
-/**
- * @typedef   rtk_bt_gatts_evt_code_t
- * @brief     Bluetooth GATTS event code definition.
- */
-typedef enum
-{
-	RTK_BT_EVT_GATTS_MTU_EXCHANGE = 1,		/*!< MTU exchange event (common event) */
-	RTK_BT_EVT_GATTS_REG_SRV,				/*!< Register service result event */
-	RTK_BT_EVT_GATTS_INDICATE,				/*!< Indicate operation result event */
-	RTK_BT_EVT_GATTS_NOTIFY,				/*!< Notify operation result event, if OK, just means local sent OK. */
-	RTK_BT_EVT_GATTS_READ,					/*!< Client read event in a service */
-	RTK_BT_EVT_GATTS_WRITE,					/*!< Client write event in a service */
-	RTK_BT_EVT_GATTS_CCCD,					/*!< CCCD update event in a service */
-	RTK_BT_EVT_GATTS_RESP_READ,				/*!< Response operation result event for client read, if OK, just means local sent OK. */
-	RTK_BT_EVT_GATTS_RESP_WRITE,			/*!< Response operation result event for client write, if OK, just means local sent OK. */
-} rtk_bt_gatts_evt_code_t;
-
-/**
- * @struct    rtk_bt_gatts_evt_common_t
- * @brief     A helper type for getting app id.
- */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-} rtk_bt_gatts_evt_common_t;
-
-/**
- * @struct    rtk_bt_gatts_evt_reg_srv_t
- * @brief     Bluetooth GATTS event register service result definition.
- */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	rtk_bt_evt_status_t status;				/*!< The status of registering service */
-} rtk_bt_gatts_evt_reg_srv_t;
-
-/**
- * @typedef   rtk_bt_gatts_ind_res_t
- * @brief     Bluetooth GATTS event indicate result type.
- */
-typedef enum
-{
-	RTK_BT_GATTS_IND_RES_OK,				/*!< Success */
-	RTK_BT_GATTS_IND_RES_ERR_LOCAL,			/*!< Error in send indication, due to local misfunction */
-	RTK_BT_GATTS_IND_RES_ERR_REMOTE,		/*!< Error in send indication, due to remote response */
-} rtk_bt_gatts_ind_res_t;
-
-/**
- * @struct    rtk_bt_gatts_evt_indicate_t
- * @brief     Bluetooth GATTS event indicate result paramter.
- */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
-	rtk_bt_gatts_ind_res_t status;			/*!< Status type */
-/*
- * For doxygen generation ONLY! Must predefine BT_CONFIG_DOXYGEN.
- */
-#if defined(BT_CONFIG_DOXYGEN)
-	union err_value
-#else
-	union
-#endif
+	struct list_head list;					/*!< Service List */
+	uint16_t app_id;						/*!< Service app_id */
+	rtk_bt_gatt_attr_t *attrs;				/*!< Service Attributes */
+	size_t attr_count;						/*!< Service Attribute count */
+	bool assgin_handle_flag;				/*!< Flag of if the service start attr handle is assigned by user */		
+	uint16_t start_handle;					/*!< User assigned start attr handle of service */
+	rtk_bt_gatts_srv_type_t type;			/*!< Service type */			
+	uint8_t register_status;				/*!< Service register status */
+	void * user_data;						/*!< Service user data */			
+	uint32_t server_info;					/*!< Service info */
+	struct _snode
 	{
-		rtk_bt_evt_status_t err_local;		/*!< Local error code, if no error is 0. */
-		uint16_t err_remote;				/*!< Remote error code, if no error is 0. */
-	};										/*!< The error value of this GATT operation */
-	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
-} rtk_bt_gatts_evt_indicate_t;
+		struct _snode *next;				/*!< next node */
+	} node;									/*!< Service Attribute node */
+};
+
 
 /**
- * @struct    rtk_bt_gatts_evt_notify_t
- * @brief     Bluetooth GATTS event indicate result paramter.
+ * @struct    rtk_bt_gatts_reg_ind_t
+ * @brief     Bluetooth GATT service register event msg.
  */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
-	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
-	rtk_bt_evt_status_t err_local;			/*!< Error code, if no error is 0. */
-} rtk_bt_gatts_evt_notify_t;
+typedef struct {
+	uint16_t reg_status;					/*!< Service register status */
+	uint16_t app_id;						/*!< Registered service's app_id */
+} rtk_bt_gatts_reg_ind_t;
 
 /**
- * @struct    rtk_bt_gatts_evt_read_t
- * @brief     Bluetooth GATTS event read request paramter.
+ * @struct    rtk_bt_gatt_mtu_exchange_ind_t
+ * @brief     MTU exchange indication.
  */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
+typedef struct {
+	uint16_t result;						/*!< MTU exchange result */
+    uint16_t conn_handle;					/*!< Connection handle */
+	uint16_t mtu_size;						/*!< MTU size */
+} rtk_bt_gatt_mtu_exchange_ind_t;
+
+/**
+ * @struct    rtk_bt_gatts_read_ind_t
+ * @brief     Bluetooth GATT server received remote client read request event msg.
+ */
+typedef struct {
+	uint16_t app_id;						/*!< Every service has a app_id */
+	uint16_t conn_handle;					/*!< Connection handle for a client */
 	uint16_t index;							/*!< Attribute index in service */
 	uint16_t offset;						/*!< offset in data, for blob read */
-} rtk_bt_gatts_evt_read_t;
+} rtk_bt_gatts_read_ind_t;
 
 /**
- * @struct    rtk_bt_gatts_evt_write_t
- * @brief     Bluetooth GATTS event write request paramter.
+ * @enum   rtk_bt_gatts_write_type_t
+ * @brief     Bluetooth GATT server received remote write request type definition.
+ */
+typedef enum
+{
+	RTK_BT_GATTS_WRITE_REQ,				/*!< GATT client write request */
+	RTK_BT_GATTS_WRITE_NO_RESP,			/*!< GATT client write cmd */
+	RTK_BT_GATTS_WRITE_NO_RESP_SIGNED,	/*!< GATT client write cmd (signed) */
+	RTK_BT_GATTS_WRITE_LONG,			/*!< GATT client write long */
+} rtk_bt_gatts_write_type_t;
+
+
+/**
+ * @struct    rtk_bt_gatts_write_ind_t
+ * @brief     Bluetooth GATT server received remote client write request event msg.
  */
 typedef struct
 {
 	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
+	uint16_t conn_handle;					/*!< Connection handle for a client */
 	uint16_t index;							/*!< Attribute index in service */
 	uint16_t offset;						/*!< offset in data, for queue write */
-	rtk_bt_gatts_write_type_t type;			/*!< Write type */
+	rtk_bt_gatts_write_type_t  type;		/*!< Write type */
 	uint16_t len;							/*!< Length of write data */
 	uint8_t *value;							/*!< Write data */
-} rtk_bt_gatts_evt_write_t;
+} rtk_bt_gatts_write_ind_t;
 
 /**
- * @struct    rtk_bt_gatts_evt_cccd_ops_t
- * @brief     Bluetooth GATTS event CCCD ops paramter.
+ * @struct    rtk_bt_gatts_cccd_ind_t
+ * @brief     Bluetooth GATTS cccd updated event msg.
  */
 typedef struct
 {
 	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
+	uint16_t conn_handle;					/*!< Connection handle for a client */
 	uint16_t index;							/*!< Attribute index in service */
-	uint16_t value;							/*!< CCCD update value */
-} rtk_bt_gatts_evt_cccd_ops_t;
+	uint16_t value;							/*!< cccd value */
+} rtk_bt_gatts_cccd_ind_t;
 
 /**
- * @struct    rtk_bt_gatts_evt_resp_read_t
- * @brief     Bluetooth GATTS event for local response result for client read ops.
+ * @struct    rtk_bt_gatts_ntf_and_ind_ind_t
+ * @brief     Bluetooth GATT server send notify or indicate complete msg.
  */
 typedef struct
 {
 	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
-	rtk_bt_evt_status_t err_local;			/*!< Error code, if no error is 0. */
+	uint16_t conn_handle;					/*!< Connection handle for a client */
+	uint16_t index;							/*!< Attribute index in service */
 	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
-} rtk_bt_gatts_evt_resp_read_t;
+	uint16_t err_code;						/*!< Error code, if no error is 0. */
+} rtk_bt_gatts_ntf_and_ind_ind_t;
 
-/**
- * @struct    rtk_bt_gatts_evt_resp_write_t
- * @brief     Bluetooth GATTS event for local response result for client write ops.
- */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID for a client */
-	rtk_bt_evt_status_t err_local;			/*!< Error code, if no error is 0. */
-	uint16_t seq;							/*!< Sequence number, for convinience, not mandatory */
-} rtk_bt_gatts_evt_resp_write_t;
-
-/**
- * @struct    rtk_bt_gatts_evt_mtu_exchange_t
- * @brief     Bluetooth GATTS event for mtu exchange result.
- */
-typedef struct
-{
-	uint8_t app_id;							/*!< Every service has a app_id. */
-	uint8_t conn_id;						/*!< Connection ID */
-	uint16_t mtu;							/*!< MTU size */
-} rtk_bt_gatts_evt_mtu_exchange_t;
-
-/**
- * @typedef   rtk_bt_gatts_cb_t
- * @brief     GATT server operation callback handle.
- * @param[in] event: The event type of this data
- * @param[in] data: GATT operation data
- */
-typedef void (*rtk_bt_gatts_cb_t)(rtk_bt_gatts_evt_code_t event, void *data);
 
 /**
  * @defgroup  bt_gatts BT GATT server APIs
@@ -766,79 +502,59 @@ typedef void (*rtk_bt_gatts_cb_t)(rtk_bt_gatts_evt_code_t event, void *data);
  */
 
 /**
- * @fn        rtk_bt_err_t rtk_bt_gatts_register_callback(rtk_bt_gatts_cb_t cb)
- * @brief     Register GATT server callback (SYNC).
- * @param[in] cb: The callback handle
- * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
- */
-rtk_bt_err_t rtk_bt_gatts_register_callback(rtk_bt_gatts_cb_t cb);
-
-/**
- * @fn        rtk_bt_err_t rtk_bt_gatts_unregister_callback(void)
- * @brief      Unregister GATT server callback (SYNC).
- * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
- */
-rtk_bt_err_t rtk_bt_gatts_unregister_callback(void);
-
-/**
- * @fn        rtk_bt_err_t rtk_bt_gatts_register_service(rtk_bt_gatts_srv_reg_param_t *param)
- * @brief     Register GATT service (ASYNC).
+ * @fn        uint16_t rtk_bt_gatts_register_service(struct rtk_bt_gatt_service *param)
+ * @brief     Register GATT service.
  * @param[in] param: The parameters for registering service app.
  * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
+ *            - 0  : Succeed
+ *            - Others: Error code
  */
-rtk_bt_err_t rtk_bt_gatts_register_service(rtk_bt_gatts_srv_reg_param_t *param);
+uint16_t rtk_bt_gatts_register_service(struct rtk_bt_gatt_service *param);
 
 /**
- * @fn        rtk_bt_err_t rtk_bt_gatts_indicate(rtk_bt_gatts_indicate_param_t *param)
- * @brief      Indicate action initiated by server (ASYNC).
- *
- * @param[in]  param: The parameters for indication.
- *
- * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
- */
-rtk_bt_err_t rtk_bt_gatts_indicate(rtk_bt_gatts_indicate_param_t *param);
-
-/**
- * @fn        rtk_bt_err_t rtk_bt_gatts_notify(rtk_bt_gatts_notify_param_t *param)
- * @brief      Notify action initiated by server (ASYNC).
+ * @fn         uint16_t rtk_bt_gatts_notify(rtk_bt_gatts_ntf_and_ind_param_t *param)
+ * @brief      Notify action initiated by server.
  * @param[in]  param: The parameters for notification.
  * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
+ *            - 0  : Succeed
+ *            - Others: Error code
  */
-rtk_bt_err_t rtk_bt_gatts_notify(rtk_bt_gatts_notify_param_t *param);
+uint16_t rtk_bt_gatts_notify(rtk_bt_gatts_ntf_and_ind_param_t *param);
 
 /**
- * @fn        rtk_bt_err_t rtk_bt_gatts_read_resp(rtk_bt_gatts_resp_read_param_t *param)
- * @brief      Server response for client read operation (ASYNC).
+ * @fn         uint16_t rtk_bt_gatts_indicate(rtk_bt_gatts_ntf_and_ind_param_t *param)
+ * @brief      Indicate action initiated by server.
+ * @param[in]  param: The parameters for notification.
+ * @return
+ *            - 0  : Succeed
+ *            - Others: Error code
+ */
+uint16_t rtk_bt_gatts_indicate(rtk_bt_gatts_ntf_and_ind_param_t *param);
+
+/**
+ * @fn         uint16_t rtk_bt_gatts_read_resp(rtk_bt_gatts_read_resp_param_t *param)
+ * @brief      Server response for client read operation.
  * @param[in]  param: The parameters for read response.
  * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
+ *            - 0  : Succeed
+ *            - Others: Error code
  */
-rtk_bt_err_t rtk_bt_gatts_read_resp(rtk_bt_gatts_resp_read_param_t *param);
+uint16_t rtk_bt_gatts_read_resp(rtk_bt_gatts_read_resp_param_t *param);
 
 /**
- * @fn        rtk_bt_err_t rtk_bt_gatts_write_resp(rtk_bt_gatts_resp_write_param_t *param)
- * @brief     Server response for client write operation (ASYNC).
+ * @fn        uint16_t rtk_bt_gatts_write_resp(rtk_bt_gatts_write_resp_param_t *param)
+ * @brief     Server response for client write operation.
  * @param[in] param: The parameters for write response.
  * @return
- *            - RTK_BT_OK  : Succeed
- *            - RTK_BT_FAIL: Failed
+ *            - 0  : Succeed
+ *            - Others: Error code
  */
-rtk_bt_err_t rtk_bt_gatts_write_resp(rtk_bt_gatts_resp_write_param_t *param);
+uint16_t rtk_bt_gatts_write_resp(rtk_bt_gatts_write_resp_param_t *param);
 
 /**
  * @}
  */
+
 
 #ifdef __cplusplus
 }

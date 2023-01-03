@@ -24,7 +24,7 @@ enum BITMASK {
 	HIGH_MASK = 1
 };
 
-struct halrf_kfree_info {
+struct halrf_kfree_info{
 	u8 efuse_content[100];
 #if 0
 	bool efuse_chenk;

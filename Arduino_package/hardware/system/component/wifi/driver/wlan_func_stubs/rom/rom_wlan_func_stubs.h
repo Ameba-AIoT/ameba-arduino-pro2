@@ -99,7 +99,7 @@ typedef struct wlan_func_stubs_s {
 	int (*rt_sha1_finish)(SHA1Context *context, u8 Message_Digest[SHA1HashSize]);
 	void (*rt_hmac_sha1)(unsigned char *text, int text_len, unsigned char *key, int key_len, unsigned char *digest);
 	// wlan_ram_map
-	void (*init_rom_wlan_ram_map)(unsigned char *(*rtw_malloc)(unsigned int sz), void (*rtw_mfree)(unsigned char *pbuf, unsigned int sz));
+	void (*init_rom_wlan_ram_map)(void *(*rtw_malloc)(unsigned int sz), void (*rtw_mfree)(unsigned char *pbuf, unsigned int sz));
 	// wps-aes
 	int (*rom_aes_128_cbc_encrypt)(const u8 *key, const u8 *iv, u8 *data, size_t data_len);
 	int (*rom_aes_128_cbc_decrypt)(const u8 *key, const u8 *iv, u8 *data, size_t data_len);

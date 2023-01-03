@@ -106,6 +106,7 @@ enum rf_type {
 	RF_TYPE_MAX,
 };
 
+#if (PHYDM_VERSION == 2)/*bb_path and rf_syn are in halbb files when use halbb*/
 enum bb_path {
 	BB_PATH_A = 0x00000001,
 	BB_PATH_B = 0x00000002,
@@ -127,6 +128,12 @@ enum bb_path {
 	BB_PATH_ABCD = (BB_PATH_A | BB_PATH_B | BB_PATH_C | BB_PATH_D),
 };
 
+enum rf_syn {
+	RF_SYN0 = 0,
+	RF_SYN1 = 1,
+};
+#endif
+
 enum rf_path {
 	RF_PATH_A = 0,
 	RF_PATH_B = 1,
@@ -143,11 +150,6 @@ enum rf_path {
 	RF_PATH_ACD,
 	RF_PATH_BCD,
 	RF_PATH_ABCD,
-};
-
-enum rf_syn {
-	RF_SYN0 = 0,
-	RF_SYN1 = 1,
 };
 
 enum wireless_set {

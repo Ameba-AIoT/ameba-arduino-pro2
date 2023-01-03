@@ -12,15 +12,15 @@ extern "C" {
 
 typedef int(*qsort_compar)(const void *, const void *);
 
-#define O_ACCMODE	0x00000003
-#define O_RDONLY	0x00000000
-#define O_WRONLY	0x00000001
-#define O_RDWR		0x00000002
-#define O_CREAT		0x00000100
-#define O_EXCL		0X00000200
-#define O_TRUNC		0x00001000
-#define O_APPEND	0x00002000
-#define O_CLOEXEC	0x02000000
+#define VFS_O_ACCMODE	0x00000003
+#define VFS_O_RDONLY	0x00000000
+#define VFS_O_WRONLY	0x00000001
+#define VFS_O_RDWR		0x00000002
+#define VFS_O_CREAT		0x00000100
+#define VFS_O_EXCL		0X00000200
+#define VFS_O_TRUNC		0x00001000
+#define VFS_O_APPEND	0x00002000
+#define VFS_O_CLOEXEC	0x02000000
 
 #define VFS_FATFS       0X00
 #define VFS_LITTLEFS    0X01
@@ -111,7 +111,7 @@ typedef struct _vfs_file {
 	int vfs_id;//Reserve
 	int interface_id;//Reserve
 	void *file;
-	int name[1024];
+	char name[1024];
 } vfs_file;
 
 typedef struct {
@@ -129,9 +129,10 @@ typedef struct {
 	int (*eof)(vfs_file *file);
 	int (*error)(vfs_file *file); //ferror
 	int (*tell)(vfs_file *file);
+	int (*ftruncate)(vfs_file *file, off_t length);
 	int (*fputc)(int character, vfs_file *file);
 	int (*fputs)(const char *str, vfs_file *file);
-	int (*fgets)(char *str, int num, vfs_file *file);
+	char *(*fgets)(char *str, int num, vfs_file *file);
 	int (*opendir)(const char *name, vfs_file *file);
 	struct dirent   *(*readdir)(vfs_file *file);
 	int (*closedir)(vfs_file *file);
@@ -144,7 +145,7 @@ typedef struct {
 	int (*mount)(int interface);
 	int (*unmount)(int interface);
 	int (*get_interface)(int interface);
-	unsigned char	*TAG;
+	const char	*TAG;
 	unsigned char drv_num;
 	void *fs;
 	int vfs_type;
@@ -154,7 +155,7 @@ typedef struct {
 	int vfs_type;
 	int vfs_type_id;
 	int vfs_interface_type;
-	char *tag;
+	const char *tag;
 } user_config;
 
 typedef struct {
@@ -170,11 +171,12 @@ extern vfs_opt littlefs_drv;
 
 void vfs_init(void *parm);
 void vfs_deinit(void *parm);
-int vfs_user_register(char *prefix, int vfs_type, int interface);
+int vfs_user_register(const char *prefix, int vfs_type, int interface);
+int vfs_user_unregister(const char *prefix, int vfs_type, int interface);
 int vfs_scan_vfs(int vfs_type);
 int vfs_register(vfs_opt *drv, int vfs_type);
 int find_vfs_number(const char *name, int *prefix_len, int *user_id);
-int vfs_user_mount(char *prefix);
+int vfs_user_mount(const char *prefix);
 
 /* access function */
 #define	F_OK		0	/* test for existence of file */
@@ -193,6 +195,7 @@ int mkdir(const char *pathname, mode_t mode);
 int access(const char *pathname, int mode);
 int stat(const char *path, struct stat *buf);
 int alphasort(const struct dirent **a, const struct dirent **b);
+int ftruncate(FILE *fd, off_t length);
 
 #ifdef __cplusplus
 }

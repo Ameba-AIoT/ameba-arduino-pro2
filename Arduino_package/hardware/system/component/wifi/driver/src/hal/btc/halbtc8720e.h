@@ -14,14 +14,15 @@
  *****************************************************************************/
 
 extern const struct btc_chip_para btc_chip_para_8720e;
-void halbtc8720e_chip_setup(struct btc_coexist *btc, u8 type);
-void halbtc8720e_cfg_init(struct btc_coexist *btc);
-void halbtc8720e_cfg_ant_switch(struct btc_coexist *btc);
-void halbtc8720e_cfg_gnt_debug(struct btc_coexist *btc);
-void halbtc8720e_cfg_fre_type(struct btc_coexist *btc);
-void halbtc8720e_cfg_coexinfo_hw(struct btc_coexist *btc);
-void halbtc8720e_cfg_wl_tx_power(struct btc_coexist *btc);
-void halbtc8720e_cfg_wl_rx_gain(struct btc_coexist *btc);
-void halbtc8720e_cfg_wlan_act_ips(struct btc_coexist *btc);
-void halbtc8720e_cfg_bt_ctrl_act(struct btc_coexist *btc);
-
+extern void halbtc8720e_cfg_init(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_ant_switch(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_gnt_fix(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_gnt_debug(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_rfe_type(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_coexinfo_hw(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_wl_tx_power(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_wl_rx_gain(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_wlan_act_gate(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_gnt_wl(struct btc_coexist *btc);
+extern void halbtc8720e_cfg_gnt_bt(struct btc_coexist *btc);
+extern void halbtc8720e_chip_setup(struct btc_coexist *btc, u8 type);

@@ -910,6 +910,7 @@ extern uint8_t ConfigBootLOG_EN;
         _DbgDump( __VA_ARGS__);\
 }while(0)
 
+#undef DBG_ASSERT
 #ifdef __GNUC__
 #define DBG_ASSERT(x)     do {\
         if (unlikely(!(x))) \
@@ -927,6 +928,7 @@ extern uint8_t ConfigBootLOG_EN;
 #else   // else of "#if CONFIG_DEBUG_LOG"
 #define DBG_8735B(...)
 #define MONITOR_LOG(...)
+#undef DBG_ASSERT
 #define DBG_ASSERT(x)
 
 #define DBG_BOOT_ERR(...)

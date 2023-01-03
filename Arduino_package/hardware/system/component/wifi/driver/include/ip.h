@@ -113,5 +113,24 @@ struct iphdr {
 	/*The options start here. */
 };
 
+/**
+ *format of ipv6 header
+ * |<---4 --->|<---8----->|<------20------->|
+ * |--version--|-traffic class-|-----flow label-----|
+ * |<--16--->|<----8----->|<--- ----8------>|
+ * |--length --|--next header-|------hop limit----|
+ * |<----------------128-------------------->|
+ * |-----------------source addr---------------|
+ * |<-----------------128------------------->|
+ * |-----------------dest addr-----------------|
+ */
+struct ipv6_hdr {
+	__u32 	v_tc_fl;
+	__u16	payload_len;
+	__u8	next_header;
+	__u8	hop_limit;
+	__u32	saddr[4];
+	__u32	daddr[4];
+};
 #endif	/* _LINUX_IP_H */
 

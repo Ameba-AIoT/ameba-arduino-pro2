@@ -139,6 +139,27 @@ enum halbb_h2c_dm_cmdid {
 	DM_MAX_H2CCMD
 };
 
+#if (defined(BB_8720E_SUPPORT) || defined(BB_8730E_SUPPORT))
+enum halbb_h2c_cmd {
+	DM_RA_H2C_MACIDCFG			= 0x40,
+	DM_RA_H2C_RSSISETTING		= 0x42,
+	DM_AP_REQ_TXRPT				= 0x43,
+	DM_RA_H2C_RA_ADJUST			= 0x47,
+	DM_IOT_H2C_FWTRACE			= 0x49,
+	DM_RA_H2C_MACIDCFG2			= 0x54,
+	DM_RA_H2C_ADJUST_RA_MASK	= 0x55,
+	DM_RA_H2C_RA_D_O_TIMER		= 0x56,
+	DM_IOT_H2C_FW_EDCCA 		= 0x57,
+	DM_MAX_IOT_H2CCMD
+};
+
+enum halbb_c2h_cmd {
+	HALBB_IOT_C2HRA_STS_RPT		= 0x16,
+	HALBB_IOT_C2HRA_TXSTS		= 0x17,
+	HALBB_MAX_IOT_C2HCMD
+};
+#endif
+
 enum halbb_c2h_classid {
 	HALBB_C2H_RUA		= 0x0,
 	HALBB_C2H_RA		= 0x1,
@@ -187,33 +208,33 @@ struct halbb_timer_info {
 };
 
 struct halbb_pwr_by_rate_tbl {
-	u8 pwr_by_rate[PWR_TBL_NUM * 2];
+	u8 pwr_by_rate[PWR_TBL_NUM*2];
 };
 
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct bb_info;
 
 void halbb_cfg_timers(struct bb_info *bb, enum bb_timer_cfg_t cfg,
-					  struct halbb_timer_info *timer);
+		      struct halbb_timer_info *timer);
 u32 halbb_get_sys_time(struct bb_info *bb);
 u32 halbb_phy0_to_phy1_ofst(struct bb_info *bb, u32 addr);
 void halbb_set_reg_curr_phy(struct bb_info *bb, u32 addr, u32 mask, u32 val);
 void halbb_set_reg_cmn(struct bb_info *bb, u32 addr, u32 mask, u32 val,
-					   enum phl_phy_idx phy_idx);
+		       enum phl_phy_idx phy_idx);
 void halbb_set_reg_phy0_1(struct bb_info *bb, u32 addr, u32 mask, u32 val);
 u32 halbb_get_reg_curr_phy(struct bb_info *bb, u32 addr, u32 mask);
 u32 halbb_get_reg_cmn(struct bb_info *bb, u32 addr, u32 mask,
-					  enum phl_phy_idx phy_idx);
+		      enum phl_phy_idx phy_idx);
 u32 halbb_get_reg_phy0_1(struct bb_info *bb, u32 addr, u32 mask, u32 *val_1);
 bool halbb_fill_h2c_cmd(struct bb_info *bb, u16 cmdlen, u8 cmdid,
-						u8 classid, u32 *pval);
+			u8 classid, u32 *pval);
 bool halbb_test_h2c_c2h_flow(struct bb_info *bb);
 
 bool halbb_check_fw_ofld(struct bb_info *bb);
 bool halbb_fw_set_reg(struct bb_info *bb, u32 addr, u32 mask, u32 val, u8 lst_cmd);
-bool halbb_fw_set_reg_cmn(struct bb_info *bb, u32 addr, u32 mask, u32 val,
-						  enum phl_phy_idx phy_idx, u8 lst_cmd);
+bool halbb_fw_set_reg_cmn(struct bb_info *bb, u32 addr, u32 mask, u32 val, 
+			            enum phl_phy_idx phy_idx, u8 lst_cmd);
 bool halbb_fw_set_rf_reg(struct bb_info *bb, enum rf_path path,
-						 u32 reg_addr, u32 bit_mask, u32 data);
+			      u32 reg_addr, u32 bit_mask, u32 data);
 
 #endif

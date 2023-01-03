@@ -22,6 +22,7 @@ void halbtc8730a_cfg_fre_type(struct btc_coexist *btc);
 void halbtc8730a_cfg_coexinfo_hw(struct btc_coexist *btc);
 void halbtc8730a_cfg_wl_tx_power(struct btc_coexist *btc);
 void halbtc8730a_cfg_wl_rx_gain(struct btc_coexist *btc);
-void halbtc8730a_cfg_wlan_act_ips(struct btc_coexist *btc);
-void halbtc8730a_cfg_bt_ctrl_act(struct btc_coexist *btc);
+void halbtc8730a_cfg_wlan_act_gate(struct btc_coexist *btc);
+void halbtc8730a_cfg_gnt_wl(struct btc_coexist *btc);
+void halbtc8730a_cfg_gnt_bt(struct btc_coexist *btc);
 

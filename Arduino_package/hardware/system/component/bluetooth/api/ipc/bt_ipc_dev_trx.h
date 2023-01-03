@@ -18,6 +18,9 @@
 #include "ameba.h"
 #include "bt_ipc_profile_config.h"
 
+#define IPC_DEV_TRX_PARAM_MAX    120 //param of data struct
+#define IPC_DEV_TRX_DATA_MAX     1024 //data
+
 /* ------------------------------- Data Types ------------------------------- */
 
 /** @brief bt ipc dev trx task private struct */
@@ -29,12 +32,11 @@ struct bt_ipc_dev_trx_task_struct {
 };
 
 typedef struct bt_ipc_dev_tx_message {
-    uint32_t    PROFILE_ID;
-	uint32_t	TX_EVENT;
-	uint32_t	param_buf[30];
+	uint32_t    PROFILE_ID;
+	uint32_t    TX_EVENT;
+	uint8_t     data[IPC_DEV_TRX_PARAM_MAX + IPC_DEV_TRX_DATA_MAX];//buffer for tx data;
 	int	        ret[4]; //for multiple return values
-	uint8_t     data[1024];//buffer for tx data;
-    uint8_t     dummy[48];//add for 64B size alignment
+	uint8_t     dummy[48];//add for 64B size alignment
 } bt_ipc_dev_tx_message;
 
 /**
@@ -42,11 +44,10 @@ typedef struct bt_ipc_dev_tx_message {
  * @param  profile_id[in]: mesh/peripheral/central ...
  * @param  tx_event[in]: BT_DEV_TX_EVENT.
  * @param  param_buf[in]: pointer to tx_event parameter.
- * @param  data[in]: pointer to data.
- * @param  size[in]: data size.
+ * @param  buf_len[in]: buffer size.
  * @return pointer to result of tx_event.
  */
-int *bt_ipc_trx_dev_message_send(uint32_t profile_id, uint32_t tx_event, uint32_t *param_buf, uint32_t buf_len, uint8_t *data, uint32_t size);
+int *bt_ipc_trx_dev_message_send(uint32_t profile_id, uint32_t tx_event, uint8_t *param_buf, uint32_t buf_len);
 
 /**
  * @brief  to initialize the ipc device for bt api.

@@ -49,17 +49,17 @@ enum bb_physts_bitmap_t {
 struct physts_rxd_user {
 	u8		macid;
 	u8		is_data: 1;
-	u8		is_ctrl: 1;
-	u8		is_mgnt: 1;
-	u8		is_bcn: 1;
-	u8		rsvd_0: 4;
+	u8		is_ctrl:1;
+	u8		is_mgnt:1;
+	u8		is_bcn:1;
+	u8		rsvd_0:4;
 };
 
 struct physts_rxd {
-	u8		is_su: 1;
-	u8		user_num: 2;
-	u8		is_to_self: 1;
-	u8		gi_ltf: 4; /*enum rtw_gi_ltf*/
+	u8		is_su:1;
+	u8		user_num:2;
+	u8		is_to_self:1;
+	u8		gi_ltf:4; /*enum rtw_gi_ltf*/
 	u16		data_rate;
 	u8		macid_su;
 	//u8		ppdu_cnt;
@@ -92,12 +92,12 @@ struct physts_result {
 struct bb_info;
 
 u8 halbb_drv_info_rssi_parsing(struct bb_info *bb, u16 rssi_in,
-							   enum channel_width bw);
+			       enum channel_width bw);
 
 bool halbb_physts_parsing(struct bb_info *bb,
-						  u8 *addr,
-						  u16 physts_total_length,
-						  struct physts_rxd *desc,
-						  struct physts_result *bb_rpt);
+			      u8 *addr,
+			      u16 physts_total_length,
+			      struct physts_rxd *desc,
+			      struct physts_result *bb_rpt);
 
 #endif

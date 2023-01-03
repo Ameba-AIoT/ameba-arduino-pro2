@@ -54,8 +54,7 @@
 
 /* For phydm configurations */
 #define CONFIG_FW_C2H_PKT
-#define PHYDM_LINUX_CODING_STYLE 1
-#define PHYDM_NEW_INTERFACE 1
+#define PHYDM_VERSION	2 /*phydm trunk*/
 
 #if defined(CONFIG_HARDWARE_8188F)
 #define CONFIG_RTL8188F
@@ -87,6 +86,19 @@
 /*************************** Non Ameba Series End *****************************/
 
 #define CONFIG_REG_ENABLE_KFREE 0	// 0: Depend on efuse(flash), 1: enable, 2: disable
+
+/*************************** Config for MP_MODE *******************************/
+//#define CONFIG_MP_INCLUDED
+#ifdef CONFIG_MP_INCLUDED
+#define MP_DRIVER 1
+#undef CONFIG_ANTENNA_DIVERSITY
+#undef CONFIG_BT_COEXIST_SOC
+#undef CONFIG_REG_ENABLE_KFREE
+#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
+#else /* undef CONFIG_MP_INCLUDED  */
+#define MP_DRIVER 0
+#endif /* #ifdef CONFIG_MP_INCLUDED */
+/************************* Config for MP_MODE end *****************************/
 
 #endif /* #ifndef AUTOCONF_NIC_H */
 

@@ -40,7 +40,7 @@
 	SET_BITS_TO_LE_1BYTE((_pEleStart) + 2, 1, 1, _val)
 #define SET_HE_MAC_CAP_TRS_SUPPORT(_pEleStart, _val) \
 	SET_BITS_TO_LE_1BYTE((_pEleStart) + 2, 2, 1, _val)
-#define SET_HE_MAC_CAP_BRS_SUPPORT(_pEleStart, _val) \
+#define SET_HE_MAC_CAP_BSR_SUPPORT(_pEleStart, _val) \
 	SET_BITS_TO_LE_1BYTE((_pEleStart) + 2, 3, 1, _val)
 #define SET_HE_MAC_CAP_BC_TWT_SUPPORT(_pEleStart, _val) \
 	SET_BITS_TO_LE_1BYTE((_pEleStart) + 2, 4, 1, _val)
@@ -684,6 +684,9 @@
 #define GET_HE_CAP_TX_MCS_80_80MHZ_8SS(_pEleStart) \
 	GET_HE_CAP_MCS_8SS(_pEleStart + 10)
 
+/* Values in HE spec */
+#define TXOP_DUR_RTS_TH_DISABLED	1023
+
 /* get HE capabilities element PPE Threshlod field: MAX 25octets */
 #define GET_HE_CAP_PPE_NSTS(_pEleStart) \
 	LE_BITS_TO_1BYTE(_pEleStart, 0, 3)
@@ -751,7 +754,7 @@
 #define GET_HE_MU_EDCA_BE_AIFSN(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 1, 0, 4)
 #define GET_HE_MU_EDCA_BE_ACI(_pEleStart) \
-	LE_BITS_TO_1BYTE((_pEleStart) + 1, 5, 2)
+	LE_BITS_TO_1BYTE((_pEleStart) + 1, 0, 8)
 #define GET_HE_MU_EDCA_BE_ECW_MIN_MAX(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 2, 0, 8)
 #define GET_HE_MU_EDCA_BE_TIMER(_pEleStart) \
@@ -759,7 +762,7 @@
 #define GET_HE_MU_EDCA_BK_AIFSN(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 4, 0, 4)
 #define GET_HE_MU_EDCA_BK_ACI(_pEleStart) \
-	LE_BITS_TO_1BYTE((_pEleStart) + 4, 5, 2)
+	LE_BITS_TO_1BYTE((_pEleStart) + 4, 0, 8)
 #define GET_HE_MU_EDCA_BK_ECW_MIN_MAX(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 5, 0, 8)
 #define GET_HE_MU_EDCA_BK_TIMER(_pEleStart) \
@@ -767,7 +770,7 @@
 #define GET_HE_MU_EDCA_VI_AIFSN(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 7, 0, 4)
 #define GET_HE_MU_EDCA_VI_ACI(_pEleStart) \
-	LE_BITS_TO_1BYTE((_pEleStart) + 7, 5, 2)
+	LE_BITS_TO_1BYTE((_pEleStart) + 7, 0, 8)
 #define GET_HE_MU_EDCA_VI_ECW_MIN_MAX(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 8, 0, 8)
 #define GET_HE_MU_EDCA_VI_TIMER(_pEleStart) \
@@ -775,7 +778,7 @@
 #define GET_HE_MU_EDCA_VO_AIFSN(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 10, 0, 4)
 #define GET_HE_MU_EDCA_VO_ACI(_pEleStart) \
-	LE_BITS_TO_1BYTE((_pEleStart) + 10, 5, 2)
+	LE_BITS_TO_1BYTE((_pEleStart) + 10, 0, 8)
 #define GET_HE_MU_EDCA_VO_ECW_MIN_MAX(_pEleStart) \
 	LE_BITS_TO_1BYTE((_pEleStart) + 11, 0, 8)
 #define GET_HE_MU_EDCA_VO_TIMER(_pEleStart) \
@@ -821,6 +824,9 @@
 #define HE_MSC_NOT_SUPP_BYTE			((HE_MSC_NOT_SUPP << 6) | (HE_MSC_NOT_SUPP << 4) \
 									| (HE_MSC_NOT_SUPP << 2) | HE_MSC_NOT_SUPP)
 
+#define HE_DEV_CLASS_A					1
+#define HE_DEV_CLASS_B					0
+
 /*
  * HE_MAC_Cap (6)
  * HE_PHY_Cap (11)
@@ -864,21 +870,23 @@
 		+ HE_OP_MAX_COHOST_BSSID_LEN + HE_OP_6G_OPER_INFO_LEN)
 
 //TODO
-struct he_actrl_bsr {
 
+struct he_actrl_bsr {
+	void *bsr;
 };
 
 struct he_actrl_uph {
-
+	void *uph;
 };
 
 struct he_actrl_bqr {
-
+	void *bqr;
 };
 
 struct he_actrl_cas {
-
+	void *cas;
 };
+
 
 struct he_variant_actrl {
 	struct he_actrl_bsr actrl_bsr;	//buffer status report
@@ -887,11 +895,11 @@ struct he_variant_actrl {
 	struct he_actrl_cas actrl_cas;	//command and status
 };
 
+
 struct he_priv {
 	u8 he_option;
 
-	u8 he_highest_rate;
-	u8 he_mcs_map[6];
+	u8 pre_he_muedca_cnt;
 
 	u8 op_present; /* he_op is present */
 
@@ -901,10 +909,34 @@ struct he_priv {
 	struct he_variant_actrl actrl_ele; //HTC aggregated control subfield
 };
 
+struct HE_caps_element {
+	unsigned char HE_MAC_caps[HE_CAP_ELE_MAC_CAP_LEN];
+	unsigned char HE_PHY_caps[HE_CAP_ELE_PHY_CAP_LEN];
+	unsigned char HE_mcs_supp[HE_CAP_ELE_SUPP_MCS_MAX_LEN];
+	unsigned char ppe_thres[HE_CAP_ELE_PPE_THRE_MAX_LEN];	/* option */
+};
+
+struct mu_ac_parameter {
+	u8 ac_aifsn;
+	u8 cw; /* ECWmin, ECWmax (CW = 2^ECW - 1) */
+	u8 timer;
+};
+
+struct HE_mu_edca_element {
+	u8 qos_info; /* AP/STA specific QoS info */
+	struct mu_ac_parameter edca[4]; /* AC_BE, AC_BK, AC_VI, AC_VO */
+};
+
+void HE_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void HE_operation_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE, u8 update);
+void HE_mu_edca_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE, u8 first);
 
 void rtw_he_nss_to_mcsmap(u8 nss, u8 *target_mcs_map, u8 *cur_mcs_map);
+u64	rtw_he_mcs_map_to_bitmap(u8 *mcs_map, u8 nss);
+
 u8 rtw_he_get_highest_rate(u8 *he_mcs_map);
-u32 rtw_build_he_cap_ie(_adapter *padapter, u8 *pbuf);
-u32 rtw_restructure_he_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len, struct country_chplan *req_chplan);
+u32 rtw_restructure_he_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len);
+void HEOnAssocRsp(_adapter *padapter);
+
 
 #endif //_RTW_HE_H_

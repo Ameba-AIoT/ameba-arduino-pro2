@@ -24,7 +24,38 @@
 #include <drv_types.h>
 #include <hal_data.h>
 
-#if (PHYDM_NEW_INTERFACE == 1)
+#if (PHYDM_VERSION == 2)
+void rtw_odm_acquirespinlock(_adapter *adapter, enum rt_spinlock_type type);
+void rtw_odm_releasespinlock(_adapter *adapter, enum rt_spinlock_type type);
+#ifdef CONFIG_DFS_MASTER
+u8 rtw_odm_get_dfs_domain(struct dvobj_priv *dvobj);
+u8 rtw_odm_dfs_domain_unknown(struct dvobj_priv *dvobj);
+void rtw_odm_radar_detect_reset(_adapter *adapter);
+void rtw_odm_radar_detect_disable(_adapter *adapter);
+void rtw_odm_radar_detect_enable(_adapter *adapter);
+BOOLEAN rtw_odm_radar_detect(_adapter *adapter);
+u8 rtw_odm_radar_detect_polling_int_ms(struct dvobj_priv *dvobj);
+#endif /* CONFIG_DFS_MASTER */
+#endif /* (PHYDM_VERSION == 2) */
+
+#if (PHYDM_VERSION == 3)
+#define rtw_phydm_ability_ops(adapter, ops, ability)
+#define rtw_phydm_set_dbg_info(padapter, dm_func)
+/*mapping to habb_supportability_t*/
+typedef enum _ODM_Support_Ability_Definition {
+	ODM_BB_DIG = BIT11,
+	ODM_BB_RA_MASK = BIT0,
+	ODM_BB_DYNAMIC_TXPWR = BIT7,
+	ODM_BB_FA_CNT = BIT1,
+	ODM_BB_CCK_PD					= 0,/*not exist*/
+} ODM_ABILITY_E;
+#endif /*(PHYDM_VERSION == 3)*/
+
+#if (PHYDM_VERSION == 1)
+void rtw_odm_acquirespinlock(_adapter *adapter,	RT_SPINLOCK_TYPE type);
+void rtw_odm_releasespinlock(_adapter *adapter,	RT_SPINLOCK_TYPE type);
+#endif /*(PHYDM_VERSION == 1)*/
+
 typedef enum _HAL_PHYDM_OPS {
 	HAL_PHYDM_DIS_ALL_FUNC,
 	HAL_PHYDM_FUNC_SET,
@@ -36,6 +67,7 @@ typedef enum _HAL_PHYDM_OPS {
 } HAL_PHYDM_OPS;
 
 u32 rtw_phydm_ability_ops(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability);
+void rtw_phydm_set_dbg_info(_adapter *padapter, u32 dm_func);
 bool rtw_odm_adaptivity_needed(_adapter *adapter);
 
 #define rtw_phydm_func_disable_all(adapter) \
@@ -65,29 +97,13 @@ bool rtw_odm_adaptivity_needed(_adapter *adapter);
 
 static inline u32 rtw_phydm_ability_get(_adapter *adapter)
 {
-	return rtw_phydm_ability_ops(adapter, HAL_PHYDM_ABILITY_GET, 0);
-}
-
-void rtw_phydm_set_dbg_info(_adapter *padapter, u32 dm_func);
-
-#if (PHYDM_LINUX_CODING_STYLE == 1)
-void rtw_odm_acquirespinlock(_adapter *adapter, enum rt_spinlock_type type);
-void rtw_odm_releasespinlock(_adapter *adapter, enum rt_spinlock_type type);
+#if (PHYDM_VERSION == 3)
+	//TODO
+	return 0;
 #else
-void rtw_odm_acquirespinlock(_adapter *adapter,	RT_SPINLOCK_TYPE type);
-void rtw_odm_releasespinlock(_adapter *adapter,	RT_SPINLOCK_TYPE type);
+	return rtw_phydm_ability_ops(adapter, HAL_PHYDM_ABILITY_GET, 0);
 #endif
-
-#endif
-u8 rtw_odm_get_dfs_domain(struct dvobj_priv *dvobj);
-u8 rtw_odm_dfs_domain_unknown(struct dvobj_priv *dvobj);
-#ifdef CONFIG_DFS_MASTER
-void rtw_odm_radar_detect_reset(_adapter *adapter);
-void rtw_odm_radar_detect_disable(_adapter *adapter);
-void rtw_odm_radar_detect_enable(_adapter *adapter);
-BOOLEAN rtw_odm_radar_detect(_adapter *adapter);
-u8 rtw_odm_radar_detect_polling_int_ms(struct dvobj_priv *dvobj);
-#endif /* CONFIG_DFS_MASTER */
+}
 
 #endif	//_RTW_ODM_H_
 

@@ -97,16 +97,16 @@
 
 
 /*@--------------------------[Enum]------------------------------------------*/
-
+ 
 /*@--------------------------[Structure]-------------------------------------*/
-
+ 
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct bb_info;
 s32 halbb_pwdb_conversion(s32 X, u32 total_bit, u32 decimal_bit);
 s32 halbb_sign_conversion(s32 val, u32 total_bit);
 u8 halbb_find_intrvl(struct bb_info *bb, u16 val, u8 *threshold, u8 len);
 void halbb_seq_sorting(struct bb_info *bb, u32 *val, u32 *idx, u32 *idx_out,
-					   u8 seq_length);
+		       u8 seq_length);
 u16 halbb_show_fraction_num(u32 frac_val, u8 bit_num);
 u16 halbb_ones_num_in_bitmap(u64 val, u8 size);
 u64 halbb_gen_mask_from_0(u8 mask_num);
@@ -115,9 +115,9 @@ u32 halbb_cal_bit_shift(u32 bit_mask);
 s32 halbb_cnvrt_2_sign(u32 val, u8 bit_num);
 s64 halbb_cnvrt_2_sign_64(u64 val, u8 bit_num);
 void halbb_print_sign_frac_digit(struct bb_info *bb, u32 val, u8 total_bit_num,
-								 u8 frac_bit_num, char *buf, u16 buf_size);
+				 u8 frac_bit_num, char *buf, u16 buf_size);
 char *halbb_print_sign_frac_digit2(struct bb_info *bb, u32 val, u8 total_bit_num,
-								   u8 frac_bit_num);
+				 u8 frac_bit_num);
 void halbb_print_buff_64(struct bb_info *bb, u8 *addr, u16 length);
 void halbb_print_buff_32(struct bb_info *bb, u8 *addr, u16 length);
 #endif

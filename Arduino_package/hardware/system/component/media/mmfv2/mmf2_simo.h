@@ -49,6 +49,8 @@ typedef struct mm_simo_s {
 	char        taskname[4][16];
 	xTaskHandle task[4];
 	uint32_t    secure_context;
+
+	void 		*ctrl_lock;	// mutex lock for stop/pause/resume
 } mm_simo_t;
 
 extern int simo_start(mm_simo_t *simo);

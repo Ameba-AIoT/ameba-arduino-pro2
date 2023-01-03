@@ -2,6 +2,7 @@
 #define ISP_OSD_EXAMPLE_H_
 
 #define RECT_NUM 6
+#define TAG_NUM 3
 
 struct result_obj {
 	int idx;

@@ -34,5 +34,8 @@
 /** @brief  Config APP LE link number */
 #define APP_MAX_LINKS  1
 
+/** @brief  Legacy ADV concurrent demo */
+#define LEGACY_ADV_CONCURRENT  0
+
 /** @} */ /* End of group PERIPH_Config */
 #endif

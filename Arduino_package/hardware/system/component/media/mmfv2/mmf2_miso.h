@@ -19,6 +19,7 @@ typedef struct mm_miso_s {
 	char            taskname[16];
 	xTaskHandle 	task;
 	uint32_t    secure_context;
+	void 		*ctrl_lock;
 } mm_miso_t;
 
 extern int miso_start(mm_miso_t *miso);
