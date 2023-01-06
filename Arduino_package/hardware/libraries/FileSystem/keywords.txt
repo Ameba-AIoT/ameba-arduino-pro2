@@ -1,0 +1,46 @@
+#######################################
+# Syntax Coloring Map for FileSystem
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+AmebaFatFS	KEYWORD1
+File	KEYWORD1
+
+#######################################
+# AmebaFatFS Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+open	KEYWORD2
+exists	KEYWORD2
+remove	KEYWORD2
+rename	KEYWORD2
+mkdir	KEYWORD2
+rmdir	KEYWORD2
+getRootPath	KEYWORD2
+readDir	KEYWORD2
+isDir	KEYWORD2
+isFile	KEYWORD2
+getLastModTime	KEYWORD2
+status	KEYWORD2
+
+#######################################
+# File Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+open	KEYWORD2
+close	KEYWORD2
+write	KEYWORD2
+read	KEYWORD2
+peek	KEYWORD2
+available	KEYWORD2
+flush	KEYWORD2
+seek	KEYWORD2
+position	KEYWORD2
+size	KEYWORD2
+isOpen	KEYWORD2
+name	KEYWORD2
