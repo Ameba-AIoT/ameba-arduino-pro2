@@ -92,6 +92,7 @@ int WiFiClient::read(uint8_t* buf, size_t size) {
     int ret;
     int err;
 
+    // size_t is uint32_t
     ret = clientdrv.getDataBuf(_sock, buf, size);
     if (ret <= 0) {
         err = clientdrv.getLastErrno(_sock);
@@ -106,6 +107,7 @@ int WiFiClient::recv(uint8_t* buf, size_t size) {
     int ret;
     int err;
 
+    // size_t is uint32_t
     ret = clientdrv.recvData(_sock, buf, size);
     if (ret <= 0) {
         err = clientdrv.getLastErrno(_sock);
