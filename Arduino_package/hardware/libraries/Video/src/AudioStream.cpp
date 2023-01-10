@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Audio.h"
+#include "AudioStream.h"
 
 #define DEBUG 0
 

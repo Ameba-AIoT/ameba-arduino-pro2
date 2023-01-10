@@ -1,6 +1,6 @@
 #include "StreamIO.h"
-#include "Audio.h"
-#include "Video.h"
+#include "AudioStream.h"
+#include "VideoStream.h"
 #include "MP4Recording.h"
 
 // Default preset configurations for each video channel:

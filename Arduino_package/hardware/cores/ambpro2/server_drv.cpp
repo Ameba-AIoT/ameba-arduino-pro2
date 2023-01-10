@@ -88,7 +88,7 @@ int ServerDrv::availData(int sock) {
     }
 }
 
-bool ServerDrv::recvData(int sock, uint8_t *_data, uint16_t _dataLen) {
+bool ServerDrv::recvData(int sock, uint8_t *_data, uint32_t _dataLen) {
     int ret;
     _available = false;
 
@@ -116,7 +116,7 @@ bool ServerDrv::getData(int sock, uint8_t *data, uint8_t peek) {
     return false;
 }
 
-int ServerDrv::getDataBuf(int sock, uint8_t *_data, uint16_t _dataLen) {
+int ServerDrv::getDataBuf(int sock, uint8_t *_data, uint32_t _dataLen) {
     int ret;
     _available = false;
 
@@ -138,7 +138,7 @@ void ServerDrv::stopSocket(int sock) {
     _available = false;
 }
 
-bool ServerDrv::sendData(int sock, const uint8_t *data, uint16_t len) {
+bool ServerDrv::sendData(int sock, const uint8_t *data, uint32_t len) {
     //printf("[info] server_drv.cpp sendData()");
 
     int ret;
@@ -155,7 +155,7 @@ bool ServerDrv::sendData(int sock, const uint8_t *data, uint16_t len) {
     return true;
 }
 
-bool ServerDrv::sendtoData(int sock, const uint8_t *data, uint16_t len, uint32_t peer_ip, uint16_t peer_port) {
+bool ServerDrv::sendtoData(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port) {
     int ret;
 
     if (sock < 0) {
