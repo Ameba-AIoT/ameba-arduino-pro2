@@ -304,8 +304,7 @@ void Video::channelBegin(int ch) {
     switch (ch) {
         case 0:
         case 1:
-        case 2:
-        {
+        case 2: {
             cameraStart(videoModule[ch]._p_mmf_context->priv, channel[ch]);
             if ((encoder[ch] == VIDEO_JPEG) && (snapshot[ch] == 0)) {
                 // Enable continuous JPEG capture for MJPEG video
