@@ -4,7 +4,10 @@
 	"PROFILE":["FWFS"],
 	"FWFS":{
         "files":[
-			"yolov4_tiny"
+			"yolov4_tiny",
+			"yamnet_s_hybrid",
+			"scrfd320p",
+			"mobilefacenet_i8"
 		]
 	},
     "yolov4_tiny":{
