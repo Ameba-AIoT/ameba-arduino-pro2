@@ -1,5 +1,5 @@
-#ifndef __VIDEO_H__
-#define __VIDEO_H__
+#ifndef __VIDEO_STREAM_H__
+#define __VIDEO_STREAM_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,6 +61,7 @@ enum encode_type {
 #define	VIDEO_3M    7
 #define	VIDEO_5M    8
 #define	VIDEO_2K    9
+#define	VIDEO_CUSTOM 10
 
 // define video resolution
 //#define VIDEO_2K_WIDTH    2560
@@ -95,22 +96,12 @@ enum encode_type {
 #define v3_STREAMING_ID 2
 #define v4_STREAMING_ID 4
 
-// define video codec
-#define USE_H265 0
-#if USE_H265
-#include "sample_h265.h"
-#define VIDEO_TYPE VIDEO_HEVC
-#define VIDEO_CODEC AV_CODEC_ID_H265
-#else
-#include "sample_h264.h"
-#define VIDEO_TYPE VIDEO_H264
-#define VIDEO_CODEC AV_CODEC_ID_H264
-#endif
-
 class MMFModule {
     friend class StreamIO;
     friend class Video;
-
+	// friend class NNFaceRecognition;
+	// friend class NNFaceDetection;
+    // friend class MD;
     public:
 
     protected:
@@ -127,6 +118,7 @@ class VideoSetting {
     public:
         VideoSetting(uint8_t preset = 0);
         VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot);
+        VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot);
         int8_t _preset = -1;
 
         uint8_t _resolution;
@@ -151,20 +143,24 @@ class Video {
         void channelBegin(int ch = 0);
         void channelEnd(int ch = 0);
         MMFModule getStream(int ch = 0);
-		
-        void setSnapshotCallback(int ch);
-        static int snapshotCB(uint32_t jpeg_addr, uint32_t jpeg_len);
-        void getImage(int ch);
+
+        void getImage(int ch, uint32_t* addr, uint32_t* len);
 
         void setFPS(int fps);
-        void printSnapshotInfo(void);
+        void printSnapshotInfo(int ch);
         void printInfo(void);
+        void videoYUV(int ch);
 
     private:
+        void setSnapshotCallback(int ch);
+        static int snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len);
+        static int snapshotCB1(uint32_t jpeg_addr, uint32_t jpeg_len);
+        static int snapshotCB2(uint32_t jpeg_addr, uint32_t jpeg_len);
+        static int snapshotCB3(uint32_t jpeg_addr, uint32_t jpeg_len);
         MMFModule videoModule[4];
 
         int channelEnable[4] = {0};
-        const int channel[4] = {v1_STREAMING_ID, v2_STREAMING_ID, v3_STREAMING_ID, v4_STREAMING_ID};
+        int channel[4] = {v1_STREAMING_ID, v2_STREAMING_ID, v3_STREAMING_ID, v4_STREAMING_ID};
         int resolution[4] = {0};
         uint16_t w[4] = {0};
         uint16_t h[4] = {0};
@@ -172,12 +168,18 @@ class Video {
         uint32_t bps[4] = {0};
         uint8_t encoder[4] = {0};
         uint8_t snapshot[4] = {0};
-
+        typedef struct roi_param_s {
+            uint32_t xmin;
+            uint32_t ymin;
+            uint32_t xmax;
+            uint32_t ymax;
+        } roi_param_t;
         String encoderArray [8] = {"HEVC", "H264", "JPEG","NV12", "RGB","NV16", "HEVC+JPEG", "H264+JPEG"};
-        String resolutionArray [10] = {"VIDEO_QCIF", "VIDEO_CIF", "VIDEO_WVGA","VIDEO_VGA", "VIDEO_D1", "VIDEO_HD", "VIDEO_FHD", "VIDEO_3M", "VIDEO_5M", "VIDEO_2K"};
+        String resolutionArray [11] = {"VIDEO_QCIF", "VIDEO_CIF", "VIDEO_WVGA","VIDEO_VGA", "VIDEO_D1", "VIDEO_HD", "VIDEO_FHD", "VIDEO_3M", "VIDEO_5M", "VIDEO_2K", "VIDEO_CUSTOM"};
 
-        static uint32_t image_addr;
-        static uint32_t image_len;   
+        static uint32_t image_addr[4];
+        static uint32_t image_len[4];
+        int MD_En;
 };
 
 extern Video Camera;

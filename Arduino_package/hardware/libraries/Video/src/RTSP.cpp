@@ -60,7 +60,9 @@ void RTSP::configVideo(VideoSetting& config) {
     if (AV_Codec_ID == VIDEO_JPEG) {
         AV_Codec_ID = AV_CODEC_ID_MJPEG;
         RTSP_bps = 0; 
-    } else {
+    } else if ((AV_Codec_ID == VIDEO_HEVC) || (AV_Codec_ID == VIDEO_HEVC_JPEG)) {
+        AV_Codec_ID = AV_CODEC_ID_H265;
+    } else if ((AV_Codec_ID == VIDEO_H264) || (AV_Codec_ID == VIDEO_H264_JPEG)) {
         AV_Codec_ID = AV_CODEC_ID_H264;
     }
     CAMDBG("%d   %d   %d", RTSP_fps, RTSP_bps, AV_Codec_ID);

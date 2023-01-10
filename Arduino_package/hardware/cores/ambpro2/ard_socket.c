@@ -313,7 +313,7 @@ int get_available(int sock) {
     } while (client_fd < 0);
 
     if (client_fd < 0) {
-        printf("\n\r[ERROR] Accept connection failed\n");
+        //printf("\n\r[ERROR] Accept connection failed\n");
         return -1;
     } else {
         timeout = 3000;
@@ -367,7 +367,7 @@ int get_available_v6(int sock) {
 }
 #endif
 
-int recv_data(int sock, const uint8_t *data, uint16_t len, int flag) {
+int recv_data(int sock, const uint8_t *data, uint32_t len, int flag) {
     int ret;
 
     ret = lwip_recv(sock, (void *)data, len, flag);
@@ -375,7 +375,7 @@ int recv_data(int sock, const uint8_t *data, uint16_t len, int flag) {
     return ret;
 }
 
-int send_data(int sock, const uint8_t *data, uint16_t len, int flag) {
+int send_data(int sock, const uint8_t *data, uint32_t len, int flag) {
     int ret;
     //printf("[info] ard_socket.c send_data()\r\n");
     ret = lwip_send(sock, data, len, flag);
@@ -385,7 +385,7 @@ int send_data(int sock, const uint8_t *data, uint16_t len, int flag) {
 
 // UDP
 
-int sendto_data(int sock, const uint8_t *data, uint16_t len, uint32_t peer_ip, uint16_t peer_port) {
+int sendto_data(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port) {
     int ret;
     struct sockaddr_in peer_addr;
 
@@ -418,7 +418,7 @@ int sendto_data_v6(int sock, const void *send_data, size_t len, uint32_t peer_ip
 }
 #endif
 
-int get_receive(int sock, uint8_t *data, int length, int flag, uint32_t *peer_addr, uint16_t *peer_port) {
+int get_receive(int sock, uint8_t *data, uint32_t length, int flag, uint32_t *peer_addr, uint16_t *peer_port) {
     int ret = 0;
     struct sockaddr from;
     socklen_t fromlen;

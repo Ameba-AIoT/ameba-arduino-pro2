@@ -39,19 +39,19 @@ class ServerDrv {
 
         int availData(int sock);
 
-        bool recvData(int sock, uint8_t *_data, uint16_t _dataLen);
+        bool recvData(int sock, uint8_t *_data, uint32_t _dataLen);
 
         bool getData(int sock, uint8_t *data, uint8_t peek = 0);
 
-        int getDataBuf(int sock, uint8_t *_data, uint16_t _dataLen);
+        int getDataBuf(int sock, uint8_t *_data, uint32_t _dataLen);
 
         int getLastErrno(int sock);
 
         void stopSocket(int sock);
 
-        bool sendData(int sock, const uint8_t *data, uint16_t len);
+        bool sendData(int sock, const uint8_t *data, uint32_t len);
 
-        bool sendtoData(int sock, const uint8_t *data, uint16_t len, uint32_t peer_ip, uint16_t peer_port);
+        bool sendtoData(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port);
 
         void getRemoteData(int sock, uint32_t *ip, uint16_t *port);
 

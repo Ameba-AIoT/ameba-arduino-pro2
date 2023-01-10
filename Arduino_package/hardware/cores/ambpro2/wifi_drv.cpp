@@ -480,7 +480,6 @@ uint8_t WiFiDrv::getCurrentEncryptionType() {
 }
 
 rtw_result_t WiFiDrv::wifidrv_scan_result_handler(unsigned int scanned_AP_num, void *user_data) {
-    (void) user_data;
     char *scan_buf = NULL;
     rtw_scan_result_t *scanned_AP_info;
     if (scanned_AP_num == 0) {

@@ -1,5 +1,5 @@
-#ifndef __AUDIO_H__
-#define __AUDIO_H__
+#ifndef __AUDIOSTREAM_H__
+#define __AUDIOSTREAM_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,7 +15,7 @@ extern "C" {
 }
 #endif
 
-#include "Video.h"
+#include "VideoStream.h"
 
 // define Audio parameters
 // reference to audio_api.h
