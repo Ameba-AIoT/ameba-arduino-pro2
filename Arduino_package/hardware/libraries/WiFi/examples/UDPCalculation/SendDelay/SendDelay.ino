@@ -1,9 +1,12 @@
 /*
-   This sketch provide a simple way to roughly calculate the delay of Ameba send delay.
-   The source code is separate into two parts.
-   The first part is Ameba code which play sender role.
-   The second part is PC code wich play receiver role. Please compile the second part and run it.
-*/
+ This sketch provide a simple way to roughly calculate the delay of Ameba send delay.
+ The source code is separate into two parts.
+ The first part is Ameba code which play sender role.
+ The second part is PC code wich play receiver role. Please compile the second part and run it.
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-udp-send-delay/
+ */
 
 #include <WiFi.h>
 #include <WiFiUdp.h>

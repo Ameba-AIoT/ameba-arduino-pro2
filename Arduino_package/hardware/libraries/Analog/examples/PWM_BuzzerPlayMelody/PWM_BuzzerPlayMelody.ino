@@ -1,6 +1,9 @@
 /*
-    This sketch shows how to use tone api to play melody.
-*/
+ This sketch shows how to use tone api to play melody.
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-pwm-music/
+ */
 
 #define NOTE_    0
 #define NOTE_B0  31

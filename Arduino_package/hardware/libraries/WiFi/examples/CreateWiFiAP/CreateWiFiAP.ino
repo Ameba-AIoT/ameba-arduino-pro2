@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ap-mode/
+ */
+
 #include <WiFi.h>
 
 // UTF-8 encoding can also be used for SSID with emoji characters

@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-mp4/
+ */
+
 #include "StreamIO.h"
 #include "AudioStream.h"
 #include "MP4Recording.h"
@@ -61,4 +67,3 @@ void printInfo(void) {
     Serial.println("- MP4 Recording Information -");
     mp4.printInfo();
 }
-

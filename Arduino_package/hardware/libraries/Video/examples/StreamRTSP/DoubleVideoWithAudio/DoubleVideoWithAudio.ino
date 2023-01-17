@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-rtsp/
+ */
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
@@ -15,12 +21,12 @@ Audio audio;
 AAC aac;
 RTSP rtsp1;
 RTSP rtsp2;
-StreamIO audioStreamer(1, 1);  // 1 Input Audio -> 1 Output AAC
+StreamIO audioStreamer(1, 1); // 1 Input Audio -> 1 Output AAC
 StreamIO avMixStreamer(3, 2); // 3 Input Video1 + Video2 + Audio -> 2 Output RTSP1 + RTSP2
 
-char ssid[] = "yourNetwork";  //  your network SSID (name)
+char ssid[] = "yourNetwork";  // your network SSID (name)
 char pass[] = "password";     // your network password
-int status = WL_IDLE_STATUS;   // the Wifi radio's status
+int status = WL_IDLE_STATUS;  // the Wifi radio's status
 
 void setup() {
     Serial.begin(115200);
@@ -90,15 +96,15 @@ void printInfo(void) {
     Serial.println("------------------------------");
 
     Camera.printInfo();
-    
+
     IPAddress ip = WiFi.localIP();
-    
+
     Serial.println("- RTSP Information -");
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");
     rtsp1.printInfo();
-    
+
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");

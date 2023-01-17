@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-web-server-status/
+ */
+
 #include <WiFi.h>
 
 char ssid[] = "yourNetwork";    // your network SSID (name)

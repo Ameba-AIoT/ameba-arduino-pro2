@@ -4,7 +4,11 @@
  * In particular in this example, the RTC time is set at 16:00:00 and an alarm at 16:00:10. 
  * When the time match using the match type MATCH_HHMMSS is reached, 
  * the attached interrupt function will print on the serial monitor Alarm Match!
+ *
+ * Example guide:
+ * https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-rtc-alarm/
 */
+
 #include <stdio.h>
 #include <time.h>
 #include "rtc.h"

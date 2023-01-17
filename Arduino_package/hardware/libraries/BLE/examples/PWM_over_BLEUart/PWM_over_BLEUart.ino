@@ -1,6 +1,10 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ble-pwm/
+ */
 
 #include "BLEDevice.h"
-
 
 #if defined(BOARD_RTL8722DM)
 #define LED_RED      13

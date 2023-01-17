@@ -1,9 +1,18 @@
 /*
-   This sketch provide a simple way to roughly calculate the delay of Ameba receive delay.
-   The source code is separate into two parts.
-   The first part is Ameba code which play receiver role.
-   The second part is PC code wich play sender role. Please compile the second part and run it.
-*/
+ This sketch provide a way to measure proper udp timeout value via dynamically changing udp
+ receiving timeout value. If timeout happens, then add 1 to receiving timeout. Otherwise
+ decrease receiving timeout.
+ This sketch separate into two parts:
+ The first part is Arduino code which play receiver role.
+ The second part is PC code wich play sender role. Please compile the second part and run it.
+
+ You can open Serial Plotter to check the change behavor of timeout value.
+ The meaning of timeout value depends on the sending frequency from sender side.
+ If the sender side send packets frequently, then the Arduino side can have smaller receiving timeout value.
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-udp-timeout/
+ */
 
 #include <WiFi.h>
 #include <WiFiUdp.h>
@@ -42,55 +51,29 @@ void setup() {
     Udp.begin(localPort);
 }
 
+int timeout = 1000;
 char buf[256];
 void loop() {
     int n;
     while (1) {
         memset(buf, 0, 256);
         n = Udp.read(buf, 255);
-        if (n > 0) {
-            handle_data(buf);
+
+        /* You can change different penalty way here. (Ex. two continuous timeouts add 10 to timeout value) */
+        if (n <= 0) {
+            timeout++;
+            if (timeout > 3000) {
+                // assume that the udp timeout is no more than 3s
+                timeout = 3000;
+            }
+        } else {
+            timeout--;
+            if (timeout < 1) {
+                timeout = 1;
+            }
         }
-    }
-}
-
-long early_diff = 0;
-
-long ameba_epoch = 0;
-long long sys_epoch = 0;
-
-long datacount = 0;
-long total_shift = 0;
-
-void handle_data(char *buf) {
-    long data;
-    long timediff;
-    long current_epoch;
-
-    data = atol(buf);
-    if (ameba_epoch == 0) {
-        /* We sync Ameba's system and PC's system time on first packet */
-        ameba_epoch = millis();
-        sys_epoch = data;
-    } else {
-        current_epoch = millis();
-        timediff = (current_epoch - ameba_epoch) - (data - sys_epoch);
-
-        if (-timediff > early_diff) {
-            /* This packet came in earlier than expected. It means there is some delay at first packet. Record this deley. */
-            early_diff = -timediff;
-        }
-
-        total_shift += timediff;
-        datacount++;
-
-        if (datacount % 10000 == 0) {
-            Serial.print("data count: ");
-            Serial.print(datacount);
-            Serial.print("\taverage delay: ");
-            Serial.print(early_diff + total_shift * 1.0 / datacount);
-            Serial.println(" ms");
-        }
+        Serial.println(timeout);
+        Udp.setRecvTimeout(timeout);
     }
 }
 
@@ -104,36 +87,19 @@ void handle_data(char *buf) {
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <sys/time.h>
 #include <unistd.h>
 
-#define BUFSIZE 1024
+#define BUFSIZE 16
 
-const char *hostname = "192.168.1.212";
+const char *hostname = "192.168.1.213";
 int portno = 5001;
-
-long base_current_time = 0;
-long get_current_time_with_ms (void)
-{
-    struct timeval tv;
-
-    gettimeofday(&tv, NULL);
-
-    long millisecondsSinceEpoch = ((long)(tv.tv_sec)) * 1000 + ((long)(tv.tv_usec)) / 1000;
-
-    if (base_current_time == 0) {
-        base_current_time = millisecondsSinceEpoch;
-        return 0;
-    } else {
-        return millisecondsSinceEpoch - base_current_time;
-    }
-}
 
 int main(int argc, char **argv) {
     int sockfd, n;
     struct sockaddr_in serveraddr;
     int serverlen = sizeof(serveraddr);
     char buf[BUFSIZE];
+    int counter = 0;
 
     /* socket: create the socket */
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -148,9 +114,10 @@ int main(int argc, char **argv) {
     serveraddr.sin_addr.s_addr = inet_addr(hostname);
     serveraddr.sin_port = htons(portno);
 
-    while (1) {
+    while(1) {
         memset(buf, 0, BUFSIZE);
-        sprintf(buf, "%ld", get_current_time_with_ms());
+        counter = (counter + 1) % 10;
+        sprintf(buf, "%d", counter);
 
         /* send the message to the server */
         n = sendto(sockfd, buf, strlen(buf), 0, (struct sockaddr *)&serveraddr, serverlen);

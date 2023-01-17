@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-mp4/
+ */
+
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "MP4Recording.h"
@@ -39,7 +45,7 @@ void setup() {
     Camera.channelBegin(CHANNEL);
     // Start recording MP4 data to SD card
     mp4.begin();
-    
+
     delay(1000);
     printInfo();
 }

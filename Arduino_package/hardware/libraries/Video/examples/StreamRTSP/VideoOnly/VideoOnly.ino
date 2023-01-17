@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-rtsp/
+ */
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
@@ -12,7 +18,7 @@
 
 VideoSetting config(CHANNEL);
 RTSP rtsp;
-StreamIO videoStreamer(1, 1);  // 1 Input Video -> 1 Output RTSP
+StreamIO videoStreamer(1, 1); // 1 Input Video -> 1 Output RTSP
 
 char ssid[] = "yourNetwork";  // your network SSID (name)
 char pass[] = "password";     // your network password

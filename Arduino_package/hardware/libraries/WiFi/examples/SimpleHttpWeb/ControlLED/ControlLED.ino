@@ -1,6 +1,12 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ameba-web-server/
+ */
+
 #include <WiFi.h>
 
-char ssid[] = "yourNetwork";        //  your network SSID (name)
+char ssid[] = "yourNetwork";        // your network SSID (name)
 char pass[] = "Password";           // your network password
 int keyIndex = 0;                   // your network key Index number (needed only for WEP)
 
@@ -14,8 +20,8 @@ WiFiServer server(80);
 #endif
 
 void setup() {
-    Serial.begin(115200);         // initialize serial communication
-    pinMode(LED_PIN, OUTPUT);        // set the LED pin mode
+    Serial.begin(115200);           // initialize serial communication
+    pinMode(LED_PIN, OUTPUT);       // set the LED pin mode
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
