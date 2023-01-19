@@ -153,8 +153,8 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int re
     video_v4_params.stream_id = stream_id;
     video_v4_params.type = type;
     video_v4_params.resolution = res;
-    video_v4_params.width = 576;
-    video_v4_params.height = 320;
+    video_v4_params.width = w;
+    video_v4_params.height = h;
     video_v4_params.bps = bps;
     video_v4_params.fps = fps;
     video_v4_params.gop = gop;
