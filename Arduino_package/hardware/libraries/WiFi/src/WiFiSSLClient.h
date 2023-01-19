@@ -1,5 +1,5 @@
-#ifndef wifisslclient_h
-#define wifisslclient_h
+#ifndef WiFiSSLClient_h
+#define WiFiSSLClient_h
 
 #include "Print.h"
 #include "Client.h"
