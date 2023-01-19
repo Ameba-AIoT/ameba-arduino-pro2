@@ -40,23 +40,23 @@ static video_params_t video_params = {
 };
 
 static video_params_t video_v4_params = {
-	.stream_id 		= 0,
-	.type 			= 0,
-	.resolution	 	= 0,
-	.width 			= 0,
-	.height 		= 0,
-	.bps 			= 0,
-	.fps 			= 0,
-	.gop 			= 0,
-	.direct_output 	= 0,
-	.use_static_addr = 1,
-	.use_roi = 1,
-	.roi = {
-		.xmin = 0,
-		.ymin = 0,
-		.xmax = 0,
-		.ymax = 0,
-	}
+    .stream_id      = 0, 
+    .type           = 0, 
+    .resolution     = 0, 
+    .width          = 0, 
+    .height         = 0, 
+    .bps            = 0, 
+    .fps            = 0, 
+    .gop            = 0, 
+    .direct_output  = 0, 
+    .use_static_addr = 1, 
+    .use_roi = 1, 
+    .roi = {
+        .xmin = 0, 
+        .ymin = 0, 
+        .xmax = 0, 
+        .ymax = 0,
+    }
 };
 
 

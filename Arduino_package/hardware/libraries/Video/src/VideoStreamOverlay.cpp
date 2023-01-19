@@ -53,8 +53,8 @@ void VideoStreamOverlay::endChannel(int ch) {
     ch_enable[ch] = 0;
     osd_render_dev_deinit(ch);
 
-    for(int i = 0; i < OSD_OBJ_MAX_CH; i++) {
-        if(ch_enable[ch]) {
+    for (int i = 0; i < OSD_OBJ_MAX_CH; i++) {
+        if (ch_enable[ch]) {
             break;
         }
         end();     // Check for active channels, if no channels active, stop task
