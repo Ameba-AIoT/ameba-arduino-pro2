@@ -99,9 +99,7 @@ enum encode_type {
 class MMFModule {
     friend class StreamIO;
     friend class Video;
-	// friend class NNFaceRecognition;
-	// friend class NNFaceDetection;
-    // friend class MD;
+
     public:
 
     protected:
@@ -119,7 +117,10 @@ class VideoSetting {
         VideoSetting(uint8_t preset = 0);
         VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot);
         VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot);
-        int8_t _preset = -1;
+
+        uint16_t width(void);
+        uint16_t height(void);
+        uint16_t fps(void);
 
         uint8_t _resolution;
         uint16_t _w;
@@ -130,6 +131,7 @@ class VideoSetting {
         uint8_t _snapshot;
 
     private:
+        int8_t _preset = -1;
 
 };
 

@@ -65,11 +65,11 @@ VideoSetting::VideoSetting(uint8_t preset) {
     _preset = preset;
 
     if (_resolution == VIDEO_FHD) {
-       _w = VIDEO_FHD_WIDTH;
-       _h = VIDEO_FHD_HEIGHT;
+        _w = VIDEO_FHD_WIDTH;
+        _h = VIDEO_FHD_HEIGHT;
     } else if (_resolution == VIDEO_HD) {
-       _w = VIDEO_HD_WIDTH;
-       _h = VIDEO_HD_HEIGHT;
+        _w = VIDEO_HD_WIDTH;
+        _h = VIDEO_HD_HEIGHT;
     }
 }
 
@@ -173,6 +173,18 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     }
 }
 
+uint16_t VideoSetting::width(void) {
+    return _w;
+}
+
+uint16_t VideoSetting::height(void) {
+    return _h;
+}
+
+uint16_t VideoSetting::fps(void) {
+    return _fps;
+}
+
 /**
   * @brief  configure video stream channel
   * @param  ch : channel to configure
@@ -191,10 +203,10 @@ void Video::configVideoChannel(int ch, VideoSetting& config) {
     snapshot[ch]        = config._snapshot;
 
     // Video stream using VIDEO_JPEG requires setting bps = 0
-//    if (encoder[ch] == VIDEO_JPEG) {
-//        bps[ch] = 0;
-//    }
-   
+    // if (encoder[ch] == VIDEO_JPEG) {
+    //     bps[ch] = 0;
+    // }
+
     CAMDBG("V1 %d    %d    %d    %d    %d    %d", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
     CAMDBG("V2 %d    %d    %d    %d    %d    %d", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
     CAMDBG("V3 %d    %d    %d    %d    %d    %d", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);

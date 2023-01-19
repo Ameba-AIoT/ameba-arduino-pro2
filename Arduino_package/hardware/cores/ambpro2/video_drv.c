@@ -40,23 +40,23 @@ static video_params_t video_params = {
 };
 
 static video_params_t video_v4_params = {
-	.stream_id 		= 0,
-	.type 			= 0,
-	.resolution	 	= 0,
-	.width 			= 0,
-	.height 		= 0,
-	.bps 			= 0,
-	.fps 			= 0,
-	.gop 			= 0,
-	.direct_output 	= 0,
-	.use_static_addr = 1,
-	.use_roi = 1,
-	.roi = {
-		.xmin = 0,
-		.ymin = 0,
-		.xmax = 0,
-		.ymax = 0,
-	}
+    .stream_id      = 0, 
+    .type           = 0, 
+    .resolution     = 0, 
+    .width          = 0, 
+    .height         = 0, 
+    .bps            = 0, 
+    .fps            = 0, 
+    .gop            = 0, 
+    .direct_output  = 0, 
+    .use_static_addr = 1, 
+    .use_roi = 1, 
+    .roi = {
+        .xmin = 0, 
+        .ymin = 0, 
+        .xmax = 0, 
+        .ymax = 0,
+    }
 };
 
 
@@ -153,8 +153,8 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int re
     video_v4_params.stream_id = stream_id;
     video_v4_params.type = type;
     video_v4_params.resolution = res;
-    video_v4_params.width = 576;
-    video_v4_params.height = 320;
+    video_v4_params.width = w;
+    video_v4_params.height = h;
     video_v4_params.bps = bps;
     video_v4_params.fps = fps;
     video_v4_params.gop = gop;
