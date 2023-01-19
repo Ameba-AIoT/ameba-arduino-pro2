@@ -49,6 +49,21 @@ typedef struct landmarki_s {
 	} pos[5];
 } landmarki_t;
 //----------------------------------------------------------------------------
+#ifdef __cplusplus
+typedef struct detobj_s {
+	float type;
+	float score;
+	float top_x, top_y;
+	float bot_x, bot_y;
+} detobj_t;
+
+typedef struct detobji_s {
+	uint32_t type;
+	uint32_t score;
+	uint32_t top_x, top_y;
+	uint32_t bot_x, bot_y;
+} detobji_t;
+#else
 typedef struct detobj_s {
 	float class;
 	float score;
@@ -62,7 +77,7 @@ typedef struct detobji_s {
 	uint32_t top_x, top_y;
 	uint32_t bot_x, bot_y;
 } detobji_t;
-
+#endif
 //----------------------------------------------------------------------------
 typedef struct nn_tensor_format_s {
 	int type;
@@ -83,7 +98,29 @@ typedef struct nn_tensor_param_s {
 	nn_tensor_format_t format[16];
 	nn_tensor_dim_t dim[16];
 } nn_tensor_param_t;
-
+#ifdef __cplusplus
+typedef struct nn_data_param_s {
+	union {
+		struct {
+			// img width height order
+			int width, height, rgb;
+			// roi
+			rect_t roi;
+			landmarki_t landmark;
+		} img;
+		struct {
+			int num_of_samples;
+			int bit_pre_sample;
+			int sample_rate;
+			int channel;
+		} aud;
+	};
+	// DONT use this
+	void *priv;
+	// DONT use this
+	int size_in_byte;
+} nn_data_param_t;
+#else
 typedef struct nn_data_param_s {
 	union {
 		struct nn_img_params_s {
@@ -105,6 +142,7 @@ typedef struct nn_data_param_s {
 	// DONT use this
 	int size_in_byte;
 } nn_data_param_t;
+#endif
 
 typedef void (*disp_postprcess_t)(void *, void *);
 typedef int (*nn_preprocess_t)(void *data_in, nn_data_param_t *data_param, void *tensor_in, nn_tensor_param_t *tensor_param);
