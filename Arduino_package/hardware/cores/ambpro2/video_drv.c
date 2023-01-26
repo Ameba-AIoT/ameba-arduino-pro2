@@ -16,7 +16,7 @@ static video_params_t video_params = {
     .resolution     = 0, 
     .width          = 0, 
     .height         = 0, 
-    .bps            = 0,
+    .bps            = 0, 
     .fps            = 0, 
     .gop            = 0, 
     .rc_mode        = 0, 
@@ -44,10 +44,10 @@ static video_params_t video_v4_params = {
 };
 
 
-int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
-                        int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,
-                        int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot,
-                        int v4_enable, int v4_w, int v4_h) {
+int cameraConfig (int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
+                  int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,
+                  int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot,
+                  int v4_enable, int v4_w, int v4_h) {
     isp_info_t info;
     info.sensor_width = 1920;
     info.sensor_height = 1080;
