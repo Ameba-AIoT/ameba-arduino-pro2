@@ -21,7 +21,7 @@ Audio audio;
 AAC aac;
 MP4Recording mp4;
 StreamIO audioStreamer(1, 1);  // 1 Input Audio -> 1 Output AAC
-StreamIO avMixStreamer(2, 1); // 2 Input Video + Audio -> 1 Output MP4
+StreamIO avMixStreamer(2, 1);  // 2 Input Video + Audio -> 1 Output MP4
 
 void setup() {
     Serial.begin(115200);

@@ -2,15 +2,7 @@
 #include "module_audio.h"
 #include "module_aac.h"
 
-#define DEBUG 0
 #define DEFAULT_AUDIO_SETTINGS 0
-
-#if DEBUG
-#define CAMDBG(fmt, args...) \
-    do {printf("\r\nFunc-[%s]@Line-%d: \r\n" fmt "\r\n", __func__, __LINE__, ## args); } while (0);
-#else
-#define CAMDBG(fmt, args...)
-#endif
 
 static audio_params_t audio_params = {
     .sample_rate = 0,
@@ -66,9 +58,9 @@ void audioOpen(mm_context_t *p, int sample_rate, int word_length, int mic_gain, 
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 6);
         mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
         mm_module_ctrl(p, CMD_AUDIO_APPLY, 0);
-        CAMDBG("audio opened");
+        //printf("audio opened");
     } else {
-        CAMDBG("audio open fail");
+        //printf("audio open fail");
     }
 }
 

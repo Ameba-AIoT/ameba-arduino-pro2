@@ -30,6 +30,7 @@ class RTSP:public MMFModule {
         void printInfo(void);
 
     private:
+        int audioEnable = 0;
 };
 
 #endif

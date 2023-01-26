@@ -21,12 +21,12 @@ Audio audio;
 AAC aac;
 RTSP rtsp1;
 RTSP rtsp2;
-StreamIO audioStreamer(1, 1); // 1 Input Audio -> 1 Output AAC
-StreamIO avMixStreamer(3, 2); // 3 Input Video1 + Video2 + Audio -> 2 Output RTSP1 + RTSP2
+StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output AAC
+StreamIO avMixStreamer(3, 2);   // 3 Input Video1 + Video2 + Audio -> 2 Output RTSP1 + RTSP2
 
-char ssid[] = "yourNetwork";  // your network SSID (name)
-char pass[] = "password";     // your network password
-int status = WL_IDLE_STATUS;  // the Wifi radio's status
+char ssid[] = "yourNetwork";    // your network SSID (name)
+char pass[] = "Password";       // your network password
+int status = WL_IDLE_STATUS;
 
 void setup() {
     Serial.begin(115200);
@@ -35,7 +35,6 @@ void setup() {
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
-        // Connect to WPA/WPA2 network:
         status = WiFi.begin(ssid, pass);
 
         // wait 2 seconds for connection:

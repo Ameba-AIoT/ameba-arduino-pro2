@@ -5,21 +5,20 @@
 #include "MotionDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL     0       // High resolution video channel for streaming
-#define CHANNELMD   3       // RGB format video for motion detection only avaliable on channel 3
-#define MDRES       16      // Motion detection grid resolution
+#define CHANNEL 0       // High resolution video channel for streaming
+#define CHANNELMD 3     // RGB format video for motion detection only avaliable on channel 3
+#define MDRES 16        // Motion detection grid resolution
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);      // High resolution video for streaming
 VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);     // Low resolution RGB video for motion detection
-
 RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerMD(1, 1);
 MotionDetection MD(MDRES, MDRES);
 
 char ssid[] = "yourNetwork";    // your network SSID (name)
-char pass[] = "password";       // your network password
-int status = WL_IDLE_STATUS;    // the Wifi radio's status
+char pass[] = "Password";       // your network password
+int status = WL_IDLE_STATUS;
 
 void mdPostProcess(char* md_result) {
     // Motion detection results is expressed as an MDRES x MDRES array
@@ -52,16 +51,16 @@ void mdPostProcess(char* md_result) {
     }
     printf("\r\n");
 
-    OSD.clearAll(CHANNEL, 0);
+    OSD.clearAll(CHANNEL);
     if (motion) {
         // Scale rectangle dimensions according to high resolution video stream and draw with OSD
         int xmin = (int)(kmin * config.width() / MDRES) + 1;
         int ymin = (int)(jmin * config.height() / MDRES) + 1;
         int xmax = (int)((kmax + 1) * config.width() / MDRES) - 1;
         int ymax = (int)((jmax + 1) * config.height() / MDRES) - 1;
-        OSD.drawRect(CHANNEL, 0, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
+        OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
     }
-    OSD.update(CHANNEL, 0);
+    OSD.update(CHANNEL);
 }
 
 void setup() {
@@ -71,7 +70,6 @@ void setup() {
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
-        // Connect to WPA/WPA2 network:
         status = WiFi.begin(ssid, pass);
 
         // wait 2 seconds for connection:

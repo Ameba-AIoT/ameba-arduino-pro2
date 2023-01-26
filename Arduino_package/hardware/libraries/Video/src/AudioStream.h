@@ -5,11 +5,10 @@
 extern "C" {
 #endif
 
-#include "audio_drv.h"
-#include "avcodec.h"
 #include "audio_api.h"
 #include "faac.h"
 #include "faaccfg.h"
+#include "module_audio.h"
 
 #ifdef __cplusplus
 }
