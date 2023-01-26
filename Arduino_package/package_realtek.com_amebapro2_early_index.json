@@ -13,6 +13,40 @@
 		{
           "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
           "architecture": "AmebaPro2",
+          "version": "4.0.1-build20230126",
+          "category": "Contributed",
+          "help": {
+            "online": "https://forum.amebaiot.com/"
+          },
+          "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2-4.0.1-build20230126.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.1-build20230126.tar.gz",
+          "checksum": "SHA-256:3e03faa7dff05a49faeac3779ba1ea05f1bd4ff055f0421686a097051e9bd4c5",
+          "size": "90614533",
+          "boards": [
+            {"name": "AMB82 (RTL8735B)"},
+            {"name": "AMB82-MINI (RTL8735B)"}
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p1"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p2"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_tools",
+              "version": "1.1.0"
+            }
+          ]
+        },
+		{
+          "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
+          "architecture": "AmebaPro2",
           "version": "4.0.1-build20230119",
           "category": "Contributed",
           "help": {
