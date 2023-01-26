@@ -24,7 +24,7 @@ g++ -o postbuild_macos postbuild_macos.cpp
 using namespace std;
 
 string fc_data_name, voe_name, iq_name, sensor_name;
-string name_buf[4] = {fc_data_name, voe_name, iq_name, sensor_name};
+string name_buf[4];
 
 string upload_mode_user_selection, upload_mode_user_selection_nn, upload_mode_user_selection_voe;
 string common_nn_models_path;
@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmd = "cp misc/image/ ./";
+    cmd = "cp misc/normal_img/* ./";
     cout << cmd << endl;
     system(cmd.c_str());
 
@@ -210,7 +210,7 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << "cp " << common_nn_models_path << " ./";
+        cmdss << "cp " << common_nn_models_path << "* ./";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());

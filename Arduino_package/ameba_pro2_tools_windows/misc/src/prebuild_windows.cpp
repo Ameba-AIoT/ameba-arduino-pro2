@@ -9,7 +9,7 @@ linux:
 g++ -o prebuild_linux prebuild_linux.cpp -static
 
 macos:
-g++ -o prebuild__macos prebuild__macos.cpp
+g++ -o prebuild_macos prebuild_macos.cpp
 
 */
 
@@ -39,7 +39,8 @@ int main(int argc, char *argv[]) {
 
     cmdss.clear();
     //cmdss << "if exist " << argv[3] << " rm -rf " << argv[3];
-    cmdss << "if exist " << argv[3] << " rmdir /s /q  " << argv[3];
+    //cmdss << "if exist " << argv[3] << " rmdir /s /q  " << argv[3];
+    cmdss << "if exist " << argv[3] << " del /s " << argv[3] << "\"*";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
