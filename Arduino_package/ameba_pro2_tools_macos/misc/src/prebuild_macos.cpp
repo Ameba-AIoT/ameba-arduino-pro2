@@ -3,7 +3,7 @@
 Compile:
 
 windows:
-mingw32-g++.exe -o prebuild__windows.exe prebuild__windows.cpp -static
+mingw32-g++.exe -o prebuild_windows.exe prebuild_windows.cpp -static
 
 linux:
 g++ -o prebuild_linux prebuild_linux.cpp -static
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     cmdss.clear();
     cmdss << "rm -rf " << argv[3] <<"/*";
     getline(cmdss, cmd);
-    cout << cmd << endl;
+    //cout << cmd << endl;
     system(cmd.c_str());
 
     return 0;

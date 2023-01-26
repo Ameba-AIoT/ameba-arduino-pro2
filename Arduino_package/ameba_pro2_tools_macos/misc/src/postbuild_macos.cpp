@@ -134,40 +134,6 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-#if 0
-    cmd = "cp misc/image/boot.bin ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/boot_fcs.bin ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/partition.bin ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/certable.bin ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/certificate.bin ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/amebapro2_partitiontable.json ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/amebapro2_firmware.json ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/image/amebapro2_firmware_NA_cam.json ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-#endif
-
     if (upload_mode_user_selection_voe == "VOEyes") {
         readtxt(4);
 
@@ -366,6 +332,7 @@ int main(int argc, char *argv[]) {
                 cmdss << "./misc/elf2bin.macos " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
                 getline(cmdss, cmd);
                 cout << cmd << endl;
+                system(cmd.c_str());
             }
         }
     }
