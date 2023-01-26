@@ -40,9 +40,7 @@ StreamIO::StreamIO(uint8_t numInput, uint8_t numOutput) {
             _p_registerOutput2 = &mimoRegOut2;
             _p_setStackSize = NULL;
             _p_setTaskPriority = NULL;
-
             getInput(numInput);
-            printf("NumIn = %d ", numInput);
         } else {
             // MISO (Multi Input Single Output)
             _p_create = &misoCreate;

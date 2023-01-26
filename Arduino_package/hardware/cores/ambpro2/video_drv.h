@@ -1,10 +1,6 @@
 #ifndef video_drv_h
 #define video_drv_h
 
-#include <stdint.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <diag.h>
 #include "mmf2_module.h"
 
 int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot, 

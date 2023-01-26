@@ -7,7 +7,6 @@
 #define CHANNEL 0
 #define FILENAME "image.jpg"
 
-// Use a pre-defined resolution, or choose to configure your own resolution
 VideoSetting config(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
 
 uint32_t img_addr = 0;

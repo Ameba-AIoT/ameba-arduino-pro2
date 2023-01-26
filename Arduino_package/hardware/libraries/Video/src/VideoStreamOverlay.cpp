@@ -11,15 +11,6 @@ extern "C" {
 }
 #endif
 
-#define DEBUG 0
-
-#if DEBUG
-#define CAMDBG(fmt, args...) \
-    do {printf("\r\nFunc-[%s]@Line-%d: \r\n" fmt "\r\n", __func__, __LINE__, ## args); } while (0);
-#else
-#define CAMDBG(fmt, args...)
-#endif
-
 VideoStreamOverlay OSD;
 
 void VideoStreamOverlay::configVideo(int ch, VideoSetting& config) {
@@ -27,11 +18,11 @@ void VideoStreamOverlay::configVideo(int ch, VideoSetting& config) {
     ch_width[ch] = config._w;
     ch_height[ch] = config._h;
 
-    CAMDBG("ch_enable %d  %d  %d\r\n", ch_enable[0], ch_enable[1], ch_enable[2]);
-    CAMDBG("character_width %d  %d  %d\r\n", character_width[0], character_width[1], character_width[2]);
-    CAMDBG("character_height %d  %d  %d\r\n", character_height[0], character_height[1], character_height[2]);
-    CAMDBG("ch_width %d  %d  %d\r\n", ch_width[0], ch_width[1], ch_width[2]);
-    CAMDBG("ch_height %d  %d  %d\r\n", ch_height[0], ch_height[1], ch_height[2]);
+    //printf("ch_enable %d  %d  %d\r\n", ch_enable[0], ch_enable[1], ch_enable[2]);
+    //printf("character_width %d  %d  %d\r\n", character_width[0], character_width[1], character_width[2]);
+    //printf("character_height %d  %d  %d\r\n", character_height[0], character_height[1], character_height[2]);
+    //printf("ch_width %d  %d  %d\r\n", ch_width[0], ch_width[1], ch_width[2]);
+    //printf("ch_height %d  %d  %d\r\n", ch_height[0], ch_height[1], ch_height[2]);
 }
 
 void VideoStreamOverlay::configTextSize(int ch, int text_width, int text_height) {
@@ -53,28 +44,36 @@ void VideoStreamOverlay::endChannel(int ch) {
     ch_enable[ch] = 0;
     osd_render_dev_deinit(ch);
 
-    for (int i = 0; i < OSD_OBJ_MAX_CH; i++) {
-        if (ch_enable[ch]) {
+    for(int i = 0; i < OSD_OBJ_MAX_CH; i++) {
+        if(ch_enable[ch]) {
             break;
         }
         end();     // Check for active channels, if no channels active, stop task
     }
 }
 
+int VideoStreamOverlay::getTextHeight(int ch) {
+    return character_height[ch];
+}
+
+int VideoStreamOverlay::getTextWidth(int ch) {
+    return character_width[ch];
+}
+
 uint32_t VideoStreamOverlay::color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     return (ARGB(alpha, red, green, blue));
 }
 
-void VideoStreamOverlay::drawPoint(int ch, int idx, int xmin, int ymin, int point_width, uint32_t color) {
+void VideoStreamOverlay::drawPoint(int ch, int xmin, int ymin, int point_width, uint32_t color, int idx) {
     canvas_set_point(ch, idx, xmin, ymin, point_width, color);
 }
 
-void VideoStreamOverlay::drawRect(int ch, int idx, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color) {
+void VideoStreamOverlay::drawRect(int ch, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color, int idx) {
     canvas_set_rect(ch, idx, xmin, ymin, xmax, ymax, line_width, color);
 }
 
-void VideoStreamOverlay::drawText(int ch, int idx, int xmin, int ymin, char *text_string, uint32_t color) {
-    canvas_set_text(ch, idx, xmin, ymin, text_string, color);
+void VideoStreamOverlay::drawText(int ch, int xmin, int ymin, const char *text_string, uint32_t color, int idx) {
+    canvas_set_text(ch, idx, xmin, ymin, (char*)text_string, color);
 }
 
 void VideoStreamOverlay::clearAll(int ch, int idx) {

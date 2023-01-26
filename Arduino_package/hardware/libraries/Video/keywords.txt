@@ -14,9 +14,14 @@ Audio	KEYWORD1
 AAC	KEYWORD1
 RTSP	KEYWORD1
 MP4Recording	KEYWORD1
+OSD	KEYWORD1
+MotionDetection	KEYWORD1
+NNObjectDetection	KEYWORD1
+NNFaceDetection	KEYWORD1
+NNFaceRecognition	KEYWORD1
 
 #######################################
-# Audio.h Methods (KEYWORD2) & Constants (LITERAL1)
+# AudioStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configAudio	KEYWORD2
@@ -55,7 +60,7 @@ USE_AUDIO_RIGHT_DMIC	LITERAL1
 USE_AUDIO_STEREO_DMIC	LITERAL1
 
 #######################################
-# Video.h Methods (KEYWORD2) & Constants (LITERAL1)
+# VideoStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configVideoChannel	KEYWORD2
@@ -144,3 +149,86 @@ registerOutput1	KEYWORD2
 registerOutput2	KEYWORD2
 setStackSize	KEYWORD2
 setTaskPriority	KEYWORD2
+
+#######################################
+# VideoStreamOverlay.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configTextSize	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+endChannel	KEYWORD2
+color	KEYWORD2
+drawPoint	KEYWORD2
+drawRect	KEYWORD2
+drawText	KEYWORD2
+clearAll	KEYWORD2
+update	KEYWORD2
+
+OSD_COLOR_RED	LITERAL1
+OSD_COLOR_BLUE	LITERAL1
+OSD_COLOR_GREEN	LITERAL1
+OSD_COLOR_CYAN	LITERAL1
+OSD_COLOR_MAGENTA	LITERAL1
+OSD_COLOR_YELLOW	LITERAL1
+OSD_COLOR_WHITE	LITERAL1
+OSD_COLOR_BLACK	LITERAL1
+OSD_COLOR_GRAY	LITERAL1
+OSD_COLOR_ORANGE	LITERAL1
+
+#######################################
+# MotionDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configResolution	KEYWORD2
+configVideo	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setTriggerBlockCount	KEYWORD2
+setDetectionMask	KEYWORD2
+getResult	KEYWORD2
+setResultCallback	KEYWORD2
+rows	KEYWORD2
+cols	KEYWORD2
+
+#######################################
+# NNObjectDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configThreshold	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setResultCallback	KEYWORD2
+getResult	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
+
+#######################################
+# NNFaceDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configFaceRecogCascadedMode	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
+
+#######################################
+# NNFaceRecognition.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+registerFace	KEYWORD2
+exitRegisterMode	KEYWORD2
+resetRegisteredFace	KEYWORD2
+backupRegisteredFace	KEYWORD2
+restoreRegisteredFace	KEYWORD2
+setThreshold	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2

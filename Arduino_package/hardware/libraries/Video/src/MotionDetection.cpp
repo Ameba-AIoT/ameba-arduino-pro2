@@ -6,19 +6,9 @@ extern "C" {
 #endif
 
 #include "md_drv.h"
-#include "osd_render.h"
 
 #ifdef __cplusplus
 }
-#endif
-
-#define DEBUG 0
-
-#if DEBUG
-#define CAMDBG(fmt, args...) \
-    do {printf("\r\nFunc-[%s]@Line-%d: \r\n" fmt "\r\n", __func__, __LINE__, ## args); } while (0);
-#else
-#define CAMDBG(fmt, args...)
 #endif
 
 MotionDetection::MotionDetection(uint8_t row, uint8_t col) {
@@ -53,7 +43,7 @@ void MotionDetection::begin(void) {
         _p_mmf_context = MDInit();
     }
     if (_p_mmf_context == NULL) {
-        CAMDBG("MD init failed\r\n");
+        printf("MD init failed\r\n");
         return;
     }
 
@@ -70,7 +60,7 @@ void MotionDetection::end(void) {
     if (MDDeinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        CAMDBG("MD deinit failed\r\n");
+        printf("MD deinit failed\r\n");
     }
 }
 

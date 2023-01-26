@@ -29,7 +29,7 @@ void setup() {
     mp4.setRecordingDuration(30);
     mp4.setRecordingFileCount(1);
     mp4.setRecordingFileName("TestRecordingAudioOnly");
-    mp4.setRecordingDataType(STORAGE_AUDIO);    // Set MP4 to record video only
+    mp4.setRecordingDataType(STORAGE_AUDIO);    // Set MP4 to record audio only
 
     // Configure StreamIO object to stream data from audio channel to AAC encoder
     audioStreamer1.registerInput(audio);

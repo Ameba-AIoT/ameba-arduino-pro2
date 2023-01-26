@@ -21,12 +21,12 @@ VideoSetting configV(CHANNEL);
 Audio audio;
 AAC aac;
 RTSP rtsp;
-StreamIO audioStreamer(1, 1); // 1 Input Audio -> 1 Output AAC
-StreamIO avMixStreamer(2, 1); // 2 Input Video + Audio -> 1 Output RTSP
+StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output AAC
+StreamIO avMixStreamer(2, 1);   // 2 Input Video + Audio -> 1 Output RTSP
 
-char ssid[] = "yourNetwork";  // your network SSID (name)
-char pass[] = "password";     // your network password
-int status = WL_IDLE_STATUS;  // the Wifi radio's status
+char ssid[] = "yourNetwork";    // your network SSID (name)
+char pass[] = "Password";       // your network password
+int status = WL_IDLE_STATUS;
 
 void setup() {
     Serial.begin(115200);

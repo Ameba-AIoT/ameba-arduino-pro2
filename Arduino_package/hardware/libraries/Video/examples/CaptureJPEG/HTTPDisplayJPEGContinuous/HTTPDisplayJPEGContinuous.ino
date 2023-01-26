@@ -1,6 +1,5 @@
 /*  This example uses the camera to capture a JPEG image repeatedly,
- *  and sends the images to a browser continuously using HTTP,
- *  creating the effect of a video.
+ *  and sends the images to a browser continuously using HTTP, creating the effect of a video.
  *  Use Firefox to connect to the board's IP address after it has connected to WiFi,
  *  or use the APP V7RC.
 */
@@ -17,7 +16,7 @@
 VideoSetting config(1024, 576, CAM_FPS, VIDEO_JPEG, 1);
 
 char ssid[] = "yourNetwork";    // your network SSID (name)
-char pass[] = "Password";  		// your network password
+char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 

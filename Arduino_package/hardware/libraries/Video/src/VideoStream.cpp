@@ -11,25 +11,11 @@ extern "C" {
 }
 #endif
 
-#define DEBUG 0
-
-#if DEBUG
-#define CAMDBG(fmt, args...) \
-    do {printf("\r\nFunc-[%s]@Line-%d: \r\n" fmt "\r\n", __func__, __LINE__, ## args); } while (0);
-#else
-#define CAMDBG(fmt, args...)
-#endif
-
 Video Camera;
 
 uint32_t Video::image_addr[4] = {0};
 uint32_t Video::image_len[4] = {0};
 
-/**
-  * @brief  initialize video stream settings for the camera sensor
-  * @param  preset: select one out of 3 preset video stream settings. default preset is 1
-  * @retval none
-  */
 VideoSetting::VideoSetting(uint8_t preset) {
     switch (preset) {
         case 0: {
@@ -65,22 +51,14 @@ VideoSetting::VideoSetting(uint8_t preset) {
     _preset = preset;
 
     if (_resolution == VIDEO_FHD) {
-        _w = VIDEO_FHD_WIDTH;
-        _h = VIDEO_FHD_HEIGHT;
+       _w = VIDEO_FHD_WIDTH;
+       _h = VIDEO_FHD_HEIGHT;
     } else if (_resolution == VIDEO_HD) {
-        _w = VIDEO_HD_WIDTH;
-        _h = VIDEO_HD_HEIGHT;
+       _w = VIDEO_HD_WIDTH;
+       _h = VIDEO_HD_HEIGHT;
     }
 }
 
-/**
-  * @brief  initialize video settings for the camera sensor
-  * @param  resolution: video resolution
-            fps: frame rate in frames per second
-            encoder: video encoder format to use
-            snapshot: enable or disable snapshot function
-  * @retval none
-  */
 VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot) {
     _resolution = resolution;
     _fps = fps;
@@ -94,7 +72,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
             _snapshot = 0;
         }
     }
-    
+
     if (_resolution == VIDEO_FHD) {
         _w = VIDEO_FHD_WIDTH;
         _h = VIDEO_FHD_HEIGHT;
@@ -185,12 +163,6 @@ uint16_t VideoSetting::fps(void) {
     return _fps;
 }
 
-/**
-  * @brief  configure video stream channel
-  * @param  ch : channel to configure
-            config : VideoSetting object
-  * @retval none
-  */
 void Video::configVideoChannel(int ch, VideoSetting& config) {
     // Copy in video stream settings for specified stream channel
     channelEnable[ch]   = 1;
@@ -207,46 +179,31 @@ void Video::configVideoChannel(int ch, VideoSetting& config) {
     //     bps[ch] = 0;
     // }
 
-    CAMDBG("V1 %d    %d    %d    %d    %d    %d", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
-    CAMDBG("V2 %d    %d    %d    %d    %d    %d", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
-    CAMDBG("V3 %d    %d    %d    %d    %d    %d", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
-    CAMDBG("V4 %d    %d    %d    %d    %d    %d", channelEnable[3], w[3], h[3]);
+    //printf("V1 %d    %d    %d    %d    %d    %d", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
+    //printf("V2 %d    %d    %d    %d    %d    %d", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
+    //printf("V3 %d    %d    %d    %d    %d    %d", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
+    //printf("V4 %d    %d    %d    %d    %d    %d", channelEnable[3], w[3], h[3]);
 }
 
-/**
-  * @brief  initialization of camera sensor using existing configurations
-  * @param  none
-  * @retval none
-  */
 void Video::camInit(CameraSetting& config) {
     // To be done
 }
 
-/**
-  * @brief  Deinitialization of camera sensor
-  * @param  none
-  * @retval none
-  */
 void Video::camDeinit(void) {
     // To be done
 }
 
-/**
-  * @brief  initialization of video streams from camera using existing configurations
-  * @param  none
-  * @retval none
-  */
 void Video::videoInit(void) {
     int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0],
                                 channelEnable[1], w[1], h[1], bps[1], snapshot[1],
                                 channelEnable[2], w[2], h[2], bps[2], snapshot[2],
                                 channelEnable[3], w[3], h[3]);
-
-    printf("\r\n[%s] VOE heap size is: %d\r\n", __FUNCTION__, heapSize);
+    (void)heapSize;
+    //printf("\r\n[%s] VOE heap size is: %d\r\n", __FUNCTION__, heapSize);
 
     for (int ch = 0; ch < 4; ch++) {
         if (channelEnable[ch]) {
-            CAMDBG("%d  %d    %d    %d    %d    %d    %d    %d", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
+            //printf("%d  %d    %d    %d    %d    %d    %d    %d", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
             videoModule[ch]._p_mmf_context = cameraInit();
 
             if (encoder[ch] == VIDEO_JPEG) {
@@ -263,7 +220,7 @@ void Video::videoInit(void) {
                             0,
                             snapshot[ch]);
             } else if (ch == 3) {
-                CAMDBG("V4 %d    %d    %d    %d", resolution[3], channelEnable[3], w[3], h[3]);
+                //printf("V4 %d    %d    %d    %d", resolution[3], channelEnable[3], w[3], h[3]);
                 bps[3] = 1*1024*1024;
                 cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
                     channel[3],
@@ -276,7 +233,7 @@ void Video::videoInit(void) {
                     CAM_NN_GOP,
                     0);     // direct output flag
             } else {
-                CAMDBG("%d  %d    %d    %d    %d    %d    %d    %d", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
+                //printf("%d  %d    %d    %d    %d    %d    %d    %d", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
                 cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv, 
                             channel[ch],
                             encoder[ch],
@@ -293,11 +250,6 @@ void Video::videoInit(void) {
     }
 }
 
-/**
-  * @brief  deinitialization of video stream module for a specific channel
-  * @param  none
-  * @retval none
-  */
 void Video::videoDeinit() {
     uint8_t i;
     for (i = 0; i < 4; i++) {
@@ -307,11 +259,6 @@ void Video::videoDeinit() {
     }
 }
 
-/**
-  * @brief  Start video streaming on a specific channel
-  * @param  ch : channel to start streaming
-  * @retval none
-  */
 void Video::channelBegin(int ch) {
     switch (ch) {
         case 0:
@@ -338,11 +285,6 @@ void Video::channelBegin(int ch) {
     }
 }
 
-/**
-  * @brief  Stop video streaming on a specific channel
-  * @param  ch : channel to stop streaming
-  * @retval none
-  */
 void Video::channelEnd(int ch) {
     if (ch > 3) {
         ch = 0;
@@ -350,11 +292,6 @@ void Video::channelEnd(int ch) {
     cameraStopVideoStream(videoModule[ch]._p_mmf_context->priv, channel[ch]);
 }
 
-/**
-  * @brief  Get video stream module
-  * @param  ch : channel
-  * @retval video stream module of channel
-  */
 MMFModule Video::getStream(int ch) {
     if (ch > 3) {
         ch = 0;
@@ -362,11 +299,6 @@ MMFModule Video::getStream(int ch) {
     return (videoModule[ch]);
 }
 
-/**
-  * @brief  Set channel for snapshot callback
-  * @param  ch: channel to call snapshot callback
-  * @retval none
-  */
 void Video::setSnapshotCallback(int ch) {
     switch (ch) {
         case 0: {
@@ -389,54 +321,46 @@ void Video::setSnapshotCallback(int ch) {
 }
 
 void Video::videoYUV(int ch) {
-    printf("Entered YUV\r\n");
+    //printf("Entered YUV\r\n");
     if (videoModule[ch]._p_mmf_context != NULL) {
         cameraYUV(videoModule[ch]._p_mmf_context->priv);
-        printf("VideoYUV Done\r\n");
+        //printf("VideoYUV Done\r\n");
     } else {
-        printf("VideoYUV = 0\r\n");
+        //printf("VideoYUV = 0\r\n");
     }
 }
 
-/**
-  * @brief  Get snapshot info
-  * @param  jpeg_addr: image address
-            jpeg_len : image length
-  * @retval none
-  */
 int Video::snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len) {
     image_addr[0] = jpeg_addr;
     image_len[0] = jpeg_len;
-    CAMDBG("snapshot 0 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
-    return 0;
-}
-int Video::snapshotCB1(uint32_t jpeg_addr, uint32_t jpeg_len) {
-    image_addr[1] = jpeg_addr;
-    image_len[1] = jpeg_len;
-    CAMDBG("snapshot 1 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
-    return 0;
-}
-int Video::snapshotCB2(uint32_t jpeg_addr, uint32_t jpeg_len) {
-    image_addr[2] = jpeg_addr;
-    image_len[2] = jpeg_len;
-    CAMDBG("snapshot 2 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
-    return 0;
-}
-int Video::snapshotCB3(uint32_t jpeg_addr, uint32_t jpeg_len) {
-    image_addr[3] = jpeg_addr;
-    image_len[3] = jpeg_len;
-    CAMDBG("snapshot 3 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    //printf("snapshot 0 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
-/**
-  * @brief  Take a snapshot
-  * @param  ch: channel to take a snapshot from
-  * @retval none
-  */
+int Video::snapshotCB1(uint32_t jpeg_addr, uint32_t jpeg_len) {
+    image_addr[1] = jpeg_addr;
+    image_len[1] = jpeg_len;
+    //printf("snapshot 1 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    return 0;
+}
+
+int Video::snapshotCB2(uint32_t jpeg_addr, uint32_t jpeg_len) {
+    image_addr[2] = jpeg_addr;
+    image_len[2] = jpeg_len;
+    //printf("snapshot 2 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    return 0;
+}
+
+int Video::snapshotCB3(uint32_t jpeg_addr, uint32_t jpeg_len) {
+    image_addr[3] = jpeg_addr;
+    image_len[3] = jpeg_len;
+    //printf("snapshot 3 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    return 0;
+}
+
 void Video::getImage(int ch, uint32_t* addr, uint32_t* len) {
     if (snapshot[ch] == 1) {
-        CAMDBG("Taking snapshot channel = %d\r\n", ch);
+        //printf("Taking snapshot channel = %d\r\n", ch);
         image_addr[ch] = 0;
         image_len[ch] = 0;
         cameraSnapshot(videoModule[ch]._p_mmf_context->priv, 1); // 1 does not represent ch, it represents mode
@@ -449,26 +373,16 @@ void Video::getImage(int ch, uint32_t* addr, uint32_t* len) {
         *len = image_len[ch];
 //        printSnapshotInfo();
     } else {
-        printf("Snapshot disabled\r\n");
+        //printf("Snapshot disabled\r\n");
         *addr = (uint32_t)NULL;
         *len = (uint32_t)NULL;
     }
 }
 
-/**
-  * @brief  Set camera video max FPS
-  * @param  fps     : max FPS
-  * @retval none
-  */
 void Video::setFPS(int fps) {
     video_set_framerate(fps);
 }
 
-/**
-  * @brief  Print out snapshot info in hexadecimal to convert it into an image using online tool (temp method).
-  * @param  none
-  * @retval none
-  */
 void Video::printSnapshotInfo(int ch) {
     uint8_t* addr = (uint8_t *)(image_addr[ch]);
     for (uint32_t i = 0; i < (image_len[ch]); i++) {
@@ -479,11 +393,6 @@ void Video::printSnapshotInfo(int ch) {
     }
 }
 
-/**
-  * @brief  Print out current configuration of video channels.
-  * @param  none
-  * @retval none
-  */
 void Video::printInfo(void) {
     for (int ch = 0; ch < 4; ch++) {
         if (channelEnable[ch] == 1) {
