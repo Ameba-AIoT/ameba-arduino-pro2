@@ -16,6 +16,9 @@ RTSP	KEYWORD1
 MP4Recording	KEYWORD1
 OSD	KEYWORD1
 MotionDetection	KEYWORD1
+NNObjectDetection	KEYWORD1
+NNFaceDetection	KEYWORD1
+NNFaceRecognition	KEYWORD1
 
 #######################################
 # AudioStream.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -90,32 +93,6 @@ VIDEO_NV16	LITERAL1
 VIDEO_HEVC_JPEG	LITERAL1
 VIDEO_H264_JPEG	LITERAL1
 
-#######################################
-# MP4Recording.h Methods (KEYWORD2) & Constants (LITERAL1)
-#######################################
-
-configVideo	KEYWORD2
-configAudio	KEYWORD2
-begin	KEYWORD2
-end	KEYWORD2
-printInfo	KEYWORD2
-setRecordingFileName	KEYWORD2
-setRecordingDuration	KEYWORD2
-setRecordingFileCount	KEYWORD2
-setLoopRecording	KEYWORD2
-setRecordingDataType	KEYWORD2
-getRecordingFileName	KEYWORD2
-getRecordingDuration	KEYWORD2
-getRecordingFileCount	KEYWORD2
-getRecordingState	KEYWORD2
-
-STORAGE_ALL	LITERAL1
-STORAGE_VIDEO	LITERAL1
-STORAGE_AUDIO	LITERAL1
-
-AUDIO_AAC	LITERAL1
-AUDIO_ULAW	LITERAL1
-AUDIO_ALAW	LITERAL1
 
 #######################################
 # RTSP.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -175,16 +152,42 @@ OSD_COLOR_GRAY	LITERAL1
 OSD_COLOR_ORANGE	LITERAL1
 
 #######################################
-# MotionDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+# NNObjectDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
-configResolution	KEYWORD2
 configVideo	KEYWORD2
+configThreshold	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
-setTriggerBlockCount	KEYWORD2
-setDetectionMask	KEYWORD2
-getResult	KEYWORD2
 setResultCallback	KEYWORD2
-rows	KEYWORD2
-cols	KEYWORD2
+getResult	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
+
+#######################################
+# NNFaceDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configFaceRecogCascadedMode	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
+
+#######################################
+# NNFaceRecognition.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+registerFace	KEYWORD2
+exitRegisterMode	KEYWORD2
+resetRegisteredFace	KEYWORD2
+backupRegisteredFace	KEYWORD2
+restoreRegisteredFace	KEYWORD2
+setThreshold	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
