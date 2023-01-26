@@ -99,7 +99,7 @@ build.usb_manufacturer="Unknown"
 build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 
 
-#pre compile 
+#pre compile sketch
 recipe.hooks.sketch.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.sketch.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.sketch.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
@@ -136,7 +136,11 @@ recipe.objcopy.hex.imagepath_appntzmap.windows="{build.path}\application.ntz.map
 recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
-recipe.objcopy.hex.pattern="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}\variants\common_nn_models\" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
+recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}\variants\common_nn_models\" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
+
+recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}/variants/common_nn_models/" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
+
+recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}/variants/common_nn_models/" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"
