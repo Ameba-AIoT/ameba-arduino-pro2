@@ -149,9 +149,7 @@ class Video {
         void getImage(int ch, uint32_t* addr, uint32_t* len);
 
         void setFPS(int fps);
-        void printSnapshotInfo(int ch);
         void printInfo(void);
-        void videoYUV(int ch);
 
     private:
         void setSnapshotCallback(int ch);
