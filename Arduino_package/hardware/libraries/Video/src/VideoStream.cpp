@@ -250,7 +250,7 @@ void Video::videoInit(void) {
     }
 }
 
-void Video::videoDeinit() {
+void Video::videoDeinit(void) {
     uint8_t i;
     for (i = 0; i < 4; i++) {
         if (videoModule[i]._p_mmf_context != NULL) {
@@ -320,16 +320,6 @@ void Video::setSnapshotCallback(int ch) {
     }
 }
 
-void Video::videoYUV(int ch) {
-    //printf("Entered YUV\r\n");
-    if (videoModule[ch]._p_mmf_context != NULL) {
-        cameraYUV(videoModule[ch]._p_mmf_context->priv);
-        //printf("VideoYUV Done\r\n");
-    } else {
-        //printf("VideoYUV = 0\r\n");
-    }
-}
-
 int Video::snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len) {
     image_addr[0] = jpeg_addr;
     image_len[0] = jpeg_len;
@@ -381,16 +371,6 @@ void Video::getImage(int ch, uint32_t* addr, uint32_t* len) {
 
 void Video::setFPS(int fps) {
     video_set_framerate(fps);
-}
-
-void Video::printSnapshotInfo(int ch) {
-    uint8_t* addr = (uint8_t *)(image_addr[ch]);
-    for (uint32_t i = 0; i < (image_len[ch]); i++) {
-        if (i % 16 == 0) {
-            printf("\r\n");
-        }
-        printf("%02x", addr[i]);
-    }
 }
 
 void Video::printInfo(void) {

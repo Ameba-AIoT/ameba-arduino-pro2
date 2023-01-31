@@ -24,10 +24,6 @@ MotionDetection	KEYWORD1
 configAudio	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
-
-configAudio	KEYWORD2
-begin	KEYWORD2
-end	KEYWORD2
 printInfo	KEYWORD2
 
 ASR_8KHZ	LITERAL1
@@ -60,13 +56,19 @@ USE_AUDIO_STEREO_DMIC	LITERAL1
 # VideoStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
+width	KEYWORD2
+height	KEYWORD2
+fps	KEYWORD2
+
 configVideoChannel	KEYWORD2
+camInit	KEYWORD2
+camDeinit	KEYWORD2
 videoInit	KEYWORD2
 videoDeinit	KEYWORD2
 channelBegin	KEYWORD2
 channelEnd	KEYWORD2
 getStream	KEYWORD2
-getP	KEYWORD2
+getImage	KEYWORD2
 setFPS	KEYWORD2
 printInfo	KEYWORD2
 
@@ -156,6 +158,8 @@ configTextSize	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
 endChannel	KEYWORD2
+getTextHeight	KEYWORD2
+getTextWidth	KEYWORD2
 color	KEYWORD2
 drawPoint	KEYWORD2
 drawRect	KEYWORD2
