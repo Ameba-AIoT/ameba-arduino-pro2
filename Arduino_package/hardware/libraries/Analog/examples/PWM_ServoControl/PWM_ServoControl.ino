@@ -24,6 +24,7 @@ int pos = 0;
 
 void setup() {
     myservo.attach(8);
+}
 
 void loop() {
     // goes from 0 degrees to 180 degrees in steps of 1 degree
