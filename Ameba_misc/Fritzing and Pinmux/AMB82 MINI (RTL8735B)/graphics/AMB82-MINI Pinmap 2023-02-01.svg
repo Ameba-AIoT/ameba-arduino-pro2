@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   sodipodi:docname="AMB82-MINI (RTL8735B) pinmap 2022-10-12.svg"
+   sodipodi:docname="AMB82-MINI Pinmap 2022-10-12.svg"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
    id="svg8"
    version="1.1"
@@ -60,11 +60,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="415"
-     inkscape:cy="171.5"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="304.40947"
+     inkscape:cy="99.348503"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g128697"
      inkscape:document-rotation="0"
      showgrid="false"
      fit-margin-top="5"
@@ -73,7 +73,7 @@
      fit-margin-bottom="3"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
-     inkscape:window-x="-8"
+     inkscape:window-x="892"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:pagecheckerboard="0"
@@ -1513,14 +1513,14 @@
                    rx="2.645669"
                    ry="2.6456692" /><text
                    xml:space="preserve"
-                   style="font-size:4.64882px;fill:#ffffff;fill-opacity:1"
-                   x="741.71509"
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.64882px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1"
+                   x="745.09271"
                    y="254.89526"
                    id="text56620-7-8-5"><tspan
                      sodipodi:role="line"
-                     id="tspan56618-6-2-1"
-                     x="741.71509"
-                     y="254.89526">SERIAL1_TX(a)</tspan></text></g></g><g
+                     id="tspan10798"
+                     x="745.09271"
+                     y="254.89526">SERIAL1_TX</tspan></text></g></g><g
                id="g64777"><ellipse
                  ry="0.36033234"
                  rx="0.3603324"
@@ -1603,14 +1603,14 @@
                    rx="2.645669"
                    ry="2.6456692" /><text
                    xml:space="preserve"
-                   style="font-size:4.64882px;fill:#ffffff;fill-opacity:1"
-                   x="741.71509"
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.64882px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1"
+                   x="744.90887"
                    y="254.89526"
                    id="text56620-7-8-5-9"><tspan
                      sodipodi:role="line"
-                     id="tspan56618-6-2-1-6"
-                     x="741.71509"
-                     y="254.89526">SERIAL1_TX(a)</tspan></text></g></g></g><g
+                     id="tspan10778"
+                     x="744.90887"
+                     y="254.89526">SERIAL1_RX</tspan></text></g></g></g><g
              id="g125758"><circle
                id="connector60pin"
                connectorname="RESET"
