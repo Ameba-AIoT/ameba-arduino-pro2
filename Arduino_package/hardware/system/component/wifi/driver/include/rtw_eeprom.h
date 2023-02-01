@@ -128,7 +128,7 @@ struct eeprom_priv {
 
 	u8		EepromOrEfuse;
 
-#if defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8720E)
+#if defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8720E)  || defined(CONFIG_RTL8730E)
 	u8		efuse_eeprom_data[HWSET_MAX_SIZE_1024]; //92C:256bytes, 88E:512bytes
 #else
 	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)

@@ -18,7 +18,7 @@
 /*@--------------------------Define Parameters-------------------------------*/
 #define PSD_RF_PATH_MAX 4
 #define PSD_RF_REG_NUM 10
-#define PSD_RF_DATA_NUM 450
+#define PSD_RF_DATA_NUM 320
 
 /*@-----------------------End Define Parameters-----------------------*/
 struct halrf_psd_data {

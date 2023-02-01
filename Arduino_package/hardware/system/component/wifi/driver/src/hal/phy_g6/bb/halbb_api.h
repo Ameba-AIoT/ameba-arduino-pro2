@@ -66,12 +66,12 @@ void halbb_pre_agc_en(struct bb_info *bb, bool enable);
 void halbb_set_gain_error(struct bb_info *bb, u8 central_ch, enum band_type band, enum rf_path path);
 u8 halbb_stop_ic_trx(struct bb_info *bb, u8 set_type);
 void halbb_ic_api_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					  char *output, u32 *_out_len);
+			char *output, u32 *_out_len);
 u16 halbb_fc_mapping(struct bb_info *bb, enum band_type band, u8 central_ch);
 void halbb_ic_hw_setting_non_io(struct bb_info *bb);
 void halbb_ic_hw_setting_low_io(struct bb_info *bb);
 void halbb_ic_hw_setting_dbcc(struct bb_info *bb);
 void halbb_ic_hw_setting(struct bb_info *bb);
-void halbb_ic_hw_setting_dbg(struct bb_info *bb, char input[][16],
-							 u32 *_used, char *output, u32 *_out_len);
+void halbb_ic_hw_setting_dbg(struct bb_info *bb, char input[][16], 
+			     u32 *_used, char *output, u32 *_out_len);
 #endif

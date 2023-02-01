@@ -83,26 +83,26 @@ struct bb_ch_info_buf_cfg_info {
 
 struct bb_ch_rpt_hdr_info {
 	u16 total_len_l; /*header(16byte) + Raw data length(Unit: byte)*/
-#if (PLATFOM_IS_LITTLE_ENDIAN)
-	u8 total_len_m: 1;
-	u8 total_seg_num: 7;
-#else
-	u8 total_seg_num: 7;
-	u8 total_len_m: 1;
-#endif
+	#if (PLATFOM_IS_LITTLE_ENDIAN)
+	u8 total_len_m:1;
+	u8 total_seg_num:7;
+	#else
+	u8 total_seg_num:7;
+	u8 total_len_m:1;
+	#endif
 
 	u8 avg_noise_pow;
-#if (PLATFOM_IS_LITTLE_ENDIAN)
-	u8 is_pkt_end: 1;
-	u8 set_valid: 1;
-	u8 n_rx: 3;
-	u8 n_sts: 3;
-#else
-	u8 n_sts: 3;
-	u8 n_rx: 3;
-	u8 set_valid: 1;
-	u8 is_pkt_end: 1;
-#endif
+	#if (PLATFOM_IS_LITTLE_ENDIAN)
+	u8 is_pkt_end:1;
+	u8 set_valid:1;
+	u8 n_rx:3;
+	u8 n_sts:3;
+	#else
+	u8 n_sts:3;
+	u8 n_rx:3;
+	u8 set_valid:1;
+	u8 is_pkt_end:1;
+	#endif
 	u8 segment_size; /*unit (8Byte)*/
 	u8 sts0_evm;
 	u8 seq_num;
@@ -112,39 +112,40 @@ struct bb_phy_info_rpt {
 	u8	rssi[2];
 	u16	rsvd_0;
 	u8	rssi_avg;
-#if (PLATFOM_IS_LITTLE_ENDIAN)
-	u8	rxsc: 4;
-	u8	sts1_evm_l: 4;
-	u8	sts1_evm_m: 4;
-	u8	rsvd_1: 4;
-#else
-	u8	rsvd_1: 4;
-	u8	sts1_evm_m: 4;
-	u8	sts1_evm_l: 4;
-	u8	rxsc: 4;
-#endif
+	#if (PLATFOM_IS_LITTLE_ENDIAN)
+	u8	rxsc:4;
+	u8	sts1_evm_l:4;
+	u8	sts1_evm_m:4;
+	u8	rsvd_1:4;
+	#else
+	u8	rsvd_1:4;
+	u8	sts1_evm_m:4;
+	u8	sts1_evm_l:4;
+	u8	rxsc:4;
+	#endif
 	u8	rsvd_2;
 };
 
 struct bb_ch_info_drv_rpt {
 	u32 raw_data_len;
 	u8 seg_idx_curr;
+	bool get_ch_rpt_success;
 };
 
 struct bb_info;
 /*@--------------------------[Prptotype]-------------------------------------*/
 bool halbb_ch_info_wait_from_physts(struct bb_info *bb, u32 dly, u32 dly_max,
-									u16 bitmap, bool valid_rpt_only);
+				    u16 bitmap, bool valid_rpt_only);
+void halbb_ch_info_cfg_mu_buff_cr(struct bb_info *bb, bool en);
 bool halbb_cfg_ch_info_cr(struct bb_info *bb, struct bb_ch_info_cr_cfg_info *cfg);
 void halbb_ch_info_size_query(struct bb_info *bb, struct bb_ch_rpt_size_info *exp_rpt_size, enum phl_phy_idx phy_idx);
-
 void halbb_ch_info_physts_en(struct bb_info *bb, bool en,
-							 u16 bitmap, enum phl_phy_idx phy_idx);
-void halbb_cfg_ch_info_buff(struct bb_info *bb, struct bb_ch_info_buf_cfg_info *cfg);
+			     u16 bitmap, enum phl_phy_idx phy_idx);
+void halbb_ch_info_status_en(struct bb_info *bb, bool en, enum phl_phy_idx phy_idx);
 enum bb_ch_info_t halbb_ch_info_parsing(struct bb_info *bb, u8 *addr, u32 len,
-										u8 *rpt_buf,
-										struct bb_ch_rpt_hdr_info *hdr,
-										struct bb_phy_info_rpt *phy_info,
-										struct bb_ch_info_drv_rpt *drv);
+					u8 *rpt_buf,
+					struct bb_ch_rpt_hdr_info *hdr,
+					struct bb_phy_info_rpt *phy_info,
+					struct bb_ch_info_drv_rpt *drv);
 
 #endif

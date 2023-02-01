@@ -1,10 +1,16 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-web-client-http/
+ */
+
 #include <HttpClient.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 
 // This example downloads the URL "http://www.amebaiot.com"
 
-char ssid[] = "YourNetwork"; //  your network SSID (name) 
+char ssid[] = "YourNetwork"; // your network SSID (name) 
 char pass[] = "password";    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 

@@ -30,6 +30,11 @@
 #define VIDEO_LOG_INF		1
 #define VIDEO_LOG_ALL		0
 
+#define VIDEO_H264_META_OFFSET 0x07
+#define VIDEO_JPEG_META_OFFSET 0x04
+
+#define VIDEO_META_USER_SIZE 0x40
+
 typedef struct encode_rc_parm_s {
 	unsigned int rcMode;
 	unsigned int iQp;		// for fixed QP
@@ -100,6 +105,8 @@ typedef struct video_param_s {
 		uint32_t xmax;
 		uint32_t ymax;
 	} roi;
+	uint32_t meta_size;
+	uint32_t dn_init_mode;
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -114,6 +121,15 @@ typedef struct mult_sensor_info_s {
 	uint32_t sensor_finish;
 } mult_sensor_info_t;
 
+typedef struct video_meta_s {
+	uint32_t type;
+	uint32_t video_addr;
+	uint32_t video_len;
+	uint32_t meta_offset;
+	isp_meta_t *isp_meta_data;
+	isp_statis_meta_t *isp_statis_meta;
+	uint32_t user_buf[VIDEO_META_USER_SIZE];
+} video_meta_t;
 
 
 
@@ -162,11 +178,11 @@ void video_set_debug_level(int value);//Default level -> VIDEO_LOG_MSG
 
 void video_set_uvcd_iq(unsigned int addr);
 
-void video_set_framerate(int fps);
-
 unsigned char *video_get_iq_buf(void);
 
 int video_get_video_sensor_status(void);
+
+void video_get_fcs_info(void *isp_fcs_info);
 
 int video_fcs_write_sensor_id(int SensorName);
 
@@ -186,8 +202,9 @@ void video_set_fcs_queue_info(int start_time, int end_time);
 
 void video_get_fcs_queue_info(int *start_time, int *end_time);
 
+int video_get_maxqp(int ch);
+
 //////////////////////
-#define VOE_NOR_REMAP_OFFSET 0xC000000 //enc_remap_addr in encrypt_fw.json
 #define VOE_NAND_FLASH_OFFSET 0x8000000
 #define FW_1 0x01
 #define FW_2 0x02

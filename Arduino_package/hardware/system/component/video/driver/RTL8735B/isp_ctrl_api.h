@@ -157,5 +157,7 @@ void isp_get_smart_ir_mode(int *pval);
 void isp_set_smart_ir_manual_level(int val);
 void isp_get_smart_ir_manual_level(int *pval);
 void isp_get_day_night_detection(int *pval);
+void isp_set_gray_mode(int val);
+void isp_get_gray_mode(int *pval);
 
 #endif

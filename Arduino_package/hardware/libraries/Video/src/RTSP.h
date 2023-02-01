@@ -12,8 +12,8 @@ extern "C" {
 }
 #endif
 
-#include "Video.h"
-#include "Audio.h"
+#include "VideoStream.h"
+#include "AudioStream.h"
 
 class RTSP:public MMFModule {
     public:
@@ -30,6 +30,7 @@ class RTSP:public MMFModule {
         void printInfo(void);
 
     private:
+        int audioEnable = 0;
 };
 
 #endif

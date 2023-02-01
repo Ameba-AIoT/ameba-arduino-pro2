@@ -51,7 +51,7 @@ enum dcr_csi_rsp {
 void halbb_dcr_init(struct bb_info *bb);
 void halbb_dcr_reset(struct bb_info *bb);
 void halbb_dyn_csi_rsp_dbg(struct bb_info *bb, char input[][16],
-						   u32 *_used, char *output, u32 *_out_len);
+			   u32 *_used, char *output, u32 *_out_len);
 void halbb_dyn_csi_rsp_main(struct bb_info *bb);
 #endif
 #endif

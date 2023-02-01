@@ -2,8 +2,7 @@
 #define __STREAMIO_H__
 
 #include "Arduino.h"
-#include "RTSP.h"
-#include "Video.h"
+#include "VideoStream.h"
 
 class StreamIO
 {

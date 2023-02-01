@@ -26,6 +26,8 @@ typedef enum {
     RTK_BT_ACT_GATTC_READ,
     RTK_BT_ACT_GATTC_WRITE,
     RTK_BT_ACT_GATTC_CONFIRM,
+    RTK_BT_ACT_IPC_REGISTER_GATTC_CB,
+    RTK_BT_ACT_IPC_UNREGISTER_GATTC_CB,
 } rtk_bt_gattc_act_t;
 
 /**

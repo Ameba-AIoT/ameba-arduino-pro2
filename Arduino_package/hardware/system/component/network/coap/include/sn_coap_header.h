@@ -44,78 +44,78 @@ struct coap_s;
  * \brief Enumeration for CoAP Version
  */
 typedef enum coap_version_ {
-    COAP_VERSION_1          = 0x40,
-    COAP_VERSION_UNKNOWN    = 0xFF
+	COAP_VERSION_1          = 0x40,
+	COAP_VERSION_UNKNOWN    = 0xFF
 } coap_version_e;
 
 /**
  * \brief Enumeration for CoAP Message type, used in CoAP Header
  */
 typedef enum sn_coap_msg_type_ {
-    COAP_MSG_TYPE_CONFIRMABLE       = 0x00, /**< Reliable Request messages */
-    COAP_MSG_TYPE_NON_CONFIRMABLE   = 0x10, /**< Non-reliable Request and Response messages */
-    COAP_MSG_TYPE_ACKNOWLEDGEMENT   = 0x20, /**< Response to a Confirmable Request  */
-    COAP_MSG_TYPE_RESET             = 0x30  /**< Answer a Bad Request */
+	COAP_MSG_TYPE_CONFIRMABLE       = 0x00, /**< Reliable Request messages */
+	COAP_MSG_TYPE_NON_CONFIRMABLE   = 0x10, /**< Non-reliable Request and Response messages */
+	COAP_MSG_TYPE_ACKNOWLEDGEMENT   = 0x20, /**< Response to a Confirmable Request  */
+	COAP_MSG_TYPE_RESET             = 0x30  /**< Answer a Bad Request */
 } sn_coap_msg_type_e;
 
 /**
  * \brief Enumeration for CoAP Message code, used in CoAP Header
  */
 typedef enum sn_coap_msg_code_ {
-    COAP_MSG_CODE_EMPTY                                 = 0,
-    COAP_MSG_CODE_REQUEST_GET                           = 1,
-    COAP_MSG_CODE_REQUEST_POST                          = 2,
-    COAP_MSG_CODE_REQUEST_PUT                           = 3,
-    COAP_MSG_CODE_REQUEST_DELETE                        = 4,
+	COAP_MSG_CODE_EMPTY                                 = 0,
+	COAP_MSG_CODE_REQUEST_GET                           = 1,
+	COAP_MSG_CODE_REQUEST_POST                          = 2,
+	COAP_MSG_CODE_REQUEST_PUT                           = 3,
+	COAP_MSG_CODE_REQUEST_DELETE                        = 4,
 
-    COAP_MSG_CODE_RESPONSE_CREATED                      = 65,
-    COAP_MSG_CODE_RESPONSE_DELETED                      = 66,
-    COAP_MSG_CODE_RESPONSE_VALID                        = 67,
-    COAP_MSG_CODE_RESPONSE_CHANGED                      = 68,
-    COAP_MSG_CODE_RESPONSE_CONTENT                      = 69,
-    COAP_MSG_CODE_RESPONSE_CONTINUE                     = 95,
-    COAP_MSG_CODE_RESPONSE_BAD_REQUEST                  = 128,
-    COAP_MSG_CODE_RESPONSE_UNAUTHORIZED                 = 129,
-    COAP_MSG_CODE_RESPONSE_BAD_OPTION                   = 130,
-    COAP_MSG_CODE_RESPONSE_FORBIDDEN                    = 131,
-    COAP_MSG_CODE_RESPONSE_NOT_FOUND                    = 132,
-    COAP_MSG_CODE_RESPONSE_METHOD_NOT_ALLOWED           = 133,
-    COAP_MSG_CODE_RESPONSE_NOT_ACCEPTABLE               = 134,
-    COAP_MSG_CODE_RESPONSE_REQUEST_ENTITY_INCOMPLETE    = 136,
-    COAP_MSG_CODE_RESPONSE_PRECONDITION_FAILED          = 140,
-    COAP_MSG_CODE_RESPONSE_REQUEST_ENTITY_TOO_LARGE     = 141,
-    COAP_MSG_CODE_RESPONSE_UNSUPPORTED_CONTENT_FORMAT   = 143,
-    COAP_MSG_CODE_RESPONSE_INTERNAL_SERVER_ERROR        = 160,
-    COAP_MSG_CODE_RESPONSE_NOT_IMPLEMENTED              = 161,
-    COAP_MSG_CODE_RESPONSE_BAD_GATEWAY                  = 162,
-    COAP_MSG_CODE_RESPONSE_SERVICE_UNAVAILABLE          = 163,
-    COAP_MSG_CODE_RESPONSE_GATEWAY_TIMEOUT              = 164,
-    COAP_MSG_CODE_RESPONSE_PROXYING_NOT_SUPPORTED       = 165
+	COAP_MSG_CODE_RESPONSE_CREATED                      = 65,
+	COAP_MSG_CODE_RESPONSE_DELETED                      = 66,
+	COAP_MSG_CODE_RESPONSE_VALID                        = 67,
+	COAP_MSG_CODE_RESPONSE_CHANGED                      = 68,
+	COAP_MSG_CODE_RESPONSE_CONTENT                      = 69,
+	COAP_MSG_CODE_RESPONSE_CONTINUE                     = 95,
+	COAP_MSG_CODE_RESPONSE_BAD_REQUEST                  = 128,
+	COAP_MSG_CODE_RESPONSE_UNAUTHORIZED                 = 129,
+	COAP_MSG_CODE_RESPONSE_BAD_OPTION                   = 130,
+	COAP_MSG_CODE_RESPONSE_FORBIDDEN                    = 131,
+	COAP_MSG_CODE_RESPONSE_NOT_FOUND                    = 132,
+	COAP_MSG_CODE_RESPONSE_METHOD_NOT_ALLOWED           = 133,
+	COAP_MSG_CODE_RESPONSE_NOT_ACCEPTABLE               = 134,
+	COAP_MSG_CODE_RESPONSE_REQUEST_ENTITY_INCOMPLETE    = 136,
+	COAP_MSG_CODE_RESPONSE_PRECONDITION_FAILED          = 140,
+	COAP_MSG_CODE_RESPONSE_REQUEST_ENTITY_TOO_LARGE     = 141,
+	COAP_MSG_CODE_RESPONSE_UNSUPPORTED_CONTENT_FORMAT   = 143,
+	COAP_MSG_CODE_RESPONSE_INTERNAL_SERVER_ERROR        = 160,
+	COAP_MSG_CODE_RESPONSE_NOT_IMPLEMENTED              = 161,
+	COAP_MSG_CODE_RESPONSE_BAD_GATEWAY                  = 162,
+	COAP_MSG_CODE_RESPONSE_SERVICE_UNAVAILABLE          = 163,
+	COAP_MSG_CODE_RESPONSE_GATEWAY_TIMEOUT              = 164,
+	COAP_MSG_CODE_RESPONSE_PROXYING_NOT_SUPPORTED       = 165
 } sn_coap_msg_code_e;
 
 /**
  * \brief Enumeration for CoAP Option number, used in CoAP Header
  */
 typedef enum sn_coap_option_numbers_ {
-    COAP_OPTION_IF_MATCH        = 1,
-    COAP_OPTION_URI_HOST        = 3,
-    COAP_OPTION_ETAG            = 4,
-    COAP_OPTION_IF_NONE_MATCH   = 5,
-    COAP_OPTION_OBSERVE         = 6,
-    COAP_OPTION_URI_PORT        = 7,
-    COAP_OPTION_LOCATION_PATH   = 8,
-    COAP_OPTION_URI_PATH        = 11,
-    COAP_OPTION_CONTENT_FORMAT  = 12,
-    COAP_OPTION_MAX_AGE         = 14,
-    COAP_OPTION_URI_QUERY       = 15,
-    COAP_OPTION_ACCEPT          = 17,
-    COAP_OPTION_LOCATION_QUERY  = 20,
-    COAP_OPTION_BLOCK2          = 23,
-    COAP_OPTION_BLOCK1          = 27,
-    COAP_OPTION_SIZE2           = 28,
-    COAP_OPTION_PROXY_URI       = 35,
-    COAP_OPTION_PROXY_SCHEME    = 39,
-    COAP_OPTION_SIZE1           = 60
+	COAP_OPTION_IF_MATCH        = 1,
+	COAP_OPTION_URI_HOST        = 3,
+	COAP_OPTION_ETAG            = 4,
+	COAP_OPTION_IF_NONE_MATCH   = 5,
+	COAP_OPTION_OBSERVE         = 6,
+	COAP_OPTION_URI_PORT        = 7,
+	COAP_OPTION_LOCATION_PATH   = 8,
+	COAP_OPTION_URI_PATH        = 11,
+	COAP_OPTION_CONTENT_FORMAT  = 12,
+	COAP_OPTION_MAX_AGE         = 14,
+	COAP_OPTION_URI_QUERY       = 15,
+	COAP_OPTION_ACCEPT          = 17,
+	COAP_OPTION_LOCATION_QUERY  = 20,
+	COAP_OPTION_BLOCK2          = 23,
+	COAP_OPTION_BLOCK1          = 27,
+	COAP_OPTION_SIZE2           = 28,
+	COAP_OPTION_PROXY_URI       = 35,
+	COAP_OPTION_PROXY_SCHEME    = 39,
+	COAP_OPTION_SIZE1           = 60
 //  128 =   (Reserved)
 //  132 =   (Reserved)
 //  136 =   (Reserved)
@@ -125,14 +125,14 @@ typedef enum sn_coap_option_numbers_ {
  * \brief Enumeration for CoAP Content Format codes
  */
 typedef enum sn_coap_content_format_ {
-    COAP_CT_NONE                = -1, // internal
-    COAP_CT_TEXT_PLAIN          = 0,
-    COAP_CT_LINK_FORMAT         = 40,
-    COAP_CT_XML                 = 41,
-    COAP_CT_OCTET_STREAM        = 42,
-    COAP_CT_EXI                 = 47,
-    COAP_CT_JSON                = 50,
-    COAP_CT__MAX                = 0xffff
+	COAP_CT_NONE                = -1, // internal
+	COAP_CT_TEXT_PLAIN          = 0,
+	COAP_CT_LINK_FORMAT         = 40,
+	COAP_CT_XML                 = 41,
+	COAP_CT_OCTET_STREAM        = 42,
+	COAP_CT_EXI                 = 47,
+	COAP_CT_JSON                = 50,
+	COAP_CT__MAX                = 0xffff
 } sn_coap_content_format_e;
 
 /**
@@ -141,30 +141,30 @@ typedef enum sn_coap_content_format_ {
  * draft-ietf-core-observe-16
  */
 typedef enum sn_coap_observe_ {
-    COAP_OBSERVE_NONE           = -1, // internal
+	COAP_OBSERVE_NONE           = -1, // internal
 
-    // Values for GET requests
-    COAP_OBSERVE_REGISTER       = 0,
-    COAP_OBSERVE_DEREGISTER     = 1,
+	// Values for GET requests
+	COAP_OBSERVE_REGISTER       = 0,
+	COAP_OBSERVE_DEREGISTER     = 1,
 
-    // In responses, value is a 24-bit opaque sequence number
-    COAP_OBSERVE__MAX   = 0xffffff
+	// In responses, value is a 24-bit opaque sequence number
+	COAP_OBSERVE__MAX   = 0xffffff
 } sn_coap_observe_e;
 
 /**
  * \brief Enumeration for CoAP status, used in CoAP Header
  */
 typedef enum sn_coap_status_ {
-    COAP_STATUS_OK                             = 0, /**< Default value is OK */
-    COAP_STATUS_PARSER_ERROR_IN_HEADER         = 1, /**< CoAP will send Reset message to invalid message sender */
-    COAP_STATUS_PARSER_DUPLICATED_MSG          = 2, /**< CoAP will send Acknowledgement message to duplicated message sender */
-    COAP_STATUS_PARSER_BLOCKWISE_MSG_RECEIVING = 3, /**< User will get whole message after all message blocks received.
+	COAP_STATUS_OK                             = 0, /**< Default value is OK */
+	COAP_STATUS_PARSER_ERROR_IN_HEADER         = 1, /**< CoAP will send Reset message to invalid message sender */
+	COAP_STATUS_PARSER_DUPLICATED_MSG          = 2, /**< CoAP will send Acknowledgement message to duplicated message sender */
+	COAP_STATUS_PARSER_BLOCKWISE_MSG_RECEIVING = 3, /**< User will get whole message after all message blocks received.
                                                          User must release messages with this status. */
-    COAP_STATUS_PARSER_BLOCKWISE_ACK           = 4, /**< Acknowledgement for sent Blockwise message received */
-    COAP_STATUS_PARSER_BLOCKWISE_MSG_REJECTED  = 5, /**< Blockwise message received but not supported by compiling switch */
-    COAP_STATUS_PARSER_BLOCKWISE_MSG_RECEIVED  = 6, /**< Blockwise message fully received and returned to app.
+	COAP_STATUS_PARSER_BLOCKWISE_ACK           = 4, /**< Acknowledgement for sent Blockwise message received */
+	COAP_STATUS_PARSER_BLOCKWISE_MSG_REJECTED  = 5, /**< Blockwise message received but not supported by compiling switch */
+	COAP_STATUS_PARSER_BLOCKWISE_MSG_RECEIVED  = 6, /**< Blockwise message fully received and returned to app.
                                                          User must take care of releasing whole payload of the blockwise messages */
-    COAP_STATUS_BUILDER_MESSAGE_SENDING_FAILED = 7  /**< When re-transmissions have been done and ACK not received, CoAP library calls
+	COAP_STATUS_BUILDER_MESSAGE_SENDING_FAILED = 7  /**< When re-transmissions have been done and ACK not received, CoAP library calls
                                                          RX callback with this status */
 } sn_coap_status_e;
 
@@ -177,32 +177,32 @@ typedef enum sn_coap_status_ {
  * \brief Structure for CoAP Options
  */
 typedef struct sn_coap_options_list_ {
-    uint8_t         etag_len;           /**< 1-8 bytes. Repeatable */
-    unsigned int    use_size1:1;
-    unsigned int    use_size2:1;
+	uint8_t         etag_len;           /**< 1-8 bytes. Repeatable */
+	unsigned int    use_size1: 1;
+	unsigned int    use_size2: 1;
 
-    uint16_t    proxy_uri_len;      /**< 1-1034 bytes. */
-    uint16_t    uri_host_len;       /**< 1-255 bytes. */
-    uint16_t    location_path_len;  /**< 0-255 bytes. Repeatable */
-    uint16_t    location_query_len; /**< 0-255 bytes. Repeatable */
-    uint16_t    uri_query_len;      /**< 1-255 bytes. Repeatable */
+	uint16_t    proxy_uri_len;      /**< 1-1034 bytes. */
+	uint16_t    uri_host_len;       /**< 1-255 bytes. */
+	uint16_t    location_path_len;  /**< 0-255 bytes. Repeatable */
+	uint16_t    location_query_len; /**< 0-255 bytes. Repeatable */
+	uint16_t    uri_query_len;      /**< 1-255 bytes. Repeatable */
 
-    sn_coap_content_format_e accept; /**< Value 0-65535. COAP_CT_NONE if not used */
+	sn_coap_content_format_e accept; /**< Value 0-65535. COAP_CT_NONE if not used */
 
-    uint32_t    max_age;            /**< Value in seconds (default is 60) */
-    uint32_t    size1;              /**< 0-4 bytes. */
-    uint32_t    size2;              /**< 0-4 bytes. */
-    int32_t     uri_port;           /**< Value 0-65535. -1 if not used */
-    int32_t     observe;            /**< Value 0-0xffffff. -1 if not used */
-    int32_t     block1;             /**< Value 0-0xffffff. -1 if not used. Not for user */
-    int32_t     block2;             /**< Value 0-0xffffff. -1 if not used. Not for user */
+	uint32_t    max_age;            /**< Value in seconds (default is 60) */
+	uint32_t    size1;              /**< 0-4 bytes. */
+	uint32_t    size2;              /**< 0-4 bytes. */
+	int32_t     uri_port;           /**< Value 0-65535. -1 if not used */
+	int32_t     observe;            /**< Value 0-0xffffff. -1 if not used */
+	int32_t     block1;             /**< Value 0-0xffffff. -1 if not used. Not for user */
+	int32_t     block2;             /**< Value 0-0xffffff. -1 if not used. Not for user */
 
-    uint8_t    *proxy_uri_ptr;      /**< Must be set to NULL if not used */
-    uint8_t    *etag_ptr;           /**< Must be set to NULL if not used */
-    uint8_t    *uri_host_ptr;       /**< Must be set to NULL if not used */
-    uint8_t    *location_path_ptr;  /**< Must be set to NULL if not used */
-    uint8_t    *location_query_ptr; /**< Must be set to NULL if not used */
-    uint8_t    *uri_query_ptr;      /**< Must be set to NULL if not used */
+	uint8_t    *proxy_uri_ptr;      /**< Must be set to NULL if not used */
+	uint8_t    *etag_ptr;           /**< Must be set to NULL if not used */
+	uint8_t    *uri_host_ptr;       /**< Must be set to NULL if not used */
+	uint8_t    *location_path_ptr;  /**< Must be set to NULL if not used */
+	uint8_t    *location_query_ptr; /**< Must be set to NULL if not used */
+	uint8_t    *uri_query_ptr;      /**< Must be set to NULL if not used */
 } sn_coap_options_list_s;
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
@@ -213,24 +213,24 @@ typedef struct sn_coap_options_list_ {
  * \brief Main CoAP message struct
  */
 typedef struct sn_coap_hdr_ {
-    uint8_t                 token_len;          /**< 1-8 bytes. */
+	uint8_t                 token_len;          /**< 1-8 bytes. */
 
-    sn_coap_status_e        coap_status;        /**< Used for telling to User special cases when parsing message */
-    sn_coap_msg_code_e      msg_code;           /**< Empty: 0; Requests: 1-31; Responses: 64-191 */
+	sn_coap_status_e        coap_status;        /**< Used for telling to User special cases when parsing message */
+	sn_coap_msg_code_e      msg_code;           /**< Empty: 0; Requests: 1-31; Responses: 64-191 */
 
-    sn_coap_msg_type_e      msg_type;           /**< Confirmable, Non-Confirmable, Acknowledgement or Reset */
-    sn_coap_content_format_e content_format;    /**< Set to COAP_CT_NONE if not used */
+	sn_coap_msg_type_e      msg_type;           /**< Confirmable, Non-Confirmable, Acknowledgement or Reset */
+	sn_coap_content_format_e content_format;    /**< Set to COAP_CT_NONE if not used */
 
-    uint16_t                msg_id;             /**< Message ID. Parser sets parsed message ID, builder sets message ID of built coap message */
-    uint16_t                uri_path_len;       /**< 0-255 bytes. Repeatable. */
-    uint16_t                payload_len;        /**< Must be set to zero if not used */
+	uint16_t                msg_id;             /**< Message ID. Parser sets parsed message ID, builder sets message ID of built coap message */
+	uint16_t                uri_path_len;       /**< 0-255 bytes. Repeatable. */
+	uint16_t                payload_len;        /**< Must be set to zero if not used */
 
-    uint8_t                *token_ptr;          /**< Must be set to NULL if not used */
-    uint8_t                *uri_path_ptr;       /**< Must be set to NULL if not used. E.g: temp1/temp2 */
-    uint8_t                *payload_ptr;        /**< Must be set to NULL if not used */
+	uint8_t                *token_ptr;          /**< Must be set to NULL if not used */
+	uint8_t                *uri_path_ptr;       /**< Must be set to NULL if not used. E.g: temp1/temp2 */
+	uint8_t                *payload_ptr;        /**< Must be set to NULL if not used */
 
-    /* Here are not so often used Options */
-    sn_coap_options_list_s *options_list_ptr;   /**< Must be set to NULL if not used */
+	/* Here are not so often used Options */
+	sn_coap_options_list_s *options_list_ptr;   /**< Must be set to NULL if not used */
 } sn_coap_hdr_s;
 
 /* * * * * * * * * * * * * * */
@@ -242,9 +242,9 @@ typedef struct sn_coap_hdr_ {
  * \brief Used protocol
  */
 typedef enum sn_nsdl_capab_ {
-    SN_NSDL_PROTOCOL_HTTP           = 0x01,         /**< Unsupported */
-    SN_NSDL_PROTOCOL_HTTPS          = 0x02,         /**< Unsupported */
-    SN_NSDL_PROTOCOL_COAP           = 0x04          /**< Supported */
+	SN_NSDL_PROTOCOL_HTTP           = 0x01,         /**< Unsupported */
+	SN_NSDL_PROTOCOL_HTTPS          = 0x02,         /**< Unsupported */
+	SN_NSDL_PROTOCOL_COAP           = 0x04          /**< Supported */
 } sn_nsdl_capab_e;
 
 /* * * * * * * * * * * * * */
@@ -256,13 +256,13 @@ typedef enum sn_nsdl_capab_ {
  * \brief Used for creating manually registration message with sn_coap_register()
  */
 typedef struct registration_info_ {
-    uint8_t endpoint_len;
-    uint8_t endpoint_type_len;
-    uint16_t links_len;
+	uint8_t endpoint_len;
+	uint8_t endpoint_type_len;
+	uint16_t links_len;
 
-    uint8_t *endpoint_ptr;          /**< Endpoint name */
-    uint8_t *endpoint_type_ptr;     /**< Endpoint type */
-    uint8_t *links_ptr;             /**< Resource registration string */
+	uint8_t *endpoint_ptr;          /**< Endpoint name */
+	uint8_t *endpoint_type_ptr;     /**< Endpoint type */
+	uint8_t *links_ptr;             /**< Resource registration string */
 } registration_info_t;
 
 
@@ -270,20 +270,20 @@ typedef struct registration_info_ {
  * \brief Address type of given address
  */
 typedef enum sn_nsdl_addr_type_ {
-    SN_NSDL_ADDRESS_TYPE_IPV6       = 0x01,         /**< Supported */
-    SN_NSDL_ADDRESS_TYPE_IPV4       = 0x02,         /**< Supported */
-    SN_NSDL_ADDRESS_TYPE_HOSTNAME   = 0x03,         /**< Unsupported */
-    SN_NSDL_ADDRESS_TYPE_NONE       = 0xFF
+	SN_NSDL_ADDRESS_TYPE_IPV6       = 0x01,         /**< Supported */
+	SN_NSDL_ADDRESS_TYPE_IPV4       = 0x02,         /**< Supported */
+	SN_NSDL_ADDRESS_TYPE_HOSTNAME   = 0x03,         /**< Unsupported */
+	SN_NSDL_ADDRESS_TYPE_NONE       = 0xFF
 } sn_nsdl_addr_type_e;
 
 /**
  * \brief Address structure of Packet data
  */
 typedef struct sn_nsdl_addr_ {
-    uint8_t                 addr_len;
-    sn_nsdl_addr_type_e     type;
-    uint16_t                port;
-    uint8_t                 *addr_ptr;
+	uint8_t                 addr_len;
+	sn_nsdl_addr_type_e     type;
+	uint16_t                port;
+	uint8_t                 *addr_ptr;
 } sn_nsdl_addr_s;
 
 

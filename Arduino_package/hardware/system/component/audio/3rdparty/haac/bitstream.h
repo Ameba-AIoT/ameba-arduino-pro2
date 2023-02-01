@@ -61,7 +61,7 @@ typedef struct _BitStreamInfo {
 	unsigned int iCache;
 	int cachedBits;
 	int nBytes;
-} BitStreamInfo;
+} __attribute__((aligned(4))) BitStreamInfo;
 
 /* bitstream.c */
 void SetBitstreamPointer(BitStreamInfo *bsi, int nBytes, unsigned char *buf);

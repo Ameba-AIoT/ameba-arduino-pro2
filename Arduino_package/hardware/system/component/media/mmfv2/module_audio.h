@@ -245,7 +245,7 @@ typedef struct audio_param_s {
 	uint32_t        fcs_avsync_vtime;
 	//...
 } audio_params_t;
-#if defined(CONFIG_BUILD_CT) && CONFIG_BUILD_CT //CT AEC library only support on 8735
+#if defined(CONFIG_NEWAEC) && CONFIG_NEWAEC //CT AEC library only support on 8735
 typedef struct RX_cfg_s {
 	CTAEC_cfg_t     aec_cfg;
 	CTAGC_cfg_t     agc_cfg;

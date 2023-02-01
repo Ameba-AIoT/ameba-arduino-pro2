@@ -34,7 +34,7 @@
  *============================================================================*/
 
 /** @brief  Config APP LE link number */
-#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B)
+#if defined(CONFIG_PLATFORM_8721D) || defined(CONFIG_PLATFORM_AMEBAD2) || defined(CONFIG_PLATFORM_8735B) || defined(CONFIG_PLATFORM_AMEBALITE)
 #define BLE_CENTRAL_APP_MAX_LINKS  3
 #elif defined(CONFIG_PLATFORM_8710C)
 #define BLE_CENTRAL_APP_MAX_LINKS  1

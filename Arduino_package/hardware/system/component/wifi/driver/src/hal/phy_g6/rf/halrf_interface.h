@@ -34,7 +34,7 @@
 /*@--------------------------[Define] ---------------------------------------*/
 /*[IO Reg]*/
 #define RF_OFST 0x10000
-#define halrf_btc_ntfy(rf, idx, type, process) rtw_hal_btc_wl_rfk_ntfy((rf)->hal_com, idx, type, process)
+#define halrf_btc_ntfy(rf, idx, type, process) rtw_hal_btc_wl_rfk_ntfy((rf)->hal_com, idx, type, process) 
 #define halrf_r32(rf, addr) hal_read32((rf)->hal_com, (addr | RF_OFST))
 #define halrf_r16(rf, addr) hal_read16((rf)->hal_com, (addr | RF_OFST))
 #define halrf_r8(rf, addr) hal_read8((rf)->hal_com, (addr | RF_OFST))
@@ -115,7 +115,7 @@
 
 
 /*@--------------------------[Structure]-------------------------------------*/
-
+ 
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct bb_info;
 
@@ -130,6 +130,6 @@ u32 halrf_rreg(struct rf_info *rf, u32 addr, u32 bit_mask);
 void halrf_wrf(struct rf_info *rf, enum rf_path path, u32 addr, u32 mask, u32 val);
 
 void halrf_fill_h2c_cmd(struct rf_info *rf, u16 cmdlen, u8 cmdid,
-						u8 classid, u32 cmdtype, u32 *pval);
+			u8 classid, u32 cmdtype, u32 *pval);
 void halrf_delay_10us(struct rf_info *rf, u32 count);
 #endif

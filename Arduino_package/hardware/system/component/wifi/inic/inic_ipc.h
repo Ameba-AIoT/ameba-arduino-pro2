@@ -34,6 +34,12 @@
 #define FLAG_WLAN_IF_NOT_RUNNING		0xFFFFFFFF
 /* -------------------------------- Macros ---------------------------------- */
 
+#if defined(CONFIG_INIC_IPC_HIGH_TP)
+// customer requirement, send udp multicast frames around 1900 bytes without fragmentation
+#define MAX_SKB_BUF_SIZE	2048
+#else
+#define MAX_SKB_BUF_SIZE	1658
+#endif
 /* ------------------------------- Data Types ------------------------------- */
 typedef struct inic_ipc_ex_msg {
 	u32	event_num;
@@ -48,7 +54,6 @@ enum IPC_WIFI_CTRL_TYPE {
 	IPC_WIFI_MSG_ALLOC_SKB,
 	IPC_WIFI_MSG_RECV_DONE,
 	IPC_WIFI_MSG_RECV_PENDING,
-	IPC_WIFI_MSG_XMIT_DONE,
 	IPC_WIFI_CMD_XIMT_PKTS,
 	IPC_WIFI_EVT_RECV_PKTS
 };

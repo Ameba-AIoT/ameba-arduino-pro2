@@ -20,9 +20,6 @@
 #define CONFIG_RTL8720E
 #endif
 
-#ifndef CONFIG_RTL8720E
-#define CONFIG_RTL8720E
-#endif
 #undef RTL8720E_SUPPORT
 #define RTL8720E_SUPPORT 1
 
@@ -34,13 +31,15 @@
 /* For efuse or flash config end */
 
 /* PHY layer band config */
-#define CONFIG_DFS
 #define NOT_SUPPORT_40M
 /* 0: 20 MHz, 1: 40 MHz, 2: 80 MHz, 3: 160MHz, 4: 80+80MHz
 * 2.4G use bit 0 ~ 3, 5G use bit 4 ~ 7
 * 0x21 means enable 2.4G 40MHz & 5G 80MHz */
 #define CONFIG_BW_MODE 0x00
-#define SUPPORT_5G_CHANNEL
+
+/*Amebalite not support 5G*/
+//#define SUPPORT_5G_CHANNEL
+
 #define CONFIG_INIT_CHAN 1
 /* PHY layer band config end */
 
@@ -52,21 +51,25 @@
 /* enable 1X code in lib_wlan as default (increase 380 bytes) */
 #define CONFIG_EAP
 
-/* For phydm configurations */
-#define CONFIG_FW_C2H_PKT
-#define PHYDM_LINUX_CODING_STYLE 1
-#define PHYDM_NEW_INTERFACE 1
-//#define CONFIG_BT_COEXIST
+#define CONFIG_BT_COEXIST
+
 //#define CONFIG_WIFI_MESH 0
 
-//#define RX_SHORTCUT
+#define RX_SHORTCUT
 //#define TX_SHORTCUT
 
 /* For 11 ax function */
-#define USE_HALBB_HALRF 1  // 11 ax ic use halbb and halrf
-//#define CONFIG_80211AX_HE
+#define CONFIG_80211AX_HE
 #ifdef CONFIG_80211AX_HE
-#define MBSSID_SUPPORT
+//#define CONFIG_MBSSID_AX
+//#define CONFIG_TWT
+#endif
+//#define CONFIG_DEBUG_RTL871X
+
+#if WIFI_LOGO_CERTIFICATION
+#ifdef CONFIG_80211AX_HE
+#define CONFIG_MBSSID_AX
+#endif
 #endif
 
 #define TXBD_PRE_MALLOC
@@ -78,28 +81,63 @@
 // Decrease STA due to memory limitation - Alex Fang
 #define NUM_STA (2 + AP_STA_NUM)  // 2 + supported clients
 
-#ifdef CONFIG_WIFI_VERIFY
-#define DISABLE_BB_RF 1
-#else
-#define DISABLE_BB_RF 0
+/*halbb halrf config*/
+#define CONFIG_FW_C2H_PKT
+#define PHYDM_VERSION	3/*halbb halrf*/
+#define DRV_BB_DFS_DISABLE
+#define DRV_BB_RUA_DISABLE
+#define DRV_BB_LA_MODE_DISABLE
+#define DRV_BB_DIG_MCC_DISABLE
+#define PHL_MAX_STA_NUM NUM_STA
+#define PLATFOM_IS_LITTLE_ENDIAN	1/*for halbb use*/
+
+/*Wifi verification*/
+#if defined(CONFIG_WIFI_VERIFY_TRUEPHY) || defined(CONFIG_WIFI_VERIFY_PSPHY)
+#define RTL8720E_WIFI_TEST	1//test code, should delete when use ASIC
+#define DISABLE_FW
+#define DISABLE_BB_RF
+#endif
+#ifdef CONFIG_WIFI_VERIFY_ASIC
+#define RTL8720E_WIFI_TEST 1  // add wifi testcode for debug
 #endif
 
-#ifdef CONFIG_MAC_LBK
-#define INT_HANDLE_IN_ISR 1
-#define CONFIG_LWIP_LAYER 0
-#define CONFIG_WLAN_HAL_TEST
-#define CONFIG_WLAN_HAL_RX_TASK
-#define CONFIG_MAC_LOOPBACK_DRIVER_AMEBA 1
-#endif
+//#define CONFIG_DFS_TEST  // add for dfs test
 
-/* For FPGA and PXP test code */
-#if defined(CONFIG_WIFI_VERIFY)
-#define RTL8720E_WIFI_TEST 1  // remove this when verification complete
-#endif
+/* enable csi function */
+#define CONFIG_CSI
 
 #define RTL8720E_WL_TODO
 
 #define CONFIG_REG_ENABLE_KFREE 0  // 0: Depend on efuse(flash), 1: enable, 2: disable
 
+#define PHYSTS_WORK_AROUND
+#define RTL8720E_WORK_AROUND
+
+/*************************** Config for MP_MODE *******************************/
+//#define CONFIG_MP_INCLUDED
+#ifdef CONFIG_MP_INCLUDED
+#define MP_DRIVER 1
+#undef CONFIG_ANTENNA_DIVERSITY
+#undef CONFIG_BT_COEXIST_SOC
+#undef CONFIG_REG_ENABLE_KFREE
+#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
+#define CONFIG_PHYDM_CMD  /*disable it in normal driver,can save 172KB code size*/
+#else /* undef CONFIG_MP_INCLUDED  */
+#define MP_DRIVER 0
+#endif /* #ifdef CONFIG_MP_INCLUDED */
+/************************* Config for MP_MODE end *****************************/
+
+#ifndef CONFIG_PHYDM_CMD
+#define DRV_BB_DBG_TRACE_DISABLE
+#define DRV_BB_PMAC_TX_DISABLE
+#endif
+
+
+/* debug log level */
+#ifdef RELEASE_VERSION
+#define RTW_MSG_LEVEL    RTW_MSG_ERROR
+#else
+#define RTW_MSG_LEVEL    RTW_MSG_WARNING
+#endif
 #endif /*#ifndef AUTOCONF_8720E_H */
 

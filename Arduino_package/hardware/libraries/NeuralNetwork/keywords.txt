@@ -1,0 +1,90 @@
+#######################################
+# Syntax Coloring Map NeuralNetwork
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+FaceDetectionResult	KEYWORD1
+NNFaceDetection	KEYWORD1
+FaceRecognitionResult	KEYWORD1
+NNFaceRecognition	KEYWORD1
+ObjectDetectionResult	KEYWORD1
+NNObjectDetection	KEYWORD1
+
+#######################################
+# FaceDetectionResult.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+name	KEYWORD2
+score	KEYWORD2
+xMin	KEYWORD2
+xMax	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2
+xFeature	KEYWORD2
+yFeature	KEYWORD2
+
+#######################################
+# NNFaceDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configFaceRecogCascadedMode	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
+
+#######################################
+# FaceRecognitionResult.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+name	KEYWORD2
+xMin	KEYWORD2
+xMax	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2
+
+#######################################
+# NNFaceRecognition.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+registerFace	KEYWORD2
+exitRegisterMode	KEYWORD2
+resetRegisteredFace	KEYWORD2
+backupRegisteredFace	KEYWORD2
+restoreRegisteredFace	KEYWORD2
+setThreshold	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2
+
+#######################################
+# ObjectDetectionResult.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+type	KEYWORD2
+name	KEYWORD2
+score	KEYWORD2
+xMin	KEYWORD2
+xMax	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2
+
+#######################################
+# NNObjectDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configRegionOfInterest	KEYWORD2
+configThreshold	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setResultCallback	KEYWORD2
+getResult	KEYWORD2
+getResultCount	KEYWORD2

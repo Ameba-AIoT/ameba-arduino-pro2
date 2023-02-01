@@ -3,9 +3,9 @@
 
 
 #include "hal_com.h"
-#if (PHYDM_LINUX_CODING_STYLE == 1)
+#if (PHYDM_VERSION == 2)
 #include "phydm/phydm_precomp.h"
-#else
+#elif (PHYDM_VERSION == 1)
 #include "OUTSRC/phydm_precomp.h"
 #endif
 
@@ -32,6 +32,10 @@
 
 #ifdef CONFIG_RTL8730A
 #include "rtl8730a_hal.h"
+#endif
+
+#ifdef CONFIG_RTL8730E
+#include "rtl8730e_hal.h"
 #endif
 
 #ifdef CONFIG_RTL8720E
@@ -116,7 +120,7 @@ typedef enum _RT_REGULATOR_MODE {
 #define MAX_IQK_INFO_BACKUP_REG_NUM		10
 #endif
 
-#if (PHYDM_LINUX_CODING_STYLE == 1)
+#if (PHYDM_VERSION == 2)
 //structure
 #define DM_ODM_T struct dm_struct
 #define PDM_ODM_T struct dm_struct*
@@ -165,6 +169,18 @@ struct 	dm_priv {
 	u8	INIDATA_RATE[32];
 };
 
+#ifdef CONFIG_CSI
+struct csi_priv {
+	struct rx_csi_pool *csi_pool;  /* csi buffer pool */
+	struct rx_csi_data *handing_buf;  /* handing csi packet */
+	u8 csi_handle_flag;  /* 0: wait new csi; 1: handling curr csi */
+	u8 trig_addr[6];
+	u8 num_bit_per_tone;
+	u16 num_sub_carrier;
+	u32 rx_csi_cnt;
+};
+#endif /* CONFIG_CSI */
+
 #ifdef CONFIG_RTL8188F
 struct kfree_data_t {
 	u8 flag;
@@ -176,7 +192,6 @@ struct kfree_data_t {
 #define KFREE_FLAG_THERMAL_K_ON		BIT1
 #endif
 
-#if (PHYDM_LINUX_CODING_STYLE==1)
 struct hal_spec_t {
 	char *ic_name;
 	u8 macid_num;
@@ -196,8 +211,10 @@ struct hal_spec_t {
 	u8 proto_cap;	/* value of PROTO_CAP_XXX */
 	u8 wl_func;		/* value of WL_FUNC_XXX */
 	u8 hci_type;	/* value of HCI Type */
-};
+#if (PHYDM_VERSION == 3)
+	struct protocol_cap_t protocol_cap;
 #endif
+};
 
 #ifdef RTW_HALMAC
 struct phy_spec_t {
@@ -219,8 +236,16 @@ struct hal_iqk_reg_backup {
 
 typedef struct hal_com_data {
 	struct rtw_hal_com_t hal_com;/*shared with ax submodules*/
+#if (PHYDM_VERSION == 3)
 	void *bb;/*ax halbb, useless for phydm*/
 	void *rf;/*ax halrf, useless for phydm*/
+#elif (PHYDM_VERSION == 2)
+	struct dm_priv	dmpriv;
+	DM_ODM_T 		odmpriv;
+#endif
+#ifdef CONFIG_CSI
+	struct csi_priv csipriv;
+#endif
 
 	HAL_VERSION			VersionID;
 //	RT_MULTI_FUNC		MultiFunc; // For multi-function consideration.
@@ -250,15 +275,7 @@ typedef struct hal_com_data {
 	u8	rf_chip;
 	u8	rf_type;
 	u8	PackageType;
-#if defined(CONFIG_PLATFORM_8711B) \
-	|| defined(CONFIG_PLATFORM_8721D) || defined (CONFIG_RTL8188F) \
-	|| defined (CONFIG_RTL8192E) || defined (CONFIG_RTL8723D) \
-	|| defined(CONFIG_PLATFORM_8710C) \
-	|| defined(CONFIG_PLATFORM_AMEBAD2) \
-	|| defined (CONFIG_PLATFORM_AMEBALITE) \
-	|| defined(CONFIG_PLATFORM_8735B)
-	u8	ChipID;
-#endif
+	u32	ChipID;
 	u8	NumTotalRFPath;
 
 	u8	BoardType;
@@ -278,7 +295,7 @@ typedef struct hal_com_data {
 	u8	EEPROMRFPwrSaveMode;
 #endif
 
-#if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || defined(CONFIG_RTL8720E)
+#if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 
 	u8	tx_bbswing_24G;
 #if defined(SUPPORT_5G_CHANNEL)
@@ -296,25 +313,16 @@ typedef struct hal_com_data {
 	s8  rf_offset_5g_rx_lna2;
 #endif
 //	u8	bTXPowerDataReadFromEEPORM;
-#if (PHYDM_LINUX_CODING_STYLE == 1)
-	u8 rf_power_tracking_type;
+#if (PHYDM_VERSION == 1)
+	u8	EEPROMThermalMeter;
+#else
 	u8  eeprom_thermal_meter;
-	u8	crystal_cap;
+#endif
+
+#if (PHYDM_VERSION == 2)
 	u32 firmware_size;
 	u16 firmware_version;
 	u16 firmware_sub_version;
-#else
-	u8	EEPROMThermalMeter;
-#endif
-//	u8	bAPKThermalMeterIgnore;
-
-//	BOOLEAN 			EepromOrEfuse;
-	//u8				EfuseMap[2][HWSET_MAX_SIZE_512]; //92C:256bytes, 88E:512bytes, we use union set (512bytes)
-
-#if defined(CONFIG_RTL8723B) || defined(CONFIG_RTL8703B) || defined(CONFIG_RTL8723D)
-	u8	adjuseVoltageVal;
-	u8	need_restore;
-	BB_INIT_REGISTER	RegForRecover[5];
 #endif
 
 #if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8735B)
@@ -334,6 +342,7 @@ typedef struct hal_com_data {
 	u8	Regulation5G;
 #endif
 
+#if (PHYDM_VERSION < 3)
 	s8	TxPwrByRateOffset[TX_PWR_BY_RATE_NUM_BAND]
 	[TX_PWR_BY_RATE_NUM_RF]
 	[TX_PWR_BY_RATE_NUM_RF]
@@ -390,43 +399,16 @@ typedef struct hal_com_data {
 	[MAX_BASE_NUM_IN_PHY_REG_PG_5G];
 #endif
 
-#if(RTL8188E_SUPPORT == 1)
-	u8	TxPwrLevelCck[MAX_RF_PATH][CHANNEL_MAX_NUMBER];
-	u8	TxPwrLevelHT40_1S[MAX_RF_PATH][CHANNEL_MAX_NUMBER];	// For HT 40MHZ pwr
-	u8	TxPwrLevelHT40_2S[MAX_RF_PATH][CHANNEL_MAX_NUMBER];	// For HT 40MHZ pwr
-	u8	TxPwrHt20Diff[MAX_RF_PATH][CHANNEL_MAX_NUMBER];// HT 20<->40 Pwr diff
-	u8	TxPwrLegacyHtDiff[MAX_RF_PATH][CHANNEL_MAX_NUMBER];// For HT<->legacy pwr diff
-#endif
-
-	// For power group
-//	u8	PwrGroupHT20[MAX_RF_PATH][CHANNEL_MAX_NUMBER];
-//	u8	PwrGroupHT40[MAX_RF_PATH][CHANNEL_MAX_NUMBER];
-
-//	u8	LegacyHTTxPowerDiff;// Legacy to HT rate power diff
-	// The current Tx Power Level
 	u8	CurrentCckTxPwrIdx;
 	u8	CurrentOfdm24GTxPwrIdx;
 	u8	CurrentBW2024GTxPwrIdx;
 #if !defined(NOT_SUPPORT_40M)
 	u8	CurrentBW4024GTxPwrIdx;
 #endif
-	//u32	AntennaTxPath;					// Antenna path Tx
-	//u32	AntennaRxPath;					// Antenna path Rx
-	//u8	BluetoothCoexist;
-//	u8	ExternalPA;
-
-#if defined(CONFIG_RTL8188F) ||defined (CONFIG_RTL8723D) || defined(CONFIG_RTL8188E)
-
-	/* PHY DM & DM Section */
-	u8			INIDATA_RATE[32/*MACID_NUM_SW_LIMIT*/];
-	/* Upper and Lower Signal threshold for Rate Adaptive*/
-	int			EntryMinUndecoratedSmoothedPWDB;
-	int			EntryMaxUndecoratedSmoothedPWDB;
-	int			MinUndecoratedPWDBForDM;
-#endif
+#endif//(PHYDM_VERSION < 3)
 
 #if defined(CONFIG_RTL8192E) || defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || \
-	defined(CONFIG_RTL8720E)
+	defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 	u8  u1ForcedIgiLb;
 	u8	PAType_2G;
 	u8	LNAType_2G;
@@ -444,19 +426,13 @@ typedef struct hal_com_data {
 	u8	TypeAPA;
 	u8	INIDATA_RATE[32/*MACID_NUM_SW_LIMIT*/];
 #endif
-	//u8	bLedOpenDrain; // Support Open-drain arrangement for controlling the LED. Added by Roger, 2009.10.16.
 
-	//u32	LedControlNum;
-	//u32	LedControlMode;
-	//u8	b1x1RecvCombine;	// for 1T1R receive combining
-
-	//u8	bCurrentTurboEDCA;
 	BOOLEAN     bSwChnl;
 	BOOLEAN     bSetChnlBW;
 	BOOLEAN     bChnlBWInitialized;
 
 #if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || \
-	defined(CONFIG_RTL8720E)
+	defined(CONFIG_RTL8720E)  || defined(CONFIG_RTL8730E)
 	u8	bDumpRxPkt;//for debug
 	u8	bDumpTxPkt;//for debug
 	u8  bDisableTXPowerTraining;
@@ -468,10 +444,8 @@ typedef struct hal_com_data {
 #endif
 #endif
 
-#if (PHYDM_LINUX_CODING_STYLE==1)
-	u8			bIQKInitialized;
 	u8			bNeedIQK;
-#endif
+
 	u32	AcParam_BE; //Original parameter for BE, use for EDCA turbo.
 #if defined(NOT_SUPPORT_RF_MULTIPATH)
 	BB_REGISTER_DEFINITION_T	PHYRegDef[1];	//Radio A
@@ -485,7 +459,7 @@ typedef struct hal_com_data {
 //	BOOLEAN	 bRDGEnable;
 
 #if defined(CONFIG_RTL8711B) || defined(CONFIG_RTL8188F) || defined(CONFIG_RTL8192E) ||defined (CONFIG_RTL8723D) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8188E) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || \
-	defined(CONFIG_RTL8720E)
+	defined(CONFIG_RTL8720E) || defined(CONFIG_RTL8730E)
 	//for host message to fw
 	u8	LastHMEBoxNum;
 #endif
@@ -498,9 +472,6 @@ typedef struct hal_com_data {
 	u8	RegReg542;
 //	u8	RegCR_1;
 	u16	RegRRSR;
-
-	struct dm_priv	dmpriv;
-	DM_ODM_T 		odmpriv;
 	//_lock			odm_stainfo_lock;
 
 #ifdef CONFIG_BT_COEXIST
@@ -510,7 +481,7 @@ typedef struct hal_com_data {
 	u8	EEPROMBluetoothAntNum;
 	BT_COEXIST	bt_coexist;
 	/* Upper and Lower Signal threshold for Rate Adaptive*/
-	int			entry_min_undecorated_smoothed_pwdb;
+	int	entry_min_undecorated_smoothed_pwdb;
 #endif
 
 #ifdef CONFIG_BT_COEXIST_SOC
@@ -549,38 +520,6 @@ typedef struct hal_com_data {
 	// Auto FSM to Turn On, include clock, isolation, power control for MAC only
 	u8			bMacPwrCtrlOn;
 
-#if defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-
-	//
-	// For SDIO Interface HAL related
-	//
-
-	//
-	// SDIO ISR Related
-	//
-//	u32			IntrMask[1];
-//	u32			IntrMaskToSet[1];
-//	LOG_INTERRUPT		InterruptLog;
-//	u32			sdio_himr;
-//	u32			sdio_hisr;
-
-	//
-	// SDIO Tx FIFO related.
-	//
-	// HIQ, MID, LOW, PUB free pages; padapter->xmitpriv.free_txpg
-//	u8			SdioTxFIFOFreePage[TX_FREE_PG_QUEUE];
-//	_lock		SdioTxFIFOFreePageLock;
-//	_thread_hdl_	SdioXmitThread;
-//	_sema		SdioXmitSema;
-//	_sema		SdioXmitTerminateSema;
-
-	//
-	// SDIO Rx FIFO related.
-	//
-	u8			SdioRxFIFOCnt;
-//	u16			SdioRxFIFOSize;
-#endif //CONFIG_SDIO_HCI
-
 #if defined (CONFIG_PCI_HCI) || defined(CONFIG_LX_HCI) || defined(CONFIG_AXI_HCI)
 //	u32	TransmitConfig;
 #if defined(CONFIG_AXI_HCI)
@@ -602,9 +541,7 @@ typedef struct hal_com_data {
 
 #endif //CONFIG_PCI_HCI || CONFIG_LX_HCI || defined(CONFIG_AXI_HCI)
 
-#if (PHYDM_LINUX_CODING_STYLE==1)
 	struct hal_spec_t hal_spec;
-#endif
 
 #ifdef CONFIG_MP_INCLUDED
 	BOOLEAN				bCCKinCH14;
@@ -619,15 +556,16 @@ typedef struct hal_com_data {
 	u8 not_xmitframe_fw_dl; /*not use xmitframe to download fw*/
 #endif
 
-#if (PHYDM_LINUX_CODING_STYLE == 1)
+#if (PHYDM_VERSION == 2)
 	u8 phydm_op_mode;
+#endif
 	u32  prv_traffic_idx;
 	bool is_turbo_edca;
-#endif
+	u8 ra_mask_suspend_cnt;
 
 } HAL_DATA_COMMON, *PHAL_DATA_COMMON;
 
-#if (PHYDM_LINUX_CODING_STYLE == 1)
+#if (PHYDM_VERSION == 2)
 #define TXPWR_LMT_RS_CCK	0
 #define TXPWR_LMT_RS_OFDM	1
 #define TXPWR_LMT_RS_HT 	2
@@ -777,10 +715,10 @@ typedef struct hal_com_data {
 #define hal_func HalFunc
 #define set_hw_reg_handler SetHwRegHandler
 #define get_hal_def_var_handler GetHalDefVarHandler
-#endif // #if (PHYDM_LINUX_CODING_STYLE == 1)
+#endif // #if (PHYDM_VERSION == 2)
 
 #if defined(CONFIG_RTL8195B) || defined(CONFIG_RTL8721D) || defined(CONFIG_RTL8710C) || defined(CONFIG_RTL8730A) || defined(CONFIG_RTL8735B) || \
-	defined(CONFIG_RTL8720E)
+	defined(CONFIG_RTL8720E)  || defined(CONFIG_RTL8730E)
 //#define ODM_RF_PATH_A RF_PATH_A
 //#define ODM_RF_PATH_B RF_PATH_B
 //#define ODM_RF_PATH_C RF_PATH_C

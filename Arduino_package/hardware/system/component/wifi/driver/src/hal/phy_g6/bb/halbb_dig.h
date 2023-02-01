@@ -333,7 +333,7 @@ struct bb_dig_info {
 struct bb_info;
 /*@--------------------------[Prptotype]-------------------------------------*/
 #ifdef HALBB_DIG_TDMA_SUPPORT
-void halbb_dig_timercheck_watchdog(struct bb_info *);
+void halbb_dig_timercheck_watchdog(struct bb_info*);
 void halbb_tdmadig_io_en(struct bb_info *bb);
 void halbb_dig_timer_init(struct bb_info *bb);
 #endif
@@ -344,10 +344,10 @@ u8 halbb_dig_igi_by_ofst(struct bb_info *bb, u8 igi_pre, s8 ofst);
 void halbb_dig(struct bb_info *bb);
 void halbb_dig_init(struct bb_info *bb);
 void halbb_dig_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-				   char *output, u32 *_out_len);
+		   char *output, u32 *_out_len);
 void halbb_cr_cfg_dig_init(struct bb_info *bb);
 
-void *halbb_get_dig_fa_statistic(struct bb_info *bb);
+void* halbb_get_dig_fa_statistic(struct bb_info *bb);
 void halbb_set_dig_pause_val(struct bb_info *bb, u32 *val_buf, u8 val_len);
 #ifdef HALBB_DIG_MCC_SUPPORT
 void Halbb_init_mccdm(struct bb_info *bb);

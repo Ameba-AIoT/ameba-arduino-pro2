@@ -39,7 +39,7 @@
 #define		CFO_TRK_ENABLE_TH	3 /* @kHz enable CFO_Track threshold*/
 #define		CFO_TRK_STOP_TH		3 /* @kHz disable CFO_Track threshold*/
 #define		NO_PKT_RETURN_TH	10
-#define		CFO_BOUND		24
+#define		CFO_VALID_BOUNDARY		50
 
 #define		CFO_SW_COMP_FINE_TUNE	5 /* @kHz expected CFO Comp. per Xcap ofst*/ /*0.8ppm~1ppm per Xcap ofst*/
 #define		DIGI_CFO_COMP_LIMIT 5 /* @kHz enable digital CFO comp threshold*/
@@ -71,7 +71,7 @@ enum bb_cfo_trk_src_t {
 enum bb_cfo_trk_st_t {
 	CFO_STATE_0 = 0,
 	CFO_STATE_1 = 1,
-	CFO_STATE_2 = 2
+	CFO_STATE_2 =2
 };
 
 enum bb_cfo_trk_acc_mode_t {
@@ -167,9 +167,9 @@ struct bb_cfo_trk_info {
 	enum bb_cfo_trk_st_t		bb_cfo_trk_state;
 	enum bb_cfo_trk_acc_mode_t bb_cfo_trk_acc_mode;
 	enum multi_sta_cfo_mode_t	multi_sta_cfo_mode;
-#ifdef BB_DYN_CFO_TRK_LOP
+	#ifdef BB_DYN_CFO_TRK_LOP
 	struct bb_dyn_cfo_trk_lop_info bb_dyn_cfo_trk_lop_i;
-#endif
+	#endif
 	struct halbb_timer_info cfo_timer_i;
 };
 
@@ -190,9 +190,9 @@ void halbb_cfo_acc_timer_init(struct bb_info *bb);
 void halbb_cfo_dm(struct bb_info *bb);
 void halbb_cfo_watchdog(struct bb_info *bb);
 void halbb_parsing_cfo(struct bb_info *bb, u32 physts_bitmap,
-					   struct physts_rxd *desc);
+		       struct physts_rxd *desc);
 void halbb_cfo_trk_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+		       char *output, u32 *_out_len);
 void halbb_cr_cfg_cfo_trk_init(struct bb_info *bb);
 void halbb_cfo_ul_ofdma_acc_enable(struct bb_info *bb);
 void halbb_cfo_ul_ofdma_acc_disable(struct bb_info *bb);

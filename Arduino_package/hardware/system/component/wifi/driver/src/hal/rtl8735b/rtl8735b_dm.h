@@ -36,7 +36,7 @@ enum {
 //============================================================
 
 void rtl8735b_phy_init_dm_priv(PADAPTER);
-void rtl8735b_phy_deinit_dm_priv(PADAPTER);
+void rtl8735b_phy_dm_timer_cancel(PADAPTER);
 void rtl8735b_phy_init_haldm(PADAPTER);
 void rtl8735b_phy_haldm_watchdog(PADAPTER);
 void rtl8735b_phy_haldm_in_lps(PADAPTER);

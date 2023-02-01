@@ -46,10 +46,14 @@ typedef enum {
 typedef enum {
     RTK_BT_PID_MAIN = 0,
     RTK_BT_PID_GAP_BLE,
-    RTK_BT_PID_GAP_BTC,
+    RTK_BT_PID_GAP_LEGACY,
+    RTK_BT_PID_SDP,
+    RTK_BT_PID_AVRCP,
+    RTK_BT_PID_A2DP,
     RTK_BT_PID_GATT,
     RTK_BT_PID_GATTC,
     RTK_BT_PID_GATTS,
+    RTK_BT_PID_LE_ISO_MGR,
     RTK_BT_PID_NUM,
 } rtk_bt_pid_t;
 

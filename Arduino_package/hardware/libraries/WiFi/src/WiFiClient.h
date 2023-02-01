@@ -1,5 +1,5 @@
-#ifndef wificlient_h
-#define wificlient_h
+#ifndef WiFiClient_h
+#define WiFiClient_h
 
 #include "Print.h"
 #include "Client.h"
@@ -10,7 +10,7 @@
 class WiFiClient : public Client {
     public:
         WiFiClient();
-        WiFiClient(uint8_t sock);
+        WiFiClient(int sock);
 
         uint8_t status();
         virtual uint8_t connected();

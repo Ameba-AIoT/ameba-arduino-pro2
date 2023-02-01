@@ -6,7 +6,11 @@
  by Scott Fitzgerald
  http://www.arduino.cc/en/Tutorial/Sweep
 
- refined 2016/03/18 by Realtek
+ modified 17 Jan 2023
+ by Realtek SG
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-pwm-servo/
 */
 
 #include <AmebaServo.h>
@@ -20,6 +24,7 @@ int pos = 0;
 
 void setup() {
     myservo.attach(8);
+}
 
 void loop() {
     // goes from 0 degrees to 180 degrees in steps of 1 degree

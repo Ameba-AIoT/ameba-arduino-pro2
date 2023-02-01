@@ -57,7 +57,7 @@ struct bb_dfs_cr_info {
 
 struct bb_dfs_info {
 	struct bb_dfs_cr_info	bb_dfs_cr_i;
-
+	
 //============= Used by TW DFS ==============//
 	bool is_tw_en;
 //===========================================//
@@ -258,57 +258,57 @@ struct bb_rdr_info {
 #else
 #if (PLATFOM_IS_LITTLE_ENDIAN)
 struct bb_rdr_info {
-	u8 rdr_info_sg0_chirp_flag: 1;	/*[18:9],[8:1],[0]*/
-	u8 rdr_info_sg0_pri_l: 7;
+	u8 rdr_info_sg0_chirp_flag:1;	/*[18:9],[8:1],[0]*/
+	u8 rdr_info_sg0_pri_l:7;
 
-	u8 rdr_info_sg0_pri_m: 1;
-	u8 rdr_info_sg0_pw_l: 7;
+	u8 rdr_info_sg0_pri_m:1;
+	u8 rdr_info_sg0_pw_l:7;
 
-	u8 rdr_info_sg0_pw_m: 3;
-	u8 rdr_info_sg1_chirp_flag: 1;	/*[37:28],[27:20],[19]*/
-	u8 rdr_info_sg1_pri_l: 4;
+	u8 rdr_info_sg0_pw_m:3;
+	u8 rdr_info_sg1_chirp_flag:1;	/*[37:28],[27:20],[19]*/
+	u8 rdr_info_sg1_pri_l:4;
 
-	u8 rdr_info_sg1_pri_m: 4;
-	u8 rdr_info_sg1_pw_l: 4;
+	u8 rdr_info_sg1_pri_m:4;
+	u8 rdr_info_sg1_pw_l:4;
 
-	u8 rdr_info_sg1_pw_m: 6;
-	u8 rdr_info_zw_chirp_flag: 1;	/*[56:47],[46:39],[38]*/
-	u8 rdr_info_zw_pri_l: 1;
+	u8 rdr_info_sg1_pw_m:6;
+	u8 rdr_info_zw_chirp_flag:1;	/*[56:47],[46:39],[38]*/
+	u8 rdr_info_zw_pri_l:1;
 
-	u8 rdr_info_zw_pri_m: 7;
-	u8 rdr_info_zw_pw_l: 1;
+	u8 rdr_info_zw_pri_m:7;
+	u8 rdr_info_zw_pw_l:1;
 
 	u8 rdr_info_zw_pw_m;
 
-	u8 rdr_info_zw_pw_h: 1;
-	u8 rdr_info_seq: 7;
+	u8 rdr_info_zw_pw_h:1;
+	u8 rdr_info_seq:7;
 };
 #else
 struct bb_rdr_info {
-	u8 rdr_info_sg0_pri_l: 7;
-	u8 rdr_info_sg0_chirp_flag: 1;
+	u8 rdr_info_sg0_pri_l:7;
+	u8 rdr_info_sg0_chirp_flag:1;
 
-	u8 rdr_info_sg0_pw_l: 7;
-	u8 rdr_info_sg0_pri_m: 1;
+	u8 rdr_info_sg0_pw_l:7;
+	u8 rdr_info_sg0_pri_m:1;
 
-	u8 rdr_info_sg1_pri_l: 4;
-	u8 rdr_info_sg1_chirp_flag: 1;
-	u8 rdr_info_sg0_pw_m: 3;
+	u8 rdr_info_sg1_pri_l:4;
+	u8 rdr_info_sg1_chirp_flag:1;
+	u8 rdr_info_sg0_pw_m:3;
 
-	u8 rdr_info_sg1_pw_l: 4;
-	u8 rdr_info_sg1_pri_m: 4;
+	u8 rdr_info_sg1_pw_l:4;
+	u8 rdr_info_sg1_pri_m:4;
 
-	u8 rdr_info_zw_pri_l: 1;
-	u8 rdr_info_zw_chirp_flag: 1;
-	u8 rdr_info_sg1_pw_m: 6;
+	u8 rdr_info_zw_pri_l:1;
+	u8 rdr_info_zw_chirp_flag:1;
+	u8 rdr_info_sg1_pw_m:6;
 
-	u8 rdr_info_zw_pw_l: 1;
-	u8 rdr_info_zw_pri_m: 7;
+	u8 rdr_info_zw_pw_l:1;
+	u8 rdr_info_zw_pri_m:7;
 
 	u8 rdr_info_zw_pw_m;
 
-	u8 rdr_info_seq: 7;
-	u8 rdr_info_zw_pw_h: 1;
+	u8 rdr_info_seq:7;
+	u8 rdr_info_zw_pw_h:1;
 };
 #endif
 #endif
@@ -318,17 +318,17 @@ struct hal_dfs_rpt;
 void halbb_dfs(struct bb_info *bb);
 void halbb_dfs_rgn_dmn_dflt_cnfg(struct bb_info *bb);
 void halbb_dfs_rgn_dmn_cnfg_by_ch(struct bb_info *bb, bool w53_band,
-								  bool w56_band);
+				  bool w56_band);
 void halbb_radar_chrp_mntr(struct bb_info *bb, bool chrp_flag, bool is_sg1);
 void halbb_radar_seq_inspctn(struct bb_info *bb, u16 dfs_rpt_idx,
-							 u8 c_num, u8 p_num, bool is_sg1);
+			     u8 c_num, u8 p_num, bool is_sg1);
 void halbb_radar_ptrn_cmprn(struct bb_info *bb, u16 dfs_rpt_idx,
-							u8 pri, u16 pw, bool chrp_flag, bool is_sg1);
+			    u8 pri, u16 pw, bool chrp_flag, bool is_sg1);
 void halbb_radar_info_processing(struct bb_info *bb,
-								 struct hal_dfs_rpt *dfs_rpt, u16 dfs_rpt_idx);
-void halbb_parsing_aci2sig(struct bb_info *bb, u32 physts_bitmap);
+				 struct hal_dfs_rpt *dfs_rpt, u16 dfs_rpt_idx);
+void halbb_parsing_aci2sig(struct bb_info* bb, u32 physts_bitmap);
 void halbb_dfs_dyn_setting(struct bb_info *bb);
 void halbb_dfs_debug(struct bb_info *bb, char input[][16], u32 *_used,
-					 char *output, u32 *_out_len);
+		     char *output, u32 *_out_len);
 void halbb_cr_cfg_dfs_init(struct bb_info *bb);
 #endif

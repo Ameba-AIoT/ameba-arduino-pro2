@@ -21,7 +21,8 @@
 #define HALRF_SCAN halrf_scanf
 #define HALRF_DCMD_SCAN_LIMIT 10
 /*@--------------------------[Enum]------------------------------------------*/
-enum rf_scanf_type {
+ enum rf_scanf_type
+{
 	DCMD_DECIMAL	= 1,
 	DCMD_HEX	= 2,
 	DCMD_CHAR	= 3,

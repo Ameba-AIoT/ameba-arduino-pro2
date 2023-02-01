@@ -167,13 +167,13 @@ struct ccx_para_info {
 
 /*--------------------------[Prptotype]-------------------------------------*/
 void halbb_env_mntr_get_bg_result(struct bb_info *bb,
-								  struct env_mntr_rpt *bg_rpt,
-								  enum phl_phy_idx phy_idx);
+				  struct env_mntr_rpt *bg_rpt,
+				  enum phl_phy_idx phy_idx);
 void halbb_env_mntr_get_bg_setting(struct bb_info *bb,
-								   struct ccx_para_info *bg_para,
-								   enum phl_phy_idx phy_idx);
+				   struct ccx_para_info *bg_para,
+				   enum phl_phy_idx phy_idx);
 u8 halbb_env_mntr_trigger(struct bb_info *bb, struct ccx_para_info *para,
-						  struct env_trig_rpt *trig_rpt, enum phl_phy_idx phy_idx);
+			  struct env_trig_rpt *trig_rpt, enum phl_phy_idx phy_idx);
 u8 halbb_env_mntr_result(struct bb_info *bb, struct env_mntr_rpt *rpt, enum phl_phy_idx phy_idx);
 
 u8 halbb_env_mntr_get_802_11_k_rsni(struct bb_info *bb, s8 rcpi, s8 anpi);

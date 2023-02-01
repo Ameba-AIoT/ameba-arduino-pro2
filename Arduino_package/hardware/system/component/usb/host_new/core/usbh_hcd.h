@@ -53,11 +53,11 @@ typedef struct {
 #define USBH_HCD_GET_FLAG(__INTERRUPT__)                  ((usb_hal_read_interrupts() & (__INTERRUPT__)) == (__INTERRUPT__))
 #define USBH_HCD_CLEAR_FLAG(__INTERRUPT__)                ((USB_GLOBAL->GINTSTS) = (__INTERRUPT__))
 
-#define USBH_HCD_CLEAR_HC_INT(chnum, __INTERRUPT__)       (USB_HC(chnum)->HCINT = (__INTERRUPT__))
-#define USBH_HCD_MASK_HALT_HC_INT(chnum)                  (USB_HC(chnum)->HCINTMSK &= ~USB_OTG_HCINTMSK_CHHM)
-#define USBH_HCD_UNMASK_HALT_HC_INT(chnum)                (USB_HC(chnum)->HCINTMSK |= USB_OTG_HCINTMSK_CHHM)
-#define USBH_HCD_MASK_ACK_HC_INT(chnum)                   (USB_HC(chnum)->HCINTMSK &= ~USB_OTG_HCINTMSK_ACKM)
-#define USBH_HCD_UNMASK_ACK_HC_INT(chnum)                 (USB_HC(chnum)->HCINTMSK |= USB_OTG_HCINTMSK_ACKM)
+#define USBH_HCD_CLEAR_HC_INT(ch_num, __INTERRUPT__)      (USB_HC(ch_num)->HCINT = (__INTERRUPT__))
+#define USBH_HCD_MASK_HALT_HC_INT(ch_num)                 (USB_HC(ch_num)->HCINTMSK &= ~USB_OTG_HCINTMSK_CHHM)
+#define USBH_HCD_UNMASK_HALT_HC_INT(ch_num)               (USB_HC(ch_num)->HCINTMSK |= USB_OTG_HCINTMSK_CHHM)
+#define USBH_HCD_MASK_ACK_HC_INT(ch_num)                  (USB_HC(ch_num)->HCINTMSK &= ~USB_OTG_HCINTMSK_ACKM)
+#define USBH_HCD_UNMASK_ACK_HC_INT(ch_num)                (USB_HC(ch_num)->HCINTMSK |= USB_OTG_HCINTMSK_ACKM)
 
 /* Exported variables --------------------------------------------------------*/
 
@@ -72,9 +72,9 @@ u8 usbh_hcd_start(usbh_hcd_t *hcd);
 u8 usbh_hcd_stop(usbh_hcd_t *hcd);
 u8 usbh_hcd_hc_submit_request(usbh_hcd_t *hcd, u8 ch_num, u8 direction, u8 ep_type, u8 token, u8 *buf, u16 length, u8 do_ping);
 usbh_hcd_state_t usbh_hcd_get_state(usbh_hcd_t *hcd);
-usbh_urb_state_t usbh_hcd_hc_get_urb_state(usbh_hcd_t *hcd, u8 chnum);
-u32 usbh_hcd_hc_get_transfer_size(usbh_hcd_t *hcd, u8 chnum);
-usbh_hc_state_t usbh_hcd_hc_get_state(usbh_hcd_t *hcd, u8 chnum);
+usbh_urb_state_t usbh_hcd_hc_get_urb_state(usbh_hcd_t *hcd, u8 ch_num);
+u32 usbh_hcd_hc_get_transfer_size(usbh_hcd_t *hcd, u8 ch_num);
+usbh_hc_state_t usbh_hcd_hc_get_state(usbh_hcd_t *hcd, u8 ch_num);
 u32 usbh_hcd_get_current_frame(usbh_hcd_t *hcd);
 u32 usbh_hcd_get_current_speed(usbh_hcd_t *hcd);
 u8 usbh_hcd_set_toggle(usbh_hcd_t *hcd, u8 pipe, u8 toggle);
@@ -85,7 +85,7 @@ void usbh_hcd_handle_connect_interrupt(usbh_hcd_t *hcd);
 void usbh_hcd_handle_disconnect_interrupt(usbh_hcd_t *hcd);
 void usbh_hcd_handle_port_enable_interrupt(usbh_hcd_t *hcd);
 void usbh_hcd_handle_port_disable_interrupt(usbh_hcd_t *hcd);
-void usbh_hcd_hc_notify_urb_state_change(usbh_hcd_t *hcd, u8 chnum, usbh_urb_state_t urb_state);
+void usbh_hcd_hc_notify_urb_state_change(usbh_hcd_t *hcd, u8 ch_num, usbh_urb_state_t urb_state);
 
 #endif /* USBH_HCD_H */
 

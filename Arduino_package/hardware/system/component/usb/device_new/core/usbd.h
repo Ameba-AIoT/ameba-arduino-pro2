@@ -25,8 +25,8 @@
 /* Exported defines ----------------------------------------------------------*/
 
 /* USB device configurations */
-#define USBD_MAX_NUM_INTERFACES			1U
-#define USBD_MAX_NUM_CONFIGURATION		1U
+#define USBD_MAX_NUM_INTERFACES			16U
+#define USBD_MAX_NUM_CONFIGURATION		16U
 #define USBD_MAX_ENDPOINTS				5U
 #define USBD_MAX_RX_FIFO_SIZE			512U
 #define USBD_MAX_NPTX_FIFO_SIZE			256U
@@ -71,7 +71,6 @@ typedef struct {
 	u32 rx_fifo_size;		/* RX FIFO size */
 	u32 nptx_fifo_size;		/* Non-Periodical TX FIFO size */
 	u32 ptx_fifo_size;		/* Periodical TX FIFO size */
-	u8 intr_use_ptx_fifo;	/* Use Periodical TX FIFO for INTR transfer */
 	u8 speed;				/* USB speed, USBD_SPEED_HIGH or USBD_SPEED_FULL */
 	u8 dma_enable;			/* Enable USB internal DMA mode, 0-Disable, 1-Enable */
 	u8 self_powered;		/* Self powered or not, 0-bus powered, 1-self powered */
@@ -141,7 +140,8 @@ typedef struct _usbd_class_driver_t {
 /* API for application */
 u8 usbd_init(usbd_config_t *cfg);
 u8 usbd_deinit(void);
-u8 usbd_get_attach_status(void);
+u8 usbd_get_status(void);
+void usbd_config_debug(u8 enable);
 
 /* API for class */
 u8 usbd_register_class(usbd_class_driver_t *driver);
@@ -150,10 +150,14 @@ u8 usbd_ep_init(usb_dev_t *dev, u8 ep_addr, u8 ep_type, u16 ep_mps);
 u8 usbd_ep_deinit(usb_dev_t *dev, u8 ep_addr);
 u8 usbd_ep_transmit(usb_dev_t *dev, u8 ep_addr, u8 *buf, u16  len);
 u8 usbd_ep_receive(usb_dev_t *dev, u8 ep_addr, u8 *buf, u16  len);
+u8 usbd_ep_set_stall(usb_dev_t *dev, u8 ep_addr);
+u8 usbd_ep_clear_stall(usb_dev_t *dev, u8 ep_addr);
+u8 usbd_ep_is_stall(usb_dev_t *dev, u8 ep_addr);
 u8 usbd_ep0_transmit(usb_dev_t *dev, u8 *buf, u16 len);
 u8 usbd_ep0_receive(usb_dev_t *dev, u8 *buf, u16 len);
 u8 usbd_ep0_transmit_status(usb_dev_t *dev);
 u8 usbd_ep0_receive_status(usb_dev_t *dev);
+u8 usbd_ep0_set_stall(usb_dev_t *dev);
 
 #endif /* USBD_H */
 

@@ -56,4 +56,8 @@ typedef struct BMS_SERVICE_INFO {
 	struct BMS_SERVICE_INFO *next;
 } BMS_SERVICE_INFO;
 
+BMS_SERVICE_INFO *ble_ms_adapter_parse_srv_tbl(ms_hal_ble_service_attrib_t **profile, uint16_t attrib_count);
+bool ble_ms_adapter_send_indication_notification(uint8_t conn_id, uint8_t service_id, uint8_t handle, uint8_t *p_value, uint16_t length, bool type);
+T_SERVER_ID ble_ms_adapter_add_service(BMS_SERVICE_INFO *service_info, void *p_func);
+
 

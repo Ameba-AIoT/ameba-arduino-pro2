@@ -18,6 +18,7 @@ extern "C" {
 #include "lwip_netconf.h"
 #include "wifi_fast_connect.h"
 #include "lwip/err.h"
+#include "osdep_service.h"
 // modifed here
 #include "lwip/netif.h"
 #include "lwip/api.h"
@@ -37,11 +38,11 @@ uint32_t    WiFiDrv::_networkEncr[WL_NETWORKS_LIST_MAXNUM] = {0};
 
 static bool init_wlan = false;
 //static int wifi_mode = NULL;
-rtw_mode_t wifi_mode = 0;
+rtw_mode_t wifi_mode = RTW_MODE_STA;
 struct static_ip_config user_static_ip;
 
 static rtw_network_info_t wifi;
-static rtw_softap_info ap;
+static rtw_softap_info_t ap = {0};
 static unsigned char password[65] = {0};
 
 rtw_wifi_setting_t WiFiDrv::wifi_setting;
@@ -479,6 +480,7 @@ uint8_t WiFiDrv::getCurrentEncryptionType() {
 }
 
 rtw_result_t WiFiDrv::wifidrv_scan_result_handler(unsigned int scanned_AP_num, void *user_data) {
+    (void) user_data;
     char *scan_buf = NULL;
     rtw_scan_result_t *scanned_AP_info;
     if (scanned_AP_num == 0) {
@@ -521,7 +523,9 @@ rtw_result_t WiFiDrv::wifidrv_scan_result_handler(unsigned int scanned_AP_num, v
 
 int8_t WiFiDrv::startScanNetworks() {
     _networkCount = 0;
-    rtw_scan_param_t  scan_param = {0};
+    //rtw_scan_param_t  scan_param = {0};
+    rtw_scan_param_t  scan_param;
+    rtw_memset(&scan_param, 0, sizeof(rtw_scan_param_t));
     scan_param.scan_user_callback = wifidrv_scan_result_handler;
     if (wifi_scan_networks(&scan_param, 0 ) != RTW_SUCCESS) {
         return WL_FAILURE;

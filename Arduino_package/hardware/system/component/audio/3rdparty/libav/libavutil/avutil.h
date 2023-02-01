@@ -197,7 +197,7 @@ const char *avutil_license(void);
 
 enum AVMediaType {
     AVMEDIA_TYPE_UNKNOWN = -1,  ///< Usually treated as AVMEDIA_TYPE_DATA
-#if !(defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D))
+#if !(defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2))
     AVMEDIA_TYPE_VIDEO,
 #endif
     AVMEDIA_TYPE_AUDIO,

@@ -74,6 +74,9 @@ int rltk_wlan_get_wifi_mac_address(__u8 *mac);
 int rltk_wlan_set_bt_mac_address(__u8 *bt_mac);
 int rltk_wlan_get_bt_mac_address(__u8 *mac);
 int rltk_wlan_get_ap_dtim(__u8 *dtim_period);
+int rltk_wlan_set_ra_start_rate(__u8 rate);
+int rltk_wlan_set_ra_max_rate(__u8 rate);
+int rltk_wlan_set_ra_mask_en(__u8 enable);
 
 void rltk_psk_info_set(struct psk_info *psk_data);
 void rltk_psk_info_get(struct psk_info *psk_data);
@@ -104,10 +107,14 @@ int rltk_wlan_get_ccmp_key(unsigned char *uncst_key, unsigned char *group_key);
 int rltk_wlan_set_tx_rate_by_ToS(unsigned char enable, unsigned char ToS_precedence, unsigned char tx_rate);
 int rltk_wlan_set_EDCA_param(unsigned int AC_param);
 int rltk_wlan_set_TX_CCA(unsigned char enable);
+int rltk_wlan_get_txbuf_remain_pkt_num(void);
 int rltk_wlan_ap_switch_chl_and_inform_sta(unsigned char new_chl, unsigned char chl_switch_cnt, ap_channel_switch_callback_t callback);
 int rltk_wlan_set_cts2self_dur_and_send(unsigned char wlan_idx, unsigned short duration);
 int rltk_wlan_get_sta_max_data_rate(unsigned char *inidata_rate);
 void rltk_wlan_set_no_beacon_timeout(unsigned char timeout_sec);
+
+int rltk_wlan_csi_config(rtw_csi_action_parm_t *act_param);
+int rltk_wlan_csi_report(__u32 buf_len, __u8 *csi_buf, __u32 *len, rtw_csi_header_t *csi_hdr);
 
 //add temporarily
 extern int rtw_wx_get_essid(unsigned char wlan_idx, __u8 *ssid);

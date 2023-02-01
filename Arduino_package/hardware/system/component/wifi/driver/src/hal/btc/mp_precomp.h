@@ -94,6 +94,16 @@ extern u32 GLBtcDbgType[];
 #include "halbtc8730awifionly.h"
 #endif
 
+#ifdef CONFIG_RTL8730E
+#include "halbtc8730e.h"
+#include "halbtc8730ewifionly.h"
+#endif
+
+#ifdef CONFIG_RTL8720E
+#include "halbtc8720e.h"
+#include "halbtc8720ewifionly.h"
+#endif
+
 #ifdef CONFIG_RTL8710C
 #include "halbtc8710c.h"
 #endif

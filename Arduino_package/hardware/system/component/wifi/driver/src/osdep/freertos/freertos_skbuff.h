@@ -10,8 +10,6 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN)  //For iNIC throughput request
-#define MAX_SKB_BUF_NUM			59
 #else
 #define MAX_SKB_BUF_NUM		24	//8              //tx+rx
 #endif
@@ -26,8 +24,6 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN)  //For iNIC throughput request
-#define MAX_SKB_BUF_NUM			59
 #else
 #define MAX_SKB_BUF_NUM		24	//8              //tx+rx
 #endif
@@ -40,8 +36,6 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN) //For iNIC throughput request
-#define MAX_SKB_BUF_NUM			15
 #else
 #define MAX_SKB_BUF_NUM		8              //tx+rx
 #endif
@@ -58,8 +52,6 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN) //For iNIC throughput request
-#define MAX_SKB_BUF_NUM			15
 #else
 #define MAX_SKB_BUF_NUM		8              //tx+rx
 #endif
@@ -77,7 +69,26 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN) //For iNIC throughput request
+#elif defined(CONFIG_AS_INIC_NP) //For iNIC throughput request
+#define MAX_SKB_BUF_NUM			10
+#else
+#define MAX_SKB_BUF_NUM		8              //tx+rx
+#endif
+#define MAX_LOCAL_SKB_NUM		(MAX_SKB_BUF_NUM + 2)	//tx+rx, +2: AP mode broadcast
+#endif
+
+#elif (RTL8730E_SUPPORT == 1)
+#if (SKB_PRE_ALLOCATE_RX==1)
+#if defined(CONFIG_HIGH_TP_TEST) || defined(CONFIG_INIC_IPC_HIGH_TP)
+#define MAX_SKB_BUF_NUM			(28)		//tx+rx (8 + RX_Q_DESC_NUM) Reduce rx skb number due to memory limitation
+#else
+#define MAX_SKB_BUF_NUM			(8 + 4)		//tx+rx (8 + RX_Q_DESC_NUM) Reduce rx skb number due to memory limitation
+#endif
+#define MAX_LOCAL_SKB_NUM		(10 + 18)	//tx+rx
+#else
+#if WIFI_LOGO_CERTIFICATION
+#define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
+#elif defined(CONFIG_AS_INIC_NP) //For iNIC throughput request
 #define MAX_SKB_BUF_NUM			10
 #else
 #define MAX_SKB_BUF_NUM		8              //tx+rx
@@ -96,7 +107,7 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN) //For iNIC throughput request
+#elif defined(CONFIG_AS_INIC_NP) //For iNIC throughput request
 #define MAX_SKB_BUF_NUM			10
 #else
 #define MAX_SKB_BUF_NUM		8              //tx+rx
@@ -111,8 +122,6 @@
 #else
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
-#elif defined(CONFIG_INIC_EN) //For iNIC throughput request
-#define MAX_SKB_BUF_NUM			15
 #else
 #define MAX_SKB_BUF_NUM		8              //tx+rx
 #endif

@@ -13,6 +13,40 @@
 		{
           "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
           "architecture": "AmebaPro2",
+          "version": "4.0.1",
+          "category": "Contributed",
+          "help": {
+            "online": "https://forum.amebaiot.com/"
+          },
+          "url": "https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/release/ameba_pro2-4.0.1.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.1.tar.gz",
+          "checksum": "SHA-256:1934934ab03befaeab9f3cda3111178fb15ad5c51c307e25e1eda357158ad330",
+          "size": "90601481",
+          "boards": [
+            {"name": "AMB82 (RTL8735B)"},
+            {"name": "AMB82-MINI (RTL8735B)"}
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p1"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p2"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_tools",
+              "version": "1.1.1"
+            }
+          ]
+        },
+		{
+          "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
+          "architecture": "AmebaPro2",
           "version": "4.0.0",
           "category": "Contributed",
           "help": {
@@ -100,6 +134,33 @@
             }
           ]
         },
+		{
+          "name": "ameba_pro2_tools",
+          "version": "1.1.1",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.1.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/release/ameba_pro2_tools_windows-1.1.1.tar.gz",
+              "checksum": "SHA-256:c7d336a015d00f8cab330dd377063297c8657d49383cb945fc27bae80d16a319",
+              "size": "7894646"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "archiveFileName": "ameba_pro2_tools_linux-1.1.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/release/ameba_pro2_tools_linux-1.1.1.tar.gz",
+              "checksum": "SHA-256:b2d9aea25eda8d7f299988aab49205e7d1b3cd796c3e13f4ac55bcea5d396063",
+              "size": "4010747"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.1.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/release/ameba_pro2_tools_macos-1.1.1.tar.gz",
+              "checksum": "SHA-256:a950931a0086c019578b14b75a195094a6ebdc1599525c67a3e07587b682054a",
+              "size": "765788"
+            }
+          ]
+        }
 		{
           "name": "ameba_pro2_tools",
           "version": "1.0.6",

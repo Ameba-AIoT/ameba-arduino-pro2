@@ -882,6 +882,7 @@ struct dm_struct {
 	u8			p_advance_ota;
 	boolean			hp_hw_id;
 	boolean			BOOLEAN_temp;
+	boolean			is_rssi_dump_en;
 	boolean			is_dfs_band;
 	u8			is_rx_blocking_en;
 	u16			fw_offload_ability;
@@ -914,6 +915,7 @@ struct dm_struct {
 	#endif
 	boolean			is_nbi_csi;
 	char			dbg_buf[PHYDM_SNPRINT_SIZE];
+	u8			rx_rate_plurality;
 /*@-----------HOOK BEFORE REG INIT-----------*/
 /*@===========================================================*/
 /*@====[ CALL BY Reference ]=========================================*/

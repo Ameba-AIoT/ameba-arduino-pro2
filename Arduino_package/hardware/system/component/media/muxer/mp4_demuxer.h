@@ -1,4 +1,5 @@
 #ifndef _MP4_DEMUX_
+#define _MP4_DEMUX_
 typedef struct _header {
 	unsigned int size;
 	unsigned char str[4];
@@ -72,4 +73,6 @@ void mp4_demuxer_close(mp4_demux *mp4_demuxer);
 void set_mp4_demuxer_fatfs_param(mp4_demux *mp4_demuxer, fatfs_sd_params_t *fatfs_param);
 void set_mp4_demuxer_vfs_enable(mp4_demux *mp4_demuxer);
 int mp4_demuxer_seek(mp4_demux *mp4_demuxer, unsigned int video_ms, int *video_index, int *audio_index);
+int get_timestamp(mp4_demux *mp4_demuxer, unsigned int type, unsigned int index);
+int check_video_key_frame(mp4_demux *mp4_demuxer, int index);
 #endif //_MP4_DEMUX_

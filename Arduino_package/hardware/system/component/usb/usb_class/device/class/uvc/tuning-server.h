@@ -201,9 +201,9 @@ enum RTS_TUNING_LOG_TYPE {
 #define RTS_TUNING_LOG_MASK_IDX_TABLE_IQ	(0x1 << RTS_TUNING_LOG_IDX_TABLE_IQ)
 
 
-void tuning_init();
-void tuning_deinit();
-void usbd_ext_init();
+void tuning_init(void);
+void tuning_deinit(void);
+void usbd_ext_init(void);
 void tuning_set_iq_heap(void *iq_heap);
 void tuning_set_max_resolution(int width, int height);
 void tuning_set_log_level(int level);

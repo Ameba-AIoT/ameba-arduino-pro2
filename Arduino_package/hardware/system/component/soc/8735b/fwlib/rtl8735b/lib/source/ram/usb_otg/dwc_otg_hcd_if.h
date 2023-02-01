@@ -409,4 +409,4 @@ extern  uint8_t dwc_otg_hcd_get_ep_bandwidth(dwc_otg_hcd_t *hcd,
 /** @} */
 
 #endif /* __DWC_HCD_IF_H__ */
-#endif /* DWC_DEVICE_ONLY */
+#endif

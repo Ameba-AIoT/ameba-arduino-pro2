@@ -41,7 +41,7 @@
 struct plcp_mcs_table_in_t {
 	u8 spec_idx : 3;
 	u8 mcs : 5;
-	u8 nss : 4;
+	u8 nss : 4;		
 	u8 bw : 2;//0:BW20, 1:BW40, 2:BW80, 3:BW160 /*enum channel_width*/
 	u8 rsvd0 : 2;
 	u8 ru_size : 3; //0:RU26, 1:RU52, 2:RU106, 3:RU242, 4:RU484, 5:RU996, 6:RU996x2, 7:hesigb
@@ -58,7 +58,7 @@ struct plcp_mcs_table_out_t {
 	u32 valid : 1;
 	u32 code_rate : 2;
 	u32 nss : 3;
-	u32 rsvd0 : 4;
+	u32 rsvd0 : 4;	
 	u32 he_n_cbps_short : 15;
 	u32 rsvd1 : 17;
 	bool dcm;
@@ -82,7 +82,7 @@ struct com_pre_fec_par {
 	u32 n_ma : 6;
 	u32 m_ma : 5;
 	u32 tb_trig : 1;
-	u32 n_hesigb_sym : 8;
+	u32 n_hesigb_sym : 8;	
 	u32 n_usr_refine : 8;
 	u32 tb_trig_t_pe : 3;
 	u32 tb_ldpc_extra : 1;
@@ -142,7 +142,7 @@ struct plcp_tx_pre_fec_padding_setting_in_t {
 	u32 max_tx_time_0p4us : 14;
 	u32 n_user : 8;
 
-	u32 ndp : 1;
+	u32 ndp : 1; 
 	u32 he_er_u106ru_en : 1; //done
 	u32 rsvd1 : 6;
 	u32 tb_l_len : 12;
@@ -211,7 +211,7 @@ enum fec_t {
 	LDPC
 };
 
-enum ru_sizes_list {
+enum ru_sizes_list{
 	RU26 		= 0,
 	RU52,
 	RU106,
@@ -222,8 +222,8 @@ enum ru_sizes_list {
 	HESIGB
 };
 
-enum packet_format_t {
-	B_MODE_FMT 	= 0,
+enum packet_format_t{
+	B_MODE_FMT 	= 0, 
 	LEGACY_FMT,
 	HT_MF_FMT,
 	HT_GF_FMT,
@@ -234,7 +234,7 @@ enum packet_format_t {
 	HE_TB_FMT
 };
 
-enum coding_rate_t {
+enum coding_rate_t{
 	R12 		= 0,
 	R23,
 	R34,
@@ -252,12 +252,12 @@ u32 halbb_ceil(u32 numerator, u32 denominator);
 u32 halbb_mod(u32 numerator, u32 denominator);
 u32 halbb_min(u32 val_1, u32 val_2);
 u32 halbb_max(u32 val_1, u32 val_2);
-void halbb_set_bit(u8 strt, u8 len, u32 in, u32 *out);
+void halbb_set_bit(u8 strt, u8 len, u32 in, u32* out);
 void halbb_write_cr(struct bb_info *bb, struct cr_address_t cr_address, u32 val,
-					enum phl_phy_idx phy_idx);
+		    enum phl_phy_idx phy_idx);
 enum plcp_sts halbb_tx_plcp_cal(struct bb_info *bb,
-								const struct plcp_tx_pre_fec_padding_setting_in_t *in,
-								struct plcp_tx_pre_fec_padding_setting_out_t *out);
+	const struct plcp_tx_pre_fec_padding_setting_in_t *in,
+	struct plcp_tx_pre_fec_padding_setting_out_t *out);
 
 
 #endif

@@ -16,9 +16,10 @@
 extern "C" {
 #endif
 
-#define TEST_GOTO_TAG(condition, tag)   do {    \
-            if (condition) goto tag;            \
-        } while(0)
+#define TEST_GOTO_TAG(condition, tag)       \
+    do {                                    \
+        if (condition) goto tag;            \
+    } while(0)
 
 rtk_bt_evt_status_t convert_stack_gap_cause(T_GAP_CAUSE cause);
 

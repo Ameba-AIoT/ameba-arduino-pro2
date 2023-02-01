@@ -37,10 +37,8 @@ extern "C"
 #endif
 
 /**
- * @addtogroup hal_sdhost HAL SDHOST
- * @ingroup 8735b_hal
+ * @addtogroup hal_sdhost
  * @{
- * @brief The SD Host module.
  */
 
 /// Defines the size of SD data block in byte
@@ -59,49 +57,59 @@ extern "C"
 #define SD_STATUS_LEN                64
 
 /**
-  \brief  Defines SDIO Bus Signaling Level.
+  \brief  Defines SD Bus Signaling Level.
 */
-enum hal_sdhost_signal_level {
-	SdHostSigVol33          = 0,
-	SdHostSigVol18          = 1
-};
-typedef uint8_t hal_sdhost_sig_lvl_t;
+typedef enum hal_sdhost_signal_level {
+	SdHostSigVol33          = 0,        ///< Voltage level 3.3V
+	SdHostSigVol18          = 1         ///< Voltage level 1.8V
+} hal_sdhost_sig_lvl_t;
 
 /**
   \brief  Defines verbose level.
 */
-enum hal_sdhost_verbose_level {
-	SdHostVerNone           = 0,        /// No verbose print
-	SdHostVerLessErr        = 0x8,      /// Convert some error log to warning, used in internal tuning
-	SdHostVerInfo           = 0x10,     /// Print card info during card identification
-	SdHostVerCmd            = 0x20,     /// Print every sent command
-};
+typedef enum hal_sdhost_verbose_level {
+	SdHostVerNone           = 0,        ///< No verbose print
+	SdHostVerLessErr        = 0x8,      ///< Convert some error log to warning, used in internal tuning
+	SdHostVerInfo           = 0x10,     ///< Print card info during card identification
+	SdHostVerCmd            = 0x20,     ///< Print every sent command
+} hal_sdhost_verb_t;
 
 /**
   \brief  Defines CMD6 function group 1 (access mode).
 */
-enum hal_sdhost_bus_speed {
+typedef enum hal_sdhost_bus_speed {
 	SdHostSpeedNA           = 0x00,
-	SdHostSpeedDS           = 0x01,  // 3.3V Function 0
-	SdHostSpeedHS           = 0x02,  // 3.3V Function 1
-	SdHostSpeedSDR12        = 0x04,  // 1.8V Function 0
-	SdHostSpeedSDR25        = 0x08,  // 1.8V Function 1
-	SdHostSpeedSDR50        = 0x10,  // 1.8V Function 2
-	SdHostSpeedSDR104       = 0x20,  // 1.8V Function 3
-	SdHostSpeedDDR50        = 0x40,  // 1.8V Function 4
-};
-typedef uint32_t hal_sdhost_speed_t;
+	SdHostSpeedDS           = 0x01,     ///< 3.3V Function 0
+	SdHostSpeedHS           = 0x02,     ///< 3.3V Function 1
+	SdHostSpeedSDR12        = 0x04,     ///< 1.8V Function 0
+	SdHostSpeedSDR25        = 0x08,     ///< 1.8V Function 1
+	SdHostSpeedSDR50        = 0x10,     ///< 1.8V Function 2
+	SdHostSpeedSDR104       = 0x20,     ///< 1.8V Function 3
+	SdHostSpeedDDR50        = 0x40,     ///< 1.8V Function 4
+} hal_sdhost_speed_t;
+
+/**
+  \brief  Defines SD physical layer specification version.
+*/
+typedef enum  sdhost_sd_spec_e {
+	SdHostSdSpecV101         = 0,       ///< SD V1.0 or V1.01
+	SdHostSdSpecV110         = 1,       ///< SD V1.10
+	SdHostSdSpecV200         = 2,       ///< SD V2.00
+	SdHostSdSpecV300         = 3,       ///< SD V3.0X
+	SdHostSdSpecUnk          = 0xFF,    ///< Unknown version
+} sdhost_sd_spec_t;
 
 /**
   \brief  Bus frequency of SD bus.
 */
-enum hal_sdhost_freq {
-	SdHostFreq390KHz       = 0x1,
-	SdHostFreq25MHz,
-	SdHostFreq50MHz,
-	SdHostFreq100MHz,
-};
-typedef uint8_t hal_sdhost_freq_t;
+typedef enum hal_sdhost_freq {
+	SdHostFreqNA           = 0x0,       ///< Invali bus frequency
+	SdHostFreq390KHz       = 0x1,       ///< Bus frequency 390KHz
+	SdHostFreq12_5MHz,                  ///< Bus frequency 12.5MHz
+	SdHostFreq25MHz,                    ///< Bus frequency 25MHz
+	SdHostFreq50MHz,                    ///< Bus frequency 50MHz
+	SdHostFreq100MHz,                   ///< Bus frequency 100MHz
+} hal_sdhost_freq_t;
 
 /**
   \brief  SD CID register version 1.0.
@@ -273,72 +281,61 @@ typedef void (*sdhost_cb_t)(void);
 typedef void (*sdhost_para_cb_t)(void *para);
 
 /**
-  \brief  Callback functions for secure-domain access.
-*/
-typedef struct hal_sdhost_s_funcs {
-	void (*hal_sdhost_en_ctrl)(BOOL en);
-	void (*hal_sdhost_ldo_ctrl)(u8 vol_sel);
-	void (*hal_sdhost_phase_shift)(u8 vp_sel, u8 shift_sel);
-} hal_sdhost_s_funcs_t;
-
-
-/**
-  \brief  The data structure for SDIO host HAL operations.
+  \brief  The adapter for SD host HAL APIs.
 */
 typedef struct hal_sdhost_adapter {
-	SDHOST_Type *base_addr;
-	volatile u8 is_card_inserted;
-	volatile u8 is_wp;
-	volatile u8 card_inited;
-	volatile u8 wait_interrupts;
-	u8 curr_sig_level;
-	u8 is_sdhc_sdxc;
-	u8 card_curr_ste;
-	u8 sd_spec_ver;
-	u8 card_support_spd_mode;
-	u8 is_s18a;
-	u8 voltage_mismatch;
-	u8 force_33v;
-	u8 verbose;
-	u8 tuning_loop;
-	hal_sdhost_speed_t curr_bus_spd;
-	hal_sdhost_freq_t curr_freq;            // Current clock frequency of SD bus
-	u8 rsvd[6];
-	u16 rca;
-	u32 magic_num;
-	u32 blk_capacity;
-	sdhost_para_cb_t card_insert_cb;
-	sdhost_para_cb_t card_remove_cb;
-	sdhost_para_cb_t transfer_done_cb;
-	sdhost_para_cb_t task_yield_cb;
-	void *card_insert_cb_para;
-	void *card_remove_cb_para;
-	void *transfer_done_cb_para;
-	void *task_yield_cb_para;
-	void (*dcache_invalidate_by_addr)(uint32_t *addr, int32_t dsize);   /*! callback function to do the D-cache invalidate  */
-	void (*dcache_clean_by_addr)(uint32_t *addr, int32_t dsize);    /*! callback function to do the D-cache clean  */
-	hal_sdhost_s_funcs_t *secure_funcs;
-	u8 *golden_pattern_buf;
-	volatile u32 xfer_int_sts;
-	u8 c6r2_buf[SDHOST_C6R2_BUF_LEN] __ALIGNED(32);
-	u8 cid[SD_CID_LEN];
-	u8 rsvd2[27];
-} hal_sdhost_adapter_t, *phal_sdhost_adapter_t;
+	SDHOST_Type *base_addr;                 ///< Base address of SDHOST IP registers
+	volatile u32 xfer_int_sts;              ///< Interrupt events after a transfer started
+	volatile u8 is_card_inserted;           ///< 1: Card is inserted, 0: Card is removed
+	volatile u8 is_wp;                      ///< (Deprecated) 1: Card is write-protected, 0: Card is not
+	volatile u8 card_inited;                ///< 1: Card identification is done
+	volatile u8 wait_interrupts;            ///< Bits of the waiting interrupts in non-blocking mode()
 
-/** @struct phal_sdhost_adapter_t
-  \brief  The data structure for SDIO host HAL operations.
-*/
+	// User configurable options:
+	u8 force_33v;                           ///< 1: Won't switch to 1.8V during hal_sdhost_init_card
+	u8 verbose;                             ///< Verbose level (hal_sdhost_verbose_level)
+	u8 tuning_loop;                         ///< How many test loop to run in tuning
+	// End of configurable options
+
+	u8 is_sdhc_sdxc;                        ///< 1: The current card is SDHC or SDXC card
+	u8 is_s18a;                             ///< 1: The card accepted voltage switch
+	u8 is_unusable_card;                    ///< 1: This card response is invalid during identification
+	u8 card_curr_ste;                       ///< Current SD card FSM state ID (check SD Spec)
+	u8 voltage_mismatch;                    ///< 1: No response to CMD8, SD ver1.X or voltage_mismatch
+	u8 card_support_spd_mode;               ///< Bitwise-OR of all supported SD speed mode (hal_sdhost_bus_speed)
+	u8 rsvd1[11];                            ///< Reserved
+	u16 rca;                                ///< The RCA (relative card address) of current card
+	u32 magic_num;                          ///< Magic number of the adapter
+	u32 blk_capacity;                       ///< The capacity is current card in blocks
+	hal_sdhost_freq_t curr_sdclk_freq;      ///< Current clock frequency of SD_CLK
+	hal_sdhost_sig_lvl_t curr_sig_level;    ///< Current signal voltage level
+	hal_sdhost_speed_t curr_bus_spd;        ///< Current SD speed mode
+	sdhost_sd_spec_t sd_spec_ver;           ///< SD Spec version the card using
+	sdhost_para_cb_t card_insert_cb;        ///< The function called when card inserted
+	sdhost_para_cb_t card_remove_cb;        ///< The function called when card removed
+	sdhost_para_cb_t transfer_done_cb;      ///< The function called when transfer finished
+	sdhost_para_cb_t task_yield_cb;         ///< The function called when transfer started busy
+	void *card_insert_cb_para;              ///< The parameter for card_insert_cb
+	void *card_remove_cb_para;              ///< The parameter for card_remove_cb
+	void *transfer_done_cb_para;            ///< The parameter for transfer_done_cb
+	void *task_yield_cb_para;               ///< The parameter for task_yield_cb
+	void (*dcache_invalidate_by_addr)(uint32_t *addr, int32_t dsize);   ///< The callback function to do the D-cache invalidate
+	void (*dcache_clean_by_addr)(uint32_t *addr, int32_t dsize);        ///< The callback function to do the D-cache clean  */
+	u8 c6r2_buf[SDHOST_C6R2_BUF_LEN] __ALIGNED(32);                     ///< The buffer to store temprary data like R2 & C6 data
+	u8 cid[SD_CID_LEN];                     ///< The buffer to store raw CID
+	u8 rsvd2[27];                           ///< Reserved
+} hal_sdhost_adapter_t, *phal_sdhost_adapter_t;
 
 
 /**
-  \brief  The data structure of the stubs function for the SDIO Host HAL functions in ROM
+  \brief  The data structure of the stubs function for the SDIO Host HAL functions
 */
 typedef struct hal_sdhost_func_stubs_s {
 	io_pin_t *sdhost_pin_table;
 	void (*hal_sdhost_irq_handler)(void);
 	void (*hal_sdhost_irq_reg)(irq_handler_t irq_handler);
 	void (*hal_sdhost_irq_unreg)(void);
-	hal_status_t (*hal_sdhost_init_host)(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_s_funcs_t *secure_funcs);
+	hal_status_t (*hal_sdhost_init_host)(hal_sdhost_adapter_t *psdhost_adapter);
 	hal_status_t (*hal_sdhost_init_card)(hal_sdhost_adapter_t *psdhost_adapter);
 	void (*hal_sdhost_deinit)(hal_sdhost_adapter_t *psdhost_adapter);
 	hal_status_t (*hal_sdhost_read_data)(hal_sdhost_adapter_t *psdhost_adapter, u32 start_addr, u16 blk_cnt, u8 *rbuf_32align);
@@ -358,24 +355,28 @@ typedef struct hal_sdhost_func_stubs_s {
 	void (*hal_sdhost_card_remove_hook)(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t pcallback, void *pdata);
 	void (*hal_sdhost_task_yield_hook)(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t task_yield, void *pdata);
 	void (*hal_sdhost_transfer_done_int_hook)(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t transfer_done_cb, void *pdata);
-	uint32_t reserved[40];  // 32 bytes align for next ROM code version function table extending.
+	hal_status_t (*hal_sdhost_switch_freq)(hal_sdhost_adapter_t *adpt, hal_sdhost_freq_t freq);
+	uint32_t reserved[39];  // 32 bytes align for next code version function table extending.
 } hal_sdhost_func_stubs_t;
 
 /// @cond _
 STATIC_ASSERT(sizeof(hal_sdhost_func_stubs_t) == 4 * 64, sdhost_stub_sz);
 /// @endcond
 
-/// @cond DOXYGEN_ROM_HAL_API
+/**
+ * @defgroup hal_sdhost_rtl_api SD Host RTL API
+ * @ingroup hal_sdhost_rtl
+ * @brief   The SD Host low-level API. The user applications should not use them directly.
+ */
 
 /**
- * @addtogroup hal_sdhost_lib_func SD Host HAL APIs.
- * @ingroup hal_sdhost
+ * @addtogroup hal_sdhost_rtl_api
  * @{
  */
 
 void hal_rtl_sdhost_irq_reg(irq_handler_t irq_handler);
 void hal_rtl_sdhost_irq_unreg(void);
-hal_status_t hal_rtl_sdhost_init_host(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_s_funcs_t *secure_funcs);
+hal_status_t hal_rtl_sdhost_init_host(hal_sdhost_adapter_t *psdhost_adapter);
 hal_status_t hal_rtl_sdhost_init_card(hal_sdhost_adapter_t *psdhost_adapter);
 void hal_rtl_sdhost_deinit(hal_sdhost_adapter_t *psdhost_adapter);
 hal_status_t hal_rtl_sdhost_read_data(hal_sdhost_adapter_t *psdhost_adapter, u32 start_addr, u16 blk_cnt, u8 *rbuf_32align);
@@ -395,11 +396,11 @@ void hal_rtl_sdhost_task_yield_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhos
 void hal_rtl_sdhost_transfer_done_int_hook(hal_sdhost_adapter_t *psdhost_adapter, sdhost_para_cb_t transfer_done_cb, void *pdata);
 hal_status_t hal_rtl_sdhost_clk_finetune(hal_sdhost_adapter_t *adpt, u8 *buf_3blk_32align, u32 buf_size, u32 tuning_blk);
 hal_status_t hal_rtl_sdhost_card_select(hal_sdhost_adapter_t *psdhost_adapter, u8 select);
+hal_status_t hal_rtl_sdhost_switch_freq(hal_sdhost_adapter_t *adpt, hal_sdhost_freq_t freq);
 
 extern const hal_sdhost_func_stubs_t hal_sdhost_stubs;
 
-/** @} */ /* End of group hal_sdhost_lib_func */
-/// @endcond /* End of condition DOXYGEN_ROM_HAL_API */
+/** @} */ /* End of group hal_sdhost_rtl_api */
 /** @} */ /* End of group hal_sdhost */
 
 #ifdef  __cplusplus

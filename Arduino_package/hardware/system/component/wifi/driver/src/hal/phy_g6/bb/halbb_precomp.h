@@ -29,7 +29,6 @@
 #include "halbb_cfg_ic.h"
 
 /*---[Define Only] ----------------------------------------------------------*/
-
 #include "halbb_types.h"
 #include "halbb_features.h"
 #include "halbb_ic_hw_info.h"
@@ -40,66 +39,76 @@
 #include "halbb_rua_tbl_ex.h"
 
 #if (PLATFOM_IS_LITTLE_ENDIAN)
-#include "halbb_physts_ie_l_endian.h"
-#include "halbb_ra_l_endian.h"
-#include "halbb_rua_tbl_l_endian.h"
+	#include "halbb_physts_ie_l_endian.h"
+	#include "halbb_ra_l_endian.h"
+	#include "halbb_rua_tbl_l_endian.h"
 #else
-#include "halbb_physts_ie_b_endian.h"
-#include "halbb_ra_b_endian.h"
-#include "halbb_rua_tbl_b_endian.h"
+	#include "halbb_physts_ie_b_endian.h"
+	#include "halbb_ra_b_endian.h"
+	#include "halbb_rua_tbl_b_endian.h"
 #endif
 
 /*---[Include structure & prototype] ----------------------------------------*/
 #ifdef BB_8852A_2_SUPPORT
-#include "halbb_8852a_2/halbb_cr_info_8852a_2.h"
-#include "halbb_8852a_2/halbb_8852a_2.h"
-#include "halbb_8852a_2/halbb_8852a_2_api.h"
-#include "halbb_8852a_2/halbb_8852a_2_api_ex.h"
-#include "halbb_8852a_2/halbb_hwimg_8852a_2.h"
-#include "halbb_8852a_2/halbb_reg_cfg_8852a_2.h"
-#include "halbb_8852a_2/halbb_version_rtl8852a_2.h"
+	#include "halbb_8852a_2/halbb_cr_info_8852a_2.h"
+	#include "halbb_8852a_2/halbb_8852a_2.h"
+	#include "halbb_8852a_2/halbb_8852a_2_api.h"
+	#include "halbb_8852a_2/halbb_8852a_2_api_ex.h"
+	#include "halbb_8852a_2/halbb_hwimg_8852a_2.h"
+	#include "halbb_8852a_2/halbb_reg_cfg_8852a_2.h"
+	#include "halbb_8852a_2/halbb_version_rtl8852a_2.h"
 #endif
 
 #ifdef BB_8852B_SUPPORT
-#include "halbb_8852b/halbb_cr_info_8852b.h"
-#include "halbb_8852b/halbb_8852b.h"
-#include "halbb_8852b/halbb_8852b_api.h"
-#include "halbb_8852b/halbb_8852b_api_ex.h"
-#include "halbb_8852b/halbb_8852b_fwofld_api.h"
-#include "halbb_8852b/halbb_hwimg_8852b.h"
-#include "halbb_8852b/halbb_reg_cfg_8852b.h"
-#include "halbb_8852b/halbb_version_rtl8852b.h"
+	#include "halbb_8852b/halbb_cr_info_8852b.h"
+	#include "halbb_8852b/halbb_8852b.h"
+	#include "halbb_8852b/halbb_8852b_api.h"
+	#include "halbb_8852b/halbb_8852b_api_ex.h"
+	#include "halbb_8852b/halbb_8852b_fwofld_api.h"
+	#include "halbb_8852b/halbb_hwimg_8852b.h"
+	#include "halbb_8852b/halbb_reg_cfg_8852b.h"
+	#include "halbb_8852b/halbb_version_rtl8852b.h"
 #endif
 
 #ifdef BB_8852C_SUPPORT
-#include "halbb_8852c/halbb_cr_info_8852c.h"
-#include "halbb_8852c/halbb_8852c.h"
-#include "halbb_8852c/halbb_8852c_api.h"
-#include "halbb_8852c/halbb_8852c_api_ex.h"
-#include "halbb_8852c/halbb_8852c_fwofld_api.h"
-#include "halbb_8852c/halbb_hwimg_8852c.h"
-#include "halbb_8852c/halbb_reg_cfg_8852c.h"
-#include "halbb_8852c/halbb_version_rtl8852c.h"
+	#include "halbb_8852c/halbb_cr_info_8852c.h"
+	#include "halbb_8852c/halbb_8852c.h"
+	#include "halbb_8852c/halbb_8852c_api.h"
+	#include "halbb_8852c/halbb_8852c_api_ex.h"
+	#include "halbb_8852c/halbb_8852c_fwofld_api.h"
+	#include "halbb_8852c/halbb_hwimg_8852c.h"
+	#include "halbb_8852c/halbb_reg_cfg_8852c.h"
+	#include "halbb_8852c/halbb_version_rtl8852c.h"
 #endif
 
 #ifdef BB_8192XB_SUPPORT
-#include "halbb_8192xb/halbb_cr_info_8192xb.h"
-#include "halbb_8192xb/halbb_8192xb.h"
-#include "halbb_8192xb/halbb_8192xb_api.h"
-#include "halbb_8192xb/halbb_8192xb_api_ex.h"
-#include "halbb_8192xb/halbb_hwimg_8192xb.h"
-#include "halbb_8192xb/halbb_reg_cfg_8192xb.h"
-#include "halbb_8192xb/halbb_version_rtl8192xb.h"
+	#include "halbb_8192xb/halbb_cr_info_8192xb.h"
+	#include "halbb_8192xb/halbb_8192xb.h"
+	#include "halbb_8192xb/halbb_8192xb_api.h"
+	#include "halbb_8192xb/halbb_8192xb_api_ex.h"
+	#include "halbb_8192xb/halbb_hwimg_8192xb.h"
+	#include "halbb_8192xb/halbb_reg_cfg_8192xb.h"
+	#include "halbb_8192xb/halbb_version_rtl8192xb.h"
 #endif
 
-#ifdef BB_8730A_SUPPORT
-#include "halbb_8730a/halbb_cr_info_8730a.h"
-#include "halbb_8730a/halbb_8730a.h"
-#include "halbb_8730a/halbb_8730a_api.h"
-#include "halbb_8730a/halbb_8730a_api_ex.h"
-#include "halbb_8730a/halbb_hwimg_8730a.h"
-#include "halbb_8730a/halbb_reg_cfg_8730a.h"
-#include "halbb_8730a/halbb_version_rtl8730a.h"
+#ifdef BB_8730E_SUPPORT
+#include "halbb_8730e/halbb_cr_info_8730e.h"
+#include "halbb_8730e/halbb_8730e.h"
+#include "halbb_8730e/halbb_8730e_api.h"
+#include "halbb_8730e/halbb_8730e_api_ex.h"
+#include "halbb_8730e/halbb_hwimg_8730e.h"
+#include "halbb_8730e/halbb_reg_cfg_8730e.h"
+#include "halbb_8730e/halbb_version_rtl8730e.h"
+#endif
+
+#ifdef BB_8720E_SUPPORT
+#include "halbb_8720e/halbb_cr_info_8720e.h"
+#include "halbb_8720e/halbb_8720e.h"
+#include "halbb_8720e/halbb_8720e_api.h"
+#include "halbb_8720e/halbb_8720e_api_ex.h"
+#include "halbb_8720e/halbb_hwimg_8720e.h"
+#include "halbb_8720e/halbb_reg_cfg_8720e.h"
+#include "halbb_8720e/halbb_version_rtl8720e.h"
 #endif
 
 #include "halbb_ra.h"

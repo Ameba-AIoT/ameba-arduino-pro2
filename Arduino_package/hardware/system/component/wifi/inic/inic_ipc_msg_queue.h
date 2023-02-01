@@ -17,8 +17,11 @@
 #include "inic_ipc.h"
 
 /* -------------------------------- Defines --------------------------------- */
-#define CONFIG_INIC_IPC_MSG_Q_PRI	(3)
-
+#ifdef CONFIG_AS_INIC_NP
+#define CONFIG_INIC_IPC_MSG_Q_PRI	(6)
+#else
+#define CONFIG_INIC_IPC_MSG_Q_PRI	(5)
+#endif
 /* -------------------------------- Macros ---------------------------------- */
 
 /* ------------------------------- Data Types ------------------------------- */

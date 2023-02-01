@@ -27,7 +27,7 @@ enum rf_ppdu_type {
 	T_HE_MU_OFDMA	= 6,
 	T_HE_TB		= 7,
 };
-
+ 
 /*@--------------------------[Structure]-------------------------------------*/
 struct rf_pmac_tx_info {
 	enum rf_ppdu_type ppdu;
@@ -127,16 +127,16 @@ struct rf_plcp_param_t {
 void halrf_set_pmac_cw(struct rf_info *rf, enum rf_path path, u16 txagc_cw, bool en);
 
 void halrf_set_pmac_tx(struct rf_info *rf, enum phl_phy_idx phy_idx,
-					   enum rf_path path, struct rf_pmac_tx_info *tx,
-					   u8 enable, bool by_cw);
+			enum rf_path path, struct rf_pmac_tx_info *tx,
+			u8 enable, bool by_cw);
 
 void halrf_set_pseudo_cw(struct rf_info *rf, enum rf_path path,
-						 u16 txagc_cw, bool en);
+			u16 txagc_cw, bool en);
 
 #if 0
 void halrf_set_pmac_tx(struct rf_info *rf, enum phl_phy_idx phy_idx,
-					   enum rf_path path, u8 ppdu_type, u8 case_id, s16 dbm,
-					   u8 enable, u8 is_cck, u16 cnt, u16 time, u16 period);
+						enum rf_path path, u8 ppdu_type, u8 case_id, s16 dbm,
+						u8 enable, u8 is_cck, u16 cnt ,u16 time, u16 period);
 #endif
 
 #endif

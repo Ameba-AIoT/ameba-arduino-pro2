@@ -19,6 +19,7 @@ typedef struct mm_siso_s {
 	char        taskname[16];
 	xTaskHandle task;
 	uint32_t    secure_context;
+	void		*ctrl_lock;
 } mm_siso_t;
 
 extern int siso_start(mm_siso_t *siso);

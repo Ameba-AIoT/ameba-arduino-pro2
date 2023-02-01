@@ -49,6 +49,7 @@ typedef struct mm_mimo_s {
 	char            taskname[4][16];
 	xTaskHandle     task[4];
 	uint32_t    	secure_context;
+	void			*ctrl_lock;
 } mm_mimo_t;
 
 extern int mimo_start(mm_mimo_t *mimo);

@@ -56,76 +56,76 @@ struct cr_address_t {
 };
 
 struct ru_rate_entry {
-	u8 dcm: 1;
-	u8 ss: 3;
-	u8 mcs: 4;
+    u8 dcm: 1;
+    u8 ss: 3;
+    u8 mcs: 4;
 };
 
 struct rura_report {
-	u8 rate_table_col_idx: 6;
-	u8 partial_allocation_flag: 1;
-	u8 rate_change_flag: 1;
+    u8 rate_table_col_idx: 6;
+    u8 partial_allocation_flag: 1;
+    u8 rate_change_flag: 1;
 };
 
 struct dl_ru_output_sta_entry {
-	u8 dropping_flag: 1; //0
-	u8 txbf: 1;
-	u8 coding: 1;
-	u8 nsts: 3;
-	u8 rsvd0: 2;
+    u8 dropping_flag: 1; //0
+    u8 txbf: 1;
+    u8 coding: 1;
+    u8 nsts: 3;
+    u8 rsvd0: 2;
 
-	u8 mac_id: 8;
-	u8 ru_position: 8;
+    u8 mac_id: 8;
+    u8 ru_position: 8;
 
-	u8 vip_flag: 1; //dont care
-	u8 pwr_boost_factor: 5; //dont care
-	u8 rsvd1: 2;
+    u8 vip_flag: 1; //dont care
+    u8 pwr_boost_factor: 5; //dont care
+    u8 rsvd1: 2;
 
-	u32 tx_length;
+    u32 tx_length;
 
-	struct ru_rate_entry ru_rate;
-	//for dl rura
-	struct rura_report ru_ra_report;
+    struct ru_rate_entry ru_rate;
+    //for dl rura
+    struct rura_report ru_ra_report;
 };
 
 struct dl_rua_output {
-	u16 ru2su_flag: 1;
-	u16 ppdu_bw: 2;  //set
-	u16 group_tx_pwr: 9;
-	u16 stbc: 1;
-	u16 gi_ltf: 3;
+    u16 ru2su_flag: 1;
+    u16 ppdu_bw: 2;  //set
+    u16 group_tx_pwr: 9;
+    u16 stbc: 1;
+    u16 gi_ltf: 3;
 
-	u8 doppler: 1;
-	u8 n_ltf_and_ma: 3;
-	u8 sta_list_num: 4; //set
+    u8 doppler: 1;
+    u8 n_ltf_and_ma: 3;
+    u8 sta_list_num: 4; //set
 
-	u8 grp_mode: 1;
-	u8 rsvd0: 6;
-	u8 fixed_mode: 1; //set 1
+    u8 grp_mode: 1;
+    u8 rsvd0: 6;
+    u8 fixed_mode: 1; //set 1
 
-	u8 group_id: 8;
-	u32 rsvd1: 24;
-	struct dl_ru_output_sta_entry  dl_output_sta_list[DL_STA_LIST_MAX_NUM];
+    u8 group_id: 8;
+    u32 rsvd1:24;
+    struct dl_ru_output_sta_entry  dl_output_sta_list[DL_STA_LIST_MAX_NUM];
 };
 
 //sig-b output
 struct sigb_compute_output {
-	u32 sta_0_idx: 3;
-	u32 sta_1_idx: 3;
-	u32 sta_2_idx: 3;
-	u32 sta_3_idx: 3;
-	u32 sta_4_idx: 3;
-	u32 sta_5_idx: 3;
-	u32 sta_6_idx: 3;
-	u32 sta_7_idx: 3;
-	u32 rsvd: 8;
-	u32 hw_sigb_content_channelone_len: 8;
-	u32 hw_sigb_content_channeltwo_len: 8;
-	u32 hw_sigb_symbolnum: 6;
-	u32 hw_sigb_content_channeltwo_offset: 5; //have to +1
-	u32 ru2su_flag: 1;
-	u32 sigb_dcm: 1;
-	u32 sigb_mcs: 3;
+    u32 sta_0_idx: 3;
+    u32 sta_1_idx: 3;
+    u32 sta_2_idx: 3;
+    u32 sta_3_idx: 3;
+    u32 sta_4_idx: 3;
+    u32 sta_5_idx: 3;
+    u32 sta_6_idx: 3;
+    u32 sta_7_idx: 3;
+    u32 rsvd: 8;
+    u32 hw_sigb_content_channelone_len: 8;
+    u32 hw_sigb_content_channeltwo_len: 8;
+    u32 hw_sigb_symbolnum: 6;
+    u32 hw_sigb_content_channeltwo_offset: 5; //have to +1
+    u32 ru2su_flag: 1;
+    u32 sigb_dcm: 1;
+    u32 sigb_mcs: 3;
 };
 
 struct bb_h2c_he_sigb {
@@ -177,13 +177,13 @@ struct halbb_plcp_info {
 	u32 doppler : 2;
 	u32 he_ltf_type : 2;//0:1x,1:2x,2:4x
 
-	u32 ht_l_len : 12;
-	u32 preamble_puncture : 1;
+	u32 ht_l_len : 12;		
+	u32 preamble_puncture : 1;		
 	u32 he_mcs_sigb : 3;//0~5
 	u32 he_dcm_sigb : 1;
 	u32 he_sigb_compress_en : 1;
 	u32 max_tx_time_0p4us : 14;
-
+	
 
 	u32 ul_flag : 1;
 	u32 tb_ldpc_extra : 1;
@@ -197,7 +197,7 @@ struct halbb_plcp_info {
 	u32 ul_srp4 : 4;
 	u32 mode : 2;
 
-	u32 group_id : 6;
+	u32 group_id : 6;	
 	u32 ppdu_type : 4;//0: bmode,1:Legacy,2:HT_MF,3:HT_GF,4:VHT,5:HE_SU,6:HE_ER_SU,7:HE_MU,8:HE_TB
 	u32 txop : 7;
 	u32 tb_strt_sts : 3;
@@ -214,7 +214,7 @@ struct halbb_plcp_info {
 	u8 n_user;
 	u16 tb_rsvd : 9;//def = 0
 	u16 rsvd3 : 7;
-
+	
 	struct usr_plcp_gen_in usr[N_USER];
 };
 
@@ -226,6 +226,6 @@ struct halbb_plcp_info {
 struct bb_info;
 
 enum plcp_sts halbb_plcp_gen(struct bb_info *bb, struct halbb_plcp_info *in,
-							 struct usr_plcp_gen_in *user, enum phl_phy_idx phy_idx);
+		    struct usr_plcp_gen_in *user, enum phl_phy_idx phy_idx);
 
 #endif

@@ -26,7 +26,8 @@
 #define DCMD_CHAR	"%s"
 #else
 #define HALBB_SCAN halbb_scanf
-enum bb_scanf_type {
+enum bb_scanf_type
+{
 	DCMD_DECIMAL	= 1,
 	DCMD_HEX	= 2,
 	DCMD_CHAR	= 3,
@@ -36,19 +37,20 @@ enum bb_scanf_type {
 #define DCMD_SCAN_LIMIT 10
 
 /*@--------------------------[Enum]------------------------------------------*/
-
-enum bb_scanf_type {
+ 
+enum bb_scanf_type
+{
 	DCMD2_DECIMAL	= 1,
 	DCMD2_HEX	= 2,
 	DCMD2_CHAR	= 3,
 };
 
-enum FWBB_DBG_COMP_SET {
+ enum FWBB_DBG_COMP_SET {
 	FWBBDBG_H2C = BIT0,
 	FWBBDBG_RA = BIT8,
 	FWBBDBG_RUA = BIT16,
-	FWBBDBG_ULPWR_CTRL = BIT24,
-	FWBBDBG_ULRA = BIT25,
+    FWBBDBG_ULPWR_CTRL = BIT24,
+    FWBBDBG_ULRA = BIT25,
 };
 
 /*@--------------------------[Structure]-------------------------------------*/
@@ -69,12 +71,12 @@ struct bb_fw_dbg_cmn_info {
 /*@--------------------------[Prptotype]-------------------------------------*/
 struct bb_info;
 void halbb_dbgport_dump_all(struct bb_info *bb, u32 *_used, char *output,
-							u32 *_out_len);
+			    u32 *_out_len);
 
 void halbb_dbgport_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+			 char *output, u32 *_out_len);
 void halbb_scanf(char *in, enum bb_scanf_type type, u32 *out);
 void halbb_cmd_parser_init(struct bb_info *bb);
 void halbb_fw_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-				  char *output, u32 *_out_len);
+			 char *output, u32 *_out_len);
 #endif

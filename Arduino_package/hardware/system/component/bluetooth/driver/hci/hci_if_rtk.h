@@ -43,6 +43,7 @@ bool hci_if_close    (void);
 bool hci_if_write    (uint8_t *buf, uint32_t len);
 bool hci_if_confirm  (uint8_t *buf);
 void hci_if_deinit   (void);
+void hci_if_wait_patch_download(void);
 
 #if 0
 void     hci_if_set_recv   (HCI_RECV hci_recv);

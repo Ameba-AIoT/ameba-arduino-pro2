@@ -41,17 +41,13 @@ extern "C"
  */
 
 #if defined(CONFIG_MII_EN) && (CONFIG_MII_EN == 1)
-hal_status_t hal_eth_pin_ctrl(eth_pin_sel_t pin_sel, BOOL en);
-void hal_eth_set_interface(eth_if_sel_t if_sel);
-void hal_eth_irq_handler(void);
-void hal_eth_irq_reg(irq_handler_t irq_handler);
 void hal_eth_irq_unreg(void);
 void hal_eth_set_mac_addr(u8 *addr);
 void hal_eth_get_mac_addr(u8 *addr);
 void hal_eth_set_desc_num(u8 tx_desc_no, u8 rx_desc_no);
 void hal_eth_set_desc_addr(u8 *tx_desc, u8 *rx_desc);
 void hal_eth_set_pkt_buf(u8 *tx_pkt_buf, u8 *rx_pkt_buf);
-hal_status_t hal_eth_init(eth_if_sel_t if_sel, eth_pin_sel_t pin_sel);
+hal_status_t hal_eth_init(void);
 void hal_eth_deinit(void);
 s32 hal_eth_write_data(u8 *data, u32 size);
 u32 hal_eth_send_pkt(void);
@@ -61,7 +57,10 @@ u32 hal_eth_get_link_status(void);
 void hal_eth_set_link(s32 speed, s32 duplex);
 void hal_eth_callback_hook(eth_callback_t pcallback);
 void hal_eth_task_yield_hook(eth_task_yield task_yield);
-u16 hal_eth_rw_phy_reg(hal_eth_adapter_t *peth_adapter, u8 operation, u8 address, u16 data);
+u16 hal_eth_rd_phy_reg(u16 page, u16 reg_addr);
+u32 hal_eth_wr_phy_reg(u16 page, u16 reg_addr, u16 data);
+void hal_eth_detect_phy_state(void);
+void hal_eth_phy_eee_ctrl(u8 en);
 #endif
 /** @} */ /* End of group hal_ethernet */
 

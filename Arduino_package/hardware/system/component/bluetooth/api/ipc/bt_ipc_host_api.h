@@ -19,9 +19,16 @@
 #include "ameba.h"
 #include "bt_ipc_profile_config.h"
 #include "platform_opts_bt.h"
-
 #include "rtk_ble_gap.h"
 #include "rtk_bt_gatts.h"
+#include "rtk_bt_gattc.h"
+#include "rtk_legacy_gap.h"
+#include "rtk_bt_sdp.h"
+#include "rtk_bt_avrcp.h"
+#include "rtk_bt_a2dp.h"
+
+#define IPC_HOST_API_DATA_MAX   976   // 244*4
+#define IPC_HOST_API_RET_MAX    40
 
 /* ------------------------------- Data Types ------------------------------- */
 
@@ -35,8 +42,8 @@ struct bt_ipc_host_api_task_struct {
 
 typedef struct bt_ipc_host_request_message {
     uint32_t    PROFILE_ID;
-    uint32_t	API_ID;
-    uint32_t    param_buf[244];
+    uint32_t    API_ID;
+    uint8_t     param_buf[IPC_HOST_API_DATA_MAX];
     int32_t     ret[10];
 } bt_ipc_host_request_message;
 
@@ -44,9 +51,29 @@ void bt_ipc_host_register_gap_cb(rtk_ble_gap_cb_t cb);
 
 void bt_ipc_host_unregister_gap_cb(void);
 
+void bt_ipc_host_register_legacy_gap_cb(rtk_legacy_gap_cb_t cb);
+
+void bt_ipc_host_unregister_legacy_gap_cb(void);
+
+void bt_ipc_host_register_sdp_cb(rtk_bt_sdp_cb_t cb);
+
+void bt_ipc_host_unregister_sdp_cb(void);
+
+void bt_ipc_host_register_avrcp_cb(rtk_bt_avrcp_cb_t cb);
+
+void bt_ipc_host_unregister_avrcp_cb(void);
+
+void bt_ipc_host_register_a2dp_cb(rtk_bt_a2dp_cb_t cb);
+
+void bt_ipc_host_unregister_a2dp_cb(void);
+
 void bt_ipc_host_register_gatts_cb(rtk_bt_gatts_cb_t cb);
 
 void bt_ipc_host_unregister_gatts_cb(void);
+
+void bt_ipc_host_register_gattc_cb(rtk_bt_gattc_cb_t cb);
+
+void bt_ipc_host_unregister_gattc_cb(void);
 
 /**
  * @brief  to initialize the ipc host for bt api.
@@ -69,7 +96,7 @@ void bt_ipc_api_deinit_host(void);
  * @param  param_buf[in]: pointer to API parameter.
  * @return pointer to result of API.
  */
-int *bt_ipc_api_host_message_send(uint32_t profile_id, uint32_t api_id, uint32_t *param_buf, uint32_t buf_len);
+int *bt_ipc_api_host_message_send(uint32_t profile_id, uint32_t api_id, uint8_t *param_buf, uint32_t buf_len);
 
 #endif /* __BT_IPC_HOST_API_H__ */
 

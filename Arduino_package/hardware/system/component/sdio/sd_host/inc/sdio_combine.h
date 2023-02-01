@@ -30,7 +30,7 @@ typedef uint32_t (*hal_sdioh_get_card_status_type)(hal_sdio_host_adapter_t *psdi
 #endif
 
 #if defined(CONFIG_PLATFORM_8735B)
-typedef uint32_t (*sdio_sd_init_combine_type)(hal_sdhost_adapter_t *psdhost_adapter, hal_sdhost_s_funcs_t *secure_funcs);
+typedef uint32_t (*sdio_sd_init_combine_type)(hal_sdhost_adapter_t *psdhost_adapter);
 typedef uint32_t (*sdio_sd_read_combine_type)(hal_sdhost_adapter_t *psdhost_adapter, u32 start_addr, u16 blk_cnt, u8 *rbuf_32align);
 typedef uint32_t (*sdio_sd_write_combine_type)(hal_sdhost_adapter_t *psdhost_adapter, u32 start_addr, u16 blk_cnt, const u8 *wbuf_32align);
 typedef uint32_t (*sdio_sd_card_combine_type)(hal_sdhost_adapter_t *psdhost_adapter);

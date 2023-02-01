@@ -61,7 +61,7 @@ struct bb_psd_cr_info {
 	u32 psd_source_sel_m;
 	u32 psd_en;
 	u32 psd_en_m;
-
+	
 };
 
 struct bb_psd_info {
@@ -99,14 +99,14 @@ struct bb_info;
 void halbb_psd_igi_lv(struct bb_info *bb, enum igi_lv_sel igi_lv);
 u32 halbb_get_psd_data(struct bb_info *bb, u32 psd_tone_idx, u32 igi_pin);
 void halbb_psd_para_setting(struct bb_info *bb, u8 sw_avg_time, u8 hw_avg_time,
-							u8 i_q_setting, u16 fft_point, u8 path,
-							u8 psd_input, u8 pri_ch, u8 channel, u8 bw, enum band_type band);
+			    u8 i_q_setting, u16 fft_point, u8 path,
+			    u8 psd_input, u8 pri_ch,u8 channel, u8 bw, enum band_type band);
 bool halbb_psd_alloc_buff(struct bb_info *bb);
 void halbb_get_gain_index(struct bb_info *bb);
 u8 halbb_psd(struct bb_info *bb, enum igi_lv_sel igi, u16 start_point,
-			 u16 stop_point);
+	     u16 stop_point);
 void halbb_psd_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-				   char *output, u32 *_out_len);
+		   char *output, u32 *_out_len);
 void halbb_psd_init(struct bb_info *bb);
 void halbb_psd_deinit(struct bb_info *bb);
 bool halbb_get_psd_result(struct bb_info *bb, u32 *psd_data, u16 *psd_len);

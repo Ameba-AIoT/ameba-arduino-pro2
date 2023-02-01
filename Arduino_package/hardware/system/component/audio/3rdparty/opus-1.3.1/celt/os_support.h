@@ -42,7 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if !defined(CONFIG_PLATFORM_8735B)
+#if !defined(CONFIG_PLATFORM_8735B) && !defined(CONFIG_PLATFORM_AMEBAD2)
 #define malloc                  Psram_reserve_malloc
 #define free                    Psram_reserve_free
 #define realloc			Psram_reserve_realloc_for_opus

@@ -71,7 +71,14 @@ int check_flash_erase = 0;
 int check_image_upload = 0;
 int check_download_process = 0;
 
-string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed, serial_port, auto_tool_name, flash_tool_name, video_init_user_selection;
+string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed;
+string serial_port, auto_tool_name, flash_tool_name, fw1_address;
+string upload_mode_user_selection, upload_mode_user_selection_nn, upload_mode_user_selection_voe;
+
+string VOE_address_PT_ISP_IQ = "0x400000";
+string NN_address_PT_NN_MDL = "0x840000";
+int upload_delay = 1000; // 1s 
+int check_upload_mode = 0x0;
 
 void download_process(void) {
     if (check_flash_erase == 100) {
@@ -83,25 +90,76 @@ void download_process(void) {
         check_flash_erase = 0;
     }
     if (check_image_upload == 100) {
-        cmdss.clear();
-        if (video_init_user_selection == "Enable") {
-            cmdss << "./image_tool/" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -r ";
+       if (upload_mode_user_selection == "SpeedEnable") {
+            if (upload_mode_user_selection_voe == "VOEyes") {
+                if (upload_mode_user_selection_nn == "NNyes") {
+                    check_upload_mode = 0x111;
+                } else {
+                    check_upload_mode = 0x110;
+                }
+            } else {
+                if (upload_mode_user_selection_nn == "NNyes") {
+                    check_upload_mode = 0x101;
+                } else {
+                    check_upload_mode = 0x100;
+                }
+            }
         } else {
-            cmdss << "./image_tool/" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -s 0x100000 -r ";
+            if (upload_mode_user_selection_voe == "VOEyes") {
+                if (upload_mode_user_selection_nn == "NNyes") {
+                    check_upload_mode = 0x011;
+                } else {
+                    check_upload_mode = 0x010;
+                }
+            } else {
+                if (upload_mode_user_selection_nn == "NNyes") {
+                    check_upload_mode = 0x001;
+                } else {
+                    check_upload_mode = 0x0;
+                }
+            }
         }
-        getline(cmdss, cmd);
-        //cout << cmd << endl;
-        system(cmd.c_str());
+
+        if (check_upload_mode == 0x111) {
+            cout << "    Speed Mode unable to process more than 1 bin   " << endl;
+        } else if (check_upload_mode == 0x110) {
+            cmdss.clear();
+            cmdss << "./image_tool/" << flash_tool_name << " -p " << serial_port << " -f firmware_isp_iq.bin -b " << flash_speed << " -s " << VOE_address_PT_ISP_IQ << " -U -r ";
+            getline(cmdss, cmd);
+            system(cmd.c_str());
+            check_image_upload = 0;
+        } else if (check_upload_mode == 0x101) {
+            cmdss.clear();
+            cmdss << "./image_tool/" << flash_tool_name << " -p " << serial_port << " -f nn_model.bin -b " << flash_speed << " -s " << NN_address_PT_NN_MDL << " -U -r ";
+            getline(cmdss, cmd);
+            system(cmd.c_str());
+        } else if (check_upload_mode == 0x100) {
+            cmdss.clear();
+            cmdss << "./image_tool/" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -s " << fw1_address << " -U -r ";
+            getline(cmdss, cmd);
+            system(cmd.c_str());
+        } else {
+            cmdss.clear();
+            cmdss << "./image_tool/" << flash_tool_name << " -p " << serial_port << " -f flash_ntz.bin -b " << flash_speed << " -U -r ";
+            getline(cmdss, cmd);
+            system(cmd.c_str());
+        }
+
+        check_upload_mode = 0x0;
         check_image_upload = 0;
     }
     check_download_process = 100;
 }
 
 void download_indicate(void) {
+    if (upload_mode_user_selection_nn == "NNyes") {
+        upload_delay = 2000;
+    }
+
     if (check_flash_erase == 100) {
         cout << "    Erasing." << flush;
         while (1) {
-            msleep(1000);
+            msleep(upload_delay);
             if (check_download_process != 0) {
                 break;
             } else {
@@ -112,7 +170,7 @@ void download_indicate(void) {
     } else {
         cout << "    Uploading." << flush;
         while (1) {
-            msleep(1000);
+            msleep(upload_delay);
             if (check_download_process != 0) {
                 break;
             } else {
@@ -124,25 +182,26 @@ void download_indicate(void) {
 }
 
 int main(int argc, char *argv[]) {
-    //string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed;
-
     // 0. change work folder
     chdir(argv[1]);
 
-    // 1. rset up all strings 
+    // 1. set up all strings
+    serial_port = argv[2];
     auto_board = argv[3];
     auto_user_selection = argv[4];
     flash_erase_mode_user_selection = argv[5];
     flash_speed = argv[6];
-    serial_port = argv[2];
-    auto_tool_name = argv[8];
     flash_tool_name = argv[7];
-    video_init_user_selection = argv[9];
+    auto_tool_name = argv[8];
+    //upload_mode_user_selection = argv[9];
+    fw1_address = argv[10];
+    upload_mode_user_selection_nn = argv[11];
+    upload_mode_user_selection_voe = argv[12];
 
     if (argv[9]) {
-        video_init_user_selection = argv[9];
+        upload_mode_user_selection = argv[9];
     } else {
-        video_init_user_selection = "Disable";
+        upload_mode_user_selection = "NormalEnable";
     }
 
     if (auto_user_selection == "Enable") {
@@ -161,24 +220,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-#if 0
-    if (flash_erase_mode_user_selection == "Enable") {
-        cout << "    Start Erase Flash" << endl;
-        cmdss.clear();
-        cmdss << "./image_tool/" << argv[7] << " -p " << argv[2] <<" -b " << argv[6] << " -e chip -r ";
-        getline(cmdss, cmd);
-        //cout << cmd << endl;
-        system(cmd.c_str());
-        return 0;
-    } else {
-        cout << "    Start Upload Flash" << endl;
-        cmdss.clear();
-        cmdss << "./image_tool/" << argv[7] << " -p " << argv[2] << " -f flash_ntz.bin -b " << argv[6] << " -r ";
-        getline(cmdss, cmd);
-        //cout << cmd << endl;
-        system(cmd.c_str());
-    }
-#else
     if (flash_erase_mode_user_selection == "Enable") {
         cout << "    Start Erase Flash" << endl;
         check_flash_erase = 100;
@@ -186,7 +227,6 @@ int main(int argc, char *argv[]) {
         cout << "    Start Upload Flash" << endl;
         check_image_upload = 100;
     }
-#endif
 
     thread t2(download_indicate);
     thread t1(download_process);

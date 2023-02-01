@@ -63,6 +63,6 @@ void halbb_set_tx_path_by_cmac_tbl(struct bb_info *bb, u8 macid, enum bb_path tx
 void halbb_path_diversity(struct bb_info *bb);
 void halbb_pathdiv_phy_sts(struct bb_info *bb, struct physts_rxd *desc);
 void halbb_pathdiv_dbg(struct bb_info *bb, char input[][16], u32 *_used,
-					   char *output, u32 *_out_len);
+			      char *output, u32 *_out_len);
 #endif
 

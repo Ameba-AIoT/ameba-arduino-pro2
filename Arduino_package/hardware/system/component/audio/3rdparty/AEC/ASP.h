@@ -17,7 +17,7 @@ typedef struct farend_pcm_pack {
 	unsigned int length;
 } farend_pcm_pack;
 
-#if defined(CONFIG_PLATFORM_8735B) && (defined(CONFIG_BUILD_CT) && CONFIG_BUILD_CT) //consilient AEC only suppored on 8735 now
+#if defined(CONFIG_PLATFORM_8735B) && (defined(CONFIG_NEWAEC) && CONFIG_NEWAEC) //consilient AEC only suppored on 8735 now
 typedef enum {
 	CT_ALC = 0,
 	CT_DRC,

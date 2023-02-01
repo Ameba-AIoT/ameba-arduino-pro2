@@ -142,7 +142,7 @@ u16 hal_voe_cmd(void);
 u16 hal_voe_cmd_data(void);	// Added By Raymond
 uint32_t check_km_cmd(void);
 uint32_t check_km_ch(void);
-
+uint32_t check_km_status(void);
 
 int hal_voe_fcs_check_km_run_done(void);
 int hal_voe_fcs_set_voe_fm_load_flag_final(void);

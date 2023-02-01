@@ -11,7 +11,7 @@
 #define __DRV_CONF_H__
 
 #include "autoconf.h"
-#if ((RTL8711B_SUPPORT==1) || (RTL8721D_SUPPORT == 1) || (RTL8730A_SUPPORT == 1) || (RTL8720E_SUPPORT == 1))
+#if ((RTL8711B_SUPPORT==1) || (RTL8721D_SUPPORT == 1) || (RTL8730A_SUPPORT == 1) || (RTL8720E_SUPPORT == 1) || (RTL8730E_SUPPORT == 1))
 #include "platform_autoconf.h"
 #endif
 

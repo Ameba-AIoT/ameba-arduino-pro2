@@ -28,9 +28,9 @@
  */
 
 #include "config.h"
-
+#ifndef __ICCARM__
 #include <sys/stat.h>
-
+#endif
 #ifdef _WIN32
 #if HAVE_DIRECT_H
 #include <direct.h>

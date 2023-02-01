@@ -30,11 +30,11 @@ typedef enum pta_type {
 //----- ------------------------------------------------------------------
 // BT Interface opened for upper layer
 //----- ------------------------------------------------------------------
-void rtlk_bt_set_gnt_bt(pta_type_t  gnt_bt);
-void rtlk_bt_set_gnt_bt_with_clk_source(pta_type_t gnt_bt);
+void rltk_bt_set_gnt_bt(pta_type_t  gnt_bt);
+void rltk_bt_set_gnt_bt_with_clk_source(pta_type_t gnt_bt);
 const unsigned char *rltk_bt_get_patch_code(void);
 unsigned int rltk_bt_get_patch_code_len(void);
-void rtlk_bt_pta_init(void);
+void rltk_bt_pta_init(void);
 void rltk_coex_bt_enable(u8 enable);
 int rltk_coex_mailbox_to_wifi(u8 *data, u8 len);
 

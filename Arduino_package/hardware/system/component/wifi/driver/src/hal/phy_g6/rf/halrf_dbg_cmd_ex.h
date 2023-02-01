@@ -32,6 +32,6 @@ struct rf_info;
 s32 halrf_cmd(struct rf_info *rf, char *input, char *output, u32 out_len);
 
 void halrf_cmd_parser(struct rf_info *rf, char input[][RF_MAX_ARGV],
-					  u32 input_num, char *output, u32 out_len);
+		      u32 input_num, char *output, u32 out_len);
 
 #endif

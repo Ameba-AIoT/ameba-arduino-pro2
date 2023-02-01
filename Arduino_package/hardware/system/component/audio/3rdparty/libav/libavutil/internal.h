@@ -217,7 +217,7 @@ void avpriv_request_sample(void *avc,
 /**
  * A wrapper for open() setting O_CLOEXEC.
  */
-#if !(defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D))
+#if !(defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2))
 int avpriv_open(const char *filename, int flags, ...);
 #endif
 

@@ -262,7 +262,7 @@
 #include "avio.h"
 #include "libavformat/version.h"
 
-#if  defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)
+#if  defined(CONFIG_PLATFORM_8195A)||defined(CONFIG_PLATFORM_8721D)||defined(CONFIG_PLATFORM_AMEBAD2)
 #define FILE void
 #endif
 

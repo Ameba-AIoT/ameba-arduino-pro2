@@ -145,7 +145,6 @@ typedef enum _VHT_DATA_SC {
 extern const u8 _ch_width_to_bw_cap[];
 #define ch_width_to_bw_cap(bw) (((bw) < CHANNEL_WIDTH_MAX) ? _ch_width_to_bw_cap[(bw)] : 0)
 
-#if ((PHYDM_LINUX_CODING_STYLE==1) || (USE_HALBB_HALRF == 1))
 #define RF_TYPE_VALID(rf_type) (rf_type < RF_TYPE_MAX)
 
 extern const u8 _rf_type_to_rf_tx_cnt[];
@@ -153,7 +152,6 @@ extern const u8 _rf_type_to_rf_tx_cnt[];
 
 extern const u8 _rf_type_to_rf_rx_cnt[];
 #define rf_type_to_rf_rx_cnt(rf_type) (RF_TYPE_VALID(rf_type) ? _rf_type_to_rf_rx_cnt[rf_type] : 0)
-#endif
 
 #define BB_GAIN_2G 0
 #ifdef SUPPORT_5G_CHANNEL

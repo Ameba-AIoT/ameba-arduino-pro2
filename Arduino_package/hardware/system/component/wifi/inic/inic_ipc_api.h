@@ -51,6 +51,7 @@ enum IPC_WIFI_H2C_EVENT_TYPE {
 	IPC_API_WIFI_IS_RUNNING,
 	IPC_API_WIFI_SET_CHANNEL,
 	IPC_API_WIFI_GET_CHANNEL,
+	IPC_API_WIFI_SET_USR_CFG,
 	IPC_API_WIFI_GET_DISCONN_REASCON,
 	IPC_API_WIFI_ON,
 	IPC_API_WIFI_OFF,
@@ -96,6 +97,11 @@ enum IPC_WIFI_H2C_EVENT_TYPE {
 	IPC_API_WIFI_DEL_STA,
 	IPC_API_WIFI_AP_CH_SWITCH,
 	IPC_API_WIFI_SET_NO_BEACON_TIMEOUT,
+	IPC_API_WIFI_CONFIG_CSI,
+	IPC_API_WIFI_GET_CSI_REPORT,
+	//inter
+	IPC_API_WIFI_COEX_SET_PTA,
+	IPC_API_WIFI_SET_WPA_MODE,
 	//promisc
 	IPC_API_PROMISC_FILTER_RETRANSMIT_PKT,
 	IPC_API_PROMISC_FILTER_WITH_LEN,
@@ -111,7 +117,11 @@ enum IPC_WIFI_H2C_EVENT_TYPE {
 	IPC_API_PROMISC_ISSUE_PROBERSP,
 	IPC_API_PROMISC_INIT_PACKET_FILTER,
 	IPC_API_PROMISC_ADD_PACKET_FILTER,
-	IPC_API_PROMISC_PACKET_FILTER_CONTROL
+	IPC_API_PROMISC_PACKET_FILTER_CONTROL,
+	//misc
+	IPC_API_WIFI_IP_UPDATE,
+	IPC_API_WIFI_IWPRIV_INFO, //dbg cmd
+	IPC_API_WIFI_MP_CMD //mp cmd
 };
 
 enum IPC_LWIP_INFO_TYPE {
@@ -155,5 +165,6 @@ void inic_ipc_ap_ch_switch_callback_indicate(unsigned char channel, rtw_channel_
 int inic_ipc_dev_set_netif_info(int idx_wlan, unsigned char *dev_addr);
 int inic_ipc_get_lwip_info(u32 type, unsigned char *input, int index);
 unsigned int inic_ipc_host_get_wifi_tsf_low(unsigned char port_id);
-
+int inic_ipc_host_get_txbuf_pkt_num(void);
+extern void inic_ipc_host_init_skb(VOID);
 #endif /* __INIC_IPC_H__ */

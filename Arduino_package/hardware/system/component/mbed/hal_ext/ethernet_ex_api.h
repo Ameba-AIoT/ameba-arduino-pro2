@@ -1,13 +1,24 @@
 /* mbed Microcontroller Library
- *******************************************************************************
- * Copyright (c) 2015, Realtek Semiconductor Corp.
- * All rights reserved.
+  ******************************************************************************
  *
- * This module is a confidential and proprietary property of RealTek and
- * possession or use of this module requires written permission of RealTek.
- *******************************************************************************
+  * Copyright(c) 2006 - 2022 Realtek Corporation. All rights reserved.
+  *
+  * SPDX-License-Identifier: Apache-2.0
+  *
+  * Licensed under the Apache License, Version 2.0 (the License); you may
+  * not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
+  ******************************************************************************
  */
-
 #ifndef ETHERNET_EX_API_H
 #define ETHERNET_EX_API_H
 
@@ -31,12 +42,21 @@ extern "C" {
 #define ETH_IF_SEL          (Eth_If_Mii)
 ///@}
 #endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)"
+
+
 /// the size (unit: Bytes) of each Tx descriptor
 #define ETH_TX_DESC_SIZE	20  // 20 Bytes
 /// the size (unit: Bytes) of each Rx descriptor
 #define ETH_RX_DESC_SIZE	16  // 16 Bytes
 /// the size of the packet buffer
 #define ETH_PKT_BUF_SIZE	1600
+
+#if defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1)
+///@name AmebaPro2 Only
+///@{
+#define ETH_PKT_MAX_SIZE    1514
+///@}
+#endif  // end of "#if defined(CONFIG_PLATFORM_8735B)"
 
 #if defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1)
 ///@name AmebaPro Only
@@ -56,6 +76,9 @@ typedef enum {
 	Eth_If_Mii = EthMiiMode,
 	Eth_If_Rmii = EthRmiiMode
 } EthInterfaceSel;
+///@}
+#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)"
+
 
 /**
   \brief  Defines the link speed.
@@ -74,8 +97,7 @@ typedef enum {
 	Eth_Duplex_Half = 0,
 	Eth_Duplex_Full = 1
 } EthDuplexMode;
-///@}
-#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)"
+
 
 
 /**
@@ -83,15 +105,15 @@ typedef enum {
 */
 typedef void (*ethernet_callback)(uint32_t event, uint32_t data);
 
-#if defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1)
-///@name AmebaPro Only
+#if ((defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1))||(defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1)))
+///@name AmebaPro & AmebaPro2 Only
 ///@{
 /**
   \brief  The function type of the OS task yield callback function.
 */
 typedef void (*ethernet_task_yield)(void);
 ///@}
-#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)"
+#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)||defined(CONFIG_PLATFORM_8735B)"
 /**
  *  @brief To hook a callback function for Ethernet MAC controller interrupt.
  *
@@ -101,8 +123,8 @@ typedef void (*ethernet_task_yield)(void);
  */
 void ethernet_irq_hook(ethernet_callback callback);
 
-#if defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1)
-///@name AmebaPro Only
+#if ((defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1))||(defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1)))
+///@name AmebaPro & AmebaPro2 Only
 ///@{
 /**
  *  @brief To hook a callback function to make OS do a context-switch while waiting.
@@ -113,7 +135,7 @@ void ethernet_irq_hook(ethernet_callback callback);
  */
 void ethernet_task_yield_hook(ethernet_task_yield task_yield);
 ///@}
-#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)"
+#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)||defined(CONFIG_PLATFORM_8735B)"
 
 /**
  *  @brief To set the Tx/Rx descriptor number.
@@ -137,8 +159,8 @@ void ethernet_set_descnum(uint8_t txdescCnt, uint8_t rxdescCnt);
  */
 void ethernet_trx_pre_setting(uint8_t *TxDescAddr, uint8_t *RxDescAddr, uint8_t *pTxPktBuf, uint8_t *pRxPktBuf);
 
-#if defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1)
-///@name AmebaPro Only
+#if ((defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1))||(defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1)))
+///@name AmebaPro & AmebaPro2 Only
 ///@{
 /**
  *  @brief To set the ethernet MAC address.
@@ -148,8 +170,27 @@ void ethernet_trx_pre_setting(uint8_t *TxDescAddr, uint8_t *RxDescAddr, uint8_t 
  *  @returns    void.
  */
 void ethernet_set_address(char *mac);
+
+/**
+ *  @brief To check the ethernet PHY's state.
+ *
+ *  @param[in]  void
+ *
+ *  @returns    void
+ */
+void ethernet_detect_phy_state(void);
+
+/**
+ *  @brief To enable/disable the EEE functionality of FEPHY
+ *
+ *  @param[in] en  Enable control: 0: disable, 1: enable.
+ *
+ *  @returns    void
+ */
+void ethernet_phy_eee_ctrl(uint8_t en);
+
 ///@}
-#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)"
+#endif  // end of "#if defined(CONFIG_PLATFORM_8195BHP)||defined(CONFIG_PLATFORM_8735B)"
 
 #ifdef __cplusplus
 }

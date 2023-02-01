@@ -127,6 +127,6 @@ int dwc_otg_boot_normal_deinit(VOID);
 unsigned int HAL_OTG_READ32(unsigned int addr);
 void HAL_OTG_WRITE32(unsigned int addr, unsigned int value);
 
-#define OTG_DRIVER_VERION "0522"
+#define OTG_DRIVER_VERION "0826"
 
 #endif

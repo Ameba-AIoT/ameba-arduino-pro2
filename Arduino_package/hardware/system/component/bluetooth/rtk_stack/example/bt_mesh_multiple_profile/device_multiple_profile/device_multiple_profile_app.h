@@ -118,7 +118,7 @@ bool prov_cb(prov_cb_type_t cb_type, prov_cb_data_t cb_data);
 void fn_cb(uint8_t frnd_index, fn_cb_type_t type, uint16_t lpn_addr);
 void lpn_cb(uint8_t frnd_index, lpn_cb_type_t type, uint16_t fn_addr);
 void hb_cb(hb_data_type_t type, void *pargs);
-void app_vendor_callback(uint8_t cb_type, void *p_cb_data);
+void bt_mesh_device_multiple_profile_app_vendor_callback(uint8_t cb_type, void *p_cb_data);
 #ifdef __cplusplus
 }
 #endif

@@ -1,5 +1,13 @@
-// Example testing sketch for various DHT humidity/temperature sensors
-// Written by ladyada, public domain
+/*
+ Example testing sketch for various DHT humidity/temperature sensors
+ Written by ladyada, public domain
+
+ modified 17 Jan 2023
+ by Realtek SG
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-gpio-dht/
+ */
 
 #include "DHT.h"
 

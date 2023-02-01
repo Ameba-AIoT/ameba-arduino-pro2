@@ -42,8 +42,8 @@
 
 /* For phydm configurations */
 #define CONFIG_FW_C2H_PKT
-#define PHYDM_LINUX_CODING_STYLE 1
-#define PHYDM_NEW_INTERFACE 1
+#define PHYDM_VERSION	2 /*phydm trunk*/
+
 #undef DBG
 #define DBG 1 /* for phydm debug */
 
@@ -64,6 +64,9 @@
 /* Configurations for WiFi driver resource */
 #define CONFIG_RX_RING_COUNT 32
 #define CONFIG_RX_REORDER_WIN_SIZE 16
+
+/* Configurations for WiFi driver setting */
+#define CONFIG_FAST_PSCAN_THRESHOLD -50
 
 /* Configurations for power saving */
 #define CONFIG_POWER_SAVING
@@ -103,6 +106,7 @@
 #define CONFIG_PNO_CONTROL
 #define CONFIG_SMART_DTIM
 #define CONFIG_WOWLAN_IO_WDT
+#define CONFIG_WOWLAN_CONTROL
 
 /* For efuse or flash config start */
 #define CONFIG_EFUSE_SEPARATE
@@ -155,6 +159,27 @@
 #define DISABLE_BB_RF 0
 #endif
 //#define INT_HANDLE_IN_ISR 1
+#endif
+
+/*************************** Config for MP_MODE *******************************/
+//#define CONFIG_MP_INCLUDED
+#ifdef CONFIG_MP_INCLUDED
+#define MP_DRIVER 1
+#undef CONFIG_ANTENNA_DIVERSITY
+#undef CONFIG_BT_COEXIST_SOC
+#undef CONFIG_REG_ENABLE_KFREE
+#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
+#else /* undef CONFIG_MP_INCLUDED  */
+#define MP_DRIVER 0
+#endif /* #ifdef CONFIG_MP_INCLUDED */
+/************************* Config for MP_MODE end *****************************/
+
+/* debug log level */
+#define RELEASE_VERSION
+#ifdef RELEASE_VERSION
+#define RTW_MSG_LEVEL    RTW_MSG_ERROR
+#else
+#define RTW_MSG_LEVEL    RTW_MSG_WARNING
 #endif
 
 #endif  /*#ifndef AUTOCONF_8735B_H  */
