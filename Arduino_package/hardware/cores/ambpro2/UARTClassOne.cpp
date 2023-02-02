@@ -145,10 +145,6 @@ void UARTClassOne::end(void)
 
 int UARTClassOne::available(void)
 {
-    printf("SERIAL_BUFFER_SIZE  %x    \r\n", SERIAL_BUFFER_SIZE);
-    printf("_rx_buffer->_iHead  %x    \r\n", _rx_buffer->_iHead);
-    printf("_rx_buffer->_iTail  %x    \r\n", _rx_buffer->_iTail);
-    printf("return              %08x    \r\n", (SERIAL_BUFFER_SIZE + _rx_buffer->_iHead - _rx_buffer->_iTail) % SERIAL_BUFFER_SIZE);
     return (uint32_t)(SERIAL_BUFFER_SIZE + _rx_buffer->_iHead - _rx_buffer->_iTail) % SERIAL_BUFFER_SIZE;
 }
 
