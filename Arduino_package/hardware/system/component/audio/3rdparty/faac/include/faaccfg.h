@@ -31,12 +31,7 @@
 /* AAC object types */
 #define MAIN 1
 
-#ifdef ARDUINO_AMBPRO2
-#ifdef LOW
-#undef LOW
-#define LOW 2
-#endif
-#else
+#ifndef ARDUINO_AMBPRO2
 #define LOW 2
 #endif
 
