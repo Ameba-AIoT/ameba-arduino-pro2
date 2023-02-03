@@ -37,6 +37,10 @@ MP4Recording::~MP4Recording(void) {
 }
 
 void MP4Recording::configVideo(VideoSetting& config) {
+    if (config._encoder == VIDEO_JPEG) {
+        printf("Save to SD card does not support MJPEG format.\r\n");
+        return;
+    }
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mp4Init();
     }
@@ -62,7 +66,7 @@ void MP4Recording::configAudio(void) {
     }
 }
 
-void MP4Recording::begin  (void) {
+void MP4Recording::begin(void) {
     if (_p_mmf_context == NULL) {
         printf("Need MP4 init first\r\n");
         return;
