@@ -14,7 +14,6 @@
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
 // Channel 1 : 1280 x 720  30FPS H264
-// Channel 2 : 1920 x 1080 30FPS MJPEG
 
 VideoSetting configV(CHANNEL);
 Audio audio;
