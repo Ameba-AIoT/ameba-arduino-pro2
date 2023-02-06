@@ -26,11 +26,11 @@ typedef enum {
 //Setting for ASP
 typedef struct CTNS_cfg_s {
 	int16_t NS_EN;
-	int NSLevel;
+	int16_t NSLevel;
+	int16_t HPFEnable;
 
 	int16_t Reserve1;
 	int16_t Reserve2;
-	int16_t Reserve3;
 } CTNS_cfg_t;
 
 typedef struct CTAGC_cfg_s {
@@ -74,7 +74,7 @@ void NS_destory(void);
 void AGC_init(int32_t sample_freq, CTAGC_cfg_t *TX_AGC);
 void AGC_process(int16_t frame_size, int16_t *out);
 void AGC_destory(void);
-
+void AEC_set_print(uint8_t flag);
 #else
 
 /**

@@ -178,6 +178,8 @@ void video_set_debug_level(int value);//Default level -> VIDEO_LOG_MSG
 
 void video_set_uvcd_iq(unsigned int addr);
 
+void video_set_uvcd_sensor(unsigned int addr);
+
 unsigned char *video_get_iq_buf(void);
 
 int video_get_video_sensor_status(void);

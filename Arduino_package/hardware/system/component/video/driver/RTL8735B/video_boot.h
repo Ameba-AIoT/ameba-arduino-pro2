@@ -102,6 +102,8 @@ typedef struct video_boot_stream_cfg {
 	uint32_t fcs_isp_iq_id;//0
 	uint8_t  fcs_isp_reserved_buf[FCS_SYSTEM_REV_SIZE];//Reserved for fcs system data
 	uint8_t  fcs_user_buffer[FCS_USER_REV_SIZE];//User can use the buffer to transfer to application
+	uint32_t fcs_start_time;//bootloader to fcs user boot function
+	uint32_t fcs_voe_time;//bootloader to voe init function
 } video_boot_stream_t;
 #endif
 

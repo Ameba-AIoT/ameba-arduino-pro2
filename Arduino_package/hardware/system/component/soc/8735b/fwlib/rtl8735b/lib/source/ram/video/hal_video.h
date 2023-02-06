@@ -419,7 +419,7 @@ int hal_video_md_trigger(void);
 // Show VOE information
 int hal_video_mem_info(void);
 int hal_video_buf_info(void);
-int hal_video_time_info(void);
+int hal_video_time_info(int level);
 int hal_video_print(int mode);
 
 

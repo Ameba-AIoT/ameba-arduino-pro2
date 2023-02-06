@@ -82,7 +82,7 @@ typedef enum {
 
 #endif
 
-
+// zzw arduino 
 //enum {
 //	OK  = 0,
 //	NOK = -1

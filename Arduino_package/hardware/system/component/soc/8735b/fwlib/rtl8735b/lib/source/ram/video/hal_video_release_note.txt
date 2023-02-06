@@ -1,4 +1,27 @@
 --------------------------------------------------------------------------	
+<01/06/2022 12:00 Martin>
+Version : RTL8735B_VOE_1.3.7.2
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. [SENSOR] add f37 sensor
+	2. polish osd interrupt enable/disable flow
+	3. add pb.c/pb/h for algo_param_pb 
+
+	Video/ENC related
+	1. VOE release support without isp source code
+	   old voe release version modify method 
+	   a. remove source/lib_isp source/isp
+	   b. rebuild voe
+	2. change hal_video_time_info interface with level argument
+	3. remove GPIO E4 pinmux_unregister(return back E4 used  for b-cut FCS pin mapping issue workaround) 
+	   
+
+	 
+Reviewer:
+--------------------------------------------------------------------------	
 <12/16/2022 15:00 Martin>
 Version : RTL8735B_VOE_1.3.7.0
 Modified Files:
@@ -12,11 +35,7 @@ Change Notes:
 
 	Video/ENC related
 	1. Add semaphore process when voe cmd timeout cases
-	2. VOE release support without isp source code
-	   old voe release version modify method 
-	   1. remove source/lib_isp source/isp
-	   2. used new release source/Makefile replace old version
-	   3. rebuild voe  
+
 
 
 	 
