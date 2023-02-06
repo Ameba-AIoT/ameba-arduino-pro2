@@ -127,10 +127,15 @@ extern "C" {
 #define MPEG4 0
 
 /* AAC object types */
-#define MAIN 1
-#define LOW  2
-#define SSR  3
-#define LTP  4
+// To prevent the conflict of the system, change the name
+//#define MAIN 1
+//#define LOW  2
+//#define SSR  3
+//#define LTP  4
+#define FAAC_TYPE_MAIN  1
+#define FAAC_TYPE_LOW   2
+#define FAAC_TYPE_SSR   3
+#define FAAC_TYPE_LTP   4
 
 
 #define BYTE_NUMBIT 8       /* bits in byte (char) */

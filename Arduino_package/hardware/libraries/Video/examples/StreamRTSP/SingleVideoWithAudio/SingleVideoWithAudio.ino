@@ -6,7 +6,7 @@
 
 #include "WiFi.h"
 #include "StreamIO.h"
-#include "Videostream.h"
+#include "VideoStream.h"
 #include "AudioStream.h"
 #include "RTSP.h"
 

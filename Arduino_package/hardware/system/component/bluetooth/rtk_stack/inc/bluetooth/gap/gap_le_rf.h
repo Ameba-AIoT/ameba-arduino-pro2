@@ -20,6 +20,7 @@
 #include "platform_opts_bt.h"
 
 #if UPPER_STACK_VERSION == VERSION_2021
+
 #ifdef __cplusplus
 extern "C"
 {

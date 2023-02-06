@@ -473,6 +473,83 @@ void gap_config_max_le_link_num(uint8_t le_link_num);
  */
 bool gap_config_credits_num(uint8_t credits_num);
 
+#if (F_BT_LE_4_1_COC_SUPPORT || F_BT_5_2_L2C_ECFC_SUPPORT)
+/**
+ * @brief   Configure the total number of LE l2cap channel.
+ *
+ *          NOTE: Default value is 0.
+ *                This function shall be called before @ref bte_init is invoked.
+ *
+ * @param[in]      le_l2c_chann_num   LE l2cap channel number.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+    void bt_stack_config_init(void)
+    {
+        gap_config_le_l2c_chann_num(5);
+    }
+ * \endcode
+ */
+void gap_config_le_l2c_chann_num(uint8_t le_l2c_chann_num);
+
+/**
+ * @brief   Configure LE protocol secure entry number.
+ *
+ *          NOTE: Default value is 0.
+ *                This function shall be called before @ref bte_init is invoked.
+ *
+ * @param[in]      le_sec_entry_num   LE protocol secure entry number.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+    void bt_stack_config_init(void)
+    {
+        gap_config_le_sec_entry_num(5);
+    }
+ * \endcode
+ */
+void gap_config_le_sec_entry_num(uint8_t le_sec_entry_num);
+#endif
+
+#if F_BT_5_2_EATT_SUPPORT
+/**
+ * @brief   Configure EATT feature.
+ *
+ *          NOTE: Default value is false.
+ *                This function shall be called before @ref bte_init is invoked.
+ *
+ * @param[in]      use_eatt   Wether to open EATT feature.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+    void bt_stack_config_init(void)
+    {
+        gap_config_eatt(true);
+    }
+ * \endcode
+ */
+void gap_config_eatt(bool use_eatt);
+
+/**
+ * @brief   Configure GATT channel number.
+ *
+ *          NOTE: This function shall be called before @ref bte_init is invoked.
+ *                This function shall be called after @ref gap_config_max_le_link_num is invoked.
+ *                The parameter gatt_chann_num can't be less than le_link_num configured by gap_config_max_le_link_num.
+ *
+ * @param[in]      gatt_chann_num   GATT channel number.
+ *
+ * <b>Example usage</b>
+ * \code{.c}
+    void bt_stack_config_init(void)
+    {
+        gap_config_gatt_chann_num(4);
+    }
+ * \endcode
+ */
+bool gap_config_gatt_chann_num(uint8_t gatt_chann_num);
+#endif
+
 /** End of GAP_LE_CONFIG_Exported_Functions
   * @}
   */

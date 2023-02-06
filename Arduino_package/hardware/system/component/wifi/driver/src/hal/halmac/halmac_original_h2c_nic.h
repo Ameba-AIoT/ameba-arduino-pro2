@@ -558,6 +558,12 @@
 	LE_BITS_TO_4BYTE(h2c_pkt + 0X04, 24, 8)
 #define PS_TUNING_PARA_SET_RX_BCN_LIMIT(h2c_pkt, value) \
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 24, 8, value)	
+#define PS_TUNING_PARA_SET_BCN_TRACK(h2c_pkt, value) \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 8, 1, value)	
+#define PS_TUNING_PARA_SET_BCN_TRACKLIMIT(h2c_pkt, value) \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 9, 4, value)
+#define PS_TUNING_PARA_SET_BCN_WEIGHT(h2c_pkt, value) \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 13, 1, value)		
 	
 #define GET_PWR_MODE_EXT_SET_CMD_ID(h2c_pkt)                  \
     LE_BITS_TO_4BYTE(h2c_pkt + 0X00, 0, 8)  
@@ -611,6 +617,21 @@
 	LE_BITS_TO_4BYTE(h2c_pkt + 0X00, 5, 3)
 #define PS_TUNING_PARA_II_SET_CLASS(h2c_pkt, value)                            \
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 5, 3, value)
+
+	
+#ifdef CONFIG_RTL8735B
+#define PS_TUNING_PARA_II_SET_BCN_TO_THRESHOLD1(h2c_pkt, value)               \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 8, 8, value)
+#define PS_TUNING_PARA_II_SET_BCN_TO_THRESHOLD2(h2c_pkt, value)               \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 16, 8, value)
+#define PS_TUNING_PARA_II_SET_BCN_TO_BOUND(h2c_pkt, value)                    \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 24, 7, value)	
+#define PS_TUNING_PARA_II_SET_DIG(h2c_pkt, value)                             \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 31, 1, value)	
+#define PS_TUNING_PARA_II_SET_BCN_TO_INTERVAL(h2c_pkt, value)                 \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 0, 8, value)
+
+#else	
 #define PS_TUNING_PARA_II_GET_BCN_TO_PERIOD(h2c_pkt)                           \
 	LE_BITS_TO_4BYTE(h2c_pkt + 0X00, 8, 7)
 #define PS_TUNING_PARA_II_SET_BCN_TO_PERIOD(h2c_pkt, value)                    \
@@ -623,6 +644,8 @@
 	LE_BITS_TO_4BYTE(h2c_pkt + 0X00, 16, 8)
 #define PS_TUNING_PARA_II_SET_DRV_EARLY_IVL(h2c_pkt, value)                    \
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 16, 8, value)
+#endif	
+	
 #define PS_LPS_PARA_GET_CMD_ID(h2c_pkt) LE_BITS_TO_4BYTE(h2c_pkt + 0X00, 0, 5)
 #define PS_LPS_PARA_SET_CMD_ID(h2c_pkt, value)                                 \
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 0, 5, value)

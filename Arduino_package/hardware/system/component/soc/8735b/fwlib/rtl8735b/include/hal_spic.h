@@ -37,7 +37,7 @@ extern "C"
 
 #define HIGH_SPEED_FLASH 0 //1:flash max speed is 100 MHz, 0:flash max speed is 62.5 MHz
 
-#define SPIC_BIT_MODE_SETTING SpicQpiMode  // Default for ram code using is qpi mode
+#define SPIC_BIT_MODE_SETTING SpicQuadIOMode  // Default for ram code using is qpi mode
 
 /**
 
