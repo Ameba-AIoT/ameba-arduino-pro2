@@ -33,6 +33,12 @@ void VideoStreamOverlay::configTextSize(int ch, int text_width, int text_height)
 void VideoStreamOverlay::begin(void) {
     osd_render_dev_init(ch_enable, character_width, character_height);
     osd_render_task_start(ch_enable, ch_width, ch_height);
+
+    for (int i = 0; i < 3; i++) {
+        if (ch_enable[i]) {
+            canvas_create_bitmap_all(i, 0, 0, 0, ch_width[i], ch_height[i], RTS_OSD2_BLK_FMT_RGBA2222);
+        }
+    }
 }
 
 void VideoStreamOverlay::end() {
@@ -64,6 +70,10 @@ uint32_t VideoStreamOverlay::color(uint8_t red, uint8_t green, uint8_t blue, uin
     return (ARGB(alpha, red, green, blue));
 }
 
+void VideoStreamOverlay::drawLine(int ch, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color, int idx) {
+    canvas_set_line(ch, idx, xmin, ymin, xmax, ymax, line_width, color);
+}
+
 void VideoStreamOverlay::drawPoint(int ch, int xmin, int ymin, int point_width, uint32_t color, int idx) {
     canvas_set_point(ch, idx, xmin, ymin, point_width, color);
 }
@@ -81,5 +91,5 @@ void VideoStreamOverlay::clearAll(int ch, int idx) {
 }
 
 void VideoStreamOverlay::update(int ch, int idx) {
-    canvas_update(ch, idx);
+    canvas_update(ch, idx, 1);
 }
