@@ -26,6 +26,7 @@ class VideoStreamOverlay {
         int getTextWidth(int ch);
 
         uint32_t color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 0xff);
+        void drawLine(int ch, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color, int idx = 0);
         void drawPoint(int ch, int xmin, int ymin, int point_width, uint32_t color, int idx = 0);
         void drawRect(int ch, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color, int idx = 0);
         void drawText(int ch, int xmin, int ymin, const char *text_string, uint32_t color, int idx = 0);
