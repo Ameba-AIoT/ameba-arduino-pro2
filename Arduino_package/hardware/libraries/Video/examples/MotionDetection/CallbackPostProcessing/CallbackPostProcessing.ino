@@ -59,8 +59,6 @@ void mdPostProcess(char* md_result) {
         int xmax = (int)((kmax + 1) * config.width() / MDRES) - 1;
         int ymax = (int)((jmax + 1) * config.height() / MDRES) - 1;
         OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
-    } else {
-        OSD.clearAll(CHANNEL);
     }
     OSD.update(CHANNEL);
 }
