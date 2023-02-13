@@ -4,6 +4,7 @@
 #include <mbedtls/ctr_drbg.h>
 #include <mbedtls/ssl.h>
 #include <mbedtls/entropy.h>
+#include <mbedtls/net_sockets.h>
 
 typedef struct {
     int socket;
