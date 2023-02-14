@@ -35,7 +35,7 @@ int recv_data(int sock, const uint8_t *data, uint32_t len, int flag);
 
 int send_data(int sock, const uint8_t *data, uint32_t len, int flag);
 // UDP
-int get_receive(int sock, uint8_t *data, uint32_t length, int flag, uint32_t *peer_addr, uint16_t *peer_port);
+int get_receive(int sock, uint8_t *data, int length, int flag, uint32_t *peer_addr, uint16_t *peer_port);
 
 //int get_receive_v6(int server_fd, void *recv_data, int len, int flags, uint32_t *peer_addr, uint16_t *peer_port);
 

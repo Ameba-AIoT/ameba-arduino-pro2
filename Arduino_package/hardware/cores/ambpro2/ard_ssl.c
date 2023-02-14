@@ -11,6 +11,7 @@
 #include <FreeRTOS.h>
 
 #define ARDUINO_MBEDTLS_DEBUG_LEVEL     0   // Set to 0 to disable debug messsages, 5 to enable all debug messages
+#define MBEDTLS_EXPORT_KEY              0
 
 
 static mbedtls_ctr_drbg_context* drbg_ctx = NULL;
@@ -66,17 +67,76 @@ static void my_debug(void *ctx, int level, const char *file, int line, const cha
             basename = p + 1;
 
     printf("%s:%04d: |%d| %s", basename, line, level, str );
+
+    if (MBEDTLS_EXPORT_KEY) {
+        // Code to format and output TLS 1.2 secrets necessary for Wireshark decoding
+        static uint8_t in_client_random = 0;
+        static uint8_t in_master_secret = 0;
+        static uint8_t hexdump_lines_to_process = 0;
+        static uint8_t key_done = 0;
+        static char out_string[200] = {0};
+        if ((level == 3)&&(!key_done)) {
+            if (strstr(str, "dumping 'client hello, random bytes'")) {
+                in_client_random = 1;
+                hexdump_lines_to_process = 2;
+                strcpy(out_string, "CLIENT_RANDOM ");
+                return;
+            } else if (strstr(str, "dumping 'master secret'")) {
+                in_master_secret = 1;
+                hexdump_lines_to_process = 3;
+                strcat(out_string, " ");
+                return;
+            } else if ((!in_client_random && !in_master_secret) || hexdump_lines_to_process == 0) {
+                return;
+            }
+
+            // Parse "0000:  64 df 18 71 ca 4a 4b e4 63 87 2a ef 5f 29 ca ff  ..."
+            str = strstr(str, ":  ");
+            if (!str || strlen(str) < 3 + 3*16) {
+                goto reset;         // not the expected hex buffer
+            }
+            str += 3;               // skip over ":  "
+
+            // Process sequences of "hh "
+            for (int i = 0; i < 3 * 16; i += 3) {
+                char c1 = str[i], c2 = str[i + 1], c3 = str[i + 2];
+                if ((('0' <= c1 && c1 <= '9') || ('a' <= c1 && c1 <= 'f')) &&
+                    (('0' <= c2 && c2 <= '9') || ('a' <= c2 && c2 <= 'f')) &&
+                    c3 == ' ') {
+                    char str1[2] = {c1,0};
+                    char str2[2] = {c2,0};
+                    strcat(out_string, str1);
+                    strcat(out_string, str2);
+                } else {
+                    goto reset;     // unexpected non-hex char
+                }
+            }
+
+            if (--hexdump_lines_to_process != 0 || !in_master_secret) {
+                return;             // line is not yet finished
+            }
+
+    reset:
+            hexdump_lines_to_process = 0;
+            in_client_random = in_master_secret = 0;
+            key_done = 1;
+            strcat(out_string, "\n");   // finish key log line
+            printf("============== Wireshark TLS decryption key ==============\n");
+            printf("%s", out_string);
+            printf("==========================================================\n");
+        }
+    }
 }
 
 //Adding definition here as complier was not able to find this function
-int mbedtls_ssl_conf_psk(mbedtls_ssl_config *conf,
+extern int mbedtls_ssl_conf_psk(mbedtls_ssl_config *conf,
                         const unsigned char *psk, size_t psk_len,
                         const unsigned char *psk_identity, size_t psk_identity_len);
 
 int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t port, unsigned char* rootCABuff, unsigned char* cli_cert, unsigned char* cli_key, unsigned char* pskIdent, unsigned char* psKey, char* SNI_hostname)
 {
     int ret = 0;
-//    int timeout;
+    int timeout;
     int enable = 1;
     int keep_idle = 30;
     mbedtls_x509_crt* cacert = NULL;
@@ -100,9 +160,6 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
 
         mbedtls_platform_set_calloc_free(my_calloc,vPortFree);
 
-
-        lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
-        lwip_setsockopt(ssl_client->socket, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle));
         if (lwip_connect(ssl_client->socket, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) < 0) {
             lwip_close(ssl_client->socket);
             printf("ERROR: Connect to Server failed! \r\n");
@@ -121,7 +178,11 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             printf("ERROR: Connect to Server failed!\r\n");
             ret = -1;
             break;
-        }//*/
+        }
+        /*/
+            timeout = ssl_client->recvTimeout;
+            lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
+            lwip_setsockopt(ssl_client->socket, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle));
 
             ssl_client->ssl = (mbedtls_ssl_context *)malloc(sizeof(mbedtls_ssl_context));
             ssl_client->conf = (mbedtls_ssl_config *)malloc(sizeof(mbedtls_ssl_config));
@@ -152,7 +213,8 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                 mbedtls_debug_set_threshold(ARDUINO_MBEDTLS_DEBUG_LEVEL);
             }
 
-            mbedtls_ssl_set_bio(ssl_client->ssl, &ssl_client->socket, mbedtls_net_send, mbedtls_net_recv, NULL);
+            mbedtls_ssl_conf_read_timeout(ssl_client->conf, timeout);
+            mbedtls_ssl_set_bio(ssl_client->ssl, &ssl_client->socket, mbedtls_net_send, NULL, mbedtls_net_recv_timeout);
 
             if((mbedtls_ssl_config_defaults(ssl_client->conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
                 printf("ERROR: mbedtls ssl config defaults failed! \r\n");
@@ -278,7 +340,6 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                     printf("mbedTLS SSL handshake success \r\n");
                 }
             }
-            //mbedtls_debug_set_threshold(ARDUINO_MBEDTLS_DEBUG_LEVEL);
         }
     } while (0);
 
@@ -352,24 +413,15 @@ int send_ssl_data(sslclient_context *ssl_client, const uint8_t *data, uint16_t l
 int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, int flag)
 {
     int ret = 0;
-    uint8_t has_backup_recvtimeout = 0;
-    int backup_recv_timeout, recv_timeout;
-    socklen_t len;
+    int recv_timeout;
 
     if (ssl_client->ssl == NULL) {
         return 0;
     }
 
     if (flag & 0x01) {
-        // peek for 10ms
-        ret = lwip_getsockopt(ssl_client->socket, SOL_SOCKET, SO_RCVTIMEO, &backup_recv_timeout, &len);
-        if (ret >= 0) {
-            recv_timeout = 100;
-            ret = lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_RCVTIMEO, &recv_timeout, sizeof(recv_timeout));
-            if (ret >= 0) {
-                has_backup_recvtimeout = 1;
-            }
-        }
+        recv_timeout = 100;
+        mbedtls_ssl_conf_read_timeout(ssl_client->conf, recv_timeout);
     }
 
     memset(data, 0, length);
@@ -378,21 +430,24 @@ int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, in
     if (ret <= 0) {
         switch(ret) {
             case MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY:
-                stop_ssl_socket(ssl_client);
+                mbedtls_ssl_close_notify(ssl_client->ssl);
                 break;
             case MBEDTLS_ERR_SSL_WANT_READ:
                 break;
             case MBEDTLS_ERR_SSL_WANT_WRITE:
                 break;
+            case MBEDTLS_ERR_SSL_TIMEOUT:
+                break;
             default:
+                printf("mbedtls_ssl_read returned: -0x%04X \r\n", -ret);
                 stop_ssl_socket(ssl_client);
                 break;
-            }
         }
+    }
 
-    if ((flag & 0x01) && (has_backup_recvtimeout == 1)) {
-        // restore receiving timeout
-        lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_RCVTIMEO, &backup_recv_timeout, sizeof(recv_timeout));
+    if ((flag & 0x01)) {
+        recv_timeout = ssl_client->recvTimeout;
+        mbedtls_ssl_conf_read_timeout(ssl_client->conf, recv_timeout);
     }
 
     return ret;
