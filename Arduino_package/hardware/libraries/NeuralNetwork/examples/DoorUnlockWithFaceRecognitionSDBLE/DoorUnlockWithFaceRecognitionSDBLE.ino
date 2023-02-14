@@ -24,6 +24,7 @@
 // Define ON and OFF to replace HIGH and LOW
 #define ON 1
 #define OFF 0
+// Customised resolution for NN
 #define NNWIDTH 576
 #define NNHEIGHT 320
 // Define BLE UUID
