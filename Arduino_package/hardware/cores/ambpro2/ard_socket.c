@@ -217,7 +217,7 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
         timeout = 3000;
         _sock = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        printf("\n\r[INFO] Create TCP socket successfudlly\n");
+        printf("\n\r[INFO] Create TCP socket successfully\n");
     } else {  // UDP
         //timeout = 1000;
         _sock = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
@@ -418,7 +418,7 @@ int sendto_data_v6(int sock, const void *send_data, size_t len, uint32_t peer_ip
 }
 #endif
 
-int get_receive(int sock, uint8_t *data, uint32_t length, int flag, uint32_t *peer_addr, uint16_t *peer_port) {
+int get_receive(int sock, uint8_t *data, int length, int flag, uint32_t *peer_addr, uint16_t *peer_port) {
     int ret = 0;
     struct sockaddr from;
     socklen_t fromlen;
@@ -467,7 +467,6 @@ int get_receive_v6(int sock, void *recv_data, int len, int flags, uint32_t *peer
     peer_port = peer_port;
 
     ret = lwip_recvfrom(sock, recv_data, len, flags, ((struct sockaddr *)&peer_addr), &peer_len);
-    //printf("get_rec_v6 lwip_recvfrom: %d\r\n", ret);
     return ret;
 }
 
