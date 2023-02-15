@@ -110,12 +110,12 @@ void ODPostProcess(std::vector<ObjectDetectionResult> results) {
                 int ymax = (int)(item.yMax() * im_h);
 
                 // Draw boundary box
-                printf("Item %d %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
+                printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
                 // Print identification text
                 char text_str[20];
-                snprintf(text_str, sizeof(text_str), "%s %d", item.name(), item.score());
+                snprintf(text_str, sizeof(text_str), "%s %d", itemList[obj_type].objectName, item.score());
                 OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN);
             }
         }
