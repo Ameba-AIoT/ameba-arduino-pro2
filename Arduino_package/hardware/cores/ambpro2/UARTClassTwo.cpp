@@ -102,7 +102,7 @@ void UARTClassTwo::IrqHandler(void)
 }
 #endif
 
-void UARTClassTwo::begin(const uint32_t dwBaudRate)
+void UARTClassTwo::begin(const uint32_t dwBaudRate, uint8_t serial_config_value)
 {
     // Log, UART1
     //serial_init(&log_uart_obj, PF_4, PF_3);
@@ -131,7 +131,71 @@ void UARTClassTwo::begin(const uint32_t dwBaudRate)
     UART_BaudRate = 115200;
 #endif
     serial_baud(&uart_obj, UART_BaudRate);
-    serial_format(&uart_obj, 8, ParityNone, 1);
+
+    switch(serial_config_value) {
+        case SERIAL_7N1:
+            serial_format(&uart_obj, 7, ParityNone, 1);
+            break;
+        case SERIAL_8N1:
+            serial_format(&uart_obj, 8, ParityNone, 1);
+            break;
+        case SERIAL_7N2:
+            serial_format(&uart_obj, 7, ParityNone, 2);
+            break;
+        case SERIAL_8N2:
+            serial_format(&uart_obj, 8, ParityNone, 2);
+            break;
+        case SERIAL_7E1:
+            serial_format(&uart_obj, 7, ParityEven, 1);
+            break;
+        case SERIAL_8E1:
+            serial_format(&uart_obj, 8, ParityEven, 1);
+            break;
+        case SERIAL_7E2:
+            serial_format(&uart_obj, 7, ParityEven, 2);
+            break;
+        case SERIAL_8E2:
+            serial_format(&uart_obj, 8, ParityEven, 2);
+            break;
+        case SERIAL_7O1:
+            serial_format(&uart_obj, 7, ParityOdd, 1);
+            break;
+        case SERIAL_8O1:
+            serial_format(&uart_obj, 8, ParityOdd, 1);
+            break;
+        case SERIAL_7O2:
+            serial_format(&uart_obj, 7, ParityOdd, 2);
+            break;
+        case SERIAL_8O2:
+            serial_format(&uart_obj, 8, ParityOdd, 2);
+            break;
+        case SERIAL_711:
+            serial_format(&uart_obj, 7, ParityForced1, 1);
+            break;
+        case SERIAL_811:
+            serial_format(&uart_obj, 8, ParityForced1, 1);
+            break;
+        case SERIAL_712:
+            serial_format(&uart_obj, 7, ParityForced1, 2);
+            break;
+        case SERIAL_812:
+            serial_format(&uart_obj, 8, ParityForced1, 2);
+            break;
+        case SERIAL_701:
+            serial_format(&uart_obj, 7, ParityForced0, 1);
+            break;
+        case SERIAL_801:
+            serial_format(&uart_obj, 8, ParityForced0, 1);
+            break;
+        case SERIAL_702:
+            serial_format(&uart_obj, 7, ParityForced0, 2);
+            break;
+        case SERIAL_802:
+            serial_format(&uart_obj, 8, ParityForced0, 2);
+            break;
+      default:
+        serial_format(&uart_obj, 8, ParityNone, 1);
+    }
 
     serial_irq_handler(&uart_obj, arduino_uart_irq_handler, (uint32_t)_rx_buffer);
     serial_irq_set(&uart_obj, RxIrq, 1);
