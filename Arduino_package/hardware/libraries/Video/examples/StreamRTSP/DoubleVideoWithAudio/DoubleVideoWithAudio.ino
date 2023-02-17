@@ -42,6 +42,8 @@ void setup() {
     }
 
     // Configure both camera video channels with corresponding video format information
+    configV1.setBitrate(2 * 1024 * 1024);     // Use 2Mbps bitrate for RTSP streaming
+    configV2.setBitrate(2 * 1024 * 1024);     // Use 2Mbps bitrate for RTSP streaming
     Camera.configVideoChannel(0, configV1);
     Camera.configVideoChannel(1, configV2);
     Camera.videoInit();
