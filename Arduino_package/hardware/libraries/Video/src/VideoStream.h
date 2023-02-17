@@ -83,8 +83,8 @@ enum encode_type {
 #define CAM_GOP             30
 #define CAM_NN_GOP          10
 
-// define video bit rate
-#define CAM_BPS             2*1024*1024
+// define default video bit rate
+#define CAM_BPS             4*1024*1024
 #define CAM_NN_BPS          1*1024*1024
 
 // define video rate control
@@ -118,6 +118,9 @@ class VideoSetting {
         VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot);
         VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot);
 
+        void setBitrate(uint32_t bitrate);
+        void setJpegQuality(uint8_t quality);
+
         uint16_t width(void);
         uint16_t height(void);
         uint16_t fps(void);
@@ -129,6 +132,7 @@ class VideoSetting {
         uint32_t _bps;
         uint8_t _encoder;
         uint8_t _snapshot;
+        uint8_t _jpeg_qlevel;
 
     private:
         int8_t _preset = -1;
@@ -168,6 +172,7 @@ class Video {
         uint32_t bps[4] = {0};
         uint8_t encoder[4] = {0};
         uint8_t snapshot[4] = {0};
+        uint8_t jpeg_qlevel[4] = {0};
         typedef struct roi_param_s {
             uint32_t xmin;
             uint32_t ymin;

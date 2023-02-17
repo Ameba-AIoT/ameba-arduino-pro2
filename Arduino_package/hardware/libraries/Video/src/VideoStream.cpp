@@ -65,6 +65,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     _bps = CAM_BPS;
     _encoder = encoder;
     _snapshot = snapshot;
+    _jpeg_qlevel = 5;
 
     if((_snapshot == 1)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
@@ -93,6 +94,7 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     _snapshot = snapshot;
     _w = w;
     _h = h;
+    _jpeg_qlevel = 5;
 
     // Check resolution maximums
     if (_w > 1920) {
@@ -151,6 +153,26 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     }
 }
 
+void VideoSetting::setBitrate(uint32_t bitrate) {
+    if (bitrate < (1 * 1024 * 1024)) {
+        bitrate = (1 * 1024 * 1024);
+    }
+    if (bitrate > (50 * 1024 * 1024)) {
+        bitrate = (50 * 1024 * 1024);
+    }
+    _bps = bitrate;
+}
+
+void VideoSetting::setJpegQuality(uint8_t quality) {
+    if (quality < 1) {
+        quality = 1;
+    }
+    if (quality > 9) {
+        quality = 9;
+    }
+    _jpeg_qlevel = quality;
+}
+
 uint16_t VideoSetting::width(void) {
     return _w;
 }
@@ -173,6 +195,7 @@ void Video::configVideoChannel(int ch, VideoSetting& config) {
     bps[ch]             = config._bps;
     encoder[ch]         = config._encoder;
     snapshot[ch]        = config._snapshot;
+    jpeg_qlevel[ch]     = config._jpeg_qlevel;
 
     // Video stream using VIDEO_JPEG requires setting bps = 0
     // if (encoder[ch] == VIDEO_JPEG) {
@@ -218,7 +241,8 @@ void Video::videoInit(void) {
                             fps[ch],
                             0,
                             0,
-                            snapshot[ch]);
+                            snapshot[ch],
+                            jpeg_qlevel[ch]);
             } else if (ch == 3) {
                 //printf("V4 %d    %d    %d    %d", resolution[3], channelEnable[3], w[3], h[3]);
                 bps[3] = 1*1024*1024;
@@ -244,7 +268,8 @@ void Video::videoInit(void) {
                             fps[ch],
                             CAM_GOP,
                             CAM_RCMODE,
-                            snapshot[ch]);
+                            snapshot[ch],
+                            jpeg_qlevel[ch]);
             }
         }
     }
