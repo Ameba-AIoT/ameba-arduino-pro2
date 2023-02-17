@@ -10,7 +10,7 @@ int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
 
 mm_context_t *cameraInit(void);
 
-void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot);
+void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel);
 
 void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int direct_output);
 
