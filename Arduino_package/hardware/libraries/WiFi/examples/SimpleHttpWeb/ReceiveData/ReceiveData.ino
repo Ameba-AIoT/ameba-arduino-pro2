@@ -5,7 +5,7 @@
  */
 
 #include <WiFi.h>
-
+int analogPins[] = {A0, A1, A2, A4, A5, A6};
 char ssid[] = "yourNetwork";    // your network SSID (name)
 char pass[] = "Password";       // your network password
 int keyIndex = 0;               // your network key Index number (needed only for WEP)
@@ -60,7 +60,7 @@ void loop() {
                     client.println("<html>");
                     // output the value of each analog input pin
                     for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-                        int sensorReading = analogRead(analogChannel);
+                        int sensorReading = analogRead(analogPins[analogChannel]);
                         client.print("analog input ");
                         client.print(analogChannel);
                         client.print(" is ");
