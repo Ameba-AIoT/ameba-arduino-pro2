@@ -2,6 +2,8 @@
 
  Example guide:
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-rtsp/
+
+ For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
  */
 
 #include "WiFi.h"
@@ -42,6 +44,9 @@ void setup() {
     }
 
     // Configure both camera video channels with corresponding video format information
+    // Adjust the bitrate based on your WiFi network quality
+    //configV1.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    //configV2.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(0, configV1);
     Camera.configVideoChannel(1, configV2);
     Camera.videoInit();

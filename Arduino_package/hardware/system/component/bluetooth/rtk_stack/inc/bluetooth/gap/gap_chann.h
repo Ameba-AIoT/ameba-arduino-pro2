@@ -117,6 +117,20 @@ bool gap_chann_get_handle(uint8_t *bd_addr, uint8_t bd_type, uint16_t *p_conn_ha
  * @retval other channel number
  */
 uint8_t gap_chann_get_num(uint16_t conn_handle);
+
+/**
+ * @brief  Get CID.
+ *
+ * @param[in]       conn_handle      Connection handle of the ACL link
+ * @param[in]       cid_record_num   Number of CID could be recorded by @ref p_cid
+ * @param[in, out]  p_cid            Pointer to CID
+ * @param[in, out]  p_cid_num        Pointer to number of CID
+ * @return Get result
+ * @retval true Success
+ * @retval false Get failed
+ */
+bool gap_chann_get_cid(uint16_t conn_handle, uint8_t cid_record_num, uint16_t *p_cid,
+                       uint8_t *p_cid_num);
 /** @} */ /* End of group GAP_CHANNEL_EXPORT_Functions */
 
 /** @} */ /* End of group GAP_CHANNEL_MODULE */

@@ -269,7 +269,8 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_KEEPALIVE_PARM_ADOPT(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)
 #define SET_H2CCMD_KEEPALIVE_PARM_PKT_TYPE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 2, 1, __Value)
 #define SET_H2CCMD_KEEPALIVE_PARM_CHECK_PERIOD(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
-#define SET_H2CCMD_KEEPALIVE_WATCHDOG_RFE_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+#define SET_H2CCMD_KEEPALIVE_WATCHDOG_RFE_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 7, __Value)
+#define SET_H2CCMD_KEEPALIVE_WATCHDOG_PULL_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 7, 1, __Value)
 #define SET_H2CCMD_KEEPALIVE_WATCHDOG_INTERVAL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 
 /* _DISCONNECT_DECISION_CMD_0x04 */
@@ -517,7 +518,7 @@ typedef struct _RSVDPAGE_LOC {
 #endif /* CONFIG_GTK_OL */
 	u8 LocProbeReq;
 	u8 LocNetList;
-#ifdef CONFIG_WOW_PATTERN_HW_CAM
+#ifdef CONFIG_WOWLAN_AOAC_RPT
 	u8 LocAOACReport;
 #endif
 #ifdef CONFIG_PNO_SUPPORT

@@ -399,6 +399,7 @@ struct pwrctrl_priv {
 	u8  wdt_enable;
 	u8  wdt_gpio;
 	u8  wdt_interval;
+	u8	wdt_pull_ctrl;
 #endif
 
 #ifdef CONFIG_WOWLAN_SSL_SERVER_KEEP_ALIVE

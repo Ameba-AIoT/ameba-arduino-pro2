@@ -2,6 +2,8 @@
 
  Example guide:
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-mp4/
+
+ For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
  */
 
 #include "StreamIO.h"
@@ -14,7 +16,6 @@
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
 // Channel 1 : 1280 x 720  30FPS H264
-// Channel 2 : 1920 x 1080 30FPS MJPEG
 
 VideoSetting configV(CHANNEL);
 Audio audio;

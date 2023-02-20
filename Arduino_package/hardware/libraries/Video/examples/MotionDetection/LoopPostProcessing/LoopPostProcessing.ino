@@ -1,3 +1,11 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-motion/
+
+ For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
+ */
+
 #include "WiFi.h"
 #include "VideoStream.h"
 #include "StreamIO.h"
@@ -7,14 +15,16 @@
 
 #define CHANNEL 0       // High resolution video channel for streaming
 #define CHANNELMD 3     // RGB format video for motion detection only avaliable on channel 3
-#define MDRES 16        // Motion detection grid resolution
+#define MDRESX 32       // Motion detection grid resolution
+#define MDRESY 18
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);      // High resolution video for streaming
 VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);     // Low resolution RGB video for motion detection
 RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerMD(1, 1);
-MotionDetection MD(MDRES, MDRES);
+MotionDetection MD(MDRESY, MDRESX);
+MotionDetectionPostProcess MDproc;
 
 char ssid[] = "yourNetwork";    // your network SSID (name)
 char pass[] = "Password";       // your network password
@@ -34,6 +44,8 @@ void setup() {
     }
 
     // Configure camera video channels for required resolutions and format outputs
+    // Adjust the bitrate based on your WiFi network quality
+    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELMD, configMD);
     Camera.videoInit();
@@ -41,10 +53,6 @@ void setup() {
     // Configure RTSP for high resolution video stream information
     rtsp.configVideo(config);
     rtsp.begin();
-
-    // Configure OSD for drawing on high resolution video stream
-    OSD.configVideo(CHANNEL, config);
-    OSD.begin();
 
     // Configure motion detection for low resolution RGB video stream
     MD.configVideo(configMD);
@@ -72,48 +80,48 @@ void setup() {
     // Start data stream from low resolution video channel
     Camera.channelBegin(CHANNELMD);
 
+    // Configure OSD for drawing on high resolution video stream
+    OSD.configVideo(CHANNEL, config);
+    OSD.begin();
 }
 
 void loop() {
-    char* md_result = MD.getResult();
-    // Motion detection results is expressed as an MDRES x MDRES array
-    // With 0 or 1 in each element indicating presence of motion
-    // Iterate through all elements to check for motion
-    // and calculate largest rectangle containing motion
-    int motion = 0, j, k;
-    int jmin = MDRES - 1, jmax = 0;
-    int kmin = MDRES - 1, kmax = 0;
-    for (j = 0; j < MDRES; j++) {
-        for (k = 0; k < MDRES; k++) {
-            printf("%d ", md_result[j * MDRES + k]);
-            if (md_result[j * MDRES + k]) {
-                motion = 1;
-                if (j < jmin) {
-                    jmin = j;
-                }
-                if (k < kmin) {
-                    kmin = k;
-                }
-                if (j > jmax) {
-                    jmax = j;
-                }
-                if (k > kmax) {
-                    kmax = k;
-                }
+    char* result = MD.getResult();
+    uint16_t count = MDproc.labelAdjacentRegions(result, MDRESY, MDRESX);
+
+    // Print out motion detection result grid
+    for (uint8_t r = 0; r < MDRESY; r++) {
+        for (uint8_t c = 0; c < MDRESX; c++) {
+            if (result[r * MDRESX + c] != 0) {
+                printf(" %x", result[r * MDRESX + c]);
+            } else {
+                printf(" .");
             }
+            printf(" ");
         }
         printf("\r\n");
     }
-    printf("\r\n");
+    printf("================================================================================================\r\n");
 
     OSD.clearAll(CHANNEL);
-    if (motion) {
-        // Scale rectangle dimensions according to high resolution video stream and draw with OSD
-        int xmin = (int)(kmin * config.width() / MDRES) + 1;
-        int ymin = (int)(jmin * config.height() / MDRES) + 1;
-        int xmax = (int)((kmax + 1) * config.width() / MDRES) - 1;
-        int ymax = (int)((jmax + 1) * config.height() / MDRES) - 1;
-        OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
+    if (count > 0) {
+        // Draw largest box containing all regions with detected motion
+        int xmin = (int)(MDproc.getRegion(0).xMin() * config.width());
+        int ymin = (int)(MDproc.getRegion(0).yMin() * config.height());
+        int xmax = (int)(MDproc.getRegion(0).xMax() * config.width());
+        int ymax = (int)(MDproc.getRegion(0).yMax() * config.height());
+        OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_RED);
+
+        for (uint16_t i = 1; i < count; i++) {
+            if (MDproc.getRegion(i).size() > 1) {
+                // Draw a box for each region with detected motion larger than 1 block in size
+                int xmin = (int)(MDproc.getRegion(i).xMin() * config.width());
+                int ymin = (int)(MDproc.getRegion(i).yMin() * config.height());
+                int xmax = (int)(MDproc.getRegion(i).xMax() * config.width());
+                int ymax = (int)(MDproc.getRegion(i).yMax() * config.height());
+                OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
+            }
+        }
     }
     OSD.update(CHANNEL);
     delay(100);

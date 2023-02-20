@@ -16,6 +16,8 @@ RTSP	KEYWORD1
 MP4Recording	KEYWORD1
 OSD	KEYWORD1
 MotionDetection	KEYWORD1
+MotionDetectionPostProcess	KEYWORD1
+MotionDetectionRegion	KEYWORD1
 
 #######################################
 # AudioStream.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -56,6 +58,8 @@ USE_AUDIO_STEREO_DMIC	LITERAL1
 # VideoStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
+setBitrate	KEYWORD2
+setJpegQuality	KEYWORD2
 width	KEYWORD2
 height	KEYWORD2
 fps	KEYWORD2
@@ -192,3 +196,13 @@ getResult	KEYWORD2
 setResultCallback	KEYWORD2
 rows	KEYWORD2
 cols	KEYWORD2
+
+labelAdjacentRegions	KEYWORD2
+getRegionCount	KEYWORD2
+getRegion	KEYWORD2
+
+size	KEYWORD2
+xMin	KEYWORD2
+xMax	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2

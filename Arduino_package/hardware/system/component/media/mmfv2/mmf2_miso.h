@@ -5,6 +5,8 @@
 #include <task.h>
 #include "mmf2_module.h"
 
+#define MISO_CTRL_TIMEOUT 100
+
 typedef struct mm_miso_s {
 	int input_cnt;
 	mm_context_t *input[4];  // max 4 input
@@ -19,6 +21,7 @@ typedef struct mm_miso_s {
 	char            taskname[16];
 	xTaskHandle 	task;
 	uint32_t    secure_context;
+	uint32_t    timeout_count;
 	void 		*ctrl_lock;
 } mm_miso_t;
 

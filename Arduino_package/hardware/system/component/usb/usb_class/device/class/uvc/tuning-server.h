@@ -98,6 +98,9 @@ enum tuning_opcode {
 	ISP_CTRL_WRITE = 31,
 	BAYER_MODE_CMD = 32,
 	ERRCODE_READ = 33,
+	CUSTOMIZED_SET_CMD = 34,
+	CUSTOMIZED_GET_CMD = 35,
+	CUSTOMIZED_GET_SIZE_CMD = 36,
 };
 
 #define UVC_MEM_READ 0xC2
@@ -125,6 +128,9 @@ enum tuning_opcode {
 #define UVC_ISP_STATIS_SIZE 0xF2
 #define UVC_ISP_IQ_FW_SIZE 0xF3
 #define UVC_ERRCODE_READ 0xFB
+#define UVC_CUSTOMIZED_SET_CMD 0xBC
+#define UVC_CUSTOMIZED_GET_CMD 0xFC
+#define UVC_CUSTOMIZED_GET_SIZE_CMD 0xFD
 
 #define UVC_MCU_ISP_CMD 0xFF
 //1. MEM_READ                        (bySubCmd : 0xC2, addr : 0xD100)
@@ -208,6 +214,7 @@ void tuning_set_iq_heap(void *iq_heap);
 void tuning_set_max_resolution(int width, int height);
 void tuning_set_log_level(int level);
 void usbd_set_log_level(int level);
+void tuning_set_custom_cmd_cb(int set_addr_cb, int get_addr_cb, int get_size_addr_cb);
 
 
 static inline int resp_size(struct tuning_cmd *cmd)

@@ -81,7 +81,7 @@ void NNFaceRecognition::end(void) {
         return;
     }
     sisoDestroy(facerecog_siso_ctx);
-    _p_mmf_context = NULL;
+    facerecog_siso_ctx = NULL;
 
     if (facerecog_ctx == NULL) {
         return;
@@ -168,6 +168,8 @@ void NNFaceRecognition::setThreshold(uint8_t threshold) {
     if (threshold > 100) {
         threshold = 100;
     }
+    // Face detection default is 0 = same face. Invert value to be same as object detection
+    threshold = 100 - threshold;
     mm_module_ctrl(facerecog_ctx, CMD_FRC_SET_THRES100, threshold);
 }
 

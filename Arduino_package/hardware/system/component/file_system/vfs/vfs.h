@@ -9,7 +9,7 @@ extern "C" {
 #define PATH_MAX 4096
 #define MAX_FS_SIZE 4
 #define MAX_USER_SIZE 4
-
+#define MAX_READDIR_NUM 10
 typedef int(*qsort_compar)(const void *, const void *);
 
 #define VFS_O_ACCMODE	0x00000003

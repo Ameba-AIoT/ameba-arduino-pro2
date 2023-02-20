@@ -226,6 +226,8 @@ typedef enum
 	EVENT_DSP_MSG = 0x22,    /**< message from DSP to user application */
 	EVENT_CODEC_MSG = 0x23,  /**< message from CODEC to user application */
 
+	EVENT_MESH = 0x80,
+
 	EVENT_CMD_FROM_8852B = 0xa1,  /**< message from 8852B to user application */
 	EVENT_USER_API_REQ = 0xa3,  /**< message from user user api */
 } T_EVENT_TYPE;

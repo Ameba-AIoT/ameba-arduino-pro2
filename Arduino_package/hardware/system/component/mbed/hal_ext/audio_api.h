@@ -556,6 +556,7 @@ void audio_dmic_depinmux(audio_t *obj, PinName dmic_clk, PinName dmic_data);
 void audio_set_diff_tx_rx_param(audio_t *obj, audio_diff_para_t *pdiff_para);
 
 #if defined(CONFIG_PLATFORM_8735B)
+void audio_err_irq_handler(audio_t *obj, audio_irq_handler err_handler, u32 *arg);
 /**
   * @brief  Control the ADC high pass filter of the left channel..
   * @param  obj: Audio object define in application software.

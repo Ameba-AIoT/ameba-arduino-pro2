@@ -1,3 +1,11 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-motion/
+
+ For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
+ */
+
 #include "WiFi.h"
 #include "VideoStream.h"
 #include "StreamIO.h"
@@ -77,6 +85,8 @@ void setup() {
     }
 
     // Configure camera video channels for required resolutions and format outputs
+    // Adjust the bitrate based on your WiFi network quality
+    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELMD, configMD);
     Camera.videoInit();
@@ -84,10 +94,6 @@ void setup() {
     // Configure RTSP for high resolution video stream information
     rtsp.configVideo(config);
     rtsp.begin();
-
-    // Configure OSD for drawing on high resolution video stream
-    OSD.configVideo(CHANNEL, config);
-    OSD.begin();
 
     // Configure motion detection for low resolution RGB video stream
     MD.configVideo(configMD);
@@ -116,6 +122,9 @@ void setup() {
     // Start data stream from low resolution video channel
     Camera.channelBegin(CHANNELMD);
 
+    // Configure OSD for drawing on high resolution video stream
+    OSD.configVideo(CHANNEL, config);
+    OSD.begin();
 }
 
 void loop() {

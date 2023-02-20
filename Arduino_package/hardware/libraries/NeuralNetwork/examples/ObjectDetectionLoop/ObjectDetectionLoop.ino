@@ -1,3 +1,11 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-object-detection/
+
+ For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
+ */
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
@@ -12,6 +20,12 @@
 // Lower resolution for NN processing
 #define NNWIDTH 576
 #define NNHEIGHT 320
+
+// User defined yolo model
+// 1: yolov3tiny
+// 2: yolov4tiny
+// 3: yolov7tiny
+#define YOLOMODEL 2
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -38,6 +52,8 @@ void setup() {
     }
 
     // Configure camera video channels with video format information
+    // Adjust the bitrate based on your WiFi network quality
+    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -48,7 +64,7 @@ void setup() {
 
     // Configure object detection with corresponding video format information
     ObjDet.configVideo(configNN);
-    ObjDet.begin();
+    ObjDet.begin(YOLOMODEL);
 
     // Configure StreamIO object to stream data from video channel to RTSP
     videoStreamer.registerInput(Camera.getStream(CHANNEL));
@@ -100,12 +116,12 @@ void loop() {
                 int ymax = (int)(item.yMax() * im_h);
 
                 // Draw boundary box
-                printf("Item %d %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
+                printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
                 // Print identification text
                 char text_str[20];
-                snprintf(text_str, sizeof(text_str), "%s %d", item.name(), item.score());
+                snprintf(text_str, sizeof(text_str), "%s %d", itemList[obj_type].objectName, item.score());
                 OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN);
             }
         }
