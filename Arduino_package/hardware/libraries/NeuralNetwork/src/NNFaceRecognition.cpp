@@ -81,7 +81,7 @@ void NNFaceRecognition::end(void) {
         return;
     }
     sisoDestroy(facerecog_siso_ctx);
-    _p_mmf_context = NULL;
+    facerecog_siso_ctx = NULL;
 
     if (facerecog_ctx == NULL) {
         return;

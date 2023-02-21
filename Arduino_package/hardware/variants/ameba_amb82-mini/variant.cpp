@@ -25,6 +25,7 @@ extern "C" {
 #endif
 
 #include "us_ticker_api.h"
+#include "wiring_digital.h"
 __weak void _init(void) { }
 void __libc_init_array(void);
 
@@ -91,7 +92,12 @@ void ameba_init(void)
     // Initialize C library
     __libc_init_array();
 
+    // Initialize micro ticker
     us_ticker_init();
+
+    // Initialize onboard LED
+    pinMode(LED_B, OUTPUT);
+    pinMode(LED_G, OUTPUT);
 }
 // ----------------------------------------------------------------------------
 
