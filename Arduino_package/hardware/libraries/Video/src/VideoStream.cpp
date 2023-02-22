@@ -35,11 +35,12 @@ VideoSetting::VideoSetting(uint8_t preset) {
             break;
         }
         case 2: {
-            _resolution = VIDEO_FHD;
+            _resolution = VIDEO_HD;
             _fps = CAM_FPS;
             _bps = CAM_BPS;
             _encoder = VIDEO_JPEG;
             _snapshot = 0;
+            _jpeg_qlevel = 2;
             break;
         }
         default: {
@@ -67,11 +68,15 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     _snapshot = snapshot;
     _jpeg_qlevel = 5;
 
-    if((_snapshot == 1)) {
+    if ((_snapshot == 1)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
             printf("snapshot function not supported on selected encoder!\n\r");
             _snapshot = 0;
         }
+    }
+
+    if (encoder == VIDEO_JPEG) {
+        _jpeg_qlevel = 2;
     }
 
     if (_resolution == VIDEO_FHD) {
@@ -108,6 +113,8 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
 
     // Check resolution minimums
     if (encoder == VIDEO_JPEG) {
+        _jpeg_qlevel = 2;
+
         if (_w < 352) {
             _w = 352;
             printf("Minimum JPEG resolution 352 x 288 \r\n");
