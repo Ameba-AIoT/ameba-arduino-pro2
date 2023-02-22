@@ -52,6 +52,13 @@ void MotionDetection::begin(void) {
     setMDParams(_p_mmf_context->priv, &md_param);
 //    setMDThreshold(_p_mmf_context->priv, &md_thr);
     setMDDisppost(_p_mmf_context->priv, md_ResultCB);
+
+    if (trigCount) {
+        setMDTrigBlock(_p_mmf_context->priv, trigCount);
+        md_control(_p_mmf_context->priv, CMD_MD_SET_OUTPUT, 1);
+        mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 1);
+        mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+    }
 }
 
 void MotionDetection::end(void) {
@@ -67,13 +74,11 @@ void MotionDetection::end(void) {
 }
 
 void MotionDetection::setTriggerBlockCount(uint16_t count) {
+    trigCount = count;
     if (_p_mmf_context == NULL) {
         return;
     }
     setMDTrigBlock(_p_mmf_context->priv, count);
-    mm_module_ctrl(_p_mmf_context, CMD_MD_SET_OUTPUT, 1);
-    mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 1);
-    mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
 }
 
 void MotionDetection::setDetectionMask(char* mask) {
@@ -84,6 +89,9 @@ void MotionDetection::setDetectionMask(char* mask) {
 }
 
 char* MotionDetection::getResult(void) {
+    if (_p_mmf_context == NULL) {
+        return md_result;
+    }
     getMDResult(_p_mmf_context->priv, md_result);
     return md_result;
 }
