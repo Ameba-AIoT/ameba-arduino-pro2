@@ -13,11 +13,7 @@ int keyIndex = 0;                   // your network key Index number (needed onl
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
-#if defined(BOARD_RTL8720DN_BW16)
-#define LED_PIN 5
-#else
-#define LED_PIN 13
-#endif
+#define LED_PIN LED_B
 
 void setup() {
     Serial.begin(115200);           // initialize serial communication

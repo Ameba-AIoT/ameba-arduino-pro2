@@ -439,7 +439,7 @@ int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, in
             case MBEDTLS_ERR_SSL_TIMEOUT:
                 break;
             default:
-                printf("mbedtls_ssl_read returned: -0x%04X \r\n", -ret);
+                //printf("mbedtls_ssl_read returned: -0x%04X \r\n", -ret);
                 stop_ssl_socket(ssl_client);
                 break;
         }
@@ -454,10 +454,15 @@ int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, in
 }
 
 int get_ssl_sock_errno(sslclient_context *ssl_client) {
-    int so_error;
-    socklen_t len = sizeof(so_error);
-    lwip_getsockopt(ssl_client->socket, SOL_SOCKET, SO_ERROR, &so_error, &len);
-    return so_error;
+// https://www.nongnu.org/lwip/2_1_x/upgrading.html
+// socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
+// All other/normal/synchronous errors are (and always were) available via 'errno'.
+//    int so_error;
+//    socklen_t len = sizeof(so_error);
+//    lwip_getsockopt(ssl_client->socket, SOL_SOCKET, SO_ERROR, &so_error, &len);
+//    return so_error;
+    (void) ssl_client->socket;
+    return errno;
 }
 
 int get_ssl_bytes_avail(sslclient_context *ssl_client) {
