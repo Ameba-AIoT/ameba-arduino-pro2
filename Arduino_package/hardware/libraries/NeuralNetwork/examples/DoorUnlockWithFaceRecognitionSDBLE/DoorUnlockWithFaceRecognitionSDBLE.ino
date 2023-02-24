@@ -4,7 +4,6 @@
 // Reset registered faces:  "RESET"                 Forget all previously registered faces
 // Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
 // Restore registered faces from flash: "RESTORE"   Load registered faces from flash
-// This example acts as a Locking System, which would activate the Face Recognition Unlock System when an external button is pushed and take a snapshot of the face used to open the door. The Locking System also act as a Bluetooth Server that could communicate with Bluetooth Client and receive commands such as "Open" and "Snapshot".
 
 #include "WiFi.h"
 #include "StreamIO.h"
@@ -18,28 +17,28 @@
 #include "BLEDevice.h"
 
 // CHANNELVID: RTSP; CHANNELJPEG: MP4; CHANNELNN: Face Detection + Face Recognition
-#define CHANNELVID 0
+#define CHANNELVID  0
 #define CHANNELJPEG 1
-#define CHANNELNN 3
-// Define ON and OFF to replace HIGH and LOW
-#define ON 1
-#define OFF 0
+#define CHANNELNN   3
+
 // Customised resolution for NN
-#define NNWIDTH 576
+#define NNWIDTH  576
 #define NNHEIGHT 320
+
 // Define BLE UUID
 #define UART_SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+
 // BLE Buffer Size
 #define STRING_BUF_SIZE 100
-// Pin Definition
-#define RED_LED 3
-#define GREEN_LED 4
-#define BUTTON_PIN 5
-#define SERVO_PIN 8
 
-// Video Config
+// Pin Definition
+#define RED_LED    3
+#define GREEN_LED  4
+#define BUTTON_PIN 5
+#define SERVO_PIN  8
+
 VideoSetting configVID(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configJPEG(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -49,9 +48,7 @@ RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerFDFR(1, 1);
 StreamIO videoStreamerRGBFD(1, 1);
-// Servo Initialisation
 AmebaServo myservo;
-// BLE Initialisation
 BLEService UartService(UART_SERVICE_UUID);
 BLECharacteristic Rx(CHARACTERISTIC_UUID_RX);
 BLECharacteristic Tx(CHARACTERISTIC_UUID_TX);
@@ -59,10 +56,10 @@ BLEAdvertData advdata;
 BLEAdvertData scndata;
 bool notify = false;
 
-// Variables
-char ssid[] = "RealKungFu";  // your network SSID (name)
-char pass[] = "RealTech";    // your network password
+char ssid[] = "yourNetwork";  // your network SSID (name)
+char pass[] = "Password";     // your network password
 int status = WL_IDLE_STATUS;
+
 int resultSize = 0;
 bool doorOpen = false;
 bool doorLatch = false;
@@ -73,7 +70,7 @@ uint32_t img_len = 0;
 String fileName;
 long counter = 0;
 
-// File Initialisation
+// File Initialization
 AmebaFatFS fs;
 
 void setup() {
@@ -82,6 +79,7 @@ void setup() {
   pinMode(GREEN_LED, OUTPUT);
   pinMode(BUTTON_PIN, INPUT);
   myservo.attach(SERVO_PIN);
+  
   Serial.begin(115200);
 
   // attempt to connect to Wifi network:
@@ -95,6 +93,7 @@ void setup() {
   }
 
   // BLE Setup
+  BLE.setDeviceName("AMEBA_BLE_FACERECOG");
   advdata.addFlags();
   advdata.addCompleteName("AMEBA_BLE_FACERECOG");
   scndata.addCompleteServices(BLEUUID(UART_SERVICE_UUID));
@@ -168,6 +167,7 @@ void setup() {
   // Start OSD drawing on RTSP video channel
   OSD.configVideo(CHANNELVID, configVID);
   OSD.begin();
+  
   // Start BLE
   BLE.beginPeripheral();
   // Servo moves to position the angle 180 degree (LOCK CLOSE)
@@ -176,29 +176,47 @@ void setup() {
 
 void loop() {
   buttonState = digitalRead(BUTTON_PIN);
-  if ((buttonState == ON) && (systemOn == false)) { // When button is being pressed, systemOn becomes true
-    Tx.writeString("Door Bell Pressed.\n");         // Send notification to connected BLE Device
+  if ((buttonState == ON) && (systemOn == false)) {  // When button is being pressed, systemOn becomes true
+    Tx.writeString("Door Bell Pressed.\n");          // Send notification to connected BLE Device
     if (BLE.connected(0) && notify) {
       Tx.notify(0);
     }
-    for (int count = 0; count < 3; count++) {       // Blink the LED for 3 Seconds
-      digitalWrite(RED_LED, ON);
-      digitalWrite(GREEN_LED, ON);
+    for (int count = 0; count < 3; count++) {  // Blink the LED for 3 Seconds
+      digitalWrite(RED_LED, HIGH);
+      digitalWrite(GREEN_LED, HIGH);
       delay(500);
-      digitalWrite(RED_LED, OFF);
-      digitalWrite(GREEN_LED, OFF);
+      digitalWrite(RED_LED, LOW);
+      digitalWrite(GREEN_LED, LOW);
       delay(500);
     }
     systemOn = true;
   } else {
-    if (systemOn == false) {                        // Ensure both LED remains on when button not pressed
+    if (systemOn == false) {  // Ensure both LED remains on when button not pressed
       systemOn = false;
-      digitalWrite(RED_LED, ON);
-      digitalWrite(GREEN_LED, ON);
+      digitalWrite(RED_LED, HIGH);
+      digitalWrite(GREEN_LED, HIGH);
     }
   }
-  if (buttonState == OFF) systemOn = false;         // Set systemOn to false after button is released
-  if (Serial.available() > 0) {                     // Serial Monitor Commands for Face Recognition
+  if (buttonState == OFF) systemOn = false;  // Set systemOn to false after button is released
+  else {
+    if (Rx.readString() == String("Open\n")) {  // When BLE Command "Open" being received
+      digitalWrite(RED_LED, LOW);
+      digitalWrite(GREEN_LED, HIGH);
+      fileName = String("Authorized");  // File name for Authorized Door Opening
+      doorOpen = true;
+      Rx.writeString("Done\n");                            // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
+    } else if (Rx.readString() == String("Snapshot\n")) {  // When BLE Command "Snapshot" being received
+      fs.begin();
+      File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg");  // File name for Snapshot taken
+      delay(1000);
+      Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
+      file.write((uint8_t*)img_addr, img_len);
+      file.close();
+      fs.end();
+      Rx.writeString("Done\n");  // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
+    }
+  }
+  if (Serial.available() > 0) {  // Serial Monitor Commands for Face Recognition
     String input = Serial.readString();
     input.trim();
 
@@ -215,7 +233,7 @@ void loop() {
       facerecog.restoreRegisteredFace();
     }
   }
-  if ((doorOpen == true) && (systemOn == true)) {   // Take snapshot and open door (For 10 secnds) when criteria met
+  if ((doorOpen == true) && (systemOn == true)) {  // Take snapshot and open door (For 10 secnds) when criteria met
     fs.begin();
     File file = fs.open(String(fs.getRootPath()) + fileName + String(++counter) + ".jpg");
     delay(1000);
@@ -227,10 +245,14 @@ void loop() {
     Serial.println("Opening Door!");
     delay(10000);
     myservo.write(180);
-    digitalWrite(RED_LED, ON);
-    digitalWrite(GREEN_LED, OFF);
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(GREEN_LED, LOW);
     doorOpen = false;
   }
+
+  delay(1000);
+  OSD.clearAll(CHANNELVID);
+  OSD.update(CHANNELVID);
 }
 
 // User callback function for post processing of face recognition results
@@ -244,38 +266,22 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
   resultSize = results.size();
 
   if (results.size() > 0) {
-    if (systemOn == true) {                                 // Enter if statement when button is being pressed
-      if (Rx.readString() == String("Open\n")) {            // When BLE Command "Open" being received
-        digitalWrite(RED_LED, OFF);
-        digitalWrite(GREEN_LED, ON);
-        fileName = String("Authorized");                    // File name for Authorized Door Opening
-        doorOpen = true;
-        Rx.writeString("Done\n");                           // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
-      } else if (Rx.readString() == String("Snapshot\n")) { // When BLE Command "Snapshot" being received
-        fs.begin();
-        File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg"); // File name for Snapshot taken
-        delay(1000);
-        Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
-        file.write((uint8_t*)img_addr, img_len);
-        file.close();
-        fs.end();
-        Rx.writeString("Done\n");                           // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
-      }
-      if (results.size() > 1) {                             // Door remain close when more than one face detected
+    if (systemOn == true) {
+      if (results.size() > 1) {  // Door remain close when more than one face detected
         if (doorOpen == false) {
-          digitalWrite(RED_LED, ON);
-          digitalWrite(GREEN_LED, OFF);
+          digitalWrite(RED_LED, HIGH);
+          digitalWrite(GREEN_LED, LOW);
         }
       } else {
         FaceRecognitionResult singleItem = results[0];
-        if (String(singleItem.name()) == String("unknown")) { // Door remain close when one unknown face detected
+        if (String(singleItem.name()) == String("unknown")) {  // Door remain close when one unknown face detected
           if (doorOpen == false) {
-            digitalWrite(RED_LED, ON);
-            digitalWrite(GREEN_LED, OFF);
+            digitalWrite(RED_LED, HIGH);
+            digitalWrite(GREEN_LED, LOW);
           }
-        } else {                                              // Door open when a single registered face detected
-          digitalWrite(RED_LED, OFF);
-          digitalWrite(GREEN_LED, ON);
+        } else {  // Door open when a single registered face detected
+          digitalWrite(RED_LED, LOW);
+          digitalWrite(GREEN_LED, HIGH);
           doorOpen = true;
           fileName = String(singleItem.name());
           // }
