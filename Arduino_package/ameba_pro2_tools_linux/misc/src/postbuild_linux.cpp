@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << "cp " << common_nn_models_path << "* ./";
+        cmdss << "cp " << common_nn_models_path << "/* ./";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());

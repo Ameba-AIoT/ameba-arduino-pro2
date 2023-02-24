@@ -1091,17 +1091,17 @@
             },
             {
               "host": "x86_64-pc-linux-gnu",
-              "archiveFileName": "ameba_pro2_tools_linux-1.1.2.tar.gz",
-              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.1.2.tar.gz",
-              "checksum": "SHA-256:6f7a0311b75cd304af1694dd7078570a51928b6ea1f353af048ceb5bde0b1c79",
-              "size": "4010872"
+              "archiveFileName": "ameba_pro2_tools_linux-1.1.2.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.1.2.1.tar.gz",
+              "checksum": "SHA-256:e15ddbf407c97f2888a77d7cbc5ea6827ac2ea0a1fd29b07192069a0ef02277d",
+              "size": "4010903"
             },
             {
               "host": "x86_64-apple-darwin",
-              "archiveFileName": "ameba_pro2_tools_macos-1.1.2.tar.gz",
-              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.1.2.tar.gz",
-              "checksum": "SHA-256:cba8d61f248d6de6ee3f44c3ba3f2db49d2158b35665f1124b61afe83800e3e3",
-              "size": "765790"
+              "archiveFileName": "ameba_pro2_tools_macos-1.1.2.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.1.2.1.tar.gz",
+              "checksum": "SHA-256:82f53ac0eec2c074dc3c550b55470dd8bb7fa4f13e813451b5e9fd6e335714c1",
+              "size": "765802"
             }
           ]
         },
