@@ -66,6 +66,7 @@ class MotionDetection:public MMFModule {
         motion_detect_threshold_t md_thr = {2,3};
         char md_result[MD_MAX_COL * MD_MAX_ROW] = {0};
         void (*md_ResultCB)(char*) = NULL;
+        uint16_t trigCount = 0;
 };
 
 #endif

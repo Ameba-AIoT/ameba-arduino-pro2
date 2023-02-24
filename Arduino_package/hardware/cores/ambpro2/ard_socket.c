@@ -251,10 +251,16 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
 #endif
 
 int get_sock_errno(int sock) {
-    int so_error;
-    socklen_t len = sizeof(so_error);
-    getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
-    return so_error;
+// https://www.nongnu.org/lwip/2_1_x/upgrading.html
+// socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
+// All other/normal/synchronous errors are (and always were) available via 'errno'.
+
+//    int so_error;
+//    socklen_t len = sizeof(so_error);
+//    lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
+//    return so_error;
+    (void)sock;
+    return errno;
 }
 
 
