@@ -31,6 +31,9 @@ char ssid[] = "yourNetwork";    // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 
+IPAddress ip;
+int rtsp_portnum; 
+
 void setup() {
     Serial.begin(115200);
 
@@ -43,6 +46,7 @@ void setup() {
         // wait 2 seconds for connection:
         delay(2000);
     }
+    ip = WiFi.localIP();
 
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
@@ -54,6 +58,7 @@ void setup() {
     // Configure RTSP with corresponding video format information
     rtsp.configVideo(config);
     rtsp.begin();
+    rtsp_portnum = rtsp.getPort();
 
     // Configure face detection with corresponding video format information
     facedet.configVideo(configNN);
@@ -95,6 +100,13 @@ void loop() {
 void FDPostProcess(std::vector<FaceDetectionResult> results) {
     uint16_t im_h = config.height();
     uint16_t im_w = config.width();
+    
+    Serial.print("Network URL for RTSP Streaming: ");
+    Serial.print("rtsp://");
+    Serial.print(ip);
+    Serial.print(":");
+    Serial.println(rtsp_portnum);
+    Serial.println(" ");
 
     printf("Total number of faces detected = %d\r\n", results.size());
     OSD.clearAll(CHANNEL);
