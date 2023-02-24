@@ -95,6 +95,13 @@ void loop() {
 void FDPostProcess(std::vector<FaceDetectionResult> results) {
     uint16_t im_h = config.height();
     uint16_t im_w = config.width();
+    
+    IPAddress ip = WiFi.localIP();
+    Serial.print("Network URL for RTSP Streaming: ");
+    Serial.print("rtsp://");
+    Serial.print(ip);
+    Serial.print(":");
+    rtsp.printInfo();
 
     printf("Total number of faces detected = %d\r\n", results.size());
     OSD.clearAll(CHANNEL);
