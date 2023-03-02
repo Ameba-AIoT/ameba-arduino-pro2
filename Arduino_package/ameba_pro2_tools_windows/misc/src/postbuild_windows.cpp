@@ -268,17 +268,17 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmdss.clear();
-    cmdss << "\"" <<path_arm_none_eabi_gcc << "arm-none-eabi-objcopy.exe\" -j .bluetooth_trace.text -Obinary application.ntz.axf APP.trace";
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
+    //cmdss.clear();
+    //cmdss << "\"" <<path_arm_none_eabi_gcc << "arm-none-eabi-objcopy.exe\" -j .bluetooth_trace.text -Obinary application.ntz.axf APP.trace";
+    //getline(cmdss, cmd);
+    //cout << cmd << endl;
+    //system(cmd.c_str());
 
-    cmdss.clear();
-    cmdss << "\"" << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy.exe\" -R .bluetooth_trace.text application.ntz.axf";
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
+    //cmdss.clear();
+    //cmdss << "\"" << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy.exe\" -R .bluetooth_trace.text application.ntz.axf -w";
+    //getline(cmdss, cmd);
+    //cout << cmd << endl;
+    //system(cmd.c_str());
 
     // 8. generate .bin
     // 8.1 firmware_ntz.bin
