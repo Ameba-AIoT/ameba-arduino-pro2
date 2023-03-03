@@ -9,7 +9,7 @@
 #include "MotionDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNELVID 0  // Channel for streaming
+#define CHANNELVID 0  // Channel for RTSP streaming
 #define CHANNELMP4 1  // Channel for MP4 recording
 #define CHANNELMD  3  // RGB format video for motion detection only avaliable on channel 3
 #define MDRES      16 // Motion detection grid resolution
@@ -55,8 +55,8 @@ char mask[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1
 };
 
-char ssid[] = "yourNetwork";  // your network SSID (name)
-char pass[] = "Password";     // your network password
+char ssid[] = "yourNetwork"; // your network SSID (name)
+char pass[] = "Password";    // your network password
 int status = WL_IDLE_STATUS;
 
 void setup() {

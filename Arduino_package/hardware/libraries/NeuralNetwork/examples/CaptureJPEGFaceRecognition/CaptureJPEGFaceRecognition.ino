@@ -15,9 +15,9 @@
 #include "VideoStreamOverlay.h"
 #include "AmebaFatFS.h"
 
-#define CHANNELVID  0 // Channel for streaming
+#define CHANNELVID  0 // Channel for RTSP streaming
 #define CHANNELJPEG 1 // Channel for taking snapshots
-#define CHANNELNN   3 // RGB format video for motion detection only avaliable on channel 3
+#define CHANNELNN   3 // RGB format video for NN only avaliable on channel 3
 
 // Customised resolution for NN
 #define NNWIDTH 576
@@ -28,7 +28,7 @@
 #define GREEN_LED 4
 #define BUTTON_PIN 5
 
-// Select the maximum number of snapshots to capture.
+// Select the maximum number of snapshots to capture
 #define MAX_UNKNOWN_COUNT 5
 
 VideoSetting configVID(VIDEO_FHD, CAM_FPS, VIDEO_H264, 0);
@@ -127,14 +127,14 @@ void setup() {
 }
 
 void loop() {
-    if (regFace == true) {                  // Face Recognition mode when image first uploaded
-        digitalWrite(RED_LED, HIGH);            // Blink the LED for 3 Seconds
+    if (regFace == true) { //Face Recognition mode on
+        digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, HIGH);
         delay(500);
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, LOW);
         delay(500);
-    if (Serial.available() > 0) {         // Serial Monitor Commands for Face Recognition
+    if (Serial.available() > 0) {
         String input = Serial.readString();
         input.trim();
 
@@ -151,8 +151,8 @@ void loop() {
           facerecog.restoreRegisteredFace();
         }
       }
-      buttonState = digitalRead(BUTTON_PIN);  
-      if (buttonState == HIGH) regFace = false; // When button is pressed, face registration mode is off.
+      buttonState = digitalRead(BUTTON_PIN);
+      if (buttonState == HIGH) regFace = false; // When button is pressed, face registration mode off.
     } else {
       // Do something
     }
@@ -182,8 +182,8 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
           if (regFace == false) {
             unknownDetected = true;
             unknownCount++;
-            if (unknownCount < (MAX_UNKNOWN_COUNT + 1)) {                         // Ensure number of snapshots under MAX_UNKNOWN_COUNT
-              facerecog.registerFace("Stranger" + String(unknownCount));          // Register first MAX_UNKNOWN_COUNT of unrecognised face under named Stranger <No.> to prevent recapture of same unrecognised person twice
+            if (unknownCount < (MAX_UNKNOWN_COUNT + 1)) { // Ensure number of snapshots under MAX_UNKNOWN_COUNT
+              facerecog.registerFace("Stranger" + String(unknownCount)); // Register under named Stranger <No.> to prevent recapture of same unrecognised person twice
               fs.begin();
               File file = fs.open(String(fs.getRootPath()) + "Stranger" + String(unknownCount) + ".jpg"); // Capture snapshot of stranger under name Stranger <No.>
               delay(1000);
@@ -205,10 +205,10 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
         snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
         OSD.drawText(CHANNELVID, xmin, ymin - OSD.getTextHeight(CHANNELVID), text_str, osd_color);
       }
-      if ((regFace == false) && (unknownDetected == true)) {           // RED LED remain lit up when unknown faces detected
+      if ((regFace == false) && (unknownDetected == true)) { // RED LED remain lit up when unknown faces detected
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
-      } else if ((regFace == false) && (unknownDetected == false)) {  // GREEN LED lit up when no unknown faces detected, Strangers are no longer considered unknown faces.
+      } else if ((regFace == false) && (unknownDetected == false)) { // GREEN LED lit up when no unknown faces detected, Strangers are no longer considered unknown faces
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, HIGH);
       }
