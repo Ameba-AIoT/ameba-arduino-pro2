@@ -28,7 +28,7 @@
 #define GREEN_LED 4
 #define BUTTON_PIN 5
 
-// Select the maximum number of snapshots to capture.
+// Select the maximum number of snapshots to capture
 #define MAX_UNKNOWN_COUNT 5
 
 VideoSetting configVID(VIDEO_FHD, CAM_FPS, VIDEO_H264, 0);
@@ -208,7 +208,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
       if ((regFace == false) && (unknownDetected == true)) { // RED LED remain lit up when unknown faces detected
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
-      } else if ((regFace == false) && (unknownDetected == false)) { // GREEN LED lit up when no unknown faces detected, Strangers are no longer considered unknown faces.
+      } else if ((regFace == false) && (unknownDetected == false)) { // GREEN LED lit up when no unknown faces detected, Strangers are no longer considered unknown faces
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, HIGH);
       }
