@@ -16,10 +16,9 @@
 #include "AmebaFatFS.h"
 #include "BLEDevice.h"
 
-// CHANNELVID: RTSP; CHANNELJPEG: MP4; CHANNELNN: Face Detection + Face Recognition
-#define CHANNELVID  0
-#define CHANNELJPEG 1
-#define CHANNELNN   3
+#define CHANNELVID  0 // Channel for RTSP streaming
+#define CHANNELJPEG 1 // Channel for taking snapshots
+#define CHANNELNN   3 // RGB format video for NN only avaliable on channel 3
 
 // Customised resolution for NN
 #define NNWIDTH  576
@@ -181,7 +180,7 @@ void loop() {
     if (BLE.connected(0) && notify) {
       Tx.notify(0);
     }
-    for (int count = 0; count < 3; count++) {  // Blink the LED for 3 Seconds
+    for (int count = 0; count < 3; count++) {
       digitalWrite(RED_LED, HIGH);
       digitalWrite(GREEN_LED, HIGH);
       delay(500);
@@ -191,32 +190,33 @@ void loop() {
     }
     systemOn = true;
   } else {
-    if (systemOn == false) {  // Ensure both LED remains on when button not pressed
+    //Both LED remains on when button not pressed
+    if (systemOn == false) {
       systemOn = false;
       digitalWrite(RED_LED, HIGH);
       digitalWrite(GREEN_LED, HIGH);
     }
   }
-  if (buttonState == OFF) systemOn = false;  // Set systemOn to false after button is released
+  if (buttonState == OFF) systemOn = false;
   else {
-    if (Rx.readString() == String("Open\n")) {  // When BLE Command "Open" being received
+    if (Rx.readString() == String("Open\n")) {
       digitalWrite(RED_LED, LOW);
       digitalWrite(GREEN_LED, HIGH);
       fileName = String("Authorized");  // File name for Authorized Door Opening
       doorOpen = true;
-      Rx.writeString("Done\n");                            // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
-    } else if (Rx.readString() == String("Snapshot\n")) {  // When BLE Command "Snapshot" being received
+      Rx.writeString("Done\n"); // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
+    } else if (Rx.readString() == String("Snapshot\n")) { // When BLE Command "Snapshot" being received
       fs.begin();
-      File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg");  // File name for Snapshot taken
+      File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg"); // File name for Snapshot taken
       delay(1000);
       Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
       file.write((uint8_t*)img_addr, img_len);
       file.close();
       fs.end();
-      Rx.writeString("Done\n");  // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
+      Rx.writeString("Done\n"); // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
     }
   }
-  if (Serial.available() > 0) {  // Serial Monitor Commands for Face Recognition
+  if (Serial.available() > 0) {
     String input = Serial.readString();
     input.trim();
 
@@ -233,7 +233,8 @@ void loop() {
       facerecog.restoreRegisteredFace();
     }
   }
-  if ((doorOpen == true) && (systemOn == true)) {  // Take snapshot and open door (For 10 secnds) when criteria met
+  // Take snapshot and open door for 10 seconds
+  if ((doorOpen == true) && (systemOn == true)) {
     fs.begin();
     File file = fs.open(String(fs.getRootPath()) + fileName + String(++counter) + ".jpg");
     delay(1000);
@@ -267,24 +268,23 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
 
   if (results.size() > 0) {
     if (systemOn == true) {
-      if (results.size() > 1) {  // Door remain close when more than one face detected
+      if (results.size() > 1) { // Door remain close when more than one face detected
         if (doorOpen == false) {
           digitalWrite(RED_LED, HIGH);
           digitalWrite(GREEN_LED, LOW);
         }
       } else {
         FaceRecognitionResult singleItem = results[0];
-        if (String(singleItem.name()) == String("unknown")) {  // Door remain close when one unknown face detected
+        if (String(singleItem.name()) == String("unknown")) {  // Door remain close when unknown face detected
           if (doorOpen == false) {
             digitalWrite(RED_LED, HIGH);
             digitalWrite(GREEN_LED, LOW);
           }
-        } else {  // Door open when a single registered face detected
+        } else { // Door open when a single registered face detected
           digitalWrite(RED_LED, LOW);
           digitalWrite(GREEN_LED, HIGH);
           doorOpen = true;
           fileName = String(singleItem.name());
-          // }
         }
       }
     }
