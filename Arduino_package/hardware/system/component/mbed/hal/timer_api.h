@@ -112,6 +112,9 @@ void gtimer_start_periodical(gtimer_t *obj, uint32_t duration_us, void *handler,
   */
 void gtimer_stop(gtimer_t *obj);
 
+#ifdef ARDUINO_SDK
+void gtimer_init_arduino(gtimer_t *obj, uint32_t tid, u8 arduino_pm_clk_sel);
+#endif
 
 #if defined(CONFIG_PLATFORM_8195A) && (CONFIG_PLATFORM_8195A == 1)
 ///@name Ameba Only

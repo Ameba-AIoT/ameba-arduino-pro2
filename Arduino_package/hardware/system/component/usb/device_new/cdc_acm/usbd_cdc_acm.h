@@ -104,7 +104,6 @@ typedef struct {
 } usbd_cdc_acm_cb_t;
 
 typedef struct {
-	u8 *ctrl_buf; 		/* TODO: Move this buffer to usb_dev_t */
 	u8  ctrl_req;
 	u8  ctrl_data_len;	/* TODO: Remove and get the data length via usbd_core_get_rx_data_size? */
 
@@ -130,12 +129,12 @@ typedef struct {
 
 /* Exported functions --------------------------------------------------------*/
 
-u8 usbd_cdc_acm_init(u16 rx_buf_len, u16 tx_buf_len, usbd_cdc_acm_cb_t *cb);
-u8 usbd_cdc_acm_deinit(void);
-u8 usbd_cdc_acm_transmit(u8 *buf, u16 len);
-u8 usbd_cdc_acm_receive(void);
+u8 usbd_cdc_new_acm_init(u16 rx_buf_len, u16 tx_buf_len, usbd_cdc_acm_cb_t *cb);
+u8 usbd_cdc_new_acm_deinit(void);
+u8 usbd_cdc_new_acm_transmit(u8 *buf, u16 len);
+u8 usbd_cdc_new_acm_receive(void);
 #if CONFIG_CDC_ACM_NOTIFY
-u8 usbd_cdc_acm_notify_serial_state(u16 serial_state);
+u8 usbd_cdc_new_acm_notify_serial_state(u16 serial_state);
 #endif
 #endif  /* USBD_CDC_ACM_H */
 

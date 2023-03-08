@@ -49,6 +49,7 @@
 #define CMD_RTSP2_SET_CHANGE_RATE_EN            MM_MODULE_CMD(0x1c)
 #define CMD_RTSP2_SET_CUSTOM_CODEC              MM_MODULE_CMD(0x1d)
 #define CMD_RTSP2_SET_PACKET_RETRY              MM_MODULE_CMD(0x1e)
+#define CMD_CMD_RTSP2_SET_TIME_OFFSET           MM_MODULE_CMD(0x1f)
 #define RTSP_WIFI_STA           0
 #define RTSP_ETHERNET           2
 

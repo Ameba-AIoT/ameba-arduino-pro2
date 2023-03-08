@@ -15,13 +15,13 @@
 
 #ifndef USBH_H
 #define USBH_H
-
 /* Includes ------------------------------------------------------------------*/
 
-#include "usb_ch9.h"
+//#include "usb_ch9.h"
+#include "common_new/usb_ch9.h"
 #include "usb_os.h"
 #include "usb_hal.h"
-
+#include "cmsis.h"
 /* Exported defines ----------------------------------------------------------*/
 
 #define USBH_MAX_PIPES_NUM					7
@@ -130,7 +130,7 @@ typedef union {
 /* USB user configuration */
 typedef struct {
 	u8 host_channels;									/* Max host channels used, 1~5, EP0-INOUT, EP1-IN, EP2-OUT, EP3-IN, EP4-OUT */
-	u8 speed;											/* USB speed, USBD_SPEED_HIGH or USBD_SPEED_FULL */
+	u8 speed;											/* USB speed, USB_SPEED_HIGH, USB_SPEED_HIGH_IN_FULL or USB_SPEED_LOW */
 	u8 dma_enable;										/* Enable USB internal DMA mode, 0-Disable, 1-Enable */
 	u8 main_task_priority;								/* USB main thread priority */
 	u8 isr_task_priority;								/* USB ISR thread priority */
@@ -197,6 +197,12 @@ u8 usbh_get_status(void);
 u8  usbh_register_class(usbh_class_driver_t *driver);
 /* Un-Register class driver */
 u8  usbh_unregister_class(usbh_class_driver_t *driver);
+
+/*
+	Config descriptor operations,
+	set the config id while bNumConfigurations[device descriptor]>1
+*/
+u8 usbh_set_config_interface(usb_host_t *host, u8 cfg_num);
 
 /* Pipe operations */
 u8 usbh_alloc_pipe(usb_host_t *host, u8 ep_addr); /* 0xFF means no available pipe */

@@ -43,7 +43,7 @@ u8 usbd_core_setup_stage(usb_dev_t *dev, u8 *setup);
 u8 usbd_core_data_out_stage(usb_dev_t *dev, u8 ep_num, u8 *buf);
 u8 usbd_core_data_in_stage(usb_dev_t *dev, u8 ep_num, u8 *buf);
 u8 usbd_core_reset(usb_dev_t  *dev);
-u8 usbd_core_set_speed(usb_dev_t  *dev, usbd_speed_type_t speed);
+u8 usbd_core_set_speed(usb_dev_t  *dev, usb_speed_type_t speed);
 u8 usbd_core_suspend(usb_dev_t  *dev);
 u8 usbd_core_resume(usb_dev_t  *dev);
 u8 usbd_core_sof(usb_dev_t  *dev);

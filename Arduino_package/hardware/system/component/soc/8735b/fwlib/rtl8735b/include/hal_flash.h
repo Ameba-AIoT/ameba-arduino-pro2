@@ -45,7 +45,10 @@ extern "C"
 #define FLASH_CMD_EXSO      0xC1            // exit secured OTP
 #define FLASH_CMD_RDSCUR    0x2B            // read security register
 #define FLASH_CMD_WRSCUR    0x2F            // write security register    
+#define FLASH_CMD_EN4ADDR   0xB7            // Enter flash 4 bytes address mode
+#define FLASH_CMD_EXIT4ADDR 0xE9            // Exit flash 4 bytes address mode
 
+#define FLASH_ID_4ADDR      0x19            // if the third byte of flash id >= 0x19, flash needs the fourth address byte
 #define ExtAddrBytesShift   24              // shift 24 bits of address bytes
 #define ThreeAddrBytesMask  0xFFFFFF        // Mask of  24 bits of address bytes
 /**
@@ -90,9 +93,10 @@ void hal_flash_stream_write(phal_spic_adaptor_t phal_spic_adaptor, u32 length, u
 void hal_flash_burst_read(phal_spic_adaptor_t phal_spic_adaptor, u32 length, u32 addr, u8 *data);
 void hal_flash_burst_write(phal_spic_adaptor_t phal_spic_adaptor, u32 length, u32 addr, u8 *data);
 void hal_flash_page_program(phal_spic_adaptor_t phal_spic_adaptor, u32 length, u32 addr, u8 *data);
-//void hal_flash_read_write_flash (phal_spic_adaptor_t phal_spic_adaptor, u32 length, u32 addr, u8 *data);
 void hal_flash_reset_to_spi(phal_spic_adaptor_t phal_spic_adaptor);
 void hal_flash_support_new_type(phal_spic_adaptor_t phal_spic_adaptor);
+void hal_flash_enter_4byte_addr(phal_spic_adaptor_t phal_spic_adaptor);
+void hal_flash_exit_4byte_addr(phal_spic_adaptor_t phal_spic_adaptor);
 
 
 /** *@} */ /* End of group hs_hal_flash_ram_func */

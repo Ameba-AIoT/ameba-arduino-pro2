@@ -41,30 +41,30 @@ RingBuffer rx_buffer1;
 
 //volatile char rc = 0;
 
-//void uart_send_str(serial_t *sobj, char *pstr)
-//{
+//void uart_send_str(serial_t *uart_obj, char *pstr) {
 //    unsigned int i = 0;
-
 //    while (*(pstr + i) != 0) {
-//        serial_putc(sobj, *(pstr + i));
+//        serial_putc(uart_obj, *(pstr + i));
 //        i++;
 //    }
 //}
 
-static void arduino_uart_irq_handler(uint32_t id, SerialIrq event)
-{
+static void arduino_uart_irq_handler(uint32_t id, SerialIrq event) {
     char c;
     RingBuffer *pRxBuffer = (RingBuffer *)id;
+    //serial_t *pRxBuffer = (serial_t *)id;
 
     if (event == RxIrq) {
         c = char(serial_getc(&uart_obj));
         pRxBuffer->store_char(c);
+        //rc = serial_getc(pRxBuffer);
+        //serial_putc(pRxBuffer, rc);
     }
 
-//    if (event == TxIrq && rc != 0) {
-//        uart_send_str(sobj, "\r\n8735b$");
-//        rc = 0;
-//    }
+    //if (event == TxIrq && rc != 0) {
+    //    uart_send_str((serial_t *)id, "\r\n8735b$");
+    //    rc = 0;
+    //}
 }
 
 UARTClassOne::UARTClassOne(int dwIrq, RingBuffer* pRx_buffer)
@@ -73,7 +73,7 @@ UARTClassOne::UARTClassOne(int dwIrq, RingBuffer* pRx_buffer)
     _dwIrq = dwIrq;
 }
 
-// Protected Methods //////////////////////////////////////////////////////////////
+// Protected Methods ///////////////////////////////////////////////////////////
 
 // Public Methods //////////////////////////////////////////////////////////////
 //zzw 
@@ -99,7 +99,7 @@ void UARTClassOne::IrqHandler(void)
 }
 #endif
 
-void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value)
+void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value, uint32_t uart0_clk_sel)
 {
     // Log, UART1
     //serial_init(&log_uart_obj, PF_4, PF_3);
@@ -108,7 +108,8 @@ void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value)
 
     // serial1, UART0
     //serial_init(&uart_obj, PA_2, PA_3);
-    serial_init(&uart_obj, PinName(g_APinDescription[SERIAL1_TX].pinname), PinName(g_APinDescription[SERIAL1_RX].pinname));
+    //serial_init(&uart_obj, PinName(g_APinDescription[SERIAL1_TX].pinname), PinName(g_APinDescription[SERIAL1_RX].pinname));
+    serial_init_arduino(&uart_obj, PinName(g_APinDescription[SERIAL1_TX].pinname), PinName(g_APinDescription[SERIAL1_RX].pinname), uart0_clk_sel);
 
     // serial2, UART2
     //serial_init(&uart_obj, PD_15, PD_16);

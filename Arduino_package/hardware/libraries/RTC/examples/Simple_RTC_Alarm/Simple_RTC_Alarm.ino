@@ -14,21 +14,19 @@
 #include "rtc.h"
 
 /* Change these values to set the current initial date */
-#define YEAR 2020
-#define MONTH 1
-#define DAY 1
+#define YEAR        2020
+#define MONTH       1
+#define DAY         1
 /* Change these values to set the current initial time */
-#define HOUR 16
-#define MIN 0
-#define SEC 0
+#define HOUR        16
+#define MIN         0
+#define SEC         0
 /* Change these values to set the alarm time */
-#define ALARM_DAY 1
-#define ALARM_HOUR 16
-#define ALARM_MIN 0
-#define ALARM_SEC 10  // set alarm as 10 seconds
+#define ALARM_DAY   1
+#define ALARM_HOUR  16
+#define ALARM_MIN   0
+#define ALARM_SEC   10  // set alarm as 10 seconds
 
-/* Create an rtc object */
-AMB_RTC rtc;
 long long seconds;
 struct tm *timeinfo;
 
@@ -67,4 +65,3 @@ void printStringTime(void) {
     Serial.print(":");
     Serial.println(timeinfo->tm_sec);
 }
-

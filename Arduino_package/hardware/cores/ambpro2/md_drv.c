@@ -15,7 +15,7 @@ void setMDParams(void *p, md_param_t* md_param) {
 }
 
 void setMDThreshold(void *p, motion_detect_threshold_t* md_thr) {
-    md_control(p, CMD_MD_SET_MD_THRESHOLD, (int)md_thr);
+    //md_control(p, CMD_MD_SET_MD_THRESHOLD, (int)md_thr);
 }
 
 void setMDMask(void *p, char* md_mask) {

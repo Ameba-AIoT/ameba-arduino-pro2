@@ -299,6 +299,7 @@ typedef struct {
 	u32 *hal_version;
 
 	isp_mask_group_t *isp_mask_group;
+	int tick_offset[MAX_CHANNEL];
 
 	__attribute__((aligned(32))) volatile int		voe_info;
 
@@ -361,6 +362,17 @@ typedef struct  {
 } video_peri_info_t;
 
 
+typedef struct  {
+
+	int voe_load;
+	int isp_ready;
+	int fcs_done;
+	int frame_done;
+	int reserv[4];
+
+} video_time_info_t;
+
+
 
 /** @} */ // end of GROUP_ENC_MODULE_SYSTEM_CONFIGURATION
 
@@ -419,7 +431,7 @@ int hal_video_md_trigger(void);
 // Show VOE information
 int hal_video_mem_info(void);
 int hal_video_buf_info(void);
-int hal_video_time_info(int level);
+int hal_video_time_info(int level, video_time_info_t *time_info);
 int hal_video_print(int mode);
 
 
@@ -448,6 +460,8 @@ int hal_video_config_grid_mask(int enable, isp_grid_t grid, uint8_t *bitmap);
 int hal_video_config_rect_mask(int enable, uint32_t id, isp_rect_t rect);
 int hal_video_set_mask(int ch, BOOL fast_en);
 int hal_video_set_dynamic_zoom(int ch, isp_crop_t corp_info);
+void hal_video_set_fps(int fps, int ch);
+int hal_video_get_no_video_time(void);
 
 extern hal_video_adapter_t vv_adapter;
 

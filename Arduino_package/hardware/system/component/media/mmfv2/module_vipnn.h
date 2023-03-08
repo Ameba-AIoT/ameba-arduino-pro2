@@ -100,6 +100,8 @@ typedef struct nn_data_param_s {
 			int channel;
 		} aud;
 	};
+	int codec_type;
+
 	// DONT use this
 	void *priv;
 	// DONT use this

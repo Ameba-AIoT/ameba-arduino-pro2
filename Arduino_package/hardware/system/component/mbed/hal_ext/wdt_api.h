@@ -88,6 +88,10 @@ void watchdog_irq_init(wdt_irq_handler handler, uint32_t id);
 
 /*\@}*/
 
+#ifdef ARDUINO_SDK
+void watchdog_init_arduino(uint32_t timeout_ms, uint32_t arduino_AON_sel);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

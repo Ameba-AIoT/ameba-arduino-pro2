@@ -19,15 +19,13 @@
 #define MIN 14
 #define SEC 15
 
-/* Create an rtc object */
-AMB_RTC rtc;
 long long seconds = 0;
 struct tm *timeinfo;
 
 void setup() {
     Serial.begin(115200);
     rtc.Init(); 
-    long long epochTime = rtc.SetEpoch(YEAR, MONTH, DAY, HOUR, MIN, SEC);
+    long long epochTime =rtc.SetEpoch(YEAR, MONTH, DAY, HOUR, MIN, SEC);
     rtc.Write(epochTime);
 }
 
@@ -67,4 +65,3 @@ void printStringTime(void) {
     Serial.print(":");
     Serial.println(timeinfo->tm_sec);
 }
-

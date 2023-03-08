@@ -25,8 +25,10 @@ uint32_t timer_mapping[GTIMER_MAX - 1] = {
 
 gtimer_t objGTimers[GTIMER_MAX - 1];
 
-void GTimerClass::begin(uint32_t timerid, uint32_t duration_us, void (*handler)(uint32_t), bool periodical, uint32_t userdata)
-{
+GTimerClass::GTimerClass(void) {};
+GTimerClass::~GTimerClass(void) {};
+
+void GTimerClass::begin(uint32_t timerid, uint32_t duration_us, void (*handler)(uint32_t), bool periodical, uint32_t userdata, uint32_t timer0_clk_sel) {
     uint32_t tid;
     //uint32_t backup_ConfigDebugErr;
 
@@ -38,7 +40,8 @@ void GTimerClass::begin(uint32_t timerid, uint32_t duration_us, void (*handler)(
     //ConfigDebug[0] = 0x00000000;
 
     tid = timer_mapping[timerid];
-    gtimer_init(&objGTimers[timerid], tid);
+    //gtimer_init(&objGTimers[timerid], tid);
+    gtimer_init_arduino(&objGTimers[timerid], tid, timer0_clk_sel);
     if (periodical) {
         gtimer_start_periodical(&objGTimers[timerid], duration_us, (void *)handler, userdata);
     } else {
@@ -48,8 +51,7 @@ void GTimerClass::begin(uint32_t timerid, uint32_t duration_us, void (*handler)(
     //ConfigDebug[0] = backup_ConfigDebugErr;
 }
 
-void GTimerClass::stop(uint32_t timerid)
-{
+void GTimerClass::stop(uint32_t timerid) {
     if (timerid >= GTIMER_MAX - 1) {
         return;
     }
@@ -57,8 +59,7 @@ void GTimerClass::stop(uint32_t timerid)
     gtimer_stop(&objGTimers[timerid]);
 }
 
-void GTimerClass::reload(uint32_t timerid, uint32_t duration_us)
-{
+void GTimerClass::reload(uint32_t timerid, uint32_t duration_us) {
     if (timerid >= GTIMER_MAX - 1) {
         return;
     }
@@ -66,8 +67,7 @@ void GTimerClass::reload(uint32_t timerid, uint32_t duration_us)
     gtimer_reload(&objGTimers[timerid], duration_us);
 }
 
-long long GTimerClass::read_us(uint32_t timerid)
-{
+long long GTimerClass::read_us(uint32_t timerid) {
     if (timerid >= GTIMER_MAX - 1) {
         return 0;
     }

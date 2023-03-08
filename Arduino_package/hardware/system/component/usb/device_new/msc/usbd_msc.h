@@ -20,7 +20,14 @@
 #elif defined(CONFIG_AMEBAD2)
 #include "ameba_sd.h"
 #endif
-
+#if defined(CONFIG_PLATFORM_8735B)
+#include "sdio_combine.h"
+#include "sys_api.h"
+#include "fatfs_ramdisk_api.h"
+#include "fatfs_sdcard_api.h"
+#include "fatfs_flash_api.h"
+#include <disk_if/inc/flash_fatfs.h>
+#endif
 /* Exported defines ----------------------------------------------------------*/
 
 /* CTRL buffer size */
@@ -87,11 +94,11 @@
 #define SENSE_LIST_DEEPTH                           4U
 
 typedef struct {
-	SD_RESULT(*disk_init)(void);
-	SD_RESULT(*disk_deinit)(void);
-	SD_RESULT(*disk_getcapacity)(u32 *sectors);
-	SD_RESULT(*disk_read)(u32 sector, u8 *buffer, u32 count);
-	SD_RESULT(*disk_write)(u32 sector, const u8 *buffer, u32 count);
+	int(*disk_init)(void);
+	int(*disk_deinit)(void);
+	int(*disk_getcapacity)(u32 *sectors);
+	int(*disk_read)(u32 sector, u8 *buffer, u32 count);
+	int(*disk_write)(u32 sector, const u8 *buffer, u32 count);
 } usb_msc_opts_t;
 
 /* command block wrapper */
@@ -148,7 +155,7 @@ typedef struct {
 	usb_dev_t *dev;
 } usbd_msc_dev_t;
 
-int usbd_msc_init(void);
-void usbd_msc_deinit(void);
+int usbd_new_msc_init(void);
+void usbd_new_msc_deinit(void);
 
 #endif // USBD_MSC_H

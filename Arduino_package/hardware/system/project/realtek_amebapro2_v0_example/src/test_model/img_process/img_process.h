@@ -4,7 +4,13 @@
 typedef struct img_s {
 	unsigned int width;
 	unsigned int height;
-	unsigned char *data;
+	union {
+		unsigned char *data;
+		struct {
+			unsigned char *y_data;
+			unsigned char *uv_data;
+		} yuv;
+	};
 } img_t;
 
 typedef struct rect_s {
@@ -61,17 +67,16 @@ void *img_dma_copy(uint8_t *dst, uint8_t *src, uint32_t size);
  *
  * [in] w : pointer to the destination
  * [in] h : pointer to the source of data
- * [in] pbuf : pointer to the allocated data buffer. If set it to NULL, memory will be allocated in function
  * [out] ret : created image
  */
-img_t img_create_image(int w, int h, uint8_t *pbuf);
+img_t *img_create_image(int w, int h);
 
 /*
  * brief: free image data buffer if allocated
  *
  * [in] im : image with data buffer need to free
  */
-void img_free_image(img_t im);
+void img_free_image(img_t *im);
 
 /*
  * brief: scale the input image to output image with padding
@@ -80,5 +85,32 @@ void img_free_image(img_t im);
  * [out] p_im_out : target image
  */
 void img_scaled_into_letterbox(img_t *p_im_in, img_t *p_im_out);
+
+/*
+ * brief: resize the nv12 image
+ *
+ * [in] im_in : original image
+ * [out] im_out : output resized image
+ */
+void img_nv12_resize_nearest(img_t *im_in, img_t *im_out);
+void img_nv12_resize_bilinear(img_t *im_in, img_t *im_out);
+void img_nv12_resize_stb(img_t *im_in, img_t *im_out);
+
+/*
+ * brief: convert nv12 to planar rgb
+ *
+ * [in] nv12_in : nv12 image
+ * [out] rgb_out : planar rgb image
+ */
+void img_nv12_to_rgb(img_t *nv12_in, img_t *rgb_out);
+
+/*
+ * brief: draw bbox on image
+ *
+ * [in] im_in : nv12 image drawn
+ * [in] x1, y1, x2, y2 : bbox left top and right bottom
+ * [in] w : line width, set it to -1 to draw filled bbox
+ */
+void img_nv12_draw_box(img_t *im_in, int x1, int y1, int x2, int y2, int w);
 
 #endif /* _IMG_PROCESS_H_ */

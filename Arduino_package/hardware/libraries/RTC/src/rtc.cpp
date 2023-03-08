@@ -2,17 +2,15 @@
 #include <time.h>
 #include "wait_api.h"
 
-
-
-AMB_RTC::AMB_RTC(){};
-AMB_RTC::~AMB_RTC(){};
+RTCClass::RTCClass(){};
+RTCClass::~RTCClass(){};
 
 /**
   * @brief  Initializes the RTC device, include clock, RTC registers and function.
   * @param  none
   * @retval  none
   */
-void AMB_RTC::Init(void) {
+void RTCClass::Init(void) {
     rtc_init();
 }
 
@@ -21,7 +19,7 @@ void AMB_RTC::Init(void) {
   * @param  none
   * @retval  none
   */
-void AMB_RTC::DeInit(void) {
+void RTCClass::DeInit(void) {
     rtc_free();
 }
 
@@ -31,7 +29,7 @@ void AMB_RTC::DeInit(void) {
   *              which is to be set.
   * @retval  none
   */
-void AMB_RTC::Write(long long t) {
+void RTCClass::Write(long long t) {
     rtc_write(t);
 }
 
@@ -41,21 +39,21 @@ void AMB_RTC::Write(long long t) {
   * @retval value: The current timestamp in seconds which is calculated from 
   *              1970.1.1 00:00:00.
   */
-long long AMB_RTC::Read(void) {
+long long RTCClass::Read(void) {
     return (rtc_read());
 }
 
 /**
   * @brief  Wait for s seconds.
   */
-void AMB_RTC::Wait(int s) {
+void RTCClass::Wait(int s) {
     wait_ms(1000 * s);
 }
 
 /**
  * @brief: convert human readable time to epoch time
 */
-long long AMB_RTC::SetEpoch(int year, int month, int day, int hour, int min, int sec) {
+long long RTCClass::SetEpoch(int year, int month, int day, int hour, int min, int sec) {
     struct tm t;
     long long t_of_day;
 
@@ -72,10 +70,12 @@ long long AMB_RTC::SetEpoch(int year, int month, int day, int hour, int min, int
     return t_of_day;
 }
 
-
-void AMB_RTC::EnableAlarm(int day, int hour, int min, int sec, void (*rtc_handler)(void)) {
+/**
+ * @brief: Enable the RTC alarm.
+*/
+void RTCClass::EnableAlarm(int day, int hour, int min, int sec, void (*rtc_handler)(void)) {
     alarm_t alarm;
-    alarm.yday = day;  
+    alarm.yday = day;
     alarm.hour = hour;
     alarm.min = min;
     alarm.sec = sec;
@@ -86,7 +86,12 @@ void AMB_RTC::EnableAlarm(int day, int hour, int min, int sec, void (*rtc_handle
     }
 }
 
-void AMB_RTC::DisableAlarm(void) {
+/**
+ * @brief: Disable the RTC alarm.
+*/
+void RTCClass::DisableAlarm(void) {
     rtc_disable_alarm();
     printf("Alarm disabled\r\n");
 }
+
+RTCClass rtc;

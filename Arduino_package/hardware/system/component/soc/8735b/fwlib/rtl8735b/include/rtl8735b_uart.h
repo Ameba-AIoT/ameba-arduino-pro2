@@ -479,6 +479,11 @@ typedef struct hal_uart_adapter_s {
 
 	irq_handler_t   irq_fun;                    /*!< the IRQ handler for UART adapters */
 	//uint8_t reserv1;            ///< reserved
+
+#ifdef ARDUINO_SDK
+	uint8_t reserv1;            ///< reserved
+#endif
+
 } hal_uart_adapter_t, *phal_uart_adapter_t;
 #endif
 

@@ -13,7 +13,7 @@ void wdt_dummy_task(void);
 class WDT {
     public:
         WDT(void);
-        WDT(int aon_wdt_check);
+        WDT(int aon_en);
         ~WDT(void);
 
         void init(uint32_t timeout_ms);
@@ -23,6 +23,6 @@ class WDT {
         void init_irq(wdt_irq_handler handler, uint32_t id);
 
     private:
-        int AON_WDT = 0;
+        int aon_wdt_check = 0;
 };
 #endif

@@ -6,7 +6,6 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-AmebaWatchdog	KEYWORD1
 WDT	KEYWORD1
 
 #######################################

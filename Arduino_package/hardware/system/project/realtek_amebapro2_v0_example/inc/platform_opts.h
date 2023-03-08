@@ -135,7 +135,10 @@
  */
 #define CONFIG_ETHERNET     0
 #if CONFIG_ETHERNET
-
+//Choice the different interface for Ethernet
+#define MII_INTERFACE       0
+#define USB_INTERFACE       1
+#define ETHERNET_INTERFACE  USB_INTERFACE //Default MII_INTERFACE
 #define CONFIG_LWIP_LAYER	1
 #define CONFIG_INIT_NET     1 //init lwip layer when start up
 
