@@ -56,8 +56,10 @@ void setup() {
 
 void loop() {
     // if there's data available, read a packet
-    if (Udp.parsePacket()) {
-        Serial.print("Received packet ");
+    int packetSize = Udp.parsePacket();
+    if (packetSize) {
+        Serial.print("Received packet of size ");
+        Serial.println(packetSize);
         Serial.print("From ");
         IPAddress remoteIp = Udp.remoteIP();
         Serial.print(remoteIp);

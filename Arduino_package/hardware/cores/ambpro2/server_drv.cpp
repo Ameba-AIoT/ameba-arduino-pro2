@@ -70,7 +70,7 @@ int ServerDrv::getAvailable(int sock) {
 
 int ServerDrv::availData(int sock) {
     int ret;
-    uint8_t c;
+    uint8_t c[1460];
     if (sock < 0) {
         return 0;
     }
@@ -78,7 +78,7 @@ int ServerDrv::availData(int sock) {
     if (_available) {
         return 1;
     } else {
-        ret = get_receive(sock, &c, 1, 1, &_peer_addr, &_peer_port);
+        ret = get_receive(sock, c, 1460, 1, &_peer_addr, &_peer_port);
         if (ret == 1) {
             _available = true;
             return 1;
