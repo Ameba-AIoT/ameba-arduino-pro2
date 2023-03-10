@@ -61,16 +61,22 @@ Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No.build.upload_mode_nn=NNno
 
 Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov4Tiny=Default_Yolov4Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov4Tiny.build.nn_od_model=DYV4
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov4Tiny.build.nn_model_flags=-DMODEL_YOLOV4TINY
 Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov3Tiny=Default_Yolov3Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov3Tiny.build.nn_od_model=DYV3
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov3Tiny.build.nn_model_flags=-DMODEL_YOLOV3TINY
 Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov7Tiny=Default_Yolov7Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov7Tiny.build.nn_od_model=DYV7
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov7Tiny.build.nn_model_flags=-DMODEL_YOLOV7TINY
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov4Tiny=Customize_Yolov4Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov4Tiny.build.nn_od_model=CYV4
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov4Tiny.build.nn_model_flags=-DMODEL_YOLOV4TINY
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny=Customize_Yolov3Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny.build.nn_od_model=CYV3
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny.build.nn_model_flags=-DMODEL_YOLOV3TINY
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny=Customize_YoloV7Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny.build.nn_od_model=CYV7
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny.build.nn_model_flags=-DMODEL_YOLOV7TINY
 
 Ameba_AMB82-MINI.menu.UploadNNFD.D_MobileFaceNet=Default_MobileFaceNet
 Ameba_AMB82-MINI.menu.UploadNNFD.D_MobileFaceNet.build.nn_fd_model=DM

@@ -40,7 +40,7 @@ class NNObjectDetection:public MMFModule {
         void configVideo(VideoSetting& config);
         void configRegionOfInterest(int xmin, int xmax, int ymin, int ymax);
         void configThreshold(float confidence_threshold, float nms_threshold);
-        void begin(int model);
+        void begin(void);
         void end(void);
 
         void setResultCallback(void (*od_callback)(std::vector<ObjectDetectionResult>));

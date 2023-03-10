@@ -9,6 +9,7 @@ extern "C" {
 #include "module_vipnn.h"
 #include "model_yolo.h"
 #include "nn_utils/class_name.h"
+#include "avcodec.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -46,6 +47,7 @@ void NNObjectDetection::configVideo(VideoSetting& config) {
     roi_nn.img.roi.xmax = config._w;
     roi_nn.img.roi.ymin = 0;
     roi_nn.img.roi.ymax = config._h;
+    roi_nn.codec_type =  AV_CODEC_ID_RGB888;
 }
 
 void NNObjectDetection::configRegionOfInterest(int xmin, int xmax, int ymin, int ymax) {
@@ -60,7 +62,7 @@ void NNObjectDetection::configThreshold(float confidence_threshold, float nms_th
     od_nms_thresh = nms_threshold;
 }
 
-void NNObjectDetection::begin(int model) {
+void NNObjectDetection::begin(void) {
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
@@ -87,17 +89,19 @@ void NNObjectDetection::begin(int model) {
     } else {
         use_roi = 0;
     }
+#if defined (MODEL_YOLOV3TINY)
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
+    //printf("YOLOV3 running...\r\n");
+#elif defined (MODEL_YOLOV4TINY)
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
+    //printf("YOLOV4 running...\r\n");
+#elif defined (MODEL_YOLOV7TINY)
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
+    //printf("YOLOV7 running...\r\n");
+#else
+    printf("ERROR.\r\n");
+#endif
 
-    if (model == 1) {
-        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-    } else if (model == 2) {
-        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-    } else if (model == 3) {
-        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-    } else {
-        printf("Selected YOLO model not supported!\r\n");
-        return;
-    }
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ODResultCallback);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_CONFIDENCE_THRES, (int)&od_confidence_thresh);

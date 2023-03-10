@@ -21,12 +21,6 @@
 #define NNWIDTH 576
 #define NNHEIGHT 320
 
-// User defined yolo model
-// 1: yolov3tiny
-// 2: yolov4tiny
-// 3: yolov7tiny
-#define YOLOMODEL 2
-
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
 NNObjectDetection ObjDet;
@@ -69,7 +63,7 @@ void setup() {
 
     // Configure object detection with corresponding video format information
     ObjDet.configVideo(configNN);
-    ObjDet.begin(YOLOMODEL);
+    ObjDet.begin();
 
     // Configure StreamIO object to stream data from video channel to RTSP
     videoStreamer.registerInput(Camera.getStream(CHANNEL));
