@@ -21,7 +21,7 @@
 #define NNWIDTH 576
 #define NNHEIGHT 320
 
-VideoSetting config(VIDEO_HD, 30, VIDEO_H264, 0);
+VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
 NNObjectDetection ObjDet;
 RTSP rtsp;
