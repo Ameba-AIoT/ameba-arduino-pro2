@@ -60,6 +60,7 @@ compiler.ld_flags=
 
 ### this can be overriden in boards.txt
 build.extra_flags=
+build.nn_model_flags=
 
 ###These can be overridden in platform.local.txt
 compiler.c.extra_flags=
@@ -105,14 +106,13 @@ recipe.hooks.sketch.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools
 recipe.hooks.sketch.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.sketch.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 
-
 # Ameba compile patterns
 # ---------------------
 ## Compile c file
-recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -MD -MT -MF -c {compiler.defines.c.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -MD -MT -MF -c {compiler.defines.c.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} {build.nn_model_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
 
 ## Compile c++ files
-recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -MD -MT -MF -c {compiler.defines.cpp.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -MD -MT -MF -c {compiler.defines.cpp.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} {build.nn_model_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
 ###-fno-exceptions
 
 ## Create archives

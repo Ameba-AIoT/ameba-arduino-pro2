@@ -8,6 +8,7 @@ extern "C" {
 #include "mmf2_module.h"
 #include "module_vipnn.h"
 #include "model_scrfd.h"
+#include "avcodec.h"
 //#include "roi_delta_qp/roi_delta_qp.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
@@ -40,6 +41,7 @@ void NNFaceDetection::configVideo(VideoSetting& config) {
     roi_nn.img.roi.xmax = config._w;
     roi_nn.img.roi.ymin = 0;
     roi_nn.img.roi.ymax = config._h;
+    roi_nn.codec_type =  AV_CODEC_ID_RGB888;
 }
 
 void NNFaceDetection::configFaceRecogCascadedMode(uint8_t enable) {
