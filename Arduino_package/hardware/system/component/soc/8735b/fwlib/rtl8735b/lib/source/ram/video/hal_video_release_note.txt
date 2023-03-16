@@ -1,21 +1,5 @@
 --------------------------------------------------------------------------	
-<02/08/2023 12:00 Martin>
-Version : RTL8735B_VOE_1.3.8.0
-Modified Files:
-All
-Change Notes:
-
-	ISP/sensor related
-	1. Fix AWB dynamic control has periodically(IRQ:statictis done) set control_force (status set to unstable)
-	2. wdr: update algo (VER.5948406) and algo version log
-	3. Add gen proto files flow with build voe	
-	Video/ENC related
-	1. flash speed down 7%,  extra 1ms for TTFF load code criteria	
-	2. Polish makefile for release-clean and rts_isp_errno_lib.h for blackduck check
-	3. add hal_video_time_info(int level, video_time_info_t *time_info) output time arguments
-
---------------------------------------------------------------------------	
-<01/06/2023 12:00 Martin>
+<01/06/2022 12:00 Martin>
 Version : RTL8735B_VOE_1.3.7.2
 Modified Files:
 All

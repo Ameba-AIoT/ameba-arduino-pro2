@@ -82,7 +82,6 @@
 #define VOE_RELEASE_ENC_CMD              0x208
 #define VOE_RELEASE_JPG_CMD              0x209
 #define VOE_OUT_CMD                      0x20B
-#define VOE_EXT_IN_CMD                   0x20C
 
 #define VOE_FORCE_I_CMD                  0x20D
 #define VOE_SET_RC_CMD                   0x20E

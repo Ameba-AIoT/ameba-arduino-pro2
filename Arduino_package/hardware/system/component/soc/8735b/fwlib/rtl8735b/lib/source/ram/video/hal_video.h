@@ -362,17 +362,6 @@ typedef struct  {
 } video_peri_info_t;
 
 
-typedef struct  {
-
-	int voe_load;
-	int isp_ready;
-	int fcs_done;
-	int frame_done;
-	int reserv[4];
-
-} video_time_info_t;
-
-
 
 /** @} */ // end of GROUP_ENC_MODULE_SYSTEM_CONFIGURATION
 
@@ -431,7 +420,7 @@ int hal_video_md_trigger(void);
 // Show VOE information
 int hal_video_mem_info(void);
 int hal_video_buf_info(void);
-int hal_video_time_info(int level, video_time_info_t *time_info);
+int hal_video_time_info(int level);
 int hal_video_print(int mode);
 
 

@@ -7,16 +7,6 @@
 //#include <linux/types.h>
 #include "rts_errno.h"
 
-#ifndef TUNING_SRV_VERSION_MAJOR
-#define TUNING_SRV_VERSION_MAJOR	0x0001
-#endif
-#ifndef TUNING_SRV_VERSION_MINOR
-#define TUNING_SRV_VERSION_MINOR	0x0002
-#endif
-#ifndef TUNING_SRV_VERSION_BUILD
-#define TUNING_SRV_VERSION_BUILD	0x0001
-#endif
-
 #define TCP_LISTEN_PORT			6666
 #define TCP_BACKLOG			10
 #define MAXEVENTS 16

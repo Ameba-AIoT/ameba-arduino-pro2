@@ -89,8 +89,8 @@ Ameba_AMB82-MINI.menu.UploadNNFR.C_SCRFD=Customize SCRFD
 Ameba_AMB82-MINI.menu.UploadNNFR.C_SCRFD.build.nn_fr_model=CS
 
 Ameba_AMB82-MINI.menu.StdLibInit.Disable=NA
-Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.nn_model_flags}
 Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF {build.nn_model_flags}
 
 ##############################################################

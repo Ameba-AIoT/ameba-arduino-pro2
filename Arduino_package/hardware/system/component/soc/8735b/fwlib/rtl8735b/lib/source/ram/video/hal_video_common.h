@@ -288,9 +288,18 @@ typedef struct {
 
 	i32 pcm_loop_filter_disabled_flag;
 
+	i32 ipcm1AreaTop;
+	i32 ipcm1AreaLeft;
+	i32 ipcm1AreaBottom;
+	i32 ipcm1AreaRight;
 
-	i32 rsvd0[9];
+	i32 ipcm2AreaTop;
+	i32 ipcm2AreaLeft;
+	i32 ipcm2AreaBottom;
+	i32 ipcm2AreaRight;
+	i32 ipcmMapEnable;
 	char *ipcmMapFile;
+
 	char *skipMapFile;
 	i32 skipMapEnable;
 	i32 skipMapBlockUnit;
@@ -539,9 +548,8 @@ typedef struct {
 	u32 isp_meta_out;
 
 	u32 fast_mask_en;
-	u32 ext_in;
 
-	u32 rsvd[53];
+	u32 rsvd[54];
 
 } __attribute__((aligned(32))) commandLine_s;
 

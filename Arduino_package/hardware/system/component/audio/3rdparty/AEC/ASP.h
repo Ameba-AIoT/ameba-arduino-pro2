@@ -75,6 +75,8 @@ void AGC_init(int32_t sample_freq, CTAGC_cfg_t *TX_AGC);
 void AGC_process(int16_t frame_size, int16_t *out);
 void AGC_destory(void);
 void AEC_set_print(uint8_t flag);
+const char *ASP_get_version(void);
+void ASP_print_version(void);
 #else
 
 /**

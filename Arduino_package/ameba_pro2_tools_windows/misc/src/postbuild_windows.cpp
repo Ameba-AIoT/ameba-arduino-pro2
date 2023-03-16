@@ -93,6 +93,12 @@ int main(int argc, char *argv[]) {
     common_nn_models_path = argv[7];
     upload_mode_user_selection_nn = argv[8];
     upload_mode_user_selection_voe = argv[9];
+    // *** NN pre requires ISP, can not avoid the ISP when using NN
+    if (upload_mode_user_selection_nn == "NNyes") {
+        if (upload_mode_user_selection_voe != "VOEyes") {
+            upload_mode_user_selection_voe = "VOEyes";
+        }
+    }
 
     if (argv[6]) {
         upload_mode_user_selection = argv[6];
@@ -341,7 +347,10 @@ int main(int argc, char *argv[]) {
         } else {
             if (upload_mode_user_selection_nn == "NNyes") {
                 cmdss.clear();
-                cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_FCSDATA=boot_fcs.bin";
+                //cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_FCSDATA=boot_fcs.bin";
+
+                // *** NN pre requires ISP, can not avoid the ISP when using NN
+                cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
                 getline(cmdss, cmd);
                 cout << cmd << endl;
                 system(cmd.c_str());

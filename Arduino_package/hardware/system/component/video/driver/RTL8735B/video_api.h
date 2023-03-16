@@ -226,6 +226,8 @@ int video_get_maxqp(int ch);
 
 void video_set_private_mask(int ch, struct private_mask_s *pmask);
 
+int video_get_buffer_info(int ch, int *enc_size, int *out_buf_size, int *out_rsvd_size);
+
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000
 #define FW_1 0x01

@@ -81,6 +81,7 @@ typedef enum {
 #define CMD_AUDIO_SET_TXASP_PARAM       MM_MODULE_CMD(0x25)
 #define CMD_AUDIO_GET_RXASP_PARAM       MM_MODULE_CMD(0x26)
 #define CMD_AUDIO_GET_TXASP_PARAM       MM_MODULE_CMD(0x27)
+#define CMD_AUDIO_PRINT_ASP_INFO        MM_MODULE_CMD(0x28)
 #endif
 
 #define CMD_AUDIO_APPLY				    MM_MODULE_CMD(0x30)  // for hardware module
