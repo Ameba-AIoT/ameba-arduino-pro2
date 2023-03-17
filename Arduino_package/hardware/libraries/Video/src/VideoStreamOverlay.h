@@ -19,6 +19,7 @@ class VideoStreamOverlay {
     public:
         void configVideo(int ch, VideoSetting& config);
         void configTextSize(int ch, int text_width, int text_height);
+        void createBitmap(int ch, int idx = 0);
         void begin(void);
         void end(void);
         void endChannel(int ch);

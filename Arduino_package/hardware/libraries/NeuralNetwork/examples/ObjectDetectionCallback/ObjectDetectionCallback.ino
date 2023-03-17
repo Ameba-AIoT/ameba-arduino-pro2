@@ -94,7 +94,9 @@ void setup() {
 }
 
 void loop() {
-    // Do nothing
+    delay(1000);
+    OSD.createBitmap(CHANNEL);
+    OSD.update(CHANNEL);
 }
 
 // User callback function for post processing of object detection results
@@ -110,8 +112,8 @@ void ODPostProcess(std::vector<ObjectDetectionResult> results) {
     Serial.println(" ");
 
     printf("Total number of objects detected = %d\r\n", results.size());
-    OSD.clearAll(CHANNEL);
-
+    
+    OSD.createBitmap(CHANNEL);
     if (results.size() > 0) {
         for (uint32_t i = 0; i < results.size(); i++) {
             int obj_type = results[i].type();

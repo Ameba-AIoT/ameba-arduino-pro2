@@ -93,7 +93,9 @@ void setup() {
 }
 
 void loop() {
-    // Do nothing
+    delay(1000);
+    OSD.createBitmap(CHANNEL);
+    OSD.update(CHANNEL);
 }
 
 // User callback function for post processing of face detection results
@@ -109,8 +111,8 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
     Serial.println(" ");
 
     printf("Total number of faces detected = %d\r\n", results.size());
-    OSD.clearAll(CHANNEL);
 
+    OSD.createBitmap(CHANNEL);
     if (results.size() > 0) {
         for (uint32_t i = 0; i < results.size(); i++) {
             FaceDetectionResult item = results[i];

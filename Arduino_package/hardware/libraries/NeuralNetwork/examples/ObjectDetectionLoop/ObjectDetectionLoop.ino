@@ -93,6 +93,10 @@ void setup() {
 }
 
 void loop() {
+    delay(1000);
+    OSD.createBitmap(CHANNEL);
+    OSD.update(CHANNEL);
+
     std::vector<ObjectDetectionResult> results = ObjDet.getResult();
 
     uint16_t im_h = config.height();
@@ -106,8 +110,8 @@ void loop() {
     Serial.println(" ");
 
     printf("Total number of objects detected = %d\r\n", results.size());
-    OSD.clearAll(CHANNEL);
 
+    OSD.createBitmap(CHANNEL);
     if (results.size() > 0) {
         for (uint32_t i = 0; i < results.size(); i++) {
             int obj_type = results[i].type();

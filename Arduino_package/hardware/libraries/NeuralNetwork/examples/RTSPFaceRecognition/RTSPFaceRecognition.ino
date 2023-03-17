@@ -132,7 +132,7 @@ void loop() {
     }
 
     delay(1000);
-    OSD.clearAll(CHANNEL);
+    OSD.createBitmap(CHANNEL);
     OSD.update(CHANNEL);
 }
 
@@ -149,8 +149,8 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     Serial.println(" ");
     
     printf("Total number of faces detected = %d\r\n", results.size());
-    OSD.clearAll(CHANNEL);
 
+    OSD.createBitmap(CHANNEL);
     if (results.size() > 0) {
         for (uint32_t i = 0; i < results.size(); i++) {
             FaceRecognitionResult item = results[i];

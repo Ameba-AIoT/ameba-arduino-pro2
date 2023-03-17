@@ -89,6 +89,7 @@ void NNObjectDetection::begin(void) {
     } else {
         use_roi = 0;
     }
+
 #if defined (MODEL_YOLOV3TINY)
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
     //printf("YOLOV3 running...\r\n");
@@ -98,8 +99,6 @@ void NNObjectDetection::begin(void) {
 #elif defined (MODEL_YOLOV7TINY)
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
     //printf("YOLOV7 running...\r\n");
-#else
-    printf("ERROR.\r\n");
 #endif
 
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
