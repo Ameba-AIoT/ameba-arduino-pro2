@@ -60,7 +60,6 @@ compiler.ld_flags=
 
 ### this can be overriden in boards.txt
 build.extra_flags=
-build.nn_model_flags=
 
 ###These can be overridden in platform.local.txt
 compiler.c.extra_flags=
@@ -126,6 +125,7 @@ recipe.hooks.sketch.prebuild.5.pattern.macosx  = {runtime.tools.ameba_pro2_tools
 recipe.hooks.sketch.prebuild.6.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/validatemodel_windows.exe {build.path}
 recipe.hooks.sketch.prebuild.6.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/validatemodel_linux.exe {build.path}
 recipe.hooks.sketch.prebuild.6.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/validatemodel_macos.exe {build.path}
+
 # Ameba compile patterns
 # ---------------------
 ## Compile c file
