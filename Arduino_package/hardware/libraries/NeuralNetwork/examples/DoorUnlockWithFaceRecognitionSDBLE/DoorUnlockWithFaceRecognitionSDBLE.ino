@@ -252,7 +252,7 @@ void loop() {
   }
 
   delay(1000);
-  OSD.clearAll(CHANNELVID);
+  OSD.createBitmap(CHANNELVID);
   OSD.update(CHANNELVID);
 }
 
@@ -262,8 +262,8 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
   uint16_t im_w = configVID.width();
 
   printf("Total number of faces detected = %d\r\n", results.size());
-  OSD.clearAll(CHANNELVID);
 
+  OSD.createBitmap(CHANNELVID);
   resultSize = results.size();
 
   if (results.size() > 0) {
