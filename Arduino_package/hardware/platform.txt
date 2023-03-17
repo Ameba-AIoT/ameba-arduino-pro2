@@ -112,12 +112,12 @@ recipe.hooks.sketch.prebuild.2.pattern.linux   = {runtime.tools.ameba_pro2_tools
 recipe.hooks.sketch.prebuild.2.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_macos RESET
 
 recipe.hooks.sketch.prebuild.3.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe {build.nn_od_model}
-recipe.hooks.sketch.prebuild.3.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_linux {build.nn_od_model}
-recipe.hooks.sketch.prebuild.3.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_macos {build.nn_od_model}
+recipe.hooks.sketch.prebuild.3.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux {build.nn_od_model}
+recipe.hooks.sketch.prebuild.3.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux {build.nn_od_model}
 
 recipe.hooks.sketch.prebuild.4.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe {build.nn_fd_model}
-recipe.hooks.sketch.prebuild.4.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_linux {build.nn_fd_model}
-recipe.hooks.sketch.prebuild.4.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_macos {build.nn_fd_model}
+recipe.hooks.sketch.prebuild.4.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux {build.nn_fd_model}
+recipe.hooks.sketch.prebuild.4.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux {build.nn_fd_model}
 
 recipe.hooks.sketch.prebuild.5.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe {build.nn_fr_model}
 recipe.hooks.sketch.prebuild.5.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux {build.nn_fr_model}
