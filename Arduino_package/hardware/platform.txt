@@ -60,6 +60,7 @@ compiler.ld_flags=
 
 ### this can be overriden in boards.txt
 build.extra_flags=
+build.nn_model_flags=
 
 ###These can be overridden in platform.local.txt
 compiler.c.extra_flags=
@@ -101,10 +102,30 @@ build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANU
 
 
 #pre compile sketch
+# ---------------------
 recipe.hooks.sketch.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.sketch.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.sketch.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 
+recipe.hooks.sketch.prebuild.2.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe RESET
+recipe.hooks.sketch.prebuild.2.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux RESET
+recipe.hooks.sketch.prebuild.2.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_macos RESET
+
+recipe.hooks.sketch.prebuild.3.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe {build.nn_od_model}
+recipe.hooks.sketch.prebuild.3.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_linux {build.nn_od_model}
+recipe.hooks.sketch.prebuild.3.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_macos {build.nn_od_model}
+
+recipe.hooks.sketch.prebuild.4.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe {build.nn_fd_model}
+recipe.hooks.sketch.prebuild.4.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_linux {build.nn_fd_model}
+recipe.hooks.sketch.prebuild.4.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_tool_macos {build.nn_fd_model}
+
+recipe.hooks.sketch.prebuild.5.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/updatemodel_windows.exe {build.nn_fr_model}
+recipe.hooks.sketch.prebuild.5.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/updatemodel_linux {build.nn_fr_model}
+recipe.hooks.sketch.prebuild.5.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/updatemodel_macos {build.nn_fr_model}
+
+recipe.hooks.sketch.prebuild.6.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/validatemodel_windows.exe {build.path}
+recipe.hooks.sketch.prebuild.6.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/validatemodel_linux.exe {build.path}
+recipe.hooks.sketch.prebuild.6.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/validatemodel_macos.exe {build.path}
 # Ameba compile patterns
 # ---------------------
 ## Compile c file
