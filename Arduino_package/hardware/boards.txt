@@ -77,30 +77,22 @@ Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny.build.nn_model_flags=-DMODEL_YOLOV
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny=Customize Yolov7Tiny
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny.build.nn_od_model=CYV7
 Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny.build.nn_model_flags=-DMODEL_YOLOV7TINY
-Ameba_AMB82-MINI.menu.UploadNNOD.Disable=NA
-Ameba_AMB82-MINI.menu.UploadNNOD.Disable.build.nn_od_model=YVNo
-Ameba_AMB82-MINI.menu.UploadNNOD.Disable.build.nn_model_flags=-DYOLOMODEL_DISABLED
+Ameba_AMB82-MINI.menu.UploadNNOD.NA=NA
+Ameba_AMB82-MINI.menu.UploadNNOD.NA.build.nn_od_model=YVNo
 
+Ameba_AMB82-MINI.menu.UploadNNFR.D_MobileFaceNet=Default MobileFaceNet
+Ameba_AMB82-MINI.menu.UploadNNFR.D_MobileFaceNet.build.nn_fr_model=DM16
+Ameba_AMB82-MINI.menu.UploadNNFR.C_MobileFaceNet=Customize MobileFaceNet
+Ameba_AMB82-MINI.menu.UploadNNFR.C_MobileFaceNet.build.nn_fr_model=CM16
+Ameba_AMB82-MINI.menu.UploadNNFR.NA=NA
+Ameba_AMB82-MINI.menu.UploadNNFR.NA.build.nn_fr_model=MNo
 
-Ameba_AMB82-MINI.menu.UploadNNFR.D_MobileFaceNet16=Default MobileFaceNet
-Ameba_AMB82-MINI.menu.UploadNNFR.D_MobileFaceNet16.build.nn_fr_model=DM16
-Ameba_AMB82-MINI.menu.UploadNNFR.D_MobileFaceNet16.build.nn_model_flags=-DMOBILEFACENET16
-Ameba_AMB82-MINI.menu.UploadNNFR.C_MobileFaceNet16=Customize MobileFaceNet
-Ameba_AMB82-MINI.menu.UploadNNFR.C_MobileFaceNet16.build.nn_fr_model=CM16
-Ameba_AMB82-MINI.menu.UploadNNFR.C_MobileFaceNet16.build.nn_model_flags=-DMOBILEFACENET16
-Ameba_AMB82-MINI.menu.UploadNNFR.Disable=NA
-Ameba_AMB82-MINI.menu.UploadNNFR.Disable.build.nn_fr_model=MNo
-Ameba_AMB82-MINI.menu.UploadNNFR.Disable.build.nn_model_flags=-DMOBILE_DISABLED
-
-Ameba_AMB82-MINI.menu.UploadNNFD.D_SCRFD640=Default SCRFD
-Ameba_AMB82-MINI.menu.UploadNNFD.D_SCRFD640.build.nn_fd_model=DS64
-Ameba_AMB82-MINI.menu.UploadNNFD.D_SCRFD640.build.nn_model_flags=-DSCRFD640
-Ameba_AMB82-MINI.menu.UploadNNFD.C_SCRFD640=Customize SCRFD
-Ameba_AMB82-MINI.menu.UploadNNFD.C_SCRFD640.build.nn_fd_model=CS64
-Ameba_AMB82-MINI.menu.UploadNNFD.C_SCRFD640.build.nn_model_flags=-DSCRFD640
-Ameba_AMB82-MINI.menu.UploadNNFD.Disable=NA
-Ameba_AMB82-MINI.menu.UploadNNFD.Disable.build.nn_fd_model=SNo
-Ameba_AMB82-MINI.menu.UploadNNFD.Disable.build.nn_model_flags=-DSCRFD_DISABLED
+Ameba_AMB82-MINI.menu.UploadNNFD.D_SCRFD=Default SCRFD
+Ameba_AMB82-MINI.menu.UploadNNFD.D_SCRFD.build.nn_fd_model=DS64
+Ameba_AMB82-MINI.menu.UploadNNFD.C_SCRFD=Customize SCRFD
+Ameba_AMB82-MINI.menu.UploadNNFD.C_SCRFD.build.nn_fd_model=CS64
+Ameba_AMB82-MINI.menu.UploadNNFD.NA=NA
+Ameba_AMB82-MINI.menu.UploadNNFD.NA.build.nn_fd_model=SNo
 
 Ameba_AMB82-MINI.menu.StdLibInit.Disable=NA
 Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.nn_model_flags}
