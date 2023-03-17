@@ -82,7 +82,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_MUTEXES								1
 #define configUSE_TICKLESS_IDLE							0
 #define configUSE_APPLICATION_TASK_TAG					1
-#define configUSE_POSIX_ERRNO							1
+#define configUSE_POSIX_ERRNO							0
 #define configUSE_NEWLIB_REENTRANT						1
 #define configUSE_CO_ROUTINES							0
 #define configUSE_COUNTING_SEMAPHORES					1
@@ -191,5 +191,9 @@ extern void vAssertCalled(uint32_t ulLine, const char *pcFile);
 
 /* Enable static allocation. */
 #define configSUPPORT_STATIC_ALLOCATION					1
+
+/* tick count initial value */
+extern uint32_t initial_tick_count;
+#define configINITIAL_TICK_COUNT	initial_tick_count
 
 #endif /* FREERTOS_CONFIG_H */

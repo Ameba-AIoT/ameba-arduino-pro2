@@ -1,7 +1,10 @@
 /**
- *  This function describes how to use the RTC API. 
- *  The RTC function is implemented by an independent BCD timer/counter.
- *  This example will print out the time information every second.
+ * This function describes how to use the RTC API.
+ * The RTC function is implemented by an independent BCD timer/counter.
+ * This example will print out the time information every second.
+ *
+ * Example guide:
+ * https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-rtc/
 */
 #include <stdio.h>
 #include <time.h>
@@ -16,15 +19,13 @@
 #define MIN 14
 #define SEC 15
 
-/* Create an rtc object */
-AMB_RTC rtc;
 long long seconds = 0;
 struct tm *timeinfo;
 
 void setup() {
     Serial.begin(115200);
     rtc.Init(); 
-    long long epochTime = rtc.SetEpoch(YEAR, MONTH, DAY, HOUR, MIN, SEC);
+    long long epochTime =rtc.SetEpoch(YEAR, MONTH, DAY, HOUR, MIN, SEC);
     rtc.Write(epochTime);
 }
 
@@ -64,4 +65,3 @@ void printStringTime(void) {
     Serial.print(":");
     Serial.println(timeinfo->tm_sec);
 }
-

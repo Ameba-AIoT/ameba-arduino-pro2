@@ -419,6 +419,13 @@ int wifi_get_scan_records(unsigned int *AP_num, char *scan_buf);
 int wifi_scan_abort(void);
 
 /**
+ * @brief  Abort onoging wifi connection
+ * @return  RTW_SUCCESS or RTW_ERROR.
+ * @note  This is an asynchronized function and will return immediately, return value
+ */
+int wifi_connection_abort(void);
+
+/**
  * @brief  Set IPS/LPS mode.
  * @param[in]  ips_mode: The desired IPS mode. It becomes effective
  * 	when wlan enter IPS.
@@ -1159,10 +1166,12 @@ int wifi_wowlan_set_arpreq_keepalive(u8  powerbit,
  *
  * @param[in]   gpio : gpiof number
  * @param[in]   interval : pull ctrl interval
+ * @param[in]   pull_ctrl : gpio pull ctrl
  * @return  RTW_SUCCESS
  */
 int wifi_wowlan_set_wdt(u8  gpio,
-						u8  interval);
+						u8  interval,
+						u8	pull_ctrl);
 #endif
 
 // WoWlan related

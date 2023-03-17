@@ -217,7 +217,7 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
         timeout = 3000;
         _sock = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        printf("\n\r[INFO] Create TCP socket successfudlly\n");
+        printf("\n\r[INFO] Create TCP socket successfully\n");
     } else {  // UDP
         //timeout = 1000;
         _sock = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
@@ -251,10 +251,16 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
 #endif
 
 int get_sock_errno(int sock) {
-    int so_error;
-    socklen_t len = sizeof(so_error);
-    getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
-    return so_error;
+// https://www.nongnu.org/lwip/2_1_x/upgrading.html
+// socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
+// All other/normal/synchronous errors are (and always were) available via 'errno'.
+
+//    int so_error;
+//    socklen_t len = sizeof(so_error);
+//    lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
+//    return so_error;
+    (void)sock;
+    return errno;
 }
 
 
@@ -313,7 +319,7 @@ int get_available(int sock) {
     } while (client_fd < 0);
 
     if (client_fd < 0) {
-        printf("\n\r[ERROR] Accept connection failed\n");
+        //printf("\n\r[ERROR] Accept connection failed\n");
         return -1;
     } else {
         timeout = 3000;
@@ -367,7 +373,7 @@ int get_available_v6(int sock) {
 }
 #endif
 
-int recv_data(int sock, const uint8_t *data, uint16_t len, int flag) {
+int recv_data(int sock, const uint8_t *data, uint32_t len, int flag) {
     int ret;
 
     ret = lwip_recv(sock, (void *)data, len, flag);
@@ -375,7 +381,7 @@ int recv_data(int sock, const uint8_t *data, uint16_t len, int flag) {
     return ret;
 }
 
-int send_data(int sock, const uint8_t *data, uint16_t len, int flag) {
+int send_data(int sock, const uint8_t *data, uint32_t len, int flag) {
     int ret;
     //printf("[info] ard_socket.c send_data()\r\n");
     ret = lwip_send(sock, data, len, flag);
@@ -385,7 +391,7 @@ int send_data(int sock, const uint8_t *data, uint16_t len, int flag) {
 
 // UDP
 
-int sendto_data(int sock, const uint8_t *data, uint16_t len, uint32_t peer_ip, uint16_t peer_port) {
+int sendto_data(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port) {
     int ret;
     struct sockaddr_in peer_addr;
 
@@ -467,7 +473,6 @@ int get_receive_v6(int sock, void *recv_data, int len, int flags, uint32_t *peer
     peer_port = peer_port;
 
     ret = lwip_recvfrom(sock, recv_data, len, flags, ((struct sockaddr *)&peer_addr), &peer_len);
-    //printf("get_rec_v6 lwip_recvfrom: %d\r\n", ret);
     return ret;
 }
 

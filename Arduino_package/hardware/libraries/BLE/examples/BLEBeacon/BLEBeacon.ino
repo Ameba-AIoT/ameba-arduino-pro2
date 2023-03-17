@@ -1,3 +1,8 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ble-beacon/
+ */
 
 #include "BLEDevice.h"
 #include "BLEBeacon.h"

@@ -176,6 +176,8 @@ int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult) {
 int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid) {
     uint8_t status = WL_IDLE_STATUS;
 
+    WiFiDrv::wifiDriverInit();
+
     if ((WiFiDrv::apSetNetwork(ssid, strlen(ssid))) != WL_FAILURE) {
         WiFiDrv::apSetChannel(channel);
         if ((WiFiDrv::apActivate(hidden_ssid)) != WL_FAILURE) {
@@ -192,6 +194,8 @@ int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid) {
 
 int WiFiClass::apbegin(char* ssid, char* password, char* channel, uint8_t hidden_ssid) {
     uint8_t status = WL_IDLE_STATUS;
+
+    WiFiDrv::wifiDriverInit();
 
     if ((WiFiDrv::apSetNetwork(ssid, strlen(ssid))) != WL_FAILURE) {
         if ((WiFiDrv::apSetPassphrase(password, strlen(password))) != WL_FAILURE) {

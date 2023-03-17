@@ -1,6 +1,9 @@
 /*
-  This sketch shows how to use hardware timer and invoke interrupt handler periodically
-*/
+ This sketch shows how to use hardware timer and invoke interrupt handler periodically
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-periodic-timer/
+ */
 
 #include <GTimer.h>
 

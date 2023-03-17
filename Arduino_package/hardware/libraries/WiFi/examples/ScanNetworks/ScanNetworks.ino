@@ -1,16 +1,16 @@
 /*
- This example  prints the Wifi shield's MAC address, and
- scans for available Wifi networks using the Wifi shield.
+ This example prints MAC address, and
+ scans for available Wifi networks.
  Every ten seconds, it scans again. It doesn't actually
  connect to any network, so no encryption scheme is specified.
-
- Circuit:
- * WiFi shield attached
 
  created 13 July 2010
  by dlf (Metodo2 srl)
  modified 21 Junn 2012
  by Tom Igoe and Jaymes Dec
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-scan-wifi/
  */
 
 #include <WiFi.h>

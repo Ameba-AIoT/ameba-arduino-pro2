@@ -26,11 +26,11 @@ typedef enum {
 //Setting for ASP
 typedef struct CTNS_cfg_s {
 	int16_t NS_EN;
-	int NSLevel;
+	int16_t NSLevel;
+	int16_t HPFEnable;
 
 	int16_t Reserve1;
 	int16_t Reserve2;
-	int16_t Reserve3;
 } CTNS_cfg_t;
 
 typedef struct CTAGC_cfg_s {
@@ -43,10 +43,10 @@ typedef struct CTAGC_cfg_s {
 	int16_t Ratio[3];
 	int16_t Threshold[3]; // Threshold1, Threshold2, NoiseGateLvl
 	int16_t KneeWidth;
+	int16_t NoiseFloorAdaptEnable;
+	int16_t RMSDetectorEnable;
 
 	int16_t Reserve1;
-	int16_t Reserve2;
-	int16_t Reserve3;
 } CTAGC_cfg_t;
 
 typedef struct CTAEC_cfg_s {
@@ -54,10 +54,10 @@ typedef struct CTAEC_cfg_s {
 	int16_t EchoTailLen;
 	int16_t CNGEnable;
 	int16_t PPLevel;
+	int16_t DTControl;
 
 	int16_t Reserve1;
 	int16_t Reserve2;
-	int16_t Reserve3;
 } CTAEC_cfg_t;
 
 void AEC_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, float snd_amplification);
@@ -74,7 +74,9 @@ void NS_destory(void);
 void AGC_init(int32_t sample_freq, CTAGC_cfg_t *TX_AGC);
 void AGC_process(int16_t frame_size, int16_t *out);
 void AGC_destory(void);
-
+void AEC_set_print(uint8_t flag);
+const char *ASP_get_version(void);
+void ASP_print_version(void);
 #else
 
 /**

@@ -26,7 +26,9 @@ class UARTClassOne : public HardwareSerial
     public:
         UARTClassOne(int dwIrq, RingBuffer* pRx_buffer);
         //UARTClassOne(RingBuffer* pRx_buffer);
-        void begin(const uint32_t dwBaudRate);
+        void begin(const uint32_t dwBaudRate) { begin(dwBaudRate, SERIAL_8N1); }
+        void begin(const uint32_t dwBaudRate, uint8_t serial_config_value) { begin(dwBaudRate, serial_config_value, 0); }
+        void begin(const uint32_t dwBaudRate, uint8_t serial_config_value, uint32_t uart0_clk_sel);
         void end(void);
         int available(void);
         int peek(void);

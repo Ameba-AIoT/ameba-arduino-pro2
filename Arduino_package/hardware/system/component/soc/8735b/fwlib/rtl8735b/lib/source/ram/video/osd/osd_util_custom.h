@@ -10,6 +10,15 @@
 
 #include "hal_osd_util.h"
 
+enum osd_coding_fmt {
+	CODING_FMT_RGBA_1BPP = 1,
+	CODING_FMT_RGBA_1111,
+	CODING_FMT_RGBA_2222,
+	CODING_FMT_RGBA_4444,
+	CODING_FMT_RGBA_5551,
+	CODING_FMT_RGBA_8888
+};
+
 
 typedef void (*func_write_bmp)(BITMAP_S *dst, BITMAP_S *src, rt_font_st *font, int start_loc, int width);
 

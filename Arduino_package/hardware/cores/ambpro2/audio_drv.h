@@ -1,13 +1,7 @@
 #ifndef audio_drv_h
 #define audio_drv_h
 
-#include <stdint.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <diag.h>
 #include "mmf2_module.h"
-#include "module_audio.h"
-#include "audio_api.h"
 
 // Audio
 mm_context_t* audioInit(void);

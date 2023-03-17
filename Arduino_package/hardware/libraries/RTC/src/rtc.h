@@ -6,10 +6,10 @@
 #include "rtc_api.h"
 #include "timer_api.h"
 
-class AMB_RTC {
+class RTCClass {
     public:
-        AMB_RTC(void);
-        ~AMB_RTC(void);
+        RTCClass(void);
+        ~RTCClass(void);
         void Init(void);
         void DeInit(void);
         void Write(long long t);
@@ -18,8 +18,8 @@ class AMB_RTC {
         long long SetEpoch(int year, int month, int day, int hour, int min, int sec);
         void EnableAlarm(int day, int hour, int min, int sec, void (*rtc_handler)(void));
         void DisableAlarm(void);
-
-    private:
-
 };
+
+extern RTCClass rtc;
+
 #endif

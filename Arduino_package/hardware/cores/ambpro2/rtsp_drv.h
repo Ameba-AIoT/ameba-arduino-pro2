@@ -1,10 +1,6 @@
 #ifndef rtsp_drv_h
 #define rtsp_drv_h
 
-#include <stdint.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <diag.h>
 #include "mmf2_module.h"
 
 mm_context_t* RTSPInit(void);

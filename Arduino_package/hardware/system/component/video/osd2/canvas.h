@@ -2,6 +2,7 @@
 #define CANVAS_H_
 
 #include <stdio.h>
+#include "hal_osd_util.h"
 
 #define TXT_STR_MAX_LEN 20
 #define CHAR_MAX_W 36
@@ -45,28 +46,29 @@ typedef struct canvas_text_s {
 	canvas_color_t color;
 } canvas_text_t;
 
+typedef struct canvas_line_s {
+	int line_width;
+	canvas_pt_t start_point, end_point;
+} canvas_line_t;
+
 typedef struct canvas_rect_s {
 	int line_width;	// filled: -1
 	canvas_pt_t start_point, end_point;
 } canvas_rect_t;
 
-typedef union {
-	canvas_text_t text;
-	canvas_rect_t rect;
-	canvas_pt_t point;
-} canvas_draw_data_t;
+typedef struct canvas_bmp_s {
+	canvas_pt_t start_point, end_point;
+	enum rts_osd2_blk_fmt bmp_format; //only support RTS_OSD2_BLK_FMT_RGBA2222, RTS_OSD2_BLK_FMT_1BPP
+	uint32_t color_1bpp;
+	uint8_t *buff;
+	int buff_len;
+} canvas_bmp_t;
 
-typedef struct canvas_msg_s {
-	int ch;
-	int idx;
-	int msg_type;
-	canvas_draw_data_t draw_data;
-	canvas_color_t color;
-} canvas_msg_t;
-
-void draw_point_on_bitmap(uint8_t *bitmap, int width, int height, canvas_pt_t *pt, canvas_color_t *color);
-void draw_line_on_bitmap(uint8_t *bitmap, int width, int height, canvas_pt_t *pt1, canvas_pt_t *pt2, canvas_color_t *color);
-void draw_rect_on_bitmap(uint8_t *bitmap, int width, int height, canvas_rect_t *rect, canvas_color_t *color);
-void draw_text_on_bitmap(uint8_t *bitmap, int width, int height, int font_idx, canvas_text_t *text, canvas_color_t *color);
+int canvas_get_bitmap_width(canvas_bmp_t *bitmap);
+int canvas_get_bitmap_height(canvas_bmp_t *bitmap);
+void draw_point_on_bitmap(canvas_bmp_t *bitmap, canvas_pt_t *pt, canvas_color_t *color);
+void draw_line_on_bitmap(canvas_bmp_t *bitmap, canvas_line_t *line, canvas_color_t *color);
+void draw_rect_on_bitmap(canvas_bmp_t *bitmap, canvas_rect_t *rect, canvas_color_t *color);
+void draw_text_on_bitmap(canvas_bmp_t *bitmap, int font_idx, canvas_text_t *text, canvas_color_t *color);
 
 #endif //CANVAS_H_

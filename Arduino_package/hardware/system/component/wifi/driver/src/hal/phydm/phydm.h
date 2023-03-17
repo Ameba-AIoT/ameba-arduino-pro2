@@ -417,7 +417,6 @@ enum odm_cmninfo {
 	ODM_CMNINFO_APA,
 	ODM_CMNINFO_GLNA,
 	ODM_CMNINFO_ALNA,
-	ODM_CMNINFO_TDMA,
 	ODM_CMNINFO_EXT_TRSW,
 	ODM_CMNINFO_EXT_LNA_GAIN,
 	ODM_CMNINFO_PATCH_ID,
@@ -489,6 +488,7 @@ enum odm_cmninfo {
 	ODM_CMNINFO_BF_ANTDIV_DECISION,
 	ODM_CMNINFO_MANUAL_SUPPORTABILITY,
 	ODM_CMNINFO_EN_DYM_BW_INDICATION,
+	ODM_EN_REGULATION_SRRC,
 	ODM_ANTI_INTERFERENCE_EN,
 	/*@--------- POINTER REFERENCE-----------*/
 
@@ -930,7 +930,6 @@ struct dm_struct {
 	u8			*channel;		/*@central CH number*/
 	boolean			*is_scan_in_process;
 	boolean			*is_power_saving;
-	boolean			*is_tdma;
 	u8			*one_path_cca;		/*@CCA path 2-path/path-A/path-B = 0/1/2; using enum odm_cca_path.*/
 	u8			*antenna_test;
 	boolean			*is_net_closed;
@@ -956,6 +955,7 @@ struct dm_struct {
 	u8			*bb_op_mode;
 	u32			*manual_supportability;
 	u8			*dis_dym_bw_indication;
+	u8			*regulation_SRRC;
 	u8			*anti_interference_en;
 /*@===========================================================*/
 /*@====[ CALL BY VALUE ]===========================================*/

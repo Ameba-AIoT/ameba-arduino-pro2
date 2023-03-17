@@ -15,7 +15,8 @@
 #define CMD_VIPNN_SET_NMS_THRES         MM_MODULE_CMD(0x07)  // set NMS threshold for object detection 
 
 #define CMD_VIPNN_SET_OUTPUT     	    MM_MODULE_CMD(0x15)  // enable module output
-#define CMD_VIPNN_SET_CASCADE     	    MM_MODULE_CMD(0x16)  // enable cascaded mode
+#define CMD_VIPNN_SET_OUTPUT_TYPE       MM_MODULE_CMD(0x16)  // set module output type
+#define CMD_VIPNN_SET_CASCADE     	    MM_MODULE_CMD(0x17)  // enable cascaded mode
 
 #define CMD_VIPNN_APPLY				    MM_MODULE_CMD(0x20)  // for hardware module
 
@@ -24,6 +25,18 @@
 
 #define MAX_OUT_BUFFER_CNT 16
 
+#if defined(CONFIG_UNITEST) && (CONFIG_UNITEST == 1)
+//----------------------------------------------------------------------------
+#define define_model(model) \
+int nn_used_##model __attribute__((weak))  = 0;
+
+#define use_model(model) \
+printf("%d\r", (int)nn_used_##model==0)
+#else
+#define define_model(model)
+#define use_model(model)
+#endif
+//----------------------------------------------------------------------------
 typedef struct landmark_s {
 	struct __post_s {
 		float x, y;
@@ -37,14 +50,14 @@ typedef struct landmarki_s {
 } landmarki_t;
 //----------------------------------------------------------------------------
 typedef struct detobj_s {
-	float class;
+	float classes;
 	float score;
 	float top_x, top_y;
 	float bot_x, bot_y;
 } detobj_t;
 
 typedef struct detobji_s {
-	uint32_t class;
+	uint32_t classes;
 	uint32_t score;
 	uint32_t top_x, top_y;
 	uint32_t bot_x, bot_y;
@@ -73,20 +86,22 @@ typedef struct nn_tensor_param_s {
 
 typedef struct nn_data_param_s {
 	union {
-		struct nn_img_params_s {
+		struct { // nn img params
 			// img width height order
 			int width, height, rgb;
 			// roi
 			rect_t roi;
 			landmarki_t landmark;
 		} img;
-		struct nn_aud_params_s {
+		struct { // nn aud params
 			int num_of_samples;
 			int bit_pre_sample;
 			int sample_rate;
 			int channel;
 		} aud;
 	};
+	int codec_type;
+
 	// DONT use this
 	void *priv;
 	// DONT use this
@@ -101,6 +116,7 @@ typedef int (*nn_get_nb_size_t)(void);
 typedef void (*nn_free_model_t)(void *);
 typedef void (*nn_set_confidence_thresh_t)(void *confidence_thresh);
 typedef void (*nn_set_nms_thresh_t)(void *nms_thresh);
+typedef void (*nn_release_t)(void);
 
 #define MODEL_SRC_MEM	0
 #define MODEL_SRC_FILE	1
@@ -122,6 +138,9 @@ typedef struct nnmodel_s {
 	nn_set_confidence_thresh_t set_confidence_thresh;
 	nn_set_nms_thresh_t set_nms_thresh;
 
+	// release resorce
+	nn_release_t release;
+
 	const char *name;
 } nnmodel_t;
 //------------------------------------------------------------------------------
@@ -134,7 +153,6 @@ typedef struct vipnn_measure_s {
 } vipnn_measure_t;
 
 typedef struct vipnn_param_s {
-	int model_type;
 	char model_file[64];
 	uint8_t *model_mem;
 	uint32_t model_size;
@@ -168,6 +186,11 @@ typedef int (*vipnn_postproc_t)(void *, void *, void *);
 
 #define MAX_IO_NUM              20
 
+typedef enum {
+	VIPNN_NORMAL_OUTPUT = 0,
+	VIPNN_RAW_OUTPUT = 1
+} vipnn_out_type_t;
+
 typedef struct vipnn_ctx_s {
 	void *parent;
 
@@ -195,6 +218,7 @@ typedef struct vipnn_ctx_s {
 
 	vipnn_cascaded_mode_t cas_mode;
 	bool module_out_en;
+	vipnn_out_type_t module_out_type;
 
 	vipnn_measure_t measure;
 } vipnn_ctx_t;
@@ -230,7 +254,7 @@ typedef struct face_feature_res_s {
 typedef struct vipnn_res_s {
 	union {
 		objdetect_res_t od_res;      	// for object detection
-		facedetect_res_t fd_res;		//
+		facedetect_res_t fd_res;		// for face detection
 		face_feature_res_t frec_res;   	// for face recognition
 	};
 	int type;

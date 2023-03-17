@@ -15,7 +15,11 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "usbh.h"
-
+#define MODULE_USB_OTG 0
+#define LEVEL_WARN 0
+#define LEVEL_ERROR 0
+#define LEVEL_TRACE
+#define DBG_PRINTF(MODULE, LEVEL, ...) printf(__VA_ARGS__)
 /* Exported defines ----------------------------------------------------------*/
 
 /* MSC Class Request Codes */

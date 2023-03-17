@@ -1,12 +1,15 @@
 /*
-  This sketch shows how to use GPIO interrupt and doing task in interrupt handler
+ This sketch shows how to use GPIO interrupt and doing task in interrupt handler
 
-  At first we light on LED.
-  As button pin meets voltage rise signal, then interrupt happen and invoke interrupt handler.
-  Then we change LED state.
-      If LED was light on, then turn it off.
-      If LED was light off, then turn it on.
-*/
+ At first we light on LED.
+ As button pin meets voltage rise signal, then interrupt happen and invoke interrupt handler.
+ Then we change LED state.
+    If LED was light on, then turn it off.
+    If LED was light off, then turn it on.
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-gpio-interrupt/
+ */
 
 int button = PUSH_BTN;
 int led    = LED_BUILTIN;

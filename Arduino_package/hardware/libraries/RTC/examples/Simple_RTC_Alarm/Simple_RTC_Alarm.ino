@@ -4,27 +4,29 @@
  * In particular in this example, the RTC time is set at 16:00:00 and an alarm at 16:00:10. 
  * When the time match using the match type MATCH_HHMMSS is reached, 
  * the attached interrupt function will print on the serial monitor Alarm Match!
+ *
+ * Example guide:
+ * https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-rtc-alarm/
 */
+
 #include <stdio.h>
 #include <time.h>
 #include "rtc.h"
 
 /* Change these values to set the current initial date */
-#define YEAR 2020
-#define MONTH 1
-#define DAY 1
+#define YEAR        2020
+#define MONTH       1
+#define DAY         1
 /* Change these values to set the current initial time */
-#define HOUR 16
-#define MIN 0
-#define SEC 0
+#define HOUR        16
+#define MIN         0
+#define SEC         0
 /* Change these values to set the alarm time */
-#define ALARM_DAY 1
-#define ALARM_HOUR 16
-#define ALARM_MIN 0
-#define ALARM_SEC 10  // set alarm as 10 seconds
+#define ALARM_DAY   1
+#define ALARM_HOUR  16
+#define ALARM_MIN   0
+#define ALARM_SEC   10  // set alarm as 10 seconds
 
-/* Create an rtc object */
-AMB_RTC rtc;
 long long seconds;
 struct tm *timeinfo;
 
@@ -63,4 +65,3 @@ void printStringTime(void) {
     Serial.print(":");
     Serial.println(timeinfo->tm_sec);
 }
-

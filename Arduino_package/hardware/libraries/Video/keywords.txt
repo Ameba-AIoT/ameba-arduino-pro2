@@ -14,14 +14,14 @@ Audio	KEYWORD1
 AAC	KEYWORD1
 RTSP	KEYWORD1
 MP4Recording	KEYWORD1
+OSD	KEYWORD1
+MotionDetection	KEYWORD1
+MotionDetectionPostProcess	KEYWORD1
+MotionDetectionRegion	KEYWORD1
 
 #######################################
-# Audio.h Methods (KEYWORD2) & Constants (LITERAL1)
+# AudioStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
-
-configAudio	KEYWORD2
-begin	KEYWORD2
-end	KEYWORD2
 
 configAudio	KEYWORD2
 begin	KEYWORD2
@@ -55,16 +55,24 @@ USE_AUDIO_RIGHT_DMIC	LITERAL1
 USE_AUDIO_STEREO_DMIC	LITERAL1
 
 #######################################
-# Video.h Methods (KEYWORD2) & Constants (LITERAL1)
+# VideoStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
+setBitrate	KEYWORD2
+setJpegQuality	KEYWORD2
+width	KEYWORD2
+height	KEYWORD2
+fps	KEYWORD2
+
 configVideoChannel	KEYWORD2
+camInit	KEYWORD2
+camDeinit	KEYWORD2
 videoInit	KEYWORD2
 videoDeinit	KEYWORD2
 channelBegin	KEYWORD2
 channelEnd	KEYWORD2
 getStream	KEYWORD2
-getP	KEYWORD2
+getImage	KEYWORD2
 setFPS	KEYWORD2
 printInfo	KEYWORD2
 
@@ -144,3 +152,57 @@ registerOutput1	KEYWORD2
 registerOutput2	KEYWORD2
 setStackSize	KEYWORD2
 setTaskPriority	KEYWORD2
+
+#######################################
+# VideoStreamOverlay.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configTextSize	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+endChannel	KEYWORD2
+getTextHeight	KEYWORD2
+getTextWidth	KEYWORD2
+color	KEYWORD2
+drawPoint	KEYWORD2
+drawRect	KEYWORD2
+drawText	KEYWORD2
+clearAll	KEYWORD2
+update	KEYWORD2
+
+OSD_COLOR_RED	LITERAL1
+OSD_COLOR_BLUE	LITERAL1
+OSD_COLOR_GREEN	LITERAL1
+OSD_COLOR_CYAN	LITERAL1
+OSD_COLOR_MAGENTA	LITERAL1
+OSD_COLOR_YELLOW	LITERAL1
+OSD_COLOR_WHITE	LITERAL1
+OSD_COLOR_BLACK	LITERAL1
+OSD_COLOR_GRAY	LITERAL1
+OSD_COLOR_ORANGE	LITERAL1
+
+#######################################
+# MotionDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configResolution	KEYWORD2
+configVideo	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setTriggerBlockCount	KEYWORD2
+setDetectionMask	KEYWORD2
+getResult	KEYWORD2
+setResultCallback	KEYWORD2
+rows	KEYWORD2
+cols	KEYWORD2
+
+labelAdjacentRegions	KEYWORD2
+getRegionCount	KEYWORD2
+getRegion	KEYWORD2
+
+size	KEYWORD2
+xMin	KEYWORD2
+xMax	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2

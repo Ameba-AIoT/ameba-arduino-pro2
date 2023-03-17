@@ -2,8 +2,11 @@
 menu.EraseFlash=* Erase Flash
 menu.AutoUploadMode=* Auto Flash Mode
 menu.UploadModeSelection=* Upload Mode
-menu.UploadVidoeBin=**      Vidoe ISP Bin
+menu.UploadVideoBin=**      Video ISP Bin
 menu.UploadNeuralNetworkBin=**      Neural Network Bin
+menu.UploadNNOD=***      NN Models Object Detection
+menu.UploadNNFD=***      NN Models Face Detection
+menu.UploadNNFR=***      NN Models Face Recognition
 menu.StdLibInit=* Standard Lib Enable
 
 ##############################################################
@@ -46,19 +49,48 @@ Ameba_AMB82-MINI.menu.UploadModeSelection.NormalMode.build.upload_mode=NormalEna
 Ameba_AMB82-MINI.menu.UploadModeSelection.SpeedMode=Speed Mode
 Ameba_AMB82-MINI.menu.UploadModeSelection.SpeedMode.build.upload_mode=SpeedEnable
 
-Ameba_AMB82-MINI.menu.UploadVidoeBin.No=No
-Ameba_AMB82-MINI.menu.UploadVidoeBin.No.build.upload_mode_voe=VOEno
-Ameba_AMB82-MINI.menu.UploadVidoeBin.Yes=Yes
-Ameba_AMB82-MINI.menu.UploadVidoeBin.Yes.build.upload_mode_voe=VOEyes
+Ameba_AMB82-MINI.menu.UploadVideoBin.Yes=Yes
+Ameba_AMB82-MINI.menu.UploadVideoBin.Yes.build.upload_mode_voe=VOEyes
+Ameba_AMB82-MINI.menu.UploadVideoBin.No=No
+Ameba_AMB82-MINI.menu.UploadVideoBin.No.build.upload_mode_voe=VOEno
 
-Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No=No
-Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No.build.upload_mode_nn=NNno
 Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.Yes=Yes
 Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.Yes.build.upload_mode_nn=NNyes
+Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No=No
+Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No.build.upload_mode_nn=NNno
+
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov4Tiny=Default Yolov4Tiny
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov4Tiny.build.nn_od_model=DYV4
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov4Tiny.build.nn_model_flags=-DMODEL_YOLOV4TINY
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov3Tiny=Default Yolov3Tiny
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov3Tiny.build.nn_od_model=DYV3
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov3Tiny.build.nn_model_flags=-DMODEL_YOLOV3TINY
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov7Tiny=Default Yolov7Tiny
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov7Tiny.build.nn_od_model=DYV7
+Ameba_AMB82-MINI.menu.UploadNNOD.D_Yolov7Tiny.build.nn_model_flags=-DMODEL_YOLOV7TINY
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov4Tiny=Customize Yolov4Tiny
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov4Tiny.build.nn_od_model=CYV4
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov4Tiny.build.nn_model_flags=-DMODEL_YOLOV4TINY
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny=Customize Yolov3Tiny
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny.build.nn_od_model=CYV3
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov3Tiny.build.nn_model_flags=-DMODEL_YOLOV3TINY
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny=Customize Yolov7Tiny
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny.build.nn_od_model=CYV7
+Ameba_AMB82-MINI.menu.UploadNNOD.C_Yolov7Tiny.build.nn_model_flags=-DMODEL_YOLOV7TINY
+
+Ameba_AMB82-MINI.menu.UploadNNFD.D_MobileFaceNet=Default MobileFaceNet
+Ameba_AMB82-MINI.menu.UploadNNFD.D_MobileFaceNet.build.nn_fd_model=DM
+Ameba_AMB82-MINI.menu.UploadNNFD.C_MobileFaceNet=Customize MobileFaceNet
+Ameba_AMB82-MINI.menu.UploadNNFD.C_MobileFaceNet.build.nn_fd_model=CM
+
+Ameba_AMB82-MINI.menu.UploadNNFR.D_SCRFD=Default SCRFD
+Ameba_AMB82-MINI.menu.UploadNNFR.D_SCRFD.build.nn_fr_model=DS
+Ameba_AMB82-MINI.menu.UploadNNFR.C_SCRFD=Customize SCRFD
+Ameba_AMB82-MINI.menu.UploadNNFR.C_SCRFD.build.nn_fr_model=CS
 
 Ameba_AMB82-MINI.menu.StdLibInit.Disable=NA
-Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.nn_model_flags}
 Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF {build.nn_model_flags}
 
 ##############################################################

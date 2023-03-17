@@ -18,10 +18,10 @@ WiFiClient::WiFiClient() : _sock(MAX_SOCK_NUM) {
     recvTimeout = 3000;
 }
 
-WiFiClient::WiFiClient(uint8_t sock) {
+WiFiClient::WiFiClient(int sock) {
     _sock = sock;
-    //if ((sock >= 0) && (sock != 0xFF)) {
-    if (sock != 0xFF) {
+    if ((sock >= 0) && (sock != 0xFF)) {
+//    if (sock != 0xFF) {
         _is_connected = true;
     }
     recvTimeout = 3000;
@@ -89,14 +89,14 @@ int WiFiClient::read() {
 }
 
 int WiFiClient::read(uint8_t* buf, size_t size) {
-    uint16_t _size = size;
     int ret;
     int err;
 
-    ret = clientdrv.getDataBuf(_sock, buf, _size);
+    // size_t is uint32_t
+    ret = clientdrv.getDataBuf(_sock, buf, size);
     if (ret <= 0) {
         err = clientdrv.getLastErrno(_sock);
-        if (err == EAGAIN) {
+        if (err != EAGAIN) {
             _is_connected = false;
         }
     }
@@ -104,11 +104,11 @@ int WiFiClient::read(uint8_t* buf, size_t size) {
 }
 
 int WiFiClient::recv(uint8_t* buf, size_t size) {
-    uint16_t _size = size;
     int ret;
     int err;
 
-    ret = clientdrv.recvData(_sock, buf, _size);
+    // size_t is uint32_t
+    ret = clientdrv.recvData(_sock, buf, size);
     if (ret <= 0) {
         err = clientdrv.getLastErrno(_sock);
         if (err != EAGAIN) {

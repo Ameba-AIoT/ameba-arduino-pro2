@@ -72,6 +72,7 @@ struct _DFS_STATISTICS {
 	boolean		sw_trigger_mode;
 	boolean		det_print;
 	boolean		det_print2;
+	boolean		det_print_sw;
 	boolean		det_print_jar3;
 	boolean		det_jar3_en;
 	boolean		radar_type;
@@ -83,6 +84,7 @@ struct _DFS_STATISTICS {
 	boolean		pri_cond3;
 	boolean		pri_cond4;
 	boolean		pri_cond5;
+	boolean		pri_cond6;
 	boolean		pw_cond1;
 	boolean		pw_cond2;
 	boolean		pw_cond3;
@@ -102,14 +104,26 @@ struct _DFS_STATISTICS {
 	u8		pw_long_hold_sum[6];
 	u8		hist_idx;
 	u16		hist_long_idx;
-	u8		pw_hold[300][6];
-	u8		pri_hold[300][6];
+	u8		pw_hold[4][6];
+	u8		pri_hold[4][6];
+	u8		pw_long_hold[300][6];
+	u8		pri_long_hold[300][6];
 	u8		pw_std;	/*@The std(var) of reasonable num of pw group*/
 	u8		pri_std;/*@The std(var) of reasonable num of pri group*/
 	/*@dfs histogram threshold*/
-	u8		pri_hist_th : 3;
-	u8		pri_sum_g1_th : 4;
-	u8		pri_sum_g5_th : 4;
+	u8		pri_hist_idle_th;
+	u8		pri_hist_th;
+	u8		pri_sum_g1_th;
+	u8		pri_sum_g0_idle_th;
+	u8		pri_sum_g0_th;
+	u8		pri_sum_g5_idle_th;
+	u8		pri_sum_g5_th;
+	u8		pw_sum_g0_idle_th;
+	u8		pw_sum_g0_th;
+	u8		pw_sum_g5_idle_th;
+	u8		pw_sum_g5_th;
+	u8		pw_pri_valid_set_idle_th;
+	u8		pw_pri_valid_set_th;
 	u8		pri_sum_g1_fcc_th : 3;
 	u8		pri_sum_g3_fcc_th : 3;
 	u8		pri_sum_safe_fcc_th : 7;
@@ -117,7 +131,8 @@ struct _DFS_STATISTICS {
 	u8		pri_sum_type6_th : 5;
 	u8		pri_sum_safe_th : 6;
 	u8		pri_sum_g5_under_g1_th : 3;
-	u8		pri_pw_diff_th : 3;
+	u8		pri_pw_diff_idle_th;
+	u8		pri_pw_diff_th;
 	u8		pri_pw_diff_fcc_th : 4;
 	u8		pri_pw_diff_fcc_idle_th : 2;
 	u8		pri_pw_diff_w53_th : 4;
@@ -158,6 +173,8 @@ struct _DFS_STATISTICS {
 	u8 		pri_cnt_th;
 	u8 		loct_diff_th;
 	u8 		dc_cnt_th;
+	u32		fa_cnt_th;
+	u32		fa_cnt_th_backup;
 };
 
 /*@

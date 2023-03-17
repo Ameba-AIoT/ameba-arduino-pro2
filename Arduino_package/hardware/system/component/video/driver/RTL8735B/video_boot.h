@@ -59,6 +59,9 @@ typedef struct video_boot_param_s {
 		uint32_t xmax;
 		uint32_t ymax;
 	} roi;
+	uint32_t level;
+	uint32_t profile;
+	uint32_t cavlc;
 } video_boot_params_t;
 
 typedef struct isp_boot_info_s {
@@ -102,6 +105,8 @@ typedef struct video_boot_stream_cfg {
 	uint32_t fcs_isp_iq_id;//0
 	uint8_t  fcs_isp_reserved_buf[FCS_SYSTEM_REV_SIZE];//Reserved for fcs system data
 	uint8_t  fcs_user_buffer[FCS_USER_REV_SIZE];//User can use the buffer to transfer to application
+	uint32_t fcs_start_time;//bootloader to fcs user boot function
+	uint32_t fcs_voe_time;//bootloader to voe init function
 } video_boot_stream_t;
 #endif
 

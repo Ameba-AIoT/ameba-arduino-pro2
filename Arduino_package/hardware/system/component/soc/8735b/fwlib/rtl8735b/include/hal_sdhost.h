@@ -47,6 +47,14 @@ extern "C"
  */
 
 /**
+  \brief  Defines the CMD/DATA output timing for SD2.0 mode.
+*/
+enum sdhost_sd20_tx_timing_e {
+	SD20_TX_TIMING_DEFAULT      = 0,
+	SD20_TX_TIMING_SHIFT        = 1
+};
+
+/**
   \brief  Defines SD CID (Card IDentification) register format.
 */
 typedef struct hal_sdhost_cid {
@@ -401,6 +409,18 @@ hal_status_t hal_sdhost_switch_freq(hal_sdhost_adapter_t *adpt, hal_sdhost_freq_
 {
 	return hal_sdhost_stubs.hal_sdhost_switch_freq(adpt, freq);
 }
+
+
+/**
+ *  @brief Adjust the CMD/DATA output timing for SD2.0 mode.
+ *
+ *  @param[in]  psdhost_adapter The SD host HAL adapter.
+ *  @param[in]  timing SD20_TX_TIMING_DEFAULT: output at falling edge of SDCLK
+ *                                 SD20_TX_TIMING_SHIFT: output is ahead by 1/4 SDCLK
+ *
+ *  @returns    The result status.
+ */
+hal_status_t hal_sdhost_adj_sd20_tx_timing(hal_sdhost_adapter_t *psdhost_adapter, u8 timing);
 
 
 /** @} */ /* End of group hal_sdhost */

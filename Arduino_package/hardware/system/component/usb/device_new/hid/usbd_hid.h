@@ -49,6 +49,7 @@
 
 
 /*wValue of HID report request*/
+#define HID_DESC 			0x21
 #define HID_REPORT_DESC 	0x22
 
 // String index
@@ -76,7 +77,8 @@
 typedef struct {
 	void(* init)(void);
 	void(* deinit)(void);
-	void(*transmit_complete)(void);
+	void(* setup)(void);
+	void(* transmit_complete)(void);
 } usbd_hid_usr_cb_t;
 
 

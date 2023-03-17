@@ -23,12 +23,12 @@ typedef struct AEC_CTRL_PARAMS {	/* keep variables in same order */
 	INT16 CNGEnable;        // 0- disabel, 1 - enable
 	INT16 CNGInitialLvl;    // 0-10, 0->33dB,.. 10->70dB
 	INT16 CNGAdjustLvl;     // 0 = none, 1 = normal, 2 = fast
-	INT16 DTControl;        //	1-Type1, 2-Type2a, 3 - Type2b, 4 - Type2c, 5 - Type3
+	INT16 DTControl;        // 1 - Type1 (allow some low residual), 2 - Type2a (may attenuate upto 6dB local), 3 - Type2b (may attenuate upto 9dB local)
 	INT16 PTime;            // 10(ms) or 20(ms)
 	INT16 BulkDelay;        // in milli seconds : 0-50(ms)
-	INT16 PPLevel;          //! 1-10
+	INT16 PPLevel;          // 1-15
 	INT16 NSEnable;         // 0-NO, 1- YES
-	INT16 Mode;             //mono - 1 and stereo -2, default - 1
+	INT16 Mode;             // mono - 1 and stereo -2, default - 1
 	INT32 SamplingRate;     // 8000 = 8000Hz, 16000 = 16000Hz
 	AGC_CTRL_PARAMS AGCCfg;
 } AEC_CTRL_PARAMS;

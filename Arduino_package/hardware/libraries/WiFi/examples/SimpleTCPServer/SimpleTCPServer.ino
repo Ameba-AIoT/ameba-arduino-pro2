@@ -1,8 +1,14 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-server-client/
+ */
+
 #include <WiFi.h>
 
-char ssid[] = "yourNetwork";      //  your network SSID (name)
-char pass[] = "Password";   // your network password
-int keyIndex = 0;                 // your network key Index number (needed only for WEP)
+char ssid[] = "yourNetwork";    // your network SSID (name)
+char pass[] = "Password";       // your network password
+int keyIndex = 0;               // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 WiFiServer server(5000);

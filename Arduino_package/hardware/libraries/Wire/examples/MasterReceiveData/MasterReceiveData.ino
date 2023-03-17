@@ -1,14 +1,18 @@
-// Wire Master Reader
-// by Nicholas Zambetti <http://www.zambetti.com>
+/*
+ Wire Master Reader
+ by Nicholas Zambetti <http://www.zambetti.com>
 
-// Demonstrates use of the Wire library
-// Reads data from an I2C/TWI slave device
-// Refer to the "Wire Slave Sender" example for use with this
+ Demonstrates use of the Wire library
+ Reads data from an I2C/TWI slave device
+ Refer to the "Wire Slave Sender" example for use with this
 
-// Created 29 March 2006
+ Created 29 March 2006
 
-// This example code is in the public domain.
+ This example code is in the public domain.
 
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-i2c-2/
+ */
 
 #include <Wire.h>
 

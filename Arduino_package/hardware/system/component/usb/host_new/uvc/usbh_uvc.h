@@ -44,7 +44,7 @@
 #define UVC_URB_NUMS		4
 #define UVC_URB_SIZE		512*8
 
-#define VIDEO_MAX_FRAME		6
+#define VIDEO_MAX_FRAME		2
 #define VIDEO_FRAME_SIZE	200*1024
 
 

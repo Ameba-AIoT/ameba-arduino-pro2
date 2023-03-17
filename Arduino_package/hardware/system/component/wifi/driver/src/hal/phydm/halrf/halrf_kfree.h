@@ -286,6 +286,11 @@
 #define TSSI_5GH1_TXA_35B 0x4cb
 #define TSSI_5GH2_TXA_35B 0x4cc
 
+#define PPG_DACDCK1_35B 0x4d1
+#define PPG_DACDCK2_35B 0x4d2
+#define PPG_DACDCK3_35B 0x4d3
+#define PPG_DACDCK4_35B 0x4d4
+
 #define PPG_ADCDCK1_35B	0x4de
 #define PPG_ADCDCK2_35B	0x4df
 

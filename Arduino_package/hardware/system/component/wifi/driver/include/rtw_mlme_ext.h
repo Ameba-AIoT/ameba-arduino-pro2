@@ -38,7 +38,7 @@
 #define MAX_CNT_AUTH_TIMES	(3) //Max connect times in case of receiving deauth/deassoc during auth&&assoc procedure and not reporting disconnect event
 #define PASSIVE_SURVEY_TO		(110) //Passive scan should > 102.4ms
 //#define SURVEY_TO		(300) //Increase time to stay each channel - Alex Fang
-#define REAUTH_TO		(800) //(50)
+#define REAUTH_TO		(300) //(50)
 #define REASSOC_TO		(300) //(50)
 //#define DISCONNECT_TO	(3000)
 #define ADDBA_TO			(2000)
@@ -598,6 +598,9 @@ struct mlme_ext_priv {
 	u8	cur_ch_offset;//PRIME_CHNL_OFFSET
 	u8	cur_wireless_mode;	// NETWORK_TYPE
 	u8	max_chan_nums;
+#if defined(CONFIG_FAST_PSCAN_THRESHOLD)
+	int fast_pscan_threshold;
+#endif
 	RT_CHANNEL_INFO		channel_set[MAX_CHANNEL_NUM + 1];
 #ifdef CONFIG_P2P_NEW
 	RT_CHANNEL_INFO		social_channel_set[4];
