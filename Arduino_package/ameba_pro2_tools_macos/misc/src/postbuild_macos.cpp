@@ -275,29 +275,29 @@ int main(int argc, char *argv[]) {
     // 8. generate .bin
     // 8.1 firmware_ntz.bin
     if (upload_mode_user_selection_voe == "VOEyes") {
-        cmd = "./misc/elf2bin.macos convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+        cmd = "./misc/elf2bin.darwin convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.macos convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+        cmd = "./misc/elf2bin.darwin convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.macos convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
+        cmd = "./misc/elf2bin.darwin convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
-        cmd = "./misc/elf2bin.macos convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
+        cmd = "./misc/elf2bin.darwin convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
         cout << cmd << endl;
         system(cmd.c_str());
     }
 
     if (upload_mode_user_selection_nn == "NNyes") {
-        cmd = "./misc/elf2bin.macos convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
+        cmd = "./misc/elf2bin.darwin convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.macos convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
+        cmd = "./misc/elf2bin.darwin convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
         cout << cmd << endl;
         system(cmd.c_str());
     }
@@ -315,13 +315,13 @@ int main(int argc, char *argv[]) {
         if (upload_mode_user_selection_voe == "VOEyes") {
             if (upload_mode_user_selection_nn == "NNyes") {
                 cmdss.clear();
-                cmdss << "./misc/elf2bin.macos " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+                cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
                 getline(cmdss, cmd);
                 cout << cmd << endl;
                 system(cmd.c_str());
             } else {
                 cmdss.clear();
-                cmdss << "./misc/elf2bin.macos " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+                cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
                 getline(cmdss, cmd);
                 cout << cmd << endl;
                 system(cmd.c_str());
@@ -329,14 +329,14 @@ int main(int argc, char *argv[]) {
         } else {
             if (upload_mode_user_selection_nn == "NNyes") {
                 cmdss.clear();
-                //cmdss << "./misc/elf2bin.macos " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_FCSDATA=boot_fcs.bin";
-                cmdss << "./misc/elf2bin.macos " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+                //cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_FCSDATA=boot_fcs.bin";
+                cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
                 getline(cmdss, cmd);
                 cout << cmd << endl;
                 system(cmd.c_str());
             } else {
                 cmdss.clear();
-                cmdss << "./misc/elf2bin.macos " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+                cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
                 getline(cmdss, cmd);
                 cout << cmd << endl;
                 system(cmd.c_str());

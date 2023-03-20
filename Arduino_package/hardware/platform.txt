@@ -100,13 +100,14 @@ build.usb_manufacturer="Unknown"
 build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 
 
-#pre compile sketch
-recipe.hooks.sketch.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
-recipe.hooks.sketch.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
-recipe.hooks.sketch.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
+# Pre build process
+# -----------------
+recipe.hooks.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
+recipe.hooks.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
+recipe.hooks.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 
 # Ameba compile patterns
-# ---------------------
+# ----------------------
 ## Compile c file
 recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -c {compiler.defines.c.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} {build.nn_model_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
 ### -MD -MT -MF
@@ -166,7 +167,7 @@ tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.p
 
 tools.ameba_pro2_tools.upload.pattern.linux="{runtime.tools.ameba_pro2_tools.path}/image_linux" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "{build.upload_mode}" "0x80000" "{build.upload_mode_nn}" "{build.upload_mode_voe}" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_macos" "{build.upload_mode}" "0x80000" "{build.upload_mode_nn}" "{build.upload_mode_voe}" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "{build.upload_mode}" "0x80000" "{build.upload_mode_nn}" "{build.upload_mode_voe}" {upload.verbose}
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"

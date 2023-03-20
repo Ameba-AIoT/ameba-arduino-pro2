@@ -2,7 +2,7 @@
 Compile:
 
 windows:
-mingw32-g++.exe -o image_windows.exe image_windows.cpp -static
+mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
 i686-w64-mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
 
 linux (ubuntu 20.04 TLS ,64 bits app generated):
