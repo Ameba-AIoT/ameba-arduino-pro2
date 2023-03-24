@@ -50,7 +50,6 @@ void MotionDetection::begin(void) {
     }
 
     setMDParams(_p_mmf_context->priv, &md_param);
-//    setMDThreshold(_p_mmf_context->priv, &md_thr);
     setMDDisppost(_p_mmf_context->priv, md_ResultCB);
 
     if (trigCount) {
@@ -88,15 +87,15 @@ void MotionDetection::setDetectionMask(char* mask) {
     setMDMask(_p_mmf_context->priv, mask);
 }
 
-char* MotionDetection::getResult(void) {
+md_result_t* MotionDetection::getResult(void) {
     if (_p_mmf_context == NULL) {
-        return md_result;
+        return &md_result;
     }
-    getMDResult(_p_mmf_context->priv, md_result);
-    return md_result;
+    getMDResult(_p_mmf_context->priv, &md_result);
+    return &md_result;
 }
 
-void MotionDetection::setResultCallback(void (*md_callback)(char*)) {
+void MotionDetection::setResultCallback(void (*md_callback)(md_result_t*)) {
     md_ResultCB = md_callback;
     if (_p_mmf_context == NULL) {
         return;
@@ -112,6 +111,8 @@ uint8_t MotionDetection::cols(void) {
     return md_param.md_col;
 }
 
+// Function not used currently, require raw MD result to use these functions
+#if 0
 uint16_t MotionDetectionPostProcess::labelAdjacentRegions(char* mdResult, uint8_t rows, uint8_t cols) {
     regionCount = 0;
     memset(regionGroup, 0, sizeof(regionGroup));
@@ -288,3 +289,4 @@ float MotionDetectionRegion::yMin(void) {
 float MotionDetectionRegion::yMax(void) {
     return ((ymax + 1) * (1.0 / rows));
 }
+#endif

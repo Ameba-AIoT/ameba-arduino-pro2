@@ -12,7 +12,6 @@
 #define CHANNELVID 0  // Channel for RTSP streaming
 #define CHANNELMP4 1  // Channel for MP4 recording
 #define CHANNELMD  3  // RGB format video for motion detection only avaliable on channel 3
-#define MDRES      16 // Motion detection grid resolution
 
 // Pin Definition
 #define GREEN_LED  4
@@ -29,7 +28,7 @@ StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output AAC
 StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output RTSP
 StreamIO videoStreamerMD(1, 1);  // 1 Input RGB Video -> 1 Output MD
 StreamIO avMixMP4Streamer(2, 1); // 2 Input Video + Audio -> 1 Output MP4
-MotionDetection MD(MDRES, MDRES);
+MotionDetection MD;
 
 bool motionDetected = false;
 bool recordingMotion = false;
@@ -37,22 +36,24 @@ int recordingCount = 0;
 
 // Set a mask which would disable the motion detection for the left half of the screen
 char mask[] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 };
 
 char ssid[] = "yourNetwork"; // your network SSID (name)
@@ -141,41 +142,18 @@ void setup() {
 }
 
 void loop() {
-    char* md_result = MD.getResult();
-    // Motion detection results is expressed as an MDRES x MDRES array
+    // Motion detection results is expressed as an array
     // With 0 or 1 in each element indicating presence of motion
     // Iterate through all elements to check for motion
     // and calculate largest rectangle containing motion
-    int motion = 0, j, k;
-    int jmin = MDRES - 1, jmax = 0;
-    int kmin = MDRES - 1, kmax = 0;
-    for (j = 0; j < MDRES; j++) {
-        for (k = 0; k < MDRES; k++) {
-            printf("%d ", md_result[j * MDRES + k]);
-            if (md_result[j * MDRES + k]) {
-            motion = 1;
-            if (j < jmin) {
-              jmin = j;
-            }
-            if (k < kmin) {
-                kmin = k;
-            }
-            if (j > jmax) {
-                jmax = j;
-            }
-            if (k > kmax) {
-                kmax = k;
-            }
-        }
-    }
-    printf("\r\n");
-  }
-printf("\r\n");
-
-    OSD.clearAll(CHANNELVID);
+    md_result_t* md_result = MD.getResult();
+    int motion = md_result->motion_cnt;
+    
+    OSD.createBitmap(CHANNELVID);
     if (motion) {
         digitalWrite(GREEN_LED, HIGH);
         motionDetected = true;
+    
         // Start recording MP4 to SD card
         if (recordingMotion == false) {
             recordingCount++;
@@ -185,11 +163,11 @@ printf("\r\n");
             recordingMotion = true;
         }
         // Scale rectangle dimensions according to high resolution video stream and draw with OSD
-        int xmin = (int)(kmin * configVID.width() / MDRES) + 1;
-        int ymin = (int)(jmin * configVID.height() / MDRES) + 1;
-        int xmax = (int)((kmax + 1) * configVID.width() / MDRES) - 1;
-        int ymax = (int)((jmax + 1) * configVID.height() / MDRES) - 1;
-        OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
+        int xmin = (int)(md_result->md_pos[0].xmin * configVID.width());
+        int ymin = (int)(md_result->md_pos[0].ymin * configVID.height());
+        int xmax = (int)(md_result->md_pos[0].xmax * configVID.width());
+        int ymax = (int)(md_result->md_pos[0].ymax * configVID.height());
+        OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
     }
     if (motionDetected == false) digitalWrite(GREEN_LED, LOW);  // GREEN LED turn off when no motion detected
     if (!mp4.getRecordingState()) recordingMotion = false;      // If not in recording state, recordingMotion = false
