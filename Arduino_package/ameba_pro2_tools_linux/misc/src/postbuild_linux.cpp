@@ -23,45 +23,74 @@ g++ -o postbuild_macos postbuild_macos.cpp
 
 using namespace std;
 
-string fc_data_name, voe_name, iq_name, sensor_name;
-string name_buf[4];
-
-string upload_mode_user_selection, upload_mode_user_selection_nn, upload_mode_user_selection_voe;
 string common_nn_models_path;
 
-int readtxt(int line_number)
-{
+string fc_data_name, voe_name, iq_name, sensor_name;
+string isp_file_name_buf[100];
+
+string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3;
+string nn_name_buf[100];
+
+int nn_model_selection_check = 0;
+
+
+//void readtxt(int line_number, int mode_isp_nn) {
+void readtxt(int mode_isp_nn) {
     ifstream myFile_Handler;
     string myLine;
-    myFile_Handler.open("misc/video_img/sensor_bin_name.txt");
     int str_count = 0;
 
-    if(myFile_Handler.is_open())
-    {
-        while (getline(myFile_Handler, myLine))
-        {
-            //cout << myLine << endl;
-            name_buf[str_count] = myLine;
-            str_count++;
-            if (str_count == line_number) {
-                break;
-            } else {
-                name_buf[str_count-1].erase(name_buf[str_count-1].size() - 1);
+    if (mode_isp_nn == 0) {
+        myFile_Handler.open("misc/video_img/sensor_bin_name.txt");
+
+        if(myFile_Handler.is_open()) {
+            while (getline(myFile_Handler, myLine)) {
+                //cout << myLine << endl;
+                isp_file_name_buf[str_count] = myLine;
+                str_count++;
+                //if (str_count == line_number) {
+                //    break;
+                //} else {
+                isp_file_name_buf[str_count-1].erase(isp_file_name_buf[str_count-1].size() - 1);
+                //}
             }
+            myFile_Handler.close();
+        } else {
+            cout << "Unable to open the file!" << endl;
         }
-        myFile_Handler.close();
-    }
-    else
-    {
-        cout << "Unable to open the file!";
-    }
 
-    fc_data_name = name_buf[0];
-    voe_name = name_buf[1];
-    iq_name = name_buf[2];
-    sensor_name = name_buf[3];
+        fc_data_name = isp_file_name_buf[0];
+        voe_name = isp_file_name_buf[1];
+        iq_name = isp_file_name_buf[2];
+        sensor_name = isp_file_name_buf[3];
+    } else if (mode_isp_nn == 1) {
+        myFile_Handler.open("misc/video_img/ino_validation.txt");
 
-    return 0;
+        if(myFile_Handler.is_open()) {
+            while (getline(myFile_Handler, myLine)) {
+                isp_file_name_buf[str_count] = myLine;
+                str_count++;
+                isp_file_name_buf[str_count-1].erase(isp_file_name_buf[str_count-1].size() - 1);
+            }
+            myFile_Handler.close();
+        } else {
+            cout << "Unable to open the file!" << endl;
+        }
+        nn_model_yolotiny_name = nn_name_buf[2];
+        nn_model_srcfd_name = nn_name_buf[3];
+        nn_model_mobilefacenet_name = nn_name_buf[4];
+        nn_header_name1 = nn_name_buf[7];
+        nn_header_name2 = nn_name_buf[8];
+        nn_header_name3 = nn_name_buf[9];
+    }
+}
+
+void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, string nn_model_mobilefacenet_name, string nn_header_name1, string nn_header_name2, string nn_header_name3) {
+    if ((nn_model_yolotiny_name != "NA") || (nn_model_srcfd_name != "NA") || (nn_model_mobilefacenet_name != "NA")) {
+        if ((nn_header_name1 != "NA") || (nn_header_name2 != "NA") || (nn_header_name3 != "NA")) {
+            nn_model_selection_check = 1;
+        }
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -86,22 +115,7 @@ int main(int argc, char *argv[]) {
     // 0. change work folder
     chdir(argv[1]);
 
-    //upload_mode_user_selection = argv[6];
-    common_nn_models_path = argv[7];
-    upload_mode_user_selection_nn = argv[8];
-    upload_mode_user_selection_voe = argv[9];
-    // *** NN pre requires ISP, can not avoid the ISP when using NN
-    if (upload_mode_user_selection_nn == "NNyes") {
-        if (upload_mode_user_selection_voe != "VOEyes") {
-            upload_mode_user_selection_voe = "VOEyes";
-        }
-    }
-
-    if (argv[6]) {
-        upload_mode_user_selection = argv[6];
-    } else {
-        upload_mode_user_selection = "NormalEnable";
-    }
+    common_nn_models_path = argv[6];
 
     // 1. remove previous files
     cmd = "rm -f application.ntz";
@@ -140,43 +154,44 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    if (upload_mode_user_selection_voe == "VOEyes") {
-        readtxt(4);
+    readtxt(0);
 
-        cmdss.clear();
-        cmdss << "cp misc/video_img/" << voe_name << " ./";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmdss.clear();
+    cmdss << "cp misc/video_img/" << voe_name << " ./";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmd = "cp misc/video_img/amebapro2_isp_iq.json ./";
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmd = "cp misc/video_img/amebapro2_isp_iq.json ./";
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmd = "cp misc/video_img/amebapro2_sensor_set.json ./";
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmd = "cp misc/video_img/amebapro2_sensor_set.json ./";
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << "cp misc/video_img/" << fc_data_name << " ./";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmdss.clear();
+    cmdss << "cp misc/video_img/" << fc_data_name << " ./";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << "cp misc/video_img/" << iq_name << " ./";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmdss.clear();
+    cmdss << "cp misc/video_img/" << iq_name << " ./";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << "cp misc/video_img/" << sensor_name << " ./";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-    }
+    cmdss.clear();
+    cmdss << "cp misc/video_img/" << sensor_name << " ./";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-    if (upload_mode_user_selection_nn == "NNyes") {
+    readtxt(1);
+    nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3);
+
+    if (nn_model_selection_check == 1) {
         cmd = "cp misc/nn_img/amebapro2_nn_model.json ./";
         cout << cmd << endl;
         system(cmd.c_str());
@@ -256,43 +271,39 @@ int main(int argc, char *argv[]) {
     // 7.1 power save mode bins
 #endif
 
+    // 8. generate .bin
+    // 8.1 firmware.bin firmware_isp_iq.bin nn_model.bin
     cmd = "cp application.ntz application.ntz.axf";
     cout << cmd << endl;
     system(cmd.c_str());
 
-    //    cmdss.clear();
-    //    cmdss << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy -j .bluetooth_trace.text -Obinary application.ntz.axf APP.trace";
-    //    getline(cmdss, cmd);
-    //    cout << cmd << endl;
-    //    system(cmd.c_str());
+    //cmdss.clear();
+    //cmdss << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy -j .bluetooth_trace.text -Obinary application.ntz.axf APP.trace";
+    //getline(cmdss, cmd);
+    //cout << cmd << endl;
+    //system(cmd.c_str());
 
-    //    cmdss.clear();
-    //    cmdss << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy -R .bluetooth_trace.text application.ntz.axf";
-    //    getline(cmdss, cmd);
-    //    cout << cmd << endl;
-    //    system(cmd.c_str());
+    //cmdss.clear();
+    //cmdss << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy -R .bluetooth_trace.text application.ntz.axf";
+    //getline(cmdss, cmd);
+    //cout << cmd << endl;
+    //system(cmd.c_str());
 
-    // 8. generate .bin
-    // 8.1 firmware_ntz.bin
-    if (upload_mode_user_selection_voe == "VOEyes") {
-        cmd = "./misc/elf2bin.linux convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmd = "./misc/elf2bin.linux convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.linux convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
-        cout << cmd << endl;
-        system(cmd.c_str());
+    cmd = "./misc/elf2bin.linux convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.linux convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
-        cout << cmd << endl;
-        system(cmd.c_str());
-    } else {
-        cmd = "./misc/elf2bin.linux convert amebapro2_firmware_NA_cam.json FIRMWARE firmware_ntz.bin";
-        cout << cmd << endl;
-        system(cmd.c_str());
-    }
+    //cmd = "./misc/elf2bin.linux convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
+    //cmd = "./misc/elf2bin.linux convert amebapro2_firmware.json FIRMWARE firmware.bin";
+    cmd = "./misc/elf2bin.linux convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
+    cout << cmd << endl;
+    system(cmd.c_str());
 
-    if (upload_mode_user_selection_nn == "NNyes") {
+    if (nn_model_selection_check == 1) {
         cmd = "./misc/elf2bin.linux convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
         cout << cmd << endl;
         system(cmd.c_str());
@@ -302,46 +313,24 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
     }
 
-    // 8.1 flash_ntz.bin
-    if (upload_mode_user_selection == "SpeedEnable") {
-        cmd = "cp firmware_ntz.bin flash_ntz.bin";
+    cmdss.clear();
+    cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json arduino_firmware.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    if (nn_model_selection_check == 1) {
+        cmdss.clear();
+        cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
-        cmd = "cp firmware_ntz.bin firmware.bin";
+        cmdss.clear();
+        cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
-
-        if (upload_mode_user_selection_voe == "VOEyes") {
-            if (upload_mode_user_selection_nn == "NNyes") {
-                cmdss.clear();
-                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-                getline(cmdss, cmd);
-                cout << cmd << endl;
-                system(cmd.c_str());
-            } else {
-                cmdss.clear();
-                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-                getline(cmdss, cmd);
-                cout << cmd << endl;
-                system(cmd.c_str());
-            }
-        } else {
-            if (upload_mode_user_selection_nn == "NNyes") {
-                cmdss.clear();
-                //cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_FCSDATA=boot_fcs.bin";
-                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-                getline(cmdss, cmd);
-                cout << cmd << endl;
-                system(cmd.c_str());
-            } else {
-                cmdss.clear();
-                cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
-                getline(cmdss, cmd);
-                cout << cmd << endl;
-                system(cmd.c_str());
-            }
-        }
     }
 
     return 0;

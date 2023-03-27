@@ -102,18 +102,24 @@ build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANU
 
 # Pre build process
 # -----------------
+## combine toolchain
 recipe.hooks.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_version_p1} {toolchain_version_p2}
 
+recipe.hooks.prebuild.2.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path}
+
+
 # Ameba compile patterns
 # ----------------------
 ## Compile c file
-recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -c {compiler.defines.c.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} {build.nn_model_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -c {compiler.defines.c.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
 ### -MD -MT -MF
 
 ## Compile c++ files
-recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -c {compiler.defines.cpp.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} {build.nn_model_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -c {compiler.defines.cpp.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {build.extra_flags} -Wl,--start-group {compiler.ameba.c.include} {compiler.arduino.c.include} {includes} -Wl,--end-group "{source_file}" -o "{object_file}"
 ### -MD -MT -MF  -fno-exceptions
 
 ## Create archives
@@ -138,11 +144,11 @@ recipe.objcopy.hex.imagepath_appntzmap.windows="{build.path}\application.ntz.map
 recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
-recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}\variants\common_nn_models" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
+recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}\variants\common_nn_models"
 
-recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}/variants/common_nn_models" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
+recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}/variants/common_nn_models"
 
-recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{build.upload_mode}" "{runtime.platform.path}/variants/common_nn_models" "{build.upload_mode_nn}" "{build.upload_mode_voe}"
+recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}/variants/common_nn_models"
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"
@@ -157,17 +163,16 @@ recipe.hooks.objcopy.postobjcopy.pattern.macosx=cp -f {ameba.tools_path}/flash_n
 recipe.output.tmp_file=flash_ntz.bin
 recipe.output.save_file=flash_ntz.bin
 
-
 # Ameba Upload tools
 # -------------------
 tools.ameba_pro2_tools.upload.params.verbose=
 tools.ameba_pro2_tools.upload.params.quiet=
 
-tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "{build.upload_mode}" "0x80000" "{build.upload_mode_nn}" "{build.upload_mode_voe}" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "0x80000" "0" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.linux="{runtime.tools.ameba_pro2_tools.path}/image_linux" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "{build.upload_mode}" "0x80000" "{build.upload_mode_nn}" "{build.upload_mode_voe}" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.linux="{runtime.tools.ameba_pro2_tools.path}/image_linux" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "0x80000" "0" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "{build.upload_mode}" "0x80000" "{build.upload_mode_nn}" "{build.upload_mode_voe}" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "2000000" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "0x80000" "0" {upload.verbose}
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
