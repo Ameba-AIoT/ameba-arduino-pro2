@@ -1,7 +1,7 @@
 
 menu.EraseFlash=* Erase All Flash Memory (16MB)
 menu.AutoUploadMode=* Auto Flash Mode
-menu.StdLibInit=* Standard Lib Enable
+menu.StdLibInit=* Standard Lib
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -40,7 +40,7 @@ Ameba_AMB82-MINI.menu.AutoUploadMode.Disable.build.auto_upload_mode=Disable
 Ameba_AMB82-MINI.menu.AutoUploadMode.Enable=Enable
 Ameba_AMB82-MINI.menu.AutoUploadMode.Enable.build.auto_upload_mode=Enable
 
-Ameba_AMB82-MINI.menu.StdLibInit.Disable=NA
+Ameba_AMB82-MINI.menu.StdLibInit.Disable=Disable
 Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
 Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
 Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
