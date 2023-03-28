@@ -90,16 +90,31 @@ void NNObjectDetection::begin(void) {
         use_roi = 0;
     }
 
-#if defined (MODEL_YOLOV3TINY)
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-    //printf("YOLOV3 running...\r\n");
-#elif defined (MODEL_YOLOV4TINY)
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-    //printf("YOLOV4 running...\r\n");
-#elif defined (MODEL_YOLOV7TINY)
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-    //printf("YOLOV7 running...\r\n");
-#endif
+    if (_nntask != OBJECT_DETECTION) {
+        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        while(1) {}
+    }
+
+    switch (_yolomodel) {
+        case DEFAULT_YOLOV3TINY: 
+        case CUSTOMIZED_YOLOV3TINY: {
+            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
+            //printf("YOLOV3 running...\r\n");
+            break;
+        }
+        case DEFAULT_YOLOV4TINY:
+        case CUSTOMIZED_YOLOV4TINY: {
+            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
+            //printf("YOLOV4 running...\r\n");
+            break;
+        }
+        case DEFAULT_YOLOV7TINY :
+        case CUSTOMIZED_YOLOV7TINY: {
+            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
+            //printf("YOLOV7 running...\r\n");
+            break;
+        }
+    }
 
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ODResultCallback);

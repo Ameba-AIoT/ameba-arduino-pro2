@@ -2,6 +2,7 @@
 #define __NN_OBJECTDETECTION_H__
 
 #include "VideoStream.h"
+#include "NNModelSelection.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +33,7 @@ class ObjectDetectionResult {
         detobj_t result = {0};
 };
 
-class NNObjectDetection:public MMFModule {
+class NNObjectDetection :public NNModelSelection {
     public:
         NNObjectDetection(void);
         ~NNObjectDetection(void);
