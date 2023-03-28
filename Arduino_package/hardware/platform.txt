@@ -111,6 +111,9 @@ recipe.hooks.prebuild.2.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/
 recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path}
 recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path}
 
+recipe.hooks.prebuild.3.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_windows.exe {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.3.pattern.linux   = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_linux {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.3.pattern.macosx  = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_macos {build.path} {ameba.tools_path}
 
 # Ameba compile patterns
 # ----------------------
