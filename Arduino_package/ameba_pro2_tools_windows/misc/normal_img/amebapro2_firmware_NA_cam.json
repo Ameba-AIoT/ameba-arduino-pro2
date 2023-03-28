@@ -5,6 +5,7 @@
 	"FIRMWARE":{
 		"manifest":"MANIFEST",
 		"images":[
+			"VOE",
 			"FW"
 		]
 	},

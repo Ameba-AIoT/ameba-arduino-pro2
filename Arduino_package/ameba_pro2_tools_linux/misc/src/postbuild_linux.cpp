@@ -314,7 +314,8 @@ int main(int argc, char *argv[]) {
     }
 
     cmdss.clear();
-    cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json arduino_firmware.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+    //cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
+    cmdss << "./misc/elf2bin.linux " << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());

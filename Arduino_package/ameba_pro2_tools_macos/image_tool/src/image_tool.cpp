@@ -127,18 +127,23 @@ void upload_process(void) {
     if (check_image_upload == 100) {
         if (check_flash_erase_upload == 100) {
             cmdss.clear();
-            cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f arduino_firmware.bin -b " << flash_speed << " -x 32 ";
+            cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f system_files.bin -b " << flash_speed << " -x 32 ";
             getline(cmdss, cmd);
             //cout << cmd << endl;
             system(cmd.c_str());
         } else {
             cmdss.clear();
-            cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f arduino_firmware.bin -b " << flash_speed << " -U -x 32 ";
+            cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f system_files.bin -b " << flash_speed << " -U -x 32 ";
             getline(cmdss, cmd);
             system(cmd.c_str());
         }
 
         if (check_nn_bin) {
+            cmdss.clear();
+            cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f firmware.bin -b " << flash_speed << " -s " << fw1_address << " -x 32 ";
+            getline(cmdss, cmd);
+            system(cmd.c_str());
+
             cmdss.clear();
             cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f firmware_isp_iq.bin -b " << flash_speed << " -s " << ISP_address_PT_ISP_IQ << " -x 32 ";
             getline(cmdss, cmd);
@@ -149,6 +154,11 @@ void upload_process(void) {
             getline(cmdss, cmd);
             system(cmd.c_str());
         } else {
+            cmdss.clear();
+            cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f firmware.bin -b " << flash_speed << " -s " << fw1_address << " -x 32";
+            getline(cmdss, cmd);
+            system(cmd.c_str());
+
             cmdss.clear();
             cmdss << image_tool_folder_name << flash_tool_name << " -p " << serial_port << " -f firmware_isp_iq.bin -b " << flash_speed << " -s " << ISP_address_PT_ISP_IQ << " -x 32 -r ";
             getline(cmdss, cmd);
@@ -201,7 +211,7 @@ int main(int argc, char *argv[]) {
     flash_speed = argv[6];
     flash_tool_name = argv[7];
     auto_tool_name = argv[8];
-//    fw1_address = argv[9];
+    fw1_address = argv[9];
 //    upload_mode_backdoor = argv[10];
 
     check_nn_bin = fileExistsInCurrentDir(nn_model_fileName);
