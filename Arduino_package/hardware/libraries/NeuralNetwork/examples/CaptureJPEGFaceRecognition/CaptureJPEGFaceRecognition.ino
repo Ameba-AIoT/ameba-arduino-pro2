@@ -10,8 +10,7 @@
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "RTSP.h"
-#include "NNFaceDetection.h"
-#include "NNFaceRecognition.h"
+#include "NNFaceDetectionRecognition.h"
 #include "VideoStreamOverlay.h"
 #include "AmebaFatFS.h"
 
@@ -34,8 +33,7 @@
 VideoSetting configVID(VIDEO_FHD, CAM_FPS, VIDEO_H264, 0);
 VideoSetting configJPEG(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
-NNFaceDetection facedet;
-NNFaceRecognition facerecog;
+NNFaceDetectionRecognition facerecog;
 RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerFDFR(1, 1);
@@ -83,12 +81,9 @@ void setup() {
     rtsp.configVideo(configVID);
     rtsp.begin();
 
-    // Configure face detection with corresponding video format information
-    facedet.configVideo(configNN);
-    facedet.configFaceRecogCascadedMode(TRUE);
-    facedet.begin();
-
     // Configure Face Recognition model
+    facerecog.configVideo(configNN);
+    facerecog.modelSelect(FACE_RECOGNITION, NA_MODEL, DEFAULT_SCRFD, DEFAULT_MOBILEFACENET);
     facerecog.begin();
     facerecog.setResultCallback(FRPostProcess);
 
@@ -99,19 +94,11 @@ void setup() {
       Serial.println("StreamIO link start failed");
     }
     
-
-    // SISO: Face Detection -> Face Recognition
-    videoStreamerFDFR.registerInput(facedet);
-    videoStreamerFDFR.registerOutput(facerecog);
-    if (videoStreamerFDFR.begin() != 0) {
-      Serial.println("StreamIO link start failed");
-    }
-
     // Configure StreamIO object to stream data from RGB video channel to face detection
     videoStreamerRGBFD.registerInput(Camera.getStream(CHANNELNN));
     videoStreamerRGBFD.setStackSize();
     videoStreamerRGBFD.setTaskPriority();
-    videoStreamerRGBFD.registerOutput(facedet);
+    videoStreamerRGBFD.registerOutput(facerecog);
     if (videoStreamerRGBFD.begin() != 0) {
       Serial.println("StreamIO link start failed");
     }

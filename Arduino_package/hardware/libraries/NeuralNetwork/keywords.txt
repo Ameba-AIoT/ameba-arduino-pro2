@@ -9,9 +9,10 @@
 FaceDetectionResult	KEYWORD1
 NNFaceDetection	KEYWORD1
 FaceRecognitionResult	KEYWORD1
-NNFaceRecognition	KEYWORD1
+NNFaceDetectionRecognition	KEYWORD1
 ObjectDetectionResult	KEYWORD1
 NNObjectDetection	KEYWORD1
+NNModelSelection	KEYWORD1
 
 #######################################
 # FaceDetectionResult.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -49,9 +50,10 @@ yMin	KEYWORD2
 yMax	KEYWORD2
 
 #######################################
-# NNFaceRecognition.h Methods (KEYWORD2) & Constants (LITERAL1)
+# NNFaceDetectionRecognition.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
+configVideo	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
 registerFace	KEYWORD2
@@ -88,3 +90,9 @@ end	KEYWORD2
 setResultCallback	KEYWORD2
 getResult	KEYWORD2
 getResultCount	KEYWORD2
+
+#######################################
+# NNModelSelection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+modelSelect	KEYWORD2

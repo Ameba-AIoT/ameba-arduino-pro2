@@ -168,7 +168,7 @@ color	KEYWORD2
 drawPoint	KEYWORD2
 drawRect	KEYWORD2
 drawText	KEYWORD2
-clearAll	KEYWORD2
+createBitmap	KEYWORD2
 update	KEYWORD2
 
 OSD_COLOR_RED	LITERAL1

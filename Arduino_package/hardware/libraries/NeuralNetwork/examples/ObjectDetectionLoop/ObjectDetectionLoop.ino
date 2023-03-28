@@ -4,6 +4,23 @@
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-object-detection/
 
  For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
+
+ NN Model Selection
+ Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
+ Replace with NA_MODEL if they are not necessary for your selected NN Task.
+
+ NN task
+ =======
+ OBJECT_DETECTION/ FACE_DETECTION/ FACE_RECOGNITION
+
+ Models
+ =======
+ YOLOv3 model         DEFAULT_YOLOV3TINY   / CUSTOMIZED_YOLOV3TINY
+ YOLOv4 model         DEFAULT_YOLOV4TINY   / CUSTOMIZED_YOLOV4TINY
+ YOLOv7 model         DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
+ SCRFD model          DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
+ MobileFaceNet model  DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
+ No model             NA_MODEL
  */
 
 #include "WiFi.h"
@@ -62,7 +79,9 @@ void setup() {
     rtsp_portnum = rtsp.getPort();
 
     // Configure object detection with corresponding video format information
+    // Select Neural Network(NN) task and models
     ObjDet.configVideo(configNN);
+    ObjDet.modelSelect(OBJECT_DETECTION, DEFAULT_YOLOV4TINY, NA_MODEL, NA_MODEL);
     ObjDet.begin();
 
     // Configure StreamIO object to stream data from video channel to RTSP

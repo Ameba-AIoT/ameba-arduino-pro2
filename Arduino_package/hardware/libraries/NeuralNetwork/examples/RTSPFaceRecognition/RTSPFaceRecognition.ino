@@ -4,21 +4,41 @@
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-face-recognition/
 
  For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
- */
 
-// Point the camera at a target face and enter the following commands into the serial monitor,
-// Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
-// Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
-// Reset registered faces:  "RESET"                 Forget all previously registered faces
-// Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
-// Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+ Face registration commands
+ --------------------------
+ Point the camera at a target face and enter the following commands into the serial monitor,
+ Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
+ Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
+ Reset registered faces:  "RESET"                 Forget all previously registered faces
+ Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
+ Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+
+ NN Model Selection
+ -------------------
+ Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
+ Replace with NA_MODEL if they are not necessary for your selected NN Task.
+
+ NN task
+ =======
+ OBJECT_DETECTION/ FACE_DETECTION/ FACE_RECOGNITION
+
+ Models
+ =======
+ YOLOv3 model         DEFAULT_YOLOV3TINY   / CUSTOMIZED_YOLOV3TINY
+ YOLOv4 model         DEFAULT_YOLOV4TINY   / CUSTOMIZED_YOLOV4TINY
+ YOLOv7 model         DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
+ SCRFD model          DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
+ MobileFaceNet model  DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
+ No model             NA_MODEL
+
+*/
 
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "RTSP.h"
-#include "NNFaceDetection.h"
-#include "NNFaceRecognition.h"
+#include "NNFaceDetectionRecognition.h"
 #include "VideoStreamOverlay.h"
 
 #define CHANNEL   0
@@ -30,8 +50,7 @@
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
-NNFaceDetection facedet;
-NNFaceRecognition facerecog;
+NNFaceDetectionRecognition facerecog;
 RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerFDFR(1, 1);
@@ -71,12 +90,10 @@ void setup() {
     rtsp.begin();
     rtsp_portnum = rtsp.getPort();
 
-    // Configure face detection with corresponding video format information
-    facedet.configVideo(configNN);
-    facedet.configFaceRecogCascadedMode(TRUE);
-    facedet.begin();
-
     // Configure Face Recognition model
+    // Select Neural Network(NN) task and models
+    facerecog.configVideo(configNN);
+    facerecog.modelSelect(FACE_RECOGNITION, NA_MODEL, DEFAULT_SCRFD, DEFAULT_MOBILEFACENET);
     facerecog.begin();
     facerecog.setResultCallback(FRPostProcess);
 
@@ -89,18 +106,11 @@ void setup() {
     // Start data stream from video channel
     Camera.channelBegin(CHANNEL);
 
-    // SISO: Face Detection -> Face Recognition
-    videoStreamerFDFR.registerInput(facedet);
-    videoStreamerFDFR.registerOutput(facerecog);
-    if (videoStreamerFDFR.begin() != 0) {
-        Serial.println("StreamIO link start failed");
-    }
-
     // Configure StreamIO object to stream data from RGB video channel to face detection
     videoStreamerRGBFD.registerInput(Camera.getStream(CHANNELNN));
     videoStreamerRGBFD.setStackSize();
     videoStreamerRGBFD.setTaskPriority();
-    videoStreamerRGBFD.registerOutput(facedet);
+    videoStreamerRGBFD.registerOutput(facerecog);
     if (videoStreamerRGBFD.begin() != 0) {
         Serial.println("StreamIO link start failed");
     }
@@ -175,7 +185,6 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
             char text_str[40];
             snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
             OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, osd_color);
-
         }
     }
     OSD.update(CHANNEL);

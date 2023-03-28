@@ -2,6 +2,7 @@
 #define __NN_FACEDETECTION_H__
 
 #include "VideoStream.h"
+#include "NNModelSelection.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,6 +20,7 @@ extern "C" {
 
 class FaceDetectionResult {
     friend class NNFaceDetection;
+    
     public:
         const char* name(void);
         int score(void);
@@ -34,13 +36,12 @@ class FaceDetectionResult {
         landmark_t landmark = {0};
 };
 
-class NNFaceDetection:public MMFModule {
+class NNFaceDetection:public NNModelSelection {
     public:
         NNFaceDetection(void);
         ~NNFaceDetection(void);
 
         void configVideo(VideoSetting& config);
-        void configFaceRecogCascadedMode(uint8_t enable);
         void begin(void);
         void end(void);
 
@@ -56,7 +57,6 @@ class NNFaceDetection:public MMFModule {
         static void (*FD_user_CB)(std::vector<FaceDetectionResult>);
 
         nn_data_param_t roi_nn = {0};
-        uint8_t cascaded_mode = 0;
 };
 
 #endif

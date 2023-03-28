@@ -44,10 +44,6 @@ void NNFaceDetection::configVideo(VideoSetting& config) {
     roi_nn.codec_type =  AV_CODEC_ID_RGB888;
 }
 
-void NNFaceDetection::configFaceRecogCascadedMode(uint8_t enable) {
-    cascaded_mode = enable;
-}
-
 void NNFaceDetection::begin(void) {
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&vipnn_module);
@@ -61,15 +57,14 @@ void NNFaceDetection::begin(void) {
         return;
     }
 
+    if (_nntask != FACE_DETECTION) {
+        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        while(1);
+    }
+
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)FDResultCallback);
-    if (cascaded_mode) {
-        mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_OUTPUT, 1);
-        mm_module_ctrl(_p_mmf_context, MM_CMD_SET_DATAGROUP, MM_GROUP_START);
-        mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 1);
-        mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
-    }
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_APPLY, 0);
 }
 
