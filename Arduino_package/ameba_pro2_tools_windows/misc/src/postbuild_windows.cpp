@@ -25,12 +25,13 @@ using namespace std;
 
 string common_nn_models_path;
 
-string fc_data_name, voe_name, iq_name, sensor_name;
+string fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
 string isp_file_name_buf[100];
 
-string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3;
-string nn_name_buf[100];
+string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3, isp_bin_check_name;
+string ino_name_buf[100];
 
+int isp_selection_check = 0;
 int nn_model_selection_check = 0;
 
 void replaceAll( string& source, const string& from, const string& to ) {
@@ -53,11 +54,11 @@ void replaceAll( string& source, const string& from, const string& to ) {
 }
 
 //void readtxt(int line_number, int mode_isp_nn) {
-void readtxt(int mode_isp_nn) {
+void readtxt(int mode_isp_ino) {
     string str;
     int str_count = 0;
 
-    if (mode_isp_nn == 0) {
+    if (mode_isp_ino == 0) {
         ifstream file("misc/video_img/sensor_bin_name.txt");
         while (std::getline(file, str)) {
             isp_file_name_buf[str_count] = str;
@@ -70,22 +71,30 @@ void readtxt(int mode_isp_nn) {
         voe_name = isp_file_name_buf[1];
         iq_name = isp_file_name_buf[2];
         sensor_name = isp_file_name_buf[3];
+        isp_fw_dummy_name = isp_file_name_buf[4];
 
-    } else if (mode_isp_nn == 1) {
+    } else if (mode_isp_ino == 1) {
         ifstream file("misc/ino_validation.txt");
         while (std::getline(file, str)) {
-            nn_name_buf[str_count] = str;
+            ino_name_buf[str_count] = str;
             str_count++;
             //if (str_count == line_number) {
             //    break;
             //}
         }
-        nn_model_yolotiny_name = nn_name_buf[2];
-        nn_model_srcfd_name = nn_name_buf[3];
-        nn_model_mobilefacenet_name = nn_name_buf[4];
-        nn_header_name1 = nn_name_buf[7];
-        nn_header_name2 = nn_name_buf[8];
-        nn_header_name3 = nn_name_buf[9];
+        nn_model_yolotiny_name = ino_name_buf[2];
+        nn_model_srcfd_name = ino_name_buf[3];
+        nn_model_mobilefacenet_name = ino_name_buf[4];
+        nn_header_name1 = ino_name_buf[7];
+        nn_header_name2 = ino_name_buf[8];
+        nn_header_name3 = ino_name_buf[9];
+        isp_bin_check_name = ino_name_buf[12];
+    }
+}
+
+void isp_bin_check(string isp_bin_check_name) {
+    if (nn_model_yolotiny_name != "NA") {
+        nn_model_selection_check = 1;
     }
 }
 
@@ -161,41 +170,49 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     readtxt(0);
-
-    cmdss.clear();
-    cmdss << "copy misc\\video_img\\" << voe_name << " .\\";
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "copy misc\\video_img\\amebapro2_isp_iq.json .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "copy misc\\video_img\\amebapro2_sensor_set.json .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmdss.clear();
-    cmdss << "copy misc\\video_img\\" << fc_data_name << " .\\";
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmdss.clear();
-    cmdss << "copy misc\\video_img\\" << iq_name << " .\\";
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmdss.clear();
-    cmdss << "copy misc\\video_img\\" << sensor_name << " .\\";
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
-
     readtxt(1);
+    isp_bin_check(isp_bin_check_name);
     nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3);
+
+    if (isp_selection_check == 1) {
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << voe_name << " .\\";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\amebapro2_isp_iq.json .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmd = "copy misc\\video_img\\amebapro2_sensor_set.json .\\";
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << fc_data_name << " .\\";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << iq_name << " .\\";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << sensor_name << " .\\";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+    } else {
+        cmdss.clear();
+        cmdss << "copy misc\\video_img\\" << isp_fw_dummy_name << " .\\";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+    }
 
     if (nn_model_selection_check == 1) {
         cmd = "copy misc\\nn_img\\amebapro2_nn_model.json .\\";
@@ -303,19 +320,23 @@ int main(int argc, char *argv[]) {
     //cout << cmd << endl;
     //system(cmd.c_str());
 
-    cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
-    cout << cmd << endl;
-    system(cmd.c_str());
+    if (isp_selection_check == 1) {
+        cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
 
-    cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
-    cout << cmd << endl;
-    system(cmd.c_str());
+        cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
 
-    //cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_firmware.json FIRMWARE firmware_ntz.bin";
-    //cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_firmware.json FIRMWARE firmware.bin";
-    cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
-    cout << cmd << endl;
-    system(cmd.c_str());
+        cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_firmware.json FIRMWARE firmware.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+    } else {
+        cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
+        cout << cmd << endl;
+        system(cmd.c_str());
+    }
 
     if (nn_model_selection_check == 1) {
         cmd = ".\\misc\\elf2bin.win.exe convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
@@ -327,25 +348,11 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
     }
 
-    //cmd = "copy firmware_ntz.bin firmware.bin";
-    //cout << cmd << endl;
-    //system(cmd.c_str());
-
-//    if (nn_model_selection_check == 1) {
-//        cmdss.clear();
-//        cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-//        getline(cmdss, cmd);
-//        cout << cmd << endl;
-//        system(cmd.c_str());
-//    } else {
-        cmdss.clear();
-        //cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-        //cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_FCSDATA=boot_fcs.bin";
-        cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-//    }
+    cmdss.clear();
+    cmdss << ".\\misc\\elf2bin.win.exe " << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();

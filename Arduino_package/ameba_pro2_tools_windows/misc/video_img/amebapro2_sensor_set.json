@@ -10,12 +10,7 @@
 			"SENSOR_SET1",
 			"SENSOR_SET2",
 			"SENSOR_SET3",
-			"SENSOR_SET4",
-			"SENSOR_SET5",
-			"SENSOR_SET6",
-			"SENSOR_SET7",
-			"SENSOR_SET8",
-			"SENSOR_SET9"
+			"SENSOR_SET4"
 		]
 	},
     "MULTI_FCS_HDR":{
@@ -29,56 +24,56 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"
+            "file":"iq.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"
+            "file":"sensor.bin"
         }
     },
 	"SENSOR_SET1":{
         "merge_en": true,
         "fcs_data": {
             "source":"binary",
-            "file":"fcs_data_dummy.bin"
+            "file":"fcs_data_sc2336.bin"
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"
+            "file":"iq.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"
+            "file":"sensor_sc2336.bin"        
         }
     },
     "SENSOR_SET2":{
         "merge_en": true,
         "fcs_data": {
             "source":"binary",
-            "file":"fcs_data_dummy.bin"
+            "file":"fcs_data_gc2053.bin"
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"
+            "file":"iq.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"
-        }
+            "file":"sensor_gc2053.bin"        
+        }   
     },
 	"SENSOR_SET3":{
         "merge_en": true,
         "fcs_data": {
             "source":"binary",
-            "file":"fcs_data_dummy.bin"
+            "file":"fcs_data_gc4653.bin"
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"
+            "file":"iq.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"
+            "file":"sensor_gc4653.bin"        
         }
     },
 	"SENSOR_SET4":{
@@ -89,86 +84,11 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"
+            "file":"iq_f37.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"
-        }
-    },
-	"SENSOR_SET5":{
-        "merge_en": true,
-        "fcs_data": {
-            "source":"binary",
-            "file":"fcs_data_dummy.bin"
-        },
-        "iq_data": {
-            "source":"binary",
-            "file":"iq_f37.bin"
-        },
-        "sensor_data": {
-            "source":"binary",
-            "file":"sensor_f37.bin"
-        }
-    },
-	"SENSOR_SET6":{
-        "merge_en": true,
-        "fcs_data": {
-            "source":"binary",
-            "file":"fcs_data_dummy.bin"
-        },
-        "iq_data": {
-            "source":"binary",
-            "file":"iq_f37.bin"
-        },
-        "sensor_data": {
-            "source":"binary",
-            "file":"sensor_f37.bin"
-        }
-    },
-	"SENSOR_SET7":{
-        "merge_en": true,
-        "fcs_data": {
-            "source":"binary",
-            "file":"fcs_data_dummy.bin"
-        },
-        "iq_data": {
-            "source":"binary",
-            "file":"iq_f37.bin"
-        },
-        "sensor_data": {
-            "source":"binary",
-            "file":"sensor_f37.bin"
-        }
-    },
-	"SENSOR_SET8":{
-        "merge_en": true,
-        "fcs_data": {
-            "source":"binary",
-            "file":"fcs_data_dummy.bin"
-        },
-        "iq_data": {
-            "source":"binary",
-            "file":"iq_f37.bin"
-        },
-        "sensor_data": {
-            "source":"binary",
-            "file":"sensor_f37.bin"
-        }
-    },
-	"SENSOR_SET9":{
-        "merge_en": true,
-        "fcs_data": {
-            "source":"binary",
-            "file":"fcs_data_dummy.bin"
-        },
-        "iq_data": {
-            "source":"binary",
-            "file":"iq_f37.bin"
-        },
-        "sensor_data": {
-            "source":"binary",
-            "file":"sensor_f37.bin"
+            "file":"sensor_f37.bin"        
         }
     }
 }
