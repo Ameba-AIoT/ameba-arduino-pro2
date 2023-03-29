@@ -239,7 +239,7 @@ def writeJSON(example_path):
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
             with open(os.path.join(sys.argv[1], file_json), "r+") as file:
-                with open(example_path, 'r+') as file:
+                with open(example_path, 'r') as file:
                     sktech_path  = example_path + os.path.sep + ".."
                     lines = file.readlines()
                     for line in lines:
