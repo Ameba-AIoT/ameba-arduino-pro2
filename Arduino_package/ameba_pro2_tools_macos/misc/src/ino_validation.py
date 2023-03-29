@@ -16,19 +16,22 @@ import sys
 import json
 from sys import platform
 
-DEBUG = 0
+DEBUG = 1
 def debug_print(message):
     if DEBUG:
         print(message)
 
-keyword = "modelSelect"
+keywordNN = "modelSelect"
+keywordVOE = "configVideoChannel"
 keyword_header = "#include"
 keyword_customized = "CUSTOMIZED"
 keyword_default = "DEFAULT"
 keyword_default_backup = "Dbackup"
 keyword_customized_backup = "Cbackup"
-keyword_bypass1 = " .modelSelect"
-keyword_bypass2 = " modelSelect"
+keyword_bypassNN1 = " .modelSelect"
+keyword_bypassNN2 = " modelSelect"
+keyword_bypassVOE1 = " .configVideoChannel"
+keyword_bypassVOE2 = " configVideoChannel"
 
 filename_txt = "ino_validation.txt"
 
@@ -162,8 +165,6 @@ def validationINO():
                 # Arduino IDE2.0 
                 if "Arduino15" not in example_path: 
                     example_name = example_path.split(os.path.sep)[-1]
-                    
-                    # check whether keyword in file content
                     if ".ino" not in example_path and ".ino" not in example_name:
                         for file in os.listdir(example_path):
                             if ".ino" in file:
@@ -189,13 +190,14 @@ def writeTXT(example_path):
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
             with open(os.path.join(sys.argv[1], file_json), "r+") as file:
-                with open(example_path, 'r+') as file:
+                with open(example_path, 'r') as file:
                     sktech_path  = example_path + os.path.sep + ".."
                     lines = file.readlines()
                     updateTXT("----------------------------------")
                     updateTXT("Current ino contains model(s):")
                     for line in lines:
-                        if "//" not in line and keyword in line and not keyword_bypass1 in line and not keyword_bypass2 in line:
+                        # check whether keywordNN in file content
+                        if "//" not in line and keywordNN in line and not keyword_bypassNN1 in line and not keyword_bypassNN2 in line:
                             input_param = re.search(r'\((.*?)\)', line).group(1)
                             if input_param != "":
                                 debug_print(f"Current input using: {input_param.split(',')}")
@@ -269,6 +271,15 @@ def writeTXT(example_path):
                             else:
                                 updateTXT("NA")
 
+                    updateTXT("----------------------------------")
+                    updateTXT("Current ino video status:")
+                    textVOE = "NA"
+                    for line in lines:
+                        # check whether keywordVOE in file content
+                        if "//" not in line and keywordVOE in line and not keyword_bypassVOE1 in line and not keyword_bypassVOE2 in line:
+                            textVOE = "ON"
+                    updateTXT(textVOE)
+                    
                     updateTXT("-------------------------------------")
                     updateTXT("Current ino contains header file(s): ")
                     for line in lines:
