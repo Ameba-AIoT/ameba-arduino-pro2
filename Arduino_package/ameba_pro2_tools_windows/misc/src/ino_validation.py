@@ -16,7 +16,7 @@ import sys
 import json
 from sys import platform
 
-DEBUG = 1
+DEBUG = 0
 def debug_print(message):
     if DEBUG:
         print(message)
