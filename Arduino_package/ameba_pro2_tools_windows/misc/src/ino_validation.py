@@ -59,7 +59,7 @@ elif platform == "linux" or platform == "linux2":
     filepath_txt = sys.argv[2] + '/misc/' + filename_txt
 elif platform == "darwin":
     # OS X
-    arduino15_path = os.path.expanduser("/Users/" + os.getlogin() + "/Library/Arduino15")
+    arduino15_path = os.path.expanduser(os.path.expanduser('~') + "/Library/Arduino15")
     ambpro2_path = arduino15_path + "/packages/realtek/hardware/AmebaPro2/"
     sdk_version = os.listdir(ambpro2_path)[1]
     dest_path = ambpro2_path + "/" + sdk_version + "/variants/common_nn_models/"
