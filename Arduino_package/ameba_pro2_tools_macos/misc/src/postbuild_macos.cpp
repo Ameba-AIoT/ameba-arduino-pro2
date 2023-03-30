@@ -89,8 +89,8 @@ void readtxt(int mode_isp_ino) {
 }
 
 void isp_bin_check(string isp_bin_check_name) {
-    if (nn_model_yolotiny_name != "NA") {
-        nn_model_selection_check = 1;
+    if (isp_bin_check_name != "NA") {
+        isp_selection_check = 1;
     }
 }
 
