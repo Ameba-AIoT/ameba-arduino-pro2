@@ -9,24 +9,7 @@ NA
 NA
 NA
 -------------------------------------
+Current ino video status:
+NA
+-------------------------------------
 Current ino contains header file(s): 
-WiFi.h
-StreamIO.h
-VideoStream.h
-RTSP.h
-NNObjectDetection.h
-NNFaceDetection.h
-NNFaceRecognition.h
-VideoStreamOverlay.h
-ObjectClassList.h
-
-
-yolov4_tiny
-yolov3_tiny
-yolov7_tiny
-mobilefacenet_i8
-mobilefacenet_i16
-scrfd640
-scrfd320p
-yamnet_s_hybrid
-yamnet_fp16
