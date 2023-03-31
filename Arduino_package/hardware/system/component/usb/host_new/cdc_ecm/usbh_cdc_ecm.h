@@ -15,44 +15,23 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "usbh.h"
-#define MODULE_USB_CLASS 0
-#define LEVEL_WARN 0
-#define LEVEL_ERROR 0
-#define LEVEL_TRACE
-#define DBG_PRINTF(MODULE, LEVEL, ...) printf(__VA_ARGS__)
+
 /* Exported defines ----------------------------------------------------------*/
-#define USBH_CDC_ECM_DEBUG  (0)
 
-#if USBH_CDC_ECM_DEBUG
-#define USB_CDC_ECM_INFO(fmt, args...)     printf("\n\r[ECM]%s: " fmt, __FUNCTION__, ## args)
-#define USB_CDC_ECM_WARN(fmt, args...)     printf("\n\r[ECM]%s: " fmt, __FUNCTION__, ## args)
-#define USB_CDC_ECM_ERROR(fmt, args...)    printf("\n\r[ECM]%s: " fmt, __FUNCTION__, ## args)
-#define USB_CDC_ECM_ENTER                  printf("\n\r[ECM]%s: =>\n", __FUNCTION__)
-#define USB_CDC_ECM_EXIT                   printf("\n\r[ECM]%s: <=\n", __FUNCTION__)
-#define USB_CDC_ECM_EXIT_ERR               printf("\n\r[ECM]%s: ERR <=\n", __FUNCTION__)
-#else
-#define USB_CDC_ECM_INFO(fmt, args...)
-#define USB_CDC_ECM_WARN(fmt, args...)
-#define USB_CDC_ECM_ERROR(fmt, args...)
-#define USB_CDC_ECM_ENTER
-#define USB_CDC_ECM_EXIT
-#define USB_CDC_ECM_EXIT_ERR
-#endif
-
-/*  */
-#define CDC_ECM_MAC_STRING_LEN 				(26)
-#define CDC_ECM_MAC_STR_LEN 				(6)
-#define USBH_CDC_ECM_BULK_BUF_MAX_SIZE  	(512)
+#define CDC_ECM_MAC_STRING_LEN                                  (26)
+#define CDC_ECM_MAC_STR_LEN                                     (6)
+#define CDC_ECM_HOST_CH_COUNT                                   (16)
+#define USBH_CDC_ECM_BULK_BUF_MAX_SIZE                          (512)
 
 
 /* CDC Class Codes */
-#define CDC_CLASS_CODE                              0x02U
-#define CDC_COMM_INTERFACE_CLASS_CODE               0x02U
-#define CDC_DATA_INTERFACE_CLASS_CODE               0x0AU
+#define CDC_CLASS_CODE                                          0x02U
+#define CDC_COMM_INTERFACE_CLASS_CODE                           0x02U
+#define CDC_DATA_INTERFACE_CLASS_CODE                           0x0AU
 
 /* CDC Communication sub class codes */
-#define CDC_RESERVED                                0x00U
-#define CDC_ETHERNET_NETWORK_CONTROL_MODEL          0x06U
+#define CDC_RESERVED                                            0x00U
+#define CDC_ETHERNET_NETWORK_CONTROL_MODEL                      0x06U
 
 /* Table 6: Class-Specific Request Codes for Ethernet subclass */
 #define CDC_ECM_SET_ETHERNET_MULTICAST_FILTERS                  0x40U
@@ -64,15 +43,15 @@
 
 /* [CDC]Table 20: Class-Specific Notification Codes */
 /* Table 11: Class-Specific Notification Codes for Ethernet subclass */
-#define CDC_ECM_NOTIFY_NETWORK_CONNECTION         0x00U
-#define CDC_ECM_NOTIFY_RESPONSE_AVAILABLE         0x01U
-#define CDC_ECM_NOTIFY_CONNECTION_SPEED_CHANGE    0x2AU
+#define CDC_ECM_NOTIFY_NETWORK_CONNECTION                       0x00U
+#define CDC_ECM_NOTIFY_RESPONSE_AVAILABLE                       0x01U
+#define CDC_ECM_NOTIFY_CONNECTION_SPEED_CHANGE                  0x2AU
 
 /* Communication Interface Class Control Protocol Codes */
-#define CDC_CTRL_PROTOCOL_NO_CLASS_SPECIFIC         0x00U
+#define CDC_CTRL_PROTOCOL_NO_CLASS_SPECIFIC                     0x00U
 
 /*  bDescriptor SubType in Communications Class Functional Descriptors  */
-#define CDC_ECM_NETWORK_FUNC_DESCRIPTOR 			0x0FU
+#define CDC_ECM_NETWORK_FUNC_DESCRIPTOR                         0x0FU
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -88,16 +67,15 @@ typedef enum {
 	USBH_CDC_ECM_MAX,
 } usbh_ecm_state_t;
 
-
 /* CDC ECM Ethernet Packet Filter Bitmap  */
 typedef enum {
-	CDC_ECM_ETH_PACKET_TYPE_PROMISCUOUS 	= 0x01U, /* ALL frames received by the networking device are forwarded up to the host (required) */
-	CDC_ECM_ETH_PACKET_TYPE_ALL_MULTICAST 	= 0x02U, /* ALL multicast frames received by the networking device are forwarded up to the host, not just
-														the ones enumerated in the device's multicast address list (required) */
-	CDC_ECM_ETH_PACKET_TYPE_DIRECTED		= 0x04U, /* Directed packets received containing a destination address equal to the MAC address of the
-														networking device are forwarded up to the host (required) */
-	CDC_ECM_ETH_PACKET_TYPE_BROADCAST		= 0x08U, /* All broadcast packets received by the networking device are forwarded up to the host. */
-	CDC_ECM_ETH_PACKET_TYPE_MULTICAST		= 0x10U, /* All multicast packets enumerated in the device's multicast address list are forwarded up to the host */
+	CDC_ECM_ETH_PACKET_TYPE_PROMISCUOUS     = 0x01U, /* ALL frames received by the networking device are forwarded up to the host (required) */
+	CDC_ECM_ETH_PACKET_TYPE_ALL_MULTICAST   = 0x02U, /* ALL multicast frames received by the networking device are forwarded up to the host, not just
+                                                        the ones enumerated in the device's multicast address list (required) */
+	CDC_ECM_ETH_PACKET_TYPE_DIRECTED        = 0x04U, /* Directed packets received containing a destination address equal to the MAC address of the
+                                                        networking device are forwarded up to the host (required) */
+	CDC_ECM_ETH_PACKET_TYPE_BROADCAST       = 0x08U, /* All broadcast packets received by the networking device are forwarded up to the host. */
+	CDC_ECM_ETH_PACKET_TYPE_MULTICAST       = 0x10U, /* All multicast packets enumerated in the device's multicast address list are forwarded up to the host */
 	CDC_ECM_ETH_PACKET_TYPE_MAX,
 } usbh_cdc_ecm_eth_packet_filter_bitmap_t;
 
@@ -138,7 +116,7 @@ typedef enum {
 
 /* ConnectionSpeedChange Data Structure */
 typedef union {
-	u32 DLBitRate;	  /* Contains the downlink bit rate, in bits per second, as sent on the IN pipe */
+	u32 DLBitRate;      /* Contains the downlink bit rate, in bits per second, as sent on the IN pipe */
 	u32 ULBitRate;    /* Contains the uplink bit rate, in bits per second, as sent on the OUT pipe */
 } usbh_cdc_ecm_speed_change_t;
 
@@ -159,20 +137,12 @@ typedef enum {
 /* CDC ECM state */
 typedef enum {
 	CDC_ECM_STATE_IDLE = 0U,
-
 	CDC_ECM_STATE_ALT_SETTING,
 	CDC_ECM_STATE_SET_ETHERNET_MULTICAST_FILTER,
 	CDC_ECM_STATE_SET_ETHERNET_PACKET_FILTER,
-
 	CDC_ECM_STATE_GET_ETHERNET_STATISTIC,
-
-	CDC_ECM_STATE_GET_NETWORK_CONNECTION,
-	CDC_ECM_STATE_GET_RESPONSE_AVAILABLE,
-	CDC_ECM_STATE_GET_CONNECTION_SPEED_CHANGE,
-
 	CDC_ECM_STATE_SWITCH_TO_TRANSFER,
 	CDC_ECM_STATE_TRANSFER,
-
 	CDC_ECM_STATE_ERROR,
 } usbh_cdc_ecm_state_t;
 
@@ -197,12 +167,12 @@ typedef struct {
 typedef struct {
 	u8  bLength;
 	u8  bDescriptorType;
-	u8  bDescriptorSubtype;								/* Ethernet Networking functional descriptor subtype */
-	u8  iMACAddress;									/* Index of string descriptor */
-	u32 bmEthernetStatistics;							/* Indicates which Ethernet statistics functions the device collects. */
-	u8  wMaxSegmentSize;								/* The maximum segment size that the Ethernet device is capable of supporting */
-	u16 wNumberMCFilters;								/* Contains the number of multicast filters that can be configured by the host */
-	u8  bNumberPowerFilters;							/* Contains the number of pattern filters that are available for causing wake-up of the host. */
+	u8  bDescriptorSubtype;                                /* Ethernet Networking functional descriptor subtype */
+	u8  iMACAddress;                                    /* Index of string descriptor */
+	u32 bmEthernetStatistics;                            /* Indicates which Ethernet statistics functions the device collects. */
+	u8  wMaxSegmentSize;                                /* The maximum segment size that the Ethernet device is capable of supporting */
+	u16 wNumberMCFilters;                                /* Contains the number of multicast filters that can be configured by the host */
+	u8  bNumberPowerFilters;                            /* Contains the number of pattern filters that are available for causing wake-up of the host. */
 } usbh_cdc_ecm_network_func_t ;
 
 /* CDC ECM user callback interface */
@@ -219,40 +189,42 @@ typedef struct {
 
 /* CDC ECM host */
 typedef struct {
-	usbh_cdc_ecm_comm_if_t        comm_if;
-	usbh_cdc_ecm_data_if_t        data_if;
-	usbh_cdc_ecm_network_func_t   func_if;
+	usbh_cdc_ecm_comm_if_t              comm_if;
+	usbh_cdc_ecm_data_if_t              data_if;
+	usbh_cdc_ecm_network_func_t         func_if;
 
-	u8 							  mac_string[CDC_ECM_MAC_STRING_LEN];//msg get from device
-	u8							  mac[CDC_ECM_MAC_STR_LEN];
+	u8                                  mac_string[CDC_ECM_MAC_STRING_LEN];//msg get from device
+	u8                                  mac[CDC_ECM_MAC_STR_LEN];
 
-	u16 						  feature_selector;
-	u32 						  eth_statistic_count;
+	u16                                 feature_selector;
+	u32                                 eth_statistic_count;
 
-	u16 						  packet_filter;
-	u8 						      muticast_filter[6 * 2];
-	u16 						  muticast_filter_len;
+	u16                                 packet_filter;
+	u8                                  muticast_filter[6 * 2];
+	u16                                 muticast_filter_len;
 
-	usbh_cdc_ecm_speed_change_t	  user_speed_info;
+	usbh_cdc_ecm_speed_change_t         user_speed_info;
 
-	u8							  next_transfor;
+	u8                                  next_transfor;
 
-	u8 							  *intr_in_buf;
-	usbh_cdc_ecm_transfer_state_t intr_in_state;
+	u8                                  intr_idle_state_cnt;
+	u8                                  *intr_in_buf;
+	usbh_cdc_ecm_transfer_state_t       intr_in_state;
 
-	u32                           bulk_data_out_len;
-	u8                            *bulk_data_out_buf;
-	usbh_cdc_ecm_transfer_state_t bulk_data_out_state;
+	u32                                 bulk_data_out_len;
+	u8                                  *bulk_data_out_buf;
+	usbh_cdc_ecm_transfer_state_t       bulk_data_out_state;
 
-	u8                            bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
-	volatile usbh_cdc_ecm_transfer_state_t bulk_data_in_state;
+	u8                                  bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
+	volatile usbh_cdc_ecm_transfer_state_t      bulk_data_in_state;
 
-	usbh_cdc_ecm_state_t          state;
+	usbh_cdc_ecm_state_t                state;
 
-	usbh_ecm_state_t				usbh_state;
+	usbh_ecm_state_t                    usbh_state;
 
+	u8                                  host_channel[CDC_ECM_HOST_CH_COUNT];
 	usbh_cdc_ecm_state_cb_t             *cb;
-	usb_host_t                    *host;
+	usb_host_t                          *host;
 } usbh_cdc_ecm_host_t;
 
 #pragma pack(pop)
@@ -270,7 +242,6 @@ u8 usbh_cdc_ecm_set_ethernet_multicast_filter(u8 *filter, u8 len);
 u8 usbh_cdc_ecm_set_ethernet_packetfilter(u16 filter);
 u8 usbh_cdc_ecm_get_ethernet_statistic(u16 selector);
 u8 usbh_cdc_ecm_set_ethernet_start_transfer(void);
-//u8 usbh_cdc_ecm_get_notify(usb_host_t *host,u8 requestType,u8 *buffer,u16 buflen);
 u8 usbh_cdc_ecm_alt_setting(void);
 u8 usbh_cdc_ecm_bulk_in_processing(void);
 u8 usbh_cdc_ecm_intr_in_processing(void);
@@ -282,4 +253,3 @@ u8 usbh_cdc_ecm_intr_receive(u8 *buf, u32 len);
 u16 usbh_cdc_ecm_get_usbin_mps(void);
 
 #endif  /* USBD_CDC_ECM_H */
-

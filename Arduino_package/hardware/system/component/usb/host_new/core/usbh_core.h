@@ -191,6 +191,8 @@ u8 usbh_core_get_active_class(usbh_core_t *core);
 u8 usbh_core_set_config_interface(usbh_core_t *core, u8 cfg_num);
 u8 usbh_core_get_interface(usbh_core_t *core, u8 class_code, u8 sub_class_code, u8 protocol);
 u8 usbh_core_set_interface(usbh_core_t *core, u8 if_num);
+u8 usbh_core_get_eptype(usbh_core_t *core, u8 ch_num);
+u8 usbh_core_reactivate(usbh_core_t *core, u8 ch_num);
 usbh_if_desc_t *usbh_core_get_interface_descriptor(usbh_core_t *core, u8 if_num);
 
 void usbh_core_disable_port(usbh_core_t *core);

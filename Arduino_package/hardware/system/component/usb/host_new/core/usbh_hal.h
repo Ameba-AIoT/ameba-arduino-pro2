@@ -83,7 +83,6 @@ typedef struct {
 	u8  toggle_out;         /*!< OUT transfer current toggle flag, 0~1 */
 	u32 dma_addr;           /*!< 32 bits aligned transfer buffer address */
 	u32 error_cnt;          /*!< Host channel error count.*/
-	u8  nak_again;          /*!< Host IN get the Nak, should retransmit again,put it to SOF to cut the CPU payload.*/
 
 	usbh_urb_state_t  urb_state;  /*!< URB state. */
 	usbh_hc_state_t   hc_state;      /*!< Host Channel state. */

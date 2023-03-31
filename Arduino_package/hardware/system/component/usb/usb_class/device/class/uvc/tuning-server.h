@@ -205,6 +205,7 @@ void tuning_set_max_resolution(int width, int height);
 void tuning_set_log_level(int level);
 void usbd_set_log_level(int level);
 void tuning_set_custom_cmd_cb(int set_addr_cb, int get_addr_cb, int get_size_addr_cb);
+void tuning_set_custom_iq_addr(unsigned int iq_addr);
 
 
 static inline int resp_size(struct tuning_cmd *cmd)
