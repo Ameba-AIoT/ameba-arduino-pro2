@@ -13,6 +13,9 @@ extern "C" {
 }
 #endif
 
+std::vector<MotionDetectionResult> MotionDetection::md_result_vector;
+void (*MotionDetection::MD_user_CB)(std::vector<MotionDetectionResult>);
+
 MotionDetection::MotionDetection(uint8_t row, uint8_t col) {
     md_param.image_width = 0;
     md_param.image_height = 0;
@@ -50,8 +53,7 @@ void MotionDetection::begin(void) {
     }
 
     setMDParams(_p_mmf_context->priv, &md_param);
-//    setMDThreshold(_p_mmf_context->priv, &md_thr);
-    setMDDisppost(_p_mmf_context->priv, md_ResultCB);
+    setMDDisppost(_p_mmf_context->priv, MDResultCallback);
 
     if (trigCount) {
         setMDTrigBlock(_p_mmf_context->priv, trigCount);
@@ -88,20 +90,28 @@ void MotionDetection::setDetectionMask(char* mask) {
     setMDMask(_p_mmf_context->priv, mask);
 }
 
-char* MotionDetection::getResult(void) {
-    if (_p_mmf_context == NULL) {
-        return md_result;
-    }
-    getMDResult(_p_mmf_context->priv, md_result);
-    return md_result;
+void MotionDetection::setResultCallback(void (*md_callback)(std::vector<MotionDetectionResult>)) {
+    MD_user_CB = md_callback;
 }
 
-void MotionDetection::setResultCallback(void (*md_callback)(char*)) {
-    md_ResultCB = md_callback;
-    if (_p_mmf_context == NULL) {
-        return;
+uint16_t MotionDetection::getResultCount(void) {
+    uint16_t md_res_count = md_result_vector.size();
+    
+    if (md_res_count >= 5) {
+        md_res_count = 4;
     }
-    setMDDisppost(_p_mmf_context->priv, md_ResultCB);
+    return md_res_count;
+}
+
+MotionDetectionResult MotionDetection::getResult(uint16_t index) {
+    if (index >= md_result_vector.size()) {
+        return MotionDetectionResult();
+    }
+    return md_result_vector[index];
+}
+
+std::vector<MotionDetectionResult> MotionDetection::getResult(void) {
+    return md_result_vector;
 }
 
 uint8_t MotionDetection::rows(void) {
@@ -112,6 +122,40 @@ uint8_t MotionDetection::cols(void) {
     return md_param.md_col;
 }
 
+void MotionDetection::MDResultCallback(md_result_t *result) {
+    if (result == NULL) {
+        return;
+    }
+    md_result_vector.clear();
+    md_result_vector.resize((size_t)result->motion_cnt);
+    
+    for (int i = 0; i < result->motion_cnt; i++) {
+        memcpy(&(md_result_vector[i].md_position), &(result->md_pos[i]), sizeof(md_pos_t));
+    }
+
+    if (MD_user_CB != NULL) {
+        MD_user_CB(md_result_vector);
+    }
+}
+
+float MotionDetectionResult::xMin(void) {
+    return md_position.xmin;
+}
+
+float MotionDetectionResult::xMax(void) {
+    return md_position.xmax;
+}
+
+float MotionDetectionResult::yMin(void) {
+    return md_position.ymin;
+}
+
+float MotionDetectionResult::yMax(void) {
+    return md_position.ymax;
+}
+
+// Function not used currently, require raw MD result to use these functions
+#if 0
 uint16_t MotionDetectionPostProcess::labelAdjacentRegions(char* mdResult, uint8_t rows, uint8_t cols) {
     regionCount = 0;
     memset(regionGroup, 0, sizeof(regionGroup));
@@ -288,3 +332,4 @@ float MotionDetectionRegion::yMin(void) {
 float MotionDetectionRegion::yMax(void) {
     return ((ymax + 1) * (1.0 / rows));
 }
+#endif

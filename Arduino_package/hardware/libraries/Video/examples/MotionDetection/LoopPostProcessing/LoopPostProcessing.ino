@@ -15,16 +15,13 @@
 
 #define CHANNEL 0       // High resolution video channel for streaming
 #define CHANNELMD 3     // RGB format video for motion detection only avaliable on channel 3
-#define MDRESX 32       // Motion detection grid resolution
-#define MDRESY 18
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);      // High resolution video for streaming
 VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);     // Low resolution RGB video for motion detection
 RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerMD(1, 1);
-MotionDetection MD(MDRESY, MDRESX);
-MotionDetectionPostProcess MDproc;
+MotionDetection MD;
 
 char ssid[] = "yourNetwork";    // your network SSID (name)
 char pass[] = "Password";       // your network password
@@ -86,42 +83,25 @@ void setup() {
 }
 
 void loop() {
-    char* result = MD.getResult();
-    uint16_t count = MDproc.labelAdjacentRegions(result, MDRESY, MDRESX);
-
-    // Print out motion detection result grid
-    for (uint8_t r = 0; r < MDRESY; r++) {
-        for (uint8_t c = 0; c < MDRESX; c++) {
-            if (result[r * MDRESX + c] != 0) {
-                printf(" %x", result[r * MDRESX + c]);
-            } else {
-                printf(" .");
-            }
-            printf(" ");
+    // Motion detection results is expressed as an array
+    // With 0 or 1 in each element indicating presence of motion
+    // Iterate through all elements to check for motion
+    // and calculate rectangles containing motion
+    std::vector<MotionDetectionResult> md_results = MD.getResult();
+    
+    OSD.createBitmap(CHANNEL);
+    if (MD.getResultCount() > 0) {
+        for (uint16_t i = 0; i < MD.getResultCount(); i++) {
+            MotionDetectionResult result = md_results[i];
+            int xmin = (int)(result.xMin() * config.width());
+            int xmax = (int)(result.xMax() * config.width());
+            int ymin = (int)(result.yMin() * config.height());
+            int ymax = (int)(result.yMax() * config.height());
+            //printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
+            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
         }
-        printf("\r\n");
-    }
-    printf("================================================================================================\r\n");
-
-    OSD.clearAll(CHANNEL);
-    if (count > 0) {
-        // Draw largest box containing all regions with detected motion
-        int xmin = (int)(MDproc.getRegion(0).xMin() * config.width());
-        int ymin = (int)(MDproc.getRegion(0).yMin() * config.height());
-        int xmax = (int)(MDproc.getRegion(0).xMax() * config.width());
-        int ymax = (int)(MDproc.getRegion(0).yMax() * config.height());
-        OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_RED);
-
-        for (uint16_t i = 1; i < count; i++) {
-            if (MDproc.getRegion(i).size() > 1) {
-                // Draw a box for each region with detected motion larger than 1 block in size
-                int xmin = (int)(MDproc.getRegion(i).xMin() * config.width());
-                int ymin = (int)(MDproc.getRegion(i).yMin() * config.height());
-                int xmax = (int)(MDproc.getRegion(i).xMax() * config.width());
-                int ymax = (int)(MDproc.getRegion(i).yMax() * config.height());
-                OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_GREEN);
-            }
-        }
+    } else {
+        OSD.createBitmap(CHANNEL);
     }
     OSD.update(CHANNEL);
     delay(100);

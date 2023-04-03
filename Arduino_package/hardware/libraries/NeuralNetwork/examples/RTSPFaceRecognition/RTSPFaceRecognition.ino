@@ -80,7 +80,7 @@ void setup() {
     
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
-    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -158,11 +158,11 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     Serial.println(rtsp_portnum);
     Serial.println(" ");
     
-    printf("Total number of faces detected = %d\r\n", results.size());
+    printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
 
     OSD.createBitmap(CHANNEL);
-    if (results.size() > 0) {
-        for (uint32_t i = 0; i < results.size(); i++) {
+    if (facerecog.getResultCount() > 0) {
+        for (uint32_t i = 0; i < facerecog.getResultCount(); i++) {
             FaceRecognitionResult item = results[i];
             // Result coordinates are floats ranging from 0.00 to 1.00
             // Multiply with RTSP resolution to get coordinates in pixels
