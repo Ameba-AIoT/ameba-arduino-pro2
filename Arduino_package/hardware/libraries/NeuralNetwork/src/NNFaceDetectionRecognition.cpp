@@ -177,7 +177,12 @@ void NNFaceDetectionRecognition::setResultCallback(void (*fr_callback)(std::vect
 }
 
 uint16_t NNFaceDetectionRecognition::getResultCount(void) {
-    return face_result_vector.size();
+    uint16_t facerecog_res_count = face_result_vector.size();
+    if (facerecog_res_count >= 5) {
+        facerecog_res_count = 4;
+    }
+    
+    return facerecog_res_count;
 }
 
 FaceRecognitionResult NNFaceDetectionRecognition::getResult(uint16_t index) {

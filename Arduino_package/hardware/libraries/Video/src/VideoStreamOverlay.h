@@ -15,6 +15,14 @@
 #define OSD_COLOR_GRAY      ARGB(0xff,0x7f,0x7f,0x7f)
 #define OSD_COLOR_ORANGE    ARGB(0xff,0xf3,0x70,0x21)
 
+// Each channel supports 6 OSD layers
+#define OSDLAYER0 0
+#define OSDLAYER1 1
+#define OSDLAYER2 2
+#define OSDLAYER3 3
+#define OSDLAYER4 4
+#define OSDLAYER5 5
+
 class VideoStreamOverlay {
     public:
         void configVideo(int ch, VideoSetting& config);

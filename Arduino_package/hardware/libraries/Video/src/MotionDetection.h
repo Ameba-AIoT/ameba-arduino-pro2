@@ -8,6 +8,8 @@
 #undef max
 #include <vector>
 
+// Class not used currently, raw MD result required
+#if 0
 #define MDMAXREGIONS (32*32/2)
 
 class MotionDetectionRegion {
@@ -43,29 +45,71 @@ class MotionDetectionPostProcess {
         uint8_t groupMap[MDMAXREGIONS] = {0};
         std::vector<MotionDetectionRegion> region_vector;
 };
+#endif
+
+// Set a mask which would disable the motion detection for the left half of the screen
+__attribute__((weak)) char mask[] = {
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+};
+
+class MotionDetectionResult {
+    friend class MotionDetection;
+
+    public:
+        float xMin(void);
+        float xMax(void);
+        float yMin(void);
+        float yMax(void);
+        
+    private:
+        md_pos_t md_position = {0};
+};
 
 class MotionDetection:public MMFModule {
     public:
-        MotionDetection(uint8_t row = 16, uint8_t col = 16);
+        MotionDetection(uint8_t row = 18, uint8_t col = 32);
         ~MotionDetection(void);
 
-        void configResolution(uint8_t row = 16, uint8_t col = 16);
+        void configResolution(uint8_t row = 18, uint8_t col = 32);
         void configVideo(VideoSetting& config);
         void begin(void);
         void end(void);
         void setTriggerBlockCount(uint16_t count);
         void setDetectionMask(char * mask);
 
-        char* getResult(void);
-        void setResultCallback(void (*md_callback)(char*));
+        void setResultCallback(void (*md_callback)(std::vector<MotionDetectionResult>));
+        uint16_t getResultCount(void);
+        MotionDetectionResult getResult(uint16_t index);
+        std::vector<MotionDetectionResult> getResult(void);
+        
         uint8_t rows(void);
         uint8_t cols(void);
 
     private:
+        static void MDResultCallback(md_result_t *result);
+        
+        static std::vector<MotionDetectionResult> md_result_vector;
+        static void (*MD_user_CB)(std::vector<MotionDetectionResult>);
+    
         md_param_t md_param = {0};
         motion_detect_threshold_t md_thr = {2,3};
-        char md_result[MD_MAX_COL * MD_MAX_ROW] = {0};
-        void (*md_ResultCB)(char*) = NULL;
         uint16_t trigCount = 0;
 };
 

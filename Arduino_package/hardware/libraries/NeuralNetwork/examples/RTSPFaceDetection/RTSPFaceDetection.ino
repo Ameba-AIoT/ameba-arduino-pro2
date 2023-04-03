@@ -30,12 +30,17 @@
 #include "NNFaceDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL 0
+#define CHANNEL   0
 #define CHANNELNN 3
 
 // Lower resolution for NN processing
-#define NNWIDTH 576
+#define NNWIDTH  576
 #define NNHEIGHT 320
+
+// OSD layers
+#define RECTLAYER  OSDLAYER0
+#define TEXTLAYER  OSDLAYER1
+#define POINTLAYER OSDLAYER2
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -67,7 +72,7 @@ void setup() {
 
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
-    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -112,9 +117,7 @@ void setup() {
 }
 
 void loop() {
-    delay(1000);
-    OSD.createBitmap(CHANNEL);
-    OSD.update(CHANNEL);
+    // Do nothing
 }
 
 // User callback function for post processing of face detection results
@@ -129,11 +132,13 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
     Serial.println(rtsp_portnum);
     Serial.println(" ");
 
-    printf("Total number of faces detected = %d\r\n", results.size());
+    printf("Total number of faces detected = %d\r\n", facedet.getResultCount());
 
-    OSD.createBitmap(CHANNEL);
-    if (results.size() > 0) {
-        for (uint32_t i = 0; i < results.size(); i++) {
+    OSD.createBitmap(CHANNEL, RECTLAYER);
+    OSD.createBitmap(CHANNEL, TEXTLAYER);
+    OSD.createBitmap(CHANNEL, POINTLAYER);
+    if (facedet.getResultCount() > 0) {
+        for (uint32_t i = 0; i < facedet.getResultCount(); i++) {
             FaceDetectionResult item = results[i];
             // Result coordinates are floats ranging from 0.00 to 1.00
             // Multiply with RTSP resolution to get coordinates in pixels
@@ -144,20 +149,22 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
 
             // Draw boundary box
             printf("Face %d confidence %d:\t%d %d %d %d\n\r", i, item.score(), xmin, xmax, ymin, ymax);
-            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
+            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE, RECTLAYER);
 
             // Print identification text above boundary box
             char text_str[40];
             snprintf(text_str, sizeof(text_str), "%s %d", item.name(), item.score());
-            OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN);
+            OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN, TEXTLAYER);
 
             // Draw facial feature points
             for (int j = 0; j < 5; j++) {
                 int x = (int)(item.xFeature(j) * im_w);
                 int y = (int)(item.yFeature(j) * im_h);
-                OSD.drawPoint(CHANNEL, x, y, 8, OSD_COLOR_RED);
+                OSD.drawPoint(CHANNEL, x, y, 8, OSD_COLOR_RED, POINTLAYER);
             }
         }
     }
-    OSD.update(CHANNEL);
+    OSD.update(CHANNEL, RECTLAYER);
+    OSD.update(CHANNEL, TEXTLAYER);
+    OSD.update(CHANNEL, POINTLAYER);
 }
