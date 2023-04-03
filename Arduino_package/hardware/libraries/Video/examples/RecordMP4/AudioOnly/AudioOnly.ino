@@ -6,10 +6,16 @@
 
 #include "StreamIO.h"
 #include "AudioStream.h"
+#include "AudioEncoder.h"
 #include "MP4Recording.h"
 
-#define CHANNEL 0
+// Default audio preset configurations:
+// 0 :  8kHz Mono Analog Mic
+// 1 : 16kHz Mono Analog Mic
+// 2 :  8kHz Mono Digital PDM Mic
+// 3 : 16kHz Mono Digital PDM Mic
 
+AudioSetting configA(0);
 Audio audio;
 AAC aac;
 MP4Recording mp4;
@@ -20,12 +26,14 @@ void setup() {
     Serial.begin(115200);
 
     // Configure audio peripheral for audio data output
+    audio.configAudio(configA);
     audio.begin();
     // Configure AAC audio encoder
+    aac.configAudio(configA);
     aac.begin();
 
     // Configure MP4 recording settings
-    mp4.configAudio();
+    mp4.configAudio(configA, CODEC_AAC);
     mp4.setRecordingDuration(30);
     mp4.setRecordingFileCount(1);
     mp4.setRecordingFileName("TestRecordingAudioOnly");
@@ -62,8 +70,6 @@ void printInfo(void) {
     Serial.println("------------------------------");
     Serial.println("- Audio Information -");
     audio.printInfo();
-    Serial.println("- AAC Information -");
-    aac.printInfo();
     Serial.println("- MP4 Recording Information -");
     mp4.printInfo();
 }

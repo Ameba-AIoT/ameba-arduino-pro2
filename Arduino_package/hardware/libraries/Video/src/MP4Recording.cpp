@@ -14,6 +14,7 @@ MP4Recording::MP4Recording(void) {
     mp4Params.sample_rate = 8000;
     mp4Params.channel = 1;
     mp4Params.mp4_audio_format = AUDIO_AAC;
+    mp4Params.mp4_audio_duration = 20;      // Required for G711 audio
 
     // MP4 recording parameters
     mp4Params.record_length = 60; //seconds
@@ -38,7 +39,7 @@ MP4Recording::~MP4Recording(void) {
 
 void MP4Recording::configVideo(VideoSetting& config) {
     if (config._encoder == VIDEO_JPEG) {
-        printf("Save to SD card does not support MJPEG format.\r\n");
+        printf("MP4 Recording does not support MJPEG format.\r\n");
         return;
     }
     if (_p_mmf_context == NULL) {
@@ -55,8 +56,12 @@ void MP4Recording::configVideo(VideoSetting& config) {
     mp4Params.gop = config._fps;
 }
 
-void MP4Recording::configAudio(void) {
-    // RTSPInit if not previously done so
+void MP4Recording::configAudio(AudioSetting& config, Audio_Codec_T codec) {
+    if ((codec == CODEC_G711_PCMU) || (codec == CODEC_G711_PCMA)) {
+            printf("MP4 Recording only accepts AAC codec\r\n");
+            // Unable to only record G711 audio without video, 23/3/2023
+        return;
+    }
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mp4Init();
     }
@@ -64,6 +69,10 @@ void MP4Recording::configAudio(void) {
         printf("MP4 Init failed\r\n");
         return;
     }
+
+    mp4Params.sample_rate = config._sampleRate;
+    mp4Params.channel = config._audioParams.channel;
+    mp4Params.mp4_audio_format = AUDIO_AAC;
 }
 
 void MP4Recording::begin(void) {

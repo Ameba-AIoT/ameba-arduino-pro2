@@ -7,16 +7,24 @@
  */
 
 #include "StreamIO.h"
-#include "AudioStream.h"
 #include "VideoStream.h"
+#include "AudioStream.h"
+#include "AudioEncoder.h"
 #include "MP4Recording.h"
 
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
 // Channel 1 : 1280 x 720  30FPS H264
 
+// Default audio preset configurations:
+// 0 :  8kHz Mono Analog Mic
+// 1 : 16kHz Mono Analog Mic
+// 2 :  8kHz Mono Digital PDM Mic
+// 3 : 16kHz Mono Digital PDM Mic
+
 VideoSetting configV1(0);
 VideoSetting configV2(1);
+AudioSetting configA(0);
 Audio audio;
 AAC aac;
 MP4Recording mp4_1;
@@ -33,18 +41,22 @@ void setup() {
     Camera.videoInit();
 
     // Configure audio peripheral for audio data output
+    audio.configAudio(configA);
     audio.begin();
     // Configure AAC audio encoder
+    aac.configAudio(configA);
     aac.begin();
 
     // Configure MP4 with corresponding video format information
     // Configure MP4 recording settings
     mp4_1.configVideo(configV1);
+    mp4_1.configAudio(configA, CODEC_AAC);
     mp4_1.setRecordingDuration(15);
     mp4_1.setRecordingFileCount(1);
     mp4_1.setRecordingFileName("TestRecordingAudioVideo1");
 
     mp4_2.configVideo(configV2);
+    mp4_2.configAudio(configA, CODEC_AAC);
     mp4_2.setRecordingDuration(30);
     mp4_2.setRecordingFileCount(1);
     mp4_2.setRecordingFileName("TestRecordingAudioVideo2");
@@ -90,8 +102,6 @@ void printInfo(void) {
 
     Serial.println("- Audio Information -");
     audio.printInfo();
-    Serial.println("- AAC Information -");
-    aac.printInfo();
     Serial.println("- MP4 Recording Information 1-");
     mp4_1.printInfo();
     Serial.println("- MP4 Recording Information 2-");

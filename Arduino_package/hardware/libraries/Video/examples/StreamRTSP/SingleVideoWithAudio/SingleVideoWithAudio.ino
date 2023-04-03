@@ -10,6 +10,7 @@
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "AudioStream.h"
+#include "AudioEncoder.h"
 #include "RTSP.h"
 
 #define CHANNEL 0
@@ -19,7 +20,14 @@
 // Channel 1 : 1280 x 720  30FPS H264
 // Channel 2 : 1280 x 720  30FPS MJPEG
 
+// Default audio preset configurations:
+// 0 :  8kHz Mono Analog Mic
+// 1 : 16kHz Mono Analog Mic
+// 2 :  8kHz Mono Digital PDM Mic
+// 3 : 16kHz Mono Digital PDM Mic
+
 VideoSetting configV(CHANNEL);
+AudioSetting configA(0);
 Audio audio;
 AAC aac;
 RTSP rtsp;
@@ -51,13 +59,15 @@ void setup() {
     Camera.videoInit();
 
     // Configure audio peripheral for audio data output
+    audio.configAudio(configA);
     audio.begin();
     // Configure AAC audio encoder
+    aac.configAudio(configA);
     aac.begin();
 
     // Configure RTSP with identical video format information and enable audio streaming
-    rtsp.enableAudio();
     rtsp.configVideo(configV);
+    rtsp.configAudio(configA, CODEC_AAC);
     rtsp.begin();
 
     // Configure StreamIO object to stream data from audio channel to AAC encoder
@@ -102,6 +112,4 @@ void printInfo(void) {
 
     Serial.println("- Audio -");
     audio.printInfo();
-    Serial.println("- AAC -");
-    aac.printInfo();
 }

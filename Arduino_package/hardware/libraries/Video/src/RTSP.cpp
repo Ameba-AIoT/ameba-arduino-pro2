@@ -1,10 +1,19 @@
 #include <Arduino.h>
 #include "RTSP.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "rtsp_drv.h"
+#include "avcodec.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 #define VID_CH_IDX 0
 #define AUDIO_CH_IDX 1
-#define AUDIO_SAMPLE_RATE 8000
-#define AUDIO_CODEC_ID AV_CODEC_ID_MP4A_LATM
 
 RTSP::RTSP(void) {
 }
@@ -31,13 +40,9 @@ void RTSP::configVideo(VideoSetting& config) {
         return;
     }
 
-    uint32_t RTSP_fps;
-    uint32_t AV_Codec_ID;
-    uint32_t RTSP_bps = CAM_BPS;
-
-    RTSP_fps = config._fps;
-    AV_Codec_ID = config._encoder;
-    RTSP_bps = config._bps;
+    uint32_t RTSP_fps = config._fps;
+    uint32_t AV_Codec_ID = config._encoder;
+    uint32_t RTSP_bps = config._bps;
 
     if (AV_Codec_ID == VIDEO_JPEG) {
         AV_Codec_ID = AV_CODEC_ID_MJPEG;
@@ -50,14 +55,9 @@ void RTSP::configVideo(VideoSetting& config) {
     RTSPSelectStream(_p_mmf_context->priv, VID_CH_IDX);
     RTSPSetParamsVideo(_p_mmf_context->priv, RTSP_fps, RTSP_bps, AV_Codec_ID);
     RTSPSetApply(_p_mmf_context->priv);
-    if (audioEnable == 1) {
-        RTSPSelectStream(_p_mmf_context->priv,AUDIO_CH_IDX);
-        RTSPSetParamsAudio(_p_mmf_context->priv,AUDIO_CH_IDX, AUDIO_SAMPLE_RATE, AUDIO_CODEC_ID);
-        RTSPSetApply(_p_mmf_context->priv);
-    }
 }
 
-void RTSP::configAudio(AudioSetting& config) {
+void RTSP::configAudio(AudioSetting& config, Audio_Codec_T codec) {
     // RTSPInit if not previously done so
     if (_p_mmf_context == NULL) {
         _p_mmf_context = RTSPInit();
@@ -66,6 +66,13 @@ void RTSP::configAudio(AudioSetting& config) {
         printf("RTSP init failed\r\n");
         return;
     }
+
+    uint32_t sample_rate = config._sampleRate;
+    uint32_t channel = config._audioParams.channel;
+
+    RTSPSelectStream(_p_mmf_context->priv, AUDIO_CH_IDX);
+    RTSPSetParamsAudio(_p_mmf_context->priv, channel, sample_rate, codec);
+    RTSPSetApply(_p_mmf_context->priv);
 }
 
 void RTSP::begin(void) {
@@ -81,11 +88,6 @@ void RTSP::end(void) {
         printf("Need RTSP init first\r\n");
     }
     RTSPSetStreaming((void *)_p_mmf_context, 0);
-}
-
-int RTSP::enableAudio(void) {
-    audioEnable = 1;
-    return audioEnable;
 }
 
 int RTSP::getPort(void) {
