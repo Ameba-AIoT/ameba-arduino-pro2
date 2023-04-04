@@ -12,6 +12,10 @@ AudioSetting	KEYWORD1
 StreamIO	KEYWORD1
 Audio	KEYWORD1
 AAC	KEYWORD1
+AAD	KEYWORD1
+G711E	KEYWORD1
+G711D	KEYWORD1
+RTP	KEYWORD1
 RTSP	KEYWORD1
 MP4Recording	KEYWORD1
 OSD	KEYWORD1
@@ -20,34 +24,46 @@ MotionDetectionPostProcess	KEYWORD1
 MotionDetectionRegion	KEYWORD1
 
 #######################################
+# AudioDecoder.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+configCodec	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+
+#######################################
+# AudioEncoder.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+configCodec	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+
+#######################################
 # AudioStream.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
 configAudio	KEYWORD2
+configMicAEC	KEYWORD2
+configMicAGC	KEYWORD2
+configMicNS	KEYWORD2
+configSpkAGC	KEYWORD2
+configSpkNS	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
+setAMicBoost	KEYWORD2
+setDMicBoost	KEYWORD2
+setMicGain	KEYWORD2
+setSpkGain	KEYWORD2
+muteMic	KEYWORD2
+muteSpk	KEYWORD2
 printInfo	KEYWORD2
 
-ASR_8KHZ	LITERAL1
-ASR_16KHZ	LITERAL1
-ASR_32KHZ	LITERAL1
-ASR_44p1KHZ	LITERAL1
-ASR_48KHZ	LITERAL1
-ASR_96KHZ	LITERAL1
-ASR_88p2KHZ	LITERAL1
-
-WL_16BIT	LITERAL1
-WL_24BIT	LITERAL1
-
-MIC_0DB	LITERAL1
-MIC_20DB	LITERAL1
-MIC_30DB	LITERAL1
-MIC_40DB	LITERAL1
-
-DMIC_BOOST_0DB	LITERAL1
-DMIC_BOOST_12DB	LITERAL1
-DMIC_BOOST_24DB	LITERAL1
-DMIC_BOOST_36DB	LITERAL1
+CODEC_AAC	LITERAL1
+CODEC_G711_PCMU	LITERAL1
+CODEC_G711_PCMA	LITERAL1
 
 USE_AUDIO_AMIC	LITERAL1
 USE_AUDIO_LEFT_DMIC	LITERAL1
@@ -134,6 +150,14 @@ end	KEYWORD2
 enableAudio	KEYWORD2
 getPort	KEYWORD2
 printInfo	KEYWORD2
+
+#######################################
+# RTP.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configPort	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
 
 #######################################
 # StreamIO.h Methods (KEYWORD2) & Constants (LITERAL1)

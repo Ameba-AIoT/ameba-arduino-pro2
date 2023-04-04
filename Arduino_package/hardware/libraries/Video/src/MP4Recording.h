@@ -13,7 +13,7 @@ class MP4Recording:public MMFModule {
         ~MP4Recording(void);
 
         void configVideo(VideoSetting& config);
-        void configAudio(void);
+        void configAudio(AudioSetting& config, Audio_Codec_T codec);
         void begin(void);
         void end(void);
 
