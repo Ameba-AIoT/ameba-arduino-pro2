@@ -85,7 +85,11 @@ void NNFaceDetection::setResultCallback(void (*fd_callback)(std::vector<FaceDete
 }
 
 uint16_t NNFaceDetection::getResultCount(void) {
-    return face_result_vector.size();
+    uint16_t facedet_res_count = face_result_vector.size();
+    if (facedet_res_count >= 5) {
+        facedet_res_count = 4;
+    }
+    return facedet_res_count;
 }
 
 FaceDetectionResult NNFaceDetection::getResult(uint16_t index) {

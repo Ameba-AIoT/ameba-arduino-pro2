@@ -140,7 +140,11 @@ void NNObjectDetection::setResultCallback(void (*od_callback)(std::vector<Object
 }
 
 uint16_t NNObjectDetection::getResultCount(void) {
-    return object_result_vector.size();
+    uint16_t od_res_count = object_result_vector.size();
+    if (od_res_count >= 5) {
+        od_res_count = 4;
+    }
+    return od_res_count;
 }
 
 ObjectDetectionResult NNObjectDetection::getResult(uint16_t index) {
