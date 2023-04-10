@@ -69,14 +69,14 @@ void setup() {
     while (status != WL_CONNECTED) {
 #ifdef MANUAL_INPUT
         Serial.println("Enter your ssid");
-        while (Serial.available() == 0){}
+        while (Serial.available() == 0) {}
         str_ssid = Serial.readString();
         str_ssid.trim();
         Serial.print("SSID entered: ");
         Serial.println(str_ssid);
 
         Serial.println("Enter your network key index number");
-        while (Serial.available() == 0){}
+        while (Serial.available() == 0) {}
         str_key = Serial.readString();
         str_key.trim();
         Serial.print("Key entered: ");

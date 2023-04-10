@@ -40,7 +40,7 @@ void setup() {
             str_ssid.trim();
             Serial.print("SSID entered: ");
             Serial.println(str_ssid);
-        
+
         Serial.println("Enter your password");
         while (Serial.available() == 0) {}
         str_pass = Serial.readString();
