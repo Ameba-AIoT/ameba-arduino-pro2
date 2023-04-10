@@ -44,8 +44,6 @@ void mdPostProcess(std::vector<MotionDetectionResult> md_results) {
             //printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
         }
-    } else {
-        OSD.createBitmap(CHANNEL);
     }
     OSD.update(CHANNEL);
 }

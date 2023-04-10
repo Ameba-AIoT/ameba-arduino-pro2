@@ -150,8 +150,6 @@ void loop() {
             int ymax = (int)(result.yMax() * configVID.height());
             OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
         }
-    } else {
-        OSD.createBitmap(CHANNELVID);
     }
     
     // GREEN LED turn off when no motion detected
