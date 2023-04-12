@@ -43,7 +43,7 @@ extern "C" {
 // firmware version string length
 #define WL_FW_VER_LENGTH            6
 // Host name length limit
-#define HOSTNAME_LEN            20
+#define HOSTNAME_LEN                20
 
 class WiFiDrv
 {

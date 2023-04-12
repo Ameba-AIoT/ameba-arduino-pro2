@@ -75,52 +75,52 @@ static void init_wifi_struct(void) {
 }
 
 void WiFiDrv::wifiDriverInit() {
-if (mode == 0x11) {
-    if (init_wlan == false) {
-        init_wlan = true;
-        LwIP_Init();
-        wifi_on(RTW_MODE_STA_AP);
-        wifi_mode = RTW_MODE_STA_AP;
-    } else if (init_wlan == true) {
-        if (wifi_mode != RTW_MODE_STA_AP) {
-            dhcps_deinit();
-            wifi_off();
-            vTaskDelay(20);
+    if (mode == 0x11) {
+        if (init_wlan == false) {
+            init_wlan = true;
+            LwIP_Init();
             wifi_on(RTW_MODE_STA_AP);
             wifi_mode = RTW_MODE_STA_AP;
+        } else if (init_wlan == true) {
+            if (wifi_mode != RTW_MODE_STA_AP) {
+                dhcps_deinit();
+                wifi_off();
+                vTaskDelay(20);
+                wifi_on(RTW_MODE_STA_AP);
+                wifi_mode = RTW_MODE_STA_AP;
+            }
         }
-    }
-} else if (mode == 0x10){
-    if (init_wlan == false) {
-        init_wlan = true;
-        LwIP_Init();
-        wifi_on(RTW_MODE_AP);
-        wifi_mode = RTW_MODE_AP;
-    } else if (init_wlan == true) {
-        if (wifi_mode != RTW_MODE_AP) {
-            dhcps_deinit();
-            wifi_off();
-            vTaskDelay(20);
+    } else if (mode == 0x10) {
+        if (init_wlan == false) {
+            init_wlan = true;
+            LwIP_Init();
             wifi_on(RTW_MODE_AP);
             wifi_mode = RTW_MODE_AP;
+        } else if (init_wlan == true) {
+            if (wifi_mode != RTW_MODE_AP) {
+                dhcps_deinit();
+                wifi_off();
+                vTaskDelay(20);
+                wifi_on(RTW_MODE_AP);
+                wifi_mode = RTW_MODE_AP;
+            }
         }
-    }
-} else {
-    if (init_wlan == false) {
-        init_wlan = true;
-        LwIP_Init();
-        wifi_on(RTW_MODE_STA);
-        wifi_mode = RTW_MODE_STA;
-    } else if (init_wlan == true) {
-        if (wifi_mode != RTW_MODE_STA) {
-            dhcps_deinit();
-            wifi_off();
-            vTaskDelay(20);
+    } else {
+        if (init_wlan == false) {
+            init_wlan = true;
+            LwIP_Init();
             wifi_on(RTW_MODE_STA);
             wifi_mode = RTW_MODE_STA;
+        } else if (init_wlan == true) {
+            if (wifi_mode != RTW_MODE_STA) {
+                dhcps_deinit();
+                wifi_off();
+                vTaskDelay(20);
+                wifi_on(RTW_MODE_STA);
+                wifi_mode = RTW_MODE_STA;
+            }
         }
     }
-}
 }
 
 int8_t WiFiDrv::wifiSetNetwork(char* ssid, uint8_t ssid_len) {
@@ -677,7 +677,6 @@ int WiFiDrv::disablePowerSave() {
 }
 
 void WiFiDrv::config(uint8_t validParams, IPAddress local_ip, IPAddress gateway, IPAddress subnet) {
-
     if (validParams == 1) {
         _arduinoIpAddr = local_ip;
         _arduinoApIpAddr = local_ip;
