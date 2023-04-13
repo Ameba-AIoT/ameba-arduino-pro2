@@ -5,7 +5,7 @@
 #define MD_MAX_COL 32 //fix value
 #define MD_FPS 10 //fix value
 
-#define MD_TIME_INTERVAL 4
+#define MD_TIME_INTERVAL 3
 #define MD_MAX_GOBJ 32
 
 //dynamic increase sensitivity when too light or too dark
@@ -106,7 +106,7 @@ typedef struct md_context_s {
 } md_context_t;
 
 void md_initial(md_context_t *md_ctx, md_param_t *md_param);
-void md_initial_adaptive_threshold(md_context_t *md_ctx, md_param_t *md_param, float md_adapt_level, int md_adapt_step);
+void md_initial_adaptive_threshold(md_context_t *md_ctx, md_param_t *md_param);
 void md_get_YRGB_value(md_context_t *md_ctx, md_param_t *md_param, unsigned char *RGB_buffer);
 void motion_detect(md_context_t *md_ctx, md_param_t *md_param);
 

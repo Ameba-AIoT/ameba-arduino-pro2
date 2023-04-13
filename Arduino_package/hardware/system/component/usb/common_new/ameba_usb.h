@@ -25,7 +25,7 @@ typedef u32(*IRQ_FUN)(void *Data);
 #define LEVEL_ERROR 3
 #define LEVEL_INFO  1
 #define LEVEL_TRACE 0
-#define DBG_PRINTF(MODULE, LEVEL, ...) if(LEVEL >= LEVEL_INFO)printf(__VA_ARGS__)
+#define DBG_PRINTF(MODULE, LEVEL, ...) if(LEVEL > LEVEL_INFO)printf(__VA_ARGS__)
 //#define video_dprintf(level, ...) if(level >= video_dbg_level) printf(__VA_ARGS__)
 //#define USB_OTG_REG_BASE		0x40040000//#define USB_BASE                    0x400C0000UL
 #define USB_OTG_REG_BASE		0x400C0000

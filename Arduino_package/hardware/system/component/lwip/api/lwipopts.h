@@ -362,7 +362,11 @@ extern unsigned int sys_now(void);
 /* ---------- Statistics options ---------- */
 #define LWIP_STATS 0
 #undef LWIP_PROVIDE_ERRNO
+#ifndef _SYS_ERRNO_H_
 #define LWIP_ERRNO_INCLUDE <sys/errno.h>
+#else
+#undef LWIP_ERRNO_INCLUDE
+#endif
 
 
 /*

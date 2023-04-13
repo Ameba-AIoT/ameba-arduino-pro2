@@ -48,6 +48,9 @@
 #define NNWIDTH 576
 #define NNHEIGHT 320
 
+#define RECTTEXTLAYER0 OSDLAYER0
+#define RECTTEXTLAYER1 OSDLAYER1
+
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
 NNFaceDetectionRecognition facerecog;
@@ -80,7 +83,7 @@ void setup() {
     
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
-    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -142,8 +145,10 @@ void loop() {
     }
 
     delay(1000);
-    OSD.createBitmap(CHANNEL);
-    OSD.update(CHANNEL);
+    OSD.createBitmap(CHANNEL,RECTTEXTLAYER0);
+    OSD.createBitmap(CHANNEL,RECTTEXTLAYER1);
+    OSD.update(CHANNEL, RECTTEXTLAYER0);
+    OSD.update(CHANNEL, RECTTEXTLAYER1);
 }
 
 // User callback function for post processing of face recognition results
@@ -158,11 +163,12 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     Serial.println(rtsp_portnum);
     Serial.println(" ");
     
-    printf("Total number of faces detected = %d\r\n", results.size());
+    printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
 
-    OSD.createBitmap(CHANNEL);
-    if (results.size() > 0) {
-        for (uint32_t i = 0; i < results.size(); i++) {
+    OSD.createBitmap(CHANNEL, RECTTEXTLAYER0);
+    OSD.createBitmap(CHANNEL, RECTTEXTLAYER1);
+    if (facerecog.getResultCount() > 0) {
+        for (uint32_t i = 0; i < facerecog.getResultCount(); i++) {
             FaceRecognitionResult item = results[i];
             // Result coordinates are floats ranging from 0.00 to 1.00
             // Multiply with RTSP resolution to get coordinates in pixels
@@ -171,21 +177,25 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
             int ymin = (int)(item.yMin() * im_h);
             int ymax = (int)(item.yMax() * im_h);
 
+            // Draw boundary box
             uint32_t osd_color;
+            int osd_layer;
             if (String(item.name()) == String("unknown")) {
                 osd_color = OSD_COLOR_RED;
+                osd_layer = RECTTEXTLAYER0;
             } else {
                 osd_color = OSD_COLOR_GREEN;
+                osd_layer = RECTTEXTLAYER1;
             }
-            // Draw boundary box
             printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
-            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, osd_color);
+            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, osd_color, osd_layer);
 
             // Print identification text above boundary box
             char text_str[40];
             snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
-            OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, osd_color);
+            OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, osd_color, osd_layer);
         }
     }
-    OSD.update(CHANNEL);
+    OSD.update(CHANNEL, RECTTEXTLAYER0);
+    OSD.update(CHANNEL, RECTTEXTLAYER1);
 }

@@ -67,6 +67,8 @@
 #define CMD_VIDEO_GET_MAX_QP		MM_MODULE_CMD(0x43)
 #define CMD_VIDEO_SET_MAX_QP		MM_MODULE_CMD(0x44)
 
+#define MMF_VIDEO_DEFAULT_META_CB	(0xFFFFFFFF)
+
 typedef struct rate_control {
 	uint32_t sampling_time;
 	uint32_t maximun_bitrate;

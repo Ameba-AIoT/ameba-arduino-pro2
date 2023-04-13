@@ -7,7 +7,7 @@
 #include "dlist.h"
 #include "mmf2_module.h"
 
-#define SIMO_CTRL_TIMEOUT 100
+#define SIMO_CTRL_TIMEOUT 10000
 
 typedef struct mm_simo_item_s {
 	// list node
@@ -50,6 +50,7 @@ typedef struct mm_simo_s {
 	char        taskname[4][16];
 	xTaskHandle task[4];
 	uint32_t    secure_context;
+	uint32_t    crtl_timeout;
 	uint32_t    timeout_count[4];
 
 	void 		*ctrl_lock;	// mutex lock for stop/pause/resume

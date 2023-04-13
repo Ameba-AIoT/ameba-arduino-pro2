@@ -22,6 +22,10 @@
 #define NNWIDTH 576
 #define NNHEIGHT 320
 
+// OSD layers
+#define RECTTEXTLAYER0 OSDLAYER0
+#define RECTTEXTLAYER1 OSDLAYER1
+
 // Pin Definition
 #define RED_LED 3
 #define GREEN_LED 4
@@ -145,8 +149,10 @@ void loop() {
     }
     
     delay(1000);
-    OSD.createBitmap(CHANNELVID);
-    OSD.update(CHANNELVID);
+    OSD.createBitmap(CHANNELVID,RECTTEXTLAYER0);
+    OSD.createBitmap(CHANNELVID,RECTTEXTLAYER1);
+    OSD.update(CHANNELVID, RECTTEXTLAYER0);
+    OSD.update(CHANNELVID, RECTTEXTLAYER1);
 }
 
 // User callback function for post processing of face recognition results
@@ -154,56 +160,63 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     uint16_t im_h = configVID.height();
     uint16_t im_w = configVID.width();
 
-    printf("Total number of faces detected = %d\r\n", results.size());
+    printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
 
-    OSD.createBitmap(CHANNELVID);
-    if (results.size() > 0) {
-      for (uint32_t i = 0; i < results.size(); i++) {
-        FaceRecognitionResult item = results[i];
-        // Result coordinates are floats ranging from 0.00 to 1.00
-        // Multiply with RTSP resolution to get coordinates in pixels
-        int xmin = (int)(item.xMin() * im_w);
-        int xmax = (int)(item.xMax() * im_w);
-        int ymin = (int)(item.yMin() * im_h);
-        int ymax = (int)(item.yMax() * im_h);
+    OSD.createBitmap(CHANNELVID, RECTTEXTLAYER0);
+    OSD.createBitmap(CHANNELVID, RECTTEXTLAYER1);
 
-        uint32_t osd_color;
-        if (String(item.name()) == String("unknown")) {
-          osd_color = OSD_COLOR_RED;
-          if (regFace == false) {
-            unknownDetected = true;
-            unknownCount++;
-            if (unknownCount < (MAX_UNKNOWN_COUNT + 1)) { // Ensure number of snapshots under MAX_UNKNOWN_COUNT
-              facerecog.registerFace("Stranger" + String(unknownCount)); // Register under named Stranger <No.> to prevent recapture of same unrecognised person twice
-              fs.begin();
-              File file = fs.open(String(fs.getRootPath()) + "Stranger" + String(unknownCount) + ".jpg"); // Capture snapshot of stranger under name Stranger <No.>
-              delay(1000);
-              Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
-              file.write((uint8_t*)img_addr, img_len);
-              file.close();
-              fs.end();
-            }
-          }
-        } else {
-          osd_color = OSD_COLOR_GREEN;
+    if (facerecog.getResultCount() > 0) {
+        for (uint32_t i = 0; i < facerecog.getResultCount(); i++) {
+             FaceRecognitionResult item = results[i];
+            // Result coordinates are floats ranging from 0.00 to 1.00
+            // Multiply with RTSP resolution to get coordinates in pixels
+            int xmin = (int)(item.xMin() * im_w);
+            int xmax = (int)(item.xMax() * im_w);
+            int ymin = (int)(item.yMin() * im_h);
+            int ymax = (int)(item.yMax() * im_h);
+
+            uint32_t osd_color;
+            int osd_layer;
+
+             if (String(item.name()) == String("unknown")) {
+                osd_color = OSD_COLOR_RED;
+                osd_layer = RECTTEXTLAYER0;
+                 if (regFace == false) {
+                     unknownDetected = true;
+                     unknownCount++;
+                     if (unknownCount < (MAX_UNKNOWN_COUNT + 1)) { // Ensure number of snapshots under MAX_UNKNOWN_COUNT
+                          facerecog.registerFace("Stranger" + String(unknownCount)); // Register under named Stranger <No.> to prevent recapture of same unrecognised person twice
+                          fs.begin();
+                          File file = fs.open(String(fs.getRootPath()) + "Stranger" + String(unknownCount) + ".jpg"); // Capture snapshot of stranger under name Stranger <No.>
+                          delay(1000);
+                          Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
+                          file.write((uint8_t*)img_addr, img_len);
+                          file.close();
+                          fs.end();
+                     }
+                 }
+             } else {
+                osd_color = OSD_COLOR_GREEN;
+                osd_layer = RECTTEXTLAYER1;
+             }
+
+            // Draw boundary box
+            printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
+            OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, osd_color, osd_layer);
+            // Print identification text above boundary box
+            char text_str[40];
+            snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
+            OSD.drawText(CHANNELVID, xmin, ymin - OSD.getTextHeight(CHANNELVID), text_str, osd_color, osd_layer);
         }
-        // Draw boundary box
-        printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
-        OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, osd_color);
-
-        // Print identification text above boundary box
-        char text_str[40];
-        snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
-        OSD.drawText(CHANNELVID, xmin, ymin - OSD.getTextHeight(CHANNELVID), text_str, osd_color);
-      }
-      if ((regFace == false) && (unknownDetected == true)) { // RED LED remain lit up when unknown faces detected
-        digitalWrite(RED_LED, HIGH);
-        digitalWrite(GREEN_LED, LOW);
-      } else if ((regFace == false) && (unknownDetected == false)) { // GREEN LED lit up when no unknown faces detected, Strangers are no longer considered unknown faces
-        digitalWrite(RED_LED, LOW);
-        digitalWrite(GREEN_LED, HIGH);
-      }
-      unknownDetected = false;
+        if ((regFace == false) && (unknownDetected == true)) { // RED LED remain lit up when unknown faces detected {
+            digitalWrite(RED_LED, HIGH);
+            digitalWrite(GREEN_LED, LOW);
+        } else if ((regFace == false) && (unknownDetected == false)) {
+            digitalWrite(RED_LED, LOW);
+            digitalWrite(GREEN_LED, HIGH);
+        }
+        unknownDetected = false;
     }
-    OSD.update(CHANNELVID);
+    OSD.update(CHANNELVID, RECTTEXTLAYER0);
+    OSD.update(CHANNELVID, RECTTEXTLAYER1);
 }

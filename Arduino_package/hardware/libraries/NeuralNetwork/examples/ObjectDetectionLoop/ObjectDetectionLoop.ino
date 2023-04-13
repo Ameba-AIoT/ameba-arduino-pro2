@@ -35,8 +35,12 @@
 #define CHANNELNN 3 
 
 // Lower resolution for NN processing
-#define NNWIDTH 576
+#define NNWIDTH  576
 #define NNHEIGHT 320
+
+// OSD layers
+#define RECTLAYER OSDLAYER0
+#define TEXTLAYER OSDLAYER1
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -68,7 +72,7 @@ void setup() {
 
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
-    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -112,10 +116,6 @@ void setup() {
 }
 
 void loop() {
-    delay(1000);
-    OSD.createBitmap(CHANNEL);
-    OSD.update(CHANNEL);
-
     std::vector<ObjectDetectionResult> results = ObjDet.getResult();
 
     uint16_t im_h = config.height();
@@ -128,11 +128,12 @@ void loop() {
     Serial.println(rtsp_portnum);
     Serial.println(" ");
 
-    printf("Total number of objects detected = %d\r\n", results.size());
+    printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
 
-    OSD.createBitmap(CHANNEL);
-    if (results.size() > 0) {
-        for (uint32_t i = 0; i < results.size(); i++) {
+    OSD.createBitmap(CHANNEL, RECTLAYER);
+    OSD.createBitmap(CHANNEL, TEXTLAYER);
+    if (ObjDet.getResultCount() > 0) {
+        for (uint32_t i = 0; i < ObjDet.getResultCount(); i++) {
             int obj_type = results[i].type();
             if (itemList[obj_type].filter) {    // check if item should be ignored
 
@@ -146,16 +147,17 @@ void loop() {
 
                 // Draw boundary box
                 printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
-                OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
+                OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE, RECTLAYER);
 
                 // Print identification text
                 char text_str[20];
                 snprintf(text_str, sizeof(text_str), "%s %d", itemList[obj_type].objectName, item.score());
-                OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN);
+                OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN, TEXTLAYER);
             }
         }
     }
-    OSD.update(CHANNEL);
+    OSD.update(CHANNEL, RECTLAYER);
+    OSD.update(CHANNEL, TEXTLAYER);
 
     // delay to wait for new results
     delay(100);

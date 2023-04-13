@@ -28,7 +28,7 @@
 #define USBH_MAX_ENDPOINTS_NUM				5
 #define USBH_MAX_INTERFACES_NUM				4
 #define USBH_MAX_CLASSES_NUM				1
-
+#define USB_HOST_SOF_POLLING                1
 /* Exported types ------------------------------------------------------------*/
 
 /* USB host state */
@@ -149,6 +149,7 @@ typedef struct {
 	u8(*setup)(struct _usb_host_t *host);				/* Called after class attached to process class standard control requests */
 	u8(*process)(struct _usb_host_t *host);				/* Called after class setup to process class specific transfers */
 	u8(*sof)(struct _usb_host_t *host);					/* Called at SOF interrupt */
+	u8(*nak)(struct _usb_host_t *host, u8 ch_num);		/* Called at NAK interrupt of specific channel */
 } usbh_class_driver_t;
 
 /* USB host user callback */
@@ -214,6 +215,11 @@ u8 usbh_close_pipe(usb_host_t *host, u8 pipe_num);
 u8 usbh_get_interface(usb_host_t *host, u8 class_code, u8 sub_class_code, u8 protocol); /* 0xFF means interface not found */
 u8 usbh_set_interface(usb_host_t *host, u8 if_num);
 usbh_if_desc_t *usbh_get_interface_descriptor(usb_host_t *host, u8 if_num);
+
+/* Get ep type in a specific channel */
+u8 usbh_get_ep_type(usb_host_t *host, u8 ch_num);
+/* Reactivate the request in a specific channel */
+u8 usbh_reactivate(usb_host_t *host, u8 ch_num);
 
 /* Get raw configuration descriptor data */
 u8 *usbh_get_raw_configuration_descriptor(usb_host_t *host);

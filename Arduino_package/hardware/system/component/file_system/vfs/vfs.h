@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 
+#include "stdio.h"
 #include "time.h"
 
 #define PATH_MAX 4096
