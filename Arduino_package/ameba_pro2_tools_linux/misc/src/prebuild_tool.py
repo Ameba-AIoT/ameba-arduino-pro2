@@ -35,23 +35,21 @@ def copy_files_recursive(src_dir, dest_dir):
     except Exception as e:
         print(f"Error copying files: {e}")
 
-
 def main(toolchian_path, toolchian_p2_path, toolchain_p1, toolchain_p2):
 #   current_dir = os.getcwd()
 #   get the full path of the source folder
 #   full_path = os.path.join(current_dir, folder_name)
-
     if os.path.exists(toolchian_p2_path):
-        copy_files_recursive(toolchian_p2_path, toolchian_path)
-        try:
-            shutil.rmtree(toolchian_p2_path)
-        except Exception as e:
-            print(f"Error: {toolchain_p2} : {e}")
+        if os.listdir(toolchian_p2_path):
+            copy_files_recursive(toolchian_p2_path, toolchian_path)
+            try:
+                shutil.rmtree(toolchian_p2_path)
+            except Exception as e:
+                print(f"Error: {toolchain_p2} : {e}")
+            os.makedirs(toolchian_p2_path)
 
 if __name__ == '__main__':
 #    print('prebuild tool test ')
-
     main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-
 #    print('prebuild tool test done')
 #    sys.exit(1)
