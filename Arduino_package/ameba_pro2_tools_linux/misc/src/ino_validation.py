@@ -5,7 +5,7 @@
 # ------------------------------------------------------
 # To generate executable
 # python -m PyInstaller  --onefile --name ino_validation_windows.exe .\ino_validation.py 
-# python3 -m PyInstaller --onefile ./ino_validation.py
+# python3 -m PyInstaller --onefile --name ino_validation_mac ./ino_validation.py
 #                        -w: no terminal required 
 # ------------------------------------------------------
 # Linux Permission Denied: chmod +x myapp ls -l myapp
@@ -69,7 +69,7 @@ def resetTXT():
     directory = os.path.dirname(filepath_txt)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    with open(filepath_txt, 'w') as file:
+    with open(filepath_txt, 'w', encoding='utf-8') as file:
         pass
     debug_print(f"[INFO] {filename_txt} has been reset")
 
@@ -77,11 +77,11 @@ def updateTXT(input):
     directory = os.path.dirname(filepath_txt)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    with open(filepath_txt, 'a') as file:
+    with open(filepath_txt, 'a', encoding='utf-8') as file:
         file.write(input + "\n")
 
 def updateNATXT(filepath, start_line, end_line):
-    with open(filepath, 'r') as file:
+    with open(filepath, 'r', encoding='utf-8') as file:
         lines = file.readlines()
     start_line_index = None
     end_line_index = None
@@ -99,7 +99,7 @@ def updateNATXT(filepath, start_line, end_line):
         is_empty = all(line.strip() == '' for line in content_between_lines)
         if is_empty:
             lines.insert(start_line_index + 1, "NA\nNA\nNA\n")
-        with open(filepath, 'w') as file:
+        with open(filepath, 'w', encoding='utf-8') as file:
             file.writelines(lines)
     else:
         raise ValueError("Start or end line not found in the file")
@@ -107,7 +107,7 @@ def updateNATXT(filepath, start_line, end_line):
 def dupCheckTXT(input):
     if input == "NA":
         return 1
-    with open(filepath_txt,'r') as file:
+    with open(filepath_txt,'r', encoding='utf-8') as file:
         if input2model(input) not in file.read():
             return 1
     return 0
@@ -149,7 +149,7 @@ def input2filename(input):
     if os.path.isdir(dest_path):
         for file_json in os.listdir(dest_path):
             if file_json.endswith(".json"):
-                with open(os.path.join(dest_path, file_json), "r+") as file:
+                with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
                     data = json.load(file)
                     value_file = data[input]["file"]
         return value_file
@@ -157,7 +157,7 @@ def input2filename(input):
 def validationINO():
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
-            with open(os.path.join(sys.argv[1], file_json), "r+") as file:
+            with open(os.path.join(sys.argv[1], file_json), "r", encoding='utf-8') as file:
                 # get path and file name for further process
                 data = json.load(file)
                 # Arduino IDE1.0 
@@ -173,7 +173,7 @@ def validationINO():
                     
                     for file_cache in os.listdir(sys.argv[1]):
                         if file_cache.endswith(".cache") and "libraries" in file_cache:
-                            with open(os.path.join(sys.argv[1], file_cache), "r+") as file:
+                            with open(os.path.join(sys.argv[1], file_cache), "r", encoding='utf-8') as file:
                                 for library_path in json.loads(file.read()):
                                     if "libraries" in library_path:
                                         library_path = library_path + os.path.sep + ".." + os.path.sep + "examples" + os.path.sep
@@ -189,8 +189,8 @@ model_list = []
 def writeTXT(example_path):
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
-            with open(os.path.join(sys.argv[1], file_json), "r+") as file:
-                with open(example_path, 'r') as file:
+            with open(os.path.join(sys.argv[1], file_json), "r", encoding='utf-8') as file:
+                with open(example_path, "r", encoding='utf-8') as file:
                     sktech_path  = example_path + os.path.sep + ".."
                     lines = file.readlines()
                     updateTXT("----------------------------------")

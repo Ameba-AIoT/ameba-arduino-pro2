@@ -69,17 +69,17 @@ elif platform == "darwin":
 def resetJSON(input):
     for file_json in os.listdir(input):
         if file_json.endswith(".json"):
-            with open(os.path.join(input, file_json), "r+") as file:
+            with open(os.path.join(input, file_json), "r", encoding='utf-8') as file:
                 data = json.load(file)
                 data["FWFS"]["files"] = []
-            with open(os.path.join(input, file_json), "w") as file:
+            with open(os.path.join(input, file_json), "w", encoding='utf-8') as file:
                 json.dump(data, file, indent=4)
             debug_print(f"[INFO] {file_json} has been reset")
 
 def updateJSON(input):
     for file_json in os.listdir(dest_path):
         if file_json.endswith(".json"):
-            with open(os.path.join(dest_path, file_json), "r+") as file:
+            with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
                 data = json.load(file)
                 if input == "null":
                     sys.stderr.write(f"[Error] Model input in json is null. Please check again!\n")
@@ -87,7 +87,7 @@ def updateJSON(input):
                 if input == 'RESET':
                     break
                 data["FWFS"]["files"].append(input)
-            with open(os.path.join(dest_path, file_json), "w") as file:
+            with open(os.path.join(dest_path, file_json), "w", encoding='utf-8') as file:
                 json.dump(data, file, indent=4)
     # validateJSON()
 
@@ -97,7 +97,7 @@ def validateJSON():
     counter = 0
     for file_json in os.listdir(dest_path):
         if file_json.endswith(".json"):
-            with open(os.path.join(dest_path, file_json), "r+") as file:
+            with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
                 data = json.load(file)
                 files_dict = data["FWFS"]["files"]
                 for value in files_dict:
@@ -116,7 +116,7 @@ def validateJSON():
 def dupCheckJSON(input):
     for file_json in os.listdir(dest_path):
         if file_json.endswith(".json"):
-            with open(os.path.join(dest_path, file_json), "r") as file:
+            with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
                 data = json.load(file)
                 if input2model(input) not in data["FWFS"]["files"]:
                     return 1
@@ -142,7 +142,7 @@ def input2filename(input):
     if os.path.isdir(dest_path):
         for file_json in os.listdir(dest_path):
             if file_json.endswith(".json"):
-                with open(os.path.join(dest_path, file_json), "r+") as file:
+                with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
                     data = json.load(file)
                     value_file = data[input]["file"]
         return value_file
@@ -206,7 +206,7 @@ def revertModel(input):
 def validationINO():
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
-            with open(os.path.join(sys.argv[1], file_json), "r+") as file:
+            with open(os.path.join(sys.argv[1], file_json), "r", encoding='utf-8') as file:
                 # get path and file name for further process
                 data = json.load(file)
                 # Arduino IDE1.0 
@@ -224,7 +224,7 @@ def validationINO():
                     
                     for file_cache in os.listdir(sys.argv[1]):
                         if file_cache.endswith(".cache") and "libraries" in file_cache:
-                            with open(os.path.join(sys.argv[1], file_cache), "r+") as file:
+                            with open(os.path.join(sys.argv[1], file_cache), "r", encoding='utf-8') as file:
                                 for library_path in json.loads(file.read()):
                                     if "libraries" in library_path:
                                         library_path = library_path + os.path.sep + ".." + os.path.sep + "examples" + os.path.sep
@@ -238,8 +238,8 @@ def validationINO():
 def writeJSON(example_path):
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
-            with open(os.path.join(sys.argv[1], file_json), "r+") as file:
-                with open(example_path, 'r') as file:
+            with open(os.path.join(sys.argv[1], file_json), "r", encoding='utf-8') as file:
+                with open(example_path, 'r', encoding='utf-8') as file:
                     sktech_path  = example_path + os.path.sep + ".."
                     lines = file.readlines()
                     for line in lines:
