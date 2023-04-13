@@ -180,10 +180,10 @@ void loop() {
     }
 
     delay(1000);
-    OSD.createBitmap(CHANNEL,RECTTEXTLAYER0);
-    OSD.createBitmap(CHANNEL,RECTTEXTLAYER1);
-    OSD.update(CHANNEL, RECTTEXTLAYER0);
-    OSD.update(CHANNEL, RECTTEXTLAYER1);
+    OSD.createBitmap(CHANNELVID,RECTTEXTLAYER0);
+    OSD.createBitmap(CHANNELVID,RECTTEXTLAYER1);
+    OSD.update(CHANNELVID, RECTTEXTLAYER0);
+    OSD.update(CHANNELVID, RECTTEXTLAYER1);
 }
 
 // User callback function for post processing of face recognition results
