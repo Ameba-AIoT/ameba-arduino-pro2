@@ -2,16 +2,20 @@
 Compile:
 
 windows:
-mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
-i686-w64-mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
+g++.exe -o image_windows.exe image_tool.cpp -static
+strip image_windows.exe
+### mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
+### i686-w64-mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
 
 linux (ubuntu 20.04 TLS ,64 bits app generated):
 g++ -o image_linux image_tool.cpp -static
 g++ -std=c++11 -lpthread -o image_linux image_tool.cpp
+strip image_linux
 
 macos:
 g++ -o image_macos image_tool.cpp
 g++ -std=c++17 -o image_macos image_tool.cpp
+strip image_macos
 
 */
 #include <iostream>

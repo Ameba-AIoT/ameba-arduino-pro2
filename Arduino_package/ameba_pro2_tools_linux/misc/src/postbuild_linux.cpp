@@ -3,13 +3,17 @@
 Compile:
 
 windows:
-mingw32-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
+g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
+strip postbuild_windows.exe
+### mingw32-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
 
 linux:
 g++ -o postbuild_linux postbuild_linux.cpp -static
+strip postbuild_linux
 
 macos:
 g++ -o postbuild_macos postbuild_macos.cpp
+strip postbuild_macos
 
 */
 

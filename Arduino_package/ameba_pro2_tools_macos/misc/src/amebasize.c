@@ -3,13 +3,17 @@
 Compile:
 
 Windows:
-mingw32-gcc.exe -o amebasize.exe tools\windows\src\amebasize.c -static
+gcc.exe -o amebasize.exe tools\windows\src\amebasize.c -static
+strip amebasize.exe
+### mingw32-gcc.exe -o amebasize.exe tools\windows\src\amebasize.c -static
 
 linux:
 gcc -o amebasize tools/linux/src/amebasize.c -static
+strip amebasize
 
 macsox:
 gcc -o tools/macos/amebasize tools/macos/src/amebasize.c
+strip amebasize
 
 */
 
