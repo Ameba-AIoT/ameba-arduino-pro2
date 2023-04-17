@@ -4,8 +4,7 @@
 # For Example: whether scrfd and mobilefacenet models have been selected while running NNFaceRecognition Example
 # ------------------------------------------------------
 # To generate executable
-# python -m PyInstaller  --onefile --name ino_validation_windows.exe .\ino_validation.py 
-# python3 -m PyInstaller --onefile --name ino_validation_mac ./ino_validation.py
+# python3 -m PyInstaller --onefile --name ino_validation_macos ./ino_validation.py
 #                        -w: no terminal required 
 # ------------------------------------------------------
 # Linux Permission Denied: chmod +x myapp ls -l myapp
