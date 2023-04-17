@@ -5,8 +5,7 @@
 # ------------------------------------------------------
 # To generate executable
 # run.bat
-# python -m PyInstaller  --onefile .\nn_model_update.py 
-# python3 -m PyInstaller --onefile ./nn_model_update.py
+# python -m PyInstaller  --onefile --name nn_model_update_windows.exe .\nn_model_update.py
 #                        -w: no terminal required 
 # ------------------------------------------------------
 # Linux Permission Denied: chmod +x myapp ls -l myapp

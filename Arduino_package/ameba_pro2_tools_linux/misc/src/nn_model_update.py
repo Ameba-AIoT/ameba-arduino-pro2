@@ -4,9 +4,7 @@
 # For Example: whether scrfd and mobilefacenet models have been selected while running NNFaceRecognition Example
 # ------------------------------------------------------
 # To generate executable
-# run.bat
-# python -m PyInstaller  --onefile .\nn_model_update.py 
-# python3 -m PyInstaller --onefile ./nn_model_update.py
+# python3 -m PyInstaller --onefile --name nn_model_update_linux ./nn_model_update.py
 #                        -w: no terminal required 
 # ------------------------------------------------------
 # Linux Permission Denied: chmod +x myapp ls -l myapp
