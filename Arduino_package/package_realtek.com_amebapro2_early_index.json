@@ -40,7 +40,7 @@
             {
               "packager": "realtek",
               "name": "ameba_pro2_tools",
-              "version": "1.2.2"
+              "version": "1.2.2.1"
             }
           ]
         },
@@ -498,6 +498,33 @@
               "url":"https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_toolchain_macos-1.0.1-p2.tar.bz2",
               "checksum":"SHA-256:892a0a6848863b0853a0b60a3fcfedb703d897961615274049f8fca036c9db32",
               "size":"77770301"
+            }
+          ]
+        },
+		{
+          "name": "ameba_pro2_tools",
+          "version": "1.2.2.1",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.2.2.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.2.2.1.tar.gz",
+              "checksum": "SHA-256:6f4b4c76f947b6acf85b99b10067bba034fbc47ee2c71c4e303f85fc7c607f73",
+              "size": "24804366"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "archiveFileName": "ameba_pro2_tools_linux-1.2.2.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.2.2.1.tar.gz",
+              "checksum": "SHA-256:469f5e3714125f606f1cd5914023747536e5fbf6bb9885e4c2f8682c698f7f1f",
+              "size": "40717220"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.2.2.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.2.2.1.tar.gz",
+              "checksum": "SHA-256:25d9f4ee05e4df5dbf4160cb3f56e175e9832d5f28f92be17f7393a4786eeb25",
+              "size": "20852831"
             }
           ]
         },

@@ -4,14 +4,11 @@
 # To generate executable
 # windows os 
 ## power shell
-## pyinstaller --onefile --name prebuild_windows prebuild_tool.py
-## strip .\dist\prebuild_windows.exe
+## pyinstaller -i icom_256.ico --strip  --onefile --name prebuild_windows prebuild_tool.py
 # linux os 
 ## pyinstaller --onefile --name prebuild_linux prebuild_tool.py
-## strip .\dist\prebuild_linux
 # macos 
 ## python3 -m PyInstaller --onefile --name prebuild_macos ./prebuild_tool.py
-## strip .\dist\prebuild_macos
 # ------------------------------------------------------
 
 import os
