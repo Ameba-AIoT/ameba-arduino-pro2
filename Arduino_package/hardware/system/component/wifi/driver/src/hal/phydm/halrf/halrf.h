@@ -188,7 +188,7 @@
 #define DPK_VER_8822B "NONE"
 #define DPK_VER_8822C "0x20"
 #define DPK_VER_8821C "NONE"
-#define DPK_VER_8192F "0x14"
+#define DPK_VER_8192F "0x15"
 #define DPK_VER_8198F "0x0e"
 #define DPK_VER_8814B "0x0f"
 #define DPK_VER_8195B "0x0c"
@@ -272,7 +272,7 @@
 #define TSSI_VER_8814B "0x1"
 #define TSSI_VER_8197G "0x1"
 #define TSSI_VER_8723F "0x1"
-#define TSSI_VER_8735B "0x18"
+#define TSSI_VER_8735B "0x20"
 
 /*PA Bias Calibration version*/
 #define PABIASK_VER_8188E \

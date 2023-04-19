@@ -275,7 +275,7 @@ SECTIONS
 		*(.retention.data*)
 	} > RAM_RETENTION
 
-	.ram.bss :
+	.ram.bss (NOLOAD):
 	{
 		. = ALIGN(4);
 		__bss_start__ = .;
@@ -398,7 +398,7 @@ SECTIONS
 		__eram_data_end__ = .;
 	} > DDR
 
-	.ddr.bss :
+	.ddr.bss (NOLOAD):
 	{
 		. = ALIGN(4);
 		__eram_bss_start__ = .;

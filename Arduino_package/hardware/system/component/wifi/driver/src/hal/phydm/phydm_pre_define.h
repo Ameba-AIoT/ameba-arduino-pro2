@@ -556,7 +556,7 @@ enum phydm_ic {
 		#define PHYDM_IC_JGR3_80M_SUPPORT
 	#endif
 	#if (RTL8735B_SUPPORT)
-		#define PHYDM_IC_JGR3_CCK2M_SUPPORT
+		#define PHYDM_IC_JGR3_ARLO_SUPPORT
 	#endif
 #endif
 

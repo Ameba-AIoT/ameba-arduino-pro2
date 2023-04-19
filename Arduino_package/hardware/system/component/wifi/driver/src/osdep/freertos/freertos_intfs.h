@@ -64,6 +64,7 @@ extern int rtw_dev_remove(struct net_device *pnetdev);
 extern int netdev_open(struct net_device *pnetdev);
 extern int netdev_close(struct net_device *pnetdev);
 extern void rtw_indicate_wx_assoc_event(_adapter *padapter);
+extern int rtw_check_wifi_user_config_size(void);
 
 #if defined(CONFIG_LX_HCI)
 u32 lextra_bus_dma_Interrupt(void *data);

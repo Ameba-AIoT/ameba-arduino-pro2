@@ -6,6 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
+GTimerClass	KEYWORD1
 GTimer	KEYWORD1
 
 #######################################

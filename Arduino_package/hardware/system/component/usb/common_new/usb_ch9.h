@@ -94,6 +94,17 @@
 #define USB_FS_MAX_PACKET_SIZE                         64U
 #define USB_MAX_EP0_SIZE                               64U
 
+/* USB speed */
+#define USB_SPEED_HIGH                                 0
+#define USB_SPEED_HIGH_IN_FULL                         1
+#define USB_SPEED_LOW                                  2
+#define USB_SPEED_FULL                                 3
+
+/* USB mode */
+#define USB_OTG_MODE_DEVICE                            0
+#define USB_OTG_MODE_HOST                              1
+#define USB_OTG_MODE_DRD                               2
+
 /* Exported types ------------------------------------------------------------*/
 
 /* USB Endpoint Type */
@@ -112,6 +123,12 @@ typedef struct {
 	u16 wIndex;			/* Index */
 	u16 wLength;		/* Number of bytes to transfer if there is a data phase */
 } usb_setup_req_t;
+
+/* USB speed, refer to USB_SPEED_XXX definitions */
+typedef int usb_speed_type_t;
+
+/* USB mode */
+typedef int usb_otg_mode_t;
 
 /* Exported macros -----------------------------------------------------------*/
 

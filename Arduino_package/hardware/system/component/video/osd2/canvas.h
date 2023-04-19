@@ -64,6 +64,8 @@ typedef struct canvas_bmp_s {
 	int buff_len;
 } canvas_bmp_t;
 
+int canvas_get_bitmap_width(canvas_bmp_t *bitmap);
+int canvas_get_bitmap_height(canvas_bmp_t *bitmap);
 void draw_point_on_bitmap(canvas_bmp_t *bitmap, canvas_pt_t *pt, canvas_color_t *color);
 void draw_line_on_bitmap(canvas_bmp_t *bitmap, canvas_line_t *line, canvas_color_t *color);
 void draw_rect_on_bitmap(canvas_bmp_t *bitmap, canvas_rect_t *rect, canvas_color_t *color);

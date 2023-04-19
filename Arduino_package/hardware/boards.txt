@@ -1,10 +1,8 @@
 
-menu.EraseFlash=* Erase Flash
+menu.EraseFlash=* Erase All Flash Memory (16MB)
 menu.AutoUploadMode=* Auto Flash Mode
-menu.UploadModeSelection=* Upload Mode
-menu.UploadVideoBin=**      Video ISP Bin
-menu.UploadNeuralNetworkBin=**      Neural Network Bin
-menu.StdLibInit=* Standard Lib Enable
+menu.StdLibInit=* Standard Lib
+menu.UploadBaudrate=* Upload Speed
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -33,32 +31,25 @@ Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
 
 Ameba_AMB82-MINI.menu.EraseFlash.Disable=Disable
 Ameba_AMB82-MINI.menu.EraseFlash.Disable.build.erase_flash=Disable
-Ameba_AMB82-MINI.menu.EraseFlash.Enable=Enable
+Ameba_AMB82-MINI.menu.EraseFlash.Enable=Erase only
 Ameba_AMB82-MINI.menu.EraseFlash.Enable.build.erase_flash=Enable
+Ameba_AMB82-MINI.menu.EraseFlash.EnableUpload=Erase then Upload
+Ameba_AMB82-MINI.menu.EraseFlash.EnableUpload.build.erase_flash=Enable_Upload
 
 Ameba_AMB82-MINI.menu.AutoUploadMode.Disable=Disable
 Ameba_AMB82-MINI.menu.AutoUploadMode.Disable.build.auto_upload_mode=Disable
 Ameba_AMB82-MINI.menu.AutoUploadMode.Enable=Enable
 Ameba_AMB82-MINI.menu.AutoUploadMode.Enable.build.auto_upload_mode=Enable
 
-Ameba_AMB82-MINI.menu.UploadModeSelection.NormalMode=Normal Mode
-Ameba_AMB82-MINI.menu.UploadModeSelection.NormalMode.build.upload_mode=NormalEnable
-Ameba_AMB82-MINI.menu.UploadModeSelection.SpeedMode=Speed Mode
-Ameba_AMB82-MINI.menu.UploadModeSelection.SpeedMode.build.upload_mode=SpeedEnable
-
-Ameba_AMB82-MINI.menu.UploadVideoBin.Yes=Yes
-Ameba_AMB82-MINI.menu.UploadVideoBin.Yes.build.upload_mode_voe=VOEyes
-Ameba_AMB82-MINI.menu.UploadVideoBin.No=No
-Ameba_AMB82-MINI.menu.UploadVideoBin.No.build.upload_mode_voe=VOEno
-
-Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.Yes=Yes
-Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.Yes.build.upload_mode_nn=NNyes
-Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No=No
-Ameba_AMB82-MINI.menu.UploadNeuralNetworkBin.No.build.upload_mode_nn=NNno
-
-Ameba_AMB82-MINI.menu.StdLibInit.Disable=NA
-Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+Ameba_AMB82-MINI.menu.StdLibInit.Disable=Disable
+Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
 Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
 
+Ameba_AMB82-MINI.menu.UploadBaudrate.2M=2000000
+Ameba_AMB82-MINI.menu.UploadBaudrate.2M.build.upload_baudrate=2000000
+Ameba_AMB82-MINI.menu.UploadBaudrate.1M=1000000
+Ameba_AMB82-MINI.menu.UploadBaudrate.1M.build.upload_baudrate=1000000
+Ameba_AMB82-MINI.menu.UploadBaudrate.230400=230400
+Ameba_AMB82-MINI.menu.UploadBaudrate.230400.build.upload_baudrate=230400
 ##############################################################

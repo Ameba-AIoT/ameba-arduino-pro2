@@ -82,7 +82,7 @@ extern uint32_t SystemCoreClock;
 #define configUSE_MUTEXES								1
 #define configUSE_TICKLESS_IDLE							0
 #define configUSE_APPLICATION_TASK_TAG					1
-#define configUSE_POSIX_ERRNO							1
+#define configUSE_POSIX_ERRNO							0
 #define configUSE_NEWLIB_REENTRANT						1
 #define configUSE_CO_ROUTINES							0
 #define configUSE_COUNTING_SEMAPHORES					1

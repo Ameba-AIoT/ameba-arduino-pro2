@@ -2,6 +2,7 @@
 #define __NN_OBJECTDETECTION_H__
 
 #include "VideoStream.h"
+#include "NNModelSelection.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +33,7 @@ class ObjectDetectionResult {
         detobj_t result = {0};
 };
 
-class NNObjectDetection:public MMFModule {
+class NNObjectDetection :public NNModelSelection {
     public:
         NNObjectDetection(void);
         ~NNObjectDetection(void);
@@ -40,7 +41,7 @@ class NNObjectDetection:public MMFModule {
         void configVideo(VideoSetting& config);
         void configRegionOfInterest(int xmin, int xmax, int ymin, int ymax);
         void configThreshold(float confidence_threshold, float nms_threshold);
-        void begin(int model);
+        void begin(void);
         void end(void);
 
         void setResultCallback(void (*od_callback)(std::vector<ObjectDetectionResult>));

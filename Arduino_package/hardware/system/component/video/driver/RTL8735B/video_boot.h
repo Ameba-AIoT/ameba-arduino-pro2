@@ -59,6 +59,9 @@ typedef struct video_boot_param_s {
 		uint32_t xmax;
 		uint32_t ymax;
 	} roi;
+	uint32_t level;
+	uint32_t profile;
+	uint32_t cavlc;
 } video_boot_params_t;
 
 typedef struct isp_boot_info_s {

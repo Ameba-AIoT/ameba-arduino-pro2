@@ -1,18 +1,19 @@
 #ifndef MMF2_MODULE_H
 #define MMF2_MODULE_H
 
+#include <stdio.h>
 #include <stdint.h>
 #include <FreeRTOS.h>
 #include <semphr.h>
-
 #include <diag.h>
+
 #if defined(CONFIG_PLATFORM_8721D)
 #ifndef rt_printf
 #define rt_printf printf
 #endif
 #define mm_printf rt_printf
 #else
-#define mm_printf(...) do{rt_printf(__VA_ARGS__);}while(0)
+#define mm_printf(...) do{printf(__VA_ARGS__);}while(0)
 #endif
 
 // MM : media module

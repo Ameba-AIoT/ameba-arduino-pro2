@@ -8,6 +8,7 @@ extern "C" {
 #include "mmf2_module.h"
 #include "module_vipnn.h"
 #include "model_scrfd.h"
+#include "avcodec.h"
 //#include "roi_delta_qp/roi_delta_qp.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
@@ -40,10 +41,7 @@ void NNFaceDetection::configVideo(VideoSetting& config) {
     roi_nn.img.roi.xmax = config._w;
     roi_nn.img.roi.ymin = 0;
     roi_nn.img.roi.ymax = config._h;
-}
-
-void NNFaceDetection::configFaceRecogCascadedMode(uint8_t enable) {
-    cascaded_mode = enable;
+    roi_nn.codec_type =  AV_CODEC_ID_RGB888;
 }
 
 void NNFaceDetection::begin(void) {
@@ -59,15 +57,14 @@ void NNFaceDetection::begin(void) {
         return;
     }
 
+    if (_nntask != FACE_DETECTION) {
+        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        while(1);
+    }
+
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)FDResultCallback);
-    if (cascaded_mode) {
-        mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_OUTPUT, 1);
-        mm_module_ctrl(_p_mmf_context, MM_CMD_SET_DATAGROUP, MM_GROUP_START);
-        mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 1);
-        mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
-    }
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_APPLY, 0);
 }
 
@@ -88,7 +85,11 @@ void NNFaceDetection::setResultCallback(void (*fd_callback)(std::vector<FaceDete
 }
 
 uint16_t NNFaceDetection::getResultCount(void) {
-    return face_result_vector.size();
+    uint16_t facedet_res_count = face_result_vector.size();
+    if (facedet_res_count >= 5) {
+        facedet_res_count = 4;
+    }
+    return facedet_res_count;
 }
 
 FaceDetectionResult NNFaceDetection::getResult(uint16_t index) {

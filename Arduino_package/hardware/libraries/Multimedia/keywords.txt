@@ -1,0 +1,232 @@
+#######################################
+# Syntax Coloring Map Camera
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Camera	KEYWORD1
+VideoSetting	KEYWORD1
+AudioSetting	KEYWORD1
+StreamIO	KEYWORD1
+Audio	KEYWORD1
+AAC	KEYWORD1
+AAD	KEYWORD1
+G711E	KEYWORD1
+G711D	KEYWORD1
+RTP	KEYWORD1
+RTSP	KEYWORD1
+MP4Recording	KEYWORD1
+OSD	KEYWORD1
+MotionDetection	KEYWORD1
+MotionDetectionPostProcess	KEYWORD1
+MotionDetectionRegion	KEYWORD1
+
+#######################################
+# AudioDecoder.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+configCodec	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+
+#######################################
+# AudioEncoder.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+configCodec	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+
+#######################################
+# AudioStream.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+configMicAEC	KEYWORD2
+configMicAGC	KEYWORD2
+configMicNS	KEYWORD2
+configSpkAGC	KEYWORD2
+configSpkNS	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setAMicBoost	KEYWORD2
+setDMicBoost	KEYWORD2
+setMicGain	KEYWORD2
+setSpkGain	KEYWORD2
+muteMic	KEYWORD2
+muteSpk	KEYWORD2
+printInfo	KEYWORD2
+
+CODEC_AAC	LITERAL1
+CODEC_G711_PCMU	LITERAL1
+CODEC_G711_PCMA	LITERAL1
+
+USE_AUDIO_AMIC	LITERAL1
+USE_AUDIO_LEFT_DMIC	LITERAL1
+USE_AUDIO_RIGHT_DMIC	LITERAL1
+USE_AUDIO_STEREO_DMIC	LITERAL1
+
+#######################################
+# VideoStream.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+setBitrate	KEYWORD2
+setJpegQuality	KEYWORD2
+width	KEYWORD2
+height	KEYWORD2
+fps	KEYWORD2
+
+configVideoChannel	KEYWORD2
+camInit	KEYWORD2
+camDeinit	KEYWORD2
+videoInit	KEYWORD2
+videoDeinit	KEYWORD2
+channelBegin	KEYWORD2
+channelEnd	KEYWORD2
+getStream	KEYWORD2
+getImage	KEYWORD2
+setFPS	KEYWORD2
+printInfo	KEYWORD2
+
+VIDEO_QCIF	LITERAL1
+VIDEO_CIF	LITERAL1
+VIDEO_WVGA	LITERAL1
+VIDEO_VGA	LITERAL1
+VIDEO_D1  	LITERAL1
+VIDEO_HD	LITERAL1
+VIDEO_FHD	LITERAL1
+VIDEO_3M	LITERAL1
+VIDEO_5M	LITERAL1
+VIDEO_2K	LITERAL1
+
+VIDEO_HEVC	LITERAL1
+VIDEO_H264	LITERAL1
+VIDEO_JPEG	LITERAL1
+VIDEO_NV12	LITERAL1
+VIDEO_RGB	LITERAL1
+VIDEO_NV16	LITERAL1
+VIDEO_HEVC_JPEG	LITERAL1
+VIDEO_H264_JPEG	LITERAL1
+
+#######################################
+# MP4Recording.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+printInfo	KEYWORD2
+setRecordingFileName	KEYWORD2
+setRecordingDuration	KEYWORD2
+setRecordingFileCount	KEYWORD2
+setLoopRecording	KEYWORD2
+setRecordingDataType	KEYWORD2
+getRecordingFileName	KEYWORD2
+getRecordingDuration	KEYWORD2
+getRecordingFileCount	KEYWORD2
+getRecordingState	KEYWORD2
+
+STORAGE_ALL	LITERAL1
+STORAGE_VIDEO	LITERAL1
+STORAGE_AUDIO	LITERAL1
+
+AUDIO_AAC	LITERAL1
+AUDIO_ULAW	LITERAL1
+AUDIO_ALAW	LITERAL1
+
+#######################################
+# RTSP.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+enableAudio	KEYWORD2
+getPort	KEYWORD2
+printInfo	KEYWORD2
+
+#######################################
+# RTP.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configPort	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+
+#######################################
+# StreamIO.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+pause	KEYWORD2
+resume	KEYWORD2
+registerInput	KEYWORD2
+registerInput1	KEYWORD2
+registerInput2	KEYWORD2
+registerInput3	KEYWORD2
+registerOutput	KEYWORD2
+registerOutput1	KEYWORD2
+registerOutput2	KEYWORD2
+setStackSize	KEYWORD2
+setTaskPriority	KEYWORD2
+
+#######################################
+# VideoStreamOverlay.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configVideo	KEYWORD2
+configTextSize	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+endChannel	KEYWORD2
+getTextHeight	KEYWORD2
+getTextWidth	KEYWORD2
+color	KEYWORD2
+drawPoint	KEYWORD2
+drawRect	KEYWORD2
+drawText	KEYWORD2
+createBitmap	KEYWORD2
+update	KEYWORD2
+
+OSD_COLOR_RED	LITERAL1
+OSD_COLOR_BLUE	LITERAL1
+OSD_COLOR_GREEN	LITERAL1
+OSD_COLOR_CYAN	LITERAL1
+OSD_COLOR_MAGENTA	LITERAL1
+OSD_COLOR_YELLOW	LITERAL1
+OSD_COLOR_WHITE	LITERAL1
+OSD_COLOR_BLACK	LITERAL1
+OSD_COLOR_GRAY	LITERAL1
+OSD_COLOR_ORANGE	LITERAL1
+
+#######################################
+# MotionDetection.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configResolution	KEYWORD2
+configVideo	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setTriggerBlockCount	KEYWORD2
+setDetectionMask	KEYWORD2
+getResult	KEYWORD2
+setResultCallback	KEYWORD2
+rows	KEYWORD2
+cols	KEYWORD2
+
+labelAdjacentRegions	KEYWORD2
+getRegionCount	KEYWORD2
+getRegion	KEYWORD2
+
+size	KEYWORD2
+xMin	KEYWORD2
+xMax	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2

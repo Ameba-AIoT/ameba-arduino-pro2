@@ -10,6 +10,8 @@
 #define	_MMF_DBG_ENCODER_           0x00000008
 #define	_MMF_DBG_VIDEO_             0x00000010
 #define	_MMF_DBG_AUDIO_             0x00000020
+#define	_MMF_DBG_MODULE_            0x00000040
+#define	_MMF_DBG_LINKER_            0x00000080
 
 extern uint32_t ConfigDebugMmfErr;
 extern uint32_t ConfigDebugMmfWarn;
@@ -72,6 +74,26 @@ extern uint32_t ConfigDebugMmfInfo;
 #define AUDIO_INFO_PREFIX        "[AUD Inf]"
 #endif
 
+#ifndef MODULE_ERR_PREFIX
+#define MODULE_ERR_PREFIX		 "[MODULE Err]"
+#endif
+#ifndef MODULE_WARN_PREFIX
+#define MODULE_WARN_PREFIX		 "[MODULE Wrn]"
+#endif
+#ifndef MODULE_INFO_PREFIX
+#define MODULE_INFO_PREFIX		 "[MODULE Inf]"
+#endif
+
+#ifndef LINKER_ERR_PREFIX
+#define LINKER_ERR_PREFIX		 "[LINKER Err]"
+#endif
+#ifndef LINKER_WARN_PREFIX
+#define LINKER_WARN_PREFIX		 "[LINKER Wrn]"
+#endif
+#ifndef LINKER_INFO_PREFIX
+#define LINKER_INFO_PREFIX		 "[LINKER Inf]"
+#endif
+
 #define MMF_PRINTK      printf
 
 #define RTSP_DBG_ERROR(...)													\
@@ -108,6 +130,16 @@ extern uint32_t ConfigDebugMmfInfo;
 				if (ConfigDebugMmfErr&_MMF_DBG_AUDIO_)					\
 					MMF_PRINTK("\n\r" AUDIO_ERR_PREFIX __VA_ARGS__);		\
 			}while(0)
+#define MODULE_DBG_ERROR(...)												\
+			do {															\
+				if (ConfigDebugMmfErr&_MMF_DBG_MODULE_)					\
+					MMF_PRINTK("\n\r" MODULE_ERR_PREFIX __VA_ARGS__);		\
+			}while(0)
+#define LINKER_DBG_ERROR(...)												\
+			do {															\
+				if (ConfigDebugMmfErr&_MMF_DBG_LINKER_)					\
+					MMF_PRINTK("\n\r" LINKER_ERR_PREFIX __VA_ARGS__);		\
+			}while(0)
 
 // DBG_WARNING
 #define RTSP_DBG_WARNING(...)												\
@@ -140,6 +172,16 @@ extern uint32_t ConfigDebugMmfInfo;
 				if (ConfigDebugMmfWarn&_MMF_DBG_AUDIO_)					\
 					MMF_PRINTK("\n\r" AUDIO_WARN_PREFIX __VA_ARGS__);		\
 			}while(0)
+#define MODULE_DBG_WARNING(...)												\
+			do {															\
+				if (ConfigDebugMmfWarn&_MMF_DBG_MODULE_)					\
+					MMF_PRINTK("\n\r" MODULE_WARN_PREFIX __VA_ARGS__);		\
+			}while(0)
+#define LINKER_DBG_WARNING(...)												\
+			do {															\
+				if (ConfigDebugMmfWarn&_MMF_DBG_LINKER_)					\
+					MMF_PRINTK("\n\r" LINKER_WARN_PREFIX __VA_ARGS__);		\
+			}while(0)
 
 // DBG_INFO
 #define RTSP_DBG_INFO(...)													\
@@ -162,7 +204,6 @@ extern uint32_t ConfigDebugMmfInfo;
 				if (ConfigDebugMmfInfo&_MMF_DBG_ENCODER_)					\
 					MMF_PRINTK("\n\r" ENCODER_INFO_PREFIX __VA_ARGS__);		\
 			}while(0)
-#endif
 #define VIDEO_DBG_INFO(...)											\
 			do {															\
 				if (ConfigDebugMmfInfo&_MMF_DBG_VIDEO_)					\
@@ -173,3 +214,14 @@ extern uint32_t ConfigDebugMmfInfo;
 				if (ConfigDebugMmfInfo&_MMF_DBG_AUDIO_)					\
 					MMF_PRINTK("\n\r" AUDIO_INFO_PREFIX __VA_ARGS__);		\
 			}while(0)
+#define MODULE_DBG_INFO(...)												\
+			do {															\
+				if (ConfigDebugMmfInfo&_MMF_DBG_MODULE_)					\
+					MMF_PRINTK("\n\r" MODULE_INFO_PREFIX __VA_ARGS__);		\
+			}while(0)
+#define LINKER_DBG_INFO(...)												\
+			do {															\
+				if (ConfigDebugMmfInfo&_MMF_DBG_LINKER_)					\
+					MMF_PRINTK("\n\r" LINKER_INFO_PREFIX __VA_ARGS__);		\
+			}while(0)
+#endif

@@ -363,6 +363,7 @@ struct mp_priv {
 	u32 rx_crcerrpktcount;
 	u32 rx_macpktcount;
 	u32 rx_pktloss;
+	s8 rx_rssi;
 
 	struct recv_stat rxstat;
 

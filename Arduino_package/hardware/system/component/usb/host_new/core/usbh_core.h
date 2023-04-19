@@ -23,6 +23,8 @@
 
 /* Exported defines ----------------------------------------------------------*/
 
+#define USBH_CONFIG_DESCRIPTOR_MAX_COUNT		2
+
 #define USBH_MAX_DATA_BUFFER					0x200U
 #define USBH_MAX_CFG_DATA_BUFFER				0x500U
 #define USBH_MAX_ERROR_COUNT					0x02U
@@ -109,6 +111,12 @@ typedef struct {
 	u8                error_cnt;						/* Error count, USBH_MSG_ERROR will be issued if USBH_MAX_ERROR_COUNT achieved */
 } usbh_ctrl_req_t;
 
+/* USB config descriptor struct*/
+typedef struct {
+	usbh_cfg_desc_t cfg_desc;							/* Parsed configuration descriptor */
+	u8				cfg_buf[USBH_MAX_CFG_DATA_BUFFER];	/* Raw data for configuration descriptor */
+} usbh_cfg_desc_array;
+
 /* USB device */
 typedef struct {
 	u8              speed;								/* Device speed */
@@ -117,9 +125,11 @@ typedef struct {
 	u8              port_enabled;						/* Flag indicates whether port is enabled */
 	u8              active_if;							/* Active device interface */
 	usbh_dev_desc_t dev_desc;							/* Parsed device descriptor */
-	usbh_cfg_desc_t cfg_desc;							/* Parsed configuration descriptor */
 	u8              desc_buf[USBH_MAX_DATA_BUFFER];		/* Raw buffer for device descriptor */
-	u8				cfg_buf[USBH_MAX_CFG_DATA_BUFFER];		/* Raw data for configuration descriptor */
+
+	u8 				cfg_index;							/* index for config_desc, which config is used */
+	u8 				cfg_count_max;						/* max count for config_desc */
+	usbh_cfg_desc_array config_desc[USBH_CONFIG_DESCRIPTOR_MAX_COUNT];
 } usbh_dev_t;
 
 /* USB host */
@@ -178,8 +188,11 @@ void usbh_core_notify_urb_state_change(usbh_core_t *core);
 
 usbh_urb_state_t usbh_core_get_urb_state(usbh_core_t *core, u8 pipe_num);
 u8 usbh_core_get_active_class(usbh_core_t *core);
+u8 usbh_core_set_config_interface(usbh_core_t *core, u8 cfg_num);
 u8 usbh_core_get_interface(usbh_core_t *core, u8 class_code, u8 sub_class_code, u8 protocol);
 u8 usbh_core_set_interface(usbh_core_t *core, u8 if_num);
+u8 usbh_core_get_eptype(usbh_core_t *core, u8 ch_num);
+u8 usbh_core_reactivate(usbh_core_t *core, u8 ch_num);
 usbh_if_desc_t *usbh_core_get_interface_descriptor(usbh_core_t *core, u8 if_num);
 
 void usbh_core_disable_port(usbh_core_t *core);

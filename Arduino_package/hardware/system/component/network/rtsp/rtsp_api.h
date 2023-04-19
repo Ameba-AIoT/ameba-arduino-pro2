@@ -117,6 +117,7 @@ struct stream_context {
 	struct __internal_payload rtpobj;
 	//add for frame control
 	struct rtp_frame_control_s framecontrol;
+	uint32_t time_offset;
 };
 #define RTSP_URL_LEN 64
 struct rtsp_context {

@@ -6,7 +6,8 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-AMB_RTC	KEYWORD1
+RTCClass	KEYWORD1
+rtc	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

@@ -18,7 +18,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "ameba_soc.h"
+//#include "ameba_soc.h"
+#include "ameba_usb.h"
 #include "usb_ch9.h"
 #include "usb_os.h"
 #include "usb_hal.h"
@@ -36,20 +37,6 @@
 
 /* USB Core HW Configurations */
 #define USBD_IN_TOKEN_QUEUE_DEPTH              8U
-
-/* USB Core ID */
-#define USB_OTG_CORE_ID_300A                   0x4F54300AU
-#define USB_OTG_CORE_ID_310A                   0x4F54310AU
-
-/* USB Core Mode */
-#define USB_OTG_MODE_DEVICE                    0U
-#define USB_OTG_MODE_HOST                      1U
-#define USB_OTG_MODE_DRD                       2U
-
-/* USB Core Speed */
-#define USB_OTG_SPEED_HIGH                     0U
-#define USB_OTG_SPEED_HIGH_IN_FULL             1U
-#define USB_OTG_SPEED_FULL                     3U
 
 /* USB Core Turnaround Timeout Value */
 #define USBD_HS_TRDT_VALUE                     5U
@@ -78,11 +65,6 @@
 #define DEP0CTL_MPS_16                         2U
 #define DEP0CTL_MPS_8                          3U
 
-/* USB EP Speed */
-#define EP_SPEED_LOW                           0U
-#define EP_SPEED_FULL                          1U
-#define EP_SPEED_HIGH                          2U
-
 /* USB EP Address Mask */
 #define EP_ADDR_MSK                            0xFU
 
@@ -110,6 +92,7 @@ typedef struct {
 	u32  xfer_len;             /*!< Current transfer length */
 	u32  xfer_count;           /*!< Partial transfer length in case of multi packet transfer */
 	u8   is_zlp;               /*!< ZLP packet */
+	u32 is_initialized;		/* Flag indicating whether the endpoint is initialized */
 } usbd_pcd_ep_t;
 
 /* USB device LPM suspend state */
@@ -168,11 +151,6 @@ typedef struct {
 	usb_dev_t *dev;
 } usbd_pcd_t;
 
-/* Unaligned 32 bit type for DFIFO usage */
-typedef struct {
-	u32 data __PACKED;
-} usbd_unaligned_u32_t;
-
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported variables --------------------------------------------------------*/
@@ -203,6 +181,7 @@ u32 usbd_hal_read_all_out_ep_interrupts(usbd_pcd_t *pcd);
 u32 usbd_hal_read_out_ep_interrupts(usbd_pcd_t *pcd, u8 ep_num);
 u32 usbd_hal_read_all_in_ep_interrupts(usbd_pcd_t *pcd);
 u32 usbd_hal_read_in_ep_interrupts(usbd_pcd_t *pcd, u8 ep_num);
+void usbd_hal_dump_registers(void);
 
 #endif /* USBD_HAL_H */
 

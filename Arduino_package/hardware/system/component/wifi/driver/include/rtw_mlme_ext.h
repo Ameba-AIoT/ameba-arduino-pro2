@@ -36,9 +36,12 @@
 #define SURVEY_TO		(100) //Reduce connection time
 #define MAX_CNT_SCAN_TIMES	(1) //Max all-channel loop scan times when connect to but fail scan the target ap
 #define MAX_CNT_AUTH_TIMES	(3) //Max connect times in case of receiving deauth/deassoc during auth&&assoc procedure and not reporting disconnect event
-#define PASSIVE_SURVEY_TO		(110) //Passive scan should > 102.4ms
+#define PASSIVE_SURVEY_TO	(110) //Passive scan should > 102.4ms
+#define HOME_SURVEY_TO		(100) //Home channel
+#define PROBE_CNT		(2) //Probe count
+
 //#define SURVEY_TO		(300) //Increase time to stay each channel - Alex Fang
-#define REAUTH_TO		(800) //(50)
+#define REAUTH_TO		(300) //(50)
 #define REASSOC_TO		(300) //(50)
 //#define DISCONNECT_TO	(3000)
 #define ADDBA_TO			(2000)

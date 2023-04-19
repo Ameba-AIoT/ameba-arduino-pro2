@@ -9,6 +9,7 @@ extern "C" {
 #include "module_vipnn.h"
 #include "model_yolo.h"
 #include "nn_utils/class_name.h"
+#include "avcodec.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -46,6 +47,7 @@ void NNObjectDetection::configVideo(VideoSetting& config) {
     roi_nn.img.roi.xmax = config._w;
     roi_nn.img.roi.ymin = 0;
     roi_nn.img.roi.ymax = config._h;
+    roi_nn.codec_type =  AV_CODEC_ID_RGB888;
 }
 
 void NNObjectDetection::configRegionOfInterest(int xmin, int xmax, int ymin, int ymax) {
@@ -60,7 +62,7 @@ void NNObjectDetection::configThreshold(float confidence_threshold, float nms_th
     od_nms_thresh = nms_threshold;
 }
 
-void NNObjectDetection::begin(int model) {
+void NNObjectDetection::begin(void) {
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
@@ -88,16 +90,32 @@ void NNObjectDetection::begin(int model) {
         use_roi = 0;
     }
 
-    if (model == 1) {
-        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-    } else if (model == 2) {
-        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-    } else if (model == 3) {
-        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-    } else {
-        printf("Selected YOLO model not supported!\r\n");
-        return;
+    if (_nntask != OBJECT_DETECTION) {
+        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        while(1) {}
     }
+
+    switch (_yolomodel) {
+        case DEFAULT_YOLOV3TINY: 
+        case CUSTOMIZED_YOLOV3TINY: {
+            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
+            //printf("YOLOV3 running...\r\n");
+            break;
+        }
+        case DEFAULT_YOLOV4TINY:
+        case CUSTOMIZED_YOLOV4TINY: {
+            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
+            //printf("YOLOV4 running...\r\n");
+            break;
+        }
+        case DEFAULT_YOLOV7TINY :
+        case CUSTOMIZED_YOLOV7TINY: {
+            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
+            //printf("YOLOV7 running...\r\n");
+            break;
+        }
+    }
+
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ODResultCallback);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_CONFIDENCE_THRES, (int)&od_confidence_thresh);
@@ -122,7 +140,11 @@ void NNObjectDetection::setResultCallback(void (*od_callback)(std::vector<Object
 }
 
 uint16_t NNObjectDetection::getResultCount(void) {
-    return object_result_vector.size();
+    uint16_t od_res_count = object_result_vector.size();
+    if (od_res_count >= 5) {
+        od_res_count = 4;
+    }
+    return od_res_count;
 }
 
 ObjectDetectionResult NNObjectDetection::getResult(uint16_t index) {

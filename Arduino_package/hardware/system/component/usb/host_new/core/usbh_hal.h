@@ -18,8 +18,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "ameba_soc.h"
-#include "usb_ch9.h"
+//#include "ameba_soc.h"
+#include "ameba_usb.h"
+//#include "usb_ch9.h"
+#include "common_new/usb_ch9.h"
 #include "usb_os.h"
 #include "usb_hal.h"
 #include "usbh.h"

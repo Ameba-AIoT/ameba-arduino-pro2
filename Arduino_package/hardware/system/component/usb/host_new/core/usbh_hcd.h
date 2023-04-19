@@ -70,6 +70,7 @@ u8 usbh_hcd_hc_halt(usbh_hcd_t *hcd, u8 ch_num);
 u8 usbh_hcd_reset_port(usbh_hcd_t *hcd);
 u8 usbh_hcd_start(usbh_hcd_t *hcd);
 u8 usbh_hcd_stop(usbh_hcd_t *hcd);
+u8 usbh_hcd_reactivate(usbh_hcd_t *hcd, u8 ch_num);
 u8 usbh_hcd_hc_submit_request(usbh_hcd_t *hcd, u8 ch_num, u8 direction, u8 ep_type, u8 token, u8 *buf, u16 length, u8 do_ping);
 usbh_hcd_state_t usbh_hcd_get_state(usbh_hcd_t *hcd);
 usbh_urb_state_t usbh_hcd_hc_get_urb_state(usbh_hcd_t *hcd, u8 ch_num);

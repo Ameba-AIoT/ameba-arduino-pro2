@@ -153,6 +153,8 @@ typedef struct {
 typedef struct {
 	unsigned short active_scan_time;      /*!< active scan time per channel, units: millisecond, default is 100ms */
 	unsigned short passive_scan_time;     /*!< passive scan time per channel, units: millisecond, default is 110ms */
+	unsigned short home_scan_time;     /*!< home channel scan time, units: millisecond, default is 100ms */
+	unsigned char  probe_cnt;
 } rtw_channel_scan_time_t;
 
 typedef rtw_result_t (*scan_user_callback_t)(\
@@ -460,6 +462,7 @@ struct  wifi_user_conf {
 
 	unsigned char bAcceptAddbaReq;
 	unsigned char bIssueAddbaReq;	///< 0: disable issue addba request, 1: enable issue addba request
+	unsigned char addba_ampdu_size;
 
 	unsigned char bCheckDestAddress; ///< 0: don't check dest mac and ip address for station, 1: check dest mac and ip address for station
 
@@ -478,8 +481,28 @@ struct  wifi_user_conf {
 	unsigned char ap_polling_sta;
 
 	unsigned char channel_plan;
+
+	unsigned char country_code;
+
+	unsigned char band_type;	// 0: 2.4g & 5g, 1: 2.4g, 2: 5g
 } ;
 extern  struct wifi_user_conf wifi_user_config;
+
+struct  wifi_default_conf {
+	unsigned short active_scan_timeout;    /*!< active scan time per channel, units: millisecond, default is 100ms */
+	unsigned short passive_scan_timeout;   /*!< passive scan time per channel, units: millisecond, default is 110ms */
+	unsigned short home_scan_timeout;      /*!< home channel scan time, units: millisecond, default is 100ms */
+	unsigned char  scan_probe_cnt;
+
+	// Packet retry limit
+	unsigned char short_retry_limit;
+	unsigned char long_retry_limit;
+
+	/* RTS/CTS */
+	unsigned char rts_cts_en;	// 0: disable, 1: enable, 2: depend on driver
+	unsigned int rts_threshold; // default 2437
+} ;
+extern  struct wifi_default_conf wifi_default_config;
 
 /**
   * @brief  The structure is used to describe the cfg parameters used for csi report,
