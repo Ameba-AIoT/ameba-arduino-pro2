@@ -38,7 +38,7 @@ char* WiFiClass::firmwareVersion() {
 int WiFiClass::begin(char* ssid) {
     uint8_t status = WL_IDLE_STATUS;
 
-    mode = mode| 0x01;
+    arduino_wifi_mode_check = arduino_wifi_mode_check| 0x01;
 
     WiFiDrv::wifiDriverInit();
 
@@ -53,7 +53,7 @@ int WiFiClass::begin(char* ssid) {
 int WiFiClass::begin(char* ssid, uint8_t key_idx, const char *key) {
     uint8_t status = WL_IDLE_STATUS;
 
-    mode = mode | 0x01;
+    arduino_wifi_mode_check = arduino_wifi_mode_check | 0x01;
 
     WiFiDrv::wifiDriverInit();
 
@@ -69,7 +69,7 @@ int WiFiClass::begin(char* ssid, uint8_t key_idx, const char *key) {
 int WiFiClass::begin(char* ssid, const char *passphrase) {
     uint8_t status = WL_IDLE_STATUS;
 
-    mode = mode | 0x01;
+    arduino_wifi_mode_check = arduino_wifi_mode_check | 0x01;
 
     WiFiDrv::wifiDriverInit();
 
@@ -83,7 +83,7 @@ int WiFiClass::begin(char* ssid, const char *passphrase) {
 }
 
 void WiFiClass::enableConcurrent(void) {
-    mode = mode | 0x11;
+    arduino_wifi_mode_check = arduino_wifi_mode_check | 0x11;
 }
 
 
@@ -186,7 +186,7 @@ int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult) {
 
 int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid) {
     uint8_t status = WL_IDLE_STATUS;
-    mode = mode | 0x10;
+    arduino_wifi_mode_check = arduino_wifi_mode_check | 0x10;
     WiFiDrv::wifiDriverInit();
 
     if ((WiFiDrv::apSetNetwork(ssid, strlen(ssid))) != WL_FAILURE) {
@@ -205,7 +205,7 @@ int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid) {
 
 int WiFiClass::apbegin(char* ssid, char* password, char* channel, uint8_t hidden_ssid) {
     uint8_t status = WL_IDLE_STATUS;
-    mode = mode | 0x10;
+    arduino_wifi_mode_check = arduino_wifi_mode_check | 0x10;
     WiFiDrv::wifiDriverInit();
 
     if ((WiFiDrv::apSetNetwork(ssid, strlen(ssid))) != WL_FAILURE) {

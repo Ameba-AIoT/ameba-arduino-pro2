@@ -57,7 +57,7 @@ IPAddress WiFiDrv::_arduinoDns1;
 IPAddress WiFiDrv::_arduinoDns2;
 bool WiFiDrv::_useStaticIp = false;
 char WiFiDrv::_hostname[HOSTNAME_LEN+1] = {0};
-uint8_t mode = 0x00;
+uint8_t arduino_wifi_mode_check = 0x00;
 
 static void init_wifi_struct(void) {
     memset(wifi.ssid.val, 0, sizeof(wifi.ssid.val));
@@ -75,7 +75,7 @@ static void init_wifi_struct(void) {
 }
 
 void WiFiDrv::wifiDriverInit() {
-    if (mode == 0x11) {
+    if (arduino_wifi_mode_check == 0x11) {
         if (init_wlan == false) {
             init_wlan = true;
             LwIP_Init();
@@ -90,7 +90,7 @@ void WiFiDrv::wifiDriverInit() {
                 wifi_mode = RTW_MODE_STA_AP;
             }
         }
-    } else if (mode == 0x10) {
+    } else if (arduino_wifi_mode_check == 0x10) {
         if (init_wlan == false) {
             init_wlan = true;
             LwIP_Init();
@@ -362,7 +362,7 @@ int8_t WiFiDrv::apActivate(uint8_t hidden_ssid) {
     struct netif * pnetif;
 #endif
     uint8_t wlan_idx;
-    if (mode == 0x11){
+    if (arduino_wifi_mode_check == 0x11){
         pnetif = &xnetif[1];
         wlan_idx = WLAN1_IDX;
     } else {

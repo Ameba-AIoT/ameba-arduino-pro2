@@ -298,7 +298,7 @@ class WiFiDrv
         static const char* getHostname();
 };
 
-extern uint8_t mode;
+extern uint8_t arduino_wifi_mode_check;
 extern WiFiDrv wiFiDrv;
 
 #endif
