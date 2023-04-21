@@ -43,16 +43,26 @@ compiler.arduino.c.include="-I{build.core.path}"
 
 # Compiler 
 # ----------------------
+##Optimization flags
+# O2 = optimize for code size and execution speed
+# Os = optimize for code size
+# Og = optimize for debugging experience
+# g3 = add in maximum debug info
+# gdwarf-3 = debug info in DWARF-3 format
+compiler.optimization_flags=-Os
+compiler.optimization_flags.release=-Os
+compiler.optimization_flags.debug=-Og -g3 -gdwarf-3
+
 ## Compile flags C/ASM/C++
-compiler.c.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char -Os -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -g -gdwarf-3 -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu99 -Wall -Wpointer-arith -Wstrict-prototypes -Wno-write-strings -Wno-maybe-uninitialized
+compiler.c.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char {compiler.optimization_flags} -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu99 -Wall -Wpointer-arith -Wstrict-prototypes -Wno-write-strings -Wno-maybe-uninitialized
 ###-fdiagnostics-color=always -Wundef
 
 compiler.S.flags=
 
-compiler.cpp.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char -Os -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -g -gdwarf-3 -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC
+compiler.cpp.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char {compiler.optimization_flags} -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC
 ###-fdiagnostics-color=always -Wundef
 
-compiler.c.elf.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char -Os -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -g -gdwarf-3 -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC 
+compiler.c.elf.flags=-march=armv8-m.main+dsp -mthumb -mcmse -mfpu=fpv5-sp-d16 -mfp16-format=ieee -mfloat-abi=softfp -fno-common -fsigned-char {compiler.optimization_flags} -fstack-usage -fdata-sections -ffunction-sections -fno-optimize-sibling-calls -MMD -nostartfiles -nodefaultlibs -nostdlib -std=gnu++11 -Wall -Wpointer-arith -Wno-write-strings -Wno-maybe-uninitialized -fno-PIC 
 ###-fdiagnostics-color=always -Wundef
 
 compiler.ar.flags=rcs
@@ -181,3 +191,24 @@ tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.pa
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
+
+
+# Debugger configuration (general options)
+# ----------------------------------------
+tools.gdb.path={runtime.tools.{toolchain_p1_name}.path}/bin/
+tools.gdb.cmd=arm-none-eabi-gdb
+tools.gdb.cmd.windows=arm-none-eabi-gdb.exe
+tools.gdb.debug.pattern="{path}/{cmd}" --interpreter=mi2 -ex "set pagination off" --baud 115200 -ex "set target-charset ASCII" -ex "target remote {debug.port}" {build.path}/application.ntz
+
+debug.executable={build.path}/application.ntz
+debug.toolchain=gcc
+debug.toolchain.path={runtime.tools.{toolchain_p1_name}.path}/bin/
+debug.toolchain.prefix=arm-none-eabi-
+
+# Options for JLink GDB server
+# ----------------------------------------
+debug.server=jlink
+debug.server.jlink.path.windows=C:/Program Files/SEGGER/JLink/JLinkGDBServerCL.exe
+debug.server.jlink.device=CORTEX-M33
+#debug.server.jlink.interface=swd
+#debug.server.jlink.script={runtime.tools.ameba_d_tools.path}/tools/debug/RTL8722_Arduino_debug.JLinkScript
