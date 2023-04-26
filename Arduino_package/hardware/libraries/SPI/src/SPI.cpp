@@ -12,195 +12,173 @@
 #include "SPI.h"
 #include "Arduino.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "device.h"
-#include "diag.h"
-#include "main.h"
-#include "spi_api.h"
-#include "spi_ex_api.h"
-
-
-#ifdef __cplusplus
-}
-#endif
-
 spi_t spi_obj0;
 spi_t spi_obj1;
 
-SPIClass::SPIClass(void *pSpiObj, int mosi, int miso, int clk, int ss)
-{
+SPIClass::SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int ss_pin) {
     pSpiMaster = pSpiObj;
 
     /* These 4 pins should belong same spi pinmux*/
-    pinMOSI = mosi;
-    pinMISO = miso;
-    pinCLK = clk;
-    pinSS = ss;
+    _pinMOSI = mosi_pin;
+    _pinMISO = miso_pin;
+    _pinCLK = clk_pin;
+    _pinSS = ss_pin;
 
-    pinUserSS = -1;
-    defaultFrequency = SPI_DEFAULT_FREQ;
+    // _pinUserSS = -1;
+    _defaultFrequency = SPI_DEFAULT_FREQ;
 }
 
-void SPIClass::begin(void)
-{
+void SPIClass::begin(void) {
     spi_init(
-        (spi_t *)pSpiMaster,
-        (PinName)g_APinDescription[pinMOSI].pinname, 
-        (PinName)g_APinDescription[pinMISO].pinname, 
-        (PinName)g_APinDescription[pinCLK].pinname, 
-        (PinName)g_APinDescription[pinSS].pinname
+        pSpiMaster,
+        (PinName)g_APinDescription[_pinMOSI].pinname, 
+        (PinName)g_APinDescription[_pinMISO].pinname, 
+        (PinName)g_APinDescription[_pinCLK].pinname, 
+        (PinName)g_APinDescription[_pinSS].pinname
     );
-    spi_format((spi_t *)pSpiMaster, 8, 0, 0);
-    spi_frequency((spi_t *)pSpiMaster, defaultFrequency);
+    spi_format(pSpiMaster, 8, 0, 0);
+    spi_frequency(pSpiMaster, _defaultFrequency);
 }
 
-void SPIClass::begin(int ss)
-{
-    pinSS = (PinName)g_APinDescription[ss].pinname;
+void SPIClass::begin(int ss_pin) {
+    _pinSS = (PinName)g_APinDescription[ss_pin].pinname;
 
     spi_init(
-        (spi_t *)pSpiMaster,
-        (PinName)g_APinDescription[pinMOSI].pinname, 
-        (PinName)g_APinDescription[pinMISO].pinname, 
-        (PinName)g_APinDescription[pinCLK].pinname, 
-        (PinName)g_APinDescription[pinSS].pinname
+        pSpiMaster,
+        (PinName)g_APinDescription[_pinMOSI].pinname, 
+        (PinName)g_APinDescription[_pinMISO].pinname, 
+        (PinName)g_APinDescription[_pinCLK].pinname, 
+        (PinName)g_APinDescription[_pinSS].pinname
     );
-    spi_format((spi_t *)pSpiMaster, 8, 0, 0);
-    spi_frequency((spi_t *)pSpiMaster, defaultFrequency);
+    spi_format(pSpiMaster, 8, 0, 0);
+    spi_frequency(pSpiMaster, _defaultFrequency);
 }
 
-void SPIClass::beginTransaction(uint8_t pin, SPISettings settings)
-{
-    bitOrder = settings._bitOrder;
-    spi_format((spi_t *)pSpiMaster, 8, settings._dataMode, 0);
-    spi_frequency((spi_t *)pSpiMaster, settings._clock);
+void SPIClass::beginTransaction(uint8_t ss_pin, SPISettings settings) {
+    _bitOrder = settings._bitOrderSetting;
+#if 0
+    spi_free(pSpiMaster);
+    spi_init(
+        pSpiMaster,
+        (PinName)g_APinDescription[_pinMOSI].pinname, 
+        (PinName)g_APinDescription[_pinMISO].pinname, 
+        (PinName)g_APinDescription[_pinCLK].pinname, 
+        (PinName)g_APinDescription[_pinSS].pinname
+    );
 
-    pinUserSS = pin;
-    pinMode(pinUserSS, OUTPUT);
-    digitalWrite(pinUserSS, 0);
+    spi_format(pSpiMaster, 8, settings._settingdataMode, 0);
+ #else   
+ 	phal_ssi_adaptor_t phal_ssi_adaptor = &(pSpiMaster->hal_ssi_adaptor);
+    hal_spi_format(phal_ssi_adaptor, 8 - 1, settings._dataModeSetting);
+#endif
+    spi_frequency(pSpiMaster, settings._clockSetting);
 }
 
 void SPIClass::beginTransaction(SPISettings settings)
 {
-    beginTransaction(pinSS, settings);
+    beginTransaction(_pinSS, settings);
 }
 
 void SPIClass::endTransaction(void)
 {
-    if (pinUserSS >= 0) {
-        digitalWrite(pinUserSS, 1);
-        pinUserSS = -1;
-    }
+    // if (_pinUserSS >= 0) {
+    //     digitalWrite(_pinUserSS, 1);
+    //     _pinUserSS = -1;
+    // }
 }
 
-byte SPIClass::transfer(uint8_t _data, SPITransferMode _mode){ // transfer 1 byte data without SS
-    (void)_mode;
+byte SPIClass::transfer(uint8_t data, SPITransferMode mode) { // transfer 1 byte data without SS
+    (void)mode;
     
-    spi_master_write((spi_t *)pSpiMaster, _data);
+    spi_master_write(pSpiMaster, data);
     //printf("Master write: %02X\n\r", _data);
     return 0;
 }
 
-byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode){ // transfer 1 byte data with SS
+byte SPIClass::transfer(byte pin, uint8_t data, SPITransferMode mode) { // transfer 1 byte data with SS
 
-    if (_pin != pinSS) {
-        pinMode(_pin, OUTPUT);
-        digitalWrite(_pin, 0);
+    if (pin != _pinSS) {
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, 0);
     }
-    spi_master_write((spi_t *)pSpiMaster, _data);
+    spi_master_write(pSpiMaster, data);
     //printf("Master write: %02X\n\r", _data);
     
     return 0;
 }
 
-void SPIClass::transfer(byte _pin, void *_buf, SIZE_T _count, SPITransferMode _mode)
-{
-    if (_pin != pinSS) {
-        pinMode(_pin, OUTPUT);
-        digitalWrite(_pin, 0);
+void SPIClass::transfer(byte pin, void *buf, SIZE_T count, SPITransferMode mode) {
+    if (pin != _pinSS) {
+        pinMode(pin, OUTPUT);
+        digitalWrite(pin, 0);
     }
 
-    spi_master_write_read_stream((spi_t *)pSpiMaster, (char *)_buf, (char *)_buf, (uint32_t)_count);
+    spi_master_write_read_stream(pSpiMaster, (char *)buf, (char *)buf, (uint32_t) count);
 
-    if ((_pin != pinSS) && (_mode == SPI_LAST)) {
-        digitalWrite(_pin, 1);
+    if ((pin != _pinSS) && (mode == SPI_LAST)) {
+        digitalWrite(pin, 1);
     }
 }
 
-void SPIClass::transfer(void *_buf, SIZE_T _count, SPITransferMode _mode)
-{
-    transfer(pinSS, _buf, _count, _mode);
+void SPIClass::transfer(void *buf, SIZE_T count, SPITransferMode mode) {
+    transfer(_pinSS, buf, count, mode);
 }
 
-uint16_t SPIClass::transfer16(byte _pin, uint16_t _data, SPITransferMode _mode)
-{
+uint16_t SPIClass::transfer16(byte pin, uint16_t data, SPITransferMode mode) {
     union { uint16_t val; struct { uint8_t lsb; uint8_t msb; }; } t;
-    t.val = _data;
+    t.val = data;
 
-    if (bitOrder == LSBFIRST) {
-        t.lsb = transfer(_pin, t.lsb, SPI_CONTINUE);
-        t.msb = transfer(_pin, t.msb, _mode);
+    if (_bitOrder == LSBFIRST) {
+        t.lsb = transfer(pin, t.lsb, SPI_CONTINUE);
+        t.msb = transfer(pin, t.msb, mode);
     } else {
-        t.msb = transfer(_pin, t.msb, SPI_CONTINUE);
-        t.lsb = transfer(_pin, t.lsb, _mode);
+        t.msb = transfer(pin, t.msb, SPI_CONTINUE);
+        t.lsb = transfer(pin, t.lsb, mode);
     }
     //printf("Master write: %04X\n\r", t.val);
     
-    _data = t.val;
-    return _data;
+    data = t.val;
+    return data;
 }
 
-uint16_t SPIClass::transfer16(uint16_t _data, SPITransferMode _mode)
-{
-    return transfer16(pinSS, _data, _mode);
+uint16_t SPIClass::transfer16(uint16_t data, SPITransferMode mode) {
+    return transfer16(_pinSS, data, mode);
 }
 
-void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder)
-{
-    (void)_pin;
+void SPIClass::setBitOrder(uint8_t pin, BitOrder order) {
+    (void)pin;
 
-    bitOrder = _bitOrder;
+    _bitOrder = order;
 }
 
-void SPIClass::setDataMode(uint8_t _pin, uint8_t _mode)
-{
-    (void)_pin;
-
-    spi_format((spi_t *)pSpiMaster, 8, _mode, 0);
+void SPIClass::setBitOrder(BitOrder order) {
+    setBitOrder(_pinSS, order);
 }
 
-void SPIClass::setClockDivider(uint8_t _pin, uint8_t _divider)
-{
-    (void)_pin;
-    (void)_divider;
+void SPIClass::setDataMode(uint8_t pin, uint8_t mode) {
+    (void)pin;
 
+    spi_format(pSpiMaster, 8, mode, 0);
+}
+
+void SPIClass::setClockDivider(uint8_t pin, uint8_t divider) {
+    (void)pin;
+    (void)divider;
     // no effect on Ameba
 }
 
-void SPIClass::setBitOrder(BitOrder _order)
-{
-    setBitOrder(pinSS, _order);
-}
-
-void SPIClass::setClockDivider(uint8_t _div)
-{
-    (void)_div;
-
+void SPIClass::setClockDivider(uint8_t div) {
+    (void)div;
     // no effect on Ameba
 }
 
-void SPIClass::setDefaultFrequency(int _frequency)
-{
-    defaultFrequency = _frequency;
+void SPIClass::setDefaultFrequency(int frequency) {
+    _defaultFrequency = frequency;
 }
 
-void SPIClass::end(void)
-{
-    spi_free((spi_t *)pSpiMaster);
+void SPIClass::end(void) {
+    spi_free(pSpiMaster);
 }
 
-SPIClass SPI((void *)(&spi_obj0), 13, 14, 15, 12);
-SPIClass SPI1((void *)(&spi_obj1), 2, 0, 1, 3);
+SPIClass SPI((&spi_obj0), 13, 14, 15, 12);
+SPIClass SPI1((&spi_obj1), 2, 0, 1, 3);
