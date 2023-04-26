@@ -16,6 +16,20 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "device.h"
+#include "diag.h"
+#include "main.h"
+#include "spi_api.h"
+#include "spi_ex_api.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 // SPI_HAS_TRANSACTION means SPI has
 //   - beginTransaction()
 //   - endTransaction()
@@ -47,83 +61,83 @@ enum SPITransferMode {
 };
 
 class SPISettings {
-public:
-    SPISettings(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) {
-        _clock = clock;
-        _bitOrder = bitOrder;
-        _dataMode = dataMode;
-    }
-    SPISettings() {
-        SPISettings(4000000, MSBFIRST, SPI_MODE0);
-    }
+    public:
+        SPISettings(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) {
+            _clockSetting = clock;
+            _bitOrderSetting = bitOrder;
+            _dataModeSetting = dataMode;
+        }
 
-private:
-    uint32_t _clock;
-    BitOrder _bitOrder;
-    uint8_t _dataMode;
+        SPISettings(void) {
+            SPISettings(4000000, MSBFIRST, SPI_MODE0);
+        }
 
-    friend class SPIClass;
+    private:
+        uint32_t _clockSetting;
+        BitOrder _bitOrderSetting;
+        uint8_t _dataModeSetting;
+
+        friend class SPIClass;
 };
 
 class SPIClass {
-public:
-    // Construct an object and configure SPI parameters — clock speed, bit order and data mode to the preferred default value.
-    SPIClass(void *pSpiObj, int mosi, int miso, int clk, int ss);
-    
-    // Initialize MOSI, MISO, CLK, and SS pins on Ameba boards, select SPIClass object, and set SPI format and frequency
-    void begin(void); 
-    void begin(int ss);
+    public:
+        // Construct an object and configure SPI parameters — clock speed, bit order and data mode to the preferred default value.
+        SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int ss_pin);
 
-    // Set slave select pin and SPI initial settings
-    void beginTransaction(uint8_t pin, SPISettings settings);
-    void beginTransaction(SPISettings settings);
+        // Initialize MOSI, MISO, CLK, and SS pins on Ameba boards, select SPIClass object, and set SPI format and frequency
+        void begin(void); 
+        void begin(int ss_pin);
 
-    // Stop SPI transaction
-    void endTransaction(void);
+        // Set slave select pin and SPI initial settings
+        void beginTransaction(uint8_t ss_pin, SPISettings settings);
+        void beginTransaction(SPISettings settings);
 
-    // For transferring 1 byte data with and without SS 
-    byte transfer (uint8_t _data, SPITransferMode _mode = SPI_LAST);
-    byte transfer(byte _pin, uint8_t _data, SPITransferMode _mode = SPI_LAST);
-    
-    void transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _mode = SPI_LAST);
-    void transfer(void *_buf, size_t _count, SPITransferMode _mode = SPI_LAST);
-    
-    // For transferring 2 bytes data with and without SS 
-    uint16_t transfer16(uint16_t _data, SPITransferMode _mode = SPI_LAST);
-    uint16_t transfer16(byte _pin, uint16_t _data, SPITransferMode _mode = SPI_LAST);
+        // Stop SPI transaction
+        void endTransaction(void);
 
-    // Set bit order to either MSB first or LSB first
-    void setBitOrder(uint8_t _pin, BitOrder _bitOrder);
-    void setBitOrder(BitOrder _order);
+        // For transferring 1 byte data with and without SS 
+        byte transfer (uint8_t data, SPITransferMode mode = SPI_LAST);
+        byte transfer(byte pin, uint8_t data, SPITransferMode mode = SPI_LAST);
+        
+        void transfer(byte pin, void *buf, size_t count, SPITransferMode mode = SPI_LAST);
+        void transfer(void *buf, size_t count, SPITransferMode mode = SPI_LAST);
+        
+        // For transferring 2 bytes data with and without SS 
+        uint16_t transfer16(uint16_t data, SPITransferMode mode = SPI_LAST);
+        uint16_t transfer16(byte pin, uint16_t data, SPITransferMode mode = SPI_LAST);
 
-    // Set data mode
-    void setDataMode(uint8_t _pin, uint8_t _mode);
-    void setDataMode(uint8_t _mode);
+        // Set bit order to either MSB first or LSB first
+        void setBitOrder(uint8_t pin, BitOrder order);
+        void setBitOrder(BitOrder order);
 
-    // Set to correct clock speed (no effect on Ameba)
-    void setClockDivider(uint8_t _pin, uint8_t _divider);
-    void setClockDivider(uint8_t _div);
+        // Set data mode
+        void setDataMode(uint8_t pin, uint8_t mode);
+        //void setDataMode(uint8_t _mode);
 
-    // Stop SPI master mode
-    void end(void);
+        // Set to correct clock speed (no effect on Ameba)
+        void setClockDivider(uint8_t pin, uint8_t divider);
+        void setClockDivider(uint8_t div);
 
-    /* extend api added by RTK */
-    // Set default SPI frequency
-    void setDefaultFrequency(int _frequency);
+        // Stop SPI master mode
+        void end(void);
 
-private:
-    void *pSpiMaster;
-    int pinMOSI;
-    int pinMISO;
-    int pinCLK;
-    int pinSS;
-    int pinUserSS;
-    int defaultFrequency; 
-    BitOrder bitOrder;
+        /* extend api added by RTK */
+        // Set default SPI frequency
+        void setDefaultFrequency(int frequency);
+
+    private:
+        spi_t *pSpiMaster;
+        int _pinMOSI;
+        int _pinMISO;
+        int _pinCLK;
+        int _pinSS;
+        int _pinUserSS;
+        int _defaultFrequency;
+        BitOrder _bitOrder;
 };
 
 extern SPIClass SPI;
 extern SPIClass SPI1;
-
 
 #endif
