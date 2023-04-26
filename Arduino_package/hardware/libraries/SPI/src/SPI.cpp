@@ -56,6 +56,7 @@ void SPIClass::begin(int ss_pin) {
 
 void SPIClass::beginTransaction(uint8_t ss_pin, SPISettings settings) {
     _bitOrder = settings._bitOrderSetting;
+
 #if 0
     spi_free(pSpiMaster);
     spi_init(
@@ -65,22 +66,20 @@ void SPIClass::beginTransaction(uint8_t ss_pin, SPISettings settings) {
         (PinName)g_APinDescription[_pinCLK].pinname, 
         (PinName)g_APinDescription[_pinSS].pinname
     );
-
     spi_format(pSpiMaster, 8, settings._settingdataMode, 0);
- #else   
- 	phal_ssi_adaptor_t phal_ssi_adaptor = &(pSpiMaster->hal_ssi_adaptor);
-    hal_spi_format(phal_ssi_adaptor, 8 - 1, settings._dataModeSetting);
+#else
+    phal_ssi_adaptor_t phal_ssi_adaptor = &(pSpiMaster->hal_ssi_adaptor);
+    hal_spi_format(phal_ssi_adaptor, (8 - 1), settings._dataModeSetting);
 #endif
+
     spi_frequency(pSpiMaster, settings._clockSetting);
 }
 
-void SPIClass::beginTransaction(SPISettings settings)
-{
+void SPIClass::beginTransaction(SPISettings settings) {
     beginTransaction(_pinSS, settings);
 }
 
-void SPIClass::endTransaction(void)
-{
+void SPIClass::endTransaction(void) {
     // if (_pinUserSS >= 0) {
     //     digitalWrite(_pinUserSS, 1);
     //     _pinUserSS = -1;
@@ -89,21 +88,19 @@ void SPIClass::endTransaction(void)
 
 byte SPIClass::transfer(uint8_t data, SPITransferMode mode) { // transfer 1 byte data without SS
     (void)mode;
-    
     spi_master_write(pSpiMaster, data);
     //printf("Master write: %02X\n\r", _data);
     return 0;
 }
 
 byte SPIClass::transfer(byte pin, uint8_t data, SPITransferMode mode) { // transfer 1 byte data with SS
-
     if (pin != _pinSS) {
         pinMode(pin, OUTPUT);
         digitalWrite(pin, 0);
     }
     spi_master_write(pSpiMaster, data);
     //printf("Master write: %02X\n\r", _data);
-    
+
     return 0;
 }
 
@@ -125,7 +122,14 @@ void SPIClass::transfer(void *buf, SIZE_T count, SPITransferMode mode) {
 }
 
 uint16_t SPIClass::transfer16(byte pin, uint16_t data, SPITransferMode mode) {
-    union { uint16_t val; struct { uint8_t lsb; uint8_t msb; }; } t;
+    union {
+        uint16_t val;
+        struct {
+            uint8_t lsb;
+            uint8_t msb;
+        };
+    } t;
+
     t.val = data;
 
     if (_bitOrder == LSBFIRST) {
@@ -136,7 +140,7 @@ uint16_t SPIClass::transfer16(byte pin, uint16_t data, SPITransferMode mode) {
         t.lsb = transfer(pin, t.lsb, mode);
     }
     //printf("Master write: %04X\n\r", t.val);
-    
+
     data = t.val;
     return data;
 }
@@ -180,5 +184,5 @@ void SPIClass::end(void) {
     spi_free(pSpiMaster);
 }
 
-SPIClass SPI((&spi_obj0), 13, 14, 15, 12);
-SPIClass SPI1((&spi_obj1), 2, 0, 1, 3);
+SPIClass SPI((&spi_obj0), SPI_MOSI, SPI_MISO, SPI_SCLK, SPI_SS);
+SPIClass SPI1((&spi_obj1), SPI1_MOSI, SPI1_MISO, SPI1_SCLK, SPI1_SS);
