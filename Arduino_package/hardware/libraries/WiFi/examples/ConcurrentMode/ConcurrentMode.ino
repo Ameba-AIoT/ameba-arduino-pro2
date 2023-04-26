@@ -28,15 +28,14 @@ String str_ssid, str_pass, str_apssid, str_appass, str_channel;
 // Emoji characters can be converted into UTF-8 at https://mothereff.in/utf-8
 // char ssid[] = "\xe2\x9c\x8c\xef\xb8\x8f Ameba \xe2\x9c\x8c\xef\xb8\x8f";
 
-char ssid[] = "yourNetwork";  // your network SSID (name)
-char pass[] = "Password";     // your network password
+char ssid[] = "Network_SSID";       // your network SSID (name)
+char pass[] = "Password";           // your network password
 
-char apssid[] = "apNetwork";  //Set the AP's SSID
-char appass[] = "apPassword"; //Set the AP's password
-char channel[] = "1";         //Set the AP's channel
-int status = WL_IDLE_STATUS;  //Set the Wifi radio's status
-int ssid_status = 0;          //Set SSID status, 1 hidden, 0 not hidden
-int wlan_interface = 1;
+char apssid[] = "AP_Network_SSID";  // Set the AP SSID
+char appass[] = "AP_Password";      // Set the AP password
+char channel[] = "1";               // Set the AP channel
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+int ssid_status = 0;                // Set SSID status, 1 hidden, 0 not hidden
 
 void setup() {
     // Initialize serial and wait for port to open:
@@ -145,7 +144,7 @@ void loop() {
 }
 
 void printWifiData(int wlan_interface) {
-    // print your WiFi shield's IP address:
+    // print your WiFi IP address:
     IPAddress ip = WiFi.localIP(wlan_interface);
     Serial.print("IP Address: ");
     Serial.println(ip);

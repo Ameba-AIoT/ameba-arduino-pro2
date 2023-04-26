@@ -139,7 +139,7 @@ class WiFiDrv
          *
          * return: WL_SUCCESS or WL_FAILURE
          */
-        static int8_t disconnect(); 
+        static int8_t disconnect();
 
         /*
          * Disconnect from the network

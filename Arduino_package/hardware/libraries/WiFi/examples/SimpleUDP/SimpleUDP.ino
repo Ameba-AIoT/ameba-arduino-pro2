@@ -17,10 +17,10 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-int status = WL_IDLE_STATUS;
-char ssid[] = "yourNetwork";        // your network SSID (name)
-char pass[] = "secretPassword";     // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "Network_SSID";       // your network SSID (name)
+char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;                   // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 
 unsigned int localPort = 2390;      // local port to listen on
 

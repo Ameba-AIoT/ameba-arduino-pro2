@@ -46,7 +46,7 @@ String str_ssid, str_pass, str_key;
 // Emoji characters can be converted into UTF-8 at https://mothereff.in/utf-8
 // char ssid[] = "\xe2\x9c\x8c\xef\xb8\x8f Ameba \xe2\x9c\x8c\xef\xb8\x8f";
 
-char ssid[] = "yourNetwork";                    // your network SSID (name)
+char ssid[] = "Network_SSID";                   // your network SSID (name)
 int keyIndex = 0;                               // your network key Index number
 #if (password_type == 0)
 char key[] = "D0D0DEADF00DABBADEAFBEADED";      // your network key, Exactly 10 or 26 hexadecimal characters
@@ -56,7 +56,7 @@ char pass[] = "D0D0D";                          // your network password, Exactl
     #error                                      // Error unsupported password type
 #endif
 
-int status = WL_IDLE_STATUS;                    // the Wifi radio's status
+int status = WL_IDLE_STATUS;                    // Indicater of Wifi status
 
 void setup() {
     //Initialize serial and wait for port to open:
@@ -105,7 +105,7 @@ void setup() {
     #elif (password_type == 1)
         status = WiFi.begin(ssid, keyIndex, pass);
     #else
-        #error                                       // Error unsupported password type
+        #error      // Error unsupported password type
     #endif
 #else
         char ssid_cust[str_ssid.length()+1];

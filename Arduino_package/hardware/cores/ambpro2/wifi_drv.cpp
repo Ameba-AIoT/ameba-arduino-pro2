@@ -446,7 +446,6 @@ exit:
     return ret;
 }
 
-
 int8_t WiFiDrv::disconnect() {
     wifi_disconnect();
     return WL_DISCONNECTED;

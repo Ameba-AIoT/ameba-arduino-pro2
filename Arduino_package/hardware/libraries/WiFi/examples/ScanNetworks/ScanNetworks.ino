@@ -15,7 +15,7 @@
 
 #include <WiFi.h>
 
-int status = WL_IDLE_STATUS;
+int status = WL_IDLE_STATUS;    // Indicater of Wifi status
 
 void setup() {
     //Initialize serial and wait for port to open:
@@ -38,10 +38,8 @@ void loop() {
 }
 
 void printMacAddress() {
-    // the MAC address of your Wifi shield
-    byte mac[6];
-
     // print your MAC address:
+    byte mac[6];
     WiFi.macAddress(mac);
     Serial.print("MAC: ");
     Serial.print(mac[0], HEX);

@@ -99,3 +99,4 @@ enum wl_enc_type {  /* Values map to 802.11 encryption suites... */
 #define SECURITY_WPA2_WPA3_MIXED (WPA2_SECURITY | WPA3_SECURITY | AES_ENABLED)
 
 #endif /* WL_DEFINITIONS_H_ */
+

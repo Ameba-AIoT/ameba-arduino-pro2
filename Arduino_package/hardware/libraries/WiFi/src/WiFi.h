@@ -77,7 +77,6 @@ class WiFiClass
          */
         void enableConcurrent(void);
 
-
         /* Change Ip configuration settings disabling the dhcp client
          *
          * param local_ip:   Static ip configuration
@@ -191,7 +190,7 @@ class WiFiClass
          * Return the Encryption Type associated with the network
          *
          * return: one value of wl_enc_type enum
-        */
+         */
         uint8_t	encryptionType();
 
         /*
@@ -278,6 +277,7 @@ class WiFiClass
         friend class WiFiServer;
         friend class WiFiSSLClient;
 };
+
 extern WiFiClass WiFi;
 
 #endif

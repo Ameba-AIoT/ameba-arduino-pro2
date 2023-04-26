@@ -6,15 +6,15 @@
 
 #include <WiFi.h>
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
-char pass[] = "Password";       // your network password
-int keyIndex = 0;               // your network key Index number (needed only for WEP)
+char ssid[] = "Network_SSID";       // your network SSID (name)
+char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;                   // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 
-int status = WL_IDLE_STATUS;
 WiFiServer server(5000);
 
 void setup() {
-    Serial.begin(115200);      // initialize serial communication
+    Serial.begin(115200);           // initialize serial communication
 
     // attempt to connect to Wifi network:
     while ( status != WL_CONNECTED) {

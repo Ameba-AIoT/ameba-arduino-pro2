@@ -177,12 +177,12 @@ int start_server(uint16_t port, uint8_t protMode) {
         timeout = 3000;
         _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-         printf("\n\r[INFO] Create TCP socket successfudlly\n");
+        //  printf("\n\r[INFO] Create TCP socket successfudlly\n");
     } else {
         timeout = 1000;
         _sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-         printf("\n\r[INFO] Create UDP socket successfully\n");
+        // printf("\n\r[INFO] Create UDP socket successfully\n");
     }
 
     if (_sock < 0) {
@@ -297,7 +297,6 @@ int sock_listen(int sock, int max) {
     printf("\n\r[INFO] Listen socket successfully\n");
     return 0;
 }
-
 
 int get_available(int sock) {
     int enable = 1;

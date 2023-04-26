@@ -86,7 +86,6 @@ void WiFiClass::enableConcurrent(void) {
     arduino_wifi_mode_check = arduino_wifi_mode_check | 0x11;
 }
 
-
 int WiFiClass::disconnect() {
     return WiFiDrv::disconnect();
 }
@@ -224,7 +223,6 @@ int WiFiClass::apbegin(char* ssid, char* password, char* channel, uint8_t hidden
     }
     return status;
 }
-
 
 int WiFiClass::disablePowerSave() {
     return WiFiDrv::disablePowerSave();
