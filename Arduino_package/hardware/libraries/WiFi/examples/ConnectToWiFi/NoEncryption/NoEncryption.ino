@@ -53,13 +53,13 @@ void setup() {
 }
 
 void loop() {
-    //check the network connection once every 10 seconds:
+    // check the network connection once every 10 seconds:
     delay(10000);
     printCurrentNet();
 }
 
 void printWifiData() {
-    //print your WiFi IP address:
+    // print your WiFi IP address:
     IPAddress ip = WiFi.localIP();
     Serial.print("IP Address: ");
     Serial.println(ip);
