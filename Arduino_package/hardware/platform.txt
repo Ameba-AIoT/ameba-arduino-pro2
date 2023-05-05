@@ -183,11 +183,11 @@ recipe.output.save_file=flash_ntz.bin
 tools.ameba_pro2_tools.upload.params.verbose=
 tools.ameba_pro2_tools.upload.params.quiet=
 
-tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "{build.upload_baudrate}" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "0x80000" "0" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "0x80000" "0" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.linux="{runtime.tools.ameba_pro2_tools.path}/image_linux" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "{build.upload_baudrate}" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "0x80000" "0" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.linux="{runtime.tools.ameba_pro2_tools.path}/image_linux" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "0x80000" "0" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{build.auto_upload_mode}" "{build.erase_flash}" "{build.upload_baudrate}" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "0x80000" "0" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "0x80000" "0" {upload.verbose}
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
