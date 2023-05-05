@@ -28,9 +28,9 @@ Ameba_AMB82-MINI.upload.maximum_size=16777216
 Ameba_AMB82-MINI.upload.use_1200bps_touch=false
 Ameba_AMB82-MINI.upload.wait_for_upload_port=false
 Ameba_AMB82-MINI.upload.native_usb=false
-Ameba_AMB82-MINI.upload.speed=2000000
 Ameba_AMB82-MINI.upload.auto_mode=Disable
 Ameba_AMB82-MINI.upload.erase_flash=Disable
+Ameba_AMB82-MINI.upload.speed=2000000
 
 Ameba_AMB82-MINI.menu.EraseFlash.Disable=Disable
 Ameba_AMB82-MINI.menu.EraseFlash.Disable.upload.erase_flash=Disable
