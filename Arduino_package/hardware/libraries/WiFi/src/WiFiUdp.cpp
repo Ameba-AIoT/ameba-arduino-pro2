@@ -33,7 +33,6 @@ extern "C" {
 /* Constructor */
 WiFiUDP::WiFiUDP() : _sock(-1), _client_sock(-1) {}
 
-
 /* Start WiFiUDP socket, listening at local port PORT */
 uint8_t WiFiUDP::begin(uint16_t port) {
     //printf("\n\rWiFiUDP::begin port %d", port);
@@ -111,7 +110,6 @@ void WiFiUDP::stop() {
     _sock = -1;
 }
 
-
 int WiFiUDP::beginPacket(const char *host, uint16_t port) {
     // Look up the host first
     int ret = 0;
@@ -155,7 +153,6 @@ size_t WiFiUDP::write(uint8_t byte) {
     return write(&byte, 1);
 }
 
-
 size_t WiFiUDP::write(const uint8_t *buffer, size_t size) {
     writeImmediately(buffer, size);
 
@@ -176,11 +173,9 @@ int WiFiUDP::writeImmediately(const uint8_t *buffer, size_t size, uint32_t peer_
     return size;
 }
 
-
 int WiFiUDP::parsePacket() {
     return available();
 }
-
 
 int WiFiUDP::read() {
     int ret;
@@ -232,7 +227,7 @@ uint16_t WiFiUDP::remotePort() {
     return _remotePort;
 }
 
-//extend API by RTK
+// extend API by RTK
 void WiFiUDP::setRecvTimeout(int timeout) {
     if (_sock >= 0) {
         serverDrv.setSockRecvTimeout(_sock, timeout);
