@@ -1,9 +1,14 @@
+/*
+
+ Example guide:
+ */
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-char ssid[] = "YourNetwork"; //  your network SSID (name)
-char pass[] = "Password";    // your network password (use for WPA, or use as key for WEP)
-int status = WL_IDLE_STATUS;
+char ssid[] = "Network_SSID";       // your network SSID (name)
+char pass[] = "Password";           // your network password
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 
 int keepAliveTimer = 30;
 

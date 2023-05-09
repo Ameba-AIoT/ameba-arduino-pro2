@@ -9,6 +9,9 @@
  modified 21 Junn 2012
  by Tom Igoe and Jaymes Dec
 
+ modified 08 May 2023
+ by Realtek SG
+
  Example guide:
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-scan-wifi/
  */

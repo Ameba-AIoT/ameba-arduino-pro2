@@ -6,6 +6,7 @@
 char ssid[] = "Network_SSID";       // your network SSID (name)
 char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;                   // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 
 // Name of the server we want to connect to
 const char kHostname[] = "maker.ifttt.com";
@@ -14,8 +15,6 @@ const char kPath[] = "/trigger/test_event/with/key/<IFTTT Key>";
 const int kNetworkTimeout = 30 * 1000;
 // Number of milliseconds to wait if no data is available before trying again
 const int kNetworkDelay = 1000;
-
-int status = WL_IDLE_STATUS;
 
 void setup() {
     Serial.begin(115200);
@@ -72,8 +71,7 @@ void loop() {
                         // We read something, reset the timeout counter
                         timeoutStart = millis();
                     } else {
-                        // We haven't got any data, so let's pause to allow some to
-                        // arrive
+                        // We haven't got any data, so let's pause to allow some to arrive
                         delay(kNetworkDelay);
                     }
                 }
