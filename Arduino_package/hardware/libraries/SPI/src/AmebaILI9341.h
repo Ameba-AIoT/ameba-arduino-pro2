@@ -3,6 +3,7 @@
 
 #include "Print.h"
 #include <cstdint>
+#include "SPI.h"
 
 #define ILI9341_TFTWIDTH     240
 #define ILI9341_TFTHEIGHT    320
@@ -108,7 +109,7 @@ public:
     void clr();
 
     void fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-
+	void drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color);
     void drawPixel(int16_t x, int16_t y, uint16_t color);
 
     void drawChar(int16_t x, int16_t y, unsigned char c, uint16_t fontcolor, uint16_t background, uint8_t fontsize);
