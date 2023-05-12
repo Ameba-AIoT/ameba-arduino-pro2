@@ -5,8 +5,7 @@
 
 #include <inttypes.h>
 
-AmebaILI9341::AmebaILI9341(int csPin, int dcPin, int resetPin)
-{
+AmebaILI9341::AmebaILI9341(int csPin, int dcPin, int resetPin) {
     _csPin = csPin; // TODO: no effect now, use pin 10 as default
     _dcPin = dcPin;
     _resetPin = resetPin;
@@ -24,8 +23,7 @@ AmebaILI9341::AmebaILI9341(int csPin, int dcPin, int resetPin)
     rotation = 0;
 }
 
-void AmebaILI9341::begin(void)
-{
+void AmebaILI9341::begin(void) {
     pinMode(_resetPin, OUTPUT);
     digitalWrite(_resetPin, LOW);
 
@@ -147,8 +145,7 @@ void AmebaILI9341::begin(void)
     writecommand(ILI9341_DISPON);    //Display on 
 }
 
-void AmebaILI9341::setAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
-{
+void AmebaILI9341::setAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     uint16_t x, y, w, h;
 
     if (x1 > x0) {
@@ -199,15 +196,13 @@ void AmebaILI9341::writecommand(uint8_t command)
     SPI.transfer(command);
 }
 
-void AmebaILI9341::writedata(uint8_t data)
-{
+void AmebaILI9341::writedata(uint8_t data) {
 //    *portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
     SPI.transfer(data);
 }
 
-void AmebaILI9341::setRotation(uint8_t m)
-{
+void AmebaILI9341::setRotation(uint8_t m) {
     writecommand(ILI9341_MADCTL);
     rotation = m % 4;
     switch (rotation) {
@@ -234,18 +229,45 @@ void AmebaILI9341::setRotation(uint8_t m)
     }
 }
 
-void AmebaILI9341::fillScreen(uint16_t color)
-{
+void AmebaILI9341::fillScreen(uint16_t color) {
     fillRectangle(0, 0, _width, _height, color);
 }
 
-void AmebaILI9341::clr(void)
-{
+void AmebaILI9341::clr(void) {
     fillScreen(background);
 }
 
-void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
-{
+void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color) {
+    uint8_t color_hi, color_lo;
+
+    if((x >= _width) || (y >= _height)) {
+        return;
+    }
+
+    if ((x + w - 1) >= _width) {
+        w = _width - x;
+    }
+
+    if ((y + h - 1) >= _height) {
+        h = _height - y;
+    }
+
+    setAddress(x, y, (x + w - 1), (y + h - 1));
+
+    uint32_t pixelCount = h * w;
+    uint32_t i;
+
+    //*portOutputRegister(_dcPort) |=  (_dcMask);
+    digitalWrite(_dcPin, 1);
+    for (i = 0; i < pixelCount; i++) {
+        color_hi = color[i] >> 8;
+        color_lo = color[i] & 0xFF;
+        SPI.transfer(color_hi);
+        SPI.transfer(color_lo);
+    }
+}
+
+void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
     uint8_t color_hi, color_lo;
 
     if((x >= _width) || (y >= _height)) {
@@ -275,8 +297,7 @@ void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uin
     }
 }
 
-void AmebaILI9341::drawPixel(int16_t x, int16_t y, uint16_t color)
-{
+void AmebaILI9341::drawPixel(int16_t x, int16_t y, uint16_t color) {
     if ((x < 0) || (x >= _width) || (y < 0) || (y >= _height)) {
         return;
     }
@@ -288,8 +309,7 @@ void AmebaILI9341::drawPixel(int16_t x, int16_t y, uint16_t color)
     SPI.transfer(color & 0xFF);
 }
 
-void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color)
-{
+void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
     int16_t temp;
     uint8_t color_hi;
     uint8_t color_lo;
@@ -383,26 +403,22 @@ void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint
     }
 }
 
-void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
-{
+void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
     drawLine(x0, y0, x1, y1, foreground);
 }
 
-void AmebaILI9341::drawRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
-{
+void AmebaILI9341::drawRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
     drawLine(x      , y      , x      , (y + h), color);
     drawLine(x      , y      , (x + w), y      , color);
     drawLine((x + w), y      , (x + w), (y + h), color);
     drawLine(x      , (y + h), (x + w), (y + h), color);
 }
 
-void AmebaILI9341::drawRectangle(int16_t x, int16_t y, int16_t w, int16_t h)
-{
+void AmebaILI9341::drawRectangle(int16_t x, int16_t y, int16_t w, int16_t h) {
     drawRectangle(x, y, w, h, foreground);
 }
 
-void AmebaILI9341::drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
-{
+void AmebaILI9341::drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color) {
     int16_t f = 1 - r;
     int16_t ddF_x = 1;
     int16_t ddF_y = -2 * r;
@@ -435,13 +451,11 @@ void AmebaILI9341::drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
     }
 }
 
-void AmebaILI9341::drawCircle(int16_t x0, int16_t y0, int16_t r)
-{
+void AmebaILI9341::drawCircle(int16_t x0, int16_t y0, int16_t r) {
     drawCircle(x0, y0, r, foreground);
 }
 
-size_t AmebaILI9341::write(uint8_t c)
-{
+size_t AmebaILI9341::write(uint8_t c) {
     if (c == '\n') {
         cursor_y += fontsize * 8;
         cursor_x = 0;
@@ -459,44 +473,36 @@ size_t AmebaILI9341::write(uint8_t c)
     return 1;
 }
 
-int16_t AmebaILI9341::getWidth()
-{
+int16_t AmebaILI9341::getWidth() {
     return _width;
 }
 
-int16_t AmebaILI9341::getHeight()
-{
+int16_t AmebaILI9341::getHeight() {
     return _height;
 }
 
-void AmebaILI9341::setCursor(int16_t x, int16_t y)
-{
+void AmebaILI9341::setCursor(int16_t x, int16_t y) {
     cursor_x = x;
     cursor_y = y;
 }
 
-void AmebaILI9341::setForeground(uint16_t color)
-{
+void AmebaILI9341::setForeground(uint16_t color) {
     foreground = color;
 }
 
-void AmebaILI9341::setBackground(uint16_t _background)
-{
+void AmebaILI9341::setBackground(uint16_t _background) {
     background = _background;
 }
 
-void AmebaILI9341::setFontSize(uint8_t size)
-{
+void AmebaILI9341::setFontSize(uint8_t size) {
     fontsize = size;
 }
 
-void AmebaILI9341::drawChar(unsigned char c)
-{
+void AmebaILI9341::drawChar(unsigned char c) {
     drawChar(cursor_x, cursor_y, c, foreground, background, fontsize);
 }
 
-void AmebaILI9341::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t _fontcolor, uint16_t _background, uint8_t _fontsize)
-{
+void AmebaILI9341::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t _fontcolor, uint16_t _background, uint8_t _fontsize) {
     int i, j;
     uint8_t line;
 
@@ -536,8 +542,7 @@ void AmebaILI9341::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t _fon
     cursor_y = y;
 }
 
-void AmebaILI9341::reset(void)
-{
+void AmebaILI9341::reset(void) {
     if (_resetPin > 0) {
         digitalWrite(_resetPin, HIGH);
         delay(5);
