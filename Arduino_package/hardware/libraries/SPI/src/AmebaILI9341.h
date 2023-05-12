@@ -91,7 +91,6 @@
 #define ILI9341_PINK        0xF81F
 
 class AmebaILI9341 : public Print {
-
 public:
     AmebaILI9341(int csPin, int dcPin, int resetPin);
 
@@ -109,7 +108,7 @@ public:
     void clr();
 
     void fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-	void drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color);
+    void drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color);
     void drawPixel(int16_t x, int16_t y, uint16_t color);
 
     void drawChar(int16_t x, int16_t y, unsigned char c, uint16_t fontcolor, uint16_t background, uint8_t fontsize);
