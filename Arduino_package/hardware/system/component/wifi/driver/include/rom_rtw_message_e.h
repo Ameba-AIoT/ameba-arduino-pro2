@@ -102,7 +102,7 @@ ROM_E_RTW_MSGPOOL(RX_MPDU_1,	"Drop packet! crc_err = %d, icv_err = %d, rx_pkt_le
 // rtw_ap.c
 ROM_E_RTW_MSGPOOL_871X(AP_TIMEOUT_CHK_1,	"Asoc expire "MAC_FMT"\n")
 // rtw_intfs.c
-ROM_E_RTW_MSGPOOL_871X(INIT_DRV_SW_1,	"The driver is for MP\n")
+ROM_E_RTW_MSGPOOL_871X(INIT_DRV_SW_1,	"The driver include MP\n")
 // rtw_ioctl_set.c
 ROM_E_RTW_MSGPOOL_871X(SET_BSSID_1,	"set BSSID: %02x:%02x:%02x:%02x:%02x:%02x\n")
 ROM_E_RTW_MSGPOOL_871X(SET_SSID_1,	"set ssid [%s] \n")

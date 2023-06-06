@@ -17,6 +17,10 @@
 #define CMD_VIPNN_SET_OUTPUT     	    MM_MODULE_CMD(0x15)  // enable module output
 #define CMD_VIPNN_SET_OUTPUT_TYPE       MM_MODULE_CMD(0x16)  // set module output type
 #define CMD_VIPNN_SET_CASCADE     	    MM_MODULE_CMD(0x17)  // enable cascaded mode
+#define CMD_VIPNN_SET_RES_SIZE     	    MM_MODULE_CMD(0x18)  // result structure size
+#define CMD_VIPNN_SET_RES_MAX_CNT  	    MM_MODULE_CMD(0x19)  // max number of result structure
+#define CMD_VIPN_SET_SAVE_OUT_TENSOR	MM_MODULE_CMD(0x1A)  // store output tensor to result structure
+
 
 #define CMD_VIPNN_APPLY				    MM_MODULE_CMD(0x20)  // for hardware module
 
@@ -82,6 +86,8 @@ typedef struct nn_tensor_param_s {
 
 	nn_tensor_format_t format[16];
 	nn_tensor_dim_t dim[16];
+
+	void *priv;
 } nn_tensor_param_t;
 
 typedef struct nn_data_param_s {
@@ -109,8 +115,10 @@ typedef struct nn_data_param_s {
 } nn_data_param_t;
 
 typedef void (*disp_postprcess_t)(void *, void *);
+typedef void (*nn_cascade_input_setup_t)(void *, int, nn_data_param_t *);
 typedef int (*nn_preprocess_t)(void *data_in, nn_data_param_t *data_param, void *tensor_in, nn_tensor_param_t *tensor_param);
-typedef void *(*nn_postprocess_t)(void *tensor_out, nn_tensor_param_t *param);
+//typedef int (*nn_postprocess_t)(void *tensor_out, nn_tensor_param_t *param, void *res, int res_idx);
+typedef int (*nn_postprocess_t)(void *tensor_out, nn_tensor_param_t *param, void *res);
 typedef void *(*nn_get_nb_t)(void);
 typedef int (*nn_get_nb_size_t)(void);
 typedef void (*nn_free_model_t)(void *);
@@ -141,7 +149,13 @@ typedef struct nnmodel_s {
 	// release resorce
 	nn_release_t release;
 
+	// cascade input setup
+	nn_cascade_input_setup_t cas_in_setup;
+
 	const char *name;
+
+	// private for model
+	void *priv;
 } nnmodel_t;
 //------------------------------------------------------------------------------
 
@@ -163,6 +177,10 @@ typedef struct vipnn_param_s {
 	rect_t roi;
 
 	int m_width, m_height;		// should read from model, not user setting
+
+	int out_res_size;			// size for storing a output result
+	int out_res_max_cnt;		// max output result count
+	int save_out_tensor;		// control to save output tensor raw data, for pc analysis
 
 	nn_data_param_t *in_param;
 	nnmodel_t *model;
@@ -221,59 +239,19 @@ typedef struct vipnn_ctx_s {
 	vipnn_out_type_t module_out_type;
 
 	vipnn_measure_t measure;
+
+	void *tmp_item;
 } vipnn_ctx_t;
 
 #define MAX_DETECT_OBJ_NUM 1024
-typedef struct objdetect_res_s {
-	int obj_num;
-	union {
-		float result[MAX_DETECT_OBJ_NUM * 6];
-		detobj_t res[MAX_DETECT_OBJ_NUM];
-	};
-} objdetect_res_t;
-
-typedef struct facedetect_res_s {
-	int obj_num;
-	union {
-		float result[MAX_DETECT_OBJ_NUM * 6];
-		detobj_t res[MAX_DETECT_OBJ_NUM];
-	};
-	landmark_t landmark[MAX_DETECT_OBJ_NUM];
-} facedetect_res_t;
-
-
 #define MAX_FACE_DETECT_NUM 16
 #define MAX_FACE_FEATURE_DIM 128
-typedef struct face_feature_res_s {
-	float result[MAX_FACE_FEATURE_DIM];
-} face_feature_res_t;
 
-#define RES_TYPE_OD	0
-#define RES_TYPE_FD	1
-#define RES_TYPE_FR	2
-typedef struct vipnn_res_s {
-	union {
-		objdetect_res_t od_res;      	// for object detection
-		facedetect_res_t fd_res;		// for face detection
-		face_feature_res_t frec_res;   	// for face recognition
-	};
-	int type;
-} vipnn_res_t;
-
-typedef struct vipnn_out_buf_s {
+//-----------------------------------------------------------------------
+typedef struct vipnn_out_tensor_s {
 	uint32_t    vipnn_out_tensor_num;
 	void        *vipnn_out_tensor[6];
 	uint32_t    vipnn_out_tensor_size[6];
-	vipnn_res_t vipnn_res;
-
-	// backup origin input
-	void 				*input_data;
-	nn_data_param_t		input_param;
-
-	// backup input tensor
-	//uint32_t    vipnn_in_tensor_num;
-	//void			*in_tensor;
-	//nn_tensor_dim_t in_tensor_dim;
 
 	uint32_t    quant_format[6];
 	union {
@@ -286,8 +264,45 @@ typedef struct vipnn_out_buf_s {
 		} affine;
 	}
 	quant_data[6];
+} vipnn_out_tensor_t;
+
+
+typedef struct vipnn_out_buf_s {
+	vipnn_out_tensor_t	tensors;
+	void 				*input_data;
+	nn_data_param_t		*input_param;
+	int res_max_cnt;
+	int res_size;
+	int res_cnt;
+	void *res[1];
 } vipnn_out_buf_t;
 
+typedef struct objdetect_res_s {
+	union {
+		float result[6];
+		detobj_t res;
+	};
+} objdetect_res_t;
+
+typedef struct facedetect_res_s {
+	union {
+		float result[6];
+		detobj_t res;
+	};
+	landmark_t landmark;
+} facedetect_res_t;
+
+typedef struct face_feature_res_s {
+	union {
+		float result[6];
+		detobj_t res;
+	};
+	float feature[MAX_FACE_FEATURE_DIM];
+} face_feature_res_t;
+
+
+#if !defined(PC_SIMULATION)
 extern mm_module_t vipnn_module;
+#endif
 
 #endif

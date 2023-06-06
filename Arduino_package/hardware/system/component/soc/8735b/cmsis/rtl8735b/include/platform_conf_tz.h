@@ -47,7 +47,7 @@
 #define CONFIG_OTG_EN                       1
 #define CONFIG_SDIO_HOST_EN                 1
 #define CONFIG_SDHOST_EN                    1
-#define CONFIG_MII_EN                       0
+#define CONFIG_MII_EN                       1
 #define CONFIG_WLAN_EN                      1
 #define CONFIG_CRYPTO_EN                    1
 #define CONFIG_ISP_EN                       1

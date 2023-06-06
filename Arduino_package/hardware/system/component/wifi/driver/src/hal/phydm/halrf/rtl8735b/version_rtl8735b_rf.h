@@ -23,4 +23,4 @@
  *
  *****************************************************************************/
 /*RTL8735B RF Parameters*/
-#define	RF_RELEASE_VERSION_8735B	38
+#define	RF_RELEASE_VERSION_8735B	40

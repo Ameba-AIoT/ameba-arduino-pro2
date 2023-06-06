@@ -87,7 +87,9 @@ extern "C" {
 #define WPA2_SECURITY   0x00400000     /**< wpa2 */
 #define WPA3_SECURITY		0x00800000  /**< wpa3 */
 #define WPS_ENABLED     0x10000000      /**< wps  enable*/
-#define RTW_MAX_PSK_LEN		(64) /**< maxmum psk length */
+#define RTW_WPA2_MAX_PSK_LEN		(64)
+#define RTW_WPA3_MAX_PSK_LEN		(128)
+#define RTW_MAX_PSK_LEN		RTW_WPA3_MAX_PSK_LEN  /**< maxmum psk length */
 #define RTW_MIN_PSK_LEN		(8)   /**< minimum psk length */
 #define MCSSET_LEN			16      /**<mcsset length */
 /**
@@ -596,6 +598,7 @@ typedef enum {
 	RTW_JOINSTATUS_UNKNOWN = 0,    /**< unknown */
 	RTW_JOINSTATUS_STARTING,          /**< starting phase */
 	RTW_JOINSTATUS_SCANNING,          /**< scanning phase */
+	RTW_JOINSTATUS_SCANN_DONE,
 	RTW_JOINSTATUS_AUTHENTICATING,  /**< authenticating phase */
 	RTW_JOINSTATUS_AUTHENTICATED,   /**< authenticated phase */
 	RTW_JOINSTATUS_ASSOCIATING,       /**< associating phase */
@@ -605,6 +608,8 @@ typedef enum {
 	RTW_JOINSTATUS_SUCCESS,                        /**< join success  */
 	RTW_JOINSTATUS_FAIL,                               /**< join fail  */
 	RTW_JOINSTATUS_DISCONNECT,                 /**< disconnect */
+	RTW_JOINSTATUS_REJECT_CONNECTION_SECURITY,         /**< RTW_JOINSTATUS_REJECT_CONNECTION_SECURITY */
+	RTW_JOINSTATUS_SCANNING_EXTERNAL,          /**< external scanning phase */
 	//TODO: RTW_JOINSTATUS_ABORTED,
 } rtw_join_status_t;
 

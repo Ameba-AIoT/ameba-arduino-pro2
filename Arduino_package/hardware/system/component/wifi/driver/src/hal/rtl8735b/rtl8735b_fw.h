@@ -13,6 +13,10 @@ extern const u8 array_mp_8735b_fw_wowlan_bcut[];
 extern u32 array_length_mp_8735b_fw_wowlan_bcut;
 extern const u8 array_mp_8735b_fw_wowlan_dcut[];
 extern u32 array_length_mp_8735b_fw_wowlan_dcut;
+extern const u8 array_mp_8735b_fw2_wowlan_bcut[];
+extern u32 array_length_mp_8735b_fw2_wowlan_bcut;
+extern const u8 array_mp_8735b_fw2_wowlan_dcut[];
+extern u32 array_length_mp_8735b_fw2_wowlan_dcut;
 #endif
 #endif
 

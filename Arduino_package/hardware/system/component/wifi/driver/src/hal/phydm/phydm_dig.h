@@ -277,6 +277,7 @@ struct phydm_fa_struct {
 	u32		cnt_mpdu_crc32_error;
 	u32		cnt_mac664_report;
 	u8		cnt_mac664_type;
+	u32		cnt_bt_polluted;
 };
 
 #ifdef PHYDM_TDMA_DIG_SUPPORT

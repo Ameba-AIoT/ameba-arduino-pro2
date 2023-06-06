@@ -23,6 +23,8 @@
 
 /* Exported types ------------------------------------------------------------*/
 typedef void (*usb_report_usbdata)(u8 *buf, u32 len);
+typedef void (*usb_cdc_ecm_attach)(void);
+typedef void (*usb_cdc_ecm_detach)(void);
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -47,8 +49,36 @@ typedef enum {
 	USBH_PACKET_MODE        = 0x03,
 	USBH_FORCE_MODE         = 0x04,
 } usbh_eye_pattern_t;
+
+typedef enum {
+	USBH_INIT_MODE             = 0x00,
+	USBH_INIT_FAIL    		   = 0x01,
+	USBH_INIT_OK               = 0x02,
+} usbh_cdc_ecm_init_t;
+
 void usbh_ecm_disable_monitor(void);
 void usbh_eye_pattern(usbh_eye_pattern_t type);
 
+typedef struct {
+	usb_report_usbdata			report_data;
+	usb_cdc_ecm_attach          usb_attach;
+	usb_cdc_ecm_detach 			usb_detach;
+} usbh_cdc_ecm_user_cb_t;
+
+typedef struct {
+	struct task_struct intr_task;
+	struct task_struct bulk_task;
+	struct task_struct sof_task;
+	struct task_struct hotplug_task;
+	_sema cdc_ecm_detach_sema;
+	_sema cdc_ecm_attach_sema;
+	_sema cdc_ecm_intr_start_sema;
+	_sema cdc_ecm_bulk_start_sema;
+} usbh_cdc_ecm_hal_t;
+
+bool usbh_cdc_ecm_on(usbh_cdc_ecm_user_cb_t *arg);//Init the ecm procedure
+bool usbh_cdc_ecm_off(void);//Deinit the ecm
+bool usbd_cdc_ecm_status(void);//Get the ecm status
+bool usbd_cdc_ecm_ethernt_status(void);//Get the ethernet status
 #endif  /* USBH_CDC_ECM_HAL_H */
 

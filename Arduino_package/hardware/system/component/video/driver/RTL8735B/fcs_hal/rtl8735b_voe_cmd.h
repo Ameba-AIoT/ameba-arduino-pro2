@@ -82,11 +82,15 @@
 #define VOE_RELEASE_ENC_CMD              0x208
 #define VOE_RELEASE_JPG_CMD              0x209
 #define VOE_OUT_CMD                      0x20B
+
 #define VOE_FORCE_I_CMD                  0x20D
 #define VOE_SET_RC_CMD                   0x20E
 
+
 #define VOE_ROI_REGION_CMD               0x211
 
+#define VOE_EXT_IN_CMD                   0x212
+#define VOE_SYNC_CMD                     0x213
 
 #define VOE_ENC_OUT_CMD                  0x215
 #define VOE_JPG_OUT_CMD                  0x216
@@ -121,6 +125,16 @@
 #define VOE_ISP_GET_SENSOR_MODE			 0x24C
 
 #define VOE_ISP_GET_3A_STATIS			 0x24D
+
+#define VOE_ISP_GET_REAL_FPS			 0x24E
+
+#define VOE_ISP_GET_AE_WEIGHT			 0x24F
+#define VOE_ISP_SET_AE_WEIGHT			 0x250
+#define VOE_ISP_SET_MASK				 0x251
+
+#define VOE_ISP_SET_ZOOM_CROP			 0x252
+
+#define VOE_SET_IQ_CALI_ENABLE			 0x253
 
 //OSD
 #define VOE_OSD_QUERY                    0x260

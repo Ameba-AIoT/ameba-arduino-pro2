@@ -55,9 +55,9 @@ typedef struct CTAEC_cfg_s {
 	int16_t CNGEnable;
 	int16_t PPLevel;
 	int16_t DTControl;
+	int16_t ConvergenceTime;
 
 	int16_t Reserve1;
-	int16_t Reserve2;
 } CTAEC_cfg_t;
 
 void AEC_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, float snd_amplification);

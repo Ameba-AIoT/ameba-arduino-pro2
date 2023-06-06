@@ -89,6 +89,7 @@
 #define CONFIG_WOWLAN_HW_CAM
 #define CONFIG_WOWLAN_CUSTOM_PATTERN
 #define CONFIG_WOWLAN_TCP_KEEP_ALIVE
+#define CONFIG_WOWLAN_TCP_PROTOCOL_KEEP_ALIVE
 #define CONFIG_WOWLAN_SSL_KEEP_ALIVE
 #define CONFIG_WOWLAN_SSL_SERVER_KEEP_ALIVE
 //#define CONFIG_WOWLAN_TCP_KEEP_ALIVE_TEST
@@ -164,13 +165,9 @@
 #endif
 
 /*************************** Config for MP_MODE *******************************/
-//#define CONFIG_MP_INCLUDED
+#define CONFIG_MP_INCLUDED
 #ifdef CONFIG_MP_INCLUDED
 #define MP_DRIVER 1
-#undef CONFIG_ANTENNA_DIVERSITY
-#undef CONFIG_BT_COEXIST_SOC
-#undef CONFIG_REG_ENABLE_KFREE
-#define CONFIG_REG_ENABLE_KFREE 1	 // 1: enable, 2: disable
 #else /* undef CONFIG_MP_INCLUDED  */
 #define MP_DRIVER 0
 #endif /* #ifdef CONFIG_MP_INCLUDED */

@@ -6,15 +6,16 @@
 
 #include "opus.h"
 
-#define CMD_OPUSD_SET_PARAMS     		MM_MODULE_CMD(0x00)  // set parameter
-#define CMD_OPUSD_GET_PARAMS     		MM_MODULE_CMD(0x01)  // get parameter
-#define CMD_OPUSD_SAMPLERATE 			MM_MODULE_CMD(0x02)
-#define CMD_OPUSD_CHANNEL				MM_MODULE_CMD(0x03)
-#define CMD_OPUSD_STREAM_TYPE			MM_MODULE_CMD(0x04)
-#define CMD_OPUSD_RESET					MM_MODULE_CMD(0x05)
+#define CMD_OPUSD_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
+#define CMD_OPUSD_GET_PARAMS            MM_MODULE_CMD(0x01)  // get parameter
+#define CMD_OPUSD_SAMPLERATE            MM_MODULE_CMD(0x02)
+#define CMD_OPUSD_CHANNEL               MM_MODULE_CMD(0x03)
+#define CMD_OPUSD_STREAM_TYPE           MM_MODULE_CMD(0x04)
+#define CMD_OPUSD_RESET                 MM_MODULE_CMD(0x05)
+#define CMD_OPUSD_STOP                  MM_MODULE_CMD(0x06)
 
 
-#define CMD_OPUSD_APPLY					MM_MODULE_CMD(0x20)  // for hardware module
+#define CMD_OPUSD_APPLY                 MM_MODULE_CMD(0x20)  // for hardware module
 
 
 typedef struct opusd_param_s {
@@ -49,6 +50,7 @@ typedef struct opusd_ctx_s {
 	uint8_t *decode_buf;
 
 	opusd_parser_t parser;
+	uint32_t stop;
 } opusd_ctx_t;
 
 extern mm_module_t opusd_module;

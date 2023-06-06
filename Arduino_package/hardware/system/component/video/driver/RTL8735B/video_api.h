@@ -33,9 +33,14 @@
 
 #define VIDEO_H264_META_OFFSET 0x07
 #define VIDEO_JPEG_META_OFFSET 0x04
+#define VIDEO_HEVC_META_OFFSET 0x08
 
 #define VIDEO_META_USER_SIZE 0x40
 
+#define VIDEO_VPS_MAX_SIZE 0x80
+#define VIDEO_SPS_MAX_SIZE 0X80
+#define VIDEO_PPS_MAX_SIZE 0X20
+#define VIDEO_PROFILE_MAX_SIZE 0X08
 typedef struct encode_rc_parm_s {
 	unsigned int rcMode;
 	unsigned int iQp;		// for fixed QP
@@ -80,7 +85,36 @@ typedef struct isp_info_s {
 	uint32_t hdr_enable;
 	uint32_t osd_buf_size;
 	uint32_t md_buf_size;
+	uint32_t frame_done_time;
 } isp_info_t;
+
+typedef struct  {
+	uint32_t enable;
+	uint32_t init_flicker;
+	uint32_t init_saturation;
+	int32_t init_brightness;
+	uint32_t init_contrast;
+	uint32_t init_hue;
+	uint32_t init_wdr_mode;
+	uint32_t init_wdr_level;
+	uint32_t init_hdr_mode;
+	uint32_t init_mirrorflip;
+} video_isp_setup_initial_items_t;
+
+typedef struct video_sps_pps_info_s {
+	int vps_len;
+	int sps_len;
+	int pps_len;
+	unsigned char vps[VIDEO_VPS_MAX_SIZE];
+	unsigned char sps[VIDEO_SPS_MAX_SIZE];
+	unsigned char pps[VIDEO_PPS_MAX_SIZE];
+	char sps_base64[VIDEO_SPS_MAX_SIZE];
+	char pps_base64[VIDEO_PPS_MAX_SIZE];
+	char vps_base64[VIDEO_VPS_MAX_SIZE];
+	char profile_level_id[VIDEO_PROFILE_MAX_SIZE];
+	int status;//1 get the info; 0 Not get info
+	int enable;
+} video_sps_pps_info_t;
 
 typedef struct video_param_s {
 	uint32_t stream_id;
@@ -125,6 +159,13 @@ typedef struct video_param_s {
 		uint32_t rows;
 		uint32_t bitmap[40];
 	} fast_mask;
+	video_sps_pps_info_t sps_pps_info;
+	uint32_t out_mode;
+	uint32_t ext_fmt;   //external input format: 0:I420 1:NV12 2:NV21 11:RGB888 12:BGR888
+	uint32_t minQp;
+	uint32_t maxQp;
+	uint32_t fast_osd_en;
+	video_isp_setup_initial_items_t init_isp_items;
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -227,6 +268,23 @@ int video_get_maxqp(int ch);
 void video_set_private_mask(int ch, struct private_mask_s *pmask);
 
 int video_get_buffer_info(int ch, int *enc_size, int *out_buf_size, int *out_rsvd_size);
+
+int video_get_sps_pps(unsigned char *frame_buf, unsigned int frame_size, int ch, video_sps_pps_info_t *info);
+
+void voe_get_cmd_timout_info(uint32_t *cmd, int *timeout);
+
+void voe_set_cmd_timout(int min_timeout, int max_timeout);
+uint32_t video_get_video_timer_cur_time(void);
+
+uint32_t video_get_system_ts_from_isp_ts(uint32_t cur_system_ts, uint32_t cur_isp_ts, int channel);
+
+int video_ext_in(int ch, uint32_t addr);
+
+void video_get_version(void);
+
+int video_get_fcs_cost_time(void);//The unit is ms for fcs cost time from bootloader to frame done
+
+int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int ch, video_sps_pps_info_t *info);
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

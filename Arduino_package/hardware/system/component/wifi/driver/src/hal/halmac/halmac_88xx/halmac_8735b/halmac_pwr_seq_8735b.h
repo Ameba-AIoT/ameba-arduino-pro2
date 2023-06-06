@@ -21,7 +21,7 @@
 
 #if HALMAC_8735B_SUPPORT
 
-#define HALMAC_8735B_PWR_SEQ_VER  "V3"
+#define HALMAC_8735B_PWR_SEQ_VER  "V6"
 
 extern struct halmac_wlan_pwr_cfg *card_dis_flow_8735b[];
 extern struct halmac_wlan_pwr_cfg *card_en_flow_8735b[];

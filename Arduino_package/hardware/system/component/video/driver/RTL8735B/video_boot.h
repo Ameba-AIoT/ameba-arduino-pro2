@@ -35,6 +35,8 @@
 
 #define FCS_TALBE_NUM  11 //The parameter can't be changed
 
+#define VIDEO_BOOT_META_USER_SIZE 0X40
+
 typedef struct video_boot_param_s {
 	uint32_t stream_id;
 	uint32_t type;
@@ -62,7 +64,27 @@ typedef struct video_boot_param_s {
 	uint32_t level;
 	uint32_t profile;
 	uint32_t cavlc;
+	uint32_t minQp;
+	uint32_t maxQp;
 } video_boot_params_t;
+#define PRIVATE_MAX_NUM 5
+#define PRIVATE_MASK_GRID 0X00
+#define PRIVATE_MASK_RECT_ID_0 0X01
+#define PRIVATE_MASK_RECT_ID_1 0X02
+#define PRIVATE_MASK_RECT_ID_2 0X03
+#define PRIVATE_MASK_RECT_ID_3 0X04
+typedef struct video_boot_private_mask_s {
+	uint32_t enable;
+	uint32_t color;
+	uint32_t en[PRIVATE_MAX_NUM];
+	uint32_t start_x[PRIVATE_MAX_NUM];//2-align
+	uint32_t start_y[PRIVATE_MAX_NUM];//2-align
+	uint32_t w[PRIVATE_MAX_NUM];//16-align when grid-mode
+	uint32_t h[PRIVATE_MAX_NUM];
+	uint32_t cols;//8-align
+	uint32_t rows;
+	uint8_t bitmap[160];
+} video_boot_private_mask_t;
 
 typedef struct isp_boot_info_s {
 	uint32_t sensor_width;
@@ -74,9 +96,31 @@ typedef struct isp_boot_info_s {
 	uint32_t osd_buf_size;
 	uint32_t md_buf_size;
 } isp_boot_info_t;
+
+typedef struct fcs_rate_control {
+	uint32_t sampling_time;
+	uint32_t maximun_bitrate;
+	uint32_t minimum_bitrate;
+	uint32_t target_bitrate;
+} fcs_rate_ctrl_t;
+
+typedef struct  {
+	uint32_t enable;
+	uint32_t init_flicker;
+	uint32_t init_saturation;
+	int32_t init_brightness;
+	uint32_t init_contrast;
+	uint32_t init_hue;
+	uint32_t init_wdr_mode;
+	uint32_t init_wdr_level;
+	uint32_t init_hdr_mode;
+	uint32_t init_mirrorflip;
+} video_boot_isp_initial_items_t;
+
 //Please don't change the structure sequence because the data structure is shared by lib boot.
 typedef struct video_boot_stream_cfg {
 	video_boot_params_t video_params[VIDEO_MAX_NUM];
+	fcs_rate_ctrl_t auto_rate_control[2];
 	isp_boot_info_t isp_info;
 	uint32_t voe_heap_addr;
 	uint32_t voe_heap_size;
@@ -95,6 +139,7 @@ typedef struct video_boot_stream_cfg {
 	uint32_t fcs_isp_awb_init_rgain;
 	uint32_t fcs_isp_awb_init_bgain;
 	uint32_t fcs_isp_init_daynight_mode;//0 night mode ; 1 day mode
+	uint32_t fcs_isp_gray_mode;//0 color mode ; 1 gray mode
 	uint32_t fcs_lookup_count;
 	uint32_t fcs_als_thr[FCS_TALBE_NUM];
 	uint32_t fcs_isp_ae_table_exposure[FCS_TALBE_NUM];
@@ -107,6 +152,10 @@ typedef struct video_boot_stream_cfg {
 	uint8_t  fcs_user_buffer[FCS_USER_REV_SIZE];//User can use the buffer to transfer to application
 	uint32_t fcs_start_time;//bootloader to fcs user boot function
 	uint32_t fcs_voe_time;//bootloader to voe init function
+	video_boot_private_mask_t private_mask;
+	uint32_t meta_enable;//
+	uint32_t meta_size;//enalbe the meta size for
+	video_boot_isp_initial_items_t init_isp_items;
 } video_boot_stream_t;
 #endif
 

@@ -109,6 +109,7 @@ enum h2c_cmd {
 	H2C_SSL_OFFLOAD = 0x93,
 #endif
 	H2C_PNO = 0x94,
+	H2C_TIMER_WDT = 0x95,
 	H2C_RESET_TSF = 0xC0,
 	H2C_BCNHWSEQ = 0xC5,
 	H2C_TSF_LATCH = 0xC9,
@@ -125,7 +126,7 @@ enum h2c_cmd {
 #define H2C_KEEP_ALIVE_CTRL_LEN	6
 #define H2C_DISCON_DECISION_LEN		3
 #define H2C_PNO_LEN		        4
-#define H2C_TCP_KEEP_ALIVE_CTRL_LEN 6
+#define H2C_TCP_KEEP_ALIVE_CTRL_LEN 7
 #define H2C_DHCP_RENEW_CTRL_LEN 6
 
 #define H2C_AP_OFFLOAD_LEN		3
@@ -153,6 +154,7 @@ enum h2c_cmd {
 #define H2C_DEFAULT_PORT_LEN	2
 #define H2C_B_TYPE_TDMA_LEN	5
 #define H2C_DYNAMIC_TX_PWR_LEN	5
+#define H2C_TIMER_WDT_LEN 6
 
 #ifdef CONFIG_MCC_MODE
 #define H2C_MCC_CTRL_LEN			7
@@ -272,6 +274,7 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_KEEPALIVE_WATCHDOG_RFE_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 7, __Value)
 #define SET_H2CCMD_KEEPALIVE_WATCHDOG_PULL_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 7, 1, __Value)
 #define SET_H2CCMD_KEEPALIVE_WATCHDOG_INTERVAL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
+#define SET_H2CCMD_KEEPALIVE_WATCHDOG_PULSE_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 
 /* _DISCONNECT_DECISION_CMD_0x04 */
 #define SET_H2CCMD_DISCONDECISION_PARM_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
@@ -287,6 +290,12 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_PNO_PARM_INTERVAL_H(__pH2CCmd, __Value)					SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
 #define SET_H2CCMD_PNO_PARM_FORCE_WAKEUP(__pH2CCmd, __Value)				SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 
+/* _TIMER_WDT_CMD_0x95 */
+#define SET_H2CCMD_TIMER_WDT_EN_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 5, __Value)
+#define SET_H2CCMD_TIMER_WDT_PULL_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 7, 1, __Value)
+#define SET_H2CCMD_TIMER_WDT_INTERVAL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
+#define SET_H2CCMD_TIMER_WDT_PULSE_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+
 /* _TCP_KEEP_ALIVE_CMD_0x07 */
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_ADOPT(__pH2CCmd, __Value)				SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)
@@ -297,7 +306,8 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_LOC(__pH2CCmd, __Value)				SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_RESEND_INTERVAL(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_FIRST_PKT_TIME(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
-#define SET_H2CCMD_TCP_KEEPALIVE_PARM_ACK_TIMEOUT(__pH2CCmd, __Value)
+#define SET_H2CCMD_TCP_KEEPALIVE_PARM_ACK_TIMEOUT(__pH2CCmd, __Value)       SET_BITS_TO_LE_1BYTE(__pH2CCmd+5, 0, 8, __Value)
+#define SET_H2CCMD_TCP_KEEPALIVE_PARM_RESEND_COUNT(__pH2CCmd, __Value)      SET_BITS_TO_LE_1BYTE(__pH2CCmd+6, 0, 8, __Value)
 
 /* _DHCP_RENEW_CMD_0x91 */
 #define SET_H2CCMD_DHCP_RENEW_PARM_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)

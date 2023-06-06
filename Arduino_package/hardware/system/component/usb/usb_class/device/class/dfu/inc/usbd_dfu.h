@@ -6,4 +6,5 @@ struct dfu_opts {
 	int (*reset)(void *parm);
 };
 int usbd_dfu_init(struct dfu_opts *dfu_cb);
+void usbd_dfu_setup_serial_number(char *str);
 #endif

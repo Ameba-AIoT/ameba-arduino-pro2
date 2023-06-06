@@ -1045,8 +1045,12 @@ int wifi_set_tx_rate_by_ToS(unsigned char enable, unsigned char ToS_precedence, 
  * +--------------------------+-------------+-------------+
  * |        TXOP Limit        |ECWmin/ECWmax|  ACI/AIFSN  |
  * +--------------------------+-------------+-------------+
- * 	BIT31~16 corresponding to TXOP Limit, BIT15~8 corresponding
- * 	to ECWmin/ECWmax, BIT7~0 corresponding to ACI/AIFSN.
+ * 	BIT31~16 corresponding to TXOP Limit,
+ *  BIT15~12 corresponding to ECWmax,
+ *  BIT11~8 corresponding to ECWmin,
+ *  BIT6~5 corresponding to ACI.
+ *         00b: BE, 01b: BK, 10b: VI, 11b: VO
+ *  BIT3~0 corresponding to AIFSN (AIFS = AIFSN * slot time + SIFS).
  * @return  RTW_SUCCESS or RTW_ERROR
  */
 int wifi_set_EDCA_param(unsigned int AC_param);
@@ -1171,7 +1175,8 @@ int wifi_wowlan_set_arpreq_keepalive(u8  powerbit,
  */
 int wifi_wowlan_set_wdt(u8  gpio,
 						u8  interval,
-						u8	pull_ctrl);
+						u8	pull_ctrl,
+						u8  pulse_duration);
 #endif
 
 // WoWlan related
@@ -1244,6 +1249,50 @@ int wifi_csi_config(rtw_csi_action_parm_t *act_param);
  * @return  RTW_SUCCESS or RTW_ERROR
  */
 int wifi_csi_report(u32 buf_len, u8 *csi_buf, u32 *len, rtw_csi_header_t *csi_header);
+
+/**
+ * @brief  set scan timeout
+ * @param[in]  active_to: active scan time per channel, units: ms
+ * @param[in]  passive_to: passive scan time per channel, units: ms
+ * @param[in]  home_to: home channel scan time, units: ms
+ * @param[in]  probe_cnt: transmit number of probes per active channel.
+ * @return None
+ */
+void wifi_set_scan_time(unsigned short active_to, unsigned short passive_to, unsigned short home_to, unsigned char probe_cnt);
+
+/**
+ * @brief  set RTS/CTS capability
+ * @param[in]  enable:
+ *  set 1 to enable RTS/CTS capability
+ * 	set 0 to disable RTS/CTS capability
+ * @param[in]  rts_threshold: RTS Threshold is used to enable/disable soft flow control mechanism.
+ *             If the packet size is above the threshold value, it will enable the feature. Otherwise, it will disable the featue.
+ * @return None
+ */
+void wifi_set_rts(unsigned char enable, unsigned int rts_threshold);
+
+/**
+ * @brief  set packet TX retry limit
+ * @param[in]  short_retry: The requirement is to configure the short packet transmission retry limit (i.e. packet shorter than RTS threshold)
+ * @param[in]  long_retry: The requirement is to configure the long packet transmission retry limit (i.e. packet longer than RTS threshold)
+ * @return  0 if success, otherwise return -1.
+ */
+int wifi_set_retry_limit(unsigned char short_retry, unsigned char long_retry);
+
+/**
+ * @brief  set start rate of Rate Adaptative
+ * @param[in]  rate: The range is MCS0(MGN_MCS0) ~ MCS7(MGN_MCS7)
+ * @return  0 if success, otherwise return -1.
+ */
+int wifi_set_ra_start_rate(unsigned char rate);
+
+/**
+ * @brief  set max rate of Rate Adaptative
+ * @param[in]  max_rate: The range is MCS0(MGN_MCS0) ~ MCS7(MGN_MCS7)
+ * @return  0 if success, otherwise return -1.
+ */
+int wifi_set_ra_max_rate(unsigned char max_rate);
+
 /**
 * @}
 */

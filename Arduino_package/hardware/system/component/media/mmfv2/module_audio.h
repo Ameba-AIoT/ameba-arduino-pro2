@@ -70,7 +70,13 @@ typedef enum {
 
 #define CMD_AUDIO_SET_AEC_LEVEL         MM_MODULE_CMD(0x18)
 #define CMD_AUDIO_SET_MIC_ENABLE        MM_MODULE_CMD(0x19)
-#define CMD_AUDIO_SET_SPK_ENABLE        MM_MODULE_CMD(0x20)
+#define CMD_AUDIO_SET_SPK_ENABLE        MM_MODULE_CMD(0x1A)
+
+#define CMD_AUDIO_GET_FIRST_DATA_TS     MM_MODULE_CMD(0x1B)
+#define CMD_AUDIO_GET_FIRST_DUMMY_TS    MM_MODULE_CMD(0x1C)
+
+#define CMD_AUDIO_SET_LEFTMIC_CB        MM_MODULE_CMD(0x1D)
+#define CMD_AUDIO_SET_RIGHTMIC_CB       MM_MODULE_CMD(0x1F)
 
 #endif
 #define CMD_AUDIO_SET_TIMESTAMP_OFFSET  MM_MODULE_CMD(0x21)
@@ -83,8 +89,10 @@ typedef enum {
 #define CMD_AUDIO_GET_TXASP_PARAM       MM_MODULE_CMD(0x27)
 #define CMD_AUDIO_PRINT_ASP_INFO        MM_MODULE_CMD(0x28)
 #endif
+#define CMD_AUDIO_SET_RX                MM_MODULE_CMD(0x29)
+#define CMD_AUDIO_SET_TX                MM_MODULE_CMD(0x2A)
 
-#define CMD_AUDIO_APPLY				    MM_MODULE_CMD(0x30)  // for hardware module
+#define CMD_AUDIO_APPLY                 MM_MODULE_CMD(0x30)  // for hardware module
 
 #define USE_DEFAULT_AUDIO_SET			1	//Use the default setting of audio module defined in module_audio.c
 
@@ -307,6 +315,8 @@ typedef struct audio_ctx_s {
 	uint32_t        drop_frame_total;
 	uint32_t        audio_frame_total;
 	void (*mic_record_file)(void *, void *, void *, void *);
+	void (*left_mic_cb)(const uint8_t *, int, uint8_t, uint32_t, audio_params_t);
+	void (*right_mic_cb)(const uint8_t *, int, uint8_t, uint32_t, audio_params_t);
 
 	uint8_t         fcs_avsync_done;
 
@@ -315,6 +325,8 @@ typedef struct audio_ctx_s {
 	uint8_t         rx_first_frame;
 
 	uint32_t        audio_timestamp_offset;
+	uint32_t        first_data_frame_ts;
+	uint32_t        first_dummy_frame_ts;
 } audio_ctx_t;
 
 extern TX_cfg_t default_tx_asp_params;

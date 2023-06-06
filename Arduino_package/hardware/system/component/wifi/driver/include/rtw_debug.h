@@ -164,6 +164,7 @@
 extern u32 GlobalDebugEnable;
 extern u8 OtherDebugPortEnable;
 extern u16 GlobalDebugLevel;
+extern u16 GlobalDebug871X;
 
 #define RT_TRACE_F(_Comp, _Level, Fmt) do{}while(0)
 
@@ -183,8 +184,8 @@ extern u16 GlobalDebugLevel;
 
 #undef	_dbgdump
 
-#define _dbgdump_nr	printf("\n\r"); printf
-#define _dbgdump	printf
+#define _dbgdump_nr(...)	printf(__VA_ARGS__); printf("\n\r")
+#define _dbgdump(...)		printf(__VA_ARGS__)
 
 #if !defined(CONFIG_PLATFORM_8711B) \
 	&& !defined(CONFIG_PLATFORM_8721D) && !defined(CONFIG_PLATFORM_8195BHP) \
@@ -232,7 +233,23 @@ extern u16 GlobalDebugLevel;
 	do {\
 		if(GlobalDebugEnable){\
 			if (level <= GlobalDebugLevel) {\
-				_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+				if(OtherDebugPortEnable){\
+					msg_uart_port(DRIVER_PREFIX __VA_ARGS__);\
+				} else {\
+					_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+				}\
+			}\
+		}\
+	}while(0)
+#define DBG_871X_LEVEL_NONR(level, ...)     \
+	do {\
+		if(GlobalDebugEnable){\
+			if (level <= GlobalDebugLevel) {\
+				if(OtherDebugPortEnable){\
+					msg_uart_port(DRIVER_PREFIX __VA_ARGS__);\
+				} else {\
+					_dbgdump(DRIVER_PREFIX __VA_ARGS__);\
+				}\
 			}\
 		}\
 	}while(0)
@@ -251,10 +268,18 @@ extern int msg_uart_port(const char *fmt, ...);
 		if(GlobalDebugEnable){\
 			if (level <= GlobalDebugLevel) {\
 				if (level <= _drv_err_ && level > _drv_always_) {\
-					_dbgdump_nr(DRIVER_PREFIX"ERROR " fmt, ##arg);\
+					if(OtherDebugPortEnable){\
+						msg_uart_port(fmt, ##arg);\
+					} else {\
+						_dbgdump_nr(DRIVER_PREFIX"ERROR " fmt, ##arg);\
+					}\
 				} \
 				else {\
-					_dbgdump_nr(DRIVER_PREFIX fmt, ##arg);\
+					if(OtherDebugPortEnable){\
+						msg_uart_port(fmt, ##arg);\
+					} else { \
+						_dbgdump_nr(DRIVER_PREFIX fmt, ##arg);\
+					} \
 				} \
 			}\
 		}\
@@ -263,21 +288,55 @@ extern int msg_uart_port(const char *fmt, ...);
 #endif	//#ifdef __CC_ARM
 #endif
 
+#define CONFIG_DEBUG
 #ifdef CONFIG_DEBUG
 #if	defined (_dbgdump)
 #undef DBG_871X
-#define DBG_871X(...)     do {\
-		_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+#define DBG_871X(...)	\
+	do {\
+		if (GlobalDebug871X) {\
+			if(OtherDebugPortEnable){\
+				msg_uart_port(DRIVER_PREFIX __VA_ARGS__);\
+			} else {\
+				_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+			}\
+		}\
 	}while(0)
 
+#undef DBG_871X_NONR
+#define DBG_871X_NONR(...)	\
+		do {\
+			if (GlobalDebug871X) {\
+				if(OtherDebugPortEnable){\
+					msg_uart_port(__VA_ARGS__);\
+				} else {\
+					_dbgdump(__VA_ARGS__);\
+				}\
+			}\
+		}while(0)
+
 #undef MSG_8192C
-#define MSG_8192C(...)     do {\
-		_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+#define MSG_8192C(...)	\
+	do {\
+		if (GlobalDebug871X) {\
+			if(OtherDebugPortEnable){\
+				msg_uart_port(DRIVER_PREFIX __VA_ARGS__);\
+			} else {\
+				_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+			}\
+		}\
 	}while(0)
 
 #undef DBG_8192C
-#define DBG_8192C(...)     do {\
-		_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+#define DBG_8192C(...)	\
+	do {\
+		if (GlobalDebug871X) {\
+			if(OtherDebugPortEnable){\
+				msg_uart_port(DRIVER_PREFIX __VA_ARGS__);\
+			} else {\
+				_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+			}\
+		}\
 	}while(0)
 #endif
 #endif /* CONFIG_DEBUG */

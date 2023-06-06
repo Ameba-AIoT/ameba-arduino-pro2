@@ -1,6 +1,8 @@
 #ifndef __SIGMOID_H__
 #define __SIGMOID_H__
 
+float fast_exp(float x);
+
 float sigmoid_alt1(float x);
 float sigmoid_alt2(float x);
 float sigmoid_alt3(float x);

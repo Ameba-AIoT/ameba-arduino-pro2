@@ -1,4 +1,341 @@
 --------------------------------------------------------------------------	
+<05/25/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add config OSD block number API
+	2. add initial setting for hdr mode, mirror/flip, brightness, contrast, saturation, flicker, wdr mode, wdr level
+	3. extend sw resolution limitation
+	4. add the interface for turning on mipi clk lane non-continuous mode
+	5. remove dn-detector log
+	6. add PC2's update for wdr: store level value for manual mode and auto mode
+	Video/ENC related
+	1. 
+
+--------------------------------------------------------------------------	
+<04/18/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.2.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. fix iq calibration API ret value non-initialized bug
+	2. polish fcs process log API
+	3. add hal_video_isp_ctrl ret value
+		 hal_video_fast_enable_mask
+	Video/ENC related
+	1. show HW Enc ret fail log 
+
+
+--------------------------------------------------------------------------	
+<03/31/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.2.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. PC2(HDR dyn_ratio feature), 3Alib(0xf6b57fa), IQ(0x1000C)
+	2. Add iq calibration API and flow
+		 hal_video_enable_load_cali_iq
+		 hal_video_load_cali_iq
+		 hal_video_config_isp_calibration
+	3. upgrade nanopb to v0.4.5, 3Alib update(0xf6b57fa)
+	4. polish osd API return value
+	5. update ld file and API for private mask feature in FCS flow
+		 hal_video_fast_enable_mask
+	Video/ENC related
+	1. fixed sync mode drop frame issue 
+	   fixed isp2tm queue timeout 30 --> 1/isp_fps
+	   disable sync mode only support 1 isp buf limit
+	2. fixed JPEG 8 pixel aligment issue
+--------------------------------------------------------------------------	
+<03/17/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. 	Add ae fps change callback(notify) control
+	Video/ENC related
+	1. Added NN/OSD/ENC Sync feature
+	   command: --mode 4 (cml->EncMode/JpgMode/YuvMode == MODE_SYNC)
+	   API: hal_video_sync(int ch) or hal_video_osd_update(int ch, rt_osd2_info_st *osd2, BOOL ready2update);
+	2. Added ENC External input feaure
+	   command: --mode 5 (cml->EncMode/JpgMode/YuvMode == MODE_EXT)
+	   API: hal_video_ext_in(int ch, u32 addr)
+	3. Added enc2out.roi_time, output roi sw time info to TM
+	4. change dbg_printf to printf in hal_voe.c
+	5. add API hal_video_get_video_timer_cur_time for voe gtimer3 cur_time
+	6. polish voe boot loader flow
+	7. buf queue size margin +20 ~> +40
+	
+
+
+--------------------------------------------------------------------------	
+<02/08/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.3.8.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix AWB dynamic control has periodically(IRQ:statictis done) set control_force (status set to unstable)
+	2. wdr: update algo (VER.5948406) and algo version log
+	3. Add gen proto files flow with build voe	
+	Video/ENC related
+	1. flash speed down 7%,  extra 1ms for TTFF load code criteria	
+	2. Polish makefile for release-clean and rts_isp_errno_lib.h for blackduck check
+	3. add hal_video_time_info(int level, video_time_info_t *time_info) output time arguments
+
+--------------------------------------------------------------------------	
+<01/06/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.3.7.2
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. [SENSOR] add f37 sensor
+	2. polish osd interrupt enable/disable flow
+	3. add pb.c/pb/h for algo_param_pb 
+
+	Video/ENC related
+	1. VOE release support without isp source code
+	   old voe release version modify method 
+	   a. remove source/lib_isp source/isp
+	   b. rebuild voe
+	2. change hal_video_time_info interface with level argument
+	3. remove GPIO E4 pinmux_unregister(return back E4 used  for b-cut FCS pin mapping issue workaround) 
+	   
+
+	 
+Reviewer:
+--------------------------------------------------------------------------	
+<12/16/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.7.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add larger range protection for interrupt enable/disable
+	2. Add more check rules for frame done/release error handling
+	3. Polish warning logs 
+
+	Video/ENC related
+	1. Add semaphore process when voe cmd timeout cases
+
+
+
+	 
+Reviewer:
+--------------------------------------------------------------------------	
+<12/12/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.6.2
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. merge pc2 SW
+   		a. iq: fix using wrong index when check dyn_ratio item
+   		b. ygc: fix dyn_ht iq checking
+   		c. wdr: add contrast value, Bump isp_algo_param version to 0x10005
+   		d. rts_camera: Add zoom application
+   		e. iq: apply patch from IQ team
+	2. Add digital zoom interface(hal_video_set_dynamic_zoom)
+
+	Video/ENC related
+	1. fixed reopen issue
+
+	 
+Reviewer:
+
+--------------------------------------------------------------------------	
+<11/28/2022 10:00 Martin>
+Version : RTL8735B_VOE_1.3.6.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add private mask API
+		hal_video_reset_rect_mask_status
+		hal_video_set_mask_color
+		hal_video_config_grid_mask
+		hal_video_config_rect_mask
+		hal_video_set_mask(int ch, BOOL fast_en) 	   
+ 	2. extend osd block num: 6->24
+    3. add awb statis r/g/b mean for meta data and change meta data timing after statis sw
+    4. update iq table for GC2053 version
+  	5. fixed hal_video_get_ae_weight num parameter cache sync issue
+  	6. update 3Alib for 120fps support
+  	7. update SC2310 sensor driver for HDR max_exp_line without 0xfff limitation
+
+	Video/ENC related
+	1. Added JPEG parameter for drop fps
+	   command line add (-j [inputRateNumer])(-n [outputRateNumer])
+	 
+Reviewer:
+
+--------------------------------------------------------------------------	
+<10/26/2022 20:00 Martin>
+Version : RTL8735B_VOE_1.3.5.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add meta data output(with enc2out_t) 
+		isp_statis_meta_t statis_data
+		isp_meta_t isp_meta_data	   	   
+ 	2. add API hal_video_isp_set_isp_meta_out
+	3. [SENSOR] update SC2310 sensor driver
+	4. [SENSOR] update IMX327 HDR sensor driver
+	5. Merge PC2 isp sw for proto 0x1000B
+	6. add API hal_video_get_ae_weight
+			   hal_video_set_ae_weight
+	Video/ENC related
+	1. 
+	2. 
+Reviewer:
+
+--------------------------------------------------------------------------	
+<10/06/2022 19:00 Martin>
+Version : RTL8735B_VOE_1.3.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. dynamic fps improvement
+	   can change sensor fps high to low
+	   remove the limitation of fixed drop ratio
+	   fps follow original setting
+	2. Fix OSD show/hide error
+	3. update IMX327 sensor driver
+	Video/ENC related
+	1. Support ENC MetaData info
+	2. Support ENC SEI as ENC MetaData info
+	   command line add (-z [size]) (size is metadata size)
+	   added enc2out->meta_offset output metadata offset information
+	3. Support JPEG COM Marker as ENC MetaData info
+	   command line add (-z [size]) (size is metadata size)
+	   added enc2out->meta_offset output metadata offset information
+	4. fixed  hal_video_froce_i -->  hal_video_force_i (typo)
+	5. hal_video_roi_region() check region & match document spec. 
+	6. fixed hal_video_roi_region() delta value < 0 fail 
+Reviewer:
+	 
+--------------------------------------------------------------------------	
+<09/12/2022 17:00 Martin>
+Version : RTL8735B_VOE_1.3.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add Fast OSD for 1st frame OSD ready
+	2. iq: change md, snr, tm item to static array
+	3. ae: fix bug that dyn_fps may be lower than sensor min fps
+	4. update 3Alib because md iq table changed
+	5. add new element mipi_max_short_exp for hdr sensor
+	6. add sensor initial error log
+	
+	Video/ENC related
+	1. Support ENC drop frame flow 
+	2. add get realfps API
+	3. fixed dynamic GOP/BPS/...  output bitrate fail issue
+	4. fixed dynamic FPS VUI update fail issue 
+	
+Reviewer:
+	Martin 
+	
+	--------------------------------------------------------------------------	
+<09/02/2022 15:00 Raymond>
+Version : RTL8735B_VOE_1.2.7.3
+Modified Files:
+All
+Change Notes:
+	Base on voe_1.2.7.2
+
+	Video/ENC related
+	1. fixed dynamic GOP/BPS/...  output bitrate fail issue
+	2. remove support dynamic VUI update for fixed dynamic FPS  
+	
+Reviewer:
+	Raymond 
+--------------------------------------------------------------------------	
+<08/16/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.2.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fixed TM/SNR/MD module buffer assignment issue
+	2. roll back PC2's upate(isp_iq: bounds: fix that get_bound API may return bounds_count as index)
+	
+	Video/ENC related
+	1. Enable VOE FreeRTOS v10.1.1 assert function 
+	2. 
+	
+Reviewer:
+	Martin 
+--------------------------------------------------------------------------	
+<08/11/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.2.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2 update for sensor temperature control function
+	2. Add temperature control function with iq table parameter
+	3. Change daynight detector timer with statis done event
+	4. Merge PC2 update for iq: add other table in HDR mode and Linear mode group
+	5. add extra iq_ext.bin for 6 table included other_id table
+	6. 
+	
+	Video/ENC related
+	1. 
+	2. 
+	
+Reviewer:
+	Martin 
+--------------------------------------------------------------------------	
+<07/28/2022 15:00 Martin>
+Version : RTL8735B_VOE_1.3.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2 updated to 0713
+		isp_iq: fix that get_bound API may return bounds_count as index
+		mod_ae: use sensor_max_fps as ae_max_fps_ctrl default value
+		isp_hw_iq: don't apply max/min to texture reg by md_val when md disabled
+		mod_tm: add luma_thd iq table error checking, add error checking to prevent from error accessing memory
+	2. update 3Alib: remove ae alg set min/max fps log
+	3. add sensor init flag and data_start_flag to filter out error data_start/frame_end event
+	4. disable RTS_V4L2_CID_IQ_TABLE
+	5. I2c resource protection
+	6. Sync PC's HDR sensor driver, add IMX327
+	
+	Video/ENC related
+	1. fixed voe_tuning_iq_param return issue
+	2. 
+	
+Reviewer:
+	Martin 
+
+--------------------------------------------------------------------------	
 <07/14/2022 15:00 Raymond>
 Version : RTL8735B_VOE_1.3.0.0
 Modified Files:

@@ -128,6 +128,7 @@ SECTIONS
 
 	.ram.img.signature :
 	{
+		__ram_readonly_start__ = .;
 		__ram_img_signature__ = .;
 		KEEP(*(.start.ram.sign*))		
 	} > RAM_IMG_SIGN
@@ -151,6 +152,7 @@ SECTIONS
 	.ddr.code.text : 
     {
         . = ALIGN(32);
+		__eram_readonly_start__ = .;
         __ddr_code_text_start__ = .;
         //*libgcc.a:pr-support.o*(.text*)
         //*libstdc++.a:list.o*(.text*)
@@ -192,6 +194,27 @@ SECTIONS
 			
 		. = ALIGN(4);
 		__ram_code_text_end__ = .;
+	} > RAM_1
+
+	.ram.code_rodata : AT (__ram_code_rodata_start__)
+	{
+		. = ALIGN(4);
+		__ram_code_rodata_start__ = .;
+		*ram_start.*o*(.rodata*)
+		*app_start.*o*(.rodata*)
+		//*lib_a*(.rodata*)
+		*hal_sys_ctrl.*o*(.rodata*)
+		*hal_dram*.*o*(.rodata*)
+		*hal_flash.*o*(.rodata*)
+		*hal_spic.*o*(.rodata*)
+		*hal_uart.*o*(.rodata*)
+		*hal_pinmux.*o*(.rodata*)
+		*(.ram.hal_pmc.rodata*)
+		. = ALIGN(32);
+		__ram_code_rodata_end__ = .;
+		
+		. = ALIGN(32);
+		__ram_readonly_end__ = .;
 	} > RAM_1
 
 
@@ -250,24 +273,6 @@ SECTIONS
 		/* All data end */
 		__data_end__ = .;
 
-	} > RAM_1
-
-	.ram.code_rodata : AT (__ram_code_rodata_start__)
-	{
-		. = ALIGN(4);
-		__ram_code_rodata_start__ = .;
-		*ram_start.*o*(.rodata*)
-		*app_start.*o*(.rodata*)
-		//*lib_a*(.rodata*)
-		*hal_sys_ctrl.*o*(.rodata*)
-		*hal_dram*.*o*(.rodata*)
-		*hal_flash.*o*(.rodata*)
-		*hal_spic.*o*(.rodata*)
-		*hal_uart.*o*(.rodata*)
-		*hal_pinmux.*o*(.rodata*)
-		*(.ram.hal_pmc.rodata*)
-		. = ALIGN(4);
-		__ram_code_rodata_end__ = .;
 	} > RAM_1
 
 	.ram.retention.data :
@@ -350,29 +355,14 @@ SECTIONS
 	{
 		. = ALIGN(4);
 		__eram_text_start__ = .;
+		__libversion_start__ = .;
+		*(.libversion.text.*)
+		__libversion_end__ = .;
 		*(.text*)
-		*(.sdram.text*)		
+		*(.sdram.text*)
+		*(*.text)
 		__eram_text_end__ = .;
 	} > DDR
-	
-	.ddr.rodata : 
-	{
-		. = ALIGN(4);
-		__eram_rodata_start__ = .;
-		*(.rodata*)
-		*(.rodata.str1*)
-		*(.sdram.rodata*)
-		__test_array_start__ = .;
-		KEEP(*(.test_array*))
-		__test_array_end__ = .;
-		__testcmd_first_start__ = .;
-		KEEP(*(.testatcmd.start*))
-		__testcmd_first_end__ = .;	
-		__testcmd_array_start__ = .;
-		KEEP(*(.testatcmd.*))
-		__testcmd_array_end__ = .;			
-		__eram_rodata_end__ = .;
-	} > DDR	
 
 	/* Add This for C++ support */
 	.ARM.extab  : 
@@ -386,7 +376,31 @@ SECTIONS
 		__exidx_start = .;
 		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
 		__exidx_end = .;
+		
 	} > DDR
+	
+	.ddr.rodata : 
+	{
+		. = ALIGN(4);
+		__eram_rodata_start__ = .;
+		*(.rodata*)
+		*(.rodata.str1*)
+		*(.sdram.rodata*)
+		*(*.rodata)
+		__test_array_start__ = .;
+		KEEP(*(.test_array*))
+		__test_array_end__ = .;
+		__testcmd_first_start__ = .;
+		KEEP(*(.testatcmd.start*))
+		__testcmd_first_end__ = .;	
+		__testcmd_array_start__ = .;
+		KEEP(*(.testatcmd.*))
+		__testcmd_array_end__ = .;			
+		__eram_rodata_end__ = .;
+		. = ALIGN(32);
+		__eram_readonly_end__ = .;
+	} > DDR	
+
 
 	.ddr.data :
 	{
@@ -395,6 +409,7 @@ SECTIONS
 		*(.data*)
 		*(.sdram.data*)
 		*(.ddr.data)
+		*(*.data)
 		__eram_data_end__ = .;
 	} > DDR
 
@@ -404,6 +419,7 @@ SECTIONS
 		__eram_bss_start__ = .;
 		*(.bss*)
 		*(.sdram.bss*)
+		*(*.bss)
 		__eram_bss_end__ = .;
 		__eram_heap_start__ = .;
 		__used_nn_model_start = .;

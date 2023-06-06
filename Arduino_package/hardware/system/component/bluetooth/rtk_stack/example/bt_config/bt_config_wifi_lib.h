@@ -34,6 +34,7 @@
 #include "ameba_soc.h"
 #endif
 #include "bt_config_wifi.h"
+#include "wifi_constants.h"
 
 #define BC_SCAN_RESLUT_UNIT				3
 #define BC_SCAN_RESLUT_UNIT_AIRSYNC		32
@@ -112,7 +113,7 @@ struct _BC_connect_AP_info
 	uint8_t security_type;/*0:open,1:WPA,2:WEP*/
 	uint8_t SSID[BC_MAX_SSID_LEN];
 	uint8_t BSSID[BC_BSSID_LEN];
-	uint8_t password[64];
+	uint8_t password[RTW_MAX_PSK_LEN];
 };
 
 extern BC_band_t BC_req_band_hdl(void);

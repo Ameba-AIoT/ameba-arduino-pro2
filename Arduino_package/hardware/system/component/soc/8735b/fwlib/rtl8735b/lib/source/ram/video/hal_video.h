@@ -66,10 +66,12 @@ extern "C"
 
 
 
-#define MODE_DISABLE			0
-#define MODE_SNAPSHOT			1
-#define MODE_ENABLE				2
-#define MODE_QUEUE				3
+#define MODE_DISABLE			0					// disable output
+#define MODE_SNAPSHOT			1					// one-shot JPEG,   for jpeg
+#define MODE_ENABLE				2					// continue output
+#define MODE_QUEUE				3					// queue on VOE
+#define MODE_SYNC				4					// keep ISP on VOE, for channel
+#define MODE_EXT				5					// external input,  for channel
 
 /**
  * @addtogroup hal_enc Encoder
@@ -188,8 +190,9 @@ typedef struct {
 	int enc_slot;			// ENC buffer used slot
 	int jpg_slot;			// JPEG buffer used slot
 
-	int enc_time;			// HW encode time on Normal , Queue avail on Buffer/Queue full return
-	int jpg_time;			// HW JPEG time
+	volatile int roi_time;	// ROI SW time
+	volatile int enc_time;	// HW encode time on Normal , Queue avail on Buffer/Queue full return
+	volatile int jpg_time;	// HW JPEG time
 	int cmd;
 	int cmd_status;
 
@@ -299,7 +302,6 @@ typedef struct {
 	u32 *hal_version;
 
 	isp_mask_group_t *isp_mask_group;
-	int tick_offset[MAX_CHANNEL];
 
 	__attribute__((aligned(32))) volatile int		voe_info;
 
@@ -362,6 +364,33 @@ typedef struct  {
 } video_peri_info_t;
 
 
+typedef struct  {
+
+	int voe_load;
+	int isp_ready;
+	int fcs_done;
+	int frame_done;
+	int reserv[4];
+
+} video_time_info_t;
+
+typedef struct  {
+
+	u32 init_flicker;
+	u32 init_saturation;
+	s32 init_brightness;
+	u32 init_contrast;
+	u32 init_hue;
+	u32 init_wdr_mode;
+	u32 init_wdr_level;
+	u32 init_hdr_mode;
+	u32 init_mirrorflip;
+	u32 reserv[15];
+
+} video_isp_initial_items_t;
+
+
+
 
 /** @} */ // end of GROUP_ENC_MODULE_SYSTEM_CONFIGURATION
 
@@ -384,6 +413,8 @@ int hal_video_close(int ch);
 int hal_video_out_mode(int ch, int type, int mode);
 int hal_video_release(int ch, int type, int mode);
 
+int hal_video_sync(int ch);
+int hal_video_ext_in(int ch, u32 addr);
 
 int hal_video_force_i(int ch);
 int hal_video_set_rc(rate_ctrl_s *rc, int ch);
@@ -420,7 +451,7 @@ int hal_video_md_trigger(void);
 // Show VOE information
 int hal_video_mem_info(void);
 int hal_video_buf_info(void);
-int hal_video_time_info(int level);
+int hal_video_time_info(int level, video_time_info_t *time_info);
 int hal_video_print(int mode);
 
 
@@ -451,6 +482,8 @@ int hal_video_set_mask(int ch, BOOL fast_en);
 int hal_video_set_dynamic_zoom(int ch, isp_crop_t corp_info);
 void hal_video_set_fps(int fps, int ch);
 int hal_video_get_no_video_time(void);
+u32 hal_video_get_video_timer_cur_time(void);
+int hal_video_config_isp_calibration(int iq_cali_flag);
 
 extern hal_video_adapter_t vv_adapter;
 
@@ -720,8 +753,69 @@ static __inline__ int hal_video_reset_mask_status(void)
 	return OK;
 }
 
+static __inline__ int hal_video_enable_load_cali_iq(int ch, int enable)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
 
+	cml = v_adp->cmd[ch];
+	cml->iq_cali_init_en = enable;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
 
+static __inline__ int hal_video_load_cali_iq(voe_cpy_t voe_cpy, int *cali_iq_addr, int *voe_ddr_addr, u32 cali_iq_size)
+{
+#if (CONFIG_VIDEO_EN==1)
+	return hal_voe_load_cali_iq(voe_cpy, cali_iq_addr, voe_ddr_addr, cali_iq_size);
+#else
+	return FAIL;
+#endif
+
+}
+
+static __inline__ int hal_video_fast_enable_mask(int ch)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->fast_mask_en = 1;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_set_isp_init_items(int ch, video_isp_initial_items_t *init_items)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+
+	cml->init_flicker = init_items->init_flicker;
+	cml->init_saturation = init_items->init_saturation;
+	cml->init_brightness = (u32)init_items->init_brightness;
+	cml->init_contrast = init_items->init_contrast;
+	//cml->init_hue = init_items->init_hue;
+	cml->init_wdr_mode = init_items->init_wdr_mode;
+	cml->init_wdr_level = init_items->init_wdr_level;
+	cml->init_hdr_mode = init_items->init_hdr_mode;
+	cml->init_mirrorflip = init_items->init_mirrorflip;
+
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_set_mipi_clk_nonctn(int ch, int clk_noncontinuous)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->mipi_clk_noncontinous = clk_noncontinuous;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
 
 
 #endif // #if !defined (CONFIG_VOE_PLATFORM) || !CONFIG_VOE_PLATFORM // Run on TM9

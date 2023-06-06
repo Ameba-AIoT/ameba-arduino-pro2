@@ -180,7 +180,7 @@ struct dm_dpk_info {
 #endif
 #endif
 
-#if(RTL8723F_SUPPORT == 1 || RTL8730A_SUPPORT == 1)
+#if(RTL8723F_SUPPORT == 1 || RTL8730A_SUPPORT == 1 || RTL8721F_SUPPORT == 1)
 	u8	one_shot_cnt;
 	u8	dpk_current_path;
 	u8	thermal_init[KPATH];

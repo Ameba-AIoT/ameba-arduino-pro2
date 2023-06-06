@@ -107,6 +107,9 @@ typedef struct mm_contex_s {
 #define MMQI_FLAG_READY         0x10
 #define MMQI_FLAG_USED          0x20
 
+#define MMQI_VSTATUS_STOP       0x00    //For MM_CMD_CLEAR_QUEUE_ITEMS, this is for the video channel is stopped
+#define MMQI_VSTATUS_START      0x01    //For MM_CMD_CLEAR_QUEUE_ITEMS, this is for the video channel is on
+
 typedef struct mm_queue_item_s {
 	uint32_t flag;
 	uint32_t data_addr;     // store data address
@@ -130,5 +133,10 @@ typedef struct mm_queue_item_s {
 extern int mm_module_ctrl(mm_context_t *ctx, int cmd, int arg);
 extern mm_context_t *mm_module_open(mm_module_t *mm);
 extern mm_context_t *mm_module_close(mm_context_t *ctx);
+
+#if defined(CONFIG_PLATFORM_8735B)
+#include "mmf2_mediatime_8735b.h"
+#endif
+
 
 #endif

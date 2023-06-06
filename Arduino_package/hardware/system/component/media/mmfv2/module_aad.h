@@ -5,12 +5,13 @@
 
 #include "aacdec.h"
 
-#define CMD_AAD_SET_PARAMS     		MM_MODULE_CMD(0x00)  // set parameter
-#define CMD_AAD_GET_PARAMS     		MM_MODULE_CMD(0x01)  // get parameter
-#define CMD_AAD_SAMPLERATE 			MM_MODULE_CMD(0x02)
-#define CMD_AAD_CHANNEL				MM_MODULE_CMD(0x03)
-#define CMD_AAD_STREAM_TYPE			MM_MODULE_CMD(0x04)
-#define CMD_AAD_RESET			MM_MODULE_CMD(0x05)
+#define CMD_AAD_SET_PARAMS          MM_MODULE_CMD(0x00)  // set parameter
+#define CMD_AAD_GET_PARAMS          MM_MODULE_CMD(0x01)  // get parameter
+#define CMD_AAD_SAMPLERATE          MM_MODULE_CMD(0x02)
+#define CMD_AAD_CHANNEL             MM_MODULE_CMD(0x03)
+#define CMD_AAD_STREAM_TYPE         MM_MODULE_CMD(0x04)
+#define CMD_AAD_RESET               MM_MODULE_CMD(0x05)
+#define CMD_AAD_STOP                MM_MODULE_CMD(0x06)
 
 
 #define CMD_AAD_APPLY				MM_MODULE_CMD(0x20)  // for hardware module
@@ -40,6 +41,7 @@ typedef struct aad_ctx_s {
 	uint8_t *decode_buf;
 
 	aad_parser_t parser;
+	uint32_t stop;
 } aad_ctx_t;
 
 extern mm_module_t aad_module;

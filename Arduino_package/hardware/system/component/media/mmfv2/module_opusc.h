@@ -6,19 +6,19 @@
 
 #include "opus.h"
 
-#define CMD_OPUSC_SET_PARAMS     		MM_MODULE_CMD(0x00)  // set parameter
-#define CMD_OPUSC_GET_PARAMS     		MM_MODULE_CMD(0x01)  // get parameter
-#define CMD_OPUSC_SAMPLERATE 			MM_MODULE_CMD(0x02)
-#define CMD_OPUSC_CHANNEL				MM_MODULE_CMD(0x03)
-#define CMD_OPUSC_BITLENGTH				MM_MODULE_CMD(0x04)
-#define CMD_OPUSC_MEMORY_SIZE			MM_MODULE_CMD(0x07)
-#define CMD_OPUSC_BLOCK_SIZE			MM_MODULE_CMD(0x08)
-#define CMD_OPUSC_MAX_FRAME_SIZE		MM_MODULE_CMD(0x09)
-#define CMD_OPUSC_INIT_MEM_POOL			MM_MODULE_CMD(0x0a)
-#define CMD_OPUSC_RESET		        	MM_MODULE_CMD(0x0b)
-#define CMD_OPUSC_STOP		        	MM_MODULE_CMD(0x0c)
+#define CMD_OPUSC_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
+#define CMD_OPUSC_GET_PARAMS            MM_MODULE_CMD(0x01)  // get parameter
+#define CMD_OPUSC_SAMPLERATE            MM_MODULE_CMD(0x02)
+#define CMD_OPUSC_CHANNEL               MM_MODULE_CMD(0x03)
+#define CMD_OPUSC_BITLENGTH             MM_MODULE_CMD(0x04)
+#define CMD_OPUSC_MEMORY_SIZE           MM_MODULE_CMD(0x07)
+#define CMD_OPUSC_BLOCK_SIZE            MM_MODULE_CMD(0x08)
+#define CMD_OPUSC_MAX_FRAME_SIZE        MM_MODULE_CMD(0x09)
+#define CMD_OPUSC_INIT_MEM_POOL         MM_MODULE_CMD(0x0a)
+#define CMD_OPUSC_RESET                 MM_MODULE_CMD(0x0b)
+#define CMD_OPUSC_STOP                  MM_MODULE_CMD(0x0c)
 
-#define CMD_OPUSC_APPLY					MM_MODULE_CMD(0x20)  // for hardware module
+#define CMD_OPUSC_APPLY                 MM_MODULE_CMD(0x20)  // for hardware module
 
 typedef struct opusc_param_s {
 	uint32_t sample_rate;	// 8000
