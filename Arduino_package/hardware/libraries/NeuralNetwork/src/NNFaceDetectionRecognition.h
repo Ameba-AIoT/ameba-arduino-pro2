@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 #include "module_vipnn.h"
+#include "module_facerecog.h"
 
 #ifdef __cplusplus
 }
@@ -30,7 +31,7 @@ class FaceRecognitionResult {
 
     private:
         char result_name[32] = {0};
-        nn_data_param_t result = {0};
+        frc_bbox_t result = {0};
 };
 
 class NNFaceDetectionRecognition:public NNModelSelection {
@@ -66,6 +67,7 @@ class NNFaceDetectionRecognition:public NNModelSelection {
         void* facerecog_siso_ctx = NULL;
         void* mbfacenet_siso_ctx = NULL;
         nn_data_param_t roi_nn = {0};
+        nn_data_param_t fr_param = {0};
 };
 
 #endif

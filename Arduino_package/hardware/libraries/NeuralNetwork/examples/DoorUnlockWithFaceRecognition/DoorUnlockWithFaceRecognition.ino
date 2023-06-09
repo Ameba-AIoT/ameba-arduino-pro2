@@ -22,10 +22,6 @@
 #define NNWIDTH  576
 #define NNHEIGHT 320
 
-// OSD layers
-#define RECTTEXTLAYER0 OSDLAYER0
-#define RECTTEXTLAYER1 OSDLAYER1
-
 // Pin Definition
 #define RED_LED    3
 #define GREEN_LED  4
@@ -179,11 +175,9 @@ void loop() {
         doorOpen = false;
     }
 
-    delay(1000);
-    OSD.createBitmap(CHANNELVID,RECTTEXTLAYER0);
-    OSD.createBitmap(CHANNELVID,RECTTEXTLAYER1);
-    OSD.update(CHANNELVID, RECTTEXTLAYER0);
-    OSD.update(CHANNELVID, RECTTEXTLAYER1);
+    delay(5000);
+    OSD.createBitmap(CHANNELVID);
+    OSD.update(CHANNELVID);
 }
 
 // User callback function for post processing of face recognition results
@@ -193,8 +187,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
 
     printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
 
-    OSD.createBitmap(CHANNELVID, RECTTEXTLAYER0);
-    OSD.createBitmap(CHANNELVID, RECTTEXTLAYER1);
+    OSD.createBitmap(CHANNELVID);
     if (facerecog.getResultCount() > 0) {
         if (systemOn == true) {
             if (facerecog.getResultCount() > 1) { // Door remain close when more than one face detected
@@ -231,19 +224,16 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
         // Draw boundary box
         if (String(item.name()) == String("unknown")) {
             osd_color = OSD_COLOR_RED;
-            osd_layer = RECTTEXTLAYER0;
         } else {
             osd_color = OSD_COLOR_GREEN;
-            osd_layer = RECTTEXTLAYER1;
         }
         printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
-        OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, osd_color, osd_layer);
+        OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, osd_color);
 
         // Print identification text above boundary box
         char text_str[40];
         snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
-        OSD.drawText(CHANNELVID, xmin, ymin - OSD.getTextHeight(CHANNELVID), text_str, osd_color, osd_layer);
+        OSD.drawText(CHANNELVID, xmin, ymin - OSD.getTextHeight(CHANNELVID), text_str, osd_color);
     }
-    OSD.update(CHANNELVID, RECTTEXTLAYER0);
-    OSD.update(CHANNELVID, RECTTEXTLAYER1);
+    OSD.update(CHANNELVID);
 }
