@@ -120,6 +120,8 @@ void NNObjectDetection::begin(void) {
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ODResultCallback);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_CONFIDENCE_THRES, (int)&od_confidence_thresh);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_NMS_THRES, (int)&od_nms_thresh);
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_SIZE, sizeof(objdetect_res_t));	// result size
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);		// result max count
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_APPLY, 0);
 }
 
@@ -141,8 +143,8 @@ void NNObjectDetection::setResultCallback(void (*od_callback)(std::vector<Object
 
 uint16_t NNObjectDetection::getResultCount(void) {
     uint16_t od_res_count = object_result_vector.size();
-    if (od_res_count >= 5) {
-        od_res_count = 4;
+    if (od_res_count > 14) {
+        od_res_count = 14;
     }
     return od_res_count;
 }
@@ -163,27 +165,27 @@ void NNObjectDetection::ODResultCallback(void *p, void *img_param) {
     if (p == NULL) {
         return;
     }
-
-    objdetect_res_t* result = (objdetect_res_t*)p;
+    vipnn_out_buf_t *out = (vipnn_out_buf_t *)p;
+    objdetect_res_t* result = (objdetect_res_t*)&out->res[0];
 
     object_result_vector.clear();
-    object_result_vector.resize((size_t)result->obj_num);
-    for (int i = 0; i < result->obj_num; i++) {
+    object_result_vector.resize((size_t)out->res_cnt);
+    for (int i = 0; i < out->res_cnt; i++) {
         if (use_roi) {
             // Scale result box back to original frame size
-            object_result_vector[i].result.classes = result->res[i].classes;
-            object_result_vector[i].result.score = result->res[i].score;
-            object_result_vector[i].result.top_x = result->res[i].top_x * xscale + xoffset;
-            object_result_vector[i].result.bot_x = result->res[i].bot_x * xscale + xoffset;
-            object_result_vector[i].result.top_y = result->res[i].top_y * yscale + yoffset;
-            object_result_vector[i].result.bot_y = result->res[i].bot_y * yscale + yoffset;
+            object_result_vector[i].result.classes = result[i].res.classes;
+            object_result_vector[i].result.score = result[i].res.score;
+            object_result_vector[i].result.top_x = result[i].res.top_x * xscale + xoffset;
+            object_result_vector[i].result.bot_x = result[i].res.bot_x * xscale + xoffset;
+            object_result_vector[i].result.top_y = result[i].res.top_y * yscale + yoffset;
+            object_result_vector[i].result.bot_y = result[i].res.bot_y * yscale + yoffset;
 
             LIMIT(object_result_vector[i].result.top_x, 0.00, 1.00);
             LIMIT(object_result_vector[i].result.bot_x, 0.00, 1.00);
             LIMIT(object_result_vector[i].result.top_y, 0.00, 1.00);
             LIMIT(object_result_vector[i].result.bot_y, 0.00, 1.00);
         } else {
-            memcpy(&(object_result_vector[i].result), &(result->res[i]), sizeof(detobj_t));
+            memcpy(&(object_result_vector[i].result), &(result[i].res), sizeof(detobj_t));
         }
     }
 

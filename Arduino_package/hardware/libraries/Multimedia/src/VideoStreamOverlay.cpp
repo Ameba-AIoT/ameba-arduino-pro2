@@ -31,7 +31,7 @@ void VideoStreamOverlay::configTextSize(int ch, int text_width, int text_height)
 }
 
 void VideoStreamOverlay::createBitmap(int ch, int idx) {
-    canvas_create_bitmap(ch, idx, RTS_OSD2_BLK_FMT_1BPP);
+    canvas_create_bitmap(ch, idx, RTS_OSD2_BLK_FMT_RGBA2222);
 }
 
 void VideoStreamOverlay::begin(void) {

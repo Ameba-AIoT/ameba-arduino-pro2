@@ -38,10 +38,6 @@
 #define NNWIDTH  576
 #define NNHEIGHT 320
 
-// OSD layers
-#define RECTLAYER OSDLAYER0
-#define TEXTLAYER OSDLAYER1
-
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
 NNObjectDetection ObjDet;
@@ -129,9 +125,8 @@ void loop() {
     Serial.println(" ");
 
     printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
+    OSD.createBitmap(CHANNEL);
 
-    OSD.createBitmap(CHANNEL, RECTLAYER);
-    OSD.createBitmap(CHANNEL, TEXTLAYER);
     if (ObjDet.getResultCount() > 0) {
         for (uint32_t i = 0; i < ObjDet.getResultCount(); i++) {
             int obj_type = results[i].type();
@@ -147,17 +142,16 @@ void loop() {
 
                 // Draw boundary box
                 printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
-                OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE, RECTLAYER);
+                OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
                 // Print identification text
                 char text_str[20];
                 snprintf(text_str, sizeof(text_str), "%s %d", itemList[obj_type].objectName, item.score());
-                OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN, TEXTLAYER);
+                OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN);
             }
         }
     }
-    OSD.update(CHANNEL, RECTLAYER);
-    OSD.update(CHANNEL, TEXTLAYER);
+    OSD.update(CHANNEL);
 
     // delay to wait for new results
     delay(100);
