@@ -130,7 +130,7 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
     printf("Total number of faces detected = %d\r\n", facedet.getResultCount());
     OSD.createBitmap(CHANNEL);
 
-    if (results.size() > 0) {
+    if (facedet.getResultCount() > 0) {
         for (uint32_t i = 0; i < facedet.getResultCount(); i++) {
             FaceDetectionResult item = results[i];
             // Result coordinates are floats ranging from 0.00 to 1.00

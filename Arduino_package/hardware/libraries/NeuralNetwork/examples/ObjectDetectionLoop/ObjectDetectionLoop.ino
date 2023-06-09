@@ -127,7 +127,7 @@ void loop() {
     printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
     OSD.createBitmap(CHANNEL);
 
-    if (results.size() > 0) {
+    if (ObjDet.getResultCount() > 0) {
         for (uint32_t i = 0; i < ObjDet.getResultCount(); i++) {
             int obj_type = results[i].type();
             if (itemList[obj_type].filter) {    // check if item should be ignored

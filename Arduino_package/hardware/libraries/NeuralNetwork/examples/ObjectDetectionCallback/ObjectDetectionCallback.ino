@@ -131,7 +131,7 @@ void ODPostProcess(std::vector<ObjectDetectionResult> results) {
     printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
     OSD.createBitmap(CHANNEL);
 
-    if (results.size() > 0) {
+    if (ObjDet.getResultCount() > 0) {
         for (uint32_t i = 0; i < ObjDet.getResultCount(); i++) {
             int obj_type = results[i].type();
             if (itemList[obj_type].filter) {    // check if item should be ignored
@@ -145,7 +145,7 @@ void ODPostProcess(std::vector<ObjectDetectionResult> results) {
                 int ymax = (int)(item.yMax() * im_h);
 
                 // Draw boundary box
-                printf("Item %d %s:\t%d %d %d %d\n\r", i,itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
+                printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
                 // Print identification text
