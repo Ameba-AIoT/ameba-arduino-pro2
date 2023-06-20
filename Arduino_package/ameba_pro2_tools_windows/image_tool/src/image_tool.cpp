@@ -4,6 +4,7 @@ Compile:
 windows:
 g++.exe -o image_windows.exe image_tool.cpp -static
 strip image_windows.exe
+### g++.exe -o image_windows.exe image_tool.cpp ico-out.o -static
 ### mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
 ### i686-w64-mingw32-g++.exe -o image_windows.exe image_tool.cpp -static
 
@@ -82,13 +83,12 @@ int check_upload_process_flash_erase = 0;
 int check_upload_process_image_upload = 0;
 
 string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed;
-string serial_port, auto_tool_name, flash_tool_name, fw1_address;
-string upload_mode_backdoor;
-
-// fw1_address reserved for OTA "0x80000"
-string ISP_address_PT_ISP_IQ = "0x400000";
-string NN_address_PT_NN_MDL = "0x840000";
-int upload_delay = 1000; // 1s 
+string serial_port, auto_tool_name, flash_tool_name;
+string fw1_address, ISP_address_PT_ISP_IQ, NN_address_PT_NN_MDL;
+//string fw1_address = "0x80000";
+//string ISP_address_PT_ISP_IQ = "0x400000";
+//string NN_address_PT_NN_MDL = "0x840000";
+int upload_delay = 1000; // 1s
 
 string arduino_firmware_fileName = "arduino_firmware.bin";
 string firmware_isp_iq_fileName = "firmware_isp_iq.bin";
@@ -186,7 +186,7 @@ void upload_indicate(void) {
                 cout << "." << flush;
             }
         }
-        cout << "    End Erase Flash" << endl;
+        cout << "  End Erase Flash" << endl;
     }
 
     if (check_image_upload == 100) {
@@ -199,7 +199,7 @@ void upload_indicate(void) {
                 cout << "." << flush;
             }
         }
-        cout << "    End Upload Flash" << endl;
+        cout << "  End Upload Flash" << endl;
     }
 }
 
@@ -216,7 +216,8 @@ int main(int argc, char *argv[]) {
     flash_tool_name = argv[7];
     auto_tool_name = argv[8];
     fw1_address = argv[9];
-//    upload_mode_backdoor = argv[10];
+    ISP_address_PT_ISP_IQ = argv[10];
+    NN_address_PT_NN_MDL = argv[11];
 
     check_nn_bin = fileExistsInCurrentDir(nn_model_fileName);
     if (check_nn_bin) {
@@ -224,33 +225,33 @@ int main(int argc, char *argv[]) {
     }
 
     if (auto_user_selection == "Enable") {
-        cout << "    Enter Auto Flash Mode!" << endl;
+        cout << "  Enter Auto Flash Mode!" << endl;
         cmdss.clear();
         cmdss << image_tool_folder_name << auto_tool_name << " . " << serial_port <<" 115200";
         getline(cmdss, cmd);
         system(cmd.c_str());
     } else {
 #if 0
-        cout << "    Please Enter Flash Mode Manually!" << endl;
+        cout << "  Please Enter Flash Mode Manually!" << endl;
         for (int i = 5; i > 0; i--) {
             msleep(1000);
             cmd = to_string(i);
             cout << "            0" << cmd << endl;
         }
 #endif
-        cout << "    Enter Flash Mode!" << endl;
+        cout << "  Enter Flash Mode!" << endl;
     }
 
     if (flash_erase_mode_user_selection == "Enable") {
-        cout << "    Start Erase Flash" << endl;
+        cout << "  Start Erase Flash" << endl;
         check_flash_erase = 100;
     } else if (flash_erase_mode_user_selection == "Enable_Upload") {
-        cout << "    Start Erase Flash then Upload Flash" << endl;
+        cout << "  Start Erase Flash then Upload Flash" << endl;
         check_flash_erase = 100;
         check_image_upload = 100;
         check_flash_erase_upload = 100;
     } else {
-        cout << "    Start Upload Flash" << endl;
+        cout << "  Start Upload Flash" << endl;
         check_image_upload = 100;
     }
 

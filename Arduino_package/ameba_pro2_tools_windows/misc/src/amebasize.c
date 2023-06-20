@@ -5,6 +5,7 @@ Compile:
 Windows:
 gcc.exe -o amebasize.exe tools\windows\src\amebasize.c -static
 strip amebasize.exe
+### gcc.exe -o amebasize.exe tools\windows\src\amebasize.c ico-out.o -static
 ### mingw32-gcc.exe -o amebasize.exe tools\windows\src\amebasize.c -static
 
 linux:

@@ -75,13 +75,13 @@
         },
         "fw2":{
             "start_addr" : "0x4C0000",
-            "length" : "0x380000",
+            "length" : "0x10000",
             "type": "PT_FW2",
             "valid": true
         },
         "nn":{
-            "start_addr" : "0x840000",
-            "length" : "0x5C0000",
+            "start_addr" : "0x4D0000",
+            "length" : "0x930000",
             "type": "PT_NN_MDL",
             "valid": true
         },

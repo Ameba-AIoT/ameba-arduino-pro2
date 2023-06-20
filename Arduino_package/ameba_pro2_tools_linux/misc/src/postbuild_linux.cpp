@@ -5,6 +5,7 @@ Compile:
 windows:
 g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
 strip postbuild_windows.exe
+### g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static ico-out.o -static
 ### mingw32-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
 
 linux:
