@@ -95,7 +95,7 @@ typedef struct md_context_s {
 	int md_adapt_thr_raise_window[MD_FPS][MD_MAX_COL * MD_MAX_ROW];
 
 	uint8_t md_his_idx[MD_MAX_COL * MD_MAX_ROW];
-	int *md_his_background[MD_MAX_COL * MD_MAX_ROW];
+	uint8_t *md_his_background[MD_MAX_COL * MD_MAX_ROW];
 
 	short *md_sensitivity_map;
 	md_result_t md_result;

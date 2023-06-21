@@ -110,6 +110,7 @@ enum h2c_cmd {
 #endif
 	H2C_PNO = 0x94,
 	H2C_TIMER_WDT = 0x95,
+	H2C_BCN_TRACK = 0x96,
 	H2C_RESET_TSF = 0xC0,
 	H2C_BCNHWSEQ = 0xC5,
 	H2C_TSF_LATCH = 0xC9,
@@ -155,6 +156,7 @@ enum h2c_cmd {
 #define H2C_B_TYPE_TDMA_LEN	5
 #define H2C_DYNAMIC_TX_PWR_LEN	5
 #define H2C_TIMER_WDT_LEN 6
+#define H2C_BCN_TRACK_LEN 7
 
 #ifdef CONFIG_MCC_MODE
 #define H2C_MCC_CTRL_LEN			7
@@ -283,7 +285,7 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_DISCONDECISION_PARM_CHECK_PERIOD(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
 #define SET_H2CCMD_DISCONDECISION_PARM_TRY_PKT_NUM(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
 
-/* _PMO_CMD_0x94 */
+/* _PNO_CMD_0x94 */
 #define SET_H2CCMD_PNO_PARM_ENABLE(__pH2CCmd, __Value)						SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
 #define SET_H2CCMD_PNO_PARM_DTIM(__pH2CCmd, __Value)					    SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 4, __Value)
 #define SET_H2CCMD_PNO_PARM_INTERVAL_L(__pH2CCmd, __Value)					SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
@@ -295,6 +297,13 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_TIMER_WDT_PULL_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 7, 1, __Value)
 #define SET_H2CCMD_TIMER_WDT_INTERVAL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
 #define SET_H2CCMD_TIMER_WDT_PULSE_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+
+/* _BCN_TRACK_CMD_0x96 */
+#define SET_H2CCMD_BCN_TRACK_EN_CTRL(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
+#define SET_H2CCMD_BCN_TRACK_START_WINDOW(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
+#define SET_H2CCMD_BCN_TRACK_MAX_WINDOW(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+#define SET_H2CCMD_BCN_TRACK_INCREMENTSTEP(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
+#define SET_H2CCMD_BCN_TRACK_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 
 /* _TCP_KEEP_ALIVE_CMD_0x07 */
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)

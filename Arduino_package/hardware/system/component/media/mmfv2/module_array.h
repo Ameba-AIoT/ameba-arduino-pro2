@@ -13,14 +13,15 @@
 #define ARRAY_MODE_ONCE		0
 #define ARRAY_MODE_LOOP		1
 
-#define CMD_ARRAY_SET_PARAMS		MM_MODULE_CMD(0x00)  // set parameter
-#define CMD_ARRAY_GET_PARAMS		MM_MODULE_CMD(0x01)  // get parameter
-#define CMD_ARRAY_SET_ARRAY			MM_MODULE_CMD(0x02)
-#define CMD_ARRAY_SET_MODE			MM_MODULE_CMD(0x03)
-#define CMD_ARRAY_GET_STATE			MM_MODULE_CMD(0x04)
-#define CMD_ARRAY_STREAMING			MM_MODULE_CMD(0x05)
-#define CMD_ARRAY_RECOUNT_PERIOD	MM_MODULE_CMD(0x06)
-#define CMD_ARRAY_PCM_SWEEP			MM_MODULE_CMD(0x07)
+#define CMD_ARRAY_SET_PARAMS                MM_MODULE_CMD(0x00)  // set parameter
+#define CMD_ARRAY_GET_PARAMS                MM_MODULE_CMD(0x01)  // get parameter
+#define CMD_ARRAY_SET_ARRAY                 MM_MODULE_CMD(0x02)
+#define CMD_ARRAY_SET_MODE                  MM_MODULE_CMD(0x03)
+#define CMD_ARRAY_GET_STATE                 MM_MODULE_CMD(0x04)
+#define CMD_ARRAY_STREAMING                 MM_MODULE_CMD(0x05)
+#define CMD_ARRAY_RECOUNT_PERIOD            MM_MODULE_CMD(0x06)
+#define CMD_ARRAY_PCM_SWEEP                 MM_MODULE_CMD(0x07)
+#define CMD_ARRAY_SET_TASK_TASKPRIORITY     MM_MODULE_CMD(0x08)
 
 
 #define CMD_ARRAY_APPLY				MM_MODULE_CMD(0x20)  // for hardware module
@@ -56,6 +57,7 @@ typedef struct array_ctx_s {
 	gtimer_t frame_timer;
 	uint32_t frame_timer_period; // us
 	uint32_t video_timer_delay_ms;
+	uint32_t task_priority;
 
 	array_params_t params;
 	array_t array;

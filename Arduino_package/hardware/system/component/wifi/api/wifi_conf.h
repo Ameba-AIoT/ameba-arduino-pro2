@@ -1179,6 +1179,23 @@ int wifi_wowlan_set_wdt(u8  gpio,
 						u8  pulse_duration);
 #endif
 
+
+#if defined CONFIG_WOWLAN_BCN_TRACK || defined __DOXYGEN__
+/**
+ * @brief   set bcn track parameters in wowlan
+ *
+ * @param[in]   start_window : start window size with tbtt
+ * @param[in]   max_window : max window size with tbtt
+ * @param[in]   increment_steps : window size increment steps with tbtt
+ * @param[in]   duration : beacon missing recovery duration
+ * @return  RTW_SUCCESS
+ */
+int wifi_wowlan_set_bcn_track(u8  start_window,
+							  u8  max_window,
+							  u8  increment_steps,
+							  u8  duration);
+#endif
+
 // WoWlan related
 //-------------------------------------------------------------//
 #if defined CONFIG_WOWLAN || defined __DOXYGEN__

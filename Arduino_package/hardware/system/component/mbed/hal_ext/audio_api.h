@@ -650,6 +650,9 @@ void audio_l_dmic_gain(audio_t *obj, audio_dmic_gain dmic_gain);
 void audio_r_dmic_gain(audio_t *obj, audio_dmic_gain dmic_gain);
 
 void audio_set_param_adv(audio_t *obj, audio_sr sample_rate, audio_wl word_length, audio_ch tx_ch, audio_ch rx_ch);
+
+uint32_t audio_get_tx_start_status(audio_t *obj);
+uint32_t audio_get_rx_start_status(audio_t *obj);
 #endif
 
 

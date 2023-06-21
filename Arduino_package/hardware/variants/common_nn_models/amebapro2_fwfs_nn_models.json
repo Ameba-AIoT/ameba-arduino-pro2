@@ -1,57 +1,54 @@
 {
-    "msg_level":3,
-
-	"PROFILE":["FWFS"],
-	"FWFS":{
-        "files":[
-			"yolov4_tiny",
-			"scrfd320p",
-			"mobilefacenet_i8"
-		]
-	},
-    "yolov4_tiny":{
-		"name" : "yolov4_tiny.nb",
-		"source":"binary",
-		"file":"yolov4_tiny.nb"
+    "msg_level": 3,
+    "PROFILE": [
+        "FWFS"
+    ],
+    "FWFS": {
+        "files": []
     },
-    "yolov3_tiny":{
-		"name" : "yolov3_tiny.nb",
-		"source":"binary",
-		"file":"yolov3_tiny.nb"
+    "yolov4_tiny": {
+        "name": "yolov4_tiny.nb",
+        "source": "binary",
+        "file": "yolov4_tiny.nb"
     },
-    "yolov7_tiny":{
-		"name" : "yolov7_tiny.nb",
-		"source":"binary",
-		"file":"yolov7_tiny.nb"
+    "yolov3_tiny": {
+        "name": "yolov3_tiny.nb",
+        "source": "binary",
+        "file": "yolov3_tiny.nb"
     },
-    "yamnet_s_hybrid":{
-		"name" : "yamnet_s_hybrid.nb",
-		"source":"binary",
-		"file":"yamnet_s_hybrid.nb"
+    "yolov7_tiny": {
+        "name": "yolov7_tiny.nb",
+        "source": "binary",
+        "file": "yolov7_tiny.nb"
     },
-    "yamnet_fp16":{
-		"name" : "yamnet_fp16.nb",
-		"source":"binary",
-		"file":"yamnet_fp16.nb"
+    "yamnet_s_hybrid": {
+        "name": "yamnet_s_hybrid.nb",
+        "source": "binary",
+        "file": "yamnet_s_hybrid.nb"
     },
-    "mobilefacenet_i8":{
-		"name" : "mobilefacenet.nb",
-		"source":"binary",
-		"file":"mobilefacenet_int8.nb"
+    "yamnet_fp16": {
+        "name": "yamnet_fp16.nb",
+        "source": "binary",
+        "file": "yamnet_fp16.nb"
     },
-    "mobilefacenet_i16":{
-		"name" : "mobilefacenet.nb",
-		"source":"binary",
-		"file":"mobilefacenet_int16.nb"
+    "mobilefacenet_i8": {
+        "name": "mobilefacenet.nb",
+        "source": "binary",
+        "file": "mobilefacenet_int8.nb"
     },
-	"scrfd640":{
-		"name" : "scrfd.nb",
-		"source":"binary",
-		"file":"scrfd_500m_bnkps_640x640_u8.nb"
+    "mobilefacenet_i16": {
+        "name": "mobilefacenet.nb",
+        "source": "binary",
+        "file": "mobilefacenet_int16.nb"
     },
-	"scrfd320p":{
-		"name" : "scrfd.nb",
-		"source":"binary",
-		"file":"scrfd_500m_bnkps_576x320_u8.nb"
+    "scrfd640": {
+        "name": "scrfd.nb",
+        "source": "binary",
+        "file": "scrfd_500m_bnkps_640x640_u8.nb"
+    },
+    "scrfd320p": {
+        "name": "scrfd.nb",
+        "source": "binary",
+        "file": "scrfd_500m_bnkps_576x320_u8.nb"
     }
 }

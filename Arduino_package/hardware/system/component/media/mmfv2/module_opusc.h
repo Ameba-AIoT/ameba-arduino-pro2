@@ -17,6 +17,7 @@
 #define CMD_OPUSC_INIT_MEM_POOL         MM_MODULE_CMD(0x0a)
 #define CMD_OPUSC_RESET                 MM_MODULE_CMD(0x0b)
 #define CMD_OPUSC_STOP                  MM_MODULE_CMD(0x0c)
+#define CMD_OPUSC_SET_PADDING_SIZE      MM_MODULE_CMD(0x0d)
 
 #define CMD_OPUSC_APPLY                 MM_MODULE_CMD(0x20)  // for hardware module
 
@@ -49,6 +50,7 @@ typedef struct opusc_ctx_s {
 	void *mem_pool;
 	opusc_params_t params;
 
+	uint32_t padding_size;
 	uint8_t *cache;
 	uint32_t cache_idx;
 	uint32_t stop;

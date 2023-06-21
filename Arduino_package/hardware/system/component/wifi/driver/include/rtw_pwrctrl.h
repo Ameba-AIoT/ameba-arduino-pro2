@@ -419,6 +419,13 @@ struct pwrctrl_priv {
 	u32 protocol_keepalive_interval;
 	u32 protocol_keepalive_count;
 #endif
+
+#ifdef CONFIG_WOWLAN_BCN_TRACK
+	u8 bcntrack_start_window;
+	u8 bcntrack_max_window;
+	u8 bcntrack_increment_step;
+	u8 bcntrack_duration;
+#endif
 };
 
 #define RTW_PWR_STATE_CHK_INTERVAL 2000

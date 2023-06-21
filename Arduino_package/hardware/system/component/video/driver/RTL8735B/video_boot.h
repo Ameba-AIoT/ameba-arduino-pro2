@@ -138,7 +138,7 @@ typedef struct video_boot_stream_cfg {
 	uint32_t fcs_isp_awb_enable;
 	uint32_t fcs_isp_awb_init_rgain;
 	uint32_t fcs_isp_awb_init_bgain;
-	uint32_t fcs_isp_init_daynight_mode;//0 night mode ; 1 day mode
+	uint32_t fcs_isp_init_daynight_mode;//0 day mode ; 1 night mode
 	uint32_t fcs_isp_gray_mode;//0 color mode ; 1 gray mode
 	uint32_t fcs_lookup_count;
 	uint32_t fcs_als_thr[FCS_TALBE_NUM];

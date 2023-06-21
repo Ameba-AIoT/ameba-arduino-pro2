@@ -32,6 +32,9 @@ struct uvc_format {
 	int init;//It only support whether the uvc is first init 0:Not initialized 1: Initialized
 };
 
+typedef struct uvcd_ctx_s {
+	void *parent;
+} uvcd_ctx_t;
 
 extern mm_module_t uvcd_module;
 

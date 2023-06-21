@@ -165,6 +165,9 @@ struct spi_s {
 #if defined(CONFIG_AUDIO_EN) && (CONFIG_AUDIO_EN == 1)
 struct audio_s {
 	hal_audio_adapter_t audio_adapter;
+	BOOL dac_l_dmute_en;
+	BOOL adc_l_dmute_en;
+	BOOL adc_r_dmute_en;
 };
 #endif
 

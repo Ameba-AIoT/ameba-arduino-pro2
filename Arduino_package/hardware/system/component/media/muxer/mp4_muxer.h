@@ -76,6 +76,7 @@ typedef struct mp4_param_s {
 	uint32_t mp4_audio_duration;//duration 20ms
 	uint32_t vfs_format_enable;
 	uint32_t use_self_file_name;
+	uint32_t append_header;
 } mp4_params_t;
 
 typedef struct _mp4_context {
@@ -163,6 +164,7 @@ typedef struct _mp4_context {
 	int vfs_format_enable;
 	FILE     *vfs_file;
 	int         status;
+	int	append_header;//0:Don't add the sps/pps 1:Add the info
 } mp4_context, *pmp4_context;
 
 void mp4_muxer_init(pmp4_context mp4_ctx);
