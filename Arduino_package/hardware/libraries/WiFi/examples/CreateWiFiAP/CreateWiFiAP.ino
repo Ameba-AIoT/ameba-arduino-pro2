@@ -6,7 +6,7 @@
 
 #include <WiFi.h>
 // Set if user wants to key in ssid/pwd manually during operation
-//#define MANUAL_INPUT
+// #define MANUAL_INPUT
 
 #ifdef MANUAL_INPUT  // Initialise ssid string, pwd string, and serial_in object
 // Initialise strings
@@ -56,18 +56,20 @@ void setup() {
             }
 
         Serial.println("Enter your channel number");
-        while (Serial.available() == 0) {}
+        int checker = 0;
+       
+        while(1){
+            while (Serial.available() == 0);
             str_channel = Serial.readString();
-            int checker = str_channel.toInt();
-            while(str_channel != (String(checker))){
-                Serial.println("channel should be a number!");
-                while (Serial.available() == 0) {}
-                str_channel = Serial.readString();
-                checker = str_channel.toInt();
-            }
             str_channel.trim();
-            Serial.print("channel entered: ");
-            Serial.println(str_channel);
+            checker = str_channel.toInt();  
+            if (str_channel == (String(checker))){
+              break;
+            }
+            Serial.println("channel should be a number!");         
+        }
+        Serial.print("channel entered: ");
+        Serial.println(str_channel);
 #endif
         Serial.print("Attempting to start AP with SSID: ");
 #ifndef MANUAL_INPUT
