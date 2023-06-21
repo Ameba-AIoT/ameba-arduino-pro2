@@ -155,6 +155,29 @@ void sys_recover_ota_signature(void);
 #if (defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1))
 ///@name AmebaPro2
 ///@{
+
+/**
+ *  brief  Enumeration to define SPIC source clock
+ */
+enum dram_size_e {
+	DDR_32MB = 0,                      //!< DRAM density is 32 MB
+	DDR_64MB = 1,                      //!< DRAM density is 64 MB
+	DDR_128MB = 2,                     //!< DRAM density is 128 MB
+	DDR_256MB = 3,                     //!< DRAM density is 256 MB
+	DDR_512MB = 4,                     //!< DRAM density is 512 MB
+	DDR_1024MB = 5,                    //!< DRAM density is 1024 MB
+	DDR_2048MB = 6,                    //!< DRAM density is 2048 MB
+	DDR_UNDEFINE = 0xFF                //!< DRAM density is not defined in CHIP ID
+};
+typedef uint8_t dram_size_t;
+
+enum dram_type_e {
+	DRAM_TYP_DDR2 = 0,                      //!< DRAM type is DDR2
+	DRAM_TYP_DDR3 = 1,                      //!< DRAM type is DDR3
+	DRAM_TYP_UNDEFINE = 0xFF                //!< DRAM type is not defined in CHIP ID
+};
+typedef uint8_t dram_type_t;
+
 /**
   * @brief vector reset
   * @retval none

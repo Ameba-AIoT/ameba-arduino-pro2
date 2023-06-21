@@ -26,7 +26,6 @@ typedef struct opusd_param_s {
 	uint32_t opus_application;
 	uint8_t  with_opus_enc;
 
-	int samples_input;
 	int max_bytes_output;
 } opusd_params_t;
 
@@ -48,6 +47,7 @@ typedef struct opusd_ctx_s {
 	int32_t last_frame_idx;
 
 	uint8_t *decode_buf;
+	uint32_t max_output_byte;
 
 	opusd_parser_t parser;
 	uint32_t stop;
