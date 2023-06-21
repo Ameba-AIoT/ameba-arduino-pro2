@@ -90,18 +90,20 @@ void setup() {
                     Serial.println(str_appass);
             }
         Serial.println("Enter your channel number:");
-        while (Serial.available() == 0) {}
+        int checker = 0;
+       
+        while(1){
+            while (Serial.available() == 0);
             str_channel = Serial.readString();
-            int checker = str_channel.toInt();
-            while(str_channel != (String(checker))){
-                Serial.println("channel should be a number!");
-                while (Serial.available() == 0) {}
-                str_channel = Serial.readString();
-                checker = str_channel.toInt();
-            }
             str_channel.trim();
-            Serial.print("channel entered: ");
-            Serial.println(str_channel);
+            checker = str_channel.toInt();  
+            if (str_channel == (String(checker))){
+              break;
+            }
+            Serial.println("channel should be a number!");         
+        }
+        Serial.print("channel entered: ");
+        Serial.println(str_channel);
 #endif
 
 #ifndef MANUAL_INPUT
