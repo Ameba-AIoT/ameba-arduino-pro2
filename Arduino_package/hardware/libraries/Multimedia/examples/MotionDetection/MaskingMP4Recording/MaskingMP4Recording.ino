@@ -4,6 +4,7 @@
 #include "VideoStream.h"
 #include "StreamIO.h"
 #include "AudioStream.h"
+#include "AudioEncoder.h"
 #include "MP4Recording.h"
 #include "RTSP.h"
 #include "MotionDetection.h"
