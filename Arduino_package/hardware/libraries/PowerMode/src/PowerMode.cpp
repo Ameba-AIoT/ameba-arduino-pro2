@@ -154,7 +154,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                 case PF_2:
                 // case PF_3:
                 // case PF_4:
-                // case PF_5:
+                case PF_5:
                 case PF_6:
                 case PF_7:
                 case PF_8:
