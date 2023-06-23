@@ -54,8 +54,7 @@ void mimoRegIn3(void *ctx, mm_context_t *arg1) {
 
 void mimoRegOut1(void *ctx, mm_context_t *arg1) {
     if (numIn == 2){
-        mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0);
-//        mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0 | MMIC_DEP_INPUT1);
+        mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0 | MMIC_DEP_INPUT1);
     }
     else if (numIn == 3){
         mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT0, (uint32_t)arg1, MMIC_DEP_INPUT0 | MMIC_DEP_INPUT2);
@@ -64,8 +63,7 @@ void mimoRegOut1(void *ctx, mm_context_t *arg1) {
 
 void mimoRegOut2(void *ctx, mm_context_t *arg1) {
     if (numIn == 2){
-        mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT1, (uint32_t)arg1, MMIC_DEP_INPUT1);
-//        mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT1,(uint32_t)arg1,  MMIC_DEP_INPUT1 | MMIC_DEP_INPUT0);
+        mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT1,(uint32_t)arg1, MMIC_DEP_INPUT1 | MMIC_DEP_INPUT0);
     }
     else if (numIn == 3){
         mimo_ctrl((mm_mimo_t *)ctx, MMIC_CMD_ADD_OUTPUT1,(uint32_t)arg1, MMIC_DEP_INPUT1 | MMIC_DEP_INPUT2);
