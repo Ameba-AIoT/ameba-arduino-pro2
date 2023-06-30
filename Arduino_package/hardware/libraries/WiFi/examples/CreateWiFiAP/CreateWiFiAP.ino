@@ -83,7 +83,7 @@ void setup() {
         strcpy(pass_cust, str_pass.c_str());
         strcpy(channel_cust, str_channel.c_str());
         Serial.println(str_ssid.c_str());
-        status = WiFi.apbegin(ssid_cust, pass_cust, channel, ssid_status);
+        status = WiFi.apbegin(ssid_cust, pass_cust, channel_cust, ssid_status);
         str_ssid = str_pass = str_channel = "";
 #endif
         delay(10000);
