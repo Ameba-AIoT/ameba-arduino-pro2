@@ -4,7 +4,9 @@
 # For Example: whether scrfd and mobilefacenet models have been selected while running NNFaceRecognition Example
 # ------------------------------------------------------
 # To generate executable
-# python3 -m PyInstaller --onefile --name nn_model_update_linux ./nn_model_update.py
+# python -m PyInstaller  --onefile --name ino_validation_windows.exe .\ino_validation.py 
+# python3 -m PyInstaller --onefile --name ino_validation_linux ./ino_validation.py
+# python3 -m PyInstaller --onefile --name ino_validation_macos ./ino_validation.py
 #                        -w: no terminal required 
 # ------------------------------------------------------
 # Linux Permission Denied: chmod +x myapp ls -l myapp
@@ -12,9 +14,7 @@
 import os
 import re
 import sys
-import shutil
 import json
-from datetime import datetime, timezone
 from sys import platform
 
 DEBUG = 0
@@ -22,14 +22,17 @@ def debug_print(message):
     if DEBUG:
         print(message)
 
-keyword = "modelSelect"
+keywordNN = "modelSelect"
+keywordVOE = "configVideoChannel"
 keyword_header = "#include"
 keyword_customized = "CUSTOMIZED"
 keyword_default = "DEFAULT"
 keyword_default_backup = "Dbackup"
 keyword_customized_backup = "Cbackup"
-keyword_bypass1 = " .modelSelect"
-keyword_bypass2 = " modelSelect"
+keyword_bypassNN1 = " .modelSelect"
+keyword_bypassNN2 = " modelSelect"
+keyword_bypassVOE1 = " .configVideoChannel"
+keyword_bypassVOE2 = " configVideoChannel"
 
 filename_txt = "ino_validation.txt"
 
@@ -63,61 +66,51 @@ elif platform == "darwin":
     dest_path = ambpro2_path + "/" + sdk_version + "/variants/common_nn_models/"
     filepath_txt = sys.argv[2] + '/misc/' + filename_txt
 
+def resetTXT():    
+    directory = os.path.dirname(filepath_txt)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    with open(filepath_txt, 'w', encoding='utf-8') as file:
+        pass
+    debug_print(f"[INFO] {filename_txt} has been reset")
 
-def resetJSON(input):
-    for file_json in os.listdir(input):
-        if file_json.endswith(".json"):
-            with open(os.path.join(input, file_json), "r", encoding='utf-8') as file:
-                data = json.load(file)
-                data["FWFS"]["files"] = []
-            with open(os.path.join(input, file_json), "w", encoding='utf-8') as file:
-                json.dump(data, file, indent=4)
-            debug_print(f"[INFO] {file_json} has been reset")
+def updateTXT(input):
+    directory = os.path.dirname(filepath_txt)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    with open(filepath_txt, 'a', encoding='utf-8') as file:
+        file.write(input + "\n")
 
-def updateJSON(input):
-    for file_json in os.listdir(dest_path):
-        if file_json.endswith(".json"):
-            with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
-                data = json.load(file)
-                if input == "null":
-                    sys.stderr.write(f"[Error] Model input in json is null. Please check again!\n")
-                    sys.exit(1)   
-                if input == 'RESET':
-                    break
-                data["FWFS"]["files"].append(input)
-            with open(os.path.join(dest_path, file_json), "w", encoding='utf-8') as file:
-                json.dump(data, file, indent=4)
-    # validateJSON()
+def updateNATXT(filepath, start_line, end_line):
+    with open(filepath, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+    start_line_index = None
+    end_line_index = None
 
-def validateJSON():
-    total_size = 0
-    limit_size = 0
-    counter = 0
-    for file_json in os.listdir(dest_path):
-        if file_json.endswith(".json"):
-            with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
-                data = json.load(file)
-                files_dict = data["FWFS"]["files"]
-                for value in files_dict:
-                    value_file_path = dest_path + data[value]["file"]
-                    debug_print(value_file_path)
-                    total_size += os.stat(value_file_path).st_size
-                    limit_size += 4194304
-                    counter += 1
-                debug_print("---------")
-                debug_print(total_size)
-                debug_print(limit_size)
-    if total_size > limit_size and counter > 1:
-        sys.stderr.write(f"[Error] Model size is too big! Please check your input again.\n")
-        sys.exit(1)
+    for index, line in enumerate(lines):
+        if start_line in line:
+            start_line_index = index
+        if end_line in line:
+            end_line_index = index
+        if start_line_index is not None and end_line_index is not None:
+            break
 
-def dupCheckJSON(input):
-    for file_json in os.listdir(dest_path):
-        if file_json.endswith(".json"):
-            with open(os.path.join(dest_path, file_json), "r", encoding='utf-8') as file:
-                data = json.load(file)
-                if input2model(input) not in data["FWFS"]["files"]:
-                    return 1
+    if start_line_index is not None and end_line_index is not None:
+        content_between_lines = lines[start_line_index + 1:end_line_index]
+        is_empty = all(line.strip() == '' for line in content_between_lines)
+        if is_empty:
+            lines.insert(start_line_index + 1, "NA\nNA\nNA\n")
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.writelines(lines)
+    else:
+        raise ValueError("Start or end line not found in the file")
+
+def dupCheckTXT(input):
+    if input == "NA":
+        return 1
+    with open(filepath_txt,'r', encoding='utf-8') as file:
+        if input2model(input) not in file.read():
+            return 1
     return 0
 
 def input2model(input):
@@ -136,6 +129,23 @@ def input2model(input):
     model = model_mapping.get(input)
     return model
 
+def input2header(input):
+    header_mapping = {
+        "yolov3_tiny"               : "NNObjectDetection.h",
+        "yolov4_tiny"               : "NNObjectDetection.h",
+        "yolov7_tiny"               : "NNObjectDetection.h",
+        "mobilefacenet_i16"         : "NNFaceDetectionRecognition.h",
+        "scrfd640"                  : "NNFaceDetection.h",
+        "yolov3_tiny"               : "NNObjectDetection.h",
+        "yolov4_tiny"               : "NNObjectDetection.h",
+        "yolov7_tiny"               : "NNObjectDetection.h",
+        "mobilefacenet_i8"          : "NNFaceDetectionRecognition.h",
+        "scrfd320p"                 : "NNFaceDetection.h",
+        "None"                      : "NA"
+    }
+    header = header_mapping.get(input)
+    return header
+
 def input2filename(input):
     if os.path.isdir(dest_path):
         for file_json in os.listdir(dest_path):
@@ -144,62 +154,6 @@ def input2filename(input):
                     data = json.load(file)
                     value_file = data[input]["file"]
         return value_file
-
-def dspFileProp(filename):
-    if os.path.isfile(dest_path + filename):
-        file_model_stats = os.stat(dest_path + filename)
-        file_model_datetime = datetime.fromtimestamp(file_model_stats.st_mtime, tz = timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
-        file_model_date = datetime.fromtimestamp(file_model_stats.st_mtime, tz = timezone.utc).strftime('%Y-%m-%d')
-        file_model_mode = oct(file_model_stats.st_mode)
-        # debug_print("              FILE INFO")
-        # debug_print("------------------------------------------")
-        # debug_print(f"Size:          {file_model_stats.st_size}")
-        # debug_print(f"Last modified: {file_model_datetime}")
-        # debug_print(f"Mode:          {file_model_mode}")
-        # debug_print("------------------------------------------")
-        return file_model_date
-    else:
-        sys.stderr.write(f"[Error] Default model {filename} does not exist. Please check {dest_path} again.\n")
-        sys.exit(1)
-
-def renameFile(filename, type):
-    if type == 1:
-        # Backup Dmodel
-        filename_modified = "Dbackup_" + dspFileProp(filename) + "_" + filename
-        if os.path.isfile(os.path.join(dest_path, filename_modified)) == False:
-            debug_print(os.path.join(dest_path, filename_modified))
-            os.rename(os.path.join(dest_path, filename), os.path.join(dest_path, filename_modified))
-        debug_print("[INFO] Dmodel Backup done.")
-    else:
-        # Backup Cmodel
-        filename_modified = "Cbackup_" + dspFileProp(filename) + "_" + filename
-        if os.path.isfile(os.path.join(dest_path, filename_modified)) == False:
-            os.rename(os.path.join(dest_path, filename), os.path.join(dest_path, filename_modified))
-        debug_print("[INFO] Cmodel Backup done.")
-
-def backupModel(input, sktech_path):
-    for dest_file in os.listdir(dest_path):
-        if "Dbackup" in dest_file:
-            debug_print(f"[INFO] Backup-ed {input} found !!!")
-            break
-    renameFile(input, 1)
-    # backup Cmodel
-    shutil.copy(sktech_path + os.path.sep + input, dest_path)
-    renameFile(input, 0)
-    # copy Cmodel
-    shutil.copy(sktech_path + os.path.sep + input, dest_path)
-    debug_print("[INFO] Cmodel copied.")
-
-def revertModel(input):
-    for dest_file in os.listdir(dest_path):
-        if keyword_default_backup in dest_file and input in dest_file:
-            debug_print(f"[INFO] Defaut backup model {dest_file} found")
-            file_model_reverted = dest_file.split("_", 2)[2]
-            os.remove(dest_path + os.path.sep + file_model_reverted)
-            debug_print(f"[INFO] User Model {file_model_reverted} has been removed")
-            # revert Dbackup
-            os.rename(os.path.join(dest_path, dest_file), os.path.join(dest_path, file_model_reverted))
-            debug_print(f"[INFO] Revert {input} done.")
 
 def validationINO():
     for file_json in os.listdir(sys.argv[1]):
@@ -212,8 +166,6 @@ def validationINO():
                 # Arduino IDE2.0 
                 if "Arduino15" not in example_path: 
                     example_name = example_path.split(os.path.sep)[-1]
-                    
-                    # check whether keyword in file content
                     if ".ino" not in example_path and ".ino" not in example_name:
                         for file in os.listdir(example_path):
                             if ".ino" in file:
@@ -233,15 +185,20 @@ def validationINO():
                     debug_print(f"[INFO] Current example {example_name} running in: {example_path}")
     return example_path
 
-def writeJSON(example_path):
+model_list = []
+
+def writeTXT(example_path):
     for file_json in os.listdir(sys.argv[1]):
         if file_json.endswith(".json") and "build" in file_json:
             with open(os.path.join(sys.argv[1], file_json), "r", encoding='utf-8') as file:
-                with open(example_path, 'r', encoding='utf-8') as file:
+                with open(example_path, "r", encoding='utf-8') as file:
                     sktech_path  = example_path + os.path.sep + ".."
                     lines = file.readlines()
+                    updateTXT("----------------------------------")
+                    updateTXT("Current ino contains model(s):")
                     for line in lines:
-                         if "//" not in line and keyword in line and not keyword_bypass1 in line and not keyword_bypass2 in line:
+                        # check whether keywordNN in file content
+                        if "//" not in line and keywordNN in line and not keyword_bypassNN1 in line and not keyword_bypassNN2 in line:
                             input_param = re.search(r'\((.*?)\)', line).group(1)
                             if input_param != "":
                                 debug_print(f"Current input using: {input_param.split(',')}")
@@ -263,11 +220,11 @@ def writeJSON(example_path):
                                     if model_type == "OBJECT_DETECTION" and "NA_MODEL" in model[0] or model_type == "OBJECT_DETECTION" and "YOLO" not in model[0] or model_type == "FACE_DETECTION" and "NA_MODEL" in model[1] or model_type == "FACE_DETECTION" and "SCRFD" not in model[1] or model_type == "FACE_RECOGNITION" and "NA_MODEL" in model[1] or model_type == "FACE_RECOGNITION" and "NA_MODEL" in model[2] or model_type == "FACE_RECOGNITION" and "SCRFD" not in model[1] or model_type == "FACE_RECOGNITION" and "MOBILEFACENET" not in model[2]:
                                         sys.stderr.write(f"[Error] Model mismatch. Please check modelSelect() again.\n")
                                         sys.exit(1)
-
+                                    
                                     for model_item in model:
                                         if model_item != "":
                                             debug_print(f"Current model using: {input2model(model_item.strip())}")
-                                            
+                                            model_list.append(input2model(model_item.strip()))
                                             if keyword_customized in model_item.strip():
                                                 files = os.listdir(sktech_path)
                                                 nb_files = [file for file in files if file.endswith('nb')]
@@ -278,30 +235,77 @@ def writeJSON(example_path):
                                                 else:
                                                     # check model naming convension
                                                     if input2filename(input2model(model_item.strip())) not in nb_files:
-                                                        resetJSON(dest_path)
+                                                        resetTXT()
                                                         sys.stderr.write(f"[Error] Customized model {input2filename(input2model(model_item.strip()))} not found. Please check your sketch folder again.\n")
                                                         sys.exit(1)
-                                                backupModel(input2filename(input2model(model_item.strip())), sktech_path)
-                                            else:
-                                                if model_item.strip() != "NA_MODEL":
-                                                    revertModel(input2filename(input2model(model_item.strip())))
-                                        # default add in at least one model for NN examples
-                                        if input2model(model_item.strip()) != None:
-                                            if dupCheckJSON(model_item.strip()):
-                                                updateJSON(input2model(model_item.strip()))
+                    if not model_list:
+                        for i in range(3):
+                            updateTXT("NA")
+                    else:
+                        for i in range(int(len(model_list)/3 - 1)):
+                            n = 3 * (i + 1)
+                            for j in range(3):
+                                if model_list[j] is None and model_list[j + n] is not None:
+                                    model_list[j] = model_list[j + n] 
+                        for i in range(3):
+                            if model_list[i] is not None:
+                                updateTXT(model_list[i])
+                            else:
+                                updateTXT("NA")
+
+                    updateTXT("-----------------------------------")
+                    updateTXT("Current NN header file(s): ")
+                    line_list = []
+                    for line in lines:
+                        if line.startswith(keyword_header) and "NN" in line:
+                            line_list.append(line.replace('"','').split()[-1])
+                    if not model_list:
+                        for i in range(3):
+                            updateTXT("NA")
+                    else:
+                        for i in range(3):
+                            if model_list[i] is not None:
+                                if input2header(model_list[i]) in line_list:
+                                    updateTXT(input2header(model_list[i]))
+                                else:
+                                    updateTXT("NA")
+                            else:
+                                updateTXT("NA")
+
+                    updateTXT("----------------------------------")
+                    updateTXT("Current ino video status:")
+                    textVOE = "NA"
+                    for line in lines:
+                        # check whether keywordVOE in file content
+                        if "//" not in line and keywordVOE in line and not keyword_bypassVOE1 in line and not keyword_bypassVOE2 in line:
+                            textVOE = "ON"
+                    updateTXT(textVOE)
+                    
+                    updateTXT("-------------------------------------")
+                    updateTXT("Current ino contains header file(s): ")
+                    for line in lines:
+                        if line.startswith(keyword_header):
+                            updateTXT(line.replace('"','').split()[-1])
+                    updateTXT("--------------------------------------")
+                    
+                    start_line1 = "Current ino contains model(s):"
+                    end_line1 = "-----------------------------------"
+                    updateNATXT(filepath_txt, start_line1, end_line1)
+                    start_line2 = "Current NN header file(s):"
+                    end_line2 = "-------------------------------------"
+                    updateNATXT(filepath_txt, start_line2, end_line2)
+                    start_line3 = "Current ino contains header file(s):"
+                    end_line3 = "--------------------------------------"
+                    updateNATXT(filepath_txt, start_line3, end_line3)
 
 def main(param1, param2):
     debug_print(f'Parameter 1: {param1}')
     debug_print(f'Parameter 2: {param2}')
     user_input_flag = False
     while user_input_flag == False:
-        if len(sys.argv) > 1:
-            user_input1 = sys.argv[1]
-        else:
-            user_input1 = input("Please provide a valid input > ")
         user_input_flag = True
-        resetJSON(dest_path)
-        writeJSON(validationINO())
+        resetTXT()
+        writeTXT(validationINO())
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
