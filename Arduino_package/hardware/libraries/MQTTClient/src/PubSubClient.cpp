@@ -342,7 +342,6 @@ boolean PubSubClient::connect(const char *id, const char *user, const char *pass
                 unsigned long t = millis();
                 if (t-lastInActivity >= ((int32_t) this->socketTimeout*1000UL)) {
                     _state = MQTT_CONNECTION_TIMEOUT;
-//                    printf("【MQTT Timeout】Timeout stop\r\n");
                     _client->stop();
                     return false;
                 }
@@ -464,11 +463,8 @@ uint32_t PubSubClient::readPacket(uint8_t* lengthLength) {
 }
 
 boolean PubSubClient::loop() {
-//    printf("PubsubClientloop\r\n");
     if (connected()) {
         unsigned long t = millis();
-//        printf("lastInActivity = %d\r\n", t-lastInActivity);
-//        printf("lastOutActivity = %d\r\n", t-lastOutActivity);
         if ((t - lastInActivity > this->keepAlive*1000UL) || (t - lastOutActivity > this->keepAlive*1000UL)) {
             if (pingOutstanding) {
                 this->_state = MQTT_CONNECTION_TIMEOUT;
@@ -902,7 +898,6 @@ boolean PubSubClient::connected() {
         rc = false;
     } else {
         rc = (int)_client->connected();
-//        printf("rc=%d\r\n",rc);
         if (!rc) {
             if (this->_state == MQTT_CONNECTED) {
                 this->_state = MQTT_CONNECTION_LOST;
