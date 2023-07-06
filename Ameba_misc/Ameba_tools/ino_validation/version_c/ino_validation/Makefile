@@ -12,8 +12,10 @@ ifeq ($(UNAME), Linux)
 else ifeq ($(UNAME), Darwin)
     # macOS-specific commands
     CC = gcc
+    AR = ar
+    RCS = rcs
     CFLAGS = -c
-    LDFLAGS = -L. -lcjson -static -L/Library/Developer/CommandLineTools/usr/lib/swift_static/macosx/ -Bstatic
+    LDFLAGS = -L. -lcjson -L/Library/Developer/CommandLineTools/usr/lib/swift_static/macosx/ -Bstatic
     OUTPUT = ino_validation_macos
 else
     $(error Unsupported operating system: $(UNAME))
@@ -32,4 +34,4 @@ libcjson.a: cJSON.o
 
 # Clean rule
 clean:
-	rm -f cJSON.o libcjson.a ino_validation
+	rm -f cJSON.o libcjson.a $(OUTPUT)
