@@ -1,19 +1,15 @@
-﻿/*
-LINUX:
-gcc -c cJSON.c
-ar rcs libcjson.a cJSON.o
-gcc ino_validation.c -o ino_validation -L. -lcjson -static
-gcc ino_validation.c -o ino_validation -L. -L/Library/Developer/CommandLineTools/usr/lib/swift_static/macosx/ -lcjson -Bstatic
-
-TODO:
-1. error handler for void func
-2. SDK == 1 check
-3. 2 modelSelect() handler
----------------------------------
-Jul
-1. customized file location check
-2. Audio NN
-*/
+﻿/*******************************************************************************************************************************************************************
+*  README
+*
+* FOR REALTEK INTERNAL USERS
+* To understand the tool overall API structure and details, please download a documentation via the Wiki link below and refer to Chapter 2:
+* https://wiki.realtek.com/download/attachments/155451805/%5BWiki%5D%5BSD3%5D%20How%20to%20update%20tools%20to%20Arduino%20SDK_20230707.pdf?api=v2
+*
+*  COMPILATION
+* Windows: VS Build Solution0
+* Linux/macOS: open terminal and execute "make clean;make" command
+*
+*******************************************************************************************************************************************************************/
 #define _GNU_SOURCE
 
 #ifdef _WIN32
