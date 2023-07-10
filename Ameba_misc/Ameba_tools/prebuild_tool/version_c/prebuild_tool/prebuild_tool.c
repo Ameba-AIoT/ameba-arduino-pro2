@@ -1,4 +1,13 @@
-﻿#ifdef _WIN32
+﻿/*******************************************************************************************************************************************************************
+*  README
+*
+*  COMPILATION
+* Windows: VS Build Solution0
+* Linux/macOS: open terminal and execute "make clean;make" command
+*
+*******************************************************************************************************************************************************************/
+
+#ifdef _WIN32
     #include <io.h>
     #include "dirent.h"	// https://codeyarns.com/tech/2014-06-06-how-to-use-dirent-h-with-visual-studio.html#gsc.tab=0
 #else // #elif __linux__
