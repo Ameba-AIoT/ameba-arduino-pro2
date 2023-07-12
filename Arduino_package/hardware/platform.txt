@@ -198,6 +198,7 @@ tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.pa
 tools.gdb.path={runtime.tools.{toolchain_p1_name}.path}/bin/
 tools.gdb.cmd=arm-none-eabi-gdb
 tools.gdb.cmd.windows=arm-none-eabi-gdb.exe
+tools.gdb.cmd.linux=arm-none-eabi-gdb
 tools.gdb.debug.pattern="{path}/{cmd}" --interpreter=mi2 -ex "set pagination off" --baud 115200 -ex "set target-charset ASCII" -ex "target remote {debug.port}" {build.path}/application.ntz
 
 debug.executable={build.path}/application.ntz
@@ -209,6 +210,7 @@ debug.toolchain.prefix=arm-none-eabi-
 # ----------------------------------------
 debug.server=jlink
 debug.server.jlink.path.windows=C:/Program Files/SEGGER/JLink/JLinkGDBServerCL.exe
+debug.server.jlink.path.linux=/opt/SEGGER/JLink/JLinkGDBServer
 debug.server.jlink.device=CORTEX-M33
 #debug.server.jlink.interface=swd
 #debug.server.jlink.script={runtime.tools.ameba_d_tools.path}/tools/debug/RTL8722_Arduino_debug.JLinkScript

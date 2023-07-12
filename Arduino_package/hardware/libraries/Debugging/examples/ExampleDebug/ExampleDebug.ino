@@ -34,10 +34,10 @@ void loop() {
     delay(500);
     if ((i % 10) == 0) {
         Serial.println(i);
-        //RTL8735B only supports a maximum of 4 hardware breakpoints. If you need more breakpoints, you can use either of the instructions below to add a software breakpoint in program execution
+        //RTL8735B only supports a maximum of 4 hardware breakpoints. If you need more breakpoints, you can use either of the instructions below (__BKPT() or __asm__("BKPT")) to add a software breakpoint in program execution
         //Note: To continue program execution from a software breakpoint, use "Step Over" first before "Continue"
         //__BKPT();
-        __asm__("BKPT");
+        //__asm__("BKPT");
     }
     digitalWrite(LED_PIN, LOW);
     delay(500);
