@@ -811,8 +811,6 @@ void String::remove(unsigned int index){
 }
 
 void String::remove(unsigned int index, unsigned int count){
-
-// zzw 
 #if 0
     if (index >= len) {
         return;

@@ -105,5 +105,8 @@ void halrf_xtal_trk_info_8735b(void *dm_void, u32 *_used, char *output, u32 *_ou
 
 void halrf_rxg_gain_setting_8735b(struct dm_struct *dm, boolean isbw20);
 
+u8 halrf_get_thermal_8735b(void *dm_void,u8 path);
+
+void halrf_pabias_track_init_8735b(void *dm_void);
 
 #endif /*__HALRF_8735B_H__*/

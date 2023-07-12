@@ -30,6 +30,7 @@
 #define	ODM_REG_RF_MODE_11N			0x00
 #define	ODM_REG_RF_0B_11N			0x0B
 #define	ODM_REG_CHNBW_11N			0x18
+#define	ODM_REG_RF_1D_11N			0x1D
 #define	ODM_REG_T_METER_11N			0x24
 #define	ODM_REG_RF_25_11N			0x25
 #define	ODM_REG_RF_26_11N			0x26

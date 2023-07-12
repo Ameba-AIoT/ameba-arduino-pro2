@@ -56,7 +56,8 @@ bool SSLDrv::getData(sslclient_context *ssl_client, uint8_t *data, uint8_t peek)
             _available = false;
         }
         return true;
-    } 
+    }
+
     return false;
 }
 

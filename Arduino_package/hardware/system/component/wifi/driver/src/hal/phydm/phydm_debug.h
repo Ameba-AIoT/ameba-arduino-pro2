@@ -452,7 +452,7 @@ void phydm_basic_dbg_message(void *dm_void);
 
 void phydm_basic_profile(void *dm_void, u32 *_used, char *output,
 			 u32 *_out_len);
-#if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_AP))
+#if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_AP | ODM_IOT))
 s32 phydm_cmd(struct dm_struct *dm, char *input, u32 in_len, u8 flag,
 	      char *output, u32 out_len);
 #endif

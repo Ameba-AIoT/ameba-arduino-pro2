@@ -15,7 +15,7 @@
 
 
 /* big enough to hold our biggest descriptor */
-#define USB_COMP_EP0_BUFSIZ 1024+24
+#define USB_COMP_EP0_BUFSIZ 4096+24//1024+24
 #define MAX_CONFIG_INTERFACES       16  /* arbitrary; max 255 */
 // predefine structure
 struct usb_composite_dev;

@@ -389,6 +389,13 @@ void DeepSleep(u8 Option, u32 SDuration, u8 Clock);
  */
 u32 Get_wake_reason(void);
 
+/**
+ *  @brief The function will clear AON Timer ISR.
+ *  @param[in]  none
+ *  @returns void
+ */
+void Aon_timer_clear(void);
+
 #endif
 
 #endif  // end of "#if (defined(CONFIG_PLATFORM_8195BHP) && (CONFIG_PLATFORM_8195BHP == 1))  ||  (defined(CONFIG_PLATFORM_8195BLP) && (CONFIG_PLATFORM_8195BLP == 1))  ||  (defined(CONFIG_PLATFORM_8710C) && (CONFIG_PLATFORM_8710C == 1))  ||  (defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1))"

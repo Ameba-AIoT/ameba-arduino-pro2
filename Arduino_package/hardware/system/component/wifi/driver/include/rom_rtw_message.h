@@ -7,6 +7,7 @@
 #endif //CONFIG_PLATFORM_AMEBA_X
 
 extern u32 GlobalDebugEnable;
+extern u8 OtherDebugPortEnable;
 
 // e-version
 typedef enum {
@@ -27,16 +28,25 @@ char **get_rom_e_rtw_msgp_str(void);
 #define rom_e_rtw_msg_printf(name, fmt, args...) \
 	do {\
 		if(GlobalDebugEnable){\
-			char **rom_e_rtw_msgp_str_ = get_rom_e_rtw_msgp_str();\
-			printf((char*)rom_e_rtw_msgp_str_[ROM_E_RTW_MSGP_##name], ## args);\
+			if(OtherDebugPortEnable){\
+				msg_uart_port(fmt, ##args);\
+			} else {\
+				char **rom_e_rtw_msgp_str_ = get_rom_e_rtw_msgp_str();\
+				printf((char*)rom_e_rtw_msgp_str_[ROM_E_RTW_MSGP_##name], ## args);\
+			}\
 		}\
 	}while(0)
 #define rom_e_rtw_msg_871X_LEVEL(name, level, fmt, args...) \
 	do {\
 		if(GlobalDebugEnable){\
-			char **rom_e_rtw_msgp_str_ = get_rom_e_rtw_msgp_str();\
-			printf("\n\r");\
-			printf((char*)rom_e_rtw_msgp_str_[ROM_E_RTW_MSGP_##name], ## args);\
+			if(OtherDebugPortEnable){\
+				printf("\n\r");\
+				msg_uart_port(fmt, ##args);\
+			} else {\
+				char **rom_e_rtw_msgp_str_ = get_rom_e_rtw_msgp_str();\
+				printf("\n\r");\
+				printf((char*)rom_e_rtw_msgp_str_[ROM_E_RTW_MSGP_##name], ## args);\
+			}\
 		}\
 	}while(0)
 #else
@@ -62,16 +72,25 @@ char **get_rom_f_rtw_msgp_str(void);
 #define rom_f_rtw_msg_printf(name, fmt, args...) \
 	do {\
 		if(GlobalDebugEnable){\
-			char **rom_f_rtw_msgp_str_ = get_rom_f_rtw_msgp_str();\
-			printf((char*)rom_f_rtw_msgp_str_[ROM_F_RTW_MSGP_##name], ## args);\
+			if(OtherDebugPortEnable){\
+				msg_uart_port(fmt, ##args);\
+			} else {\
+				char **rom_f_rtw_msgp_str_ = get_rom_f_rtw_msgp_str();\
+				printf((char*)rom_f_rtw_msgp_str_[ROM_F_RTW_MSGP_##name], ## args);\
+			}\
 		}\
 	}while(0)
 #define rom_f_rtw_msg_871X_LEVEL(name, level, fmt, args...) \
 	do {\
 		if(GlobalDebugEnable){\
-			char **rom_f_rtw_msgp_str_ = get_rom_f_rtw_msgp_str();\
-			printf("\n\r");\
-			printf((char*)rom_f_rtw_msgp_str_[ROM_F_RTW_MSGP_##name], ## args);\
+			if(OtherDebugPortEnable){\
+				printf("\n\r");\
+				msg_uart_port(fmt, ##args);\
+			} else {\
+				char **rom_f_rtw_msgp_str_ = get_rom_f_rtw_msgp_str();\
+				printf("\n\r");\
+				printf((char*)rom_f_rtw_msgp_str_[ROM_F_RTW_MSGP_##name], ## args);\
+			}\
 		}\
 	}while(0)
 #else

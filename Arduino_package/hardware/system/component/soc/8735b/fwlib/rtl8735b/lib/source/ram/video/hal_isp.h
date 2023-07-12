@@ -72,6 +72,7 @@ typedef struct hal_isp_stream_stream {
 	uint32_t crop_w;
 	uint32_t crop_h;
 
+	uint32_t sync;
 } hal_isp_stream_t;
 
 
@@ -160,7 +161,10 @@ typedef struct {
 	uint32_t sensor_pwrctrl_pin;
 	uint32_t i2c_id;
 	uint32_t daynight_mode;
+	uint32_t init_hdr_mode;
+	uint32_t init_mirrorflip_mode;
 
+	int *cali_iq_addr;		// Add for store input calibration iq data
 
 } __attribute__((aligned(32))) hal_isp_adapter_t;
 
@@ -315,7 +319,59 @@ typedef struct {
 	isp_rect_t rect_mask[ISP_MASK_RECT_NUM];
 } __attribute__((aligned(32))) isp_mask_group_t;
 
+#define IQ_CALI_EN_AWB  (0x1 << 0)
+#define IQ_CALI_EN_MLSC (0x1 << 1)
+#define IQ_CALI_EN_NLSC (0x1 << 2)
 
+struct isp_iq_cali_point {
+	int32_t x;
+	int32_t y;
+} __attribute__((packed));
+
+struct isp_iq_cali_nlsc {
+	struct isp_iq_cali_point r_center;
+	struct isp_iq_cali_point g_center;
+	struct isp_iq_cali_point b_center;
+} __attribute__((packed));
+
+struct isp_iq_cali_mlsc_u8 {
+	uint8_t matrix_r[1536];
+	uint8_t matrix_g[1536];
+	uint8_t matrix_b[1536];
+} __attribute__((packed));
+
+struct isp_iq_cali_awb {
+	int32_t x_offset;
+	int32_t y_offset;
+} __attribute__((packed));
+
+struct isp_iq_cali {
+	uint8_t enable;
+	struct isp_iq_cali_awb awb;
+	struct isp_iq_cali_mlsc_u8 mlsc;
+	struct isp_iq_cali_nlsc nlsc;
+} __attribute__((packed));
+
+#define RTSV_BRIGHTNESS           0x0000
+#define RTSV_CONTRAST             0x0001
+#define RTSV_SATURATION           0x0002
+//#define RTSV_HUE		          0x0003
+#define RTSV_AUTO_WHITE_BALANCE   0x000C
+#define RTSV_RED_BALANCE          0x000E
+#define RTSV_BLUE_BALANCE         0x000F
+#define RTSV_GAMMA                0x0010
+#define RTSV_EXPOSURE             0x0011
+#define RTSV_AUTOGAIN             0x0012
+#define RTSV_GAIN                 0x0013
+#define RTSV_ANTI_FLICKER         0x0018   //DISABLE = 0, 50HZ = 1, 60HZ = 2, AUTO = 3
+#define RTSV_DAY_NIGHT            0xF002
+#define RTSV_LDC                  0xF008
+#define RTSV_GRAY                 0xF009
+#define RTSV_WDR_MODE             0xF00C   // 0: DISABLE, 1: MANUAL, 2: AUTO
+#define RTSV_WDR_LEVEL            0xF00D
+#define RTSV_SENSOR_MIRROR_FLIP   0xF020   // bit 0: MIRROR, bit 1: Flip
+#define RTSV_AE_MIN_FPS           0xF021
+#define RTSV_AE_MAX_FPS           0xF022
 
 void *isp_soc_start(hal_isp_adapter_t *isp_adpt);
 int isp_open_stream(hal_isp_adapter_t *isp_adpt, uint8_t stream_id);
@@ -349,5 +405,8 @@ int hal_isp_get_real_fps(int ch, int *fps100);
 int hal_isp_get_ae_weight(uint8_t *weights, int *win_num);
 int hal_isp_set_ae_weight(uint8_t *weights, int win_num);
 int hal_isp_set_mask(isp_mask_group_t *input_mask);
+int hal_isp_config_iq_calibration(int config_flag);
+void hal_isp_set_hdr_mode(uint32_t hdr_mode);
+void hal_isp_set_mirrorflip_mode(uint32_t mirrorflip_mode);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

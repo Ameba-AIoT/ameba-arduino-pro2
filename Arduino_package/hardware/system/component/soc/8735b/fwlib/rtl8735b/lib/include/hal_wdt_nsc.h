@@ -54,6 +54,9 @@ void NS_ENTRY hal_wdt_unreg_irq_nsc(void);
 void NS_ENTRY hal_wdt_reset_nsc(u8 reset);
 void NS_ENTRY hal_wdt_aon_enable_nsc(void);
 void NS_ENTRY hal_wdt_aon_disable_nsc(void);
+uint8_t NS_ENTRY hal_wdt_check_wdt_aon_reboot_nsc(void);
+void NS_ENTRY hal_wdt_aon_clear_nsc(void);
+
 /** @} */ /* End of group hal_wdt__nsc_api */
 #endif // end of "#if defined(CONFIG_BUILD_SECURE)"
 
@@ -68,6 +71,8 @@ void  hal_wdt_unreg_irq_nsc(void);
 void  hal_wdt_reset_nsc(u8 reset);
 void  hal_wdt_aon_enable_nsc(void);
 void  hal_wdt_aon_disable_nsc(void);
+uint8_t hal_wdt_check_wdt_aon_reboot_nsc(void);
+void  hal_wdt_aon_clear_nsc(void);
 
 #define hal_wdt_set_timeout             hal_wdt_set_timeout_nsc
 #define hal_wdt_init                    hal_wdt_init_nsc
@@ -79,6 +84,8 @@ void  hal_wdt_aon_disable_nsc(void);
 #define hal_wdt_reset                   hal_wdt_reset_nsc
 #define hal_wdt_aon_enable              hal_wdt_aon_enable_nsc
 #define hal_wdt_aon_disable             hal_wdt_aon_disable_nsc
+#define hal_wdt_check_wdt_aon_reboot	hal_wdt_check_wdt_aon_reboot_nsc
+#define hal_wdt_aon_clear				hal_wdt_aon_clear_nsc
 
 #endif  // end of "#if defined(CONFIG_BUILD_NONSECURE)"
 

@@ -1,71 +1,89 @@
-// This example acts as a Security System based on Motion Detection, which would start to record a 
-// 30 seconds long MP4 video everytime motion is detected. (Alarm function could be initiated as well, but on default disabled)
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-motion-mp4/
+
+ For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/welcome-to-ameba-faq/1748
+
+ This example acts as a Security System based on Motion Detection, which would start to record a 
+ 30 seconds long MP4 video everytime motion is detected. (Alarm function could be initiated as well, but on default disabled)
+ */
 #include "WiFi.h"
-#include "VideoStream.h"
 #include "StreamIO.h"
+#include "VideoStream.h"
 #include "AudioStream.h"
+#include "AudioEncoder.h"
 #include "MP4Recording.h"
 #include "RTSP.h"
 #include "MotionDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNELVID 0  // Channel for RTSP streaming
-#define CHANNELMP4 1  // Channel for MP4 recording
+// Default preset configurations for each video channel:
+// Channel 0 : 1920 x 1080 30FPS H264
+// Channel 1 : 1280 x 720  30FPS H264
+
+// Default audio preset configurations:
+// 0 :  8kHz Mono Analog Mic
+// 1 : 16kHz Mono Analog Mic
+// 2 :  8kHz Mono Digital PDM Mic
+// 3 : 16kHz Mono Digital PDM Mic
+
+#define CHANNELVID 0  // Channel for RTSP streaming & MP4 recording
 #define CHANNELMD  3  // RGB format video for motion detection only avaliable on channel 3
 
 // Pin Definition
 #define GREEN_LED  4
 //#define BUZZER_PIN 7
 
-VideoSetting configVID(VIDEO_HD, CAM_FPS, VIDEO_H264, 0);  // HD resolution video for streaming
-VideoSetting configMP4(VIDEO_FHD, CAM_FPS, VIDEO_H264, 0); // FHD resolution video for streaming
-VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);        // Low resolution RGB video for motion detection
-RTSP rtsp;
+AudioSetting configA(0);
+VideoSetting configV(VIDEO_FHD, CAM_FPS, VIDEO_H264, 0);
+VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);     // Low resolution RGB video for motion detection
 Audio audio;
 AAC aac;
 MP4Recording mp4;
-StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output AAC
-StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output RTSP
-StreamIO videoStreamerMD(1, 1);  // 1 Input RGB Video -> 1 Output MD
-StreamIO avMixMP4Streamer(2, 1); // 2 Input Video + Audio -> 1 Output MP4
+RTSP rtsp;
 MotionDetection MD;
+StreamIO videoStreamerMD(1, 1); // 1 Input RGB Video -> 1 Output MD
+StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output AAC
+StreamIO avMixStreamer(2, 2);   // 2 Input Video + Audio -> 2 Output MP4 + RTSP
 
-bool motionDetected = false;
-bool recordingMotion = false;
 int recordingCount = 0;
 
-char ssid[] = "yourNetwork"; // your network SSID (name)
-char pass[] = "Password";    // your network password
+char ssid[] = "Network_SSID"; // your network SSID (name)
+char pass[] = "Password";     // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;
 
 void setup() {
+    Serial.begin(115200);
+    
     // GPIO Initialization
     pinMode(GREEN_LED, OUTPUT);
-    Serial.begin(115200);
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
-      Serial.print("Attempting to connect to WPA SSID: ");
-      Serial.println(ssid);
-      status = WiFi.begin(ssid, pass);
+        Serial.print("Attempting to connect to WPA SSID: ");
+        Serial.println(ssid);
+        status = WiFi.begin(ssid, pass);
 
-      // wait 2 seconds for connection:
-      delay(2000);
+        // wait 2 seconds for connection:
+        delay(2000);
     }
 
-    // Configure camera video channels for required resolutions and format outputs
-    Camera.configVideoChannel(CHANNELVID, configVID);
-    Camera.configVideoChannel(CHANNELMP4, configMP4);
+    // Configure camera video channel with video format information
+    Camera.configVideoChannel(CHANNELVID, configV);
     Camera.configVideoChannel(CHANNELMD, configMD);
     Camera.videoInit();
 
     // Configure audio peripheral for audio data output
-    // Configure AAC audio encoder
+    audio.configAudio(configA);
     audio.begin();
+    // Configure AAC audio encoder
+    aac.configAudio(configA);
     aac.begin();
 
-    // Configure RTSP with corresponding video format information
-    rtsp.configVideo(configVID);
+    // Configure RTSP with identical video format information and enable audio streaming
+    rtsp.configVideo(configV);
+    rtsp.configAudio(configA, CODEC_AAC);
     rtsp.begin();
 
     // Configure motion detection for low resolution RGB video stream
@@ -75,7 +93,8 @@ void setup() {
 
     // Configure MP4 with identical video format information
     // Configure MP4 recording settings
-    mp4.configVideo(configMP4);
+    mp4.configVideo(configV);
+    mp4.configAudio(configA, CODEC_AAC);
     mp4.setRecordingDuration(30);
     mp4.setRecordingFileCount(1);
 
@@ -86,13 +105,18 @@ void setup() {
       Serial.println("StreamIO link start failed");
     }
 
-    // Configure StreamIO object to stream data from high res video channel to RTSP
-    videoStreamer.registerInput(Camera.getStream(CHANNELVID));
-    videoStreamer.registerOutput(rtsp);
-    if (videoStreamer.begin() != 0) {
-      Serial.println("StreamIO link start failed");
+    // Configure StreamIO object to stream data from video channel and AAC encoder to MP4 recording
+    avMixStreamer.registerInput1(Camera.getStream(CHANNELVID));
+    avMixStreamer.registerInput2(aac);
+    avMixStreamer.registerOutput1(rtsp);
+    avMixStreamer.registerOutput2(mp4);
+    if (avMixStreamer.begin() != 0) {
+        Serial.println("StreamIO link start failed");
     }
-    
+
+    // Start data stream from video channel
+    Camera.channelBegin(CHANNELVID);
+
     // Configure StreamIO object to stream data from low res video channel to motion detection
     videoStreamerMD.registerInput(Camera.getStream(CHANNELMD));
     videoStreamerMD.setStackSize();
@@ -100,22 +124,12 @@ void setup() {
     if (videoStreamerMD.begin() != 0) {
       Serial.println("StreamIO link start failed");
     }
-    
-    // Configure StreamIO object to stream data from video channel and AAC encoder to MP4 recording
-    avMixMP4Streamer.registerInput1(Camera.getStream(CHANNELMP4));
-    avMixMP4Streamer.registerInput2(aac);
-    avMixMP4Streamer.registerOutput(mp4);
-    if (avMixMP4Streamer.begin() != 0) {
-      Serial.println("StreamIO link start failed");
-    }
-    
-    // Start data stream from video channels
-    Camera.channelBegin(CHANNELMD);
-    Camera.channelBegin(CHANNELVID);
-    Camera.channelBegin(CHANNELMP4);
 
+    // Start data stream from low resolution video channel
+    Camera.channelBegin(CHANNELMD);
+    
     // Configure OSD for drawing on video stream
-    OSD.configVideo(CHANNELVID, configVID);
+    OSD.configVideo(CHANNELVID, configV);
     OSD.begin();
 }
 
@@ -129,39 +143,26 @@ void loop() {
     OSD.createBitmap(CHANNELVID);
     if (MD.getResultCount() > 0) {
         digitalWrite(GREEN_LED, HIGH);
-        motionDetected = true;
 
-        // Start recording MP4 to SD card
-        if (recordingMotion == false) {
+        for (uint16_t i = 0; i < MD.getResultCount(); i++) {
+            MotionDetectionResult result = md_results[i];
+            int xmin = (int)(result.xMin() * configV.width());
+            int xmax = (int)(result.xMax() * configV.width());
+            int ymin = (int)(result.yMin() * configV.height());
+            int ymax = (int)(result.yMax() * configV.height());
+            //printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
+            OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
+        }       
+        if (!mp4.getRecordingState()) { // if not MP4 not in recording mode
             recordingCount++;
             mp4.setRecordingFileName("MotionDetection" + String(recordingCount));
             mp4.begin();
             // tone(BUZZER_PIN, 1000, 500);
-            recordingMotion = true;
         }
-
-        for (uint16_t i = 0; i < MD.getResultCount(); i++) {
-            MotionDetectionResult result = md_results[i];
-
-            // Scale rectangle dimensions according to high resolution video stream and draw with OSD
-            int xmin = (int)(result.xMin() * configVID.width());
-            int ymin = (int)(result.yMin() * configVID.height());
-            int xmax = (int)(result.xMax() * configVID.width());
-            int ymax = (int)(result.yMax() * configVID.height());
-            OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
-        }
+    } else {
+       digitalWrite(GREEN_LED, LOW); // GREEN LED turn off when no motion detected
     }
     
-    // GREEN LED turn off when no motion detected
-    if (motionDetected == false) {
-        digitalWrite(GREEN_LED, LOW);
-    }
-    
-    // If not in recording state, recordingMotion = false
-    if (!mp4.getRecordingState()) {
-        recordingMotion = false;
-    }
-    motionDetected = false;
     OSD.update(CHANNELVID);
     delay(100);
 }

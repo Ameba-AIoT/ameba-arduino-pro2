@@ -657,6 +657,7 @@ enum phydm_dbg_comp {
 	DBG_ADPTV_SOML		= BIT(F17_ADPTV_SOML),
 	DBG_LNA_SAT_CHK		= BIT(F18_LNA_SAT_CHK),
 	/*Neet to re-arrange*/
+	DBG_CMN_OTHER		= BIT(19),
 	DBG_PHY_STATUS		= BIT(20),
 	DBG_TMP			= BIT(21),
 	DBG_FW_TRACE		= BIT(22),

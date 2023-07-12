@@ -86,13 +86,7 @@ uint32_t micros(void) {
     uint32_t us;
     uint32_t tick_per_us;
 
-#if defined(BOARD_RTL8710AF)
-    tick_per_us = 83333;
-#elif defined(BOARD_RTL8195AM)
-    tick_per_us = 166666;
-#elif defined(RTL8722DM)
-    tick_per_us = 200000;
-#elif defined(ARDUINO_AMBPRO2)
+#if defined(ARDUINO_AMBPRO2)
     tick_per_us = 500000;
 #else
 #error "micros(): Unknown chip frequency"

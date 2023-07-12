@@ -89,6 +89,8 @@
 
 #define VOE_ROI_REGION_CMD               0x211
 
+#define VOE_EXT_IN_CMD                   0x212
+#define VOE_SYNC_CMD                     0x213
 
 #define VOE_ENC_OUT_CMD                  0x215
 #define VOE_JPG_OUT_CMD                  0x216
@@ -131,6 +133,8 @@
 #define VOE_ISP_SET_MASK				 0x251
 
 #define VOE_ISP_SET_ZOOM_CROP			 0x252
+
+#define VOE_SET_IQ_CALI_ENABLE			 0x253
 
 //OSD
 #define VOE_OSD_QUERY                    0x260

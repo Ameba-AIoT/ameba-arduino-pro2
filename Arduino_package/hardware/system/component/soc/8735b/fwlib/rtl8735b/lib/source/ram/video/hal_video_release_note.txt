@@ -1,5 +1,100 @@
 --------------------------------------------------------------------------	
-<01/06/2022 12:00 Martin>
+<05/25/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add config OSD block number API
+	2. add initial setting for hdr mode, mirror/flip, brightness, contrast, saturation, flicker, wdr mode, wdr level
+	3. extend sw resolution limitation
+	4. add the interface for turning on mipi clk lane non-continuous mode
+	5. remove dn-detector log
+	6. add PC2's update for wdr: store level value for manual mode and auto mode
+	Video/ENC related
+	1. 
+
+--------------------------------------------------------------------------	
+<04/18/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.2.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. fix iq calibration API ret value non-initialized bug
+	2. polish fcs process log API
+	3. add hal_video_isp_ctrl ret value
+		 hal_video_fast_enable_mask
+	Video/ENC related
+	1. show HW Enc ret fail log 
+
+
+--------------------------------------------------------------------------	
+<03/31/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.2.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. PC2(HDR dyn_ratio feature), 3Alib(0xf6b57fa), IQ(0x1000C)
+	2. Add iq calibration API and flow
+		 hal_video_enable_load_cali_iq
+		 hal_video_load_cali_iq
+		 hal_video_config_isp_calibration
+	3. upgrade nanopb to v0.4.5, 3Alib update(0xf6b57fa)
+	4. polish osd API return value
+	5. update ld file and API for private mask feature in FCS flow
+		 hal_video_fast_enable_mask
+	Video/ENC related
+	1. fixed sync mode drop frame issue 
+	   fixed isp2tm queue timeout 30 --> 1/isp_fps
+	   disable sync mode only support 1 isp buf limit
+	2. fixed JPEG 8 pixel aligment issue
+--------------------------------------------------------------------------	
+<03/17/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. 	Add ae fps change callback(notify) control
+	Video/ENC related
+	1. Added NN/OSD/ENC Sync feature
+	   command: --mode 4 (cml->EncMode/JpgMode/YuvMode == MODE_SYNC)
+	   API: hal_video_sync(int ch) or hal_video_osd_update(int ch, rt_osd2_info_st *osd2, BOOL ready2update);
+	2. Added ENC External input feaure
+	   command: --mode 5 (cml->EncMode/JpgMode/YuvMode == MODE_EXT)
+	   API: hal_video_ext_in(int ch, u32 addr)
+	3. Added enc2out.roi_time, output roi sw time info to TM
+	4. change dbg_printf to printf in hal_voe.c
+	5. add API hal_video_get_video_timer_cur_time for voe gtimer3 cur_time
+	6. polish voe boot loader flow
+	7. buf queue size margin +20 ~> +40
+	
+
+
+--------------------------------------------------------------------------	
+<02/08/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.3.8.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix AWB dynamic control has periodically(IRQ:statictis done) set control_force (status set to unstable)
+	2. wdr: update algo (VER.5948406) and algo version log
+	3. Add gen proto files flow with build voe	
+	Video/ENC related
+	1. flash speed down 7%,  extra 1ms for TTFF load code criteria	
+	2. Polish makefile for release-clean and rts_isp_errno_lib.h for blackduck check
+	3. add hal_video_time_info(int level, video_time_info_t *time_info) output time arguments
+
+--------------------------------------------------------------------------	
+<01/06/2023 12:00 Martin>
 Version : RTL8735B_VOE_1.3.7.2
 Modified Files:
 All

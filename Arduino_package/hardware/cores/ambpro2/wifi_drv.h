@@ -43,7 +43,7 @@ extern "C" {
 // firmware version string length
 #define WL_FW_VER_LENGTH            6
 // Host name length limit
-#define HOSTNAME_LEN            20
+#define HOSTNAME_LEN                20
 
 class WiFiDrv
 {
@@ -139,7 +139,7 @@ class WiFiDrv
          *
          * return: WL_SUCCESS or WL_FAILURE
          */
-        static int8_t disconnect(); 
+        static int8_t disconnect();
 
         /*
          * Disconnect from the network
@@ -160,7 +160,7 @@ class WiFiDrv
          *
          * return: copy the ip address value in IPAddress object
          */
-        static void getIpAddress(IPAddress& ip);
+        static void getIpAddress(IPAddress& ip, uint8_t interface = 0);
 
 #if 0
         /*
@@ -176,14 +176,14 @@ class WiFiDrv
          *
          * return: copy the subnet mask address value in IPAddress object
          */
-        static void getSubnetMask(IPAddress& mask);
+        static void getSubnetMask(IPAddress& mask, uint8_t interface = 0);
 
         /*
          * Get the gateway ip address.
          *
          * return: copy the gateway ip address value in IPAddress object
          */
-        static void getGatewayIP(IPAddress& ip);
+        static void getGatewayIP(IPAddress& ip, uint8_t interface = 0);
 
         /*
          * Return the current SSID associated with the network
@@ -298,6 +298,7 @@ class WiFiDrv
         static const char* getHostname();
 };
 
+extern uint8_t arduino_wifi_mode_check;
 extern WiFiDrv wiFiDrv;
 
 #endif

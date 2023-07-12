@@ -9,13 +9,16 @@
  modified 21 Junn 2012
  by Tom Igoe and Jaymes Dec
 
+ modified 08 May 2023
+ by Realtek SG
+
  Example guide:
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-scan-wifi/
  */
 
 #include <WiFi.h>
 
-int status = WL_IDLE_STATUS;
+int status = WL_IDLE_STATUS;    // Indicater of Wifi status
 
 void setup() {
     //Initialize serial and wait for port to open:
@@ -38,10 +41,8 @@ void loop() {
 }
 
 void printMacAddress() {
-    // the MAC address of your Wifi shield
-    byte mac[6];
-
     // print your MAC address:
+    byte mac[6];
     WiFi.macAddress(mac);
     Serial.print("MAC: ");
     Serial.print(mac[0], HEX);

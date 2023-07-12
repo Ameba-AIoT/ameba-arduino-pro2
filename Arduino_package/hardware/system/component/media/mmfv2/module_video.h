@@ -67,11 +67,19 @@
 #define CMD_VIDEO_GET_MAX_QP		MM_MODULE_CMD(0x43)
 #define CMD_VIDEO_SET_MAX_QP		MM_MODULE_CMD(0x44)
 
+#define CMD_VIDEO_SET_SPS_PPS_INFO  MM_MODULE_CMD(0x45)
+#define CMD_VIDEO_GET_SPS_PPS_INFO  MM_MODULE_CMD(0x46)
+
+#define CMD_VIDEO_SET_EXT_INPUT     MM_MODULE_CMD(0x50)
+
+#define CMD_VIDEO_SPS_CB            MM_MODULE_CMD(0x51)
+
 #define MMF_VIDEO_DEFAULT_META_CB	(0xFFFFFFFF)
 
 typedef struct rate_control {
 	uint32_t sampling_time;
 	uint32_t maximun_bitrate;
+	uint32_t minimum_bitrate;
 	uint32_t target_bitrate;
 } rate_ctrl_t;
 
@@ -96,10 +104,8 @@ typedef struct video_ctx_s {
 	video_state_t state;
 	uint32_t timestamp_offset;
 	void (*meta_cb)(void *);
+	void (*sps_pps_cb)(void *);
 	rate_ctrl_param_t rate_ctrl_p;
-	int channel_offset;
-	int offset_set;
-	int output_frames;
 } video_ctx_t;
 
 extern mm_module_t video_module;

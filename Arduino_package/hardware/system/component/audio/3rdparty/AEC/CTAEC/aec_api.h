@@ -26,7 +26,7 @@ typedef struct AEC_CTRL_PARAMS {	/* keep variables in same order */
 	INT16 DTControl;        // 1 - Type1 (allow some low residual), 2 - Type2a (may attenuate upto 6dB local), 3 - Type2b (may attenuate upto 9dB local)
 	INT16 PTime;            // 10(ms) or 20(ms)
 	INT16 BulkDelay;        // in milli seconds : 0-50(ms)
-	INT16 PPLevel;          // 1-15
+	INT16 PPLevel;          // 1-50
 	INT16 NSEnable;         // 0-NO, 1- YES
 	INT16 Mode;             // mono - 1 and stereo -2, default - 1
 	INT32 SamplingRate;     // 8000 = 8000Hz, 16000 = 16000Hz
@@ -52,8 +52,8 @@ INT16 AEC_Process(INT32 *AECMemory, INT16 *rin, INT16 *sin, INT16 *sout, AEC_RTC
 INT16 AEC_SET_PPLevel(INT32 *AECMemory, INT16 PPLevel);
 //INT16 AEC_SET_NSLevel (INT32 *AECMemory, INT16 NSLevel) ;
 //INT16 AEC_SET_AGCRefLevel (INT32 *AECMemory, INT16 RefLevel, INT16 NoiseGateLvl) ;
-INT16 AEC_SET_Enable(INT32 *AECMemory, INT16 AECEnable);
-
+//INT16 AEC_SET_Enable(INT32 *AECMemory, INT16 AECEnable);
+INT16 AEC_SET_ConvergenceTime(INT32 *ECMemory, INT16 ConvergeceTime);
 #ifdef __cplusplus
 }
 #endif

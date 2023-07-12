@@ -186,6 +186,13 @@ u32 hal_get_wake_reason(void);
  */
 void hal_syspll_peripll_spread_spectrum_en(u8 syspll_en, u8 peripll_en);
 
+/**
+*  @brief The function will clear AON Timer ISR.
+*  @param[in]  none
+*  @returns void
+*/
+void hal_aon_timer_clear(void);
+
 #ifdef  __cplusplus
 }
 #endif

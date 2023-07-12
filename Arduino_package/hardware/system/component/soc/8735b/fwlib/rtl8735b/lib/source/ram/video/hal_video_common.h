@@ -288,18 +288,9 @@ typedef struct {
 
 	i32 pcm_loop_filter_disabled_flag;
 
-	i32 ipcm1AreaTop;
-	i32 ipcm1AreaLeft;
-	i32 ipcm1AreaBottom;
-	i32 ipcm1AreaRight;
 
-	i32 ipcm2AreaTop;
-	i32 ipcm2AreaLeft;
-	i32 ipcm2AreaBottom;
-	i32 ipcm2AreaRight;
-	i32 ipcmMapEnable;
+	i32 rsvd0[9];
 	char *ipcmMapFile;
-
 	char *skipMapFile;
 	i32 skipMapEnable;
 	i32 skipMapBlockUnit;
@@ -364,10 +355,7 @@ typedef struct {
 
 	i32 sliceSize;
 
-//	i32 testId;
-
 	i32 rotation;
-//	i32 mirror;
 	i32 horOffsetSrc;
 	i32 verOffsetSrc;
 	i32 colorConversion;
@@ -549,7 +537,22 @@ typedef struct {
 
 	u32 fast_mask_en;
 
-	u32 rsvd[54];
+	u32 init_flicker;
+	u32 init_saturation;
+	u32 init_brightness;
+	u32 init_contrast;
+	u32 init_wdr_mode;
+	u32 init_wdr_level;
+	u32 init_hdr_mode;
+	u32 init_mirrorflip;
+
+	u32 mipi_clk_noncontinous;
+
+	u32 iq_cali_init_en;
+
+	u32 osd_block_num;
+
+	u32 rsvd[43];   //When add new element, please reduce same rsvd size
 
 } __attribute__((aligned(32))) commandLine_s;
 

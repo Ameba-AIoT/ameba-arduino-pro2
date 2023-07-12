@@ -47,6 +47,7 @@ void hal_eth_get_mac_addr(u8 *addr);
 void hal_eth_set_desc_num(u8 tx_desc_no, u8 rx_desc_no);
 void hal_eth_set_desc_addr(u8 *tx_desc, u8 *rx_desc);
 void hal_eth_set_pkt_buf(u8 *tx_pkt_buf, u8 *rx_pkt_buf);
+void hal_eth_sys_hw_ctrl(u8 hw_id, u8 en);
 hal_status_t hal_eth_init(void);
 void hal_eth_deinit(void);
 s32 hal_eth_write_data(u8 *data, u32 size);

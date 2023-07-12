@@ -78,7 +78,7 @@ int ir_ctrl_set_brightness_d(int dbrightness);
  * @param enable 1 for enable, 0 for disable
  * @return 0 for success
  */
-int sensor_external_set_gray_mode(int enable);
+int sensor_external_set_gray_mode(int enable, int led_level);
 
 /**
  * loop routine

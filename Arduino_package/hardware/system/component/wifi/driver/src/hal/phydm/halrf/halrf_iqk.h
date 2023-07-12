@@ -111,7 +111,7 @@ struct dm_iqk_info {
 	RTL8812F_SUPPORT == 1 || RTL8197G_SUPPORT == 1 ||\
 	RTL8710C_SUPPORT == 1 || RTL8723F_SUPPORT == 1 ||\
 	RTL8814C_SUPPORT == 1 || RTL8735B_SUPPORT == 1 ||\
-	RTL8730A_SUPPORT == 1 || RTL8822E_SUPPORT == 1)
+	RTL8730A_SUPPORT == 1 || RTL8822E_SUPPORT == 1 || RTL8721F_SUPPORT == 1)
 	u32 iqk_channel[2];
 	boolean iqk_fail_report[2][NUM][2]; /*channel/path/TRX(TX:0, RX:1) */
 	/*channel / path / TRX(TX:0, RX:1) / CFIR_real*/
@@ -170,7 +170,7 @@ struct dm_iqk_info {
 	u32 iqk_tab[2];
 #endif
 #if (RTL8710C_SUPPORT == 1 || RTL8197G_SUPPORT == 1 || RTL8730A_SUPPORT == 1 ||\
-	RTL8822E_SUPPORT == 1)
+	RTL8822E_SUPPORT == 1 || RTL8721F_SUPPORT == 1)
 	u32 txxy[2][2];
 	u32 rxxy[2][2];
 #endif

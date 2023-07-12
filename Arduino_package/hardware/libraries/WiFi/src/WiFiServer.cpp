@@ -39,7 +39,6 @@ void WiFiServer::begin() {
     }
 }
 
-
 WiFiClient WiFiServer::available(uint8_t* status) {
     int client_fd = (int)(status);
 

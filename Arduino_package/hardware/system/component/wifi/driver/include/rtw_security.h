@@ -150,7 +150,7 @@ struct security_priv {
 
 	u8 supplicant_ie[MAX_WPA_IE_LEN];  //store sta security information element
 	u8 rsnxe_ie[MAX_WPA_IE_LEN];
-
+	u8 pmf_enable;
 	//for tkip countermeasure
 	u32 last_mic_err_time;
 	u8	btkip_countermeasure;

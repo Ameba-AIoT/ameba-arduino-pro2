@@ -6,11 +6,11 @@
 
 #include <WiFi.h>
 int analogPins[] = {A0, A1, A2, A4, A5, A6};
-char ssid[] = "yourNetwork";    // your network SSID (name)
-char pass[] = "Password";       // your network password
-int keyIndex = 0;               // your network key Index number (needed only for WEP)
 
-int status = WL_IDLE_STATUS;
+char ssid[] = "Network_SSID";       // your network SSID (name)
+char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;                   // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 
 WiFiServer server(80);
 void setup() {

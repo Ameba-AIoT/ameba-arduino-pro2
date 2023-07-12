@@ -630,6 +630,10 @@
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X00, 31, 1, value)	
 #define PS_TUNING_PARA_II_SET_BCN_TO_INTERVAL(h2c_pkt, value)                 \
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 0, 8, value)
+#define PS_TUNING_PARA_II_SET_TIMNULL(h2c_pkt, value)                 \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 8, 1, value)
+#define PS_TUNING_PARA_II_SET_TIMTO(h2c_pkt, value)                 \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 9, 1, value)
 
 #else	
 #define PS_TUNING_PARA_II_GET_BCN_TO_PERIOD(h2c_pkt)                           \

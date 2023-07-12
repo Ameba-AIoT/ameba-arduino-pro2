@@ -64,6 +64,8 @@ void NNFaceDetection::begin(void) {
 
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_SIZE, sizeof(facedetect_res_t));
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)FDResultCallback);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_APPLY, 0);
 }
@@ -86,8 +88,8 @@ void NNFaceDetection::setResultCallback(void (*fd_callback)(std::vector<FaceDete
 
 uint16_t NNFaceDetection::getResultCount(void) {
     uint16_t facedet_res_count = face_result_vector.size();
-    if (facedet_res_count >= 5) {
-        facedet_res_count = 4;
+    if (facedet_res_count > 14) {
+        facedet_res_count = 14;
     }
     return facedet_res_count;
 }
@@ -108,14 +110,14 @@ void NNFaceDetection::FDResultCallback(void *p, void *img_param) {
     if (p == NULL) {
         return;
     }
-
-    facedetect_res_t* result = (facedetect_res_t*)p;
+    vipnn_out_buf_t *out = (vipnn_out_buf_t *)p;
+    facedetect_res_t* result = (facedetect_res_t*)&out->res[0];
 
     face_result_vector.clear();
-    face_result_vector.resize((size_t)result->obj_num);
-    for (int i = 0; i < result->obj_num; i++) {
-        memcpy(&(face_result_vector[i].result), &(result->res[i]), sizeof(detobj_t));
-        memcpy(&(face_result_vector[i].landmark), &(result->landmark[i]), sizeof(landmark_t));
+    face_result_vector.resize((size_t)out->res_cnt);
+    for (int i = 0; i < out->res_cnt; i++) {
+        memcpy(&(face_result_vector[i].result), &(result[i].res), sizeof(detobj_t));
+        memcpy(&(face_result_vector[i].landmark), &(result[i].landmark), sizeof(landmark_t));
     }
 
     if (FD_user_CB != NULL) {

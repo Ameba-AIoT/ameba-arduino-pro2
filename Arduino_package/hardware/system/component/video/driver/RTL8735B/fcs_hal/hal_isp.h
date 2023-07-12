@@ -72,6 +72,7 @@ typedef struct hal_isp_stream_stream {
 	uint32_t crop_w;
 	uint32_t crop_h;
 
+	uint32_t sync;
 } hal_isp_stream_t;
 
 
@@ -160,7 +161,10 @@ typedef struct {
 	uint32_t sensor_pwrctrl_pin;
 	uint32_t i2c_id;
 	uint32_t daynight_mode;
+	uint32_t init_hdr_mode;
+	uint32_t init_mirrorflip_mode;
 
+	int *cali_iq_addr;		// Add for store input calibration iq data
 
 } __attribute__((aligned(32))) hal_isp_adapter_t;
 
@@ -228,6 +232,146 @@ typedef struct {
 
 } __attribute__((aligned(32))) awb_statis_t;
 
+typedef struct {
+
+	int exposure_h;
+	int gain_h;
+	int exposure_l;
+	int gain_l;
+
+	int wb_r_gain;
+	int wb_b_gain;
+	int wb_g_gain;
+	int colot_temperature;
+
+	int y_average;
+	uint32_t white_num;
+	uint32_t rg_sum;
+	uint32_t bg_sum;
+
+	int hdr_mode;
+	int sensor_fps;
+	int max_fps;
+	int frame_count;
+
+	u32 time_stamp;
+
+	uint32_t rmean;
+	uint32_t gmean;
+	uint32_t bmean;
+
+} isp_statis_meta_t;
+
+#define ISP_MASK_GRID_NUM 1
+#define ISP_MASK_RECT_NUM 4
+#define ISP_MASK_NUM (ISP_MASK_GRID_NUM + ISP_MASK_RECT_NUM)
+#define ISP_MASK_GRID_COLS 40
+#define ISP_MASK_GRID_ROWS 30
+#define ISP_MASK_GRID_CELLS (ISP_MASK_GRID_COLS * ISP_MASK_GRID_ROWS)
+
+typedef struct {
+	int start_x;
+	int start_y;
+	int cell_w;
+	int cell_h;
+	int cols;
+	int rows;
+} isp_grid_t;
+
+typedef struct {
+
+	int left;
+	int top;
+	int right;
+	int bottom;
+
+} isp_rect_t;
+
+typedef struct {
+
+	int start_x;
+	int start_y;
+	int width;
+	int height;
+
+} isp_crop_t;
+
+
+typedef struct {
+	isp_grid_t grid;
+	uint8_t bitmap[ISP_MASK_GRID_CELLS / 8];
+
+} isp_grid_mask_entry_t;
+
+
+
+enum _isp_mask_action {
+	ISP_MASK_KEEP,
+	ISP_MASK_SET,
+	ISP_MASK_CLEAR
+};
+
+typedef struct {
+	uint32_t color; /* rgb888 */
+	int grid_mask_set_status;
+	isp_grid_mask_entry_t grid_mask;
+	int rect_mask_set_status[ISP_MASK_RECT_NUM];
+	isp_rect_t rect_mask[ISP_MASK_RECT_NUM];
+} __attribute__((aligned(32))) isp_mask_group_t;
+
+#define IQ_CALI_EN_AWB  (0x1 << 0)
+#define IQ_CALI_EN_MLSC (0x1 << 1)
+#define IQ_CALI_EN_NLSC (0x1 << 2)
+
+struct isp_iq_cali_point {
+	int32_t x;
+	int32_t y;
+} __attribute__((packed));
+
+struct isp_iq_cali_nlsc {
+	struct isp_iq_cali_point r_center;
+	struct isp_iq_cali_point g_center;
+	struct isp_iq_cali_point b_center;
+} __attribute__((packed));
+
+struct isp_iq_cali_mlsc_u8 {
+	uint8_t matrix_r[1536];
+	uint8_t matrix_g[1536];
+	uint8_t matrix_b[1536];
+} __attribute__((packed));
+
+struct isp_iq_cali_awb {
+	int32_t x_offset;
+	int32_t y_offset;
+} __attribute__((packed));
+
+struct isp_iq_cali {
+	uint8_t enable;
+	struct isp_iq_cali_awb awb;
+	struct isp_iq_cali_mlsc_u8 mlsc;
+	struct isp_iq_cali_nlsc nlsc;
+} __attribute__((packed));
+
+#define RTSV_BRIGHTNESS           0x0000
+#define RTSV_CONTRAST             0x0001
+#define RTSV_SATURATION           0x0002
+//#define RTSV_HUE		          0x0003
+#define RTSV_AUTO_WHITE_BALANCE   0x000C
+#define RTSV_RED_BALANCE          0x000E
+#define RTSV_BLUE_BALANCE         0x000F
+#define RTSV_GAMMA                0x0010
+#define RTSV_EXPOSURE             0x0011
+#define RTSV_AUTOGAIN             0x0012
+#define RTSV_GAIN                 0x0013
+#define RTSV_ANTI_FLICKER         0x0018   //DISABLE = 0, 50HZ = 1, 60HZ = 2, AUTO = 3
+#define RTSV_DAY_NIGHT            0xF002
+#define RTSV_LDC                  0xF008
+#define RTSV_GRAY                 0xF009
+#define RTSV_WDR_MODE             0xF00C   // 0: DISABLE, 1: MANUAL, 2: AUTO
+#define RTSV_WDR_LEVEL            0xF00D
+#define RTSV_SENSOR_MIRROR_FLIP   0xF020   // bit 0: MIRROR, bit 1: Flip
+#define RTSV_AE_MIN_FPS           0xF021
+#define RTSV_AE_MAX_FPS           0xF022
 
 void *isp_soc_start(hal_isp_adapter_t *isp_adpt);
 int isp_open_stream(hal_isp_adapter_t *isp_adpt, uint8_t stream_id);
@@ -257,5 +401,12 @@ void hal_isp_set_drop_frame_num(uint32_t num);
 int hal_isp_set_init_dn_mode(int dn_mode);
 void hal_isp_set_direct_i2c_mode(uint32_t direct_i2c_mode);
 int hal_isp_set_init_gray_mode(int gray_mode);
+int hal_isp_get_real_fps(int ch, int *fps100);
+int hal_isp_get_ae_weight(uint8_t *weights, int *win_num);
+int hal_isp_set_ae_weight(uint8_t *weights, int win_num);
+int hal_isp_set_mask(isp_mask_group_t *input_mask);
+int hal_isp_config_iq_calibration(int config_flag);
+void hal_isp_set_hdr_mode(uint32_t hdr_mode);
+void hal_isp_set_mirrorflip_mode(uint32_t mirrorflip_mode);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

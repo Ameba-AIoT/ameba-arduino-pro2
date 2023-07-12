@@ -49,11 +49,8 @@ extern "C" {
 #define UART_UNIFY  (0)//ENABLE
 
 /// The number of UART port on this platform
-#if IS_AFTER_CUT_C(CONFIG_CHIP_VER)
 #define MAX_UART_PORT                   (MaxUartNum)
-#else
-#define MAX_UART_PORT                   (4)
-#endif
+
 
 /**
   \brief  Defines the FIFO size.
@@ -76,11 +73,8 @@ enum  uart_id_e {
 	Uart3             = 3,
 	Uart4             = 4,  //BT UART
 
-#if IS_AFTER_CUT_C(CONFIG_CHIP_VER)
 	MaxUartNum
-#else
-	MaxUartNum        = MAX_UART_PORT
-#endif
+
 };
 typedef uint8_t uart_id_t;
 

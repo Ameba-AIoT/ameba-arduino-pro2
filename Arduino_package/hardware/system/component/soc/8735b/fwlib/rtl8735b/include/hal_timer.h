@@ -231,6 +231,7 @@ void hal_timer_disable(phal_timer_adapter_t ptimer_adp)
 {
 	TM_TypeDef *TM_OBJ = (TM_TypeDef *)(ptimer_adp->tmr_ba);
 	TM_OBJ->TM_CTRL &= (~TM_BIT_EN);
+	TM_OBJ->TM_ISR &= 0x1F;
 }
 
 /**
@@ -895,4 +896,5 @@ BOOLEAN hal_is_timeout(uint32_t start_us, uint32_t timeout_us);
 
 
 #endif  // end of "#define _HAL_TIMER_H_"
+
 

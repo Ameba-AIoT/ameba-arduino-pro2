@@ -54,7 +54,7 @@
 
 #define IQK_BB_REG_NUM		9
 
-
+#define AVG_THERMAL_NUM_PABIAS	4
 
 #define iqk_matrix_reg_num	8
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE) && defined(DM_ODM_CE_MAC80211)
@@ -125,6 +125,7 @@ struct dm_rf_calibration_struct {
 	u8	thermal_value_iqk;
 	s8  	thermal_value_delta; /* delta of thermal_value and efuse thermal */
 	u8	thermal_value_dpk;
+	u8	thermal_value_pabias;
 	u8	thermal_value_avg[AVG_THERMAL_NUM];
 	u8	thermal_value_avg_index;
 	u8	thermal_value_rx_gain;
@@ -168,7 +169,7 @@ struct dm_rf_calibration_struct {
 	u8  delta_swing_table_idx_2gb_p[DELTA_SWINGIDX_SIZE];
 	u8  delta_swing_table_idx_2gb_n[DELTA_SWINGIDX_SIZE];
 
-#if (RTL8195B_SUPPORT == 1 || RTL8721D_SUPPORT == 1 || RTL8730A_SUPPORT == 1 || RTL8735B_SUPPORT)
+#if (RTL8195B_SUPPORT == 1 || RTL8721D_SUPPORT == 1 || RTL8730A_SUPPORT == 1 || RTL8735B_SUPPORT || RTL8721F_SUPPORT == 1)
 	u8  delta_swing_table_idx_5ga_p[BAND_NUM][DELTA_SWINGIDX_SIZE];
 	u8  delta_swing_table_idx_5ga_n[BAND_NUM][DELTA_SWINGIDX_SIZE];
 	u8  delta_swing_table_idx_5gb_p[BAND_NUM][DELTA_SWINGIDX_SIZE];
@@ -276,6 +277,11 @@ struct dm_rf_calibration_struct {
 	u8			rf_kfree_enable;		/*for efuse enable check*/
 	boolean pa_dynamic_bias_enable;
 
+	u8 thermal_pabias[MAX_RF_PATH];
+	u8 thermal_pabias_avg[MAX_RF_PATH][AVG_THERMAL_NUM_PABIAS];
+	u8 thermal_pabias_avg_index;
+
+	boolean pabias_workaround;
 };
 
 

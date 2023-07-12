@@ -41,7 +41,7 @@
 #define PROBE_CNT		(2) //Probe count
 
 //#define SURVEY_TO		(300) //Increase time to stay each channel - Alex Fang
-#define REAUTH_TO		(300) //(50)
+#define REAUTH_TO		(500) //(50)
 #define REASSOC_TO		(300) //(50)
 //#define DISCONNECT_TO	(3000)
 #define ADDBA_TO			(2000)
@@ -552,7 +552,7 @@ struct mlme_ext_info {
 #define PSCAN_DISABLE_MASK    0xFE //disable PSCAN_ENABLE
 #define PSCAN_CLEAR_SSID_DONE 0x7F //clear PSCAN_SET_SSID_DONE
 #define PSCAN_CLEAR_PASSIVE_SCAN 0xF7 //clear PSCAN_PASSIVE_SCAN
-#define PSCAN_RETRY_TIMES        7 //the retry times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES        14 //the retry times of resending probe request when PSCAN_FAST_SURVEY is set
 
 typedef struct _RT_CHANNEL_INFO {
 	u8				ChannelNum;		// The channel number.
@@ -634,6 +634,11 @@ struct mlme_ext_priv {
 	u8	retry; //retry for issue probereq
 
 	u64 TSFValue;
+	u8	tsf_shift_done;
+	u8	tsf_shift_cnt;
+	u16	tsf_shift_min;
+	u16	tsf_shift_max;
+	u16	tsf_shift_set;
 	unsigned char bstart_bss;
 
 #ifdef CONFIG_80211D

@@ -1481,8 +1481,8 @@ T_GAP_CAUSE le_conn_update_cfm(uint8_t conn_id, uint16_t result);
   * @param[in] conn_latency  Value range: 0x0000 - 0x01F3
                This shall be less than or equal to (((supervision_timeout * 10ms) / (conn_interval_max * 1.25ms * 2)) - 1).
   * @param[in] supervision_timeout  Value range: 0x000A - 0x0C80 (100ms - 32000ms, 10ms/step).
-  * @param[in] ce_length_min  Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
-  * @param[in] ce_length_max  Value range: 0x0006 - 0x0C80 (7.5ms - 4000ms, 1.25ms/step).
+  * @param[in] ce_length_min  Value range: 0x0000 - 0xFFFF (0 - 65535ms, 0.625ms/step).
+  * @param[in] ce_length_max  Value range: 0x0000 - 0xFFFF (0 - 65535ms, 0.625ms/step).
   * @return  result.
   * @retval GAP_CAUSE_SUCCESS Send request success.
   * @retval GAP_CAUSE_NON_CONN Failed. No connection.

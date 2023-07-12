@@ -77,6 +77,7 @@ typedef void	(*func_swing8814only)(void *, u8 **, u8 **, u8 **, u8 **);
 typedef void(*func_swing_xtal)(void *, s8 **, s8 **);
 typedef void(*func_set_xtal)(void *);
 typedef void(*func_pa_dynamic_bias)(void *, u8, s8);
+typedef void(*func_pabias_track)(void *, boolean);
 
 struct txpwrtrack_cfg {
 	u8		swing_table_size_cck;
@@ -84,6 +85,7 @@ struct txpwrtrack_cfg {
 	u8		threshold_iqk;
 	u8		threshold_dpk;
 	u8		threshold_lck;
+	u8		threshold_pabias;
 	u8		average_thermal_num;
 	u8		rf_path_count;
 	u32		thermal_reg_addr;
@@ -95,6 +97,7 @@ struct txpwrtrack_cfg {
 	func_swing_xtal			get_delta_swing_xtal_table;
 	func_set_xtal			odm_txxtaltrack_set_xtal;
 	func_pa_dynamic_bias	halrf_pa_dynamic_bias;
+	func_pabias_track		pa_bias_track;
 };
 
 void

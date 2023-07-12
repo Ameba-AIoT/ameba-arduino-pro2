@@ -152,6 +152,7 @@ int hal_voe_ready(void);
 int hal_voe_set_wdt(int mode, int sec);
 void hal_voe_cpy(void *dest, void *src, size_t len);
 void hal_voe_show_fcs_result(void);
+int hal_voe_load_cali_iq(voe_cpy_t isp_cpy, int *iq_cali_addr, int *voe_ddr_addr, u32 cali_iq_size);
 
 
 /** @} */ /* End of group hs_hal_voe */

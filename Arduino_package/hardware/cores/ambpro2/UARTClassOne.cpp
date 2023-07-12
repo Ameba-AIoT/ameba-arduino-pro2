@@ -67,8 +67,7 @@ static void arduino_uart_irq_handler(uint32_t id, SerialIrq event) {
     //}
 }
 
-UARTClassOne::UARTClassOne(int dwIrq, RingBuffer* pRx_buffer)
-{
+UARTClassOne::UARTClassOne(int dwIrq, RingBuffer* pRx_buffer) {
     _rx_buffer = pRx_buffer;
     _dwIrq = dwIrq;
 }
@@ -76,10 +75,8 @@ UARTClassOne::UARTClassOne(int dwIrq, RingBuffer* pRx_buffer)
 // Protected Methods ///////////////////////////////////////////////////////////
 
 // Public Methods //////////////////////////////////////////////////////////////
-//zzw 
 #if 0
-void UARTClassOne::IrqHandler(void)
-{
+void UARTClassOne::IrqHandler(void) {
     uint8_t     data = 0;
     BOOL        PullMode = _FALSE;
 
@@ -99,8 +96,7 @@ void UARTClassOne::IrqHandler(void)
 }
 #endif
 
-void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value, uint32_t uart0_clk_sel)
-{
+void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value, uint32_t uart0_clk_sel) {
     // Log, UART1
     //serial_init(&log_uart_obj, PF_4, PF_3);
     ////serial_init(&log_uart_obj, PF_13, PF_12);
@@ -200,29 +196,25 @@ void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value,
     //serial_irq_set(&uart_obj, TxIrq, 1);
 }
 
-void UARTClassOne::end(void)
-{
+void UARTClassOne::end(void) {
     // clear any received data
     _rx_buffer->_iHead = _rx_buffer->_iTail;
 
     serial_free(&uart_obj);
 }
 
-int UARTClassOne::available(void)
-{
+int UARTClassOne::available(void) {
     return (uint32_t)(SERIAL_BUFFER_SIZE + _rx_buffer->_iHead - _rx_buffer->_iTail) % SERIAL_BUFFER_SIZE;
 }
 
-int UARTClassOne::peek(void)
-{
+int UARTClassOne::peek(void) {
     if (_rx_buffer->_iHead == _rx_buffer->_iTail)
         return -1;
 
     return _rx_buffer->_aucBuffer[_rx_buffer->_iTail];
 }
 
-int UARTClassOne::read(void)
-{
+int UARTClassOne::read(void) {
     // if the head isn't ahead of the tail, we don't have any characters
     if (_rx_buffer->_iHead == _rx_buffer->_iTail) {
         return -1;
@@ -233,8 +225,7 @@ int UARTClassOne::read(void)
     return uc;
 }
 
-void UARTClassOne::flush(void)
-{
+void UARTClassOne::flush(void) {
 // TODO: 
 // while ( serial_writable(&(this->sobj)) != 1 );
 /*
@@ -244,8 +235,7 @@ void UARTClassOne::flush(void)
 */
 }
 
-size_t UARTClassOne::write(const uint8_t uc_data)
-{
+size_t UARTClassOne::write(const uint8_t uc_data) {
     serial_putc(&uart_obj, (int)(uc_data));
     return 1;
 }

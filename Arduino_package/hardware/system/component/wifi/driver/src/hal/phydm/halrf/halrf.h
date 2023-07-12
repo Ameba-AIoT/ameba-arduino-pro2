@@ -127,7 +127,7 @@
 #define IQK_VER_8723F "0x00"
 #define IQK_VER_8814C "0x00"
 #define IQK_VER_8735B "0x03"
-#define IQK_VER_8822E "0x0E"
+#define IQK_VER_8822E "0x10"
 
 /*LCK version*/
 #define LCK_VER_8188E "0x02"
@@ -193,10 +193,10 @@
 #define DPK_VER_8814B "0x0f"
 #define DPK_VER_8195B "0x0c"
 #define DPK_VER_8812F "0x0a"
-#define DPK_VER_8197G "0x0d"
+#define DPK_VER_8197G "0x0e"
 #define DPK_VER_8814C "0x01"
 #define DPK_VER_8735B "0x0d"
-#define DPK_VER_8822E "0x06"
+#define DPK_VER_8822E "0x0a"
 
 /*RFK_INIT version*/
 #define RFK_INIT_VER_8822B "0x8"
@@ -219,16 +219,17 @@
 /*TXGAPK version*/
 #define TXGAPK_VER_8814B "0x1"
 #define TXGAPK_VER_8195B "0x2"
+#define TXGAPK_VER_8822E "0x5"
 
 /*RXDCK version*/
-#define RXDCK_VER_8735B "0xb"
-#define RXDCK_VER_8822E "0x3"
+#define RXDCK_VER_8735B "0xd"
+#define RXDCK_VER_8822E "0x4"
 
 /*RCK version*/
 #define RCK_VER_8735B "0x1"
 
 /*RX Spur K version*/
-#define RXSPURK_VER_8822E "0xf"
+#define RXSPURK_VER_8822E "0x10"
 
 /*Kfree tracking version*/
 #define KFREE_VER_8188E \
@@ -498,7 +499,8 @@ enum halrf_func_idx { /*F_XXX = PHYDM XXX function*/
 	RF08_RXDCK = 8,
 	RF09_RFK = 9,
 	RF10_PA_DYNAMIC_BIAS = 10,
-	RF11_RX_SPURK = 11
+	RF11_RX_SPURK = 11,
+	RF12_PABIAS_TRACK = 12
 };
 
 enum halrf_ability {
@@ -512,7 +514,8 @@ enum halrf_ability {
 	HAL_2GBAND_SHIFT = BIT(RF07_2GBAND_SHIFT),
 	HAL_RF_RXDCK = BIT(RF08_RXDCK),
 	HAL_RF_PA_DYNAMIC_BIAS = BIT(RF10_PA_DYNAMIC_BIAS),
-	HAL_RF_RX_SPURK = BIT(RF11_RX_SPURK)
+	HAL_RF_RX_SPURK = BIT(RF11_RX_SPURK),
+	HAL_RF_PABIAS_TRACK = BIT(RF12_PABIAS_TRACK)
 };
 
 enum halrf_shift_band {
@@ -532,6 +535,7 @@ enum halrf_dbg_comp {
 	DBG_RF_RXDCK = BIT(RF08_RXDCK),
 	DBG_RF_RFK = BIT(RF09_RFK),
 	DBG_RF_RXSPURK = BIT(RF11_RX_SPURK),
+	DBG_RF_PABIAS_TRACK = BIT(RF12_PABIAS_TRACK),
 	DBG_RF_MP = BIT(29),
 	DBG_RF_TMP = BIT(30),
 	DBG_RF_INIT = BIT(31)
@@ -622,11 +626,14 @@ struct _halrf_tssi_data {
 #endif
 };
 
+#define RF_GAIN_TABLE_NUM 12
+
 struct _halrf_txgapk_info {
-	u32 txgapk_rf3f_bp[5][12][PHYDM_MAX_RF_PATH]; /* band(2Gcck/2GOFDM/5GL/5GM/5GH)/idx/path */
+	u32 txgapk_rf3f_bp[5][RF_GAIN_TABLE_NUM][PHYDM_MAX_RF_PATH]; /* band(2Gcck/2GOFDM/5GL/5GM/5GH)/idx/path */
+	u32 txgapk_rf3f_same[5][RF_GAIN_TABLE_NUM][PHYDM_MAX_RF_PATH]; /* band(2Gcck/2GOFDM/5GL/5GM/5GH)/idx/path */
 	boolean txgapk_bp_done;
-	s8 offset[12][PHYDM_MAX_RF_PATH];
-	s8 fianl_offset[12][PHYDM_MAX_RF_PATH];
+	s8 offset[RF_GAIN_TABLE_NUM][PHYDM_MAX_RF_PATH];
+	s8 fianl_offset[RF_GAIN_TABLE_NUM][PHYDM_MAX_RF_PATH];
 	u8 read_txgain;
 
 	s32 track_d[2][11];
@@ -640,6 +647,7 @@ struct _halrf_txgapk_info {
 struct _halrf_rxdck_info {
 	boolean 	is_rxdck_timeout;
 	boolean		is_rxdck_off;
+	boolean		need_rek;
 	u8		rxdck_ch;
 	u8		rxdck_band;
 	u8		rxdck_bw;
@@ -682,6 +690,7 @@ struct _hal_rf_ {
 	u64 iqk_progressing_time;
 	u64 txgapk_progressing_time;
 	u64 rxspurk_progressing_time;
+	u64 pabias_progressing_time;
 	u32 fw_ver;
 
 	boolean *is_con_tx;
@@ -694,6 +703,7 @@ struct _hal_rf_ {
 	boolean aac_checked;
 	boolean is_txgapk_in_progress;
 	boolean is_rxspurk_in_progress;
+	boolean is_pabias_in_progress;
 	boolean is_tssi_mode[KPATH];
 
 	u8 *mp_rate_index;
@@ -722,6 +732,8 @@ struct _hal_rf_ {
 
 	u8 iot_dram_size;		/*IOT DRAM Size 64M, 128M, 256M*/
 	u8 iot_dram_type;		/*IOT DRAM Type DDR2, DDR3*/
+
+	s8 pabias_track_default;
 };
 
 /*@============================================================*/
@@ -946,6 +958,8 @@ void halrf_rxdck(void *dm_void);
 
 void halrf_delay_10us(u16 v1);
 
+void halrf_delay_1us(u16 v1);
+
 void halrf_dump_rfk_reg(void *dm_void, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len);
 
@@ -990,4 +1004,7 @@ u8 halrf_get_thermal(void *dm_void, u8 path);
 void halrf_ex_dac_fifo_rst(void *dm_void);
 
 void halrf_kip_rsvd_page(void *dm_void, u8 *buf, u32 *buf_size);
+
+void halrf_pabias_track_init(void *dm_void);
+
 #endif /*__HALRF_H__*/

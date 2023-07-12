@@ -97,7 +97,6 @@ uint32_t analogRead(uint32_t ulPin) {
 //    float    voltage;
     uint32_t mv;
 
-
     if ((g_APinDescription[ulPin].ulPinType & TYPE_ANALOG) != TYPE_ANALOG) {
         printf("%s : ulPin %d wrong\n", __FUNCTION__, ((int)ulPin));
         return 0;

@@ -106,5 +106,5 @@ struct bulk_cs_wrap {
 #define US_BULK_RESET_REQUEST   0xff
 #define US_BULK_GET_MAX_LUN     0xfe
 
-extern int usbd_msc_receive_cbw(struct msc_dev *mscdev, struct usb_request *req);
+//extern int usbd_msc_receive_cbw(struct msc_dev *mscdev, struct usb_request *req);
 #endif

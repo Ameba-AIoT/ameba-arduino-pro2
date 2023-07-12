@@ -88,7 +88,7 @@
 
 #define OSD_TEXT_STR_MAX	32
 
-#define RTS_OSD2_BLK_MAX_NUMBER		6
+#define RTS_OSD2_BLK_MAX_NUMBER		96
 #define RTS_MAX_STM_COUNT		5
 
 enum osd_char_type {
@@ -260,6 +260,7 @@ typedef struct {
 	int flick_enable;
 	uint32_t show_time;
 	uint32_t hide_time;
+	uint8_t RSVD[12];
 } rt_osd2_info_st;
 
 typedef struct {
@@ -367,7 +368,7 @@ struct rts_video_osd2_block {
  */
 struct rts_video_osd2_attr {
 	const int number; /**< OSD block number */
-	struct rts_video_osd2_block blocks[RTS_OSD2_BLK_MAX_NUMBER];
+	struct rts_video_osd2_block *blocks;
 
 	unsigned int single_font_addr;
 	unsigned int double_font_addr;

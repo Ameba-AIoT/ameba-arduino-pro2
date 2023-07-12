@@ -10,7 +10,7 @@
 #define DFU_DT_FUNC			0x21
 
 //#define DFU_TIMEOUT                     2000 //2S
-#define DFU_DEFAULT_POLL_TIMEOUT 5000
+#define DFU_DEFAULT_POLL_TIMEOUT 2000//5000
 
 #define DFU_BIT_WILL_DETACH		(0x1 << 3)
 #define DFU_BIT_MANIFESTATION_TOLERANT	(0x1 << 2)
@@ -18,7 +18,7 @@
 #define DFU_BIT_CAN_DNLOAD		0x1
 
 /* big enough to hold our biggest descriptor */
-#define DFU_USB_BUFSIZ			64//4096
+#define DFU_USB_BUFSIZ			4096//64//4096
 
 #define USB_REQ_DFU_DETACH		0x00
 #define USB_REQ_DFU_DNLOAD		0x01

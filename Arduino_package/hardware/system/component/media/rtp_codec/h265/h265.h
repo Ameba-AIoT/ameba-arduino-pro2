@@ -21,6 +21,7 @@
 #define H265_VPS 	0x40
 #define H265_SPS 	0x42
 #define H265_PPS 	0x44
+#define H265_SEI 	0x4E
 #define H265_IFRAME     0x26
 #define H265_PFRAME     0X02
 

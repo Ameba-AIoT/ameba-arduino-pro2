@@ -1,7 +1,11 @@
 #ifndef __QUANTIZATION_H__
 #define __QUANTIZATION_H__
 
+#if !defined(PC_SIMULATION)
 #include "mmf2_module.h"
+#else
+#include <stdbool.h>
+#endif
 #include "module_vipnn.h"
 
 float u8_to_f(uint8_t val, uint8_t zero_p, float scale);

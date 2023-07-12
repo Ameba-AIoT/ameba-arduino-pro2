@@ -166,7 +166,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             ret = -1;
             break;
         } else {
-        /*/
+        /*
         if (lwip_connect(ssl_client->socket, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
             timeout = ssl_client->recvTimeout;
             lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
@@ -179,7 +179,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             ret = -1;
             break;
         }
-        /*/
+        */
             timeout = ssl_client->recvTimeout;
             lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
             lwip_setsockopt(ssl_client->socket, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle));
@@ -313,7 +313,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                 // for mbedtls 3.0.0
                 //if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0, mbedtls_ctr_drbg_random, ssl_client->ctr_drbg ) != 0) {
                 // for mbedtls 2.28.1
-                if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0 ) != 0) {
+                if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, (strlen((char*)cli_key) + 1), NULL, 0) != 0) {
                     printf("ERROR: mbedtls x509 parse client_rsa failed! \r\n");
                     ret = -1;
                     break;

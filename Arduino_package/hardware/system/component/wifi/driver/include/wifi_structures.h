@@ -194,7 +194,7 @@ typedef struct {
 	unsigned char		bssid[6];   /**< the bssid of connected AP or softAP */
 	unsigned char		channel;
 	rtw_security_t		security_type;   /**< the security type of connected AP or softAP */
-	unsigned char 		password[65];   /**< the password of connected AP or softAP */
+	unsigned char 		password[RTW_MAX_PSK_LEN + 1]; /**< the password of connected AP or softAP */
 	unsigned char		key_idx;
 } rtw_wifi_setting_t;
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
@@ -209,7 +209,7 @@ typedef struct {
 	unsigned char 		ssid[32];
 	unsigned char		ssid_len;
 	unsigned char		security_type;
-	unsigned char		password[65];
+	unsigned char		password[RTW_MAX_PSK_LEN + 1];
 	unsigned char		password_len;
 	unsigned char		channel;
 } rtw_wifi_config_t;
@@ -376,7 +376,7 @@ typedef struct {
 struct psk_info {
 	unsigned char index;                  ///<  index
 	unsigned char psk_essid[32 + 4]; ///< refer to NDIS_802_11_LENGTH_SSID + 4
-	unsigned char psk_passphrase[64 + 1]; ///< refer to IW_PASSPHRASE_MAX_SIZE + 1
+	unsigned char psk_passphrase[RTW_MAX_PSK_LEN + 1]; ///< refer to IW_PASSPHRASE_MAX_SIZE + 1
 	unsigned char wpa_global_PSK[20 * 2]; ///< refer to A_SHA_DIGEST_LEN * 2
 };
 
@@ -444,6 +444,7 @@ struct  wifi_user_conf {
 	unsigned char rtw_powersave_en;
 
 	unsigned char rtw_cmd_tsk_spt_wap3;
+	unsigned char rtw_ignore_wpa_tkip;
 
 	unsigned char g_user_ap_sta_num;
 

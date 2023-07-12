@@ -84,7 +84,35 @@ void watchdog_refresh(void);
  * @retval  none
  */
 void watchdog_irq_init(wdt_irq_handler handler, uint32_t id);
+
 ///@}
+
+
+#if defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1)
+///@name AmebaPro2 Only
+///@{
+
+/**
+*  @brief   Check reboot reason was AON WDT or not
+*
+*  @param   None
+*  @retval  1:Reboot reason was AON WDT
+*	    0:Reboot reason wasn't AON WDT
+*
+*/
+uint8_t watchdog_aon_reboot_check(void);
+
+/**
+*  @brief   Clear AON WDT boot reason
+*
+*  @param   None
+*  @retval  None
+*
+*/
+void watchdog_aon_clear(void);
+
+///@}
+#endif //CONFIG_PLATFORM_8735B
 
 /*\@}*/
 

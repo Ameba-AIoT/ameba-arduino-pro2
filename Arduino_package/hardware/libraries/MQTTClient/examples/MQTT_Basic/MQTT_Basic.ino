@@ -1,9 +1,25 @@
+/*
+
+ MQTT Basic example
+
+ This sketch demonstrates the basic capabilities of the library.
+  - connects to an MQTT server
+  - publishes "hello world" to the topic "outTopic"
+  - subscribes to the topic "inTopic", printing out any messages it receives. It assumes the received payloads are strings not binary
+
+ It will reconnect to the server if the connection is lost using a blocking
+ reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
+ achieve the same result without blocking the main loop.
+
+ Example guide:
+ */
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-char ssid[] = "yourNetwork"; //  your network SSID (name)
-char pass[] = "Password";    // your network password (use for WPA, or use as key for WEP)
-int status = WL_IDLE_STATUS;
+char ssid[] = "Network_SSID";       // your network SSID (name)
+char pass[] = "Password";           // your network password
+int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 
 char mqttServer[]     = "test.mosquitto.org";
 char clientId[]       = "amebaClient";
@@ -21,18 +37,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println();
 }
 
-
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
 
 void reconnect() {
     // Loop until we're reconnected
     while (!(client.connected())) {
-        Serial.print("Attempting MQTT connection...");
+        Serial.print("\r\nAttempting MQTT connection...");
         // Attempt to connect
         if (client.connect(clientId)) {
             Serial.println("connected");
-            //Once connected, publish an announcement
+            //Once connected, publish an announcement and resubscribe
             client.publish(publishTopic, publishPayload);
             client.subscribe(subscribeTopic);
         } else {
@@ -41,21 +56,21 @@ void reconnect() {
             Serial.println(" try again in 5 seconds");
             //Wait 5 seconds before retrying
             delay(5000);
-            }
-    }
         }
+    }
+}
 
 void setup() {
     //Initialize serial and wait for port to open:
     Serial.begin(115200);
-    // wait for serial port to connect. Needed for native USB port only
+    // wait for serial port to connect.
     while (!Serial) {
         ;
     }
 
     //Attempt to connect to WiFi network
     while (status != WL_CONNECTED) {
-        Serial.print("Attempting to connect to SSID: ");
+        Serial.print("\r\nAttempting to connect to SSID: ");
         Serial.println(ssid);
         // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
         status = WiFi.begin(ssid, pass);
@@ -76,4 +91,4 @@ void loop() {
         reconnect();
     }
     client.loop();
-};
+}

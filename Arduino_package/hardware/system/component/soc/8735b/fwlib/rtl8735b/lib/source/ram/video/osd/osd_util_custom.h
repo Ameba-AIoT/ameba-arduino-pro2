@@ -10,6 +10,8 @@
 
 #include "hal_osd_util.h"
 
+#define RTS_OSD2_CH_BLK_MAX_NUMBER 	24
+
 enum osd_coding_fmt {
 	CODING_FMT_RGBA_1BPP = 1,
 	CODING_FMT_RGBA_1111,

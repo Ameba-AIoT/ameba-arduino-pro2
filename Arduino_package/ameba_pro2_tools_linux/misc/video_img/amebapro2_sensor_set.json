@@ -20,11 +20,11 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"
+            "file":"iq_f37.bin"        
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"
+            "file":"sensor_f37.bin"        
         }
     }
 }

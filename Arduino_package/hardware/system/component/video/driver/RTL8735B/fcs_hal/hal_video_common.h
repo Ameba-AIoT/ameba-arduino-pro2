@@ -211,6 +211,7 @@ typedef enum {
 	VCENC_RESERVED = -255,
 	VCENC_INTRA_FRAME = 0,
 	VCENC_PREDICTED_FRAME = 1,
+//	VCENC_PREDICTED_FRAME_META = 2,		// ToDo
 	VCENC_BIDIR_PREDICTED_FRAME = 2,
 	VCENC_NOTCODED_FRAME  /* Used just as a return value */
 } VCEncPictureCodingType;
@@ -236,9 +237,6 @@ typedef struct {
 
 /* Structure for command line options */
 typedef struct {
-
-//	char input[MAX_PATH];
-//	char output[MAX_PATH];
 
 	i32 CodecType;
 
@@ -290,18 +288,9 @@ typedef struct {
 
 	i32 pcm_loop_filter_disabled_flag;
 
-	i32 ipcm1AreaTop;
-	i32 ipcm1AreaLeft;
-	i32 ipcm1AreaBottom;
-	i32 ipcm1AreaRight;
 
-	i32 ipcm2AreaTop;
-	i32 ipcm2AreaLeft;
-	i32 ipcm2AreaBottom;
-	i32 ipcm2AreaRight;
-	i32 ipcmMapEnable;
+	i32 rsvd0[9];
 	char *ipcmMapFile;
-
 	char *skipMapFile;
 	i32 skipMapEnable;
 	i32 skipMapBlockUnit;
@@ -323,10 +312,8 @@ typedef struct {
 	i32 crf; /*CRF constant*/
 
 	i32 bitVarRangeI;
-
 	i32 bitVarRangeP;
 
-//	i32 bitVarRangeB;
 	u32 u32StaticSceneIbitPercent;
 
 	i32 tolMovingBitRate;/*tolerance of max Moving bit rate */
@@ -368,10 +355,7 @@ typedef struct {
 
 	i32 sliceSize;
 
-//	i32 testId;
-
 	i32 rotation;
-//	i32 mirror;
 	i32 horOffsetSrc;
 	i32 verOffsetSrc;
 	i32 colorConversion;
@@ -390,7 +374,8 @@ typedef struct {
 	i32 fieldOrder;
 	i32 videoRange;
 	i32 sei;
-	char *userData;
+
+	u32 userData;
 	u32 gopSize;
 	char *gopCfg;
 	u32 gopLowdelay;
@@ -495,7 +480,7 @@ typedef struct {
 
 	/* AmebaPro VOE/buffer control */
 	i32 osd;
-//	i32 obj;
+	//	i32 obj;
 
 	u32 lumaSize;
 	i32	enc_cnt;
@@ -545,7 +530,29 @@ typedef struct {
 
 	u32 all_init_iq_set_flag;
 
-	u32 rsvd[2 + 56];
+	u32 fast_osd_en;
+	u32 *osd_buf;
+
+	u32 isp_meta_out;
+
+	u32 fast_mask_en;
+
+	u32 init_flicker;
+	u32 init_saturation;
+	u32 init_brightness;
+	u32 init_contrast;
+	u32 init_wdr_mode;
+	u32 init_wdr_level;
+	u32 init_hdr_mode;
+	u32 init_mirrorflip;
+
+	u32 mipi_clk_noncontinous;
+
+	u32 iq_cali_init_en;
+
+	u32 osd_block_num;
+
+	u32 rsvd[43];   //When add new element, please reduce same rsvd size
 
 } __attribute__((aligned(32))) commandLine_s;
 

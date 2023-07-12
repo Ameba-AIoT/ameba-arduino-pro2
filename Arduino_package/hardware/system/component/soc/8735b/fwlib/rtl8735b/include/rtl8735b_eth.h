@@ -319,6 +319,15 @@ enum  eth_packet_type_e {
 	eth_pkt_ipv6_udp        = 10
 };
 
+enum  eth_sys_hw_ctrl_e {
+	eth_sys_hw_fephy_ip,
+	eth_sys_hw_femac_ip,
+	eth_sys_hw_uabg_en,
+	eth_sys_hw_uahv_en,
+	eth_sys_hw_fephy_en,
+	eth_sys_hw_lx_en
+};
+
 
 /**
   \brief  Ethernet callback function for interrupt event.
@@ -380,8 +389,8 @@ typedef struct hal_eth_func_stubs_s {
 	void (*hal_eth_set_pkt_buf)(hal_eth_adapter_t *peth_adapter, u8 *tx_pkt_buf, u8 *rx_pkt_buf);
 	void (*hal_eth_set_mac_addr)(hal_eth_adapter_t *peth_adapter, u8 *addr);
 	void (*hal_eth_get_mac_addr)(hal_eth_adapter_t *peth_adapter, u8 *addr);
-	hal_status_t (*hal_eth_init)(hal_eth_adapter_t *peth_adapter);
-	void (*hal_eth_deinit)(hal_eth_adapter_t *peth_adapter);
+//	hal_status_t (*hal_eth_init)(hal_eth_adapter_t *peth_adapter);
+//	void (*hal_eth_deinit)(hal_eth_adapter_t *peth_adapter);
 	s32(*hal_eth_write_data)(hal_eth_adapter_t *peth_adapter, u8 *data, u32 size);
 	u32(*hal_eth_send_pkt)(hal_eth_adapter_t *peth_adapter);
 	u32(*hal_eth_receive_pkt)(hal_eth_adapter_t *peth_adapter);
@@ -392,7 +401,7 @@ typedef struct hal_eth_func_stubs_s {
 	void (*hal_eth_task_yield_hook)(hal_eth_adapter_t *peth_adapter, eth_task_yield task_yield);
 	u16(*hal_eth_rd_phy_reg)(hal_eth_adapter_t *peth_adapter, u16 page, u16 reg_addr);
 	u32(*hal_eth_wr_phy_reg)(hal_eth_adapter_t *peth_adapter, u16 page, u16 reg_addr, u16 data);
-	void (*hal_eth_detect_phy_state)(hal_eth_adapter_t *peth_adapter);
+//    void (*hal_eth_detect_phy_state)(hal_eth_adapter_t *peth_adapter);
 	void (*hal_eth_phy_eee_ctrl)(hal_eth_adapter_t *peth_adapter, u8 en);
 	uint32_t reserved[12];  // reserved space for next ROM code version function table extending.
 } hal_eth_func_stubs_t;
@@ -413,8 +422,8 @@ void hal_rtl_eth_set_desc_addr(hal_eth_adapter_t *peth_adapter, u8 *tx_desc, u8 
 void hal_rtl_eth_set_pkt_buf(hal_eth_adapter_t *peth_adapter, u8 *tx_pkt_buf, u8 *rx_pkt_buf);
 void hal_rtl_eth_set_mac_addr(hal_eth_adapter_t *peth_adapter, u8 *addr);
 void hal_rtl_eth_get_mac_addr(hal_eth_adapter_t *peth_adapter, u8 *addr);
-hal_status_t hal_rtl_eth_init(hal_eth_adapter_t *peth_adapter);
-void hal_rtl_eth_deinit(hal_eth_adapter_t *peth_adapter);
+//hal_status_t hal_rtl_eth_init(hal_eth_adapter_t *peth_adapter);
+//void hal_rtl_eth_deinit(hal_eth_adapter_t *peth_adapter);
 s32 hal_rtl_eth_write_data(hal_eth_adapter_t *peth_adapter, u8 *data, u32 size);
 u32 hal_rtl_eth_send_pkt(hal_eth_adapter_t *peth_adapter);
 u32 hal_rtl_eth_receive_pkt(hal_eth_adapter_t *peth_adapter);
@@ -425,7 +434,7 @@ void hal_rtl_eth_callback_hook(hal_eth_adapter_t *peth_adapter, eth_callback_t p
 void hal_rtl_eth_task_yield_hook(hal_eth_adapter_t *peth_adapter, eth_task_yield task_yield);
 u16 hal_rtl_eth_rd_phy_reg(hal_eth_adapter_t *peth_adapter, u16 page, u16 reg_addr);
 u32 hal_rtl_eth_wr_phy_reg(hal_eth_adapter_t *peth_adapter, u16 page, u16 reg_addr, u16 data);
-void hal_rtl_eth_detect_phy_state(hal_eth_adapter_t *peth_adapter);
+//void hal_rtl_eth_detect_phy_state(hal_eth_adapter_t *peth_adapter);
 void hal_rtl_eth_phy_eee_ctrl(hal_eth_adapter_t *peth_adapter, u8 en);
 
 /** @} */ /* End of group hs_hal_ethernet_rom_func */
