@@ -781,7 +781,7 @@
               "host": "i686-mingw32",
               "archiveFileName": "ameba_pro2_tools_windows-1.2.9.1.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.2.9.1.tar.gz",
-              "checksum": "SHA-256:f99ce9ba9dbd6580f2a174d6ed761f79e3962c3a8c93a003ce0285a6b1c4b6b5",
+              "checksum": "SHA-256:cdc4874face98f3a002d0d8092372da4ac8f8a7aff53847fba5adc338a90e29b",
               "size": "3780632"
             },
             {
