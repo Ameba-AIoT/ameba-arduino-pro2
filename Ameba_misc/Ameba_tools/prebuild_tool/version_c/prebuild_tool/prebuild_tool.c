@@ -51,14 +51,6 @@ void deleteDirectory(const char* path);
 void removeLastPathComponent(char* path);
 
 int main(int argc, char *argv[]) { 
-	// Check if the number of input arguments is correct 
-	if (argc != 5) { 
-#if PRINT_DEBUG
-		printf("[Error] Incorrect number of input parameters. Expected 4 parameters.\r\n"); 
-#endif
-		exit(1);
-	} 
-
 	// Retrieve the input parameters 
 	char* toolchain_p1_path = argv[1];
 	char* toolchain_p2_path = argv[2];
