@@ -5,8 +5,8 @@
 
 |Branch|Usage|Remarks|
 |:-----|:-----|:-----|
+|`main` | stable release| `main` branch is only for hosting stable release by link https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek.com_amebapro2_index.json, refer to section 2 to use the stable release |
 |`dev`| merge `PR` & early release| `dev` branch is open to `Pull Request`(PR) for ***feature addition*** and ***bug fix***. It will also have the latest features which you can access via this link https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek.com_amebapro2_early_index.json (refer below for steps to install early release on Arduino IDE, please be noted that as this is a **early release**, bugs and/or performance issue might occur and break your program) |
-|`main` | stable release| `main` branch is only for hosting stable release, no `PR` will be merged, refer to the following steps to use the stable release |
 
 
 For all `release` information, please visit this [link](https://github.com/ambiot/ambpro2_arduino/releases).
