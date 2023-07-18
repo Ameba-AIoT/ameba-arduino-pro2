@@ -13,7 +13,7 @@
 
 #ifdef _WIN32
     #include <io.h>
-    #include "dirent.h"	// https://codeyarns.com/tech/2014-06-06-how-to-use-dirent-h-with-visual-studio.html#gsc.tab=0
+    #include "dirent.h"     // https://codeyarns.com/tech/2014-06-06-how-to-use-dirent-h-with-visual-studio.html#gsc.tab=0
     #define F_OK 0
 #else // #elif __linux__
     #include <inttypes.h>
@@ -89,9 +89,8 @@ void revertModel(const char* dmodel_name, const char* dmodel_name_backup, const 
 /* Copy files from source to destination dir, can be merged with renameFile */
 void copyFile(const char* sourcePath, const char* destinationPath);
 // -------------------------------------------------------------
-
+/* Clear nn model json file*/
 void resetJSON(const char* input);
-
 /* Update nn model json file*/
 void updateJSON(const char* input, const char* destPath);
 /* Function to update JSON */
@@ -194,21 +193,13 @@ int main(int argc, char* argv[]) {
     printf("path_txt         = %s\n", path_txt);
 #endif
 
-    resetJSON(path_model); 
+    resetJSON(path_model);
     //printf("[%s][INFO] resetJSON done\n", __func__);
     path_build_options_json = pathTempJSON(path_build, ext_json, key_json);
-    printf("[%s][INFO] path_build_options_json            = %s\n", __func__, path_build_options_json);
     path_example = validateINO(path_build);
-    printf("[%s][INFO] path_example            = %s\n", __func__, path_example);
-    
-    
-    
-    
-
-   
-    
+    //printf("[%s][INFO] path_example            = %s\n", __func__, path_example);
     writeJSON(path_example);    //writeTXT(path_example);
-    
+
     return 0;
 }
 
@@ -415,12 +406,11 @@ error_non_singular:
     error_handler("AmebaPro2 directory only allow 1 SDK!!! Please check again.");
 }
 
-#ifdef _WIN32
+#ifndef __MINGW64__
 extern int mkdir(char* filename);
 #endif
 
 void resetTXT(char* directory_path) {
-
 #ifndef _WIN32
     DIR* dir;
     dir = opendir(directory_path);
@@ -578,8 +568,6 @@ void removeChar(char* str, char c) {
 }
 
 const char* validateINO(const char* directory_path) {
-
-
     // Open the JSON file and retrive the data
     cJSON* data = loadJSONFile(path_build_options_json);
     // Arduino IDE1.0 
@@ -921,8 +909,8 @@ int writeJSON(const char* f_path) {
     char line_strip_header[100] = "NA";
     char line_strip_headerNN[100] = "NA";
 
-	char* file_path = NULL;
-	const char* ino_extension = ".ino";
+    char* file_path = NULL;
+    const char* ino_extension = ".ino";
     f_path = path_example;
 
 #if PRINT_DEBUG
@@ -963,13 +951,12 @@ int writeJSON(const char* f_path) {
         }
         printf("%s\r\n", file_path);
         closedir(dir);
-    }
-    else{
-    	file_path = f_path;
+    } else{
+        file_path = (char *)f_path;
     }
 
-	FILE* f_model = fopen(file_path, "r");
-	char param[100];
+    FILE* f_model = fopen(file_path, "r");
+    char param[100];
     if (f_model) {
         char line[MAX_PATH_LENGTH];
         while (fgets(line, sizeof(line), f_model)) {
@@ -1000,7 +987,6 @@ int writeJSON(const char* f_path) {
                                 if (dirExists(path_model)) {
                                     DIR* dir = opendir(path_model);
                                     struct dirent* ent;
-
                                     while ((ent = readdir(dir)) != NULL) {
                                         if (endsWith(ent->d_name, ".json")) {
                                             char fpath_nn_json[MAX_PATH_LENGTH];
@@ -1184,7 +1170,7 @@ int writeJSON(const char* f_path) {
 #endif
                                                     }
                                                 } else {
-                                                        goto error_customized_mismatch;     // 3. check model file (.nb) existance
+                                                    goto error_customized_mismatch;     // 3. check model file (.nb) existance
                                                 }
                                             }
                                         }
@@ -1325,7 +1311,6 @@ int writeJSON(const char* f_path) {
                                         }
                                         closedir(dir);
                                     }
-
                                     if (flag_Dbackup) {
                                         revertModel(fname_dmodel, fname_dmodel_backup, path_model);
                                     }
@@ -1378,14 +1363,14 @@ int writeJSON(const char* f_path) {
     }
     return 0;
 
-error_combination:
-    error_handler("Model combination mismatch. Please check modelSelect() again.");
+    error_combination:
+        error_handler("Model combination mismatch. Please check modelSelect() again.");
 
-error_customized_missing:
-    error_handler("Model missing. Please check your sketch folder again.");
+    error_customized_missing:
+        error_handler("Model missing. Please check your sketch folder again.");
 
-error_customized_mismatch:
-    error_handler("Customized model mismatch. Please check your sketch folder again.");
+    error_customized_mismatch:
+        error_handler("Customized model mismatch. Please check your sketch folder again.");
 }
 
 void updateJSON(const char* input, const char* destPath) {

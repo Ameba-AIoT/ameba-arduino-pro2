@@ -13,7 +13,7 @@
 
 #ifdef _WIN32
     #include <io.h>
-    #include "dirent.h" // https://codeyarns.com/tech/2014-06-06-how-to-use-dirent-h-with-visual-studio.html#gsc.tab=0
+    #include "dirent.h"     // https://codeyarns.com/tech/2014-06-06-how-to-use-dirent-h-with-visual-studio.html#gsc.tab=0
 #else // #elif __linux__
     #include <inttypes.h>
     #include <unistd.h>
@@ -310,7 +310,6 @@ const char* input2filename(const char* dest_path, const char* input) {
                             break;
                         }
                     }
-
                     fclose(f_model);
                 }
             }
@@ -367,12 +366,11 @@ error_non_singular:
     error_handler("AmebaPro2 directory only allow 1 SDK!!! Please check again.");
 }
 
-#ifdef _WIN32
+#ifndef __MINGW64__
 extern int mkdir(char* filename);
 #endif
 
 void resetTXT(char* directory_path) {
-
 #ifndef _WIN32
     DIR* dir;
     dir = opendir(directory_path);
@@ -670,12 +668,11 @@ int writeTXT(const char* path) {
             }
         }
         closedir(dir);
-    }
-    else{
+    } else{
 #if PRINT_DEBUG
         printf("IDE1\n");
 #endif
-    	file_path = (char *)path;
+        file_path = (char *)path;
     }
     FILE* f_model = fopen(file_path, "r");
     char param[100];
@@ -788,8 +785,7 @@ int writeTXT(const char* path) {
 #if PRINT_DEBUG
                                                     printf("%s\n", ent->d_name);
 #endif
-                                                }
-                                                else {
+                                                } else {
                                                     goto error_customized_mismatch;
                                                 }
                                             }
@@ -838,13 +834,12 @@ int writeTXT(const char* path) {
 #if PRINT_DEBUG
                                                     printf("%s\n", ent->d_name);
 #endif
-                                                }
-                                                else {
+                                                } else {
                                                     goto error_customized_mismatch;
-                                                }
                                                 }
                                             }
                                         }
+                                    }
                                     if (count <= 1) {
                                         goto error_customized_missing;
                                     }
@@ -854,25 +849,23 @@ int writeTXT(const char* path) {
                                 strcpy(model_name_fr, token);
                             }
                         }
-                    }
-
                     /* default settings for all models */
-                    else {
+                    } else {
                         /* provide default settings for all models if user never provide any selections*/
                         if (strcmp(model_type, "OBJECT_DETECTION") == 0 && strcmp(input2model(model_name_od), "NA") == 0) {
-                            printf("111\n");
+                            //printf("111\n");
                             strcpy(model_name_od, "DEFAULT_YOLOV4TINY");
                             strcpy(model_name_fd, "NA_MODEL");
                             strcpy(model_name_fr, "NA_MODEL");
                         }
                         if (strcmp(model_type, "FACE_DETECTION") == 0 && strcmp(input2model(model_name_od), "NA") == 0) {
-                            printf("222\n");
+                            //printf("222\n");
                             strcpy(model_name_od, "NA_MODEL");
                             strcpy(model_name_fd, "DEFAULT_SCRFD");
                             strcpy(model_name_fr, "NA_MODEL");
                         }
                         if (strcmp(model_type, "FACE_RECOGNITION") == 0 && strcmp(input2model(model_name_od), "NA") == 0) {
-                            printf("333\n");
+                            //printf("333\n");
                             strcpy(model_name_od, "NA_MODEL");
                             strcpy(model_name_fd, "DEFAULT_SCRFD");
                             strcpy(model_name_fr, "DEFAULT_MOBILEFACENET");
@@ -990,12 +983,12 @@ int writeTXT(const char* path) {
     }
     return 0;
 
-error_combination:
-    error_handler("Model combination mismatch. Please check modelSelect() again.");
+    error_combination:
+        error_handler("Model combination mismatch. Please check modelSelect() again.");
 
-error_customized_missing:
-    error_handler("Model missing. Please check your sketch folder again.");
+    error_customized_missing:
+        error_handler("Model missing. Please check your sketch folder again.");
 
-error_customized_mismatch:
-    error_handler("Customized model mismatch. Please check your sketch folder again.");
+    error_customized_mismatch:
+        error_handler("Customized model mismatch. Please check your sketch folder again.");
 }
