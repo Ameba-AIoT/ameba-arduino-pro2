@@ -124,6 +124,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <HeapCommitSize>10KB</HeapCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
