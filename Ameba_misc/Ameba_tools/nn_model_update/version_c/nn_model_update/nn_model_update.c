@@ -63,7 +63,7 @@ void removeChar(char* str, char c);
 /* Validate example in directory_path and returns example path */
 const char* validateINO(const char* directory_path);
 /* Clear all content in the ino_validation.txt file */
-void resetTXT(const char* directory_path);
+void resetTXT(char* directory_path);
 /* Update content in the input to TXT f_model */
 void updateTXT(const char* input);
 /* Similar function as REGEX*/
@@ -194,13 +194,21 @@ int main(int argc, char* argv[]) {
     printf("path_txt         = %s\n", path_txt);
 #endif
 
-    resetJSON(path_model);      //resetTXT(path_txt);
+    resetJSON(path_model); 
     //printf("[%s][INFO] resetJSON done\n", __func__);
     path_build_options_json = pathTempJSON(path_build, ext_json, key_json);
+    printf("[%s][INFO] path_build_options_json            = %s\n", __func__, path_build_options_json);
     path_example = validateINO(path_build);
-    //printf("[%s][INFO] path_example            = %s\n", __func__, path_example);
-    writeJSON(path_example);    //writeTXT(path_example);
+    printf("[%s][INFO] path_example            = %s\n", __func__, path_example);
+    
+    
+    
+    
 
+   
+    
+    writeJSON(path_example);    //writeTXT(path_example);
+    
     return 0;
 }
 
@@ -234,8 +242,8 @@ const char* input2filename(const char* directory_path, const char* key) {
     // Read the JSON data from the file
     size_t read_size = fread(json_data, 1, file_size, file);
 #if PRINT_DEBUG
-    printf("[%s][Info] read_size %d\n", __func__, read_size);
-    printf("[%s][Info] file_size %d\n", __func__, file_size);
+    printf("[%s][Info] read_size %zu\n", __func__, read_size);
+    printf("[%s][Info] file_size %zu\n", __func__, file_size);
 #endif
     if (read_size != file_size) {
         printf("[%s][Error] Failed to read the file.\n", __func__);
@@ -269,7 +277,7 @@ const char* input2filename(const char* directory_path, const char* key) {
 
     cJSON* file_obj = cJSON_GetObjectItemCaseSensitive(yolov4_tiny_obj, "file");
     if (file_obj == NULL) {
-        printf("Attribute \"file\" not found！\n");
+        printf("Attribute \"file\" not found!\n");
         cJSON_Delete(data);
         return value;
     }
@@ -375,21 +383,21 @@ int dirExists(const char* directory_path) {
 
 const char* dirName(const char* directory_path) {
     int sdk_counter = 0;
-    struct dirent* entry;
+    struct dirent* ent;
     DIR* directory = opendir(directory_path);
     const char* sdk_name = "";
     // check dir validation
     if (directory) {
-        while ((entry = readdir(directory)) != NULL) {
+        while ((ent = readdir(directory)) != NULL) {
 #ifdef __APPLE__
-            if(strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 || strcmp(entry->d_name, ".DS_Store") == 0) {
+            if(strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0 || strcmp(ent->d_name, ".DS_Store") == 0) {
 #else
-            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0) {
 #endif
                 continue;
             } else {
                 sdk_counter++;
-                sdk_name = entry->d_name;
+                sdk_name = ent->d_name;
             }
         }
         // non singular SDK validation
@@ -407,7 +415,11 @@ error_non_singular:
     error_handler("AmebaPro2 directory only allow 1 SDK!!! Please check again.");
 }
 
-void resetTXT(const char* directory_path) {
+#ifdef _WIN32
+extern int mkdir(char* filename);
+#endif
+
+void resetTXT(char* directory_path) {
 
 #ifndef _WIN32
     DIR* dir;
@@ -522,8 +534,8 @@ cJSON* loadJSONFile(const char* directory_path) {
     // Read the JSON data from the file
     size_t read_size = fread(json_data, 1, file_size, file);
 #if PRINT_DEBUG
-    printf("[%s][Info] read_size %d\n", __func__, read_size);
-    printf("[%s][Info] file_size %d\n", __func__, file_size);
+    printf("[%s][Info] read_size %zu\n", __func__, read_size);
+    printf("[%s][Info] file_size %zu\n", __func__, file_size);
 #endif
     if (read_size != file_size) {
         printf("[%s][Error] Failed to read the file.\n", __func__);
@@ -556,7 +568,7 @@ cJSON* loadJSONFile(const char* directory_path) {
 
 void removeChar(char* str, char c) {
     int i, j;
-    int len = strlen(str);
+    size_t len = strlen(str);
     for (i = j = 0; i < len; i++) {
         if (str[i] != c) {
             str[j++] = str[i];
@@ -566,8 +578,7 @@ void removeChar(char* str, char c) {
 }
 
 const char* validateINO(const char* directory_path) {
-    DIR* dir;
-    struct dirent* ent;
+
 
     // Open the JSON file and retrive the data
     cJSON* data = loadJSONFile(path_build_options_json);
@@ -610,7 +621,7 @@ void extractString(char* source, char* result) {
         return;
     }
 
-    int length = end - start;
+    __int64 length = end - start;
     strncpy(result, start, length);
 	result[length] = '\0'; // add ending param at EOL
 }
@@ -630,7 +641,7 @@ void extractString2(char* source, char* result) {
         return;
     }
 
-    int length = end - start;
+    __int64 length = end - start;
     strncpy(result, start, length);
     result[length] = '\0'; // add ending param at EOL
 }
@@ -648,7 +659,7 @@ void extractRootDirectory(char* filepath, char* rootDir) {
 
 void resetJSON(const char* input) {
     DIR* dir;
-    struct dirent* entry;
+    struct dirent* ent;
 
     dir = opendir(input);
     if (dir == NULL) {
@@ -656,10 +667,10 @@ void resetJSON(const char* input) {
         return;
     }
 
-    while ((entry = readdir(dir)) != NULL) {
-        if (strstr(entry->d_name, ".json") != NULL) {
+    while ((ent = readdir(dir)) != NULL) {
+        if (strstr(ent->d_name, ".json") != NULL) {
             char filepath[256];
-            snprintf(filepath, sizeof(filepath), "%s/%s", input, entry->d_name);
+            snprintf(filepath, sizeof(filepath), "%s/%s", input, ent->d_name);
 
             FILE* file = fopen(filepath, "r");
             if (file == NULL) {
@@ -677,7 +688,7 @@ void resetJSON(const char* input) {
 
             cJSON* root = cJSON_Parse(file_contents);
             if (root == NULL) {
-                fprintf(stderr, "Error parsing JSON in file: %s\n", entry->d_name);
+                fprintf(stderr, "Error parsing JSON in file: %s\n", ent->d_name);
                 free(file_contents);
                 continue;
             }
@@ -686,7 +697,7 @@ void resetJSON(const char* input) {
             if (fwfs == NULL || !cJSON_IsObject(fwfs)) {
                 cJSON_Delete(root);
                 free(file_contents);
-                fprintf(stderr, "Invalid JSON format in file: %s\n", entry->d_name);
+                fprintf(stderr, "Invalid JSON format in file: %s\n", ent->d_name);
                 continue;
             }
 
@@ -694,7 +705,7 @@ void resetJSON(const char* input) {
             if (files == NULL || !cJSON_IsArray(files)) {
                 cJSON_Delete(root);
                 free(file_contents);
-                fprintf(stderr, "Invalid JSON format in file: %s\n", entry->d_name);
+                fprintf(stderr, "Invalid JSON format in file: %s\n", ent->d_name);
                 continue;
             }
 
@@ -854,9 +865,9 @@ void backupModel(char* input, char* sktech_path) {
     bool flag_Dbackup = 0;
     /* check whether default example has been back up */
     if (dir) {
-        struct dirent* entry;
-        while ((entry = readdir(dir)) != NULL) {
-            if (strstr(entry->d_name, "Dbackup") != NULL) {     // customized model has been used
+        struct dirent* ent;
+        while ((ent = readdir(dir)) != NULL) {
+            if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
                 //printf("[%s][INFO] Backup-ed %s found !!!\n", __func__, input);
                 flag_Dbackup = 1;
                 break;
@@ -891,8 +902,6 @@ void revertModel(const char* dmodel_name, const char* dmodel_name_backup, const 
 }
 
 int writeJSON(const char* f_path) {
-    DIR* dir;
-    struct dirent* ent;
     const char buf[MAX_PATH_LENGTH] = "";
     const char backslash[] = "\\";
     char line[MAX_PATH_LENGTH] = { 0 };
@@ -905,13 +914,15 @@ int writeJSON(const char* f_path) {
     char header_od[100] = "NA";
     char header_fd[100] = "NA";
     char header_fr[100] = "NA";
-    char header_all[100] = "";
+    char header_all[MAX_PATH_LENGTH] = "";
     char fname_od[100] = "NA";
     char fname_fd[100] = "NA";
     char fname_fr[100] = "NA";
     char line_strip_header[100] = "NA";
     char line_strip_headerNN[100] = "NA";
 
+	char* file_path = NULL;
+	const char* ino_extension = ".ino";
     f_path = path_example;
 
 #if PRINT_DEBUG
@@ -926,33 +937,39 @@ int writeJSON(const char* f_path) {
         DIR* dir;
         struct dirent* ent;
 
-        // check weather dir is valid
-        if ((dir = opendir(f_path)) != NULL) {
-            /* print all the files and directories within directory */
-            while ((ent = readdir(dir)) != NULL) {
-                if (ent->d_type == DT_REG && strstr(ent->d_name, ".ino") != NULL) {
-#if PRINT_DEBUG
-                    printf("[%s] File:%s\n", __func__, ent->d_name);
-#endif
-#ifndef _WIN32
-                    strcat(f_path, backspace);
-                    strcat(f_path, ent->d_name);
-#else
-                    strcat((char *)f_path, backspace);
-                    strcat((char *)f_path, ent->d_name);
-#endif
-                    printf("[%s] path:%s\n", __func__, f_path);
+        dir = opendir(f_path);
+        if (dir == NULL) {
+            printf("Unable to open directory: %s\n", f_path);
+            return 0;
+        }
+
+        while ((ent = readdir(dir)) != NULL) {
+            if (ent->d_type == DT_REG) { 
+                size_t len = strlen(ent->d_name);
+                if (len > strlen(ino_extension) && strcmp(ent->d_name + len - strlen(ino_extension), ino_extension) == 0) {
+                    size_t path_len = strlen(f_path);
+                    size_t file_name_len = strlen(ent->d_name);
+                    file_path = malloc(path_len + file_name_len + 2);
+                    if (file_path == NULL) {
+                        printf("Memory allocation error.\n");
+                        return 0;
+                    }
+                    strcpy(file_path, f_path);
+                    strcat(file_path, backspace);
+                    strcat(file_path, ent->d_name);
+                    break;
                 }
             }
-        } else {
-            /* opendir() failed for some other reason. */
-            printf("[%s][Error] Faield to open temp dir in IDE2.0 :%s\n", __func__, f_path);
-            // qqz return EXIT_FAILURE;
         }
+        printf("%s\r\n", file_path);
+        closedir(dir);
+    }
+    else{
+    	file_path = f_path;
     }
 
-    FILE* f_model = fopen(f_path, "r");
-    char param[100];
+	FILE* f_model = fopen(file_path, "r");
+	char param[100];
     if (f_model) {
         char line[MAX_PATH_LENGTH];
         while (fgets(line, sizeof(line), f_model)) {
@@ -982,14 +999,14 @@ int writeJSON(const char* f_path) {
                                 // goto path_model and open the file ends with .json
                                 if (dirExists(path_model)) {
                                     DIR* dir = opendir(path_model);
-                                    struct dirent* entry;
+                                    struct dirent* ent;
 
-                                    while ((entry = readdir(dir)) != NULL) {
-                                        if (endsWith(entry->d_name, ".json")) {
+                                    while ((ent = readdir(dir)) != NULL) {
+                                        if (endsWith(ent->d_name, ".json")) {
                                             char fpath_nn_json[MAX_PATH_LENGTH];
-                                            char dir_nn_json[MAX_PATH_LENGTH];
+                                            char dir_nn_json[MAX_PATH_LENGTH] = "";;
 
-                                            sprintf(fpath_nn_json, "%s\\%s", path_model, entry->d_name);
+                                            sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 #ifndef _WIN32
                                             cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
 #else
@@ -1054,11 +1071,11 @@ int writeJSON(const char* f_path) {
                                 
                                 /* check whether default example has been back up */
                                 if (dir) {
-                                    struct dirent* entry;
-                                    while ((entry = readdir(dir)) != NULL) {
-                                        if (strstr(entry->d_name, "Dbackup") != NULL) {     // customized model has been used
+                                    struct dirent* ent;
+                                    while ((ent = readdir(dir)) != NULL) {
+                                        if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
                                             flag_Dbackup = 1;
-                                            strcpy(fname_dmodel_backup, entry->d_name);
+                                            strcpy(fname_dmodel_backup, ent->d_name);
                                             strcpy(model_name_od, token);
                                             char* input = "";
 #ifndef _WIN32
@@ -1112,14 +1129,14 @@ int writeJSON(const char* f_path) {
                                     // goto path_model and open the file ends with .json
                                     if (dirExists(path_model)) {
                                         DIR* dir = opendir(path_model);
-                                        struct dirent* entry;
+                                        struct dirent* ent;
 
-                                        while ((entry = readdir(dir)) != NULL) {
-                                            if (endsWith(entry->d_name, ".json")) {
+                                        while ((ent = readdir(dir)) != NULL) {
+                                            if (endsWith(ent->d_name, ".json")) {
                                                 char fpath_nn_json[MAX_PATH_LENGTH];
-                                                char dir_nn_json[MAX_PATH_LENGTH];
+                                                char dir_nn_json[MAX_PATH_LENGTH] = "";
 
-                                                sprintf(fpath_nn_json, "%s\\%s", path_model, entry->d_name);
+                                                sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 #ifndef _WIN32
                                                 cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
 #else
@@ -1183,11 +1200,11 @@ int writeJSON(const char* f_path) {
                                     char fname_dmodel_backup[100];
                                     /* check whether default example has been back up */
                                     if (dir) {
-                                        struct dirent* entry;
-                                        while ((entry = readdir(dir)) != NULL) {
-                                            if (strstr(entry->d_name, "Dbackup") != NULL) {     // customized model has been used
+                                        struct dirent* ent;
+                                        while ((ent = readdir(dir)) != NULL) {
+                                            if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
                                                 flag_Dbackup = 1;
-                                                strcpy(fname_dmodel_backup, entry->d_name);
+                                                strcpy(fname_dmodel_backup, ent->d_name);
                                                 char* start = strstr(fname_dmodel_backup, "_scrfd");        // Find the starting position of the substring
                                                 if (start != NULL) {
                                                     start += strlen("_scrfd_");     // Move the pointer past the substring
@@ -1222,14 +1239,14 @@ int writeJSON(const char* f_path) {
                                     // goto path_model and open the file ends with .json
                                     if (dirExists(path_model)) {
                                         DIR* dir = opendir(path_model);
-                                        struct dirent* entry;
+                                        struct dirent* ent;
 
-                                        while ((entry = readdir(dir)) != NULL) {
-                                            if (endsWith(entry->d_name, ".json")) {
+                                        while ((ent = readdir(dir)) != NULL) {
+                                            if (endsWith(ent->d_name, ".json")) {
                                                 char fpath_nn_json[MAX_PATH_LENGTH];
-                                                char dir_nn_json[MAX_PATH_LENGTH];
+                                                char dir_nn_json[MAX_PATH_LENGTH] = "";
 
-                                                sprintf(fpath_nn_json, "%s\\%s", path_model, entry->d_name);
+                                                sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 #ifndef _WIN32
                                                 cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
 #else
@@ -1293,11 +1310,11 @@ int writeJSON(const char* f_path) {
                                     char fname_dmodel_backup[100];
                                     /* check whether default example has been back up */
                                     if (dir) {
-                                        struct dirent* entry;
-                                        while ((entry = readdir(dir)) != NULL) {
-                                            if (strstr(entry->d_name, "Dbackup") != NULL) {     // customized model has been used
+                                        struct dirent* ent;
+                                        while ((ent = readdir(dir)) != NULL) {
+                                            if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
                                                 flag_Dbackup = 1;
-                                                strcpy(fname_dmodel_backup, entry->d_name);
+                                                strcpy(fname_dmodel_backup, ent->d_name);
                                                 char* start = strstr(fname_dmodel_backup, "_mobilefacenet");		// Find the starting position of the substring
                                                 if (start != NULL) {
                                                     start += strlen("_mobilefacenet_");     // Move the pointer past the substring
@@ -1355,6 +1372,7 @@ int writeJSON(const char* f_path) {
                 if (strstr(input2model(model_name_fr), "NA") == NULL) {
                     updateJSON(input2model(model_name_fr), path_model);
                 }
+                return 0;
             }
         }
     }
@@ -1372,7 +1390,7 @@ error_customized_mismatch:
 
 void updateJSON(const char* input, const char* destPath) {
     DIR* dir;
-    struct dirent* entry;
+    struct dirent* ent;
     // Open the destination directory
     dir = opendir(destPath);
     if (dir == NULL) {
@@ -1380,8 +1398,8 @@ void updateJSON(const char* input, const char* destPath) {
         return;
     }
 
-    while ((entry = readdir(dir)) != NULL) {
-        const char* destFile = entry->d_name;
+    while ((ent = readdir(dir)) != NULL) {
+        const char* destFile = ent->d_name;
 
         // Check if the destination file is a JSON file
         if (strstr(destFile, ".json") != NULL) {
