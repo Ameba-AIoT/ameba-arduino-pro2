@@ -3,8 +3,6 @@
  Example guide:
  https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-motion-mp4/
 
- For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/welcome-to-ameba-faq/1748
-
  This example acts as a Security System based on Motion Detection, which would start to record a 
  30 seconds long MP4 video everytime motion is detected. (Alarm function could be initiated as well, but on default disabled)
  */

@@ -39,8 +39,8 @@ StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerFDFR(1, 1);
 StreamIO videoStreamerRGBFD(1, 1);
 
-char ssid[] = "yourNetwork"; // your network SSID (name)
-char pass[] = "Password";    // your network password
+char ssid[] = "Network_SSID";   // your network SSID (name)
+char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 
 bool buttonState = false;
