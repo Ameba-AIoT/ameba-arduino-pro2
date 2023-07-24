@@ -1,6 +1,6 @@
 /*
 
- Example guide:
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-audio-rtsp/
 
  */
 
@@ -26,7 +26,7 @@ RTSP rtsp;
 StreamIO audioStreamer1(1, 1);   // 1 Input Audio -> 1 Output encoder
 StreamIO audioStreamer2(1, 1);   // 1 Input encoder -> 1 Output RTSP
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 

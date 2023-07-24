@@ -11,7 +11,7 @@
 VideoSetting config(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
 //VideoSetting config(1072, 1072, CAM_FPS, VIDEO_JPEG, 1);
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);

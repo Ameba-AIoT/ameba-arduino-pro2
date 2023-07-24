@@ -1,6 +1,6 @@
 /*
 
- Example guide:
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-echo-cancel/
 
  */
 
@@ -29,7 +29,7 @@ StreamIO audioStreamer1(1, 1);   // 1 Input Audio -> 1 Output AAC
 StreamIO audioStreamer2(1, 1);   // 1 Input Audio -> 1 Output AAC
 StreamIO audioStreamer3(1, 1);   // 1 Input Audio -> 1 Output AAC
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 uint16_t value;
