@@ -52,8 +52,9 @@ static int _readResolution = 10;
 extern void *gpio_pin_struct[];
 static int _writeResolution = 8;
 static int _writePeriod = 1000;
-static uint16_t _offset = 0;
-static uint16_t _gain = 0;
+static float _offset = 0;
+static float _gain = 0;
+static int _calibrate_en = 0;
 
 void analogReadResolution(int res) {
     if (res > 12) {
@@ -89,21 +90,29 @@ void analogReference(eAnalogReference ulMode) {
     analog_reference = ulMode;
 }
 
+void analogSet(float gain, float offset){
+    _offset = offset;
+    _gain = gain;
+    _calibrate_en = 1;
+}
+
 uint32_t analogRead(uint32_t ulPin) {
     void *pAdc_t;
     analogin_t *adc_obj;
 
-    uint16_t ret = 0;
+    float ret = 0;
 //    float    voltage;
-    uint32_t mv;
+    float mv;
 
     if ((g_APinDescription[ulPin].ulPinType & TYPE_ANALOG) != TYPE_ANALOG) {
         printf("%s : ulPin %d wrong\n", __FUNCTION__, ((int)ulPin));
         return 0;
     }
 
-    _offset = 0x83B; // copy from AmbD
-    _gain = 0x2E25;
+    if (_calibrate_en == 0) {
+        _offset = 0x83B; // copy from AmbD
+        _gain = 0x2E25;
+    }
 
 #if 0
     if ((_offset == 0) || (_gain == 0)) {
