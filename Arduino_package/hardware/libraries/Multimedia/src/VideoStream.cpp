@@ -180,6 +180,14 @@ void VideoSetting::setJpegQuality(uint8_t quality) {
     _jpeg_qlevel = quality;
 }
 
+// 0 (default): 0 degree
+// 1: 90 degree (Rotate Right)
+// 2: 90 degree (Rotate Left)
+// 3: 180 degree
+void VideoSetting::setRotation(int angle) {
+    _rotation = angle;
+}
+
 uint16_t VideoSetting::width(void) {
     return _w;
 }
@@ -203,6 +211,7 @@ void Video::configVideoChannel(int ch, VideoSetting& config) {
     encoder[ch]         = config._encoder;
     snapshot[ch]        = config._snapshot;
     jpeg_qlevel[ch]     = config._jpeg_qlevel;
+    video_rotation[ch]  = config._rotation;
 
     // Video stream using VIDEO_JPEG requires setting bps = 0
     // if (encoder[ch] == VIDEO_JPEG) {
@@ -249,7 +258,8 @@ void Video::videoInit(void) {
                             0,
                             0,
                             snapshot[ch],
-                            jpeg_qlevel[ch]);
+                            jpeg_qlevel[ch],
+                            video_rotation[ch]);
             } else if (ch == 3) {
                 //printf("V4 %d    %d    %d    %d", resolution[3], channelEnable[3], w[3], h[3]);
                 bps[3] = 1*1024*1024;
@@ -276,7 +286,8 @@ void Video::videoInit(void) {
                             CAM_GOP,
                             CAM_RCMODE,
                             snapshot[ch],
-                            jpeg_qlevel[ch]);
+                            jpeg_qlevel[ch],
+                            video_rotation[ch]);
             }
         }
     }

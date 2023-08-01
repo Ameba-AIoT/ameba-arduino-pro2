@@ -11,17 +11,18 @@ uint32_t image_len = 0;
 int voe_heap_size = 0;
 
 static video_params_t video_params = {
-    .stream_id      = 0,
-    .type           = 0,
-    .resolution     = 0,
-    .width          = 0,
-    .height         = 0,
-    .bps            = 0,
-    .fps            = 0,
-    .gop            = 0,
-    .rc_mode        = 0,
-    .jpeg_qlevel = 5,
-    .use_static_addr = 1
+    .stream_id       = 0,
+    .type            = 0,
+    .resolution      = 0,
+    .width           = 0,
+    .height          = 0,
+    .bps             = 0,
+    .fps             = 0,
+    .gop             = 0,
+    .rc_mode         = 0,
+    .jpeg_qlevel     = 5,
+    .use_static_addr = 1,
+    .rotation        = 0
 };
 
 static video_params_t video_v4_params = {
@@ -91,7 +92,7 @@ mm_context_t *cameraInit(void) {
     return videoData;
 }
 
-void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel) {
+void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation) {
     // assign value parsing from user level
     video_params.stream_id = stream_id;
     video_params.type = type;
@@ -103,6 +104,7 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     video_params.gop = gop;
     video_params.rc_mode = rc_mode;
     video_params.jpeg_qlevel = jpeg_qlevel;
+    video_params.rotation =  video_rotation;
 
     //printf("%d    %d    %d    %d    %d    %d    %d    %d    %d",stream_id, type, res, w, h, bps, fps, gop, rc_mode);
 
