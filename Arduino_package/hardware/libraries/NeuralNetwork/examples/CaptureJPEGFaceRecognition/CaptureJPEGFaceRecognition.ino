@@ -1,10 +1,35 @@
-// Point the camera at a target face and enter the following commands into the serial monitor,
-// Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
-// Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
-// Reset registered faces:  "RESET"                 Forget all previously registered faces
-// Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
-// Restore registered faces from flash: "RESTORE"   Load registered faces from flash
-// This example takes snapshot of unrecognised personnel after the Face Registration mode is turned off.
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-face-recognition-jpeg/
+
+ Point the camera at a target face and enter the following commands into the serial monitor,
+ Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
+ Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
+ Reset registered faces:  "RESET"                 Forget all previously registered faces
+ Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
+ Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+ This example takes snapshot of unrecognised personnel after the Face Registration mode is turned off.
+
+ NN Model Selection
+ -------------------
+ Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
+ Replace with NA_MODEL if they are not necessary for your selected NN Task.
+
+ NN task
+ =======
+ OBJECT_DETECTION/ FACE_DETECTION/ FACE_RECOGNITION
+
+ Models
+ =======
+ YOLOv3 model         DEFAULT_YOLOV3TINY   / CUSTOMIZED_YOLOV3TINY
+ YOLOv4 model         DEFAULT_YOLOV4TINY   / CUSTOMIZED_YOLOV4TINY
+ YOLOv7 model         DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
+ SCRFD model          DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
+ MobileFaceNet model  DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
+ No model             NA_MODEL
+
+*/
 
 #include "WiFi.h"
 #include "StreamIO.h"

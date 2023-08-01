@@ -120,6 +120,7 @@ class VideoSetting {
 
         void setBitrate(uint32_t bitrate);
         void setJpegQuality(uint8_t quality);
+        void setRotation(int angle);
 
         uint16_t width(void);
         uint16_t height(void);
@@ -133,6 +134,7 @@ class VideoSetting {
         uint8_t _encoder;
         uint8_t _snapshot;
         uint8_t _jpeg_qlevel;
+        int _rotation;
 
     private:
         int8_t _preset = -1;
@@ -173,6 +175,7 @@ class Video {
         uint8_t encoder[4] = {0};
         uint8_t snapshot[4] = {0};
         uint8_t jpeg_qlevel[4] = {0};
+        int video_rotation[4] = {0};
         typedef struct roi_param_s {
             uint32_t xmin;
             uint32_t ymin;
