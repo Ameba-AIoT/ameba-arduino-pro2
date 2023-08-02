@@ -17,15 +17,21 @@ spi_t spi_obj1;
 
 SPIClass::SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int ss_pin) {
     pSpiMaster = pSpiObj;
-
+    pSpiSlave = pSpiObj;
+    
     /* These 4 pins should belong same spi pinmux*/
     _pinMOSI = mosi_pin;
     _pinMISO = miso_pin;
     _pinCLK = clk_pin;
     _pinSS = ss_pin;
 
-    // _pinUserSS = -1;
+    initStatus = false;
+    _dataBits = 8;           // default databits is 8 bits
+    _dataMode = SPI_DATA_MODE0;   // default datamode is mode 0
     _defaultFrequency = SPI_DEFAULT_FREQ;
+    // _pinUserSS = -1;
+
+    _SPI_Mode = SPI_MODE_MASTER;
 }
 
 void SPIClass::begin(void) {
@@ -36,8 +42,11 @@ void SPIClass::begin(void) {
         (PinName)g_APinDescription[_pinCLK].pinname, 
         (PinName)g_APinDescription[_pinSS].pinname
     );
-    spi_format(pSpiMaster, 8, 0, 0);
+    spi_format(pSpiMaster, _dataBits, _dataMode, 0);
     spi_frequency(pSpiMaster, _defaultFrequency);
+
+    // Mark SPI init status
+    initStatus = true;
 }
 
 void SPIClass::begin(int ss_pin) {
@@ -50,8 +59,57 @@ void SPIClass::begin(int ss_pin) {
         (PinName)g_APinDescription[_pinCLK].pinname, 
         (PinName)g_APinDescription[_pinSS].pinname
     );
-    spi_format(pSpiMaster, 8, 0, 0);
+    spi_format(pSpiMaster, _dataBits, _dataMode, 0);
     spi_frequency(pSpiMaster, _defaultFrequency);
+
+    // Mark SPI init status
+    initStatus = true;
+}
+
+void SPIClass::begin(char SPI_mode) {
+    _SPI_Mode = SPI_mode;
+    if (_SPI_Mode == SPI_MODE_MASTER) {
+        begin();
+    } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+        spi_init(
+        pSpiSlave,
+        (PinName)g_APinDescription[_pinMOSI].pinname, 
+        (PinName)g_APinDescription[_pinMISO].pinname, 
+        (PinName)g_APinDescription[_pinCLK].pinname, 
+        (PinName)g_APinDescription[_pinSS].pinname
+        );
+        spi_format(pSpiSlave, _dataBits, _dataMode, 1);
+
+        // Mark SPI init status
+        initStatus = true;
+    } else {
+        printf("SPI begin: error. SPI mode \r\n");
+        return;
+    }
+}
+
+void SPIClass::begin(int ss_pin, char SPI_mode) {
+    _SPI_Mode = SPI_mode;
+    if (_SPI_Mode == SPI_MODE_MASTER) {
+        begin(ss_pin);
+     } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+        _pinSS = (PinName)g_APinDescription[ss_pin].pinname;
+
+        spi_init(
+        pSpiSlave,
+        (PinName)g_APinDescription[_pinMOSI].pinname, 
+        (PinName)g_APinDescription[_pinMISO].pinname, 
+        (PinName)g_APinDescription[_pinCLK].pinname, 
+        (PinName)g_APinDescription[_pinSS].pinname
+        );
+        spi_format(pSpiSlave, _dataBits, _dataMode, 1);
+
+        // Mark SPI init status
+        initStatus = true;
+     } else {
+        printf("SPI begin: error. SPI mode \r\n");
+        return;
+     }
 }
 
 void SPIClass::beginTransaction(uint8_t ss_pin, SPISettings settings) {
@@ -149,6 +207,10 @@ uint16_t SPIClass::transfer16(uint16_t data, SPITransferMode mode) {
     return transfer16(_pinSS, data, mode);
 }
 
+int SPIClass::slaveRead (void) {
+    return spi_slave_read(pSpiSlave);
+}
+
 void SPIClass::setBitOrder(uint8_t pin, BitOrder order) {
     (void)pin;
 
@@ -159,10 +221,18 @@ void SPIClass::setBitOrder(BitOrder order) {
     setBitOrder(_pinSS, order);
 }
 
-void SPIClass::setDataMode(uint8_t pin, uint8_t mode) {
-    (void)pin;
-
-    spi_format(pSpiMaster, 8, mode, 0);
+void SPIClass::setDataMode(uint8_t bits, uint8_t dataMode, char SPI_mode) {
+    _dataBits = bits;
+    _dataMode = dataMode;
+    _SPI_Mode = SPI_mode;
+    
+    if(initStatus) {
+        if (_SPI_Mode == SPI_MODE_MASTER) {
+            spi_format(pSpiMaster, _dataBits, _dataMode, 0);
+        } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+            spi_format(pSpiSlave, _dataBits, _dataMode, 1);
+        }
+    }
 }
 
 void SPIClass::setClockDivider(uint8_t pin, uint8_t divider) {
@@ -180,9 +250,16 @@ void SPIClass::setDefaultFrequency(int frequency) {
     _defaultFrequency = frequency;
 }
 
-void SPIClass::end(void) {
-    spi_free(pSpiMaster);
+void SPIClass::end(char SPI_mode) {
+    _SPI_Mode = SPI_mode;
+    
+    if (_SPI_Mode == SPI_MODE_MASTER) {
+        spi_free(pSpiMaster);
+     } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+        spi_free(pSpiSlave);
+     }
 }
 
 SPIClass SPI((&spi_obj0), SPI_MOSI, SPI_MISO, SPI_SCLK, SPI_SS);
 SPIClass SPI1((&spi_obj1), SPI1_MOSI, SPI1_MISO, SPI1_SCLK, SPI1_SS);
+
