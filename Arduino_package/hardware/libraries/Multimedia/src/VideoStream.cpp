@@ -88,7 +88,10 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     } else if (_resolution == VIDEO_VGA) {
         _w = VIDEO_VGA_WIDTH;
         _h = VIDEO_VGA_HEIGHT;
-    }
+    } else if (_resolution == VIDEO_D1) {
+        _w = VIDEO_D1_WIDTH;
+        _h = VIDEO_D1_HEIGHT;
+    } 
 }
 
 VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot) {

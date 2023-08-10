@@ -70,6 +70,8 @@ enum encode_type {
 #define VIDEO_FHD_HEIGHT    1080
 #define VIDEO_HD_WIDTH      1280
 #define VIDEO_HD_HEIGHT     720
+#define VIDEO_D1_WIDTH      720
+#define VIDEO_D1_HEIGHT     480
 #define VIDEO_VGA_WIDTH     640
 #define VIDEO_VGA_HEIGHT    480
 #define VIDEO_WVGA_WIDTH    640
