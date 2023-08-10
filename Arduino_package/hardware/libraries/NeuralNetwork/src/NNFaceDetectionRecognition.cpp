@@ -212,13 +212,6 @@ void NNFaceDetectionRecognition::registerFace(const char* name) {
     mm_module_ctrl(facerecog_ctx, CMD_FRC_REGISTER_MODE, (int)name);
 }
 
-void NNFaceDetectionRecognition::exitRegisterMode(void) {
-    if (!facerecog_ctx) {
-        return;
-    }
-    mm_module_ctrl(facerecog_ctx, CMD_FRC_RECOGNITION_MODE, 0);
-}
-
 void NNFaceDetectionRecognition::resetRegisteredFace(void) {
     if (!facerecog_ctx) {
         return;

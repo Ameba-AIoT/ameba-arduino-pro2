@@ -7,7 +7,6 @@
  --------------------------
  Point the camera at a target face and enter the following commands into the serial monitor,
  Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
- Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
  Reset registered faces:  "RESET"                 Forget all previously registered faces
  Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
  Restore registered faces from flash: "RESTORE"   Load registered faces from flash
@@ -128,8 +127,6 @@ void loop() {
         if (input.startsWith(String("REG="))){
             String name = input.substring(4);
             facerecog.registerFace(name);
-        } else if (input.startsWith(String("EXIT"))) {
-            facerecog.exitRegisterMode();
         } else if (input.startsWith(String("RESET"))) {
             facerecog.resetRegisteredFace();
         } else if (input.startsWith(String("BACKUP"))) {
@@ -139,7 +136,7 @@ void loop() {
         }
     }
 
-    delay(5000);
+    delay(2000);
     OSD.createBitmap(CHANNEL);
     OSD.update(CHANNEL);
 }
@@ -187,3 +184,4 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     }
     OSD.update(CHANNEL);
 }
+

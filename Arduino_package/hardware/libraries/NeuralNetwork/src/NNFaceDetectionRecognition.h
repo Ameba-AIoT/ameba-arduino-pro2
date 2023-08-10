@@ -45,7 +45,6 @@ class NNFaceDetectionRecognition:public NNModelSelection {
 
         void registerFace(String name);
         void registerFace(const char* name);
-        void exitRegisterMode(void);
         void resetRegisteredFace(void);
         void backupRegisteredFace(void);
         void restoreRegisteredFace(void);
