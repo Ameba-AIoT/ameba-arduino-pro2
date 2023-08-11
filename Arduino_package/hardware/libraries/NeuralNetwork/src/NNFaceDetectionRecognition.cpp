@@ -28,7 +28,6 @@ std::vector<FaceRecognitionResult> NNFaceDetectionRecognition::face_result_vecto
 void (*NNFaceDetectionRecognition::FR_user_CB)(std::vector<FaceRecognitionResult>);
 
 NNFaceDetectionRecognition::NNFaceDetectionRecognition(void) {
-
 }
 
 NNFaceDetectionRecognition::~NNFaceDetectionRecognition(void) {
@@ -65,7 +64,7 @@ void NNFaceDetectionRecognition::begin(void) {
         printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
         while(1);
     }
-    
+
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_OUTPUT, 1);
@@ -113,7 +112,7 @@ void NNFaceDetectionRecognition::begin(void) {
     vipnn_control(mbfacenet_ctx->priv, CMD_VIPNN_SET_OUTPUT, 1);
     mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_IN_PARAMS, (int)&fr_param);
     mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_SIZE, sizeof(face_feature_res_t));	// result size
-	mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);		// result max count
+    mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);		// result max count
 
     mm_module_ctrl(mbfacenet_ctx, MM_CMD_SET_DATAGROUP, MM_GROUP_END);
     mm_module_ctrl(mbfacenet_ctx, MM_CMD_SET_QUEUE_LEN, 1);

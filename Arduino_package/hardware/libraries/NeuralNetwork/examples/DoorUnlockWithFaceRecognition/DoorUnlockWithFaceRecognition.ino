@@ -111,7 +111,7 @@ void setup() {
     // Configure RTSP with corresponding video format information
     rtsp.configVideo(configVID);
     rtsp.begin();
-  
+
     // Configure Face Recognition model
     facerecog.configVideo(configNN);
     facerecog.modelSelect(FACE_RECOGNITION, NA_MODEL, DEFAULT_SCRFD, DEFAULT_MOBILEFACENET);
@@ -145,7 +145,7 @@ void setup() {
 
     // Restore any registered faces saved in flash
     facerecog.restoreRegisteredFace();
-    
+
     // Servo moves to position the angle 180 degree (LOCK CLOSE)
     myservo.write(180);
 }
@@ -168,23 +168,23 @@ void loop() {
     }
 
     if (Serial.available() > 0) {
-      String input = Serial.readString();
-      input.trim();
+        String input = Serial.readString();
+        input.trim();
 
-      if (regMode == true) {
-        if (input.startsWith(String("REG="))) {
-          String name = input.substring(4);
-          facerecog.registerFace(name);
-        } else if (input.startsWith(String("RESET"))) {
-          facerecog.resetRegisteredFace();
-        } else if (input.startsWith(String("BACKUP"))) {
-          facerecog.backupRegisteredFace();
-        } else if (input.startsWith(String("RESTORE"))) {
-          facerecog.restoreRegisteredFace();
+        if (regMode == true) {
+            if (input.startsWith(String("REG="))) {
+                String name = input.substring(4);
+                facerecog.registerFace(name);
+            } else if (input.startsWith(String("RESET"))) {
+                facerecog.resetRegisteredFace();
+            } else if (input.startsWith(String("BACKUP"))) {
+                facerecog.backupRegisteredFace();
+            } else if (input.startsWith(String("RESTORE"))) {
+                facerecog.restoreRegisteredFace();
+            }
         }
-      } 
     }
-    
+
     if (regMode == false) {
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, LOW);
@@ -197,12 +197,12 @@ void loop() {
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, HIGH);
     }
-    
+
     // Take snapshot and open door for 10 seconds
     if ((doorOpen == true) && (regMode == false)) {
         fs.begin();
         File file = fs.open(String(fs.getRootPath()) + fileName + String(++counter) + ".jpg");
-    
+
         delay(1000);
         Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
         file.write((uint8_t*)img_addr, img_len);
@@ -279,4 +279,3 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     }
     OSD.update(CHANNELVID);
 }
-

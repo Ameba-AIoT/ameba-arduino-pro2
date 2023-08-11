@@ -38,12 +38,12 @@
 #include "NNFaceDetectionRecognition.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL   0
-#define CHANNELNN 3
+#define CHANNEL     0
+#define CHANNELNN   3
 
 // Customised resolution for NN
-#define NNWIDTH 576
-#define NNHEIGHT 320
+#define NNWIDTH     576
+#define NNHEIGHT    320
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -74,7 +74,7 @@ void setup() {
     }
 
     ip = WiFi.localIP();
-    
+
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
     config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
@@ -184,4 +184,3 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     }
     OSD.update(CHANNEL);
 }
-

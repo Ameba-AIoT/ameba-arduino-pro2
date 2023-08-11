@@ -63,7 +63,7 @@ void setup() {
         delay(2000);
     }
     ip = WiFi.localIP();
-    
+
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
     config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
@@ -82,7 +82,7 @@ void setup() {
     ObjDet.setResultCallback(ODPostProcess);
     ObjDet.modelSelect(OBJECT_DETECTION, DEFAULT_YOLOV4TINY, NA_MODEL, NA_MODEL);
     ObjDet.begin();
-    
+
     // Configure StreamIO object to stream data from video channel to RTSP
     videoStreamer.registerInput(Camera.getStream(CHANNEL));
     videoStreamer.registerOutput(rtsp);
