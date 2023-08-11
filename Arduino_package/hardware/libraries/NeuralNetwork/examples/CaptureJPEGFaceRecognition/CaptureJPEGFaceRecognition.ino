@@ -5,7 +5,6 @@
 
  Point the camera at a target face and enter the following commands into the serial monitor,
  Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
- Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
  Reset registered faces:  "RESET"                 Forget all previously registered faces
  Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
  Restore registered faces from flash: "RESTORE"   Load registered faces from flash
@@ -127,7 +126,7 @@ void setup() {
     if (videoStreamerRGBFD.begin() != 0) {
       Serial.println("StreamIO link start failed");
     }
-    
+
     // Start data stream from video channel
     Camera.channelBegin(CHANNELVID);
     Camera.channelBegin(CHANNELJPEG);
@@ -146,30 +145,30 @@ void loop() {
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, LOW);
         delay(500);
-    if (Serial.available() > 0) {
-        String input = Serial.readString();
-        input.trim();
+        if (Serial.available() > 0) {
+            String input = Serial.readString();
+            input.trim();
 
-        if (input.startsWith(String("REG="))) {
-          String name = input.substring(4);
-          facerecog.registerFace(name);
-        } else if (input.startsWith(String("EXIT"))) {
-          facerecog.exitRegisterMode();
-        } else if (input.startsWith(String("RESET"))) {
-          facerecog.resetRegisteredFace();
-        } else if (input.startsWith(String("BACKUP"))) {
-          facerecog.backupRegisteredFace();
-        } else if (input.startsWith(String("RESTORE"))) {
-          facerecog.restoreRegisteredFace();
+            if (input.startsWith(String("REG="))) {
+                String name = input.substring(4);
+                facerecog.registerFace(name);
+            } else if (input.startsWith(String("RESET"))) {
+                facerecog.resetRegisteredFace();
+            } else if (input.startsWith(String("BACKUP"))) {
+                facerecog.backupRegisteredFace();
+            } else if (input.startsWith(String("RESTORE"))) {
+                facerecog.restoreRegisteredFace();
+            }
         }
-      }
-      buttonState = digitalRead(BUTTON_PIN);
-      if (buttonState == HIGH) regFace = false; // When button is pressed, face registration mode off.
+        buttonState = digitalRead(BUTTON_PIN);
+        if (buttonState == HIGH) {
+            regFace = false; // When button is pressed, face registration mode off.
+        }
     } else {
       // Do something
     }
-    
-    delay(5000);
+
+    delay(2000);
     OSD.createBitmap(CHANNELVID);
     OSD.update(CHANNELVID);
 }
@@ -195,7 +194,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
 
             uint32_t osd_color;
 
-             if (String(item.name()) == String("unknown")) {
+            if (String(item.name()) == String("unknown")) {
                 osd_color = OSD_COLOR_RED;
                 if (regFace == false) {
                     unknownDetected = true;
@@ -211,9 +210,9 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
                         fs.end();
                     }
                 }
-             } else {
+            } else {
                 osd_color = OSD_COLOR_GREEN;
-             }
+            }
 
             // Draw boundary box
             printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);

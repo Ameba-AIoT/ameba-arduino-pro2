@@ -1,3 +1,6 @@
+#ifndef __OBJECTCLASSLIST_H__
+#define __OBJECTCLASSLIST_H__
+
 struct ObjectDetectionItem {
     uint8_t index;
     const char* objectName;
@@ -88,3 +91,5 @@ ObjectDetectionItem itemList[80] = {
 {77, "teddy bear",      1},
 {78, "hair dryer",      1},
 {79, "toothbrush",      1}};
+
+#endif

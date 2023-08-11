@@ -28,12 +28,12 @@
 #include "NNFaceDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL   0
-#define CHANNELNN 3
+#define CHANNEL     0
+#define CHANNELNN   3
 
 // Lower resolution for NN processing
-#define NNWIDTH  576
-#define NNHEIGHT 320
+#define NNWIDTH     576
+#define NNHEIGHT    320
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
