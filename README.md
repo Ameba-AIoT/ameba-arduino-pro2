@@ -1,5 +1,6 @@
 # Ameba Arduino SDK (ambpro2_arduino)
 
+## I love AMB82-MINI
 
 ## 1. About `dev` & `main` branch
 
