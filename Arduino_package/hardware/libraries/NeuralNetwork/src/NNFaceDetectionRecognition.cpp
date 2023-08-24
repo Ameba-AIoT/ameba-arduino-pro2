@@ -219,7 +219,6 @@ void NNFaceDetectionRecognition::removeFace(const char* name) {
     if (!facerecog_ctx) {
         return;
     }
-
     mm_module_ctrl(facerecog_ctx, CMD_FRC_UNREGISTER_MODE, (int)name);
 }
 

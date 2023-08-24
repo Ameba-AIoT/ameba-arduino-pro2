@@ -57,7 +57,7 @@ configVideo	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
 registerFace	KEYWORD2
-exitRegisterMode	KEYWORD2
+removeFace	KEYWORD2
 resetRegisteredFace	KEYWORD2
 backupRegisteredFace	KEYWORD2
 restoreRegisteredFace	KEYWORD2
