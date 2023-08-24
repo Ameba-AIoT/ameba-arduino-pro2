@@ -897,4 +897,3 @@ BOOLEAN hal_is_timeout(uint32_t start_us, uint32_t timeout_us);
 
 #endif  // end of "#define _HAL_TIMER_H_"
 
-

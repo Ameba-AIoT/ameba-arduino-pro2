@@ -1,3 +1,48 @@
+Version : RTL8735B_VOE_1.4.X.X
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+
+	Video/ENC related
+	1. modify receiver queue timeout information (no show fail)
+	2. modify osd2enc receiver queue show condition (EncMode/JpgMode --> open channel)
+	2. if HW bus access fail ForceI & set scene Change
+
+--------------------------------------------------------------------------	
+<06/26/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. raw: add dump point for mask out
+	2. awb: force update AWB status to unstable for each algo ctrl (3A lib: ea63d5a)
+	3. lsc: add curve ratio to calibration structure
+	4. change flick_ctrl default value from 50Hz to Auto
+
+	Video/ENC related
+	1. fix non-free osd object.
+	2. improve locate memory sequence
+	3. add semephore protection during stream close.
+	
+	
+--------------------------------------------------------------------------	
+<06/15/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.3.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add 2nd register control for turning on mipi clk lane non-continuous mode
+	Video/ENC related
+	1. Add terminating FCS flow weak func and example code.
+	2. fixed ENC fail issue (inst structure fail)
+	
+
 --------------------------------------------------------------------------	
 <05/25/2023 12:00 Martin>
 Version : RTL8735B_VOE_1.4.3.0

@@ -5,10 +5,16 @@
 
 /** @brief  Supported LE Vendor Commands*/
 #define BT_VENDOR_CMD_ONE_SHOT_SUPPORT      1
+#define BT_VENDOR_CMD_ADV_TX_POWER_SUPPORT  1
+#define BT_VENDOR_CMD_CONN_TX_POWER_SUPPORT 1
 
 /** @brief  LE Vendor Command Opcode*/
 #define HCI_LE_VENDOR_EXTENSION_FEATURE2        0xFC87
 #define HCI_EXT_SUB_ONE_SHOT_ADV                1
+
+#define HCI_LE_VENDOR_EXTENSION_FEATURE         0xFD80
+#define HCI_EXT_SUB_SET_ADV_TX_POWER            0
+#define HCI_EXT_SUB_SET_LINK_TX_POW             0xC
 
 /**
   * @brief  Trigger One Shot Advertising.
@@ -33,6 +39,137 @@
   */
 #if BT_VENDOR_CMD_ONE_SHOT_SUPPORT
 T_GAP_CAUSE le_vendor_one_shot_adv(void);
+#endif
+
+/**
+  * @brief  Set the advertising tx power for the device, or reset advertising tx power to default value.
+  *
+  *         NOTE: This function can be called after @ref vendor_cmd_init is invoked.
+  *
+  * @param[in] option  Set to 0.
+  * @param[in] tx_gain index for power level. NOTE: The following tx gain table may be changed in future version.
+                       tx_gain   Power
+                       0x1B      -10 dBm
+                       0x2F      0   dBm
+                       0x38      4.5 dBm
+                       0x3F      8   dBm (default)
+
+  * @retval GAP_CAUSE_SUCCESS Operation success.
+  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  *
+  * <b>Example usage</b>
+  * \code{.c}
+     void test()
+     {
+         T_GAP_CAUSE cause;
+         uint8_t tx_gain = 0x06;
+         cause = le_adv_set_tx_power(0, tx_gain);
+     }
+     void app_vendor_callback(uint8_t cb_type, void *p_cb_data)
+     {
+        T_GAP_VENDOR_CB_DATA cb_data;
+        memcpy(&cb_data, p_cb_data, sizeof(T_GAP_VENDOR_CB_DATA));
+        APP_PRINT_INFO1("app_vendor_callback: command 0x%x", cb_data.p_gap_vendor_cmd_rsp->command);
+        switch (cb_type)
+        {
+        case GAP_MSG_VENDOR_CMD_RSP:
+            switch(cb_data.p_gap_vendor_cmd_rsp->command)
+            {
+                case HCI_LE_VENDOR_EXTENSION_FEATURE:
+                    switch(cb_data.p_gap_vendor_cmd_rsp->param[0])
+                    {
+#if BT_VENDOR_CMD_ADV_TX_POWER_SUPPORT
+                        case HCI_EXT_SUB_SET_ADV_TX_POWER:
+                            APP_PRINT_INFO1("HCI_EXT_SUB_SET_ADV_TX_POWER: cause 0x%x", cb_data.p_gap_vendor_cmd_rsp->cause);
+                            break;
+#endif
+                    }
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        return;
+    }
+  * \endcode
+  */
+#if BT_VENDOR_CMD_ADV_TX_POWER_SUPPORT
+T_GAP_CAUSE le_adv_set_tx_power(uint8_t option, uint8_t tx_gain);
+#endif
+
+/**
+  * @brief  Set the link tx power for the device.
+  *
+  *         Set LE link tx power. Or reset link tx power to default value.
+  *         Tx power is set to default every time a link is connect. Use this command
+  *         after the link is connected.
+  *         Tx gain default value, the order of precedence is Logical efuse -> Physical efuse -> driver config
+  *
+  *         NOTE: This function can be called after @ref vendor_cmd_init is invoked.
+  *
+  * @param[in] conn_id  Connection ID for this link.
+  * @param[in] reset    Whether to reset to default value and restore power track function.
+  * @param[in] tx_gain index for power level. NOTE: The following tx gain table may be changed in future version.
+                       tx_gain   Power
+                       0x1B      -10 dBm
+                       0x2F      0   dBm
+                       0x38      4.5 dBm
+                       0x3F      8   dBm (default)
+
+  * @retval GAP_CAUSE_SUCCESS Operation success.
+  * @retval GAP_CAUSE_SEND_REQ_FAILED Operation failure.
+  *
+  * <b>Example usage</b>
+  * \code{.c}
+     void test()
+     {
+        T_GAP_CAUSE cause;
+        uint8_t conn_id = 0;
+        bool reset = false;
+        uint8_t tx_pwr = 0x06;
+
+        cause = le_set_conn_tx_power(conn_id, reset, tx_pwr);
+     }
+     void app_vendor_callback(uint8_t cb_type, void *p_cb_data)
+     {
+        T_GAP_VENDOR_CB_DATA cb_data;
+        memcpy(&cb_data, p_cb_data, sizeof(T_GAP_VENDOR_CB_DATA));
+        APP_PRINT_INFO1("app_vendor_callback: command 0x%x", cb_data.p_gap_vendor_cmd_rsp->command);
+        switch (cb_type)
+        {
+        case GAP_MSG_VENDOR_CMD_RSP:
+            switch(cb_data.p_gap_vendor_cmd_rsp->command)
+            {
+                case HCI_LE_VENDOR_EXTENSION_FEATURE:
+                    switch(cb_data.p_gap_vendor_cmd_rsp->param[0])
+                    {
+#if BT_VENDOR_CMD_CONN_TX_POWER_SUPPORT
+                        case HCI_EXT_SUB_SET_LINK_TX_POW:
+                            APP_PRINT_INFO1("HCI_EXT_SUB_SET_LINK_TX_POW: cause 0x%x", cb_data.p_gap_vendor_cmd_rsp->cause);
+                            break;
+#endif
+                    }
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        return;
+    }
+  * \endcode
+  */
+#if BT_VENDOR_CMD_CONN_TX_POWER_SUPPORT
+T_GAP_CAUSE le_set_conn_tx_power(uint8_t conn_id, bool reset, uint8_t tx_gain);
 #endif
 
 /**

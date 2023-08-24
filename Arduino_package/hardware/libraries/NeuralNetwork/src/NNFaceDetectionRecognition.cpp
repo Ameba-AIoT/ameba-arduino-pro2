@@ -211,6 +211,18 @@ void NNFaceDetectionRecognition::registerFace(const char* name) {
     mm_module_ctrl(facerecog_ctx, CMD_FRC_REGISTER_MODE, (int)name);
 }
 
+void NNFaceDetectionRecognition::removeFace(String name) {
+    removeFace(name.c_str());
+}
+
+void NNFaceDetectionRecognition::removeFace(const char* name) {
+    if (!facerecog_ctx) {
+        return;
+    }
+
+    mm_module_ctrl(facerecog_ctx, CMD_FRC_UNREGISTER_MODE, (int)name);
+}
+
 void NNFaceDetectionRecognition::resetRegisteredFace(void) {
     if (!facerecog_ctx) {
         return;

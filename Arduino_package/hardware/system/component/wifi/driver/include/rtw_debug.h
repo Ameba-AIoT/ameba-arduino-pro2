@@ -176,6 +176,7 @@ extern u16 GlobalDebug871X;
 #define MSG_8192C(x, ...) do {} while(0)
 #define DBG_8192C(x,...) do {} while(0)
 #define DBG_871X_LEVEL(x,...) do {} while(0)
+#define DBG_871X_NONR(...)	do {} while(0)
 
 #ifdef CONFIG_BT_COEXIST
 #define RTW_INFO(x,...) do {} while (0)
@@ -203,7 +204,11 @@ extern u16 GlobalDebug871X;
 #define RTW_RESIDENT(...)   \
 	do { \
 		if (RTW_MSG_LEVEL >= RTW_MSG_RESIDENT) { \
-			_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+				if(OtherDebugPortEnable){\
+					msg_uart_port(DRIVER_PREFIX __VA_ARGS__);\
+				} else {\
+					_dbgdump_nr(DRIVER_PREFIX __VA_ARGS__);\
+				}\
 			} \
 	} while(0)
 
@@ -288,7 +293,7 @@ extern int msg_uart_port(const char *fmt, ...);
 #endif	//#ifdef __CC_ARM
 #endif
 
-#define CONFIG_DEBUG
+//#define CONFIG_DEBUG
 #ifdef CONFIG_DEBUG
 #if	defined (_dbgdump)
 #undef DBG_871X

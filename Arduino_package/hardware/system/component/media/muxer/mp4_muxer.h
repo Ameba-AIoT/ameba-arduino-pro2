@@ -58,6 +58,7 @@ struct BlockInfo {
 #define AUDIO_AAC  0X00
 #define AUDIO_ULAW 0X01
 #define AUDIO_ALAW 0X02
+#define AUDIO_OPUS 0X03
 
 typedef struct mp4_param_s {
 	uint32_t width;

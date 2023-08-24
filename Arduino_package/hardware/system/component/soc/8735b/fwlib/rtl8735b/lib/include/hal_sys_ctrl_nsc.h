@@ -83,6 +83,7 @@ void NS_ENTRY hal_sys_spic_ddr_ctrl_nsc(u8 ctrl);
 void NS_ENTRY hal_sys_spic_phy_en_nsc(void);
 void NS_ENTRY hal_sys_spic_set_phy_delay_nsc(u8 delay_line);
 u8 NS_ENTRY hal_sys_spic_read_phy_delay_nsc(void);
+void NS_ENTRY hal_osc128k_cal_nsc(void);
 #endif
 
 #if defined(CONFIG_BUILD_NONSECURE)
@@ -124,6 +125,8 @@ void hal_sys_spic_phy_en_nsc(void);
 void hal_sys_spic_set_phy_delay_nsc(u8 delay_line);
 u8 hal_sys_spic_read_phy_delay_nsc(void);
 void hal_sys_save_dev_adtr_nsc(void *padatr);
+void hal_aon_timer_clear_nsc(void);
+void hal_osc128k_cal_nsc(void);
 
 #if !defined(ENABLE_SECCALL_PATCH)
 #define hal_sys_peripheral_en                 hal_sys_peripheral_nsc
@@ -140,6 +143,7 @@ void hal_sys_save_dev_adtr_nsc(void *padatr);
 #define hal_aon_wdt_enable                    hal_aon_wdt_enable_nsc
 #if !defined(ENABLE_SECCALL_PATCH)
 #define hal_osc4m_cal                         hal_osc4m_cal_nsc
+#define hal_osc128k_cal                       hal_osc128k_cal_nsc
 #define hal_sys_bt_uart_mux                   hal_sys_bt_uart_mux_nsc
 #endif
 #define hal_32k_s1_sel                        hal_32k_s1_sel_nsc

@@ -111,6 +111,7 @@ enum h2c_cmd {
 	H2C_PNO = 0x94,
 	H2C_TIMER_WDT = 0x95,
 	H2C_BCN_TRACK = 0x96,
+	H2C_NTP = 0x98,
 	H2C_RESET_TSF = 0xC0,
 	H2C_BCNHWSEQ = 0xC5,
 	H2C_TSF_LATCH = 0xC9,
@@ -157,6 +158,7 @@ enum h2c_cmd {
 #define H2C_DYNAMIC_TX_PWR_LEN	5
 #define H2C_TIMER_WDT_LEN 6
 #define H2C_BCN_TRACK_LEN 7
+#define H2C_NTP_CTRL_LEN 5
 
 #ifdef CONFIG_MCC_MODE
 #define H2C_MCC_CTRL_LEN			7
@@ -304,6 +306,12 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_BCN_TRACK_MAX_WINDOW(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
 #define SET_H2CCMD_BCN_TRACK_INCREMENTSTEP(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 #define SET_H2CCMD_BCN_TRACK_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
+
+/* _NTP_CMD_0x98 */
+#define SET_H2CCMD_NTP_PARM_ENABLE(__pH2CCmd, __Value)			         SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
+#define SET_H2CCMD_NTP_PARM_LOC(__pH2CCmd, __Value)                      SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
+#define SET_H2CCMD_NTP_PARM_TIME_L(__pH2CCmd, __Value)				     SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+#define SET_H2CCMD_NTP_PARM_TIME_H(__pH2CCmd, __Value)				     SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 
 /* _TCP_KEEP_ALIVE_CMD_0x07 */
 #define SET_H2CCMD_TCP_KEEPALIVE_PARM_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)

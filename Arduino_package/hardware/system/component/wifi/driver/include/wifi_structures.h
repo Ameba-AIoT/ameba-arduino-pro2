@@ -444,7 +444,7 @@ struct  wifi_user_conf {
 	unsigned char rtw_powersave_en;
 
 	unsigned char rtw_cmd_tsk_spt_wap3;
-	unsigned char rtw_ignore_wpa_tkip;
+	unsigned char rtw_ignore_security;
 
 	unsigned char g_user_ap_sta_num;
 
@@ -486,6 +486,14 @@ struct  wifi_user_conf {
 	unsigned char country_code;
 
 	unsigned char band_type;	// 0: 2.4g & 5g, 1: 2.4g, 2: 5g
+
+	/*
+	The wifi_debug_enabled is used to configure the wlan debug settings, each bit controls one aspect.
+	bit 0: (0: disable 4way handshake debug, 1:  enable 4way handshake debug messenge)
+	bit 1: (0: disable wifi connection profile info, 1:  enable wifi connection profile info)
+	bit 2: (0: show wifi connection state, 1:  show wifi connection state time)
+	*/
+	unsigned char wifi_debug_enabled;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 

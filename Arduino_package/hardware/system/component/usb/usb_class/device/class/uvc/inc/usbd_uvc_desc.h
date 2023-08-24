@@ -111,4 +111,6 @@ int usbd_uvc_get_status(void);
 void usbd_wait_frame_down(void);
 void usbd_uvc_ext_get_cb(int cb);
 void usbd_uvc_ext_set_cb(int cb);
+void usbd_uvc_stop(void);
+void usbd_uvc_deinit(void);
 #endif

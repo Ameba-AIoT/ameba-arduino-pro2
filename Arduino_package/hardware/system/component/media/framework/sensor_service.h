@@ -89,5 +89,5 @@ int sensor_external_set_gray_mode(int enable, int led_level);
  * @return 0 for success
  */
 int sensor_external_loop(void);
-
+void ss_set_dbglevel(int enable);
 #endif

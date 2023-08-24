@@ -6,10 +6,11 @@
  Face registration commands
  --------------------------
  Point the camera at a target face and enter the following commands into the serial monitor,
- Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
- Reset registered faces:  "RESET"                 Forget all previously registered faces
- Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
- Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+ Register face:                       "REG={Name}"  Ensure that there is only one face detected in frame
+ Remove face:                         "DEL={Name}"  Remove a registered face
+ Reset registered faces:              "RESET"       Forget all previously registered faces
+ Backup registered faces to flash:    "BACKUP"      Save registered faces to flash
+ Restore registered faces from flash: "RESTORE"     Load registered faces from flash
 
  NN Model Selection
  -------------------
@@ -127,6 +128,9 @@ void loop() {
         if (input.startsWith(String("REG="))){
             String name = input.substring(4);
             facerecog.registerFace(name);
+        } else if (input.startsWith(String("DEL="))) {
+            String name = input.substring(4);
+            facerecog.removeFace(name);
         } else if (input.startsWith(String("RESET"))) {
             facerecog.resetRegisteredFace();
         } else if (input.startsWith(String("BACKUP"))) {

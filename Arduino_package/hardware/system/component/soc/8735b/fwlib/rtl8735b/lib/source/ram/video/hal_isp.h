@@ -332,6 +332,7 @@ struct isp_iq_cali_nlsc {
 	struct isp_iq_cali_point r_center;
 	struct isp_iq_cali_point g_center;
 	struct isp_iq_cali_point b_center;
+	float curve_ratio;
 } __attribute__((packed));
 
 struct isp_iq_cali_mlsc_u8 {

@@ -74,6 +74,8 @@
 
 #define CMD_VIDEO_SPS_CB            MM_MODULE_CMD(0x51)
 
+#define CMD_VIDEO_PRE_INIT_PARM     MM_MODULE_CMD(0x52)
+
 #define MMF_VIDEO_DEFAULT_META_CB	(0xFFFFFFFF)
 
 typedef struct rate_control {

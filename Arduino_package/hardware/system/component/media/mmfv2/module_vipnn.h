@@ -300,6 +300,10 @@ typedef struct face_feature_res_s {
 	float feature[MAX_FACE_FEATURE_DIM];
 } face_feature_res_t;
 
+typedef struct yamnet_res_s {
+	int clsid;
+	float prob;
+} yamnet_res_t;
 
 #if !defined(PC_SIMULATION)
 extern mm_module_t vipnn_module;

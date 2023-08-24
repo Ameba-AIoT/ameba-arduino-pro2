@@ -76,6 +76,7 @@ uint8_t *LwIP_GetMAC(uint8_t idx);
 unsigned char *LwIP_GetIP(uint8_t idx);
 unsigned char *LwIP_GetGW(uint8_t idx);
 uint8_t *LwIP_GetMASK(uint8_t idx);
+uint8_t *LwIP_GetDHCPSERVER(uint8_t idx);
 void LwIP_wlan_set_netif_info(int idx_wlan, void *dev, unsigned char *dev_addr);
 void LwIP_ethernetif_recv(uint8_t idx, int total_len);
 int LwIP_netif_is_valid_IP(int idx, unsigned char *ip_dest);
