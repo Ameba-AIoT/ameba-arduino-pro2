@@ -652,6 +652,7 @@ void backupModel(char* input, char* sktech_path) {
 	}
 	else {
 		while ((entry = readdir(dir)) != NULL) {
+			// TODO 4.0.6: if (strstr(entry->d_name, key_amb_default_backup) != NULL) {
 			if (strstr(entry->d_name, "Dbackup") != NULL) {     // customized model has been used
 				if (PRINT_DEBUG) printf("[%s][%d][INFO] Backup-ed %s found !!!\n", __func__, __LINE__, input);
 				flag_Dbackup = 1;
@@ -1179,6 +1180,7 @@ int writeJSON(const char* f_path) {
 						if (dir) {
 							struct dirent* ent;
 							while ((ent = readdir(dir)) != NULL) {
+								//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {     // customized model has been used
 								if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 									flag_Dbackup = 1;
 									strcpy(fname_dmodel_backup, ent->d_name);
@@ -1333,6 +1335,7 @@ int writeJSON(const char* f_path) {
 							if (dir) {
 								struct dirent* ent;
 								while ((ent = readdir(dir)) != NULL) {
+									//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {
 									if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 										flag_Dbackup = 1;
 										strcpy(fname_dmodel_backup, ent->d_name);
@@ -1469,6 +1472,7 @@ int writeJSON(const char* f_path) {
 								if (dir) {
 									struct dirent* ent;
 									while ((ent = readdir(dir)) != NULL) {
+										//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {
 										if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 											flag_Dbackup = 1;
 											strcpy(fname_dmodel_backup, ent->d_name);
@@ -1601,6 +1605,7 @@ int writeJSON(const char* f_path) {
 									if (dir) {
 										struct dirent* ent;
 										while ((ent = readdir(dir)) != NULL) {
+											//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {
 											if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 												flag_Dbackup = 1;
 												strcpy(fname_dmodel_backup, ent->d_name);
