@@ -10,7 +10,7 @@ struct AudioDetectionItem {
 
 //// List of audio the pre-trained model is capable of recognizing
 //// Index number is fixed and hard-coded from training
-//// Set the filter value to 0 to ignore any recognized objects
+//// Set the filter value to 0 to ignore any recognized audios
 AudioDetectionItem audioNames[521] = {
 {0, "Speech",                                   1},
 {1, "Child speech, kid speaking",               1},
@@ -535,4 +535,3 @@ AudioDetectionItem audioNames[521] = {
 {520, "Field recording",                        1}};
 
 #endif
-
