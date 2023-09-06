@@ -34,7 +34,7 @@
 #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 #define STRING_BUF_SIZE 100
-#define MaxNumValue      2
+#define MaxNumValue     2
 
 #define value1  0
 #define value2  1
@@ -58,15 +58,14 @@ RTSP rtsp1;
 RTSP rtsp2;
 StreamIO videoStreamer(1, 2);   // 1 Input Video -> 1 Output RTSP
 
-char ssid[] = "your_ssid";            // your network SSID (name)
-char pass[] = "your_password";       // your network password
+char ssid[] = "Network_SSID";   // your network SSID (name)
+char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 
-typedef struct{
+typedef struct {
     bool reciveCMDFlag;
     int  ReciveValue;
-
-}_rCMD;
+} _rCMD;
 
 BLEService UartService(UART_SERVICE_UUID);
 BLECharacteristic Rx(CHARACTERISTIC_UUID_RX);
@@ -76,80 +75,74 @@ BLEAdvertData scndata;
 bool notify = false;
 uint8_t Count;
 
-String CMDRefer[5] = {"SS2","SS4","SRT","SR2","SRV"};
+String CMDRefer[5] = {"SS2", "SS4", "SRT", "SR2", "SRV"};
 _rCMD bleReciveData[MaxNumValue];
 
-void forward(){
-  digitalWrite(MotoA_1A,1);
-  analogWrite(MotoA_1B,5);  
+void forward() {
+    digitalWrite(MotoA_1A,1);
+    analogWrite(MotoA_1B,5);
 
-  digitalWrite(MotoB_1A,1);
-  analogWrite(MotoB_1B,5);
+    digitalWrite(MotoB_1A,1);
+    analogWrite(MotoB_1B,5);
 
-  delay(50);
+    delay(50);
 }
 
+void backward() {
+    digitalWrite(MotoA_1A,0);
+    analogWrite(MotoA_1B,250);
 
-void backward(){
-  digitalWrite(MotoA_1A,0);
-  analogWrite(MotoA_1B,250);
+    digitalWrite(MotoB_1A,0);
+    analogWrite(MotoB_1B,250);
 
-  digitalWrite(MotoB_1A,0);
-  analogWrite(MotoB_1B,250);
-  
-  delay(50);
+    delay(50);
 }
 
-void turnRight(){
+void turnRight() {
+    digitalWrite(MotoA_1A,1);
+    analogWrite(MotoA_1B,5);
 
-  digitalWrite(MotoA_1A,1);
-  analogWrite(MotoA_1B,5);
+    digitalWrite(MotoB_1A,0);
+    analogWrite(MotoB_1B,250);
 
-  digitalWrite(MotoB_1A,0);
-  analogWrite(MotoB_1B,250);
-
-  delay(50);
+    delay(50);
 }
 
-void turnLeft(){
+void turnLeft() {
+    digitalWrite(MotoA_1A,0);
+    analogWrite(MotoA_1B,250);
 
-  digitalWrite(MotoA_1A,0);
-  analogWrite(MotoA_1B,250);
+    digitalWrite(MotoB_1A,1);
+    analogWrite(MotoB_1B,5);
 
-  digitalWrite(MotoB_1A,1);
-  analogWrite(MotoB_1B,5);
-
-  delay(50);
+    delay(50);
 }
 
-void BrakeAll(){
-  digitalWrite(MotoA_1A,0);
-  analogWrite(MotoA_1B,0);
+void BrakeAll() {
+    digitalWrite(MotoA_1A,0);
+    analogWrite(MotoA_1B,0);
 
-  digitalWrite(MotoB_1A,0);
-  analogWrite(MotoB_1B,0);
-  
-  delay(50);
+    digitalWrite(MotoB_1A,0);
+    analogWrite(MotoB_1B,0);
+
+    delay(50);
 }
 
-void readCB (BLECharacteristic* chr, uint8_t connID) {
+void readCB(BLECharacteristic* chr, uint8_t connID) {
     printf("Characteristic %s read by connection %d \n", chr->getUUID().str(), connID);
 }
 
-void writeCB (BLECharacteristic* chr, uint8_t connID) {
+void writeCB(BLECharacteristic* chr, uint8_t connID) {
     //printf("Characteristic %s write by connection %d :\n", chr->getUUID().str(), connID);
     if (chr->getDataLen() > 0) {
-      ParseCMDString(chr->readString());
-
-        
-       // Serial.print("Received string: ");
-       // Serial.print(chr->readString());
-       // Serial.println();   
-        
+        ParseCMDString(chr->readString());
+        // Serial.print("Received string: ");
+        // Serial.print(chr->readString());
+        // Serial.println();
     }
 }
 
-void notifCB (BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
+void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
     if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
         printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         notify = true;
@@ -159,51 +152,41 @@ void notifCB (BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
     }
 }
 
-void ParseCMDString(String cmd)
-{
+void ParseCMDString(String cmd) {
     int comdLength = cmd.length();
     int chkx;
     int CMDMaxNUM = sizeof(CMDRefer)/sizeof(String);
 
-
-    for(chkx = 0; chkx < CMDMaxNUM ;chkx++){
-        if(cmd.indexOf(CMDRefer[chkx].c_str()) > -1)
+    for (chkx = 0; chkx < CMDMaxNUM; chkx++) {
+        if (cmd.indexOf(CMDRefer[chkx].c_str()) > -1) {
             break;
+        }
     }
 
-    if(chkx >= CMDMaxNUM && cmd.charAt(comdLength - 1) != '#')
+    if (chkx >= CMDMaxNUM && cmd.charAt(comdLength - 1) != '#') {
         return;
-    
+    }
 
-    
-    if(cmd.indexOf("SRT") > -1 ){
-
+    if (cmd.indexOf("SRT") > -1) {
         int x = 3;
         int ValueIndex = 0;
 
-        while(x < comdLength - 1){
-            if(x + 3 < comdLength){
-                String _NumString = cmd.substring(x,x + 4);
+        while (x < (comdLength - 1)) {
+            if ((x + 3) < comdLength) {
+                String _NumString = cmd.substring(x, (x + 4));
                 //Serial.println(_NumString);
-
-                if(ValueIndex < MaxNumValue){
-                    if(bleReciveData[ValueIndex].ReciveValue != _NumString.toInt()){
+                if (ValueIndex < MaxNumValue) {
+                    if(bleReciveData[ValueIndex].ReciveValue != _NumString.toInt()) {
                         bleReciveData[ValueIndex].ReciveValue = _NumString.toInt();
                         bleReciveData[ValueIndex].reciveCMDFlag = true;
                     }
                 }
-
             }
-
             ValueIndex++;
-
             x += 4;
-            
         }
-        
     }
 }
-
 
 void printInfo(void) {
     Serial.println("------------------------------");
@@ -222,13 +205,11 @@ void printInfo(void) {
     Serial.print("rtsp://");
     Serial.print(ip);
     Serial.print(":");
-    rtsp2.printInfo();    
+    rtsp2.printInfo();
 }
 
-
-void setup()
-{
-	  Serial.begin(115200);
+void setup() {
+    Serial.begin(115200);
 
     advdata.addFlags(GAP_ADTYPE_FLAGS_LIMITED | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED);
     advdata.addCompleteName("AMB82-TANK");
@@ -245,7 +226,7 @@ void setup()
     Tx.setNotifyProperty(true);
     Tx.setCCCDCallback(notifCB);
     Tx.setBufferLen(STRING_BUF_SIZE);
-    
+
     UartService.addCharacteristic(Rx);
     UartService.addCharacteristic(Tx);
 
@@ -257,7 +238,7 @@ void setup()
 
     BLE.beginPeripheral();
 
-     // attempt to connect to Wifi network:
+    // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
@@ -275,7 +256,7 @@ void setup()
     rtsp1.configVideo(config);
     rtsp1.begin();
     rtsp2.configVideo(config);
-    rtsp2.begin(); 
+    rtsp2.begin();
 
     // Configure StreamIO object to stream data from video channel to RTSP
     videoStreamer.registerInput(Camera.getStream(CHANNEL));
@@ -287,7 +268,6 @@ void setup()
 
     // Start data stream from video channel
     Camera.channelBegin(CHANNEL);
-
 
     delay(1000);
     printInfo();
@@ -301,29 +281,25 @@ void setup()
     digitalWrite(MotoA_1B,0);
     digitalWrite(MotoB_1A,0);
     digitalWrite(MotoB_1B,0);
-
 }
 
-void loop()
-{
-    while(Count < MaxNumValue) {
-        if(bleReciveData[Count].reciveCMDFlag){
+void loop() {
+    while (Count < MaxNumValue) {
+        if (bleReciveData[Count].reciveCMDFlag) {
             bleReciveData[Count].reciveCMDFlag = false;
 
-            if(abs( bleReciveData[value1].ReciveValue- 1500) < 100 && abs(bleReciveData[value2].ReciveValue - 1500) < 100){
+            if (abs(bleReciveData[value1].ReciveValue - 1500) < 100 && abs(bleReciveData[value2].ReciveValue - 1500) < 100) {
                 BrakeAll();
-            }else if(abs(bleReciveData[value1].ReciveValue - 1500) > abs(bleReciveData[value2].ReciveValue - 1500) ){
-                if(bleReciveData[value1].ReciveValue > 1500){
+            } else if (abs(bleReciveData[value1].ReciveValue - 1500) > abs(bleReciveData[value2].ReciveValue - 1500)) {
+                if (bleReciveData[value1].ReciveValue > 1500) {
                     turnRight();
-                }
-                else{
+                } else{
                     turnLeft();
                 }
-            }else{
-                if(bleReciveData[value2].ReciveValue > 1500){
+            } else {
+                if (bleReciveData[value2].ReciveValue > 1500) {
                     forward();
-                }
-                else{
+                } else {
                     backward();
                 }
             }
@@ -331,10 +307,5 @@ void loop()
         Count++;
     }
     Count = 0;
-
-
-
-    delay(1);	
+    delay(1);
 }
-
-
