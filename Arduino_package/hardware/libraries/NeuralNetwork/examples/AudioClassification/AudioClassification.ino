@@ -9,14 +9,14 @@
 #include "NNAudioClassification.h"
 #include "AudioClassList.h"
 
-// NN audio classification require 16KHz
+// NN audio classification requires 16KHz
 AudioSetting configA(16000, 1, USE_AUDIO_AMIC); // Sample rate, Channel count, Mic type
 Audio audio;
 NNAudioClassification audioNN;
-StreamIO audioStreamerNN(1, 1);        // 1 Input Audio -> 1 Output Audio Classification
+StreamIO audioStreamerNN(1, 1);                 // 1 Input Audio -> 1 Output Audio Classification
 
 void setup() {
-    // Configure audio peripheral for audio data output
+    // Configure audio peripheral for audio data format
     audio.configAudio(configA);
     audio.begin();
 
@@ -53,4 +53,3 @@ void ACPostProcess(std::vector<AudioClassificationResult> results) {
         }
     }
 }
-
