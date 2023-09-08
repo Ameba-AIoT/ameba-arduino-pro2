@@ -28,7 +28,6 @@ class AudioClassificationResult {
         yamnet_res_t result = {0};
 };
 
-
 class NNAudioClassification :public NNModelSelection {
     public:
         NNAudioClassification (void);
@@ -47,9 +46,8 @@ class NNAudioClassification :public NNModelSelection {
         static void ACResultCallback(void *p, void *img_param);
         static std::vector<AudioClassificationResult> audio_result_vector;
         static void (*AC_user_CB)(std::vector<AudioClassificationResult>);
-        
+
         nn_data_param_t audio_nn_params = {0};
 
 };
 #endif
-

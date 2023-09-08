@@ -34,12 +34,11 @@ void setup() {
 }
 
 void loop() {
-  // Do nothing 
+  // Do nothing
 }
 
 // User callback function
 void ACPostProcess(std::vector<AudioClassificationResult> results) {
-
     printf("No of Audio Detected = %d\r\n", audioNN.getResultCount());
 
     if (audioNN.getResultCount() > 0) {

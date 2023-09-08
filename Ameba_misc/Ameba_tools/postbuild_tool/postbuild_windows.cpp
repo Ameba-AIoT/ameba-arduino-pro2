@@ -114,7 +114,6 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
 }
 
 int main(int argc, char *argv[]) {
-
     int ret = 0;
     stringstream cmdss;
     string cmd, line, msg;

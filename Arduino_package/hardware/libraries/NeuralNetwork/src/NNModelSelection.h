@@ -27,7 +27,7 @@ class NNModelSelection:public MMFModule {
     public:
         void modelSelect(unsigned char nntask);
         void modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel);
-		void modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel);
+        void modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel);
 
     protected:
         unsigned char _yolomodel;

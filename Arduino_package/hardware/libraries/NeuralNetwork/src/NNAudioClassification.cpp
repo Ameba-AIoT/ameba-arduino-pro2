@@ -117,4 +117,3 @@ int AudioClassificationResult::classID(void) {
 int AudioClassificationResult::score(void) {
     return ((int)((result.prob) * 100));
 }
-

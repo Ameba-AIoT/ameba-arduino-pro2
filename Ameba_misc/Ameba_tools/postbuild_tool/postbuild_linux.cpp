@@ -39,7 +39,6 @@ string ino_name_buf[100];
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
 
-
 //void readtxt(int line_number, int mode_isp_nn) {
 void readtxt(int mode_isp_ino) {
     ifstream myFile_Handler;
@@ -110,7 +109,6 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
 }
 
 int main(int argc, char *argv[]) {
-
     int ret = 0;
     stringstream cmdss;
     string cmd, line, msg;

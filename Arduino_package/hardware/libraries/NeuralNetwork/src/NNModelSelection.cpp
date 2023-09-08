@@ -218,7 +218,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
         default:
             _scrfdmodel = NA_MODEL;
     }
-    
+
     // MOBILEFACENET
     switch (facerecogmodel) {
         case DEFAULT_MOBILEFACENET: {
