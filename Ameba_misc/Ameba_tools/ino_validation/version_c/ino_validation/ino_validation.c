@@ -149,7 +149,7 @@ char path_txtfile[MAX_PATH_LENGTH];
 char folder_example[MAX_PATH_LENGTH];
 
 // -------------------------------
-//           Main
+//              Main
 // -------------------------------
 int main(int argc, char* argv[]) {
 	setlocale(LC_ALL, "en_US.UTF-8");
@@ -249,7 +249,7 @@ const char* dirName(const char* directory_path) {
 				sdk_counter++;
 				sdk_name = entry->d_name;
 			}
-			}
+		}
 		// non singular SDK validation
 		if (sdk_counter > 1) {
 			goto error_non_singular;
@@ -257,7 +257,7 @@ const char* dirName(const char* directory_path) {
 		else {
 			return sdk_name;
 		}
-		}
+	}
 	else {
 		printf("[%s][%d][Error]Failed to open directory.\n", __func__, __LINE__);
 	}
@@ -265,7 +265,7 @@ const char* dirName(const char* directory_path) {
 
 error_non_singular:
 	error_handler("AmebaPro2 directory only allow 1 SDK!!! Please check again.");
-	}
+}
 
 
 void convertToHeaderFiles(const char* input) {
@@ -326,7 +326,7 @@ void extractRootDirectory(char* filepath, char* rootDir) {
 #ifdef _WIN32
 	char* lastSeparator = strrchr(filepath, '\\'); // find last occurance of backspace
 #else
-	char* lastSeparator = strrchr(filepath, '/'); // find last occurance of backspace
+	char* lastSeparator = strrchr(filepath, '/');	// find last occurance of backspace
 #endif
 
 	if (lastSeparator == NULL) {
@@ -361,6 +361,7 @@ void extractParam(char* line, char* param) {
 	}
 }
 
+
 void extractString(char* source, char* result) {
 	char* start = strchr(source, '\"'); // find the 1st "
 	if (start == NULL) {
@@ -379,7 +380,7 @@ void extractString(char* source, char* result) {
 	__int64 length = end - start;
 	strncpy(result, start, length);
 	result[length] = '\0'; // add ending param at EOL
-	}
+}
 
 
 void extractString2(char* source, char* result) {
@@ -400,7 +401,7 @@ void extractString2(char* source, char* result) {
 	__int64 length = end - start;
 	strncpy(result, start, length);
 	result[length] = '\0'; // add ending param at EOL
-	}
+}
 
 
 const char* input2model(const char* input) {
@@ -461,6 +462,7 @@ const char* pathTidy(const char* input) {
 	return output;
 
 }
+
 
 const char* pathTempINO(const char* directory_path, const char* ext, const char* key) {
 	DIR* dir;
@@ -756,14 +758,15 @@ int writeTXT(const char* path) {
 			printf("Unable to open directory: %s\n", path);
 			return 0;
 		}
+
 		// find .ino file in IDE2 TEMP folder
 		while ((entry = readdir(dir)) != NULL) {
 			if (entry->d_type == DT_REG) {
 				if (strstr(entry->d_name, ".ino") != NULL) {
 					size_t path_len = strlen(path);
 					size_t file_name_len = strlen(entry->d_name);
-					file_path = malloc(path_len + file_name_len + 2);
 
+					file_path = malloc(path_len + file_name_len + 2);
 					if (file_path == NULL) {
 						printf("Memory allocation error.\n");
 					}
@@ -783,6 +786,7 @@ int writeTXT(const char* path) {
 		size_t path_len = strlen(path);
 		file_path = malloc(path_len + 2);
 		file_path = (char*)path;
+		if (PRINT_DEBUG) printf("[%d] file_path %s\n", __LINE__, file_path);
 
 		if (file_path == NULL) {
 			printf("Memory allocation error.\n");
@@ -818,17 +822,21 @@ int writeTXT(const char* path) {
 					strcpy(model_type, token);
 					if (PRINT_DEBUG) printf("[%d] Model Type: %s\n", __LINE__, model_type);
 				}
+				else {
+					goto error_syntax;
+				}
 
 				/* ------------------ object detection ------------------*/
 				token = strtok(NULL, ", ");
 				if (PRINT_DEBUG) printf("[%d]  Param 1: %s\n", __LINE__, token);
-
 				if (token != NULL) {
+					strcpy(model_name_od, token);
 					// OBJECT_DETECTION example: check model combination rules
 					if (strcmp(model_type, "OBJECT_DETECTION") == 0) {
 						if (strcmp(token, "NA_MODEL") == 0 || strstr(token, "YOLO") == NULL) {
 							goto error_combination;
 						}
+
 						// check customized od model
 						if (strstr(token, key_amb_customized) != NULL) {
 							if (PRINT_DEBUG) printf("[%d] od key_amb_customized\n", __LINE__);
@@ -837,7 +845,7 @@ int writeTXT(const char* path) {
 
 							if (strcmp(path_example, "Temp") == 0) {
 								// IDE1
-								printf("[%d] ------------qqz IDE1\r\n", __LINE__);
+								if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
 #ifndef _WIN32
 								extractRootDirectory(path_example, dir_example);
 #else
@@ -846,15 +854,12 @@ int writeTXT(const char* path) {
 							}
 							else {
 								// IDE2
-								printf("[%d] ------------qqz IDE2\r\n", __LINE__);
-
+								if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
 								char* example_name = strrchr(path_example, '\\');   // find the last "\"
 								removeChar(example_name, '\\');
-								printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 								listExampleDir(path_library, example_name);
 								strcpy(dir_example, folder_example);                // update example directory name
 							}
-							if (PRINT_DEBUG) printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
 
 							DIR* dir;
 							struct dirent* entry;
@@ -869,18 +874,12 @@ int writeTXT(const char* path) {
 										count++;
 									}
 									if (strstr(entry->d_name, ".nb") != NULL) {
-										printf("[%d] ------------qqz dir example %s\r\n", __LINE__, entry->d_name);
-										//printf("[%d] ------------qqz dir example %s\r\n", __LINE__, input2model(token));
-										//printf("[%d] ------------qqz dir example %d\r\n", __LINE__, strstr(entry->d_name, input2model(token)));
 										if (strstr(entry->d_name, input2model(token))) {
 #if PRINT_DEBUG
 											printf("[%d] %s\n", __LINE__, entry->d_name);
 #endif
 											count_match++;
 										}
-										/*		else {
-													goto error_customized_mismatch;
-												}*/
 									}
 								}
 							}
@@ -898,6 +897,7 @@ int writeTXT(const char* path) {
 					token = strtok(NULL, ", ");
 					if (PRINT_DEBUG) printf("[%d]  Param 2: %s\n", __LINE__, token);
 					if (token != NULL) {
+						strcpy(model_name_fd, token);
 						// FACE_DETECTION example: check model combination rules
 						if (strcmp(model_type, "FACE_DETECTION") == 0) {
 							if (strcmp(token, "NA_MODEL") == 0 || strstr(token, "SCRFD") == NULL) {
@@ -906,14 +906,13 @@ int writeTXT(const char* path) {
 						}
 						// check customized FD model
 						if (strstr(token, key_amb_customized) != NULL) {
-#if PRINT_DEBUG
-							printf("[%d]fd key_amb_customized\n", __LINE__);
-							printf("[%d]customized fd: %s\n", __LINE__, input2model(token));
-							printf("[%d]path_example: %s\n", __LINE__, path_example);
-#endif
+							if (PRINT_DEBUG) printf("[%d]fd key_amb_customized\n", __LINE__);
+							if (PRINT_DEBUG) printf("[%d]customized fd: %s\n", __LINE__, input2model(token));
+							if (PRINT_DEBUG) printf("[%d]path_example: %s\n", __LINE__, path_example);
+
 							if (strcmp(path_example, "Temp") == 0) {
 								// IDE1
-								printf("[%d] ------------qqz IDE1\r\n", __LINE__);
+								if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
 #ifndef _WIN32
 								extractRootDirectory(path_example, dir_example);
 #else
@@ -922,17 +921,13 @@ int writeTXT(const char* path) {
 							}
 							else {
 								// IDE2
-								printf("[%d] ------------qqz IDE2\r\n", __LINE__);
-
+								if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
 								char* example_name = strrchr(path_example, '\\');   // find the last "\"
 								removeChar(example_name, '\\');
-								printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 								listExampleDir(path_library, example_name);
 								strcpy(dir_example, folder_example);                // update example directory name
 							}
-#if PRINT_DEBUG
-							printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
-#endif
+
 
 							DIR* dir;
 							struct dirent* entry;
@@ -947,14 +942,10 @@ int writeTXT(const char* path) {
 										count++;
 									}
 									if (strstr(entry->d_name, ".nb") != NULL) {
-										printf("[%d] ------------qqz dir example %s\r\n", __LINE__, entry->d_name);
 										if (strstr(entry->d_name, "scrfd")) {
 											if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
 											count_match++;
 										}
-										/*	else {
-												goto error_customized_mismatch;
-											}*/
 									}
 								}
 							}
@@ -970,9 +961,9 @@ int writeTXT(const char* path) {
 
 						/*-------------- face recognition --------------*/
 						token = strtok(NULL, ", ");
+						if (PRINT_DEBUG) printf("[%d]  Param 3: %s\n", __LINE__, token);
 						if (token != NULL) {
-							if (PRINT_DEBUG) printf("[%d]  Param 3: %s\n", __LINE__, token);
-
+							strcpy(model_name_fr, token);
 							// FACE_RECOGNITION example: check model combination rules
 							if (strcmp(model_type, "FACE_RECOGNITION") == 0) {
 								if (strcmp(model_name_fd, "NA_MODEL") == 0 || strstr(model_name_fd, "SCRFD") == NULL || strcmp(token, "NA_MODEL") == 0 || strstr(token, "MOBILEFACENET") == NULL) {
@@ -988,7 +979,7 @@ int writeTXT(const char* path) {
 
 								if (strcmp(path_example, "Temp") == 0) {
 									// IDE1
-									printf("[%d] ------------qqz IDE1\r\n", __LINE__);
+									if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
 #ifndef _WIN32
 									extractRootDirectory(path_example, dir_example);
 #else
@@ -996,11 +987,10 @@ int writeTXT(const char* path) {
 #endif
 								}
 								else {
-									// IDE2
-									printf("[%d] ------------qqz IDE2\r\n", __LINE__);
+									// IDE1
+									if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
 									char* example_name = strrchr(path_example, '\\');   // find the last "\"
 									removeChar(example_name, '\\');
-									printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 									listExampleDir(path_library, example_name);
 									strcpy(dir_example, folder_example);                // update example directory name
 								}
@@ -1018,7 +1008,6 @@ int writeTXT(const char* path) {
 											count++;
 										}
 										if (strstr(entry->d_name, ".nb") != NULL) {
-											printf("[%d] ------------qqz dir example %s\r\n", __LINE__, entry->d_name);
 											if (strstr(entry->d_name, "mobilefacenet")) {
 												if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
 												count_match++;
@@ -1039,11 +1028,22 @@ int writeTXT(const char* path) {
 								/*-------------- audio classification --------------*/
 								token = strtok(NULL, ", ");
 								if (PRINT_DEBUG) printf("[%d] Param 4: %s\n", __LINE__, token);
-
 								if (token != NULL) {
+									strcpy(model_name_ac, token);
 									// AUDIO_CLASSIFICATION(AC) example: check model combination rules
 									if (strcmp(model_type, "AUDIO_CLASSIFICATION") == 0) {
-										if (strcmp(model_name_od, "NA_MODEL") == 0 && strstr(model_name_fd, "NA_MODEL") == NULL && strcmp(model_name_fr, "NA_MODEL") == 0) {
+										if (strcmp(model_name_ac, "NA_MODEL") == 0) { // if selected AUDIO_CLASSIFICATION without giving corresponding model
+											goto error_combination;
+										}
+										else {
+											if ((strcmp(model_name_od, "NA_MODEL") || strcmp(model_name_fd, "NA_MODEL") || strcmp(model_name_fr, "NA_MODEL")) != 0) {
+												goto error_exceed;
+											}
+										}
+									}
+									// non AUDIO_CLASSIFICATION(AC) example: model cannot exists with audio model
+									else {
+										if (strcmp(model_name_ac, "NA_MODEL") != 0) { // if non AUDIO_CLASSIFICATION(AC) example also contains audio model
 											goto error_exceed;
 										}
 									}
@@ -1054,7 +1054,8 @@ int writeTXT(const char* path) {
 										if (PRINT_DEBUG) printf("[%d] path example %s\r\n", __LINE__, path_example);
 
 										if (strcmp(path_example, "Temp") == 0) {
-											if (PRINT_DEBUG) printf("[%d] ------------qqz IDE1\r\n", __LINE__);
+											// IDE1
+											if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
 #ifndef _WIN32
 											extractRootDirectory(path_example, dir_example);
 #else
@@ -1062,15 +1063,13 @@ int writeTXT(const char* path) {
 #endif
 										}
 										else {
-											if (PRINT_DEBUG) printf("[%d] ------------qqz IDE2\r\n", __LINE__);
+											// IDE2
+											if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
 											char* example_name = strrchr(path_example, '\\');   // find the last "\"
 											removeChar(example_name, '\\');
-											if (PRINT_DEBUG) printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 											listExampleDir(path_library, example_name);
 											strcpy(dir_example, folder_example);                // update example directory name
 										}
-
-										if (PRINT_DEBUG) printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
 
 										DIR* dir;
 										struct dirent* entry;
@@ -1085,13 +1084,7 @@ int writeTXT(const char* path) {
 													count++;
 												}
 												if (strstr(entry->d_name, ".nb") != NULL) {
-													printf("[%d] ------------qqz dir example %s\r\n", __LINE__, entry->d_name);
-													//printf("[%d] ------------qqz dir example %s\r\n", __LINE__, input2model(token));
-													//printf("[%d] ------------qqz dir example %d\r\n", __LINE__, strstr(entry->d_name, input2model(token)));
 													if (strstr(entry->d_name, input2model(token))) {
-#if PRINT_DEBUG
-														printf("[%d] %s\n", __LINE__, entry->d_name);
-#endif
 														count_match++;
 													}
 												}
@@ -1105,7 +1098,9 @@ int writeTXT(const char* path) {
 										}
 									}
 								}
-								else { token = "NA_MODEL"; }
+								else {
+									goto error_combination; // missing parameter for Audio Classification
+								}
 								strcpy(model_name_ac, token);
 							}
 						}
@@ -1280,4 +1275,7 @@ error_customized_mismatch:
 
 error_exceed:
 	error_handler("Exceeds model size limitation. Please remove unwanted model(s).");
+
+error_syntax:
+	error_handler("Syntax Error! Please input a valid Neural Network task in modelSelect().");
 }
