@@ -115,7 +115,6 @@ void WiFiServer::setBlocking() {
     _is_blocked = !_is_blocked;
 }
 
-
 #if 0
 size_t WiFiServer::write(const uint8_t *buf, size_t size) {
     if (_sock_ser < 0) {
