@@ -32,6 +32,10 @@ WiFiServer::WiFiServer(uint16_t port, tProtMode portMode) {
     _portMode = portMode;
 }
 
+WiFiServer::~WiFiServer() {
+    stop();
+}
+
 void WiFiServer::begin() {
     _is_connected = false;
     _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
