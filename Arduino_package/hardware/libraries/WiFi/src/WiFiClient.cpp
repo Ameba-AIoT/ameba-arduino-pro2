@@ -5,7 +5,6 @@ extern "C" {
     #include "wl_definitions.h"
     #include "wl_types.h"
     #include "string.h"
-
 //    #include "update.h"
 }
 

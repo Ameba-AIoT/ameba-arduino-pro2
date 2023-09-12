@@ -27,9 +27,14 @@ WiFiServer::WiFiServer(uint16_t port) {
     _port = port;
 }
 
+WiFiServer::WiFiServer(uint16_t port, tProtMode portMode) {
+    _port = port;
+    _portMode = portMode;
+}
+
 void WiFiServer::begin() {
     _is_connected = false;
-    _sock_ser = serverdrv.startServer(_port);
+    _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
     if (_sock_ser < 0) {
         _is_connected = false;
         printf("\n[ERROR] Socket connect failed \n\r");
@@ -92,6 +97,20 @@ size_t WiFiServer::write(uint8_t b) {
     return write(&b, 1);
 }
 
+void WiFiServer::stop() {
+    if (_sock_ser < 0) {
+        return;
+    }
+    serverdrv.stopSocket(_sock_ser);
+    _is_connected = false;
+    _sock_ser = -1;
+}
+
+// set WiFi server to blocking mode
+void WiFiServer::setBlocking() {
+    _is_blocked = !_is_blocked;
+}
+
 #if 0
 size_t WiFiServer::write(const uint8_t *buf, size_t size) {
     if (_sock_ser < 0) {
@@ -109,15 +128,6 @@ size_t WiFiServer::write(const uint8_t *buf, size_t size) {
     }
 
     return size;
-}
-
-void WiFiServer::stop() {
-    if (_sock_ser < 0) {
-        return;
-    }
-    serverdrv.stopSocket(_sock_ser);
-    _is_connected = false;
-    _sock_ser = -1;
 }
 
 void WiFiServer::end() {

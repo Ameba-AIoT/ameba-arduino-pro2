@@ -30,6 +30,7 @@ void setup() {
         // wait 10 seconds for connection:
         delay(10000);
     }
+    //server.setBlocking();
     server.begin();
     // you're connected now, so print out the status:
     printWifiStatus();
@@ -86,6 +87,9 @@ void loop() {
         client.stop();
         Serial.println("client disonnected");
     }
+    // continue with user code in WiFi server non-blocking mode
+    Serial.println("User code implementing here...");
+    delay(5000);
 }
 
 void printWifiStatus() {
