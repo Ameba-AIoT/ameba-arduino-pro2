@@ -84,7 +84,7 @@ void loop() {
         delay(1);
 
         // close the connection:
-        //client.stop();
+        client.stop();
         Serial.println("client disonnected");
     }
     // continue with user code in WiFi server non-blocking mode
