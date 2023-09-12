@@ -37,7 +37,7 @@ int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protM
 int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
     int sock;
     if (blockMode) {
-        printf("\r\n[INFO] server_drv.cpp: WiFi server is set to blocking mode\r\n");
+        printf("\r\n [INFO] server_drv.cpp: WiFi server is set to blocking mode\r\n");
         //if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
             if (sock >= 0) {
@@ -48,7 +48,6 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
             }
 //        } else {
 //            sock = start_server_v6(port, portMode);
-//
 //            if (sock >= 0) {
 //                if (portMode == TCP_MODE) {
 //                    //Make it listen to socket with max 20 connections
@@ -57,7 +56,7 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
 //            }
 //        }
     } else {
-        printf("\r\n[INFO] server_drv.cpp: WiFi server is set to non-blocking mode\r\n");
+        printf("\r\n [INFO] server_drv.cpp: WiFi server is set to non-blocking mode\r\n");
         //if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
             int block = set_nonblocking(sock);
@@ -66,7 +65,6 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
                 if (portMode == TCP_MODE) {
                     //Make it listen to socket with max 20 connections
                     sock_listen(sock, 1);
-                    
                 }
             }
 //        } else {
@@ -80,7 +78,6 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
 //            }
 //        }
     }
-    
     return sock;
 }
 

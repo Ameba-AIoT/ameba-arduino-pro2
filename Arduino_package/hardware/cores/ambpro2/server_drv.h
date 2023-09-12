@@ -29,11 +29,11 @@ class ServerDrv {
     public:
         int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE);
 
+        int startServer(uint16_t port, uint8_t portMode = TCP_MODE, bool blockMode = false);
+
     //    int startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode = TCP_MODE);
 
     //    int startClientV6(const char *ipv6Address, uint16_t port, uint8_t protMode);
-
-        int startServer(uint16_t port, uint8_t portMode = TCP_MODE, bool blockMode = false);
 
         int getAvailable(int sock);
 
