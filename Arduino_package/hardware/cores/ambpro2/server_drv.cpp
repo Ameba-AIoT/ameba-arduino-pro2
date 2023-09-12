@@ -34,27 +34,53 @@ int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protM
 }
 #endif
 
-int ServerDrv::startServer(uint16_t port, uint8_t protMode) {
+int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
     int sock;
-
-//    if (getIPv6Status() == 0) {
-        sock = start_server(port, protMode);
-        if (sock >= 0) {
-            if (protMode == TCP_MODE) {
-                //Make it listen to socket with max 20 connections
-                sock_listen(sock, 1);
+    if (blockMode) {
+        printf("\r\n[INFO] server_drv.cpp: WiFi server is set to blocking mode\r\n");
+        //if (getIPv6Status() == 0) {
+            sock = start_server(port, portMode);
+            if (sock >= 0) {
+                if (portMode == TCP_MODE) {
+                    //Make it listen to socket with max 20 connections
+                    sock_listen(sock, 1);
+                }
             }
-        }
-////    } else {
-////        sock = start_server_v6(port, protMode);
+//        } else {
+//            sock = start_server_v6(port, portMode);
 //
-//        if (sock >= 0) {
-//            if (protMode == TCP_MODE) {
-//                //Make it listen to socket with max 20 connections
-//                sock_listen(sock, 20);
+//            if (sock >= 0) {
+//                if (portMode == TCP_MODE) {
+//                    //Make it listen to socket with max 20 connections
+//                    sock_listen(sock, 20);
+//                }
 //            }
 //        }
-//    }
+    } else {
+        printf("\r\n[INFO] server_drv.cpp: WiFi server is set to non-blocking mode\r\n");
+        //if (getIPv6Status() == 0) {
+            sock = start_server(port, portMode);
+            int block = set_nonblocking(sock);
+            printf("Blocking mode = %d",block);
+            if (sock >= 0) {
+                if (portMode == TCP_MODE) {
+                    //Make it listen to socket with max 20 connections
+                    sock_listen(sock, 1);
+                    
+                }
+            }
+//        } else {
+//            sock = start_server_v6(port, portMode);
+//            set_nonblocking(sock);
+//            if (sock >= 0) {
+//                if (portMode == TCP_MODE) {
+//                    //Make it listen to socket with max 20 connections
+//                    sock_listen(sock, 20);
+//                }
+//            }
+//        }
+    }
+    
     return sock;
 }
 

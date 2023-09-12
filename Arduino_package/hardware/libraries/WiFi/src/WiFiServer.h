@@ -9,11 +9,12 @@ class WiFiClient;
 class WiFiServer : public Server {
     public:
         WiFiServer(uint16_t);
-
+        WiFiServer(uint16_t, tProtMode);
+        
         virtual void begin();
 
         WiFiClient available(uint8_t* status = NULL);
-    //
+
     //    virtual int available(int server_fd);
     //
     //    virtual uint8_t connected();
@@ -24,11 +25,14 @@ class WiFiServer : public Server {
     //
     //    virtual size_t write(const uint8_t* buf, size_t size);
     //
-    //    virtual void stop();
+        virtual void stop();
     //
     //    virtual void end();
     //
     //    virtual void close();
+
+        virtual void setBlocking();
+    
     //    // extend API from RTK
     //    virtual int setTimeout(int timeout);
     //    // IPv6 related
@@ -45,6 +49,8 @@ class WiFiServer : public Server {
         bool _is_connected;
     //    uint8_t data[DATA_LENTH];
     //    int recvTimeout;
+        bool _is_blocked = false;
+        tProtMode _portMode = TCP_MODE;
 };
 
 #endif

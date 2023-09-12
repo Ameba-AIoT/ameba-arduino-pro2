@@ -169,6 +169,21 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
 }
 #endif
 
+int set_nonblocking(int fd) {
+    int flags;
+
+    flags = fcntl(fd, F_GETFL, 0);
+    if (flags == -1) {
+        return -1;
+    }
+    flags |= O_NONBLOCK;
+    if (fcntl(fd, F_SETFL, flags) == -1) {
+        
+        return -1;
+    }
+    return 0;
+}
+
 int start_server(uint16_t port, uint8_t protMode) {
     int _sock;
     int timeout;
@@ -314,11 +329,16 @@ int get_available(int sock) {
             if (err != EAGAIN) {
                 break;
             }
+            
+            // Get current socket status and break if it is in non blocking mode
+            if (fcntl(sock, F_GETFL, 0) & O_NONBLOCK) {
+                break;
+            }
         }
     } while (client_fd < 0);
 
     if (client_fd < 0) {
-        //printf("\n\r[ERROR] Accept connection failed\n");
+        printf("\n\r[ERROR] Accept connection failed\n");
         return -1;
     } else {
         timeout = 3000;
