@@ -27,6 +27,8 @@
 WiFiClass::WiFiClass() {
 }
 
+WiFiClass::~WiFiClass() {}
+
 void WiFiClass::init() {
     WiFiDrv::wifiDriverInit();
 }

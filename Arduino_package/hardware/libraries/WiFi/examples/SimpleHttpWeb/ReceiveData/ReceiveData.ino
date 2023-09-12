@@ -30,7 +30,7 @@ void setup() {
         // wait 10 seconds for connection:
         delay(10000);
     }
-    //server.setBlocking();
+    // server.setBlocking();
     server.begin();
     // you're connected now, so print out the status:
     printWifiStatus();
@@ -40,9 +40,9 @@ void loop() {
     // listen for incoming clients
     WiFiClient client = server.available();
     if (client) {
-        Serial.println("new client");
         // an http request ends with a blank line
         boolean currentLineIsBlank = true;
+        Serial.println("new client");
         while (client.connected()) {
             if (client.available()) {
                 char c = client.read();
@@ -84,10 +84,10 @@ void loop() {
         delay(1);
 
         // close the connection:
-        client.stop();
+        // client.stop(); // remove this line since destructor will be called automatically
         Serial.println("client disonnected");
     }
-    // continue with user code in WiFi server non-blocking mode
+    // continue with user code in WiFi server non-blocking mode 
     Serial.println("User code implementing here...");
     delay(5000);
 }
@@ -109,3 +109,4 @@ void printWifiStatus() {
     Serial.print(rssi);
     Serial.println(" dBm");
 }
+

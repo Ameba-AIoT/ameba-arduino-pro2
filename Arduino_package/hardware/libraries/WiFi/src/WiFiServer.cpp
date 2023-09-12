@@ -32,6 +32,10 @@ WiFiServer::WiFiServer(uint16_t port, tProtMode portMode) {
     _portMode = portMode;
 }
 
+WiFiServer::~WiFiServer() {
+    stop();
+}
+
 void WiFiServer::begin() {
     _is_connected = false;
     _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
@@ -110,6 +114,7 @@ void WiFiServer::stop() {
 void WiFiServer::setBlocking() {
     _is_blocked = !_is_blocked;
 }
+
 
 #if 0
 size_t WiFiServer::write(const uint8_t *buf, size_t size) {
