@@ -27,7 +27,7 @@ typedef enum eProtMode { TCP_MODE,
 #define DATA_LENTH 128
 class ServerDrv {
     public:
-        int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE);
+        int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE, bool blockMode = false);
 
         int startServer(uint16_t port, uint8_t portMode = TCP_MODE, bool blockMode = false);
 

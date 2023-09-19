@@ -20,6 +20,7 @@ class WiFiClient : public Client {
         virtual int read(uint8_t *buf, size_t size);
         virtual int recv(uint8_t *buf, size_t size);
         virtual void stop();
+        virtual void setBlocking();
         virtual size_t write(uint8_t);
         virtual size_t write(const uint8_t *buf, size_t size);
         virtual operator bool();
@@ -43,7 +44,9 @@ class WiFiClient : public Client {
         ServerDrv clientdrv;
         bool _is_connected;
         uint8_t data[DATA_LENTH];
+        bool _is_blocked = false;
         int recvTimeout;
+        tProtMode _portMode = TCP_MODE;
 };
 
 #ifdef __cplusplus

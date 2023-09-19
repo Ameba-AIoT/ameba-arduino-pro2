@@ -191,7 +191,7 @@ int start_server(uint16_t port, uint8_t protMode) {
         timeout = 3000;
         _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        //  printf("\r\n [INFO] Create TCP socket successfudlly\n");
+        //  printf("\r\n [INFO] Create TCP socket successfully\n");
     } else {
         timeout = 1000;
         _sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -273,6 +273,12 @@ int get_sock_errno(int sock) {
 //    socklen_t len = sizeof(so_error);
 //    lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
 //    return so_error;
+
+    if (fcntl(sock, F_GETFL, 0) & O_NONBLOCK) {
+        //printf("\r\n[ard_socket.c][get_sock_errno] Non blocking\r\n");
+        return 0;
+    }
+
     (void)sock;
     return errno;
 }
@@ -326,10 +332,6 @@ int get_available(int sock) {
         if (client_fd < 0) {
             err = get_sock_errno(sock);
             if (err != EAGAIN) {
-                break;
-            }
-            // Get current socket status and break if it is in non blocking mode
-            if (fcntl(sock, F_GETFL, 0) & O_NONBLOCK) {
                 break;
             }
         }

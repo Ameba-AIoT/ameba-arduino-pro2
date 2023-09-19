@@ -134,6 +134,12 @@ size_t WiFiClient::write(uint8_t b) {
     return write(&b, 1);
 }
 
+// set WiFi client to blocking mode
+void WiFiClient::setBlocking() {
+    _is_blocked = !_is_blocked;
+}
+
+
 size_t WiFiClient::write(const uint8_t *buf, size_t size) {
     if (_sock < 0) {
         setWriteError();
@@ -187,7 +193,7 @@ int WiFiClient::connect(const char* host, uint16_t port) {
 
 int WiFiClient::connect(IPAddress ip, uint16_t port) {
     _is_connected = false;
-    _sock = clientdrv.startClient(ip, port);
+    _sock = clientdrv.startClient(ip, port, _portMode, _is_blocked);
     // whether sock is connected
     if (_sock < 0) {
         _is_connected = false;
