@@ -10,7 +10,9 @@
 class WiFiClient : public Client {
     public:
         WiFiClient();
-        WiFiClient(int sock);
+        WiFiClient(uint8_t sock);
+        WiFiClient(tProtMode portMode);
+        WiFiClient(uint8_t sock, tProtMode portMode);
         ~WiFiClient();
 
         uint8_t status();
@@ -40,7 +42,7 @@ class WiFiClient : public Client {
         using Print::write;
 
     private:
-        int _sock;
+        uint8_t _sock;
         ServerDrv clientdrv;
         bool _is_connected;
         uint8_t data[DATA_LENTH];

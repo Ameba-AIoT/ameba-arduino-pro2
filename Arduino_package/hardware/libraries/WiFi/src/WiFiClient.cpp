@@ -17,13 +17,28 @@ WiFiClient::WiFiClient() : _sock(MAX_SOCK_NUM) {
     recvTimeout = 3000;
 }
 
-WiFiClient::WiFiClient(int sock) {
+WiFiClient::WiFiClient(tProtMode portMode) : _sock(MAX_SOCK_NUM) {
+    _is_connected = false;
+    recvTimeout = 3000;
+    _portMode = portMode;
+}
+
+WiFiClient::WiFiClient(uint8_t sock) {
     _sock = sock;
     if ((sock >= 0) && (sock != 0xFF)) {
 //    if (sock != 0xFF) {
         _is_connected = true;
     }
     recvTimeout = 3000;
+}
+
+WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode) {
+    _sock = sock;
+    if ((sock >= 0) && (sock != 0xFF)) {
+        _is_connected = true;
+    }
+    recvTimeout = 3000;
+    _portMode = portMode;
 }
 
 WiFiClient::~WiFiClient() {
