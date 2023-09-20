@@ -1,8 +1,7 @@
 /*
 
  Example guide:
- no link to example yet, pending to be updated
-
+ https://www.amebaiot.com/en/amebapro2-arduino-video-rtspg-v7rc/
 */
 
 #include "WiFi.h"

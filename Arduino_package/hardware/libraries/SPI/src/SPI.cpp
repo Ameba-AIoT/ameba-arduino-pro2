@@ -18,7 +18,7 @@ spi_t spi_obj1;
 SPIClass::SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int ss_pin) {
     pSpiMaster = pSpiObj;
     pSpiSlave = pSpiObj;
-    
+
     /* These 4 pins should belong same spi pinmux*/
     _pinMOSI = mosi_pin;
     _pinMISO = miso_pin;
@@ -35,12 +35,22 @@ SPIClass::SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int 
 }
 
 void SPIClass::begin(void) {
+    amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
+    amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
+    amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
+    amb_ard_pin_check_fun(_pinSS, PIO_SPI);
+
+    _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
+    _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
+    _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
+    _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
+
     spi_init(
         pSpiMaster,
-        (PinName)g_APinDescription[_pinMOSI].pinname, 
-        (PinName)g_APinDescription[_pinMISO].pinname, 
-        (PinName)g_APinDescription[_pinCLK].pinname, 
-        (PinName)g_APinDescription[_pinSS].pinname
+        (PinName)(_pinMOSI), 
+        (PinName)(_pinMISO), 
+        (PinName)(_pinCLK), 
+        (PinName)(_pinSS)
     );
     spi_format(pSpiMaster, _dataBits, _dataMode, 0);
     spi_frequency(pSpiMaster, _defaultFrequency);
@@ -50,14 +60,24 @@ void SPIClass::begin(void) {
 }
 
 void SPIClass::begin(int ss_pin) {
-    _pinSS = (PinName)g_APinDescription[ss_pin].pinname;
+    _pinSS = ss_pin;
+
+    amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
+    amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
+    amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
+    amb_ard_pin_check_fun(_pinSS, PIO_SPI);
+
+    _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
+    _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
+    _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
+    _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
 
     spi_init(
         pSpiMaster,
-        (PinName)g_APinDescription[_pinMOSI].pinname, 
-        (PinName)g_APinDescription[_pinMISO].pinname, 
-        (PinName)g_APinDescription[_pinCLK].pinname, 
-        (PinName)g_APinDescription[_pinSS].pinname
+        (PinName)(_pinMOSI), 
+        (PinName)(_pinMISO), 
+        (PinName)(_pinCLK), 
+        (PinName)(_pinSS)
     );
     spi_format(pSpiMaster, _dataBits, _dataMode, 0);
     spi_frequency(pSpiMaster, _defaultFrequency);
@@ -71,12 +91,22 @@ void SPIClass::begin(char SPI_mode) {
     if (_SPI_Mode == SPI_MODE_MASTER) {
         begin();
     } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+        amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
+        amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
+        amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
+        amb_ard_pin_check_fun(_pinSS, PIO_SPI);
+
+        _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
+        _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
+        _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
+        _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
+
         spi_init(
-        pSpiSlave,
-        (PinName)g_APinDescription[_pinMOSI].pinname, 
-        (PinName)g_APinDescription[_pinMISO].pinname, 
-        (PinName)g_APinDescription[_pinCLK].pinname, 
-        (PinName)g_APinDescription[_pinSS].pinname
+            pSpiSlave,
+            (PinName)(_pinMOSI), 
+            (PinName)(_pinMISO), 
+            (PinName)(_pinCLK), 
+            (PinName)(_pinSS)
         );
         spi_format(pSpiSlave, _dataBits, _dataMode, 1);
 
@@ -92,24 +122,34 @@ void SPIClass::begin(int ss_pin, char SPI_mode) {
     _SPI_Mode = SPI_mode;
     if (_SPI_Mode == SPI_MODE_MASTER) {
         begin(ss_pin);
-     } else if (_SPI_Mode == SPI_MODE_SLAVE) {
-        _pinSS = (PinName)g_APinDescription[ss_pin].pinname;
+    } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+        _pinSS = ss_pin;
+
+        amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
+        amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
+        amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
+        amb_ard_pin_check_fun(_pinSS, PIO_SPI);
+
+        _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
+        _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
+        _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
+        _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
 
         spi_init(
-        pSpiSlave,
-        (PinName)g_APinDescription[_pinMOSI].pinname, 
-        (PinName)g_APinDescription[_pinMISO].pinname, 
-        (PinName)g_APinDescription[_pinCLK].pinname, 
-        (PinName)g_APinDescription[_pinSS].pinname
+            pSpiSlave,
+            (PinName)(_pinMOSI), 
+            (PinName)(_pinMISO), 
+            (PinName)(_pinCLK), 
+            (PinName)(_pinSS)
         );
         spi_format(pSpiSlave, _dataBits, _dataMode, 1);
 
         // Mark SPI init status
         initStatus = true;
-     } else {
+    } else {
         printf("SPI begin: error. SPI mode \r\n");
         return;
-     }
+    }
 }
 
 void SPIClass::beginTransaction(uint8_t ss_pin, SPISettings settings) {
@@ -207,7 +247,7 @@ uint16_t SPIClass::transfer16(uint16_t data, SPITransferMode mode) {
     return transfer16(_pinSS, data, mode);
 }
 
-int SPIClass::slaveRead (void) {
+int SPIClass::slaveRead(void) {
     return spi_slave_read(pSpiSlave);
 }
 
@@ -226,7 +266,7 @@ void SPIClass::setDataMode(uint8_t bits, uint8_t dataMode, char SPI_mode) {
     _dataMode = dataMode;
     _SPI_Mode = SPI_mode;
     
-    if(initStatus) {
+    if (initStatus) {
         if (_SPI_Mode == SPI_MODE_MASTER) {
             spi_format(pSpiMaster, _dataBits, _dataMode, 0);
         } else if (_SPI_Mode == SPI_MODE_SLAVE) {
@@ -252,7 +292,7 @@ void SPIClass::setDefaultFrequency(int frequency) {
 
 void SPIClass::end(char SPI_mode) {
     _SPI_Mode = SPI_mode;
-    
+
     if (_SPI_Mode == SPI_MODE_MASTER) {
         spi_free(pSpiMaster);
      } else if (_SPI_Mode == SPI_MODE_SLAVE) {
@@ -262,4 +302,3 @@ void SPIClass::end(char SPI_mode) {
 
 SPIClass SPI((&spi_obj0), SPI_MOSI, SPI_MISO, SPI_SCLK, SPI_SS);
 SPIClass SPI1((&spi_obj1), SPI1_MOSI, SPI1_MISO, SPI1_SCLK, SPI1_SS);
-

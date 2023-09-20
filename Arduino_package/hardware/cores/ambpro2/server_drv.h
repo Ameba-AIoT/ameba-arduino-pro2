@@ -22,8 +22,11 @@
 
 #include <inttypes.h>
 
-typedef enum eProtMode { TCP_MODE,
-                         UDP_MODE } tProtMode;
+typedef enum eProtMode {
+    TCP_MODE,
+    UDP_MODE
+} tProtMode;
+
 #define DATA_LENTH 128
 class ServerDrv {
     public:

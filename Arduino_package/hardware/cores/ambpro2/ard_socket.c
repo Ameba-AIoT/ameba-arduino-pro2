@@ -18,7 +18,8 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     int _sock;
 
     //create socket
-    if (protMode == 0) {  // TCP
+    if (protMode == 0) {
+        // TCP
         _sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     } else {
         _sock = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -37,9 +38,10 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     serv_addr.sin_port = htons(port);
 
     //Connecting to server
-    if (protMode == 0) {  //TCP MODE
+    if (protMode == 0) {
+        //TCP MODE
         if (connect(_sock, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
-            printf("\r\n [INFO] Connect to Server successfully!\r\n");
+            printf("\r\n[INFO] Connect to Server successfully!\r\n");
             timeout = 3000;
             lwip_setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
             timeout = 30000;
@@ -58,7 +60,6 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     return _sock;
 }
 
-
 #if 0
 int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
     int enable = 1;
@@ -66,7 +67,8 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
     int _sock;
 
     //create socket
-    if (protMode == 0) {  // TCP
+    if (protMode == 0) {
+        // TCP
         _sock = lwip_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
     } else {
         _sock = lwip_socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
@@ -88,7 +90,8 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
     }
 
     // connection starts
-    if (protMode == 0) {  //TCP MODE
+    if (protMode == 0) {
+        //TCP MODE
         if (connect(_sock, (struct sockaddr *)(&serv_addr6), sizeof(serv_addr6)) == -1) {
             printf("\r\n [ERROR] Connect to server failed\n");
         }
@@ -123,7 +126,8 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
     struct sockaddr_in6 ser_addr;
 
     // create socket
-    if (protMode == 0) {  // TCP
+    if (protMode == 0) {
+        // TCP
         _sock = lwip_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
     } else {
         _sock = lwip_socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
@@ -145,7 +149,8 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
     // }
 
     // Connecting to server
-    if (protMode == 0) {  //TCP MODE
+    if (protMode == 0) {
+        //TCP MODE
         if (connect(_sock, ((struct sockaddr *)&ser_addr), sizeof(ser_addr)) == 0) {
             printf("\r\n [INFO] Connect to server successfully\n");
             timeout = 3000;
@@ -161,8 +166,9 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
             return -1;
         }
     }
-    // else {  // UDP
-    // printf("\r\n [INFO] UDP client setup Server's information successful!\n");
+    // else {
+        // UDP
+    // printf("\n\r [INFO] UDP client setup Server's information successful!\n");
     // }
 
     return _sock;
@@ -259,7 +265,6 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
     }
     //lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
     printf("\r\n [INFO] Bind socket successfully\n");
-   
     return _sock;
 }
 #endif
@@ -282,11 +287,9 @@ int get_sock_errno(int sock) {
     return errno;
 }
 
-
 int set_sock_recv_timeout(int sock, int timeout) {
     return lwip_setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 }
-
 
 void close_socket(int sock) {
     lwip_close(sock);
@@ -408,7 +411,6 @@ int send_data(int sock, const uint8_t *data, uint32_t len, int flag) {
 }
 
 // UDP
-
 int sendto_data(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port) {
     int ret;
     struct sockaddr_in peer_addr;
@@ -494,7 +496,6 @@ int get_receive_v6(int sock, void *recv_data, int len, int flags, uint32_t *peer
     return ret;
 }
 
-
 void ipv6_udp_server(void) {
     int server_fd;
     struct sockaddr_in6 client_addr;
@@ -523,7 +524,6 @@ void ipv6_udp_server(void) {
     }
 
     closesocket(server_fd);
-
     return;
 }
 #endif

@@ -1,6 +1,6 @@
 // Single Input and Multiple Output
-#ifndef simo_drv_h
-#define simo_drv_h
+#ifndef SIMO_DRV_H
+#define SIMO_DRV_H
 
 #include "Arduino.h"
 #include "mmf2_module.h"

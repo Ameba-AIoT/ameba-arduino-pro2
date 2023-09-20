@@ -1,7 +1,6 @@
 /*
 
  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-echo-cancel/
-
  */
 
 #include "WiFi.h"

@@ -39,7 +39,6 @@
 #define value1  0
 #define value2  1
 
-
 #define MotoA_1A 16   //GPIO
 #define MotoA_1B 7    //PWM
 #define MotoB_1A 17   //GPIO
@@ -79,51 +78,51 @@ String CMDRefer[5] = {"SS2", "SS4", "SRT", "SR2", "SRV"};
 _rCMD bleReciveData[MaxNumValue];
 
 void forward() {
-    digitalWrite(MotoA_1A,1);
-    analogWrite(MotoA_1B,5);
+    digitalWrite(MotoA_1A, 1);
+    analogWrite(MotoA_1B, 5);
 
-    digitalWrite(MotoB_1A,1);
-    analogWrite(MotoB_1B,5);
+    digitalWrite(MotoB_1A, 1);
+    analogWrite(MotoB_1B, 5);
 
     delay(50);
 }
 
 void backward() {
-    digitalWrite(MotoA_1A,0);
-    analogWrite(MotoA_1B,250);
+    digitalWrite(MotoA_1A, 0);
+    analogWrite(MotoA_1B, 250);
 
-    digitalWrite(MotoB_1A,0);
-    analogWrite(MotoB_1B,250);
+    digitalWrite(MotoB_1A, 0);
+    analogWrite(MotoB_1B, 250);
 
     delay(50);
 }
 
 void turnRight() {
-    digitalWrite(MotoA_1A,1);
-    analogWrite(MotoA_1B,5);
+    digitalWrite(MotoA_1A, 1);
+    analogWrite(MotoA_1B, 5);
 
-    digitalWrite(MotoB_1A,0);
-    analogWrite(MotoB_1B,250);
+    digitalWrite(MotoB_1A, 0);
+    analogWrite(MotoB_1B, 250);
 
     delay(50);
 }
 
 void turnLeft() {
-    digitalWrite(MotoA_1A,0);
-    analogWrite(MotoA_1B,250);
+    digitalWrite(MotoA_1A, 0);
+    analogWrite(MotoA_1B, 250);
 
-    digitalWrite(MotoB_1A,1);
-    analogWrite(MotoB_1B,5);
+    digitalWrite(MotoB_1A, 1);
+    analogWrite(MotoB_1B, 5);
 
     delay(50);
 }
 
 void BrakeAll() {
-    digitalWrite(MotoA_1A,0);
-    analogWrite(MotoA_1B,0);
+    digitalWrite(MotoA_1A, 0);
+    analogWrite(MotoA_1B, 0);
 
-    digitalWrite(MotoB_1A,0);
-    analogWrite(MotoB_1B,0);
+    digitalWrite(MotoB_1A, 0);
+    analogWrite(MotoB_1B, 0);
 
     delay(50);
 }
@@ -155,7 +154,7 @@ void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
 void ParseCMDString(String cmd) {
     int comdLength = cmd.length();
     int chkx;
-    int CMDMaxNUM = sizeof(CMDRefer)/sizeof(String);
+    int CMDMaxNUM = sizeof(CMDRefer) / sizeof(String);
 
     for (chkx = 0; chkx < CMDMaxNUM; chkx++) {
         if (cmd.indexOf(CMDRefer[chkx].c_str()) > -1) {
@@ -176,7 +175,7 @@ void ParseCMDString(String cmd) {
                 String _NumString = cmd.substring(x, (x + 4));
                 //Serial.println(_NumString);
                 if (ValueIndex < MaxNumValue) {
-                    if(bleReciveData[ValueIndex].ReciveValue != _NumString.toInt()) {
+                    if (bleReciveData[ValueIndex].ReciveValue != _NumString.toInt()) {
                         bleReciveData[ValueIndex].ReciveValue = _NumString.toInt();
                         bleReciveData[ValueIndex].reciveCMDFlag = true;
                     }
@@ -293,7 +292,7 @@ void loop() {
             } else if (abs(bleReciveData[value1].ReciveValue - 1500) > abs(bleReciveData[value2].ReciveValue - 1500)) {
                 if (bleReciveData[value1].ReciveValue > 1500) {
                     turnRight();
-                } else{
+                } else {
                     turnLeft();
                 }
             } else {

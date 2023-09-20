@@ -15,14 +15,13 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#ifndef _UART_CLASS_TRI_
-#define _UART_CLASS_TRI_
+#ifndef _UARTCLASSTRI_
+#define _UARTCLASSTRI_
 
 #include "HardwareSerial.h"
 #include "RingBuffer.h"
 
-class UARTClassTri : public HardwareSerial
-{
+class UARTClassTri : public HardwareSerial {
     public:
         UARTClassTri(int dwIrq, RingBuffer* pRx_buffer);
         void begin(const uint32_t dwBaudRate) { begin(dwBaudRate, SERIAL_8N1); }

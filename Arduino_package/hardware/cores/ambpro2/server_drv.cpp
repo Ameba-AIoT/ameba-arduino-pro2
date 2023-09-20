@@ -25,12 +25,12 @@ int ServerDrv::startClientV6(const char *ipv6Address, uint16_t port, uint8_t pro
     printf("\n\r [INFO] %s ipv6 addr: %s\n\r", __FUNCTION__, ipv6Address);
     int sock;
 
-    sock = start_client_v6((char *)ipv6Address, port, protMode);
+    sock = start_client_v6((char *)ipv6Address, port, portMode);
 
     return sock;
 }
 
-int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
+int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t portMode) {
     int sock;
     sock = start_clientv6(ipv6Address, port, protMode);
     printf("\n\r [INFO] %s sock value: %x\n\r", __FUNCTION__, sock);

@@ -1,7 +1,7 @@
 /*
 
  Example guide:
-
+ https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-audio-classification/
 */
 
 #include "WiFi.h"
