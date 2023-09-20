@@ -162,7 +162,7 @@ char path_txtfile[MAX_PATH_LENGTH];
 char folder_example[MAX_PATH_LENGTH];
 
 // -------------------------------
-//              Main
+//           Main
 // -------------------------------
 int main(int argc, char* argv[]) {
 	setlocale(LC_ALL, "en_US.UTF-8");
@@ -215,8 +215,8 @@ int main(int argc, char* argv[]) {
 	path_build_options_json = pathTempJSON(path_build, ext_json, key_json);
 	path_example = validateINO(path_build);
 	writeJSON(path_example);
-	if (PRINT_DEBUG) printf("[%s]----END----\n", __func__);
 
+	if (PRINT_DEBUG) printf("[%s]----END----\n", __func__);
 	return 0;
 }
 
@@ -226,7 +226,6 @@ int main(int argc, char* argv[]) {
 #ifndef __MINGW64__
 extern int mkdir(char* filename);
 #endif
-
 
 void copyFile(const char* sourcePath, const char* destinationPath) {
 	FILE* sourceFile;
@@ -261,7 +260,6 @@ void copyFile(const char* sourcePath, const char* destinationPath) {
 	if (PRINT_DEBUG) printf("[%s][%d][INFO] File copied successfully: %s\n", __func__, __LINE__, destinationPath);
 }
 
-
 int dirExists(const char* directory_path) {
 	DIR* directory = opendir(directory_path);
 	// check weather dir is valid
@@ -274,7 +272,6 @@ int dirExists(const char* directory_path) {
 		return 0;
 	}
 }
-
 
 const char* dirName(const char* directory_path) {
 	int sdk_counter = 0;
@@ -312,7 +309,6 @@ const char* dirName(const char* directory_path) {
 error_non_singular:
 	error_handler("AmebaPro2 directory only allow 1 SDK!!! Please check again.");
 }
-
 
 int isDirExists(const char* path) {
 	DIR* dir;
@@ -358,7 +354,6 @@ int isDirExists(const char* path) {
 	}
 }
 
-
 void listExampleDir(char* basePath, char* exampleName)
 {
 	char path[1000];
@@ -386,8 +381,7 @@ void listExampleDir(char* basePath, char* exampleName)
 	closedir(dir);
 }
 
-
-void extractRootDirectory(char* filepath, char* rootDir) { // QQZ: diff from ino_validataion.c
+void extractRootDirectory(char* filepath, char* rootDir) {
 #ifdef _WIN32
 	char* lastBackslash = strrchr(filepath, '\\');
 #else
@@ -397,7 +391,6 @@ void extractRootDirectory(char* filepath, char* rootDir) { // QQZ: diff from ino
 		*lastBackslash = '\0';
 	}
 }
-
 
 void renameFile(char* filename, char* filepath, int type) {
 	char dest_path[MAX_PATH_LENGTH] = "";       // Replace with the desired destination path
@@ -460,7 +453,6 @@ void renameFile(char* filename, char* filepath, int type) {
 	}
 }
 
-
 char* dspFileProp(const char* filename) {
 	struct stat file_model_stats;
 
@@ -493,7 +485,6 @@ int endsWith(const char* str, const char* suffix) {
 	return (strncmp(str + str_len - suffix_len, suffix, suffix_len) == 0);
 }
 
-
 const char* pathTidy(const char* input) {
 	size_t input_length = strlen(input);
 	size_t output_length = 0;
@@ -525,7 +516,6 @@ const char* pathTidy(const char* input) {
 	return output;
 }
 
-
 void removeChar(char* str, char c) {
 	int i, j;
 	size_t len = strlen(str);
@@ -537,7 +527,6 @@ void removeChar(char* str, char c) {
 	str[j] = '\0';
 }
 
-
 void extractParam(char* line, char* param) {
 	char* start = strchr(line, '(');
 	char* end = strchr(line, ')');
@@ -547,7 +536,6 @@ void extractParam(char* line, char* param) {
 		param[length] = '\0';
 	}
 }
-
 
 const char* input2model(const char* input) {
 	const char* model_mapping[][2] = {
@@ -575,7 +563,6 @@ const char* input2model(const char* input) {
 
 	return "NA";
 }
-
 
 const char* input2filename(const char* directory_path, const char* key) {
 	const char* value = NULL;
@@ -665,7 +652,6 @@ void backupModel(char* input, char* sktech_path) {
 	}
 	else {
 		while ((entry = readdir(dir)) != NULL) {
-			// TODO 4.0.6: if (strstr(entry->d_name, key_amb_default_backup) != NULL) {
 			if (strstr(entry->d_name, "Dbackup") != NULL) {     // customized model has been used
 				if (PRINT_DEBUG) printf("[%s][%d][INFO] Backup-ed %s found !!!\n", __func__, __LINE__, input);
 				flag_Dbackup = 1;
@@ -685,7 +671,6 @@ void backupModel(char* input, char* sktech_path) {
 		renameFile(input, sktech_path, 0);       // back up Cmodel
 	}
 }
-
 
 void revertModel(const char* dmodel_name, const char* dmodel_name_backup, const char* dmodel_path) {
 	char source_path[300] = "";
@@ -707,7 +692,6 @@ void error_handler(const char* message) {
 	fprintf(stderr, "[Error] %s\n", message);
 	exit(1);
 }
-
 
 const char* validateINO(const char* directory_path) {
 	// Open the JSON file and retrive the data
@@ -795,63 +779,6 @@ void resetJSON(const char* input) {
 	closedir(dir);
 	if (PRINT_DEBUG) printf("[%s][%d][INFO] resetJSON done\n", __func__, __LINE__);
 }
-
-
-cJSON* loadJSONFile(const char* directory_path) {
-	cJSON* data = NULL;
-	FILE* file = fopen(directory_path, "rb");
-	if (file == NULL) {
-		printf("[%s][Error] Failed to open the file.\n", __func__);
-		perror("Error opening file");
-		printf("Error code: %d\n", errno);
-		return data;
-	}
-
-	// Get the file size
-	fseek(file, 0, SEEK_END);
-	size_t file_size = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	rewind(file);
-
-	// Allocate memory to hold the JSON data
-	char* json_data = (char*)malloc(file_size + 1);
-	if (json_data == NULL) {
-		printf("[%s][Error] Failed to allocate memory.\n", __func__);
-		fclose(file);
-		return data;
-	}
-
-	// Read the JSON data from the file
-	size_t read_size = fread(json_data, 1, file_size, file);
-	if (PRINT_DEBUG) printf("[%s][Info] read_size %zu\n", __func__, read_size);
-	if (PRINT_DEBUG) printf("[%s][Info] file_size %zu\n", __func__, file_size);
-
-	if (read_size != file_size) {
-		printf("[%s][Error] Failed to read the file.\n", __func__);
-		fclose(file);
-		free(json_data);
-		return data;
-	}
-	json_data[file_size] = '\0';  // Null-terminate the string
-
-	// Close the file
-	fclose(file);
-
-	// Parse the JSON data
-	data = cJSON_Parse(json_data);
-	if (data == NULL) {
-		printf("[%s][Error] Failed to parse JSON data.\n", __func__);
-		return NULL;
-	}
-	// print JSON data 
-	if (PRINT_DEBUG) printf("[%s] json_data %s.\n", __func__, json_data);
-
-	// Clean up cJSON object and allocated memory
-	free(json_data);
-
-	return data;
-}
-
 
 void updateJSON(const char* input, const char* destPath) {
 	DIR* dir;
@@ -951,7 +878,6 @@ void updateJSON(const char* input, const char* destPath) {
 	closedir(dir);
 }
 
-
 const char* pathTempJSON(const char* directory_path, const char* ext, const char* key) {
 	DIR* dir;
 	struct dirent* entry;
@@ -981,6 +907,60 @@ const char* pathTempJSON(const char* directory_path, const char* ext, const char
 	return directory_path;
 }
 
+cJSON* loadJSONFile(const char* directory_path) {
+	cJSON* data = NULL;
+	FILE* file = fopen(directory_path, "rb");
+	if (file == NULL) {
+		printf("[%s][Error] Failed to open the file.\n", __func__);
+		perror("Error opening file");
+		printf("Error code: %d\n", errno);
+		return data;
+	}
+
+	// Get the file size
+	fseek(file, 0, SEEK_END);
+	size_t file_size = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	rewind(file);
+
+	// Allocate memory to hold the JSON data
+	char* json_data = (char*)malloc(file_size + 1);
+	if (json_data == NULL) {
+		printf("[%s][Error] Failed to allocate memory.\n", __func__);
+		fclose(file);
+		return data;
+	}
+
+	// Read the JSON data from the file
+	size_t read_size = fread(json_data, 1, file_size, file);
+	if (PRINT_DEBUG) printf("[%s][Info] read_size %zu\n", __func__, read_size);
+	if (PRINT_DEBUG) printf("[%s][Info] file_size %zu\n", __func__, file_size);
+
+	if (read_size != file_size) {
+		printf("[%s][Error] Failed to read the file.\n", __func__);
+		fclose(file);
+		free(json_data);
+		return data;
+	}
+	json_data[file_size] = '\0';  // Null-terminate the string
+
+	// Close the file
+	fclose(file);
+
+	// Parse the JSON data
+	data = cJSON_Parse(json_data);
+	if (data == NULL) {
+		printf("[%s][Error] Failed to parse JSON data.\n", __func__);
+		return NULL;
+	}
+	// print JSON data 
+	if (PRINT_DEBUG) printf("[%s] json_data %s.\n", __func__, json_data);
+
+	// Clean up cJSON object and allocated memory
+	free(json_data);
+
+	return data;
+}
 
 int writeJSON(const char* f_path) {
 	const char buf[MAX_PATH_LENGTH] = "";
@@ -1062,12 +1042,12 @@ int writeJSON(const char* f_path) {
 			char* example_name = strrchr(path_example, '\\');   // find the last "\"
 			removeChar(example_name, '\\');
 			listExampleDir(path_library, example_name);
-			strcpy(file_path, folder_example);					// update example directory name
-			if (PRINT_DEBUG) printf("[%d] file_path %s\n", __LINE__, file_path);
+			strcpy(file_path, folder_example);                // update example directory name
 		}
 	}
-
 	f_path = (const char*)file_path;
+	if (PRINT_DEBUG) printf("[%d]------------qqz file_path %s\r\n", __LINE__, f_path);
+
 	FILE* f_model = fopen(f_path, "r");
 	char param[100];
 
@@ -1084,16 +1064,13 @@ int writeJSON(const char* f_path) {
 				if (token != NULL) {
 					strcpy(model_type, token);
 					if (PRINT_DEBUG) printf("[%d] Model Type: %s\n", __LINE__, model_type);
-				}
-				else {
-					goto error_syntax;
+
 				}
 
 				/* ------------------ object detection ------------------*/
 				token = strtok(NULL, ", ");
 				if (PRINT_DEBUG) printf("[%d] Param 1: %s\n", __LINE__, token);
 				if (token != NULL) {
-					strcpy(model_name_od, token);
 					// OBJECT_DETECTION example: check model combination rules
 					if (strcmp(model_type, "OBJECT_DETECTION") == 0) {
 						if (strcmp(token, "NA_MODEL") == 0 || strstr(token, "YOLO") == NULL) {
@@ -1129,23 +1106,24 @@ int writeJSON(const char* f_path) {
 							closedir(dir);
 						}
 
-						if (strcmp(path_example, "Temp") == 0) {
-							// IDE1
-							if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
+						if (strcmp(path_example, "Temp") == 0) {	// IDE1
+							printf("[%d] ------------qqz IDE1\r\n", __LINE__);
 #ifndef _WIN32
 							extractRootDirectory(path_example, dir_example);
 #else
 							extractRootDirectory((char*)path_example, dir_example);
 #endif
 						}
-						else {
-							// IDE2
-							if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
+						else {										// IDE2
+							printf("[%d] ------------qqz IDE2\r\n", __LINE__);
+
 							char* example_name = strrchr(path_example, '\\');   // find the last "\"
 							removeChar(example_name, '\\');
+							printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 							listExampleDir(path_library, example_name);
 							strcpy(dir_example, folder_example);                // update example directory name
 						}
+						if (PRINT_DEBUG) printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
 
 						DIR* dir;
 						struct dirent* entry;
@@ -1161,7 +1139,7 @@ int writeJSON(const char* f_path) {
 								}
 								if (strstr(entry->d_name, ".nb") != NULL) {
 									if (strstr(entry->d_name, input2model(token))) {		// 1. check model file (.nb) within example directory 
-										if (strcmp(entry->d_name, fname_od) != 0) {			// 2. check model file (.nb) name matches in json
+										if (strcmp(entry->d_name, fname_od) != 0) {       // 2. check model file (.nb) name matches in json
 											goto error_customized_mismatch;
 										}
 										else {
@@ -1185,6 +1163,8 @@ int writeJSON(const char* f_path) {
 								goto error_customized_mismatch;
 							}
 						}
+						printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
+						printf("[%s] %d\n", __func__, count);
 						if (count < 1) {
 							goto error_customized_missing;
 						}
@@ -1199,7 +1179,6 @@ int writeJSON(const char* f_path) {
 						if (dir) {
 							struct dirent* ent;
 							while ((ent = readdir(dir)) != NULL) {
-								//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {     // customized model has been used
 								if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 									flag_Dbackup = 1;
 									strcpy(fname_dmodel_backup, ent->d_name);
@@ -1236,14 +1215,15 @@ int writeJSON(const char* f_path) {
 							revertModel(fname_dmodel, fname_dmodel_backup, path_model);
 						}
 					}
+
 					strcpy(model_name_od, token);
 
 					/* ----------------- face detection -----------------*/
 					token = strtok(NULL, ", ");
 					if (PRINT_DEBUG) printf("[%d] Param 2: %s\n", __LINE__, token);
+
 					if (token != NULL) {
-						strcpy(model_name_fd, token);
-						// FACE_DETECTION example: check model combination rules
+						// check model combination rules
 						if (strcmp(model_type, "FACE_DETECTION") == 0) {
 							if (strcmp(token, "NA_MODEL") == 0 || strstr(token, "SCRFD") == NULL) {
 								goto error_combination;
@@ -1251,9 +1231,11 @@ int writeJSON(const char* f_path) {
 						}
 						// check customized FD model
 						if (strstr(token, key_amb_customized) != NULL) {
-							if (PRINT_DEBUG) printf("[%d] fd key_amb_customized\n", __LINE__);
-							if (PRINT_DEBUG) printf("[%d] customized fd: %s\n", __LINE__, input2model(token));
-							if (PRINT_DEBUG) printf("[%d] path example %s\r\n", __LINE__, path_example);
+#if PRINT_DEBUG
+							printf("[%d] fd key_amb_customized\n", __LINE__);
+							printf("[%d] customized fd: %s\n", __LINE__, input2model(token));
+							printf("[%d] path example %s\r\n", __LINE__, path_example);
+#endif
 							// goto path_model and open the file ends with .json
 							if (dirExists(path_model)) {
 								DIR* dir = opendir(path_model);
@@ -1277,7 +1259,7 @@ int writeJSON(const char* f_path) {
 							}
 							if (strcmp(path_example, "Temp") == 0) {
 								// IDE1
-								if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
+								printf("[%d] ------------qqz IDE1\r\n", __LINE__);
 #ifndef _WIN32
 								extractRootDirectory(path_example, dir_example);
 #else
@@ -1286,12 +1268,15 @@ int writeJSON(const char* f_path) {
 							}
 							else {
 								// IDE2
-								if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
+								printf("[%d] ------------qqz IDE2\r\n", __LINE__);
+
 								char* example_name = strrchr(path_example, '\\');   // find the last "\"
 								removeChar(example_name, '\\');
+								printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 								listExampleDir(path_library, example_name);
 								strcpy(dir_example, folder_example);                // update example directory name
 							}
+							if (PRINT_DEBUG) printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
 
 							DIR* dir;
 							struct dirent* ent;
@@ -1332,6 +1317,8 @@ int writeJSON(const char* f_path) {
 									goto error_customized_mismatch;
 								}
 							}
+							printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
+							printf("[%s] %d\n", __func__, count);
 							if (count < 1) {
 								goto error_customized_missing;
 							}
@@ -1346,7 +1333,6 @@ int writeJSON(const char* f_path) {
 							if (dir) {
 								struct dirent* ent;
 								while ((ent = readdir(dir)) != NULL) {
-									//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {
 									if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 										flag_Dbackup = 1;
 										strcpy(fname_dmodel_backup, ent->d_name);
@@ -1370,9 +1356,9 @@ int writeJSON(const char* f_path) {
 
 						/*-------------- face recognition --------------*/
 						token = strtok(NULL, ", ");
-						if (PRINT_DEBUG) printf("[%d]  Param 3: %s\n", __LINE__, token);
+						if (PRINT_DEBUG) printf("[%d] Param 3: %s\n", __LINE__, token);
+
 						if (token != NULL) {
-							strcpy(model_name_fr, token);
 							// FACE_RECOGNITION example: check model combination rules
 							if (strcmp(model_type, "FACE_RECOGNITION") == 0) {
 								if (strcmp(model_name_fd, "NA_MODEL") == 0 || strstr(model_name_fd, "SCRFD") == NULL || strcmp(token, "NA_MODEL") == 0 || strstr(token, "MOBILEFACENET") == NULL) {
@@ -1408,8 +1394,10 @@ int writeJSON(const char* f_path) {
 									closedir(dir);
 								}
 								if (strcmp(path_example, "Temp") == 0) {
+#if PRINT_DEBUG
 									// IDE1
-									if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
+									printf("[%d] ------------qqz IDE1\r\n", __LINE__);
+#endif
 #ifndef _WIN32
 									extractRootDirectory(path_example, dir_example);
 #else
@@ -1417,13 +1405,18 @@ int writeJSON(const char* f_path) {
 #endif
 								}
 								else {
-									// IDE1
-									if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
+#if PRINT_DEBUG
+									// IDE2
+									printf("[%d] ------------qqz IDE2\r\n", __LINE__);
+#endif
 									char* example_name = strrchr(path_example, '\\');   // find the last "\"
 									removeChar(example_name, '\\');
 									listExampleDir(path_library, example_name);
 									strcpy(dir_example, folder_example);                // update example directory name
 								}
+#if PRINT_DEBUG
+								printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
+#endif
 
 								DIR* dir;
 								struct dirent* ent;
@@ -1443,7 +1436,9 @@ int writeJSON(const char* f_path) {
 													goto error_customized_mismatch;
 												}
 												else {
-													if (PRINT_DEBUG) printf("[%s][%d][Info] Found customized model %s in %s\n", __func__, __LINE__, ent->d_name, dir_example);
+#if PRINT_DEBUG
+													printf("[%s][%d][Info] Found customized model %s in %s\n", __func__, __LINE__, ent->d_name, dir_example);
+#endif
 #ifndef _WIN32
 													backupModel(ent->d_name, dir_example);
 #else
@@ -1474,7 +1469,6 @@ int writeJSON(const char* f_path) {
 								if (dir) {
 									struct dirent* ent;
 									while ((ent = readdir(dir)) != NULL) {
-										//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {
 										if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 											flag_Dbackup = 1;
 											strcpy(fname_dmodel_backup, ent->d_name);
@@ -1497,25 +1491,15 @@ int writeJSON(const char* f_path) {
 							/*-------------- audio classification --------------*/
 							token = strtok(NULL, ", ");
 							if (PRINT_DEBUG) printf("[%d] Param 4: %s\n", __LINE__, token);
+
 							if (token != NULL) {
-								strcpy(model_name_ac, token);
 								// AUDIO_CLASSIFICATION example: check model combination rules
 								if (strcmp(model_type, "AUDIO_CLASSIFICATION") == 0) {
-									if (strcmp(model_name_ac, "NA_MODEL") == 0) { // if selected AUDIO_CLASSIFICATION without giving corresponding model
-										goto error_combination;
-									}
-									else {
-										if ((strcmp(model_name_od, "NA_MODEL") || strcmp(model_name_fd, "NA_MODEL") || strcmp(model_name_fr, "NA_MODEL")) != 0) {
-											goto error_exceed;
-										}
-									}
-								}
-								// non AUDIO_CLASSIFICATION(AC) example: model cannot exists with audio model
-								else {
-									if (strcmp(model_name_ac, "NA_MODEL") != 0) { // if non AUDIO_CLASSIFICATION(AC) example also contains audio model
+									if (strcmp(model_name_od, "NA_MODEL") == 0 && strstr(model_name_fd, "NA_MODEL") == NULL && strcmp(model_name_fr, "NA_MODEL") == 0) {
 										goto error_exceed;
 									}
 								}
+
 								// check customized AC model
 								if (strstr(token, key_amb_customized) != NULL) {
 									if (PRINT_DEBUG) printf("[%d] ac key_amb_customized\n", __LINE__);
@@ -1543,23 +1527,23 @@ int writeJSON(const char* f_path) {
 										}
 										closedir(dir);
 									}
-									if (strcmp(path_example, "Temp") == 0) {
-										// IDE1
-										if (PRINT_DEBUG) printf("[%d] IDE1\r\n", __LINE__);
+									if (strcmp(path_example, "Temp") == 0) {	// IDE1
+										printf("[%d] ------------qqz IDE1\r\n", __LINE__);
 #ifndef _WIN32
 										extractRootDirectory(path_example, dir_example);
 #else
 										extractRootDirectory((char*)path_example, dir_example);
 #endif
 									}
-									else {
-										// IDE2
-										if (PRINT_DEBUG) printf("[%d] IDE2\r\n", __LINE__);
+									else {										// IDE2
+										printf("[%d] ------------qqz IDE2\r\n", __LINE__);
 										char* example_name = strrchr(path_example, '\\');   // find the last "\"
 										removeChar(example_name, '\\');
+										printf("[%d] ------------qqz example_name %s\r\n", __LINE__, example_name);
 										listExampleDir(path_library, example_name);
 										strcpy(dir_example, folder_example);                // update example directory name
 									}
+									if (PRINT_DEBUG) printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
 
 									DIR* dir;
 									struct dirent* entry;
@@ -1596,10 +1580,13 @@ int writeJSON(const char* f_path) {
 										if (count <= 1) {
 											goto error_customized_missing;
 										}
+
 										if (count_match == 0) {
 											goto error_customized_mismatch;
 										}
 									}
+									printf("[%d] ------------qqz dir example %s\r\n", __LINE__, dir_example);
+									printf("[%s] %d\n", __func__, count);
 									if (count < 1) {
 										goto error_customized_missing;
 									}
@@ -1614,7 +1601,6 @@ int writeJSON(const char* f_path) {
 									if (dir) {
 										struct dirent* ent;
 										while ((ent = readdir(dir)) != NULL) {
-											//TODO 4.0.6 if (strstr(ent->d_name, key_amb_default_backup) != NULL) {
 											if (strstr(ent->d_name, "Dbackup") != NULL) {     // customized model has been used
 												flag_Dbackup = 1;
 												strcpy(fname_dmodel_backup, ent->d_name);
@@ -1624,19 +1610,24 @@ int writeJSON(const char* f_path) {
 													strcpy(fname_dmodel, "scrfd_");
 													strcat(fname_dmodel, start);
 												}
+												}
 											}
-										}
 										closedir(dir);
-									}
+										}
+
+
 									if (flag_Dbackup) {
 										revertModel(fname_dmodel, fname_dmodel_backup, path_model);
 									}
-								}
+									}
 								strcpy(model_name_ac, token);
+								}
+
+
+
 							}
 						}
 					}
-				}
 				else {
 					// provide default settings for all models if user never provide any selections
 					if (strcmp(model_type, "OBJECT_DETECTION") == 0) {
@@ -1668,10 +1659,10 @@ int writeJSON(const char* f_path) {
 						strcpy(model_name_ac, "DEFAULT_YAMNET");
 					}
 				}
+				}
 			}
-		}
 		fclose(f_model);
-	}
+		}
 	else {
 		printf("[%s][%d][Error] Failed to open the file.\n", __func__, __LINE__);
 		perror(file_path);
@@ -1715,7 +1706,4 @@ error_customized_mismatch:
 
 error_exceed:
 	error_handler("Exceeds model size limitation. Please remove unwanted model(s).");
-
-error_syntax:
-	error_handler("Syntax Error! Please input a valid Neural Network task in modelSelect().");
-}
+	}
