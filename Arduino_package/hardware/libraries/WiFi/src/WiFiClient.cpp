@@ -17,13 +17,28 @@ WiFiClient::WiFiClient() : _sock(MAX_SOCK_NUM) {
     recvTimeout = 3000;
 }
 
-WiFiClient::WiFiClient(int sock) {
+WiFiClient::WiFiClient(tProtMode portMode) : _sock(MAX_SOCK_NUM) {
+    _is_connected = false;
+    recvTimeout = 3000;
+    _portMode = portMode;
+}
+
+WiFiClient::WiFiClient(uint8_t sock) {
     _sock = sock;
     if ((sock >= 0) && (sock != 0xFF)) {
 //    if (sock != 0xFF) {
         _is_connected = true;
     }
     recvTimeout = 3000;
+}
+
+WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode) {
+    _sock = sock;
+    if ((sock >= 0) && (sock != 0xFF)) {
+        _is_connected = true;
+    }
+    recvTimeout = 3000;
+    _portMode = portMode;
 }
 
 WiFiClient::~WiFiClient() {
@@ -58,14 +73,15 @@ try_again:
             return 1;
         } else {
             err = clientdrv.getLastErrno(_sock);
-            if (err == EAGAIN) goto try_again;
+            if (err == EAGAIN) {
+                goto try_again;
+            }
             if (err != 0) {
                 _is_connected = false;
             }
             return 0;
         }
     }
-
     return 0;
 }
 
@@ -87,7 +103,6 @@ int WiFiClient::read() {
             _is_connected = false;
         }
     }
-
     return ret;
 }
 
@@ -134,6 +149,11 @@ size_t WiFiClient::write(uint8_t b) {
     return write(&b, 1);
 }
 
+// set WiFi client to blocking mode
+void WiFiClient::setBlocking() {
+    _is_blocked = !_is_blocked;
+}
+
 size_t WiFiClient::write(const uint8_t *buf, size_t size) {
     if (_sock < 0) {
         setWriteError();
@@ -149,7 +169,6 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
         _is_connected = false;
         return 0;
     }
-
     return size;
 }
 
@@ -187,7 +206,7 @@ int WiFiClient::connect(const char* host, uint16_t port) {
 
 int WiFiClient::connect(IPAddress ip, uint16_t port) {
     _is_connected = false;
-    _sock = clientdrv.startClient(ip, port);
+    _sock = clientdrv.startClient(ip, port, _portMode, _is_blocked);
     // whether sock is connected
     if (_sock < 0) {
         _is_connected = false;
@@ -240,13 +259,11 @@ int WiFiClient::setRecvTimeout(int timeout) {
         recvTimeout = timeout;
         clientdrv.setSockRecvTimeout(_sock, recvTimeout);
     }
-
     return 0;
 }
 
 int WiFiClient::read(char *buf, size_t size) {
     read(((uint8_t *)buf), size);
-
     return 0;
 }
 
