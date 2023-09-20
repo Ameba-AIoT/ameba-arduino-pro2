@@ -1,5 +1,8 @@
 /*
  This sketch shows how to open/close file and perform read/write to it.
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-filesystem-simple-application/
  */
 
 #include "AmebaFatFS.h"

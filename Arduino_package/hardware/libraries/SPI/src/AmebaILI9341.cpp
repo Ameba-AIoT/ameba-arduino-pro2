@@ -189,8 +189,7 @@ void AmebaILI9341::setAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1
     SPI.transfer(ILI9341_RAMWR);
 }
 
-void AmebaILI9341::writecommand(uint8_t command)
-{
+void AmebaILI9341::writecommand(uint8_t command) {
 //    *portOutputRegister(_dcPort) &= ~(_dcMask);
     digitalWrite(_dcPin, 0);
     SPI.transfer(command);

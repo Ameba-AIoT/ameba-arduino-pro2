@@ -1,5 +1,5 @@
-#ifndef md_drv_h
-#define md_drv_h
+#ifndef MD_DRV_H
+#define MD_DRV_H
 
 #include "mmf2_module.h"
 #include "md_api.h"

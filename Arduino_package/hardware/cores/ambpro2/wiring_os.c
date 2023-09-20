@@ -10,7 +10,6 @@ extern "C" {
 extern size_t xPortGetFreeHeapSize(void);
 
 uint32_t os_thread_create_arduino(void(* task)(const void *argument), void *argument, int priority, uint32_t stack_size) {
-
     osThreadDef_t thread_def;
 
     thread_def.pthread = task;
@@ -50,7 +49,6 @@ int32_t os_signal_clear_arduino(uint32_t thread_id, int32_t signals) {
 }
 
 os_event_t os_signal_wait_arduino(int32_t signals, uint32_t millisec) {
-
     osEvent evt;
     os_event_t ret;
 
@@ -65,7 +63,6 @@ os_event_t os_signal_wait_arduino(int32_t signals, uint32_t millisec) {
 typedef void (*os_ptimer) (void const *argument);
 
 uint32_t os_timer_create_arduino(void(* callback)(void const *argument), uint8_t isPeriodic, void *argument) {
-
     osTimerDef_t *pTimerDef;
 
     pTimerDef = (osTimerDef_t *)(malloc(sizeof(osTimerDef_t)));
@@ -84,7 +81,6 @@ uint32_t os_timer_stop_arduino(uint32_t timer_id) {
 }
 
 uint32_t os_timer_delete_arduino(uint32_t timer_id) {
-
     osTimerDef_t *pTimerDef;
 
     pTimerDef = (osTimerDef_t *)(pvTimerGetTimerID((const TimerHandle_t)timer_id));

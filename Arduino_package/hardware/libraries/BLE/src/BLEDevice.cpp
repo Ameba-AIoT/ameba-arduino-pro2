@@ -401,6 +401,7 @@ void BLEDevice::getLocalAddr(uint8_t (&addr)[GAP_BD_ADDR_LEN]) {
     gap_get_param(GAP_PARAM_BD_ADDR, btaddr);
     memcpy(addr, btaddr, sizeof(btaddr));
 }
+
 void BLEDevice::BLEMainTask(void *p_param) {
     (void)p_param;
     uint8_t event;

@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-ble-unlock/
+ */
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"

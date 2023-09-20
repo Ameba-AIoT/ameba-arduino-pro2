@@ -6,6 +6,7 @@
  * Example guide:
  * https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-rtc/
 */
+
 #include <stdio.h>
 #include <time.h>
 #include "rtc.h"

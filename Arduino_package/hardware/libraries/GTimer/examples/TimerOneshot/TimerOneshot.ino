@@ -10,8 +10,8 @@
 void myhandler(uint32_t data) {
     Serial.print("I am timer!");
     Serial.println(data);
-    
-    if(data >= 7) {
+
+    if (data >= 7) {
         Serial.println("End of the timer demo\r\n");
     }
 }

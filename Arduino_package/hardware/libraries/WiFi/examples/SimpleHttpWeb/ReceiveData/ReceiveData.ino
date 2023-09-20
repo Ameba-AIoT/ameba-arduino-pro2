@@ -72,11 +72,11 @@ void loop() {
                     break;
                 }
                 if (c == '\n') {
-                  // you're starting a new line
-                  currentLineIsBlank = true;
+                    // you're starting a new line
+                    currentLineIsBlank = true;
                 } else if (c != '\r') {
-                  // you've gotten a character on the current line
-                  currentLineIsBlank = false;
+                    // you've gotten a character on the current line
+                    currentLineIsBlank = false;
                 }
             }
         }

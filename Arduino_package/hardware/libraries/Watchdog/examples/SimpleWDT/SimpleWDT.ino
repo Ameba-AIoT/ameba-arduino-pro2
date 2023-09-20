@@ -6,7 +6,7 @@
  * Otherwise, while running bigTask, watchdog will restart system in default or call callback function if registered.
 
  * Example guide:
- * TBD
+ * https://www.amebaiot.com/en/amebapro2-arduino-wdt/
  */
 
 #include "WDT.h"
@@ -23,7 +23,6 @@ void setup() {
 
     // setup 5s watchdog
     wdt.init(5000);
-
 
 #if AON_WDT_Enable
     // when WDT always on IRQ is not supported
@@ -46,7 +45,6 @@ void setup() {
 void loop() {
     delay(1000);
 }
-
 
 void Small_Task(void) {
     Serial.println();

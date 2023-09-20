@@ -1,3 +1,9 @@
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-ifttt/
+ */
+
 #include <HttpClient.h>
 #include <WiFi.h>
 #include <WiFiClient.h>

@@ -7,29 +7,29 @@ extern "C" {
 }
 #endif
 
-int ServerDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
+int ServerDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t portMode) {
     printf("\n\r[INFO]server_drv.cpp:  start_client");
     int sock;
 
-    sock = start_client(ipAddress, port, protMode);
+    sock = start_client(ipAddress, port, portMode);
 
     return sock;
 }
 
 #if 0
-int ServerDrv::startClientV6(const char *ipv6Address, uint16_t port, uint8_t protMode) {
+int ServerDrv::startClientV6(const char *ipv6Address, uint16_t port, uint8_t portMode) {
     printf("\n\r[INFO]server_drv.cpp startClientV6() ipv6 addr: %s\n\r", ipv6Address);
     int sock;
 
-    sock = start_client_v6((char *)ipv6Address, port, protMode);
+    sock = start_client_v6((char *)ipv6Address, port, portMode);
 
     return sock;
 }
 
-int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
+int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t portMode) {
     int sock;
-    sock = start_clientv6(ipv6Address, port, protMode);
-    printf("\n\r[INFO]server_drv.cpp:  startClientv6() sock value: %x\n\r", sock);
+    sock = start_clientv6(ipv6Address, port, portMode);
+    printf("\n\r [INFO]server_drv.cpp:  startClientv6() sock value: %x\n\r", sock);
     return sock;
 }
 #endif

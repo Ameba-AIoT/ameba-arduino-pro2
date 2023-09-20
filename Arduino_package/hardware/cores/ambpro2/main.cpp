@@ -48,7 +48,6 @@ void main_task (void*) {
 }
 
 int main(void) {
-
     ameba_init();
     initVariant();
     voe_t2ff_prealloc();

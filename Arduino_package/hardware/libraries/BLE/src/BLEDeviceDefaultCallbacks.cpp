@@ -51,7 +51,7 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data) {
                 uint16_t supervision_timeout = p_data->p_le_conn_update_ind->supervision_timeout;
                 printf("GAP_MSG_LE_CONN_UPDATE_IND: conn_id %d, conn_interval_max %d ms, conn_interval_min %d ms, conn_latency %d, supervision_timeout %d ms",
                     conn_id, (uint16_t)(conn_int_max * 1.25), (uint16_t)(conn_int_min * 1.25), conn_latency, (uint16_t)(supervision_timeout * 10));
-                }
+            }
             /* if reject the proposed connection parameter from peer device, use APP_RESULT_REJECT. */
             result = APP_RESULT_ACCEPT;
             break;
