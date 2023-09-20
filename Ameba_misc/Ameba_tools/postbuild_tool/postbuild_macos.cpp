@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
     readtxt(0);
     readtxt(1);
     isp_bin_check(isp_bin_check_name);
-    nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3);
+    nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4);
 
     if (isp_selection_check == 1) {
         cmdss.clear();
