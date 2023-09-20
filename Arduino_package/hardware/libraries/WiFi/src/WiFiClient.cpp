@@ -73,14 +73,15 @@ try_again:
             return 1;
         } else {
             err = clientdrv.getLastErrno(_sock);
-            if (err == EAGAIN) goto try_again;
+            if (err == EAGAIN) {
+                goto try_again;
+            }
             if (err != 0) {
                 _is_connected = false;
             }
             return 0;
         }
     }
-
     return 0;
 }
 
@@ -102,7 +103,6 @@ int WiFiClient::read() {
             _is_connected = false;
         }
     }
-
     return ret;
 }
 
@@ -154,7 +154,6 @@ void WiFiClient::setBlocking() {
     _is_blocked = !_is_blocked;
 }
 
-
 size_t WiFiClient::write(const uint8_t *buf, size_t size) {
     if (_sock < 0) {
         setWriteError();
@@ -170,7 +169,6 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
         _is_connected = false;
         return 0;
     }
-
     return size;
 }
 
@@ -261,13 +259,11 @@ int WiFiClient::setRecvTimeout(int timeout) {
         recvTimeout = timeout;
         clientdrv.setSockRecvTimeout(_sock, recvTimeout);
     }
-
     return 0;
 }
 
 int WiFiClient::read(char *buf, size_t size) {
     read(((uint8_t *)buf), size);
-
     return 0;
 }
 

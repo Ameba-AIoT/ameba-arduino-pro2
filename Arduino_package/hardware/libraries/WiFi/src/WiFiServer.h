@@ -8,6 +8,8 @@ class WiFiClient;
 
 class WiFiServer : public Server {
     public:
+        WiFiServer();
+        WiFiServer(tProtMode);
         WiFiServer(uint16_t);
         WiFiServer(uint16_t, tProtMode);
         ~WiFiServer();

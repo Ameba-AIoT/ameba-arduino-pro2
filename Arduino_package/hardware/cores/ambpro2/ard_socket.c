@@ -191,7 +191,7 @@ int start_server(uint16_t port, uint8_t protMode) {
         timeout = 3000;
         _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        //  printf("\r\n [INFO] Create TCP socket successfully\n");
+        // printf("\r\n [INFO] Create TCP socket successfully\n");
     } else {
         timeout = 1000;
         _sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -279,7 +279,6 @@ int get_sock_errno(int sock) {
         return 0;
     }
 
-    (void)sock;
     return errno;
 }
 
