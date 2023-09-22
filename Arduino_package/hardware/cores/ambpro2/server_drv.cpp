@@ -60,10 +60,10 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
 //            }
 //        }
     } else {
-        printf("\r\n [INFO] s% WiFi server is set to non-blocking mode \r\n", __FUNCTION__);
+        printf("\r\n [INFO] %s WiFi server is set to non-blocking mode \r\n", __FUNCTION__);
         //if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
-            int block = set_nonblocking(sock);
+            set_nonblocking(sock);
             if (sock >= 0) {
                 if (portMode == TCP_MODE) {
                     //Make it listen to socket with max 20 connections

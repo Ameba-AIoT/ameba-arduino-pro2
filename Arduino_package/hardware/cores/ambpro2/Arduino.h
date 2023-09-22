@@ -26,8 +26,6 @@
 #include <math.h>
 #include "binary.h"
 
-#define AMEBA_ARDUINO_Pin_Mapping_Check
-
 //#define Arduino_STD_PRINTF
 #ifdef Arduino_STD_PRINTF
 #include <stdio.h>
@@ -147,6 +145,7 @@ extern PinDescription g_APinDescription[];
 ////    #include "wiring_watchdog.h"
 ////    #include "wiring_shift.h"
 
+#define AMEBA_ARDUINO_Pin_Mapping_Check
 // ameba - arduino pin mapping function check
 #include "amb_ard_pin_check.h"
 

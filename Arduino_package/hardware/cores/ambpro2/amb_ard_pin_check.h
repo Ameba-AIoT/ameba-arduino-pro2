@@ -1,13 +1,9 @@
 #ifndef _AMB_ARD_PIN_CHECK_
 #define _AMB_ARD_PIN_CHECK_
 
-#include "Arduino.h"
-
 #ifdef __cplusplus
  extern "C" {
 #endif
-
-#include "PinNames.h"
 
 // ameba - arduino pin mapping name check
 void __attribute__((weak)) amb_ard_pin_check_name(int pin);

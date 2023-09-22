@@ -26,8 +26,7 @@ extern "C" {
 /*
  * \brief SAM3 products have only one reference for ADC
  */
-typedef enum _eAnalogReference
-{
+typedef enum _eAnalogReference {
     AR_DEFAULT,
 } eAnalogReference;
 

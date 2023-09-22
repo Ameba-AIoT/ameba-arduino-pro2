@@ -1,10 +1,13 @@
-#include "amb_ard_pin_check.h"
 
 #ifdef AMEBA_ARDUINO_Pin_Mapping_Check
+
+#include "Arduino.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "amb_ard_pin_check.h"
 
     //g_APinDescription[ard_pin_name].pinname;
     //g_APinDescription[ard_pin_name].ulPinType;
@@ -17,7 +20,7 @@ void amb_ard_pin_check_name(int pin) {
         delay(5000);
     }
 
-    while (g_APinDescription[pin].pinname == NC) {
+    while (g_APinDescription[pin].pinname == 0xFFFFFFFF) {
         printf("Error %s. The pin: %d is NC!!! \n\r", __FUNCTION__, pin);
         printf("Please check if pin or board is correct \n\r");
         delay(5000);
@@ -30,7 +33,7 @@ void amb_ard_pin_check_name(int pin) {
 void amb_ard_pin_check_type(int pin, uint32_t pin_type) {
     amb_ard_pin_check_name(pin);
 
-    char pin_type_name[] = "";
+    char pin_type_name[128] = "";
 
     switch (pin_type) {
         case TYPE_ANALOG:
@@ -61,7 +64,7 @@ void amb_ard_pin_check_type(int pin, uint32_t pin_type) {
 // PIO_UART                        (1UL<<8)
 // PIO_SPI                         (1UL<<9)
 void amb_ard_pin_check_fun(int pin, uint32_t pin_fun) {
-    char pin_fun_name[] = "";
+    char pin_fun_name[128] = "";
 
     switch (pin_fun) {
         case PIO_GPIO:
