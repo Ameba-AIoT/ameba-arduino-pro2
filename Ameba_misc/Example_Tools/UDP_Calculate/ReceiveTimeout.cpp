@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(__WIN32__) // MINGW64
+//#include <winsock.h>
+#include <winsock2.h>
+#include <windows.h>
+#elif defined(__linux__) || defined(__APPLE__)// ubuntu 32 bits  and OS X 64bits
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#endif
 #include <unistd.h>
 
 #define BUFSIZE 16

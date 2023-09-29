@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(__WIN32__) // MINGW64
+//#include <winsock.h>
+#include <winsock2.h>
+#include <windows.h>
+#elif defined(__linux__) || defined(__APPLE__)// ubuntu 32 bits  and OS X 64bits
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
+#endif
 #include <sys/time.h>
 
 #define BUFSIZE 1024
@@ -64,7 +71,7 @@ int main(int argc, char **argv) {
     int sockfd, optval;
 
     struct sockaddr_in serveraddr, clientaddr;
-#ifdef __CYGWIN__
+#if defined(__CYGWIN__) || defined(__WIN32__)
     int clientaddr_len = sizeof(clientaddr);
 #else
     unsigned int clientaddr_len = sizeof(clientaddr);
@@ -83,7 +90,11 @@ int main(int argc, char **argv) {
     }
 
     optval = 1;
+#if defined(__CYGWIN__) || defined(__WIN32__)
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char *)&optval , sizeof(int));
+#else
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
+#endif
 
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
