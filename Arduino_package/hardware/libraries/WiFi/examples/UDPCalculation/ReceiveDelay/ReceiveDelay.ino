@@ -2,7 +2,7 @@
  This sketch provide a simple way to roughly calculate the delay of Ameba receive delay.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-udp-receive-delay/
+ https://www.amebaiot.com/en/amebapro2-arduino-udp-receive-delay/
  */
 
 #include <WiFi.h>

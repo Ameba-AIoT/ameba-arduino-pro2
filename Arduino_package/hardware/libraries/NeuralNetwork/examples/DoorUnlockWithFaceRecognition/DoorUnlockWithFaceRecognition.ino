@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-face-recognition-unlock/
+ https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-recognition-unlock/
 
  Point the camera at a target face and enter the following commands into the serial monitor,
  Register face:           "REG={Name}"            Ensure that there is only one face detected in frame

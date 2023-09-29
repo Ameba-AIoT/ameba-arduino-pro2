@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ble-wifi-configuration/
+ https://www.amebaiot.com/en/amebapro2-arduino-ble-wifi-configuration/
  */
 
 #include "BLEDevice.h"

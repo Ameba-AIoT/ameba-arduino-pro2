@@ -8,7 +8,7 @@
  If the sender side send packets frequently, then the Arduino side can have smaller receiving timeout value.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-udp-timeout/
+ https://www.amebaiot.com/en/amebapro2-arduino-udp-timeout/
  */
 
 #include <WiFi.h>

@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ble-uart-service/
+ https://www.amebaiot.com/en/amebapro2-arduino-ble-uart-service/
  */
 
 #include "BLEDevice.h"

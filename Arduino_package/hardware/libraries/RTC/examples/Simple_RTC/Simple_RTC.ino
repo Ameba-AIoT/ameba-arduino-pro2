@@ -4,7 +4,7 @@
  * This example will print out the time information every second.
  *
  * Example guide:
- * https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-rtc/
+ * https://www.amebaiot.com/en/amebapro2-arduino-rtc/
 */
 
 #include <stdio.h>

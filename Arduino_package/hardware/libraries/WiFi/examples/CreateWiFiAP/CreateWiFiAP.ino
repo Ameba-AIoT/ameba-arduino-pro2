@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ap-mode/
+ https://www.amebaiot.com/en/amebapro2-arduino-ap-mode/
  */
 
 #include <WiFi.h>

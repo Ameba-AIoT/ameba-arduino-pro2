@@ -11,7 +11,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ameba-udp-server/
+ https://www.amebaiot.com/en/amebapro2-arduino-ameba-udp-server/
  */
 
 #include <WiFi.h>

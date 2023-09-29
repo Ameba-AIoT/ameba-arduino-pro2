@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ble-battery/
+ https://www.amebaiot.com/en/amebapro2-arduino-ble-battery/
  */
 
 #include "BLEDevice.h"

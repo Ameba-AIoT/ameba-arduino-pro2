@@ -2,7 +2,7 @@
  This sketch shows how to use hardware timer and invoke interrupt handler periodically
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-periodic-timer/
+ https://www.amebaiot.com/en/amebapro2-arduino-periodic-timer/
  */
 
 #include <GTimer.h>

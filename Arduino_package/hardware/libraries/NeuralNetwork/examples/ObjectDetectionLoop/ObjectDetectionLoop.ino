@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-object-detection/
+ https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-object-detection/
 
  NN Model Selection
  Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).

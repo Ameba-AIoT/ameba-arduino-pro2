@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-mp4/
+ https://www.amebaiot.com/en/amebapro2-arduino-video-mp4/
  */
 
 #include "StreamIO.h"

@@ -14,7 +14,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-i2c-1/
+ https://www.amebaiot.com/en/amebapro2-arduino-i2c-1/
  */
 
 #include <Wire.h>

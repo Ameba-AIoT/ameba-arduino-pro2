@@ -10,7 +10,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-pwm-servo/
+ https://www.amebaiot.com/en/amebapro2-arduino-pwm-servo/
 */
 
 #include <AmebaServo.h>

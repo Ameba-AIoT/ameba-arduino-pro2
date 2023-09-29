@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-motion/
+ https://www.amebaiot.com/en/amebapro2-arduino-video-motion/
  */
 
 #include "WiFi.h"

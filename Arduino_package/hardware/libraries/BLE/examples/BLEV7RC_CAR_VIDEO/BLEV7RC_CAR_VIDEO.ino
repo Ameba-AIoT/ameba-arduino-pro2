@@ -21,6 +21,8 @@
  * 
  * For more information about our company, please visit: www.makdev.net
  * 
+ * Example guide:
+ * https://www.amebaiot.com/en/amebapro2-arduino-ble-v7rc/
  *******************************************************/
 
 #include "BLEDevice.h"
