@@ -41,7 +41,8 @@ int ServerDrv::startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t portM
 int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
     int sock;
     if (blockMode) {
-        printf("\r\n [INFO] %s WiFi server is set to blocking mode \r\n", __FUNCTION__);
+// TBD a function to show if it is blocking mode or not
+//        printf("\r\n [INFO] %s WiFi server is set to blocking mode \r\n", __FUNCTION__);
         //if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
             if (sock >= 0) {
@@ -60,7 +61,8 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, bool blockMode) {
 //            }
 //        }
     } else {
-        printf("\r\n [INFO] %s WiFi server is set to non-blocking mode \r\n", __FUNCTION__);
+// TBD a function to show if it is blocking mode or not
+//        printf("\r\n [INFO] %s WiFi server is set to non-blocking mode \r\n", __FUNCTION__);
         //if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
             set_nonblocking(sock);

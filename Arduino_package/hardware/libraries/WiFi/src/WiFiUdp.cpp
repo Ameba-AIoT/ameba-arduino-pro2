@@ -46,7 +46,8 @@ uint8_t WiFiUDP::begin(uint16_t port) {
     }
 
     _port = port;
-    _sock = serverDrv.startServer(port, UDP_MODE);
+// UDP start server as blocking mode
+    _sock = serverDrv.startServer(port, UDP_MODE, true);
 
     if (_sock >= 0) {
         return 1;
@@ -195,7 +196,6 @@ int WiFiUDP::read() {
 }
 
 int WiFiUDP::read(unsigned char *buffer, size_t len) {
-
     return serverDrv.getDataBuf(_sock, buffer, len);
 }
 
