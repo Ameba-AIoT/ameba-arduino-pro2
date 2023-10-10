@@ -43,7 +43,7 @@ void NNAudioClassification::begin(void) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("NNAudioClassification init failed\r\n");
+        printf("\r\n[ERROR] NNAudioClassification init failed\n");
         return;
     }
 

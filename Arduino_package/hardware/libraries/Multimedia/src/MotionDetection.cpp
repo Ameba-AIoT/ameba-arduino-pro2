@@ -48,7 +48,7 @@ void MotionDetection::begin(void) {
         _p_mmf_context = MDInit();
     }
     if (_p_mmf_context == NULL) {
-        printf("MD init failed\r\n");
+        printf("\r\n[ERROR] MD init failed\n");
         return;
     }
 
@@ -71,7 +71,7 @@ void MotionDetection::end(void) {
     if (MDDeinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("MD deinit failed\r\n");
+        printf("\r\n[ERROR] MD deinit failed\n");
     }
 }
 

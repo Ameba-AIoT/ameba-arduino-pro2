@@ -16,14 +16,14 @@ bool File::open(const char *filename) {
     _file = (FIL*) malloc(sizeof(FIL));
     if (_file == NULL) {
         ret = FR_INT_ERR;
-        printf("open file (%s) malloc fail.\r\n", filename);
+        printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
         return false;
     }
 
     ret = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 
     if (ret != FR_OK) {
-        printf("open file (%s) fail. (ret=%d)\r\n", filename, ret);
+        printf("\r\n[ERROR] open file (%s) fail. (ret=%d)\n", filename, ret);
         if (_file != NULL) {
             free(_file);
             _file = NULL;
@@ -55,7 +55,7 @@ size_t File::write(const uint8_t *buf, size_t size) {
     if (_file != NULL) {
         ret = f_write(_file, (const void *)buf, size, &writesize);
         if (ret != FR_OK) {
-            printf("File write error.\r\n");
+            printf("\r\n[ERROR] File write.\n");
         }
     }
 
@@ -79,7 +79,7 @@ int File::read(void) {
     if (_file != NULL) {
         ret = f_read(_file, &c, 1, &readsize);
         if (ret != FR_OK) {
-            printf("File read error.\r\n");
+            printf("\r\n[ERROR] File read.\n");
         }
     }
 
@@ -93,7 +93,7 @@ int File::read(void *buf, size_t nbyte) {
     if (_file != NULL) {
         ret = f_read(_file, buf, nbyte, &readsize);
         if (ret != FR_OK) {
-            printf("File read error.\r\n");
+            printf("\r\n[ERROR] File read.\n");
         }
     }
 

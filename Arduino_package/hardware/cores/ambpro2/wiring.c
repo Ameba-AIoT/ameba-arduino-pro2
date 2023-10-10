@@ -42,7 +42,7 @@ void delay(uint32_t ms) {
 
     ret = osDelay(ms);
     if ((ret != osEventTimeout) && (ret != osOK)) {
-        //printf("delay : ERROR : 0x%x \n", ret);
+        //printf("\r\n[ERROR] %s. 0x%x \n", __FUNCTION__, ret);
     }
 }
 

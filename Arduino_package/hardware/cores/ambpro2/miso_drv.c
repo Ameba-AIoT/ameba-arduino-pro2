@@ -7,7 +7,7 @@ uint32_t misoCreate(void) {
     mm_miso_t *context = NULL;
     context  = miso_create();
     if (context == NULL) {
-        printf("MISO create failed/r/n");
+        printf("\r\n[ERROR] MISO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -15,7 +15,7 @@ uint32_t misoCreate(void) {
 void misoDestroy(void *ctx) {
     //delete the MISO object created and stop the miso task
     if(NULL != miso_delete((mm_miso_t *)ctx)) {
-        printf("MISO linker destroy failed\r\n");
+        printf("\r\n[ERROR] MISO linker destroy failed\n");
     }
 }
 

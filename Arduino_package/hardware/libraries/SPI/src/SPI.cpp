@@ -113,7 +113,7 @@ void SPIClass::begin(char SPI_mode) {
         // Mark SPI init status
         initStatus = true;
     } else {
-        printf("SPI begin: error. SPI mode \r\n");
+        printf("\r\n[ERROR] SPI begin: SPI mode \n");
         return;
     }
 }
@@ -147,7 +147,7 @@ void SPIClass::begin(int ss_pin, char SPI_mode) {
         // Mark SPI init status
         initStatus = true;
     } else {
-        printf("SPI begin: error. SPI mode \r\n");
+        printf("\r\n[ERROR] SPI begin: SPI mode \n");
         return;
     }
 }
@@ -187,7 +187,7 @@ void SPIClass::endTransaction(void) {
 byte SPIClass::transfer(uint8_t data, SPITransferMode mode) { // transfer 1 byte data without SS
     (void)mode;
     spi_master_write(pSpiMaster, data);
-    //printf("Master write: %02X\n\r", _data);
+    //printf("\r\n[INFO] Master write: %02X\n", _data);
     return 0;
 }
 
@@ -197,7 +197,7 @@ byte SPIClass::transfer(byte pin, uint8_t data, SPITransferMode mode) { // trans
         digitalWrite(pin, 0);
     }
     spi_master_write(pSpiMaster, data);
-    //printf("Master write: %02X\n\r", _data);
+    //printf("\r\n[INFO] Master write: %02X\n", _data);
 
     return 0;
 }
@@ -237,7 +237,7 @@ uint16_t SPIClass::transfer16(byte pin, uint16_t data, SPITransferMode mode) {
         t.msb = transfer(pin, t.msb, SPI_CONTINUE);
         t.lsb = transfer(pin, t.lsb, mode);
     }
-    //printf("Master write: %04X\n\r", t.val);
+    //printf("\r\n[INFO] Master write: %04X\n", t.val);
 
     data = t.val;
     return data;

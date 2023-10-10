@@ -67,11 +67,11 @@ void NNObjectDetection::begin(void) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("NNObjectDetection init failed\r\n");
+        printf("\r\n[ERROR] NNObjectDetection init failed\n");
         return;
     }
     if((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
-        printf("ERROR: NNFaceDetection video not configured\r\n");
+        printf("\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
 
@@ -91,7 +91,7 @@ void NNObjectDetection::begin(void) {
     }
 
     if (_nntask != OBJECT_DETECTION) {
-        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
         while(1) {}
     }
 
@@ -99,19 +99,19 @@ void NNObjectDetection::begin(void) {
         case DEFAULT_YOLOV3TINY: 
         case CUSTOMIZED_YOLOV3TINY: {
             vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-            //printf("YOLOV3 running...\r\n");
+            //printf("\r\n[INFO] YOLOV3 running...\n");
             break;
         }
         case DEFAULT_YOLOV4TINY:
         case CUSTOMIZED_YOLOV4TINY: {
             vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-            //printf("YOLOV4 running...\r\n");
+            //printf("\r\n[INFO] YOLOV4 running...\n");
             break;
         }
         case DEFAULT_YOLOV7TINY :
         case CUSTOMIZED_YOLOV7TINY: {
             vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-            //printf("YOLOV7 running...\r\n");
+            //printf("\r\n[INFO] YOLOV7 running...\n");
             break;
         }
     }
@@ -133,7 +133,7 @@ void NNObjectDetection::end(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("NNObjectDetection deinit failed\r\n");
+        printf("\r\n[ERROR] NNObjectDetection deinit failed\n");
     }
 }
 

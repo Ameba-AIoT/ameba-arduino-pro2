@@ -17,12 +17,6 @@ WiFiClient::WiFiClient() : _sock(MAX_SOCK_NUM) {
     recvTimeout = 3000;
 }
 
-WiFiClient::WiFiClient(tProtMode portMode) : _sock(MAX_SOCK_NUM) {
-    _is_connected = false;
-    recvTimeout = 3000;
-    _portMode = portMode;
-}
-
 WiFiClient::WiFiClient(uint8_t sock) {
     _sock = sock;
     if ((sock >= 0) && (sock != 0xFF)) {
@@ -32,6 +26,18 @@ WiFiClient::WiFiClient(uint8_t sock) {
     recvTimeout = 3000;
 }
 
+WiFiClient::WiFiClient(tProtMode portMode) : _sock(MAX_SOCK_NUM) {
+    _is_connected = false;
+    recvTimeout = 3000;
+    _portMode = portMode;
+}
+
+WiFiClient::WiFiClient(tBlockingMode blockMode) : _sock(MAX_SOCK_NUM) {
+    _is_connected = false;
+    recvTimeout = 3000;
+    _is_blocked = blockMode;
+}
+
 WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode) {
     _sock = sock;
     if ((sock >= 0) && (sock != 0xFF)) {
@@ -39,6 +45,16 @@ WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode) {
     }
     recvTimeout = 3000;
     _portMode = portMode;
+}
+
+WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode, tBlockingMode blockMode) {
+    _sock = sock;
+    if ((sock >= 0) && (sock != 0xFF)) {
+        _is_connected = true;
+    }
+    recvTimeout = 3000;
+    _portMode = portMode;
+    _is_blocked = blockMode;
 }
 
 WiFiClient::~WiFiClient() {
@@ -149,9 +165,13 @@ size_t WiFiClient::write(uint8_t b) {
     return write(&b, 1);
 }
 
-// set WiFi client to blocking mode
-void WiFiClient::setBlocking() {
-    _is_blocked = !_is_blocked;
+// set WiFi client to blocking/non-blocking mode
+void WiFiClient::setBlockingMode() {
+    _is_blocked = BLOCKING_MODE;
+}
+
+void WiFiClient::setNonBlockingMode() {
+    _is_blocked = NON_BLOCKING_MODE;
 }
 
 size_t WiFiClient::write(const uint8_t *buf, size_t size) {
@@ -185,9 +205,9 @@ int WiFiClient::connect(const char* host, uint16_t port) {
             return connect(remote_addr, port);
         }
 //    } else {
-        //printf("\n\r[INFO]WiFiClient.cpp: connect hostByNameV6() \n\r");
+        //printf("\r\n[INFO] WiFiClient.cpp: connect hostByNameV6() \n");
 //        if (WiFi.hostByNamev6(host, remote_addr_v6)) {
-            //printf("[INFO]WiFiClient.cpp: connect ipv6: %s\n\r", host);
+            //printf("\r\n[INFO] WiFiClient.cpp: connect ipv6: %s\n", host);
 //            _sock = clientdrv.startClientV6(host, port, TCP_MODE);
 //        } else {
 //        }
@@ -222,14 +242,14 @@ int WiFiClient::connect(IPAddress ip, uint16_t port) {
 int WiFiClient::connectv6(IPv6Address ipv6, uint16_t port) {
     _is_connected = false;
     _sock = clientdrv.startClientv6(ipv6, port);
-    //printf("[INFO]wifiClient.cpp: connectv6 sock value: %x\n\r", _sock);
+    //printf("\r\n[INFO] wifiClient.cpp: connectv6 sock value: %x\n", _sock);
     if (_sock < 0) {
         _is_connected = false;
-        //printf("[INFO]wifiClient.cpp: connectv6 not connected\n\r");
+        //printf("\r\n[INFO] wifiClient.cpp: connectv6 not connected\n");
         return 0;
     } else {
         _is_connected = true;
-        //printf("[INFO]wifiClient.cpp: connectv6 connected\n\r");
+        //printf("\r\n[INFO] wifiClient.cpp: connectv6 connected\n");
         clientdrv.setSockRecvTimeout(_sock, recvTimeout);
     }
     return 1;

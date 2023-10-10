@@ -7,7 +7,7 @@ uint32_t sisoCreate(void) {
     mm_siso_t *context = NULL;
     context  = siso_create();
     if (context == NULL) {
-        printf("SISO create failed/r/n");
+        printf("\r\n[ERROR] SISO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -15,7 +15,7 @@ uint32_t sisoCreate(void) {
 void sisoDestroy(void *ctx) {
     //delete the SISO object created and stop the siso task
     if(NULL != siso_delete((mm_siso_t *)ctx)) {
-        printf("SISO linker destroy failed\r\n");
+        printf("\r\n[ERROR] SISO linker destroy failed\n");
     }
 }
 

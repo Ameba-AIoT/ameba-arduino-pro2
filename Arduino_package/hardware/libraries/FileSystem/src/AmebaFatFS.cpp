@@ -23,7 +23,7 @@ bool AmebaFatFS::begin(void) {
 
     res = (FRESULT)fatfs_sd_init();
     if (res != 0) {
-        printf("fatfs_sd_init fail (%d)\r\n", res);
+        printf("\r\n[ERROR] fatfs_sd_init fail (%d)\n", res);
         return (res == FR_OK);
     }
     fatfs_sd_get_param(&fatfs_sd);

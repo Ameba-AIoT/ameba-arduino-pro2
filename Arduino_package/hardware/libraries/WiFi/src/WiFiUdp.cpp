@@ -40,14 +40,15 @@ WiFiUDP::~WiFiUDP() {
 
 /* Start WiFiUDP socket, listening at local port PORT */
 uint8_t WiFiUDP::begin(uint16_t port) {
-    //printf("\n\rWiFiUDP::begin port %d", port);
+    //printf("\r\n[INFO] WiFiUDP::begin port %d\n", port);
     if ((_port == port) && (_sock >= 0)) {
         return 1;
     }
 
     _port = port;
-// UDP start server as blocking mode
-    _sock = serverDrv.startServer(port, UDP_MODE, true);
+
+    // UDP start server as blocking mode
+    _sock = serverDrv.startServer(port, UDP_MODE, BLOCKING_MODE);
 
     if (_sock >= 0) {
         return 1;
@@ -66,11 +67,11 @@ int WiFiUDP::connect(const char *host, uint16_t port) {
             //return connect(remote_addr, port);
         }
     } else {
-        //printf("\n\r[INFO]WiFiUDP.cpp: connect|hostByNameV6 \n\r");
+        //printf("\r\n[INFO] WiFiUDP.cpp: connect|hostByNameV6 \n");
         if (WiFi.hostByNamev6(host, remote_addr_v6)) {
-            //printf("[INFO]WiFiUDP.cpp: connect v6 \n\r");
-            //printf("[INFO]WiFiUDP.cpp: connect ipv6 %s\n\r", host);
-            _sock = clientDrv.startClientV6(host, port, UDP_MODE);
+            //printf("\r\n[INFO] WiFiUDP.cpp: connect v6 \n");
+            //printf("\r\n[INFO] WiFiUDP.cpp: connect ipv6 %s\n", host);
+            _sock = clientDrv.startClientV6(host, port, UDP_MODE, BLOCKING_MODE);
         } else {
         }
 
@@ -133,7 +134,7 @@ int WiFiUDP::beginPacket(IPAddress ip, uint16_t port) {
     if (_sock >= 0) {
         _client_sock = _sock;
     } else {
-        _client_sock = serverDrv.startClient(ip, port, UDP_MODE);
+        _client_sock = serverDrv.startClient(ip, port, UDP_MODE, BLOCKING_MODE);
     }
 
     if (_client_sock < 0) {

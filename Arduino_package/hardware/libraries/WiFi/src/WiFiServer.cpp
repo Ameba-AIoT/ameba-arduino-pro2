@@ -23,13 +23,30 @@
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 
+WiFiServer::WiFiServer() : _port(1883) {
+}
+
 WiFiServer::WiFiServer(uint16_t port) {
     _port = port;
+}
+
+WiFiServer::WiFiServer(tProtMode portMode) : _port(1883) {
+    _portMode = portMode;
+}
+
+WiFiServer::WiFiServer(tBlockingMode blockMode) : _port(1883) {
+    _is_blocked = blockMode;
 }
 
 WiFiServer::WiFiServer(uint16_t port, tProtMode portMode) {
     _port = port;
     _portMode = portMode;
+}
+
+WiFiServer::WiFiServer(uint16_t port, tProtMode portMode, tBlockingMode blockMode) {
+    _port = port;
+    _portMode = portMode;
+    _is_blocked = blockMode;
 }
 
 WiFiServer::~WiFiServer() {
@@ -41,10 +58,10 @@ void WiFiServer::begin() {
     _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
     if (_sock_ser < 0) {
         _is_connected = false;
-        printf("\n[ERROR] Socket connect failed \n\r");
+        printf("\r\n[ERROR] Socket connect failed \n");
     } else {
         _is_connected = true;
-        printf("\n[INFO] Socket connect successfully \n\r");
+        //printf("\r\n[INFO] Socket connect successfully \n");
     }
 }
 
@@ -110,9 +127,13 @@ void WiFiServer::stop() {
     _sock_ser = -1;
 }
 
-// set WiFi server to blocking mode
-void WiFiServer::setBlocking() {
-    _is_blocked = !_is_blocked;
+// set WiFi server to blocking/non-blocking mode
+void WiFiServer::setBlockingMode() {
+    _is_blocked = BLOCKING_MODE;
+}
+
+void WiFiServer::setNonBlockingMode() {
+    _is_blocked = NON_BLOCKING_MODE;
 }
 
 #if 0

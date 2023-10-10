@@ -17,7 +17,7 @@ RTP::RTP(void) {
         _p_mmf_context = mm_module_open(&rtp_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("RTP init failed\r\n");
+        printf("\r\n[ERROR] RTP init failed\n");
         return;
     }
 }
@@ -30,7 +30,7 @@ RTP::~RTP(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("RTP deinit failed\r\n");
+        printf("\r\n[ERROR] RTP deinit failed\n");
     }
 }
 

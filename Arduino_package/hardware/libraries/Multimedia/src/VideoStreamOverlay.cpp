@@ -18,11 +18,11 @@ void VideoStreamOverlay::configVideo(int ch, VideoSetting& config) {
     ch_width[ch] = config._w;
     ch_height[ch] = config._h;
 
-    //printf("ch_enable %d  %d  %d\r\n", ch_enable[0], ch_enable[1], ch_enable[2]);
-    //printf("character_width %d  %d  %d\r\n", character_width[0], character_width[1], character_width[2]);
-    //printf("character_height %d  %d  %d\r\n", character_height[0], character_height[1], character_height[2]);
-    //printf("ch_width %d  %d  %d\r\n", ch_width[0], ch_width[1], ch_width[2]);
-    //printf("ch_height %d  %d  %d\r\n", ch_height[0], ch_height[1], ch_height[2]);
+    //printf("\r\n[INFO] ch_enable %d  %d  %d\n", ch_enable[0], ch_enable[1], ch_enable[2]);
+    //printf("\r\n[INFO] character_width %d  %d  %d\n", character_width[0], character_width[1], character_width[2]);
+    //printf("\r\n[INFO] character_height %d  %d  %d\n", character_height[0], character_height[1], character_height[2]);
+    //printf("\r\n[INFO] ch_width %d  %d  %d\n", ch_width[0], ch_width[1], ch_width[2]);
+    //printf("\r\n[INFO] ch_height %d  %d  %d\n", ch_height[0], ch_height[1], ch_height[2]);
 }
 
 void VideoStreamOverlay::configTextSize(int ch, int text_width, int text_height) {

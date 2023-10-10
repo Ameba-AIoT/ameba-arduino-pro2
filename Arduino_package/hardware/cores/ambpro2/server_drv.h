@@ -27,11 +27,16 @@ typedef enum eProtMode {
     UDP_MODE
 } tProtMode;
 
+typedef enum eBlockingMode {
+    BLOCKING_MODE,
+    NON_BLOCKING_MODE
+} tBlockingMode;
+
 #define DATA_LENTH 128
 class ServerDrv {
     public:
-        int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE, bool blockMode = false);
-        int startServer(uint16_t port, uint8_t portMode = TCP_MODE, bool blockMode = false);
+        int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE, tBlockingMode blockMode = NON_BLOCKING_MODE);
+        int startServer(uint16_t port, uint8_t portMode = TCP_MODE, tBlockingMode blockMode = NON_BLOCKING_MODE);
     //    int startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode = TCP_MODE);
     //    int startClientV6(const char *ipv6Address, uint16_t port, uint8_t protMode);
         int getAvailable(int sock);

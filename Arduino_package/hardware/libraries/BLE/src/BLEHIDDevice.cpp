@@ -2,11 +2,10 @@
 
 BLEHIDDevice BLEHIDDev;
 
-uint8_t ble_hid_report_descriptor[] =
-{
-  TUD_HID_REPORT_DESC_KEYBOARD( HID_REPORT_ID(REPORT_ID_KEYBOARD) ),
-  TUD_HID_REPORT_DESC_CONSUMER( HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL) ),
-  TUD_HID_REPORT_DESC_MOUSE   ( HID_REPORT_ID(REPORT_ID_MOUSE) )
+uint8_t ble_hid_report_descriptor[] = {
+    TUD_HID_REPORT_DESC_KEYBOARD( HID_REPORT_ID(REPORT_ID_KEYBOARD) ),
+    TUD_HID_REPORT_DESC_CONSUMER( HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL) ),
+    TUD_HID_REPORT_DESC_MOUSE   ( HID_REPORT_ID(REPORT_ID_MOUSE) )
 };
 
 void HIDnotifCB (BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
@@ -17,15 +16,15 @@ void HIDnotifCB (BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
         (void) id;
         (void) type;
         if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-            //printf("Notifications enabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+            //printf("\r\n[INFO] Notifications enabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
         } else {
-            //printf("Notifications disabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+            //printf("\r\n[INFO] Notifications disabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
         }
     } else {
         if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-            //printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+            //printf("\r\n[INFO] Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         } else {
-            //printf("Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+            //printf("\r\n[INFO] Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         }
     }
 }
@@ -37,9 +36,9 @@ void HIDwriteCB (BLECharacteristic* chr, uint8_t connID) {
         uint8_t type = chr->getReportRefType();
         (void) id;
         (void) type;
-        //printf("Data written on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+        //printf("\r\n[INFO] Data written on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
     } else {
-        //printf("Data written on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        //printf("\r\n[INFO] Data written on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
     }
 }
 
@@ -50,14 +49,13 @@ void HIDreadCB (BLECharacteristic* chr, uint8_t connID) {
         uint8_t type = chr->getReportRefType();
         (void) id;
         (void) type;
-        //printf("Data read on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+        //printf("\r\n[INFO] Data read on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
     } else {
-        //printf("Data read from Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        //printf("\r\n[INFO] Data read from Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
     }
 }
 
 BLEHIDDevice::BLEHIDDevice() {
-
 }
 
 BLEHIDDevice::~BLEHIDDevice() {

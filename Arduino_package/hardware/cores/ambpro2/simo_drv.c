@@ -7,7 +7,7 @@ uint32_t simoCreate(void) {
     mm_simo_t *context = NULL;
     context  = simo_create();
     if (context == NULL) {
-        printf("SIMO create failed/r/n");
+        printf("\r\n[ERROR] SIMO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -15,7 +15,7 @@ uint32_t simoCreate(void) {
 void simoDestroy(void *ctx) {
     //delete the SIMO object created and stop the simo task
     if(NULL != simo_delete((mm_simo_t *)ctx)) {
-        printf("SIMO linker destroy failed\r\n");
+        printf("\r\n[ERROR] SIMO linker destroy failed\n");
     }
 }
 

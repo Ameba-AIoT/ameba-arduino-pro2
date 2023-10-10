@@ -47,7 +47,7 @@ void pinMode(uint32_t ulPin, uint32_t ulMode) {
 
     if ((g_APinDescription[ulPin].ulPinMode & 0x000000FF) == ulMode) {
         // Nothing changes
-        // printf("The pin mode is unchanged. \r\n");
+        // printf("\r\n[INFO] The pin mode is unchanged. \n");
         return;
     }
 
@@ -93,7 +93,7 @@ void pinMode(uint32_t ulPin, uint32_t ulMode) {
             g_APinDescription[ulPin].ulPinMode |= GPIO_MODE_ENABLED;
             g_APinDescription[ulPin].ulPinMode &= (~MODE_NOT_INITIAL);
         } else {
-            printf("Error Mode not supported. \r\n");
+            printf("\r\n[ERROR] Mode not supported. \n");
         }
     } else {
         pGpio_t = gpio_pin_struct[ulPin];
@@ -156,7 +156,7 @@ void pinMode(uint32_t ulPin, uint32_t ulMode) {
             break;
 
         default:
-            printf("Error Digital pin mode setup. \r\n");
+            printf("\r\n[ERROR] Digital pin mode setup. \n");
             break;
     }
     g_APinDescription[ulPin].ulPinMode &= 0xFFFFFF00;

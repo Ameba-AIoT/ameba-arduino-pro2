@@ -9,7 +9,7 @@ uint32_t mimoCreate(void) {
     mm_mimo_t *context = NULL;
     context  = mimo_create();
     if (context == NULL) {
-        printf("MIMO create failed/r/n");
+        printf("\r\n[ERROR] MIMO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -17,7 +17,7 @@ uint32_t mimoCreate(void) {
 void mimoDestroy(void *ctx) {
     //delete the MIMO object created and stop the mimo task
     if(NULL != mimo_delete((mm_mimo_t *)ctx)) {
-        printf("MIMO linker destroy failed\r\n");
+        printf("\r\n[ERROR] MIMO linker destroy failed\n");
     }
 }
 

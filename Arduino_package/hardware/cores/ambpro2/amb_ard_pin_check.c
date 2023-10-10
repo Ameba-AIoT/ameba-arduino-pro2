@@ -15,14 +15,14 @@ extern "C" {
     //g_APinDescription[ard_pin_name].ulPinMode;
 void amb_ard_pin_check_name(int pin) {
     while (pin > TOTAL_GPIO_PIN_NUM) {
-        printf("Error %s. The pin: %d beyond the pin mapping!!! \n\r", __FUNCTION__, pin);
-        printf("Please check if pin or board is correct \n\r");
+        printf("\r\n[ERROR] %s. The pin: %d beyond the pin mapping!!! \n", __FUNCTION__, pin);
+        printf("\r\n[ERROR] Please check if pin or board is correct \n\r");
         delay(5000);
     }
 
     while (g_APinDescription[pin].pinname == 0xFFFFFFFF) {
-        printf("Error %s. The pin: %d is NC!!! \n\r", __FUNCTION__, pin);
-        printf("Please check if pin or board is correct \n\r");
+        printf("\r\n[ERROR] %s. The pin: %d is NC!!! \n", __FUNCTION__, pin);
+        printf("\r\n[ERROR] Please check if pin or board is correct \n");
         delay(5000);
     }
 }
@@ -43,12 +43,12 @@ void amb_ard_pin_check_type(int pin, uint32_t pin_type) {
             strcpy(pin_type_name, "TYPE_DIGITAL");
             break;
         default:
-            printf("Error %s. Incorrect pin_type input!!! \n\r", __FUNCTION__);
+            printf("\r\n[ERROR] %s. Incorrect pin_type input!!! \n", __FUNCTION__);
     }
 
     while ((g_APinDescription[pin].ulPinType & pin_type) != pin_type) {
-        printf("Error %s. %s is not supported by the pin: %d !!! \n\r", __FUNCTION__, pin_type_name, pin);
-        printf("Please check if pin or board is correct \n\r");
+        printf("\r\n[ERROR] %s. %s is not supported by the pin: %d !!! \n", __FUNCTION__, pin_type_name, pin);
+        printf("\r\n[ERROR] Please check if pin or board is correct \n");
         delay(5000);
     }
 }
@@ -95,12 +95,12 @@ void amb_ard_pin_check_fun(int pin, uint32_t pin_fun) {
             strcpy(pin_fun_name, "PIO_SPI");
             break;
         default:
-            printf("Error %s. Incorrect pin_fun input!!! \n\r", __FUNCTION__);
+            printf("\r\n[ERROR] %s. Incorrect pin_fun input!!! \n", __FUNCTION__);
     }
 
     while ((g_APinDescription[pin].ulPinAttribute & pin_fun) != pin_fun) {
-        printf("Error %s. %s is not supported by the pin: %d !!! \n\r", __FUNCTION__, pin_fun_name, pin);
-        printf("Please check if pin or board is correct \n\r");
+        printf("\r\n[ERROR] %s. %s is not supported by the pin: %d !!! \n", __FUNCTION__, pin_fun_name, pin);
+        printf("\r\n[ERROR] Please check if pin or board is correct \n");
         delay(5000);
     }
 }

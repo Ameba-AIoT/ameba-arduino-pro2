@@ -52,16 +52,16 @@ void NNFaceDetectionRecognition::begin(void) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("NNFaceDetection init failed\r\n");
+        printf("\r\n[ERROR] NNFaceDetection init failed\n");
         return;
     }
     if((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
-        printf("NNFaceDetection video not configured\r\n");
+        printf("\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
 
     if (_nntask != FACE_RECOGNITION) {
-        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
         while(1);
     }
 
@@ -80,21 +80,21 @@ void NNFaceDetectionRecognition::begin(void) {
         mbfacenet_ctx = mm_module_open(&vipnn_module);
     }
     if (mbfacenet_ctx == NULL) {
-        printf("NNFaceRecognition init failed\r\n");
+        printf("\r\n[ERROR] NNFaceRecognition init failed\n");
         return;
     }
     if (facerecog_ctx == NULL) {
         facerecog_ctx = mm_module_open(&facerecog_module);
     }
     if (facerecog_ctx == NULL) {
-        printf("FaceRecognition module init failed\r\n");
+        printf("\r\n[ERROR] FaceRecognition module init failed\n");
         return;
     }
     if (facerecog_siso_ctx == NULL) {
         facerecog_siso_ctx = (void*)sisoCreate();
     }
     if (facerecog_siso_ctx == NULL) {
-        printf("FaceRecognition SISO init failed\r\n");
+        printf("\r\n[ERROR] FaceRecognition SISO init failed\n");
         return;
     }
 
@@ -102,7 +102,7 @@ void NNFaceDetectionRecognition::begin(void) {
         mbfacenet_siso_ctx = (void*)sisoCreate();
     }
     if (mbfacenet_siso_ctx == NULL) {
-        printf("VIPNN MobileFaceNet SISO init failed\r\n");
+        printf("\r\n[ERROR] VIPNN MobileFaceNet SISO init failed\n");
         return;
     }
 
@@ -158,13 +158,13 @@ void NNFaceDetectionRecognition::end(void) {
     if (mm_module_close(facerecog_ctx) == NULL) {
         facerecog_ctx = NULL;
     } else {
-        printf("NNFaceRecognition deinit failed\r\n");
+        printf("\r\n[ERROR] NNFaceRecognition deinit failed\n");
     }
 
     if (mm_module_close(mbfacenet_ctx) == NULL) {
         mbfacenet_ctx = NULL;
     } else {
-        printf("NNFaceRecognition deinit failed\r\n");
+        printf("\r\n[ERROR] NNFaceRecognition deinit failed\n");
     }
 
     if (_p_mmf_context == NULL) {
@@ -173,7 +173,7 @@ void NNFaceDetectionRecognition::end(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("NNFaceRecognition deinit failed\r\n");
+        printf("\r\n[ERROR] NNFaceRecognition deinit failed\n");
     }
 }
 

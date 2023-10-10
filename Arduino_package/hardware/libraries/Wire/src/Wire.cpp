@@ -98,12 +98,12 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
 
     // i2c_read error;
     if (readed != 0) {
-        printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
+        printf("\r\n[ERROR] requestFrom: readed=%d, quantity=%d \n", readed, quantity);
     }
 
     /*//i2c_read error;
     if (readed != quantity) {
-        printf("requestFrom: readed=%d, quantity=%d : ERROR\n", readed, quantity);
+        printf("\r\n[ERROR] requestFrom: readed=%d, quantity=%d \n", readed, quantity);
         
         return readed;
     }
@@ -215,7 +215,6 @@ void TwoWire::flush(void) {
 
 void TwoWire::onReceiveService(uint8_t *inBytes, size_t numBytes, bool stop, void *arg) {
     //status = SLAVE_RECV;
-    //printf("in onReceiveService\r\n");
 
     stop = stop;
 
@@ -233,7 +232,6 @@ void TwoWire::onReceiveService(uint8_t *inBytes, size_t numBytes, bool stop, voi
 
 void TwoWire::onRequestService(void * arg) {
     //status = SLAVE_SEND;
-    //printf("in onRequestService\r\n");
 
     TwoWire *wire = (TwoWire*)arg;
     if(!wire->user_onRequest){

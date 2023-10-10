@@ -49,16 +49,16 @@ void NNFaceDetection::begin(void) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("NNFaceDetection init failed\r\n");
+        printf("\r\n[ERROR] NNFaceDetection init failed\n");
         return;
     }
     if((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
-        printf("NNFaceDetection video not configured\r\n");
+        printf("\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
 
     if (_nntask != FACE_DETECTION) {
-        printf("Invalid NN task selected! Please check modelSelect() again.\r\n");
+        printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
         while(1);
     }
 
@@ -78,7 +78,7 @@ void NNFaceDetection::end(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("NNFaceDetection deinit failed\r\n");
+        printf("\r\n[ERROR] NNFaceDetection deinit failed\n");
     }
 }
 

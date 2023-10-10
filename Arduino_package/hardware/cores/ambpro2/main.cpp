@@ -53,7 +53,7 @@ int main(void) {
     voe_t2ff_prealloc();
 
     if (xTaskCreate(main_task, ((const char *)"main task"), MAIN_THREAD_STACK_SIZE, NULL, 1, NULL) != pdPASS) {
-        printf("\n\r%s xTaskCreate(main task) failed\n", __FUNCTION__);
+        printf("\r\n[ERROR] %s xTaskCreate(main task) failed\n", __FUNCTION__);
     }
     vTaskStartScheduler();
 
