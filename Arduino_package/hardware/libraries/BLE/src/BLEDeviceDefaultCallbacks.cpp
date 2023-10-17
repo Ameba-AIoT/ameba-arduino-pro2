@@ -463,7 +463,7 @@ T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t 
                 if (p_client_app_cb_data->cb_content.disc_state_data.disc_state == DISC_STATE_SRV_DONE) {
                     if (BTDEBUG) printf("\r\n[INFO] Discovery All Service Procedure Done.\n");
                 } else {
-                    if (BTDEBUG) printf("\r\n[INFO] Discovery state send to application directly.\");
+                    if (BTDEBUG) printf("\r\n[INFO] Discovery state send to application directly.\n");
                 }
                 break;
 
