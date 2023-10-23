@@ -224,7 +224,7 @@ int main(int argc, char* argv[]) {
 //           Functions
 // -------------------------------
 #ifndef __MINGW64__
-extern int mkdir(char* filename);
+//extern int mkdir(char* filename);
 #endif
 
 void copyFile(const char* sourcePath, const char* destinationPath) {
@@ -467,12 +467,13 @@ char* dspFileProp(const char* filename) {
 	if (PRINT_DEBUG) printf("[%s][%d][INFO] File creation date: %s\n", __func__, __LINE__, fileCreationDate);
 
 
-#ifndef _WIN32
-	return fileCreationDate;
-#else
+//#ifndef _WIN32
+//	return fileCreationDate;
+//#else
 	char* fileCreationDate_addr = fileCreationDate;
+
 	return fileCreationDate_addr;
-#endif
+//#endif
 }
 
 
@@ -715,9 +716,9 @@ void resetJSON(const char* input) {
 
 	while ((entry = readdir(dir)) != NULL) {
 		if (strstr(entry->d_name, ".json") != NULL) {
-			char filepath[256];
+			char filepath[MAX_PATH_LENGTH];
+			
 			snprintf(filepath, sizeof(filepath), "%s/%s", input, entry->d_name);
-
 			FILE* file = fopen(filepath, "r");
 			if (file == NULL) {
 				perror("Error opening file");
@@ -799,7 +800,8 @@ void updateJSON(const char* input, const char* destPath) {
 			printf("Processing JSON file: %s\n", destFile);
 #endif
 			// Open the JSON file
-			char filePath[256];
+			char filePath[MAX_PATH_LENGTH];
+			
 			snprintf(filePath, sizeof(filePath), "%s/%s", destPath, destFile);
 			FILE* jsonFile = fopen(filePath, "r");
 			if (jsonFile == NULL) {
@@ -891,13 +893,13 @@ const char* pathTempJSON(const char* directory_path, const char* ext, const char
 		while ((entry = readdir(dir)) != NULL) {
 			if (entry->d_type == DT_REG && strstr(entry->d_name, ext_json) != NULL && strstr(entry->d_name, key_json) != NULL) {
 				if (PRINT_DEBUG) printf("[%s][%d][INFO] File: %s\n", __func__, __LINE__, entry->d_name);
-#ifndef _WIN32
-				strcat(directory_path, backspace);
-				strcat(directory_path, entry->d_name);
-#else
+//#ifndef _WIN32
+//				strcat(directory_path, backspace);
+//				strcat(directory_path, entry->d_name);
+//#else
 				strcat((char*)directory_path, backspace);
 				strcat((char*)directory_path, entry->d_name);
-#endif
+//#endif
 				break;
 			}
 		}
@@ -964,7 +966,6 @@ cJSON* loadJSONFile(const char* directory_path) {
 
 int writeJSON(const char* f_path) {
 	const char buf[MAX_PATH_LENGTH] = "";
-	const char backslash[] = "\\";
 	char line[MAX_PATH_LENGTH] = { 0 };
 	char voe_status[MAX_PATH_LENGTH] = "NA";
 	char model_type[MAX_PATH_LENGTH] = "";
@@ -1014,10 +1015,15 @@ int writeJSON(const char* f_path) {
 					file_path = malloc(path_len + file_name_len + 2);
 					if (file_path == NULL) {
 						printf("Memory allocation error.\n");
+					} else{
+#ifndef _WIN32
+						sprintf(file_path, "%s//%s", f_path, ent->d_name);
+#else
+						sprintf(file_path, "%s\\%s", f_path, ent->d_name);
+#endif	
 					}
-					strcpy(file_path, f_path);
-					strcat(file_path, pathTidy(backspace));
-					strcat(file_path, ent->d_name);
+					if (PRINT_DEBUG) printf("[%d] file_path: %s\n", __LINE__, file_path);
+					//free(file_path);
 					break;
 				}
 			}
@@ -1091,16 +1097,17 @@ int writeJSON(const char* f_path) {
 
 							while ((ent = readdir(dir)) != NULL) {
 								if (endsWith(ent->d_name, ".json")) {
-									char fpath_nn_json[MAX_PATH_LENGTH];
-									char dir_nn_json[MAX_PATH_LENGTH] = "";;
-
-									sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
+									char fpath_nn_json[BUFFER_SIZE];
+									char dir_nn_json[MAX_PATH_LENGTH] = "";
+									
 #ifndef _WIN32
-									cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
+									sprintf(fpath_nn_json, "%s//%s", path_model, ent->d_name);
+									cJSON* fname_model = (cJSON*)input2filename(fpath_nn_json, input2model(token));
 #else
+									sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 									char* fname_model = (char*)(input2filename(fpath_nn_json, input2model(token)));
 #endif
-									strcpy(fname_od, fname_model);
+									strcpy(fname_od, (char*)fname_model);
 								}
 							}
 							closedir(dir);
@@ -1108,11 +1115,11 @@ int writeJSON(const char* f_path) {
 
 						if (strcmp(path_example, "Temp") == 0) {	// IDE1
 							printf("[%d] ------------qqz IDE1\r\n", __LINE__);
-#ifndef _WIN32
-							extractRootDirectory(path_example, dir_example);
-#else
+//#ifndef _WIN32
+//							extractRootDirectory(path_example, dir_example);
+//#else
 							extractRootDirectory((char*)path_example, dir_example);
-#endif
+//#endif
 						}
 						else {										// IDE2
 							printf("[%d] ------------qqz IDE2\r\n", __LINE__);
@@ -1184,11 +1191,11 @@ int writeJSON(const char* f_path) {
 									strcpy(fname_dmodel_backup, ent->d_name);
 									strcpy(model_name_od, token);
 									char* input = "";
-#ifndef _WIN32
-									input = input2model(model_name_od);
-#else
+//#ifndef _WIN32
+//									input = input2model(model_name_od);
+//#else
 									input = (char*)(input2model(model_name_od));
-#endif
+//#endif
 									char output[100];
 									char* underscore = strchr(input, '_');      // Find the first occurrence of "_"
 									if (underscore != NULL) {
@@ -1243,16 +1250,18 @@ int writeJSON(const char* f_path) {
 
 								while ((ent = readdir(dir)) != NULL) {
 									if (endsWith(ent->d_name, ".json")) {
-										char fpath_nn_json[MAX_PATH_LENGTH];
+										char fpath_nn_json[BUFFER_SIZE];
 										char dir_nn_json[MAX_PATH_LENGTH] = "";
 
-										sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
+										
 #ifndef _WIN32
-										cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
+										sprintf(fpath_nn_json, "%s//%s", path_model, ent->d_name);
+										cJSON* fname_model = (cJSON*)input2filename(fpath_nn_json, input2model(token));
 #else
+										sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 										char* fname_model = (char*)(input2filename(fpath_nn_json, input2model(token)));
 #endif
-										strcpy(fname_fd, fname_model);
+										strcpy(fname_fd, (char*)fname_model);
 									}
 								}
 								closedir(dir);
@@ -1260,11 +1269,11 @@ int writeJSON(const char* f_path) {
 							if (strcmp(path_example, "Temp") == 0) {
 								// IDE1
 								printf("[%d] ------------qqz IDE1\r\n", __LINE__);
-#ifndef _WIN32
-								extractRootDirectory(path_example, dir_example);
-#else
+//#ifndef _WIN32
+//								extractRootDirectory(path_example, dir_example);
+//#else
 								extractRootDirectory((char*)path_example, dir_example);
-#endif
+//#endif
 							}
 							else {
 								// IDE2
@@ -1379,16 +1388,17 @@ int writeJSON(const char* f_path) {
 
 									while ((ent = readdir(dir)) != NULL) {
 										if (endsWith(ent->d_name, ".json")) {
-											char fpath_nn_json[MAX_PATH_LENGTH];
+											char fpath_nn_json[BUFFER_SIZE];
 											char dir_nn_json[MAX_PATH_LENGTH] = "";
-
-											sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
-#ifndef _WIN32
-											cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
+								
+#ifndef _WIN32						
+											sprintf(fpath_nn_json, "%s//%s", path_model, ent->d_name);
+											cJSON* fname_model = (cJSON*)input2filename(fpath_nn_json, input2model(token));
 #else
+											sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 											char* fname_model = (char*)(input2filename(fpath_nn_json, input2model(token)));
 #endif
-											strcpy(fname_fr, fname_model);
+											strcpy(fname_fr, (char*)fname_model);
 										}
 									}
 									closedir(dir);
@@ -1398,11 +1408,11 @@ int writeJSON(const char* f_path) {
 									// IDE1
 									printf("[%d] ------------qqz IDE1\r\n", __LINE__);
 #endif
-#ifndef _WIN32
-									extractRootDirectory(path_example, dir_example);
-#else
+//#ifndef _WIN32
+//									extractRootDirectory(path_example, dir_example);
+//#else
 									extractRootDirectory((char*)path_example, dir_example);
-#endif
+//#endif
 								}
 								else {
 #if PRINT_DEBUG
@@ -1513,27 +1523,29 @@ int writeJSON(const char* f_path) {
 
 										while ((ent = readdir(dir)) != NULL) {
 											if (endsWith(ent->d_name, ".json")) {
-												char fpath_nn_json[MAX_PATH_LENGTH];
+												char fpath_nn_json[BUFFER_SIZE];
 												char dir_nn_json[MAX_PATH_LENGTH] = "";;
 
-												sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
+												
 #ifndef _WIN32
-												cJSON* fname_model = input2filename(fpath_nn_json, input2model(token));
+												sprintf(fpath_nn_json, "%s//%s", path_model, ent->d_name);
+												cJSON* fname_model = (cJSON*)input2filename(fpath_nn_json, input2model(token));
 #else
+												sprintf(fpath_nn_json, "%s\\%s", path_model, ent->d_name);
 												char* fname_model = (char*)(input2filename(fpath_nn_json, input2model(token)));
 #endif
-												strcpy(fname_ac, fname_model);
+												strcpy(fname_ac, (char*)fname_model);
 											}
 										}
 										closedir(dir);
 									}
 									if (strcmp(path_example, "Temp") == 0) {	// IDE1
 										printf("[%d] ------------qqz IDE1\r\n", __LINE__);
-#ifndef _WIN32
-										extractRootDirectory(path_example, dir_example);
-#else
+//#ifndef _WIN32
+//										extractRootDirectory(path_example, dir_example);
+//#else
 										extractRootDirectory((char*)path_example, dir_example);
-#endif
+//#endif
 									}
 									else {										// IDE2
 										printf("[%d] ------------qqz IDE2\r\n", __LINE__);
@@ -1697,9 +1709,6 @@ error_combination:
 
 error_customized_missing:
 	error_handler("Model missing. Please check your sketch folder again.");
-
-error_customized_exceed:
-	error_handler("Too many models. Please remove unwanted models.");
 
 error_customized_mismatch:
 	error_handler("Customized model mismatch. Please rename your model.");
