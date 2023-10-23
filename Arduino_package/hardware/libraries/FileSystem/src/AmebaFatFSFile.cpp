@@ -32,7 +32,7 @@ bool File::open(const char *filename) {
     }
     // Copy file name
     char const* name = strrchr(filename, '/');
-    strncpy(_name, name+1, MAX_FILENAME_LEN);
+    strncpy(_name, (name + 1), MAX_FILENAME_LEN);
     return true;
 }
 
@@ -82,7 +82,6 @@ int File::read(void) {
             printf("\r\n[ERROR] File read.\n");
         }
     }
-
     return c;
 }
 
@@ -96,7 +95,6 @@ int File::read(void *buf, size_t nbyte) {
             printf("\r\n[ERROR] File read.\n");
         }
     }
-
     return readsize;
 }
 
@@ -109,7 +107,6 @@ int File::peek(void) {
         c = read();
         f_lseek(_file, pos);
     }
-
     return c;
 }
 
@@ -121,7 +118,6 @@ int File::available(void) {
         uint32_t pos  = f_tell(_file);
         ret = size - pos;
     }
-
     return ret;
 }
 
@@ -137,7 +133,6 @@ bool File::seek(uint32_t pos) {
     if (_file != NULL) {
         ret = f_lseek(_file, pos);
     }
-
     return (ret == FR_OK);
 }
 
@@ -147,7 +142,6 @@ uint32_t File::position(void) {
     if (_file != NULL) {
         pos = f_tell(_file);
     }
-
     return pos;
 }
 
@@ -157,7 +151,6 @@ uint32_t File::size(void) {
     if (_file != NULL) {
         size = f_size(_file);
     }
-
     return size;
 }
 
@@ -173,6 +166,5 @@ const char* File::name(void) {
     if (_file != NULL) {
         return _name;
     }
-
     return NULL;
 }

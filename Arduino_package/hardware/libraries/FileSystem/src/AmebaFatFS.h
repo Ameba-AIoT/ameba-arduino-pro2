@@ -5,11 +5,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
 #include "fatfs_sdcard_api.h"
-
-#ifdef __cplusplus
 }
 #endif
 
@@ -57,7 +53,6 @@ class AmebaFatFS {
 
         // structures containg FATFS parameters for sdcard drive
         fatfs_sd_params_t fatfs_sd;
-
 };
 
 #endif

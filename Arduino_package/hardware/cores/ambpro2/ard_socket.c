@@ -18,7 +18,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     int _sock;
 
     //create socket
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         // TCP
         _sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     } else {
@@ -38,7 +38,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     serv_addr.sin_port = htons(port);
 
     //Connecting to server
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         //TCP MODE
         if (connect(_sock, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
             //printf("\r\n[INFO] Connect to Server successfully!\r\n");
@@ -67,7 +67,7 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
     int _sock;
 
     //create socket
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         // TCP
         _sock = lwip_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
     } else {
@@ -90,7 +90,7 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode) {
     }
 
     // connection starts
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         //TCP MODE
         if (connect(_sock, (struct sockaddr *)(&serv_addr6), sizeof(serv_addr6)) == -1) {
             printf("\r\n[ERROR] %s Connect to server failed\n", __FUNCTION__);
@@ -126,7 +126,7 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
     struct sockaddr_in6 ser_addr;
 
     // create socket
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         // TCP
         _sock = lwip_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
     } else {
@@ -141,7 +141,7 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
     // initialize value in dest
     memset(&ser_addr, 0, sizeof(ser_addr));
     ser_addr.sin6_family = AF_INET6;
-    // if (protMode == 0) {  // TCP
+    // if (protMode == TCP_MODE) {  // TCP
     // ser_addr.sin6_family = AF_INET6;
     ser_addr.sin6_port = htons(port);
     //---------------------------------------
@@ -149,7 +149,7 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
     // }
 
     // Connecting to server
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         //TCP MODE
         if (connect(_sock, ((struct sockaddr *)&ser_addr), sizeof(ser_addr)) == 0) {
             //printf("\r\n[INFO] Connect to server successfully\n");
@@ -192,16 +192,16 @@ int start_server(uint16_t port, uint8_t protMode) {
     int _sock;
     int timeout;
     //create socket
-    if (protMode == 0) {
+    if (protMode == TCP_MODE) {
         timeout = 3000;
         _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        //printf("\r\n[INFO] Create TCP socket successfully\n");
+        printf("\r\n[INFO] Create TCP socket successfully\n");
     } else {
         timeout = 1000;
         _sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        //printf("\r\n[INFO] Create UDP socket successfully\n");
+        printf("\r\n[INFO] Create UDP socket successfully\n");
     }
 
     if (_sock < 0) {
@@ -232,7 +232,7 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
     int timeout;
 
     //create socket
-    if (protMode == 0) {  // TCP
+    if (protMode == TCP_MODE) {  // TCP
         timeout = 3000;
         _sock = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));

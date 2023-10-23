@@ -21,16 +21,7 @@
 #define SERVER_DRV_H
 
 #include <inttypes.h>
-
-typedef enum eProtMode {
-    TCP_MODE,
-    UDP_MODE
-} tProtMode;
-
-typedef enum eBlockingMode {
-    BLOCKING_MODE,
-    NON_BLOCKING_MODE
-} tBlockingMode;
+#include "wl_definitions.h"
 
 #define DATA_LENTH 128
 class ServerDrv {

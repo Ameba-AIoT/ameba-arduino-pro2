@@ -63,8 +63,8 @@ class WiFiUDP : public UDP {
         virtual size_t write(const uint8_t* buffer, size_t size);
 
         // Send packet immediately from buffer
-        int writeImmediately(const uint8_t* buffer, size_t size);
-        int writeImmediately(const uint8_t* buffer, size_t size, uint32_t peer_ip, uint16_t peer_port);
+        size_t writeImmediately(const uint8_t* buffer, size_t size);
+        size_t writeImmediately(const uint8_t* buffer, size_t size, IPAddress peer_ip, uint16_t peer_port);
 
         // Start processing the next available incoming packet
         // Returns the size of the packet in bytes, or 0 if no packets are available
@@ -116,10 +116,10 @@ class WiFiUDP : public UDP {
         ServerDrv serverDrv;  // socket driver
     //    ServerDrv clientDrv;  // socket driver
     //    uint8_t data[DATA_LENTH];
-        uint32_t peer_ip;
-        uint32_t peer_port;
-    //    uint32_t peer_ip_v6;
-    //    uint32_t peer_port_v6;
+        IPAddress _peer_ip;
+        uint16_t _peer_port;
+    //    uint32_t _peer_ip_v6;
+    //    uint32_t _peer_port_v6;
 };
 
 #endif

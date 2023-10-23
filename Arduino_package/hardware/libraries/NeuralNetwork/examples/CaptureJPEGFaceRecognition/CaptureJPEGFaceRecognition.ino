@@ -3,11 +3,15 @@
  Example guide:
  https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-recognition-jpeg/
 
+ Face registration commands
+ --------------------------
  Point the camera at a target face and enter the following commands into the serial monitor,
- Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
- Reset registered faces:  "RESET"                 Forget all previously registered faces
- Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
- Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+ Register face:                       "REG={Name}"  Ensure that there is only one face detected in frame
+ Remove face:                         "DEL={Name}"  Remove a registered face
+ Reset registered faces:              "RESET"       Forget all previously registered faces
+ Backup registered faces to flash:    "BACKUP"      Save registered faces to flash
+ Restore registered faces from flash: "RESTORE"     Load registered faces from flash
+
  This example takes snapshot of unrecognised personnel after the Face Registration mode is turned off.
 
  NN Model Selection
@@ -43,13 +47,13 @@
 #define CHANNELNN   3 // RGB format video for NN only avaliable on channel 3
 
 // Customised resolution for NN
-#define NNWIDTH 576
-#define NNHEIGHT 320
+#define NNWIDTH     576
+#define NNHEIGHT    320
 
 // Pin Definition
-#define RED_LED 3
-#define GREEN_LED 4
-#define BUTTON_PIN 5
+#define RED_LED                   3
+#define GREEN_LED                 4
+#define BUTTON_PIN                5
 
 // Select the maximum number of snapshots to capture
 #define MAX_UNKNOWN_COUNT 5
@@ -83,16 +87,17 @@ void setup() {
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
     pinMode(BUTTON_PIN, INPUT);
+
     Serial.begin(115200);
 
     // Attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
-      Serial.print("Attempting to connect to WPA SSID: ");
-      Serial.println(ssid);
-      status = WiFi.begin(ssid, pass);
+        Serial.print("Attempting to connect to WPA SSID: ");
+        Serial.println(ssid);
+        status = WiFi.begin(ssid, pass);
 
-      // wait 2 seconds for connection:
-      delay(2000);
+        // wait 2 seconds for connection:
+        delay(2000);
     }
 
     // Configure camera video channels with video format information
@@ -115,16 +120,16 @@ void setup() {
     videoStreamer.registerInput(Camera.getStream(CHANNELVID));
     videoStreamer.registerOutput(rtsp);
     if (videoStreamer.begin() != 0) {
-      Serial.println("StreamIO link start failed");
+        Serial.println("StreamIO link start failed");
     }
-    
+
     // Configure StreamIO object to stream data from RGB video channel to face detection
     videoStreamerRGBFD.registerInput(Camera.getStream(CHANNELNN));
     videoStreamerRGBFD.setStackSize();
     videoStreamerRGBFD.setTaskPriority();
     videoStreamerRGBFD.registerOutput(facerecog);
     if (videoStreamerRGBFD.begin() != 0) {
-      Serial.println("StreamIO link start failed");
+        Serial.println("StreamIO link start failed");
     }
 
     // Start data stream from video channel
@@ -152,6 +157,9 @@ void loop() {
             if (input.startsWith(String("REG="))) {
                 String name = input.substring(4);
                 facerecog.registerFace(name);
+            } else if (input.startsWith(String("DEL="))) {
+                String name = input.substring(4);
+                facerecog.removeFace(name);
             } else if (input.startsWith(String("RESET"))) {
                 facerecog.resetRegisteredFace();
             } else if (input.startsWith(String("BACKUP"))) {
@@ -179,12 +187,11 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     uint16_t im_w = configVID.width();
 
     printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
-
     OSD.createBitmap(CHANNELVID);
 
     if (facerecog.getResultCount() > 0) {
         for (uint32_t i = 0; i < facerecog.getResultCount(); i++) {
-             FaceRecognitionResult item = results[i];
+            FaceRecognitionResult item = results[i];
             // Result coordinates are floats ranging from 0.00 to 1.00
             // Multiply with RTSP resolution to get coordinates in pixels
             int xmin = (int)(item.xMin() * im_w);
@@ -193,7 +200,6 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
             int ymax = (int)(item.yMax() * im_h);
 
             uint32_t osd_color;
-
             if (String(item.name()) == String("unknown")) {
                 osd_color = OSD_COLOR_RED;
                 if (regFace == false) {
@@ -217,12 +223,14 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
             // Draw boundary box
             printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNELVID, xmin, ymin, xmax, ymax, 3, osd_color);
+
             // Print identification text above boundary box
             char text_str[40];
             snprintf(text_str, sizeof(text_str), "Face:%s", item.name());
             OSD.drawText(CHANNELVID, xmin, ymin - OSD.getTextHeight(CHANNELVID), text_str, osd_color);
         }
-        if ((regFace == false) && (unknownDetected == true)) { // RED LED remain lit up when unknown faces detected {
+        if ((regFace == false) && (unknownDetected == true)) {
+            // RED LED remain lit up when unknown faces detected
             digitalWrite(RED_LED, HIGH);
             digitalWrite(GREEN_LED, LOW);
         } else if ((regFace == false) && (unknownDetected == false)) {

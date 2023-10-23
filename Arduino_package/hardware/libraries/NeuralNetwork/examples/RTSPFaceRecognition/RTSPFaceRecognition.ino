@@ -64,7 +64,7 @@ int rtsp_portnum;
 void setup() {
     Serial.begin(115200);
 
-    // attempt to connect to Wifi network:
+    // Attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
@@ -112,6 +112,7 @@ void setup() {
     if (videoStreamerRGBFD.begin() != 0) {
         Serial.println("StreamIO link start failed");
     }
+
     // Start video channel for NN
     Camera.channelBegin(CHANNELNN);
 
@@ -176,6 +177,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
             } else {
                 osd_color = OSD_COLOR_GREEN;
             }
+
             // Draw boundary box
             printf("Face %d name %s:\t%d %d %d %d\n\r", i, item.name(), xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, osd_color);

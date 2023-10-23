@@ -3,11 +3,14 @@
  Example guide:
  https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-recognition-unlock/
 
+ Face registration commands
+ --------------------------
  Point the camera at a target face and enter the following commands into the serial monitor,
- Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
- Reset registered faces:  "RESET"                 Forget all previously registered faces
- Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
- Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+ Register face:                       "REG={Name}"  Ensure that there is only one face detected in frame
+ Remove face:                         "DEL={Name}"  Remove a registered face
+ Reset registered faces:              "RESET"       Forget all previously registered faces
+ Backup registered faces to flash:    "BACKUP"      Save registered faces to flash
+ Restore registered faces from flash: "RESTORE"     Load registered faces from flash
 
  This example takes snapshot of unrecognised personnel after the Face Registration mode is turned off.
 
@@ -45,8 +48,8 @@
 #define CHANNELNN   3 // RGB format video for NN only avaliable on channel 3
 
 // Customised resolution for NN
-#define NNWIDTH  576
-#define NNHEIGHT 320
+#define NNWIDTH     576
+#define NNHEIGHT    320
 
 // Pin Definition
 #define RED_LED                   3
@@ -73,7 +76,6 @@ bool doorOpen = false;
 bool backupButtonState = false;
 bool RegModeButtonState = false;
 bool regMode = false;
-
 uint32_t img_addr = 0;
 uint32_t img_len = 0;
 String fileName;
@@ -89,10 +91,10 @@ void setup() {
     pinMode(BACKUP_FACE_BUTTON_PIN, INPUT);
     pinMode(EN_REGMODE_BUTTON_PIN, INPUT);
     myservo.attach(SERVO_PIN);
-  
+
     Serial.begin(115200);
 
-    // attempt to connect to Wifi network:
+    // Attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
@@ -124,6 +126,7 @@ void setup() {
     if (videoStreamer.begin() != 0) {
         Serial.println("StreamIO link start failed");
     }
+
     // Start data stream from video channel
     Camera.channelBegin(CHANNELVID);
     Camera.channelBegin(CHANNELJPEG);
@@ -136,6 +139,7 @@ void setup() {
     if (videoStreamerRGBFD.begin() != 0) {
         Serial.println("StreamIO link start failed");
     }
+
     // Start video channel for NN
     Camera.channelBegin(CHANNELNN);
 
@@ -150,10 +154,10 @@ void setup() {
     myservo.write(180);
 }
 
-void loop() {  
+void loop() {
     backupButtonState  = digitalRead(BACKUP_FACE_BUTTON_PIN);
     RegModeButtonState = digitalRead(EN_REGMODE_BUTTON_PIN);
-    
+
     if ((backupButtonState == HIGH) && (regMode == true)) { // Button is pressed when registration mode is on
         for (int count = 0; count < 3; count++) {
             digitalWrite(RED_LED, HIGH);
@@ -175,6 +179,9 @@ void loop() {
             if (input.startsWith(String("REG="))) {
                 String name = input.substring(4);
                 facerecog.registerFace(name);
+            } else if (input.startsWith(String("DEL="))) {
+                String name = input.substring(4);
+                facerecog.removeFace(name);
             } else if (input.startsWith(String("RESET"))) {
                 facerecog.resetRegisteredFace();
             } else if (input.startsWith(String("BACKUP"))) {
@@ -210,7 +217,7 @@ void loop() {
         fs.end();
         myservo.write(0);
         Serial.println("Opening Door!");
-        
+
         delay(10000);
         myservo.write(180);
         digitalWrite(RED_LED, LOW);
@@ -229,8 +236,8 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     uint16_t im_w = configVID.width();
 
     printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
-
     OSD.createBitmap(CHANNELVID);
+
     if (facerecog.getResultCount() > 0) {
         if (regMode == false) {
             if (facerecog.getResultCount() > 1) { // Door remain close when more than one face detected
@@ -263,6 +270,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
         int ymax = (int)(item.yMax() * im_h);
 
         uint32_t osd_color;
+
         // Draw boundary box
         if (String(item.name()) == String("unknown")) {
             osd_color = OSD_COLOR_RED;

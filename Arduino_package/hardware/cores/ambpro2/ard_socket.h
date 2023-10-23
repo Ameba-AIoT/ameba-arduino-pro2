@@ -5,6 +5,8 @@
 #include <inttypes.h>
 #include <stddef.h>
 
+#include "wl_definitions.h"
+
 int set_nonblocking(int fd);
 int start_server(uint16_t port, uint8_t portMode);
 //int start_server_v6(uint16_t port, uint8_t portMode);

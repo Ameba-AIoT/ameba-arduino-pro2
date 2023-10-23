@@ -3,11 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
 #include "rtl8735b.h"
-
-#ifdef __cplusplus
 }
 #endif
 
@@ -268,7 +264,7 @@ int AmebaFatFS::setLastModTime(char *path, uint16_t year, uint16_t month, uint16
             break;
         }
     } while (0);
-    
+
 //#endif
     return (-ret);
 }
@@ -300,5 +296,5 @@ int AmebaFatFS::getAttribute(char *path, unsigned char *attr) {
         *attr = fno.fattrib;
     } while (0);
 
-    return -ret;
+    return (-ret);
 }

@@ -98,4 +98,14 @@ enum wl_enc_type {  /* Values map to 802.11 encryption suites... */
 #define SECURITY_WPA3_AES_PSK    (WPA3_SECURITY | AES_ENABLED)
 #define SECURITY_WPA2_WPA3_MIXED (WPA2_SECURITY | WPA3_SECURITY | AES_ENABLED)
 
+typedef enum eProtMode {
+    TCP_MODE,
+    UDP_MODE
+} tProtMode;
+
+typedef enum eBlockingMode {
+    BLOCKING_MODE,
+    NON_BLOCKING_MODE
+} tBlockingMode;
+
 #endif /* WL_DEFINITIONS_H_ */

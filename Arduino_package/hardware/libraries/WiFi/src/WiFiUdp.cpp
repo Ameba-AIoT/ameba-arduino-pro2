@@ -128,13 +128,13 @@ int WiFiUDP::beginPacket(const char *host, uint16_t port) {
 }
 
 int WiFiUDP::beginPacket(IPAddress ip, uint16_t port) {
-    peer_ip = ip;
-    peer_port = port;
-
+    _peer_ip = IPAddress(ip);
+    _peer_port = port;
     if (_sock >= 0) {
         _client_sock = _sock;
     } else {
-        _client_sock = serverDrv.startClient(ip, port, UDP_MODE, BLOCKING_MODE);
+        return 0;
+        //_client_sock = serverDrv.startClient(ip, port, UDP_MODE, BLOCKING_MODE);
     }
 
     if (_client_sock < 0) {
@@ -149,8 +149,8 @@ int WiFiUDP::endPacket() {
         serverDrv.stopSocket(_client_sock);
     }
 
-    peer_ip = 0;
-    peer_port = 0;
+    _peer_ip = IPAddress(0, 0, 0, 0);
+    _peer_port = 0;
     _client_sock = -1;
 
     return true;
@@ -161,19 +161,14 @@ size_t WiFiUDP::write(uint8_t byte) {
 }
 
 size_t WiFiUDP::write(const uint8_t *buffer, size_t size) {
-    writeImmediately(buffer, size);
-
-    return size;
+    return writeImmediately(buffer, size);
 }
 
-int WiFiUDP::writeImmediately(const uint8_t *buffer, size_t size) {
-    _client_sock = 0;
-    serverDrv.sendtoData(_client_sock, buffer, size, peer_ip, peer_port);
-
-    return size;
+size_t WiFiUDP::writeImmediately(const uint8_t *buffer, size_t size) {
+    return writeImmediately(buffer, size, _peer_ip, _peer_port);
 }
 
-int WiFiUDP::writeImmediately(const uint8_t *buffer, size_t size, uint32_t peer_ip, uint16_t peer_port) {
+size_t WiFiUDP::writeImmediately(const uint8_t *buffer, size_t size, IPAddress peer_ip, uint16_t peer_port) {
     _client_sock = 0;
     serverDrv.sendtoData(_client_sock, buffer, size, peer_ip, peer_port);
 
