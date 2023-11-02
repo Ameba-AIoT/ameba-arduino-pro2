@@ -427,7 +427,7 @@ void Video::printInfo(void) {
             printf("\r\n[INFO] Video width: %d\n", w[ch]);
             printf("\r\n[INFO] Video height: %d\n", h[ch]);
             printf("\r\n[INFO] fps: %d\n", fps[ch]);
-            printf("\r\n[INFO] bps: %d\n", bps[ch]);
+            printf("\r\n[INFO] bps: %ld\n", bps[ch]);
         }
     }
 }
