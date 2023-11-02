@@ -1,9 +1,11 @@
 /*
-    This example uses the on-board camera sensor (JX-F37P) to capture suspicious movements. 
-    Upon detection, the system captures an image, saves it to an SD Card, uploads it to Google Drive, 
-    and concurrently sends an alert through Line Notify to the user's mobile phone, ensuring swift response and heightened security.
+    This example uses the on-board camera sensor (JX-F37P) to capture suspicious
+   movements. Upon detection, the system captures an image, saves it to an SD
+   Card, uploads it to Google Drive, and concurrently sends an alert through
+   Line Notify to the user's mobile phone, ensuring swift response and
+   heightened security.
 
-    Example guide: TBD
+    Example guide: https://www.amebaiot.com/zh/amebapro2-arduino-motion-notify/
 */
 
 #include <Arduino.h>
@@ -17,20 +19,18 @@
 #include "Base64.h"
 
 // User Configuration
-#define CHANNEL 0             // Video channel for streaming & snapshot
-#define CHANNELMD 3           // RGB format video for motion detection only avaliable on channel 3
-#define SSID "Network_SSID5"  // Enter your WiFi SSID (name)
-#define PW "Password"         // Enter your WiFi password
-#define FILENAME "image.jpg"  // Save as jpg image in SD Card
+#define CHANNEL     0           // Video channel for streaming & snapshot
+#define CHANNELMD   3           // RGB format video for motion detection only avaliable on channel 3
+#define FILENAME    "image.jpg" // Save as jpg image in SD Card
 
 // Enter your Google Script and Line Notify details
-String myScript = "/macros/s/****************************/exec";  // Create your Google Apps Script and replace the "myScript" path. AKfycbyTUSAQIV1XuY7OgadvlO8n2Fyid3MnGCpFOe4oF19CJT9rU3nV1XVc915NjykUcaSx
-String myFoldername = "&myFoldername=AMB82";                      // Set the Google Drive folder name to store your file
-String myFilename = "&myFilename=image.jpg";                      // Set the Google Drive file name to store your data
+String myScript = "/macros/s/****************************************/exec";  // Create your Google Apps Script and replace the "myScript" path.
+String myFoldername = "&myFoldername=AMB82";  // Set the Google Drive folder name to store your file
+String myFilename = "&myFilename=image.jpg";  // Set the Google Drive file name to store your data
 String myImage = "&myFile=";
 
-char ssid[] = SSID;
-char pass[] = PW;
+char ssid[] = "Network_SSID";  // your network SSID (name)
+char pass[] = "Password";      // your network password
 int status = WL_IDLE_STATUS;
 
 uint32_t img_addr = 0;
@@ -38,7 +38,7 @@ uint32_t img_len = 0;
 
 // Create objects
 VideoSetting config(VIDEO_D1, CAM_FPS, VIDEO_H264_JPEG, 1);  // High resolution video for streaming
-VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);          // Low resolution RGB video for motion detection
+VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);  // Low resolution RGB video for motion detection
 RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerMD(1, 1);
@@ -54,19 +54,21 @@ bool flag_motion = false;
 void setup() {
     Serial.begin(115200);
 
-    // Wi-Fi init
+    // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
         status = WiFi.begin(ssid, pass);
-        // wait 2 seconds for connection:
         delay(2000);
     }
     WiFiCon();
 
-    // camera init
-    Camera.configVideoChannel(CHANNEL, config);      // Channel for video streaming
-    Camera.configVideoChannel(CHANNELMD, configMD);  // Channel for motion detection
+    // Configure camera video channels for required resolutions and format
+    // outputs Adjust the bitrate based on your WiFi network quality
+    // config.setBitrate(2 * 1024 * 1024);
+    // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    Camera.configVideoChannel(CHANNEL, config);
+    Camera.configVideoChannel(CHANNELMD, configMD);
     Camera.videoInit();
 
     // Configure RTSP for high resolution video stream information
@@ -106,6 +108,7 @@ void setup() {
     Serial.println("================================");
     Serial.println("Motion Detecting");
     Serial.println("================================");
+    delay(2000);
 }
 
 void loop() {
@@ -136,7 +139,7 @@ void loop() {
     }
 
     if (flag_motion) {
-        Serial.println("Motion Detected");  // motion detected take photo
+        Serial.println("Motion Detected");
         // SD card init
         if (!fs.begin()) {
             StreamEnd();
@@ -146,7 +149,7 @@ void loop() {
             Serial.println("================================");
             Serial.println("[ERROR] SD Card Mount Failed !!!");
             Serial.println("================================");
-            while (1);
+            while(1);
         }
 
         // List root directory and put results in buf
@@ -184,9 +187,10 @@ void loop() {
         while (strlen(p) > 0) {
             /* list out file name image will be saved as "image.jpg" */
             if (strstr(p, FILENAME) != NULL) {
-            Serial.println("Found 'image.jpg' in the string.");
+                Serial.println("Found 'image.jpg' in the string.");
             } else {
-            //Serial.println("Substring 'image.jpg' not found in the string.");
+                // Serial.println("Substring 'image.jpg' not found in the
+                // string.");
             }
             p += strlen(p) + 1;
         }
@@ -237,75 +241,49 @@ void loop() {
             boolean state = false;
 
             while ((startTime + waitTime) > millis()) {
-                Serial.print(".");
+                // Serial.print(".");
                 delay(100);
                 while (wifiClient.available()) {
                     char c = wifiClient.read();
-                    if (state == true) getBody += String(c);
-                    if (c == '\n') {
-                        if (getAll.length() == 0) state = true;
-                        getAll = "";
-                    } else if (c != '\r')
-                        getAll += String(c);
-                        startTime = millis();
+                    if (state == true) {
+                        getBody += String(c);
                     }
-                    if (getBody.length() > 0) break;
+                    if (c == '\n') {
+                        if (getAll.length() == 0) {
+                            state = true;
+                        }
+                        getAll = "";
+                    } else if (c != '\r') {
+                        getAll += String(c);
+                    }
+                    startTime = millis();
                 }
-                wifiClient.stop();
-                Serial.println(getBody);
+                if (getBody.length() > 0) {
+                    break;
+                }
+            }
+            wifiClient.stop();
+            Serial.println(getBody);
         } else {
             getBody = "Connected to " + String(myDomain) + " failed.";
             Serial.println("Connected to " + String(myDomain) + " failed.");
         }
         Serial.println("File uploading done.");
         Serial.println("===================================");
-
-    } else {
-        Serial.print(".");  // no motion detected
+    } else {  // no motion detected
+        Serial.print(".");
     }
 }
 
-// //https://github.com/zenmanenergy/ESP8266-Arduino-Examples/
-// String urlencode(String str) {
-//   String encodedString = "";
-//   char c;
-//   char code0;
-//   char code1;
-//   //char code2;
-//   for (unsigned int i = 0; i < str.length(); i++) {
-//     c = str.charAt(i);
-//     if (c == ' ') {
-//       encodedString += '+';
-//     } else if (isalnum(c)) {
-//       encodedString += c;
-//     } else {
-//       code1 = (c & 0xf) + '0';
-//       if ((c & 0xf) > 9) {
-//         code1 = (c & 0xf) - 10 + 'A';
-//       }
-//       c = (c >> 4) & 0xf;
-//       code0 = c + '0';
-//       if (c > 9) {
-//         code0 = c - 10 + 'A';
-//       }
-//       //code2='\0';
-//       encodedString += '%';
-//       encodedString += code0;
-//       encodedString += code1;
-//       //encodedString+=code2;
-//     }
-//     yield();
-//   }
-//   return encodedString;
-// }
-
-//https://www.arduino.cc/reference/en/libraries/urlencode/
+// https://www.arduino.cc/reference/en/libraries/urlencode/
 String urlencode(String str) {
     const char *msg = str.c_str();
     const char *hex = "0123456789ABCDEF";
     String encodedMsg = "";
     while (*msg != '\0') {
-        if (('a' <= *msg && *msg <= 'z') || ('A' <= *msg && *msg <= 'Z') || ('0' <= *msg && *msg <= '9') || *msg == '-' || *msg == '_' || *msg == '.' || *msg == '~') {
+        if (('a' <= *msg && *msg <= 'z') || ('A' <= *msg && *msg <= 'Z') ||
+            ('0' <= *msg && *msg <= '9') || *msg == '-' || *msg == '_' ||
+            *msg == '.' || *msg == '~') {
             encodedMsg += *msg;
         } else {
             encodedMsg += '%';
@@ -320,9 +298,9 @@ String urlencode(String str) {
 void CamFlash() {
     pinMode(LED_G, OUTPUT);
     for (int i = 0; i < 5; i++) {
-        digitalWrite(LED_G, HIGH);  // turn the LED on (HIGH is the voltage level)
-        delay(100);                 // wait for a second
-        digitalWrite(LED_G, LOW);   // turn the LED off by making the voltage LOW
+        digitalWrite(LED_G, HIGH);
+        delay(100);
+        digitalWrite(LED_G, LOW);
         delay(100);
     }
 }
@@ -330,19 +308,19 @@ void CamFlash() {
 void WiFiCon() {
     pinMode(LED_B, OUTPUT);
     for (int i = 0; i < 2; i++) {
-        digitalWrite(LED_B, HIGH);  // turn the LED on (HIGH is the voltage level)
-        delay(300);                 // wait for a second
-        digitalWrite(LED_B, LOW);   // turn the LED off by making the voltage LOW
+        digitalWrite(LED_B, HIGH);
+        delay(300);
+        digitalWrite(LED_B, LOW);
         delay(300);
     }
 }
 
 void StreamEnd() {
-    videoStreamer.pause();        // pause linkers
+    videoStreamer.pause();  // pause linkers
     videoStreamerMD.pause();
-    rtsp.end();                   // stop RTSP chaneel/module
-    Camera.channelEnd();          // stop camera channel/module
-    MD.end();                     // close module
-    Camera.videoDeinit();         // video deinit
+    rtsp.end();            // stop RTSP chaneel/module
+    Camera.channelEnd();   // stop camera channel/module
+    MD.end();              // close module
+    Camera.videoDeinit();  // video deinit
     delay(1000);
 }
