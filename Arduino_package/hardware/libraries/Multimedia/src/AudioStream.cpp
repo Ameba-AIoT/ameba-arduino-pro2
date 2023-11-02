@@ -80,7 +80,7 @@ AudioSetting::AudioSetting(uint32_t sampleRate, uint8_t channelCount,      uint8
 //            break;
 //        }
         default: {
-            printf("\r\n[ERROR] Invalid audio sample rate: %d !\n", sampleRate);
+            printf("\r\n[ERROR] Invalid audio sample rate: %ld !\n", sampleRate);
             _sampleRate = 8000;
             _audioParams.sample_rate = ASR_8KHZ;
             break;
@@ -359,6 +359,6 @@ void Audio::printInfo(void) {
     }
 
     printf("\r\n[INFO] Mic type: %s\n", micTypeArray[use_mic_type].c_str());
-    printf("\r\n[INFO] Sample rate: %d Hz\n", sample_rate);
+    printf("\r\n[INFO] Sample rate: %ld Hz\n", sample_rate);
     printf("\r\n[INFO] Word length: %s\n", wordLengthArray[word_length].c_str());
 }

@@ -142,6 +142,6 @@ uint8_t MP4Recording::getRecordingState(void) {
 
 void MP4Recording::printInfo(void) {
     printf("\r\n[INFO] Recording file name: %s\n", getRecordingFileName().c_str());
-    printf("\r\n[INFO] Recording duration: %d seconds\n", getRecordingDuration());
-    printf("\r\n[INFO] File count: %d\n", getRecordingFileCount());
+    printf("\r\n[INFO] Recording duration: %ld seconds\n", getRecordingDuration());
+    printf("\r\n[INFO] File count: %ld\n", getRecordingFileCount());
 }
