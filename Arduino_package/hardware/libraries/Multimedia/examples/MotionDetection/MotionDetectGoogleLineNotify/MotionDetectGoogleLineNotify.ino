@@ -149,8 +149,7 @@ void loop() {
             Serial.println("================================");
             Serial.println("[ERROR] SD Card Mount Failed !!!");
             Serial.println("================================");
-            while (1)
-                ;
+            while(1);
         }
 
         // List root directory and put results in buf
@@ -227,16 +226,13 @@ void loop() {
 
             wifiClient.println("POST " + myScript + " HTTP/1.1");
             wifiClient.println("Host: " + String(myDomain));
-            wifiClient.println("Content-Length: " +
-                               String(Data.length() + imageFile.length()));
-            wifiClient.println(
-                "Content-Type: application/x-www-form-urlencoded");
+            wifiClient.println("Content-Length: " + String(Data.length() + imageFile.length()));
+            wifiClient.println("Content-Type: application/x-www-form-urlencoded");
             wifiClient.println("Connection: keep-alive");
             wifiClient.println();
 
             wifiClient.print(Data);
-            for (unsigned int Index = 0; Index < imageFile.length();
-                 Index = Index + 1000) {
+            for (unsigned int Index = 0; Index < imageFile.length(); Index = Index + 1000) {
                 wifiClient.print(imageFile.substring(Index, Index + 1000));
             }
 
@@ -249,15 +245,22 @@ void loop() {
                 delay(100);
                 while (wifiClient.available()) {
                     char c = wifiClient.read();
-                    if (state == true) getBody += String(c);
+                    if (state == true) {
+                        getBody += String(c);
+                    }
                     if (c == '\n') {
-                        if (getAll.length() == 0) state = true;
+                        if (getAll.length() == 0) {
+                            state = true;
+                        }
                         getAll = "";
-                    } else if (c != '\r')
+                    } else if (c != '\r') {
                         getAll += String(c);
+                    }
                     startTime = millis();
                 }
-                if (getBody.length() > 0) break;
+                if (getBody.length() > 0) {
+                    break;
+                }
             }
             wifiClient.stop();
             Serial.println(getBody);
