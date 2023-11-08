@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #if defined(__WIN32__) // MINGW64
 //#include <winsock.h>
 #include <winsock2.h>
@@ -9,7 +10,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#else
+#error
 #endif
+
 #include <sys/time.h>
 
 #define BUFSIZE 1024

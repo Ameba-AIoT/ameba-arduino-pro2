@@ -133,8 +133,7 @@ int WiFiUDP::beginPacket(IPAddress ip, uint16_t port) {
     if (_sock >= 0) {
         _client_sock = _sock;
     } else {
-        return 0;
-        //_client_sock = serverDrv.startClient(ip, port, UDP_MODE, BLOCKING_MODE);
+        _client_sock = serverDrv.startClient(ip, port, UDP_MODE, BLOCKING_MODE);
     }
 
     if (_client_sock < 0) {

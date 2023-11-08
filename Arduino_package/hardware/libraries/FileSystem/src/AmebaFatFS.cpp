@@ -182,7 +182,7 @@ int AmebaFatFS::readDir(char *path, char *result_buf, unsigned int bufsize) {
             }
 
             // print file names into buffer
-            if (fileinfo.fattrib & AM_DIR) {
+            //if (fileinfo.fattrib & AM_DIR) {
                 if ((bufidx + filelen + 1) < bufsize) {
 #ifdef Arduino_STD_PRINTF
                     bufidx += sprintf((result_buf + bufidx), "%s", filename) + 1;
@@ -191,7 +191,7 @@ int AmebaFatFS::readDir(char *path, char *result_buf, unsigned int bufsize) {
 #endif
                     //bufidx++;
                 }
-            }
+            //}
         }
     } while (0);
 
