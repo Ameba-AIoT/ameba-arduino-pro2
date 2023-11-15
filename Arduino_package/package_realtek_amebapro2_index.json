@@ -18,7 +18,7 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2-4.0.5.tar.gz",
+          "url": "https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/release/ameba_pro2-4.0.5.tar.gz",
           "archiveFileName": "ameba_pro2-4.0.5.tar.gz",
           "checksum": "SHA-256:aa6d9d4ea3ead00d6db373a57297051ca46b757f65cd70f6e69c02e7ed6d20ca",
           "size": "97447220",
