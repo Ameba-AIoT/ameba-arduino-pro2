@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-web-client-ssl/
+ https://www.amebaiot.com/en/amebapro2-arduino-web-client-ssl/
  */
 
 #include <WiFi.h>

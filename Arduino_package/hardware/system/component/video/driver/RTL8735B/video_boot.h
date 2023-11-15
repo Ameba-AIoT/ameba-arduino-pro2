@@ -4,15 +4,13 @@
 #include <stdint.h>
 #include "fw_img_export.h"
 
-#define ISP_COMMON_BUF  900*1024
-#define ENC_COMMON_BUF  500*1024
-#define ENABLE_OSD_BUF  900*1024
 #define ENABLE_MD_BUF   500*1024
 #define ENABLE_HDR_BUF  500*1024
 
-#define ISP_CREATE_BUF 200*1024
-#define ENC_CREATE_BUF 420*1024
+#define ISP_CREATE_BUF 750*1024
+#define ENC_CREATE_BUF (859+59)*1024
 #define SNAPSHOT_BUF   300*1024
+#define OSD_CREATE_BUF (10*1024+24*480) //default 24 blocks, each one require 480 bytes
 
 #define V1_ENC_BUF_SIZE  8 //sec
 #define V2_ENC_BUF_SIZE  8 //sec
@@ -36,6 +34,8 @@
 #define FCS_TALBE_NUM  11 //The parameter can't be changed
 
 #define VIDEO_BOOT_META_USER_SIZE 0X40
+
+#define VIDEO_BOOT_META_REV_BUF  0x1000
 
 typedef struct video_boot_param_s {
 	uint32_t stream_id;
@@ -156,6 +156,8 @@ typedef struct video_boot_stream_cfg {
 	uint32_t meta_enable;//
 	uint32_t meta_size;//enalbe the meta size for
 	video_boot_isp_initial_items_t init_isp_items;
+	uint32_t fcs_meta_offset;
+	uint32_t fcs_meta_total_size;
 } video_boot_stream_t;
 #endif
 

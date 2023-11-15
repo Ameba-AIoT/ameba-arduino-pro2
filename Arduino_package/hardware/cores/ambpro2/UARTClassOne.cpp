@@ -97,6 +97,9 @@ void UARTClassOne::IrqHandler(void) {
 #endif
 
 void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value, uint32_t uart0_clk_sel) {
+    //amb_ard_pin_check_fun(SERIAL1_TX, PIO_UART);
+    //amb_ard_pin_check_fun(SERIAL1_RX, PIO_UART);
+
     // Log, UART1
     //serial_init(&log_uart_obj, PF_4, PF_3);
     ////serial_init(&log_uart_obj, PF_13, PF_12);
@@ -126,7 +129,7 @@ void UARTClassOne::begin(const uint32_t dwBaudRate, uint8_t serial_config_value,
 #endif
     serial_baud(&uart_obj, UART_BaudRate);
 
-    switch(serial_config_value) {
+    switch (serial_config_value) {
         case SERIAL_7N1:
             serial_format(&uart_obj, 7, ParityNone, 1);
             break;

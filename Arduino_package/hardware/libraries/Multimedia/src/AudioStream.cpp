@@ -80,7 +80,7 @@ AudioSetting::AudioSetting(uint32_t sampleRate, uint8_t channelCount,      uint8
 //            break;
 //        }
         default: {
-            printf("Invalid audio sample rate: %d !\r\n", sampleRate);
+            printf("\r\n[ERROR] Invalid audio sample rate: %ld !\n", sampleRate);
             _sampleRate = 8000;
             _audioParams.sample_rate = ASR_8KHZ;
             break;
@@ -94,7 +94,7 @@ AudioSetting::AudioSetting(uint32_t sampleRate, uint8_t channelCount,      uint8
         }
         case 2: // Stereo audio is disabled due to poor quality with DMIC
         default: {
-            printf("Invalid audio channel count: %d !\r\n", channelCount);
+            printf("\r\n[ERROR] Invalid audio channel count: %d !\n", channelCount);
             break;
         }
     }
@@ -108,7 +108,7 @@ AudioSetting::AudioSetting(uint32_t sampleRate, uint8_t channelCount,      uint8
             break;
         }
         default: {
-            printf("Invalid audio mic type !\r\n", micType);
+            printf("\r\n[ERROR] Invalid audio mic type %d !\n", micType);
             break;
         }
     }
@@ -119,7 +119,7 @@ Audio::Audio(void) {
         _p_mmf_context = mm_module_open(&audio_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("Audio init failed\r\n");
+        printf("\r\n[ERROR] Audio init failed\n");
         return;
     }
 }
@@ -132,7 +132,7 @@ Audio::~Audio(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("Audio deinit failed\r\n");
+        printf("\r\n[ERROR] Audio deinit failed\n");
     }
 }
 
@@ -142,7 +142,7 @@ void Audio::configAudio(AudioSetting& config) {
 
 void Audio::configMicAEC(uint8_t enable, uint8_t level) {
     if (level > 17) {
-        printf("Acoustic Echo Cancellation limited to maximum level of 17!\r\n");
+        printf("\r\n[INFO] Acoustic Echo Cancellation limited to maximum level of 17!\n");
         level = 17;
     }
     if (enable) {
@@ -155,7 +155,7 @@ void Audio::configMicAEC(uint8_t enable, uint8_t level) {
 
 void Audio::configMicAGC(uint8_t enable, uint8_t dBFS) {
     if (dBFS > 30) {
-        printf("Automatic Gain Control reference level limited from 0 to -30dBFS!\r\n");
+        printf("\r\n[INFO] Automatic Gain Control reference level limited from 0 to -30dBFS!\n");
         dBFS = 30;
     }
     if (enable) {
@@ -168,7 +168,7 @@ void Audio::configMicAGC(uint8_t enable, uint8_t dBFS) {
 
 void Audio::configMicNS(uint8_t enable, uint8_t level) {
     if (level > 12) {
-        printf("Noise suppression limited to maximum level of 12!\r\n");
+        printf("\r\n[INFO] Noise suppression limited to maximum level of 12!\n");
         level = 12;
     }
     if (enable) {
@@ -181,7 +181,7 @@ void Audio::configMicNS(uint8_t enable, uint8_t level) {
 
 void Audio::configSpkAGC(uint8_t enable, uint8_t dBFS) {
     if (dBFS > 30) {
-        printf("Automatic Gain Control reference level limited from 0 to -30dBFS!\r\n");
+        printf("\r\n[ERROR] Automatic Gain Control reference level limited from 0 to -30dBFS!\n");
         dBFS = 30;
     }
     if (enable) {
@@ -194,7 +194,7 @@ void Audio::configSpkAGC(uint8_t enable, uint8_t dBFS) {
 
 void Audio::configSpkNS(uint8_t enable, uint8_t level) {
     if (level > 12) {
-        printf("Noise suppression limited to maximum level of 12!\r\n");
+        printf("\r\n[ERROR] Noise suppression limited to maximum level of 12!\n");
         level = 12;
     }
     if (enable) {
@@ -210,7 +210,7 @@ void Audio::begin(void) {
         return;
     }
     if (_audioParams == NULL) {
-        printf("Invalid AudioSetting configuration!\r\n");
+        printf("\r\n[ERROR] Invalid AudioSetting configuration!\n");
         return;
     }
 
@@ -234,7 +234,7 @@ void Audio::end(void) {
 
 void Audio::setAMicBoost(uint8_t amicBoost) {
     if (_audioParams == NULL) {
-        printf("Configure AudioSetting first!\r\n");
+        printf("\r\n[ERROR] Configure AudioSetting first!\n");
         return;
     }
     switch (amicBoost) {
@@ -255,7 +255,7 @@ void Audio::setAMicBoost(uint8_t amicBoost) {
 
 void Audio::setDMicBoost(uint8_t dmicBoost) {
     if (_audioParams == NULL) {
-        printf("Configure AudioSetting first!\r\n");
+        printf("\r\n[ERROR] Configure AudioSetting first!\n");
         return;
     }
     switch (dmicBoost) {
@@ -358,8 +358,7 @@ void Audio::printInfo(void) {
         }
     }
 
-    printf("Mic type: %s\r\n", micTypeArray[use_mic_type].c_str());
-    printf("Sample rate: %d Hz\r\n", sample_rate);
-    printf("Word length: %s\r\n", wordLengthArray[word_length].c_str());
-    printf("\r\n");
+    printf("\r\n[INFO] Mic type: %s\n", micTypeArray[use_mic_type].c_str());
+    printf("\r\n[INFO] Sample rate: %ld Hz\n", sample_rate);
+    printf("\r\n[INFO] Word length: %s\n", wordLengthArray[word_length].c_str());
 }

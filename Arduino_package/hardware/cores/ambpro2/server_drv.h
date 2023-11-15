@@ -17,50 +17,32 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef Server_Drv_h
-#define Server_Drv_h
+#ifndef SERVER_DRV_H
+#define SERVER_DRV_H
 
 #include <inttypes.h>
+#include "wl_definitions.h"
 
-typedef enum eProtMode { TCP_MODE,
-                         UDP_MODE } tProtMode;
 #define DATA_LENTH 128
 class ServerDrv {
     public:
-        int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE);
-
+        int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE, tBlockingMode blockMode = NON_BLOCKING_MODE);
+        int startServer(uint16_t port, uint8_t portMode = TCP_MODE, tBlockingMode blockMode = NON_BLOCKING_MODE);
     //    int startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode = TCP_MODE);
-
     //    int startClientV6(const char *ipv6Address, uint16_t port, uint8_t protMode);
-
-        int startServer(uint16_t port, uint8_t protMode = TCP_MODE);
-
         int getAvailable(int sock);
-
         int availData(int sock);
-
         bool recvData(int sock, uint8_t *_data, uint32_t _dataLen);
-
         bool getData(int sock, uint8_t *data, uint8_t peek = 0);
-
         int getDataBuf(int sock, uint8_t *_data, uint32_t _dataLen);
-
         int getLastErrno(int sock);
-
         void stopSocket(int sock);
-
         bool sendData(int sock, const uint8_t *data, uint32_t len);
-
         bool sendtoData(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port);
-
         void getRemoteData(int sock, uint32_t *ip, uint16_t *port);
-
         int setSockRecvTimeout(int sock, int timeout);
-
     //    static int enableIPv6();
-
     //    static int getIPv6Status();
-
     //    void setIPv6UDPServer(void);
 
     private:

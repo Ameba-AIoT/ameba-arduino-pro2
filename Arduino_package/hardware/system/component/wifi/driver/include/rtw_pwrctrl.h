@@ -426,6 +426,13 @@ struct pwrctrl_priv {
 	u8 bcntrack_increment_step;
 	u8 bcntrack_duration;
 #endif
+
+#ifdef CONFIG_WOWLAN_NTP_OFFLOAD
+	u8  ntp_rsvd_page_locate;
+	u8 *ntp_pkt;
+	u32 ntp_pkt_size;
+	u16 ntp_time;
+#endif
 };
 
 #define RTW_PWR_STATE_CHK_INTERVAL 2000

@@ -15,14 +15,13 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#ifndef _UART_CLASS_TWO_
-#define _UART_CLASS_TWO_
+#ifndef _UARTCLASSTWO_
+#define _UARTCLASSTWO_
 
 #include "HardwareSerial.h"
 #include "RingBuffer.h"
 
-class UARTClassTwo : public HardwareSerial
-{
+class UARTClassTwo : public HardwareSerial {
     public:
         UARTClassTwo(int dwIrq, RingBuffer* pRx_buffer);
         void begin(const uint32_t dwBaudRate) { begin(dwBaudRate, SERIAL_8N1); }

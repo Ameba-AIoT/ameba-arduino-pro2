@@ -208,6 +208,7 @@ u8 hal_sys_spic_read_phy_delay(void);
 uint8_t hal_sys_get_atld_cfg(const uint8_t op);
 void hal_sys_get_img_vrf_digest(const uint8_t op_img, void *pld_buf);
 void hal_sys_get_cust_derived_uid(void *pld_buf);
+void hal_osc128k_cal(void);
 
 #define RAM_FOOTPH_INIT(idx)                hal_sys_boot_footpath_init(idx)
 #define RAM_FOOTPH_STORE(idx,fp_v)          hal_sys_boot_footpath_store(idx,fp_v)

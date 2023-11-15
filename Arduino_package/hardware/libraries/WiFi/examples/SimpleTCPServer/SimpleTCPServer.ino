@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-server-client/
+ https://www.amebaiot.com/en/amebapro2-arduino-server-client/
  */
 
 #include <WiFi.h>

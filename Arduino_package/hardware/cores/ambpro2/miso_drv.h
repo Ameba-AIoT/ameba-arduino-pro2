@@ -1,6 +1,6 @@
 // Multiple Input and Single Output
-#ifndef miso_drv_h
-#define miso_drv_h
+#ifndef MISO_DRV_H
+#define MISO_DRV_H
 
 #include "Arduino.h"
 #include "mmf2_module.h"

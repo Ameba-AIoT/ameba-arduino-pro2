@@ -26,7 +26,7 @@ RTSP::~RTSP(void) {
     if (RTSPDeinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("RTSP deinit failed\r\n");
+        printf("\r\n[ERROR] RTSP deinit failed\n");
     }
 }
 
@@ -36,7 +36,7 @@ void RTSP::configVideo(VideoSetting& config) {
         _p_mmf_context = RTSPInit();
     }
     if (_p_mmf_context == NULL) {
-        printf("RTSP init failed\r\n");
+        printf("\r\n[ERROR] RTSP init failed\n");
         return;
     }
 
@@ -63,7 +63,7 @@ void RTSP::configAudio(AudioSetting& config, Audio_Codec_T codec) {
         _p_mmf_context = RTSPInit();
     }
     if (_p_mmf_context == NULL) {
-        printf("RTSP init failed\r\n");
+        printf("\r\n[ERROR] RTSP init failed\n");
         return;
     }
 
@@ -77,7 +77,7 @@ void RTSP::configAudio(AudioSetting& config, Audio_Codec_T codec) {
 
 void RTSP::begin(void) {
     if (_p_mmf_context == NULL) {
-        printf("Need RTSP init first\r\n");
+        printf("\r\n[ERROR] Need RTSP init first\n");
     } else {
         RTSPSetStreaming((void *)_p_mmf_context, 1);
     }
@@ -85,20 +85,19 @@ void RTSP::begin(void) {
 
 void RTSP::end(void) {
     if (_p_mmf_context == NULL) {
-        printf("Need RTSP init first\r\n");
+        printf("\r\n[ERROR] Need RTSP init first\n");
     }
     RTSPSetStreaming((void *)_p_mmf_context, 0);
 }
 
 int RTSP::getPort(void) {
     if (_p_mmf_context == NULL) {
-        printf("Need RTSP init first\r\n");
+        printf("\r\n[ERROR] Need RTSP init first\n");
     }
     return RTSPGetPort(_p_mmf_context->priv);
 }
 
 void RTSP::printInfo(void) {
     int port = getPort();
-    printf("%d\r\n", port);
-    printf("\r\n");
+    printf("\r\n[INFO] %d\n", port);
 }

@@ -8,4 +8,5 @@ struct dfu_opts {
 };
 int usbd_dfu_init(struct dfu_opts *dfu_cb);
 void usbd_dfu_setup_serial_number(char *str);
+void usbd_dfu_deinit(void);
 #endif

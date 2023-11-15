@@ -33,12 +33,11 @@ string common_nn_models_path;
 string fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
 string isp_file_name_buf[100];
 
-string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3, isp_bin_check_name;
+string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, isp_bin_check_name;
 string ino_name_buf[100];
 
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
-
 
 //void readtxt(int line_number, int mode_isp_nn) {
 void readtxt(int mode_isp_ino) {
@@ -86,10 +85,12 @@ void readtxt(int mode_isp_ino) {
         nn_model_yolotiny_name = ino_name_buf[2];
         nn_model_srcfd_name = ino_name_buf[3];
         nn_model_mobilefacenet_name = ino_name_buf[4];
-        nn_header_name1 = ino_name_buf[7];
-        nn_header_name2 = ino_name_buf[8];
-        nn_header_name3 = ino_name_buf[9];
-        isp_bin_check_name = ino_name_buf[12];
+        nn_model_yamnet_name = ino_name_buf[5];
+        nn_header_name1 = ino_name_buf[8];
+        nn_header_name2 = ino_name_buf[9];
+        nn_header_name3 = ino_name_buf[10];
+        nn_header_name4 = ino_name_buf[11];
+        isp_bin_check_name = ino_name_buf[14];
     }
 }
 
@@ -99,16 +100,15 @@ void isp_bin_check(string isp_bin_check_name) {
     }
 }
 
-void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, string nn_model_mobilefacenet_name, string nn_header_name1, string nn_header_name2, string nn_header_name3) {
-    if ((nn_model_yolotiny_name != "NA") || (nn_model_srcfd_name != "NA") || (nn_model_mobilefacenet_name != "NA")) {
-        if ((nn_header_name1 != "NA") || (nn_header_name2 != "NA") || (nn_header_name3 != "NA")) {
+void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, string nn_model_mobilefacenet_name, string nn_model_yamnet_name, string nn_header_name1, string nn_header_name2, string nn_header_name3, string nn_header_name4) {
+    if ((nn_model_yolotiny_name != "NA") || (nn_model_srcfd_name != "NA") || (nn_model_mobilefacenet_name != "NA") || (nn_model_yamnet_name != "NA")) {
+        if ((nn_header_name1 != "NA") || (nn_header_name2 != "NA") || (nn_header_name3 != "NA") || (nn_header_name4 != "NA")) {
             nn_model_selection_check = 1;
         }
     }
 }
 
 int main(int argc, char *argv[]) {
-
     int ret = 0;
     stringstream cmdss;
     string cmd, line, msg;
@@ -171,8 +171,8 @@ int main(int argc, char *argv[]) {
     readtxt(0);
     readtxt(1);
     isp_bin_check(isp_bin_check_name);
-    nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_header_name1, nn_header_name2, nn_header_name3);
-
+    nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4);
+    
     if (isp_selection_check == 1) {
         cmdss.clear();
         cmdss << "cp misc/video_img/" << voe_name << " ./";

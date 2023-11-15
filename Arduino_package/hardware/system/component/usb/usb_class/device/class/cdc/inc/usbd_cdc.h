@@ -22,4 +22,5 @@ void usbd_cdc_deinit(void);
 int cdc_port_status(void);
 int usb_insert_status(void);
 int usbd_cdc_acm_sync_transmit_data(void *buf, u16 length);
+void usbd_cdc_stop(void);
 #endif

@@ -95,7 +95,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                 gpio_init(&PM_GPIO_1, PA_2);
                 gpio_pull_ctrl(&PM_GPIO_1, PullDown);
             } else {
-                printf("ERROR: DeepSlesp wakeup AON GPIO pin selection fail.    \r\n");
+                printf("\r\n[ERROR] DeepSlesp wakeup AON GPIO pin selection fail. \n");
                 PM_begin_check = 0;
                 return;
             }
@@ -105,7 +105,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
         } else if (wakeup_source == 2){
             PM_wakeup_source = DS_RTC;
         } else {
-            printf("ERROR: DeepSlesp wakeup source selection fail.    \r\n");
+            printf("\r\n[ERROR] DeepSlesp wakeup source selection fail. \n");
             PM_begin_check = 0;
             return;
         }
@@ -133,7 +133,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                 case PA_3:
                     break;
                 default:
-                    printf("ERROR: Standby wakeup AON GPIO pin selection fail.    \r\n");
+                    printf("\r\n[ERROR] Standby wakeup AON GPIO pin selection fail. \n");
                     PM_begin_check = 0;
                     return;
             }
@@ -169,7 +169,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                 // case PF_17:
                     break;
                 default:
-                    printf("ERROR: Standby wakeup PON GPIO pin selection fail.    \r\n");
+                    printf("\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
                     PM_begin_check = 0;
                     return;
             }
@@ -208,7 +208,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
             //serial_init(&PM_UART, PA_2, PA_3);
             // 0:40M, 1:4M
             serial_init_arduino(&PM_UART, PA_2, PA_3, 1);
-            //printf("Check the 4M en %d   \r\n ", (PM_UART.uart_adp.reserv1));
+            //printf("\r\n[INFO] Check the 4M en %d \n ", (PM_UART.uart_adp.reserv1));
             serial_baud(&PM_UART, 115200);
             serial_format(&PM_UART, 8, ParityNone, 1);
             serial_irq_handler(&PM_UART, uart_irq, (uint32_t)&PM_UART);
@@ -230,13 +230,13 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
         } else if (wakeup_source == 6) {
             // PWM TBD
         } else {
-            printf("ERROR: Standby wakeup source selection fail.    \r\n");
+            printf("\r\n[ERROR] Standby wakeup source selection fail. \n");
             PM_begin_check = 0;
             return;
         }
         PM_begin_check = 2;
     } else {
-        printf("ERROR: Power mode selection fail.    \r\n");
+        printf("\r\n[ERROR] Power mode selection fail. \n");
         PM_begin_check = 0;
     }
 }
@@ -286,7 +286,7 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec) {
         }
         Standby(PM_wakeup_source, PM_sleep_duration, PM_clock, 0);
     } else {
-        printf("ERROR: Power Mode begin check fail.    \r\n");
+        printf("\r\n[ERROR] Power Mode begin check fail. \n");
     }
 }
 

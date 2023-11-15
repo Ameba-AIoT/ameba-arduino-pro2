@@ -18,6 +18,7 @@
 
 #define CMD_UVCD_CALLBACK_SET     	MM_MODULE_CMD(0x00)  // set parameter
 #define CMD_UVCD_CALLBACK_GET     	MM_MODULE_CMD(0x01)  // get parameter
+#define CMD_UVCD_STOP     	        MM_MODULE_CMD(0x02)  // get parameter
 
 struct uvc_format {
 	int width;

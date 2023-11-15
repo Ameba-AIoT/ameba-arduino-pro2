@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ble-scan/
+ https://www.amebaiot.com/en/amebapro2-arduino-ble-scan/
  */
 
 #include "BLEDevice.h"

@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ameba-web-server/
+ https://www.amebaiot.com/en/amebapro2-arduino-ameba-web-server/
  */
 
 #include <WiFi.h>
@@ -45,7 +45,6 @@ void loop() {
                 char c = client.read();         // read a byte, then
                 Serial.write(c);                // print it out the serial monitor
                 if (c == '\n') {                // if the byte is a newline character
-
                     // if the current line is blank, you got two newline characters in a row.
                     // that's the end of the client HTTP request, so send a response:
                     if (currentLine.length() == 0) {

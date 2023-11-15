@@ -1,5 +1,8 @@
 /*
  This sketch shows how to list files under root directory.
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-filesystem-simple-application/
  */
 
 #include "AmebaFatFS.h"

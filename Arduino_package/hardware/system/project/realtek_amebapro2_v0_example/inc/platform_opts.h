@@ -159,6 +159,12 @@
 #endif
 #define CONFIG_LWIP_TCP_RESUME        1
 
+
+/*Enable CONFIG_LWIP_DHCP_FINE_TIMEOUT if lease time is less than or equal to CONFIG_LWIP_DHCP_COARSE_TIMER
+* replace dhcp_coarse_tmr with dhcp_fine_tmr to manage and check for lease timeout
+*/
+#define CONFIG_LWIP_DHCP_FINE_TIMEOUT 0
+
 /****************** For EAP method example *******************/
 //#define CONFIG_EXAMPLE_EAP	0
 
@@ -193,4 +199,8 @@
 
 #define CONFIG_FTL_EN 1
 
+/* For RTK EVB IR GPIO CONTROL
+*  GPIO: F12(IR_CUT) F13(IR_LED)
+*/
+#define CONFIG_RTK_EVB_IR_CTRL 0
 #endif

@@ -1,15 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#if defined(__WIN32__) // MINGW64
+//#include <winsock.h>
+#include <winsock2.h>
+#include <windows.h>
+#elif defined(__linux__) || defined(__APPLE__)// ubuntu 32 bits  and OS X 64bits
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
+#else
+#error
+#endif
+
 #include <sys/time.h>
 
 #define BUFSIZE 1024
 #define PORT 5001
 
-long get_current_time_with_ms (void)
-{
+long get_current_time_with_ms(void) {
     struct timeval tv;
 
     gettimeofday(&tv, NULL);
@@ -61,10 +71,10 @@ void process_data(char *buf) {
 int main(int argc, char **argv) {
     printf("Please wait.");
 
-    int sockfd, optval;
+    int optval = 1;
 
     struct sockaddr_in serveraddr, clientaddr;
-#ifdef __CYGWIN__
+#if defined(__CYGWIN__) || defined(__WIN32__)
     int clientaddr_len = sizeof(clientaddr);
 #else
     unsigned int clientaddr_len = sizeof(clientaddr);
@@ -76,14 +86,38 @@ int main(int argc, char **argv) {
     int n;
     char buf[BUFSIZE];
 
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd < 0) {
-        printf("ERROR opening socket\r\n");
+#if defined(__WIN32__) // MINGW64
+    // Declare and initialize variables
+    WSADATA wsaData = {0};
+    int iResult = 0;
+    SOCKET sockfd = INVALID_SOCKET;
+
+    // Initialize Winsock
+    iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (iResult != 0) {
+        printf("WSAStartup failed: %d \r\n", iResult);
         return -1;
     }
 
-    optval = 1;
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd == INVALID_SOCKET) {
+        printf("ERROR %d opening socket \r\n",  WSAGetLastError());
+        return -1;
+    }
+#else
+    int sockfd;
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd < 0) {
+        printf("ERROR %d opening socket\r\n", sockfd);
+        return -1;
+    }
+#endif
+
+#if defined(__CYGWIN__) || defined(__WIN32__)
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char *)&optval , sizeof(int));
+#else
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
+#endif
 
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
@@ -102,5 +136,19 @@ int main(int argc, char **argv) {
         }
         process_data(buf);
     }
+
+#if defined(__WIN32__) // MINGW64
+    iResult = closesocket(sockfd);
+    if (iResult == SOCKET_ERROR) {
+        printf("closesocket failed with error: %d \r\n", WSAGetLastError());
+        WSACleanup();
+        return -1;
+    }
+
+    // Clean up and quit.
+    printf("Exiting. \r\n");
+    WSACleanup();
+#endif
+
     return 0;
 }

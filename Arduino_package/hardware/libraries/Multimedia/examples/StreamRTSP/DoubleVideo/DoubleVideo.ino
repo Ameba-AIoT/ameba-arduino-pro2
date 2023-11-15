@@ -1,9 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-video-rtsp/
-
- For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
+ https://www.amebaiot.com/en/amebapro2-arduino-video-rtsp/
  */
 
 #include "WiFi.h"
@@ -23,7 +21,7 @@ RTSP rtsp1;
 RTSP rtsp2;
 StreamIO videoStreamer(1, 2);   // 1 Input Video -> 2 Output RTSP1 + RTSP2
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 

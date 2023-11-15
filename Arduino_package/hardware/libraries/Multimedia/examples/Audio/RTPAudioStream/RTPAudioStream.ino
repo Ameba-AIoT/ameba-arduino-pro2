@@ -1,7 +1,6 @@
 /*
 
- Example guide:
-
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-audio-rtp/
  */
 
 #include "WiFi.h"
@@ -26,7 +25,7 @@ RTP rtp;
 StreamIO audioStreamer1(1, 1);   // 1 Input RTP -> 1 Output decoder
 StreamIO audioStreamer2(1, 1);   // 1 Input decoder -> 1 Output Audio
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 

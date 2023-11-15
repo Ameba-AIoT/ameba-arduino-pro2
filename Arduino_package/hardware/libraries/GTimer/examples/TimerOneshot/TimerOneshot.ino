@@ -2,7 +2,7 @@
  This sketch shows how to use several hardware timers in invoke handler only once for each timer.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-singleuse-timer/
+ https://www.amebaiot.com/en/amebapro2-arduino-singleuse-timer/
  */
 
 #include <GTimer.h>
@@ -10,8 +10,8 @@
 void myhandler(uint32_t data) {
     Serial.print("I am timer!");
     Serial.println(data);
-    
-    if(data >= 7) {
+
+    if (data >= 7) {
         Serial.println("End of the timer demo\r\n");
     }
 }

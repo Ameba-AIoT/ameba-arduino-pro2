@@ -1,9 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-neuralnework-face-detection/
-
- For recommended setting to achieve better video quality, please refer to our Ameba FAQ: https://forum.amebaiot.com/t/ameba-faq/1220
+ https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-detection/
 
  NN Model Selection
  Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
@@ -30,12 +28,12 @@
 #include "NNFaceDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL   0
-#define CHANNELNN 3
+#define CHANNEL     0
+#define CHANNELNN   3
 
 // Lower resolution for NN processing
-#define NNWIDTH  576
-#define NNHEIGHT 320
+#define NNWIDTH     576
+#define NNHEIGHT    320
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -44,7 +42,7 @@ RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerNN(1, 1);
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 

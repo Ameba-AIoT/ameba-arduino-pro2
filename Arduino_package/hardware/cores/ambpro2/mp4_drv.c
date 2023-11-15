@@ -43,4 +43,3 @@ uint8_t mp4RecordingState(void *p) {
     mp4_control(p, CMD_MP4_GET_STATUS, (int)(&state));
     return state;
 }
-

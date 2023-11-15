@@ -26,8 +26,7 @@ extern "C" {
 /*
  * \brief SAM3 products have only one reference for ADC
  */
-typedef enum _eAnalogReference
-{
+typedef enum _eAnalogReference {
     AR_DEFAULT,
 } eAnalogReference;
 
@@ -75,6 +74,8 @@ extern void analogOutputInit(void);
 extern void noTone(uint32_t ulPin);
 
 extern void analogWritePeriod(int us);
+
+extern void analogSet(float gain, float offset);
 
 #ifdef __cplusplus
 }

@@ -30,8 +30,7 @@ static const int HTTP_ERROR_INVALID_RESPONSE = -4;
 #define HTTP_HEADER_CONNECTION          "Connection"
 #define HTTP_HEADER_USER_AGENT          "User-Agent"
 
-class HttpClient : public Client
-{
+class HttpClient : public Client {
     public:
         static const int kNoContentLengthHeader = -1;
         static const int kHttpPort = 80;

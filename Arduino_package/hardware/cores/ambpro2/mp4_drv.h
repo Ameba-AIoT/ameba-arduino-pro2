@@ -1,5 +1,5 @@
-#ifndef mp4_drv_h
-#define mp4_drv_h
+#ifndef MP4_DRV_H
+#define MP4_DRV_H
 
 #include "mmf2_module.h"
 #include "mp4_muxer.h"
@@ -33,4 +33,3 @@ extern int mp4_handle(void *p, void *input, void *output);
 #endif
 
 #endif
-

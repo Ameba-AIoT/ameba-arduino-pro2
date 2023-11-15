@@ -11,7 +11,7 @@
  This example code is in the public domain.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-i2c-2/
+ https://www.amebaiot.com/en/amebapro2-arduino-i2c-2/
  */
 
 #include <Wire.h>

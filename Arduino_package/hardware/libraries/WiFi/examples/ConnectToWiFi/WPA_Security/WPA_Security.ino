@@ -12,7 +12,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-connect-wifi/
+ https://www.amebaiot.com/en/amebapro2-arduino-connect-wifi/
  */
 
 #include <WiFi.h>
@@ -49,25 +49,25 @@ void setup() {
 #ifdef MANUAL_INPUT
         Serial.println("Enter your ssid");
         while (Serial.available() == 0) {}
-            str_ssid = Serial.readString();
-            str_ssid.trim();
-            Serial.print("SSID entered: ");
-            Serial.println(str_ssid);
-        
+        str_ssid = Serial.readString();
+        str_ssid.trim();
+        Serial.print("SSID entered: ");
+        Serial.println(str_ssid);
+
         Serial.println("Enter your password");
         while (Serial.available() == 0) {}
         str_pass = Serial.readString();
         str_pass.trim();
-            if (str_pass.length() != 0) { // user has entered data
-                while (str_pass.length() <8 ) { // to catch pwd<8 exception
-                    Serial.println("Password cannot be less than 8 characters! Try again");
-                    while (Serial.available() == 0) {}
-                    str_pass = Serial.readString();
-                    str_pass.trim();
-                }
-                    Serial.print("Password entered: ");
-                    Serial.println(str_pass);
+        if (str_pass.length() != 0) { // user has entered data
+            while (str_pass.length() <8 ) { // to catch pwd<8 exception
+                Serial.println("Password cannot be less than 8 characters! Try again");
+                while (Serial.available() == 0) {}
+                str_pass = Serial.readString();
+                str_pass.trim();
             }
+            Serial.print("Password entered: ");
+            Serial.println(str_pass);
+        }
 #endif
         Serial.print("Attempting to connect to WPA SSID: ");
 

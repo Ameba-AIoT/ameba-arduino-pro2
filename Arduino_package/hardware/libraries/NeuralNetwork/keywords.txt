@@ -13,6 +13,8 @@ NNFaceDetectionRecognition	KEYWORD1
 ObjectDetectionResult	KEYWORD1
 NNObjectDetection	KEYWORD1
 NNModelSelection	KEYWORD1
+AudioClassificationResult	KEYWORD1
+NNAudioClassification	KEYWORD1
 
 #######################################
 # FaceDetectionResult.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -57,7 +59,7 @@ configVideo	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
 registerFace	KEYWORD2
-exitRegisterMode	KEYWORD2
+removeFace	KEYWORD2
 resetRegisteredFace	KEYWORD2
 backupRegisteredFace	KEYWORD2
 restoreRegisteredFace	KEYWORD2
@@ -96,3 +98,14 @@ getResultCount	KEYWORD2
 #######################################
 
 modelSelect	KEYWORD2
+
+#######################################
+# NNAudioClassification.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+configAudio	KEYWORD2
+begin	KEYWORD2
+end	KEYWORD2
+setResultCallback	KEYWORD2
+getResultCount	KEYWORD2
+getResult	KEYWORD2

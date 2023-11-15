@@ -51,25 +51,25 @@ enum encode_type {
     VIDEO_H264_JPEG
 };
 
-#define	VIDEO_QCIF  0
-#define	VIDEO_CIF   1
-#define	VIDEO_WVGA  2
-#define	VIDEO_VGA   3
-#define	VIDEO_D1    4
-#define	VIDEO_HD    5
-#define	VIDEO_FHD   6
-#define	VIDEO_3M    7
-#define	VIDEO_5M    8
-#define	VIDEO_2K    9
+//#define	VIDEO_QCIF  0   // Quarter Common Intermediate Format(QCIF) 176*144
+//#define	VIDEO_CIF   1   // Common Intermediate Format(CIF)          352*288
+#define	VIDEO_WVGA  2       // 360p                                     640*360
+#define	VIDEO_VGA   3       // Standard Definition(SD) 480p             640*480
+#define	VIDEO_D1    4       // Full D1(D1)                              720*480
+#define	VIDEO_HD    5       // High Definition(HD)                      1280*720
+#define	VIDEO_FHD   6       // Full HD(FHD)                             1920*1080
+//#define	VIDEO_3M    7   // 3M pixels                                1536*2048
+//#define	VIDEO_5M    8   // 5M pixels                                2592*1944
+//#define	VIDEO_2K    9   // Quad HD(QHD)                             2560*1400
 #define	VIDEO_CUSTOM 10
 
 // define video resolution
-//#define VIDEO_2K_WIDTH    2560
-//#define VIDEO_2K_HEIGHT   1440
 #define VIDEO_FHD_WIDTH     1920
 #define VIDEO_FHD_HEIGHT    1080
 #define VIDEO_HD_WIDTH      1280
 #define VIDEO_HD_HEIGHT     720
+#define VIDEO_D1_WIDTH      720
+#define VIDEO_D1_HEIGHT     480
 #define VIDEO_VGA_WIDTH     640
 #define VIDEO_VGA_HEIGHT    480
 #define VIDEO_WVGA_WIDTH    640
@@ -120,6 +120,7 @@ class VideoSetting {
 
         void setBitrate(uint32_t bitrate);
         void setJpegQuality(uint8_t quality);
+        void setRotation(int angle);
 
         uint16_t width(void);
         uint16_t height(void);
@@ -133,6 +134,7 @@ class VideoSetting {
         uint8_t _encoder;
         uint8_t _snapshot;
         uint8_t _jpeg_qlevel;
+        int _rotation;
 
     private:
         int8_t _preset = -1;
@@ -173,6 +175,7 @@ class Video {
         uint8_t encoder[4] = {0};
         uint8_t snapshot[4] = {0};
         uint8_t jpeg_qlevel[4] = {0};
+        int video_rotation[4] = {0};
         typedef struct roi_param_s {
             uint32_t xmin;
             uint32_t ymin;

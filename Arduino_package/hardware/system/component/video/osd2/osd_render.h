@@ -3,11 +3,13 @@
 
 #include "canvas.h"
 #include "hal_osd_util.h"
+#include "osd_util_custom.h"
 
 #define OSD_OBJ_MAX_CH 3 //fix value
-#define OSD_OBJ_MAX_NUM 24 //fix value
+#define OSD_OBJ_MAX_NUM RTS_OSD2_CH_BLK_MAX_NUMBER //fix value
 #define OSD_PT_MAX_NUM 5
 #define MAX_DRAW_MSG 30
+#define MAX_QUEUE_MSG 100
 
 #define CANVAS_CREATE_BMP 		0x01
 #define CANVAS_MSG_DRAW			0x02
@@ -39,6 +41,7 @@ typedef struct osd_render_obj_s {
 	int buff_used_index;
 	canvas_msg_t canvas_draw_msg[MAX_DRAW_MSG];
 	int canvas_draw_msg_count;
+	int canvas_draw_msg_count_last;
 } osd_render_obj_t;
 
 typedef struct osd_render_info_s {
@@ -51,8 +54,8 @@ typedef struct osd_render_info_s {
 
 int canvas_create_bitmap(int ch, int idx, enum rts_osd2_blk_fmt bmp_format);
 int canvas_update(int ch, int idx, int ready2update);
-int canvas_set_point(int ch, int idx, int xmin, int ymin, int point_width, uint32_t color);
-int canvas_set_line(int ch, int idx, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color);
+int canvas_set_point(int ch, int idx, int x, int y, int point_width, uint32_t color);
+int canvas_set_line(int ch, int idx, int xstart, int ystart, int xend, int yend, int line_width, uint32_t color);
 int canvas_set_rect(int ch, int idx, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color);
 int canvas_set_text(int ch, int idx, int xmin, int ymin, char *text_string, uint32_t color);
 void osd_render_dev_init(int *ch_enable, int *char_resize_w, int *char_resize_h);

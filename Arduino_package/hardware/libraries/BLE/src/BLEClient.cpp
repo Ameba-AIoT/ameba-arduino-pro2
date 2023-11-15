@@ -22,17 +22,17 @@ bool BLEClient::connected() {
 
 void BLEClient::discoverServices() {
     if (_serviceDiscState != DISC_IDLE) {
-        printf("Conn ID %d client error: Services already discovered or failed previously \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Services already discovered or failed previously \n", _connId);
         return;
     }
     if (!connected())  {
-        printf("Conn ID %d client error: not connected \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: not connected \n", _connId);
         return;
     }
     if (client_all_primary_srv_discovery(_connId, _clientId) == GAP_CAUSE_SUCCESS) {
         _serviceDiscState = DISC_START;
     } else {
-        printf("Conn ID %d client error: Service discovery request failed \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Service discovery request failed \n", _connId);
         return;
     }
 }
@@ -43,28 +43,28 @@ bool BLEClient::discoveryDone() {
 
 void BLEClient::printServices() {
     if (_serviceDiscState != DISC_DONE) {
-        printf("Conn ID %d client error: Discover services first \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Discover services first \n", _connId);
         return;
     } else if (_serviceCount == 0) {
-        printf("Conn ID %d client error: No services found to print \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: No services found to print \n", _connId);
         return;
     }
-    printf("Device at conn ID %d has services: \n", _connId);
+    printf("\r\n[INFO] Device at conn ID %d has services: \n", _connId);
     BLERemoteService* pserv;
     BLERemoteCharacteristic* pchar;
     BLERemoteDescriptor* pdesc;
     for (uint8_t i = 0; i < _serviceCount; i++) {
         pserv = _servicePtrList[i];
-        printf("Service UUID: %s\n", pserv->_uuid.str());
-        printf("  Start handle: 0x%x, End handle: 0x%x\n", pserv->_handleStart, pserv->_handleEnd);
+        printf("\r\n[INFO] Service UUID: %s\n", pserv->_uuid.str());
+        printf("\r\n[INFO]  Start handle: 0x%x, End handle: 0x%x\n", pserv->_handleStart, pserv->_handleEnd);
         for (uint8_t j = 0; j < (pserv->_characteristicCount); j++) {
             pchar = pserv->_characteristicPtrList[j];
-            printf("\tCharacteristic UUID: %s, Properties: 0x%x\n", pchar->_uuid.str(), pchar->_properties);
-            printf("\t  Declaration handle: 0x%x, Value handle: 0x%x\n", pchar->_declarationHandle, pchar->_valueHandle);
+        printf("\r\n[INFO] \tCharacteristic UUID: %s, Properties: 0x%x\n", pchar->_uuid.str(), pchar->_properties);
+        printf("\r\n[INFO]  Declaration handle: 0x%x, Value handle: 0x%x\n", pchar->_declarationHandle, pchar->_valueHandle);
             for (uint8_t k = 0; k < (pchar->_descriptorCount); k++) {
                 pdesc = pchar->_descriptorPtrList[k];
-                printf("\t\tDescriptor UUID: %s\n", pdesc->_uuid.str());
-                printf("\t\t  Declaration handle: 0x%x\n", pdesc->_declarationHandle);
+                printf("\r\n[INFO] \t\tDescriptor UUID: %s\n", pdesc->_uuid.str());
+                printf("\r\n[INFO] \t\t  Declaration handle: 0x%x\n", pdesc->_declarationHandle);
             }
         }
     }
@@ -76,10 +76,10 @@ BLERemoteService* BLEClient::getService(const char* uuid) {
 
 BLERemoteService* BLEClient::getService(BLEUUID uuid) {
     if (_serviceDiscState != DISC_DONE) {
-        printf("Conn ID %d client error: Discover services first \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Discover services first \n", _connId);
         return nullptr;
     } else if (_serviceCount == 0) {
-        printf("Conn ID %d client error: No services found \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: No services found \n", _connId);
         return nullptr;
     }
     for (uint8_t i = 0; i < _serviceCount; i++) {
@@ -105,7 +105,7 @@ void BLEClient::setDisconnectCallback(void (*fCallback) (BLEClient* client)) {
 
 void BLEClient::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_STATE discovery_state) {
     if (conn_id != _connId) {
-        printf("Conn ID %d client error: Conn ID mismatch in discover state callback \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Conn ID mismatch in discover state callback \n", _connId);
         return;
     }
     // Perform further discovery steps after each stage is complete
@@ -120,7 +120,7 @@ void BLEClient::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_
                     uint16_t start_handle = 0x0001;
                     uint16_t end_handle = 0xffff;
                     if (client_all_char_discovery(_connId, _clientId, start_handle, end_handle) != GAP_CAUSE_SUCCESS) {
-                        printf("Conn ID %d client error: all_char_discovery failed \n", _connId);
+                        printf("\r\n[ERROR] Conn ID %d client: all_char_discovery failed \n", _connId);
                     }
                 }
                 break;
@@ -135,7 +135,7 @@ void BLEClient::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_
                     uint16_t start_handle = 0x0001;
                     uint16_t end_handle = 0xffff;
                     if (client_all_char_descriptor_discovery(_connId, _clientId, start_handle, end_handle) != GAP_CAUSE_SUCCESS) {
-                        printf("Conn ID %d client error: all_char_descriptor_discovery failed \n", _connId);
+                        printf("\r\n[ERROR] Conn ID %d client: all_char_descriptor_discovery failed \n", _connId);
                     }
                 }
                 break;
@@ -149,11 +149,11 @@ void BLEClient::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_
                 _serviceDiscState = DISC_DONE;
                 break;
             case DISC_STATE_FAILED:
-                printf("Conn ID %d client error: Discovery failed \n", _connId);
+                printf("\r\n[ERROR] Conn ID %d client: Discovery failed \n", _connId);
                 _serviceDiscState = DISC_FAILED;
                 break;
             default:
-                printf("Conn ID %d client error: Unhandled discovery state %d \n", _connId, discovery_state);
+                printf("\r\n[ERROR] Conn ID %d client: Unhandled discovery state %d \n", _connId, discovery_state);
                 break;
         }
     }
@@ -161,7 +161,7 @@ void BLEClient::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_
 
 void BLEClient::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY_RESULT_TYPE result_type, T_DISCOVERY_RESULT_DATA result_data) {
     if (conn_id != _connId) {
-        printf("Conn ID %d client error: Conn ID mismatch in discover result callback \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Conn ID mismatch in discover result callback \n", _connId);
         return;
     }
     // Create corresponding services and clients as discovered
@@ -181,7 +181,7 @@ void BLEClient::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY
                     uuid = BLEUUID(result_data.p_srv_uuid128_disc_data->uuid128, 16);
                 }
                 if (_serviceCount >= MAX_REMOTE_SERVICE_COUNT) {
-                    printf("Conn ID %d client error: Maximum number of remote services per client reached \n", _connId);
+                    printf("\r\n[ERROR] Conn ID %d client: Maximum number of remote services per client reached \n", _connId);
                 } else {
                     // Create new service corresponding to discovered data, add to list
                     _servicePtrList[_serviceCount] = new BLERemoteService(uuid);
@@ -251,7 +251,7 @@ void BLEClient::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY
                         // Core 5.2 spec: The Characteristic Value declaration shall exist immediately following the characteristic declaration.
                         // Core 5.2 spec: Any optional characteristic descriptor declarations are placed after the Characteristic Value declaration.
                         if (charCount == 0) {
-                            printf("Conn ID %d client error: Service %s has no characteristics to add descriptor to \n", _connId, pserv->_uuid.str());
+                            printf("\r\n[ERROR] Conn ID %d client: Service %s has no characteristics to add descriptor to \n", _connId, pserv->_uuid.str());
                             break;
                         } else {
                             pchar = pserv->_characteristicPtrList[charCount - 1];
@@ -286,7 +286,7 @@ void BLEClient::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY
             //case DISC_RESULT_BY_UUID128_CHAR:
                 //break;
             default:
-                printf("Conn ID %d client error: Unhandled discovery result %d \n", _connId, result_type);
+                printf("\r\n[ERROR] Conn ID %d client: Unhandled discovery result %d \n", _connId, result_type);
                 break;
         }
     }
@@ -294,7 +294,7 @@ void BLEClient::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY
 
 void BLEClient::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
     if (conn_id != _connId) {
-        printf("Conn ID %d client error: Conn ID mismatch read result callback \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Conn ID mismatch read result callback \n", _connId);
         return;
     }
     // Check handle and pass into corresponding service
@@ -308,7 +308,7 @@ void BLEClient::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause,
 
 void BLEClient::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits) {
     if (conn_id != _connId) {
-        printf("Conn ID %d client error: Conn ID mismatch in write result callback \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Conn ID mismatch in write result callback \n", _connId);
         return;
     }
     // Check handle and pass into corresponding service
@@ -323,7 +323,7 @@ void BLEClient::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_T
 T_APP_RESULT BLEClient::clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
     T_APP_RESULT app_result = APP_RESULT_APP_ERR;
     if (conn_id != _connId) {
-        printf("Conn ID %d client error: Conn ID mismatch in notify/indicate callback \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Conn ID mismatch in notify/indicate callback \n", _connId);
         return app_result;
     }
     // Check handle and pass into corresponding service
@@ -338,7 +338,7 @@ T_APP_RESULT BLEClient::clientNotifyIndicateCallbackDefault(uint8_t conn_id, boo
 
 void BLEClient::clientDisconnectCallbackDefault(uint8_t conn_id) {
     if (conn_id != _connId) {
-        printf("Conn ID %d client error: Conn ID mismatch in disconnect callback \n", _connId);
+        printf("\r\n[ERROR] Conn ID %d client: Conn ID mismatch in disconnect callback \n", _connId);
         return;
     }
     // Alert application about disconnection

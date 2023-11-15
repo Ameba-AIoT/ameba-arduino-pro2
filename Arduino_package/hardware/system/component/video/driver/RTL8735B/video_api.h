@@ -41,6 +41,9 @@
 #define VIDEO_SPS_MAX_SIZE 0X80
 #define VIDEO_PPS_MAX_SIZE 0X20
 #define VIDEO_PROFILE_MAX_SIZE 0X08
+
+#define VIDEO_META_REV_BUF  0x1000
+#define VIDEO_START_CODE_DUMMY 0x03
 typedef struct encode_rc_parm_s {
 	unsigned int rcMode;
 	unsigned int iQp;		// for fixed QP
@@ -88,19 +91,6 @@ typedef struct isp_info_s {
 	uint32_t frame_done_time;
 } isp_info_t;
 
-typedef struct  {
-	uint32_t enable;
-	uint32_t init_flicker;
-	uint32_t init_saturation;
-	int32_t init_brightness;
-	uint32_t init_contrast;
-	uint32_t init_hue;
-	uint32_t init_wdr_mode;
-	uint32_t init_wdr_level;
-	uint32_t init_hdr_mode;
-	uint32_t init_mirrorflip;
-} video_isp_setup_initial_items_t;
-
 typedef struct video_sps_pps_info_s {
 	int vps_len;
 	int sps_len;
@@ -115,6 +105,40 @@ typedef struct video_sps_pps_info_s {
 	int status;//1 get the info; 0 Not get info
 	int enable;
 } video_sps_pps_info_t;
+
+typedef struct video_pre_init_params_s {
+	uint32_t meta_enable;
+	uint32_t meta_size;
+	uint32_t dn_init_enable;
+	uint32_t dn_init_mode;
+	uint32_t isp_init_enable;
+	video_isp_initial_items_t init_isp_items;
+	uint32_t fast_mask_en;
+	struct private_mask_s {
+		uint32_t en;
+		uint32_t grid_mode;
+		uint32_t id;//0~3 only for rect-mode
+		uint32_t color;
+		uint32_t start_x;//2-align
+		uint32_t start_y;//2-align
+		uint32_t w;//16-align when grid-mode
+		uint32_t h;
+		uint32_t cols;//8-align
+		uint32_t rows;
+		uint32_t bitmap[40];
+	} fast_mask;
+	uint32_t voe_dbg_disable;
+	uint32_t isp_ae_enable;
+	uint32_t isp_ae_init_exposure;
+	uint32_t isp_ae_init_gain;
+	uint32_t isp_awb_enable;
+	uint32_t isp_awb_init_rgain;
+	uint32_t isp_awb_init_bgain;
+	uint32_t video_drop_enable;
+	uint32_t video_drop_frame;
+	uint32_t video_meta_offset;//the meta offset size
+	uint32_t video_meta_total_size;//the meta total size
+} video_pre_init_params_t;
 
 typedef struct video_param_s {
 	uint32_t stream_id;
@@ -140,32 +164,17 @@ typedef struct video_param_s {
 		uint32_t xmax;
 		uint32_t ymax;
 	} roi;
-	uint32_t meta_size;
-	uint32_t dn_init_mode;
 	uint32_t level;
 	uint32_t profile;
 	uint32_t cavlc;
-	uint32_t fast_mask_en;
-	struct private_mask_s {
-		uint32_t en;
-		uint32_t grid_mode;
-		uint32_t id;//0~3 only for rect-mode
-		uint32_t color;
-		uint32_t start_x;//2-align
-		uint32_t start_y;//2-align
-		uint32_t w;//16-align when grid-mode
-		uint32_t h;
-		uint32_t cols;//8-align
-		uint32_t rows;
-		uint32_t bitmap[40];
-	} fast_mask;
+	/* uint32_t fast_mask_en; */
 	video_sps_pps_info_t sps_pps_info;
 	uint32_t out_mode;
 	uint32_t ext_fmt;   //external input format: 0:I420 1:NV12 2:NV21 11:RGB888 12:BGR888
 	uint32_t minQp;
 	uint32_t maxQp;
 	uint32_t fast_osd_en;
-	video_isp_setup_initial_items_t init_isp_items;
+	uint32_t scale_up_en;  //1.only support in ch0  2.width and height should both larger than sensor size  3.cannot be used with ROI crop  4.max scale up resolution is 2688x1944
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -285,6 +294,14 @@ void video_get_version(void);
 int video_get_fcs_cost_time(void);//The unit is ms for fcs cost time from bootloader to frame done
 
 int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int ch, video_sps_pps_info_t *info);
+
+void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
+
+void video_sei_write(unsigned char *video_output, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input, int user_length);
+
+void video_sei_read(unsigned char *video_input, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input, int user_length);
+
+int video_get_meta_offset(void);
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

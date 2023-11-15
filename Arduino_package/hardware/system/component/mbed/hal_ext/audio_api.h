@@ -653,6 +653,8 @@ void audio_set_param_adv(audio_t *obj, audio_sr sample_rate, audio_wl word_lengt
 
 uint32_t audio_get_tx_start_status(audio_t *obj);
 uint32_t audio_get_rx_start_status(audio_t *obj);
+void audio_dac_clk(audio_t *obj, BOOL dac_clk_en);
+void audio_adc_clk(audio_t *obj, BOOL adc_l_clk_en, BOOL adc_r_clk_en);
 #endif
 
 

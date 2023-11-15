@@ -13,7 +13,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-scan-wifi/
+ https://www.amebaiot.com/en/amebapro2-arduino-scan-wifi/
  */
 
 #include <WiFi.h>

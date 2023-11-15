@@ -2,7 +2,7 @@
  This sketch shows how to use power mode standby 
 
  Example guide:
- TBD
+ https://www.amebaiot.com/en/amebapro2-arduino-standby/
  */
 
 #include "PowerMode.h"
@@ -43,7 +43,6 @@
 #else
     #define WAKUPE_SETTING      0
 #endif
-
 
 void setup() {
     Serial.begin(115200);

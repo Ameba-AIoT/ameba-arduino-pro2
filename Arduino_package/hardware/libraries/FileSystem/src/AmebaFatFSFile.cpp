@@ -11,19 +11,19 @@ File::File(const char *filename) {
 }
 
 bool File::open(const char *filename) {
-    FRESULT ret = FR_OK;
+    FRESULT res = FR_OK;
 
     _file = (FIL*) malloc(sizeof(FIL));
     if (_file == NULL) {
-        ret = FR_INT_ERR;
-        printf("open file (%s) malloc fail.\r\n", filename);
+        res = FR_INT_ERR;
+        printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
         return false;
     }
 
-    ret = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+    res = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 
-    if (ret != FR_OK) {
-        printf("open file (%s) fail. (ret=%d)\r\n", filename, ret);
+    if (res != FR_OK) {
+        printf("\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
         if (_file != NULL) {
             free(_file);
             _file = NULL;
@@ -32,7 +32,7 @@ bool File::open(const char *filename) {
     }
     // Copy file name
     char const* name = strrchr(filename, '/');
-    strncpy(_name, name+1, MAX_FILENAME_LEN);
+    strncpy(_name, (name + 1), MAX_FILENAME_LEN);
     return true;
 }
 
@@ -49,13 +49,13 @@ size_t File::write(uint8_t c) {
 }
 
 size_t File::write(const uint8_t *buf, size_t size) {
-    FRESULT ret = FR_OK;
+    FRESULT res = FR_OK;
     uint32_t writesize = 0;
 
     if (_file != NULL) {
-        ret = f_write(_file, (const void *)buf, size, &writesize);
-        if (ret != FR_OK) {
-            printf("File write error.\r\n");
+        res = f_write(_file, (const void *)buf, size, &writesize);
+        if (res != FR_OK) {
+            printf("\r\n[ERROR] File write.\n");
         }
     }
 
@@ -72,31 +72,29 @@ size_t File::write(const char *buf, size_t size) {
 }
 
 int File::read(void) {
-    FRESULT ret = FR_OK;
+    FRESULT res = FR_OK;
     char c = -1;
     uint32_t readsize = 0;
 
     if (_file != NULL) {
-        ret = f_read(_file, &c, 1, &readsize);
-        if (ret != FR_OK) {
-            printf("File read error.\r\n");
+        res = f_read(_file, &c, 1, &readsize);
+        if (res != FR_OK) {
+            printf("\r\n[ERROR] File read.\n");
         }
     }
-
     return c;
 }
 
 int File::read(void *buf, size_t nbyte) {
-    FRESULT ret = FR_OK;
+    FRESULT res = FR_OK;
     uint32_t readsize = 0;
 
     if (_file != NULL) {
-        ret = f_read(_file, buf, nbyte, &readsize);
-        if (ret != FR_OK) {
-            printf("File read error.\r\n");
+        res = f_read(_file, buf, nbyte, &readsize);
+        if (res != FR_OK) {
+            printf("\r\n[ERROR] File read.\n");
         }
     }
-
     return readsize;
 }
 
@@ -109,20 +107,18 @@ int File::peek(void) {
         c = read();
         f_lseek(_file, pos);
     }
-
     return c;
 }
 
 int File::available(void) {
-    int ret = 0;
+    int res = 0;
 
     if (_file != NULL) {
         uint32_t size = f_size(_file);
         uint32_t pos  = f_tell(_file);
-        ret = size - pos;
+        res = size - pos;
     }
-
-    return ret;
+    return res;
 }
 
 void File::flush(void) {
@@ -132,13 +128,12 @@ void File::flush(void) {
 }
 
 bool File::seek(uint32_t pos) {
-    FRESULT ret = FR_OK;
+    FRESULT res = FR_OK;
 
     if (_file != NULL) {
-        ret = f_lseek(_file, pos);
+        res = f_lseek(_file, pos);
     }
-
-    return (ret == FR_OK);
+    return (res == FR_OK);
 }
 
 uint32_t File::position(void) {
@@ -147,7 +142,6 @@ uint32_t File::position(void) {
     if (_file != NULL) {
         pos = f_tell(_file);
     }
-
     return pos;
 }
 
@@ -157,7 +151,6 @@ uint32_t File::size(void) {
     if (_file != NULL) {
         size = f_size(_file);
     }
-
     return size;
 }
 
@@ -173,6 +166,5 @@ const char* File::name(void) {
     if (_file != NULL) {
         return _name;
     }
-
     return NULL;
 }

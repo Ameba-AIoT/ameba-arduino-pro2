@@ -1,7 +1,6 @@
 /*
 
- Example guide:
-
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-audio-basic/
  */
 
 #include "WiFi.h"

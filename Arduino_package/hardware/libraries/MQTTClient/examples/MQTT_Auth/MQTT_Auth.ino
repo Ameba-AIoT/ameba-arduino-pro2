@@ -5,6 +5,7 @@
   - subscribes to the topic "inTopic"
 
  Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-mqtt-upload-listen/
  */
 
 #include <WiFi.h>

@@ -11,8 +11,8 @@
  * We can either use a level converter or use resister to devide the level.
  *
  * Example guide:
- * https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-gpio-ultrasonic/
- **/
+ * https://www.amebaiot.com/en/amebapro2-arduino-gpio-ultrasonic/
+ */
 
 const int trigger_pin = 12;
 const int echo_pin    = 11;

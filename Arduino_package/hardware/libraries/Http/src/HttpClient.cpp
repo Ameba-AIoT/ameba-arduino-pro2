@@ -10,8 +10,7 @@ const char* HttpClient::kContentLengthPrefix = HTTP_HEADER_CONTENT_LENGTH ": ";
 
 #ifdef PROXY_ENABLED // currently disabled as introduces dependency on Dns.h in Ethernet
 HttpClient::HttpClient(Client& aClient, const char* aProxy, uint16_t aProxyPort)
- : iClient(&aClient), iProxyPort(aProxyPort)
-{
+ : iClient(&aClient), iProxyPort(aProxyPort) {
     resetState();
     if (aProxy) {
         // Resolve the IP address for the proxy
@@ -24,14 +23,12 @@ HttpClient::HttpClient(Client& aClient, const char* aProxy, uint16_t aProxyPort)
 }
 #else
 HttpClient::HttpClient(Client& aClient)
- : iClient(&aClient), iProxyPort(0)
-{
+ : iClient(&aClient), iProxyPort(0) {
     resetState();
 }
 #endif
 
-void HttpClient::resetState()
-{
+void HttpClient::resetState() {
     iState = eIdle;
     iStatusCode = 0;
     iContentLength = 0;
@@ -40,19 +37,16 @@ void HttpClient::resetState()
     iHttpResponseTimeout = kHttpResponseTimeout;
 }
 
-void HttpClient::stop()
-{
+void HttpClient::stop() {
     iClient->stop();
     resetState();
 }
 
-void HttpClient::beginRequest()
-{
+void HttpClient::beginRequest() {
     iState = eRequestStarted;
 }
 
-int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent)
-{
+int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent) {
     tHttpState initialState = iState;
     if ((eIdle != iState) && (eRequestStarted != iState)) {
         return HTTP_ERROR_API;
@@ -80,8 +74,7 @@ int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, cons
     return ret;
 }
 
-int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent)
-{
+int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent) {
     tHttpState initialState = iState;
     if ((eIdle != iState) && (eRequestStarted != iState)) {
         return HTTP_ERROR_API;
@@ -109,8 +102,7 @@ int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServe
     return ret;
 }
 
-int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP, uint16_t aPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent)
-{
+int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP, uint16_t aPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent) {
     aServerIP = aServerIP;
     // Send the HTTP command, i.e. "GET /somepath/ HTTP/1.0"
     iClient->print(aHttpMethod);
@@ -154,27 +146,23 @@ int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP,
     return HTTP_SUCCESS;
 }
 
-void HttpClient::sendHeader(const char* aHeader)
-{
+void HttpClient::sendHeader(const char* aHeader) {
     iClient->println(aHeader);
 }
 
-void HttpClient::sendHeader(const char* aHeaderName, const char* aHeaderValue)
-{
+void HttpClient::sendHeader(const char* aHeaderName, const char* aHeaderValue) {
     iClient->print(aHeaderName);
     iClient->print(": ");
     iClient->println(aHeaderValue);
 }
 
-void HttpClient::sendHeader(const char* aHeaderName, const int aHeaderValue)
-{
+void HttpClient::sendHeader(const char* aHeaderName, const int aHeaderValue) {
     iClient->print(aHeaderName);
     iClient->print(": ");
     iClient->println(aHeaderValue);
 }
 
-void HttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
-{
+void HttpClient::sendBasicAuth(const char* aUser, const char* aPassword) {
     iClient->print("Authorization: Basic ");
 
     unsigned char input[3];
@@ -201,21 +189,18 @@ void HttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
     iClient->println();
 }
 
-void HttpClient::finishHeaders()
-{
+void HttpClient::finishHeaders() {
     iClient->println();
     iState = eRequestSent;
 }
 
-void HttpClient::endRequest()
-{
+void HttpClient::endRequest() {
     if (iState < eRequestSent) {
         finishHeaders();
     }
 }
 
-int HttpClient::responseStatusCode()
-{
+int HttpClient::responseStatusCode() {
     if (iState < eRequestSent) {
         return HTTP_ERROR_API;
     }
@@ -276,8 +261,7 @@ int HttpClient::responseStatusCode()
     }
 }
 
-int HttpClient::skipResponseHeaders()
-{
+int HttpClient::skipResponseHeaders() {
     unsigned long timeoutStart = millis();
     while ((!endOfHeadersReached()) && ((millis() - timeoutStart) < iHttpResponseTimeout)) {
         if (available()) {
@@ -295,16 +279,14 @@ int HttpClient::skipResponseHeaders()
     }
 }
 
-bool HttpClient::endOfBodyReached()
-{
+bool HttpClient::endOfBodyReached() {
     if (endOfHeadersReached() && (contentLength() != kNoContentLengthHeader)) {
         return (iBodyLengthConsumed >= contentLength());
     }
     return false;
 }
 
-int HttpClient::read()
-{
+int HttpClient::read() {
     int ret = iClient->read();
     if (ret >= 0) {
         if (endOfHeadersReached() && (iContentLength > 0)) {
@@ -314,8 +296,7 @@ int HttpClient::read()
     return ret;
 }
 
-int HttpClient::read(uint8_t *buf, size_t size)
-{
+int HttpClient::read(uint8_t *buf, size_t size) {
     int ret = iClient->read(buf, size);
     if (endOfHeadersReached() && iContentLength > 0) {
         if (ret >= 0) {
@@ -325,8 +306,7 @@ int HttpClient::read(uint8_t *buf, size_t size)
     return ret;
 }
 
-int HttpClient::readHeader()
-{
+int HttpClient::readHeader() {
     char c = read();
 
     if (endOfHeadersReached()) {

@@ -48,10 +48,13 @@ extern "C" {
 //   - beginTransaction(pin, SPISettings settings) (if transactions are available)
 #define SPI_HAS_EXTENDED_CS_PIN_HANDLING 1
 
-#define SPI_MODE0 0x00
-#define SPI_MODE1 0x01
-#define SPI_MODE2 0x02
-#define SPI_MODE3 0x03
+#define SPI_DATA_MODE0     0x00
+#define SPI_DATA_MODE1     0x01
+#define SPI_DATA_MODE2     0x02
+#define SPI_DATA_MODE3     0x03
+
+#define SPI_MODE_MASTER     'M'
+#define SPI_MODE_SLAVE      'S'
 
 #define SPI_DEFAULT_FREQ 200000
 
@@ -69,7 +72,7 @@ class SPISettings {
         }
 
         SPISettings(void) {
-            SPISettings(4000000, MSBFIRST, SPI_MODE0);
+            SPISettings(4000000, MSBFIRST, SPI_DATA_MODE0);
         }
 
     private:
@@ -88,6 +91,8 @@ class SPIClass {
         // Initialize MOSI, MISO, CLK, and SS pins on Ameba boards, select SPIClass object, and set SPI format and frequency
         void begin(void); 
         void begin(int ss_pin);
+        void begin(char SPI_mode);
+        void begin(int ss_pin, char SPI_mode);
 
         // Set slave select pin and SPI initial settings
         void beginTransaction(uint8_t ss_pin, SPISettings settings);
@@ -106,21 +111,24 @@ class SPIClass {
         // For transferring 2 bytes data with and without SS 
         uint16_t transfer16(uint16_t data, SPITransferMode mode = SPI_LAST);
         uint16_t transfer16(byte pin, uint16_t data, SPITransferMode mode = SPI_LAST);
+		
+		// Retrieve data from receive buffer as slave
+        int slaveRead (void);
 
         // Set bit order to either MSB first or LSB first
         void setBitOrder(uint8_t pin, BitOrder order);
         void setBitOrder(BitOrder order);
 
         // Set data mode
-        void setDataMode(uint8_t pin, uint8_t mode);
+        void setDataMode(uint8_t pin, uint8_t dataMode, char SPI_mode = SPI_MODE_MASTER);
         //void setDataMode(uint8_t _mode);
 
         // Set to correct clock speed (no effect on Ameba)
         void setClockDivider(uint8_t pin, uint8_t divider);
         void setClockDivider(uint8_t div);
 
-        // Stop SPI master mode
-        void end(void);
+        // Stop SPI master/slave mode
+        void end(char SPI_mode);
 
         /* extend api added by RTK */
         // Set default SPI frequency
@@ -128,6 +136,8 @@ class SPIClass {
 
     private:
         spi_t *pSpiMaster;
+        spi_t *pSpiSlave;
+        
         int _pinMOSI;
         int _pinMISO;
         int _pinCLK;
@@ -135,6 +145,11 @@ class SPIClass {
         int _pinUserSS;
         int _defaultFrequency;
         BitOrder _bitOrder;
+        u8 _dataBits;
+        u8 _dataMode;
+        char _SPI_Mode;
+
+        bool initStatus;   // flag to mark SPI init status
 };
 
 extern SPIClass SPI;

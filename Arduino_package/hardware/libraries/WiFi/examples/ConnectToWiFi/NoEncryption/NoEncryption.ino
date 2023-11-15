@@ -12,7 +12,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-connect-wifi/
+ https://www.amebaiot.com/en/amebapro2-arduino-connect-wifi/
  */
 
 #include <WiFi.h>

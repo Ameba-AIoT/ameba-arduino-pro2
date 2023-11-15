@@ -1,7 +1,6 @@
 /*
 
- Example guide:
-
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-audio-effects/
  */
 
 #include "WiFi.h"
@@ -20,7 +19,7 @@ AudioSetting configA(PRESET);
 Audio audio;
 StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output Audio
 
-char ssid[] = "yourNetwork";    // your network SSID (name)
+char ssid[] = "Network_SSID";   // your network SSID (name)
 char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 int value;

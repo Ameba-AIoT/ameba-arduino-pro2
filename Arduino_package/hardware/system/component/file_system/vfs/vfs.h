@@ -178,7 +178,7 @@ int vfs_scan_vfs(int vfs_type);
 int vfs_register(vfs_opt *drv, int vfs_type);
 int find_vfs_number(const char *name, int *prefix_len, int *user_id);
 int vfs_user_mount(const char *prefix);
-
+int vfs_status(void);
 /* access function */
 #define	F_OK		0	/* test for existence of file */
 #define	X_OK		0x01	/* test for execute or search permission */

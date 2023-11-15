@@ -341,6 +341,11 @@
 #if (defined (__DSP_PRESENT) && (__DSP_PRESENT == 1))
 #define ARM_MATH_DSP
 #endif
+#elif defined (CONFIG_PLATFORM_8735B)
+#include "cmsis.h"
+#if (defined (__DSP_PRESENT) && (__DSP_PRESENT == 1))
+#define ARM_MATH_DSP
+#endif
 #else
 #error "Define according the used Cortex core ARM_MATH_CM7, ARM_MATH_CM4, ARM_MATH_CM3, ARM_MATH_CM0PLUS, ARM_MATH_CM0, ARM_MATH_ARMV8MBL, ARM_MATH_ARMV8MML"
 #endif

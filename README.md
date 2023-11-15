@@ -5,8 +5,8 @@
 
 |Branch|Usage|Remarks|
 |:-----|:-----|:-----|
-|`main` | stable release| https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek_amebapro2_index.json or https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek.com_amebapro2_index.json|
-|`dev`| merge `Pull Request` & early release| https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json or https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek.com_amebapro2_early_index.json|
+|`main` | stable release| https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek_amebapro2_index.json|
+|`dev`| merge `Pull Request` & early release| https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json|
 
 
 For all `release` information, please visit this [link](https://github.com/ambiot/ambpro2_arduino/releases).

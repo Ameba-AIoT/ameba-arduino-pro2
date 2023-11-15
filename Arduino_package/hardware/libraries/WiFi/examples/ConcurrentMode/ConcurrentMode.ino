@@ -7,7 +7,7 @@
  by Realtek SG
 
  Example guide:
- 
+ https://www.amebaiot.com/en/amebapro2-arduino-concurrent/
 */
 
 #include <WiFi.h>
@@ -57,16 +57,16 @@ void setup() {
         while (Serial.available() == 0) {}
         str_pass = Serial.readString();
         str_pass.trim();
-            if (str_pass.length() != 0) {
-                while (str_pass.length() < 8) {
-                    Serial.println("Password cannot be less than 8 characters! Try again");
-                    while (Serial.available() == 0) {}
-                    str_pass = Serial.readString();
-                    str_pass.trim();
-                }
-                    Serial.print("Password entered: ");
-                    Serial.println(str_pass);
+        if (str_pass.length() != 0) {
+            while (str_pass.length() < 8) {
+                Serial.println("Password cannot be less than 8 characters! Try again");
+                while (Serial.available() == 0) {}
+                str_pass = Serial.readString();
+                str_pass.trim();
             }
+            Serial.print("Password entered: ");
+            Serial.println(str_pass);
+        }
 
         Serial.println("Enter your AP ssid:");
         while (Serial.available() == 0) {}
@@ -79,28 +79,28 @@ void setup() {
         while (Serial.available() == 0) {}
         str_appass = Serial.readString();
         str_appass.trim();
-            if (str_appass.length() != 0) {
-                while (str_appass.length() < 8) {
-                    Serial.println("Password cannot be less than 8 characters! Try again");
-                    while (Serial.available() == 0) {}
-                    str_appass = Serial.readString();
-                    str_appass.trim();
-                }
-                    Serial.print("Password entered: ");
-                    Serial.println(str_appass);
+        if (str_appass.length() != 0) {
+            while (str_appass.length() < 8) {
+                Serial.println("Password cannot be less than 8 characters! Try again");
+                while (Serial.available() == 0) {}
+                str_appass = Serial.readString();
+                str_appass.trim();
             }
+            Serial.print("Password entered: ");
+            Serial.println(str_appass);
+        }
         Serial.println("Enter your channel number:");
         int checker = 0;
-       
-        while(1){
+
+        while (1) {
             while (Serial.available() == 0);
             str_channel = Serial.readString();
             str_channel.trim();
             checker = str_channel.toInt();  
-            if (str_channel == (String(checker))){
-              break;
+            if (str_channel == (String(checker))) {
+                break;
             }
-            Serial.println("channel should be a number!");         
+            Serial.println("channel should be a number!");
         }
         Serial.print("channel entered: ");
         Serial.println(str_channel);
@@ -114,7 +114,7 @@ void setup() {
 #else
         char apssid_cust[str_apssid.length() + 1];
         char appass_cust[str_appass.length() + 1];
-        char channel_cust[str_channel.length()+ 1];
+        char channel_cust[str_channel.length() + 1];
         strcpy(apssid_cust, str_apssid.c_str());
         strcpy(appass_cust, str_appass.c_str());
         strcpy(channel_cust, str_channel.c_str());

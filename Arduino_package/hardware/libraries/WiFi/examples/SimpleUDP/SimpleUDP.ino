@@ -11,7 +11,7 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-ameba-udp-server/
+ https://www.amebaiot.com/en/amebapro2-arduino-ameba-udp-server/
  */
 
 #include <WiFi.h>
@@ -25,7 +25,7 @@ int status = WL_IDLE_STATUS;        // Indicater of Wifi status
 unsigned int localPort = 2390;      // local port to listen on
 
 char packetBuffer[255]; //buffer to hold incoming packet
-char  ReplyBuffer[] = "acknowledged";       // a string to send back
+char ReplyBuffer[] = "acknowledged";       // a string to send back
 
 WiFiUDP Udp;
 
@@ -62,9 +62,10 @@ void loop() {
         Serial.println(packetSize);
         Serial.print("From ");
         IPAddress remoteIp = Udp.remoteIP();
+        uint16_t remotePort = Udp.remotePort();
         Serial.print(remoteIp);
         Serial.print(", port ");
-        Serial.println(Udp.remotePort());
+        Serial.println(remotePort);
 
         // read the packet into packetBufffer
         int len = Udp.read(packetBuffer, 255);
@@ -75,7 +76,7 @@ void loop() {
         Serial.println(packetBuffer);
 
         // send a reply, to the IP address and port that sent us the packet we received
-        Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
+        Udp.beginPacket(remoteIp, remotePort);
         Udp.write(ReplyBuffer);
         Udp.endPacket();
     }

@@ -49,7 +49,7 @@ void BLESecurity::setStaticPin(uint32_t pin) {
         _authSecReqEnable = true;
         _authSecReqFlags = GAP_AUTHEN_BIT_BONDING_FLAG | GAP_AUTHEN_BIT_MITM_FLAG | GAP_AUTHEN_BIT_SC_FLAG;
     } else {
-        printf("BLE Static Pin is limited to numbers up to 999999\r\n");
+        printf("\r\n[ERROR] BLE Static Pin is limited to numbers up to 999999\n");
     }
 }
 

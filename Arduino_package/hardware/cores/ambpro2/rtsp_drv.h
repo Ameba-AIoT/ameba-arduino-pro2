@@ -1,5 +1,5 @@
-#ifndef rtsp_drv_h
-#define rtsp_drv_h
+#ifndef RTSP_DRV_H
+#define RTSP_DRV_H
 
 #include "mmf2_module.h"
 

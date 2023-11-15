@@ -42,27 +42,20 @@ void delay(uint32_t ms) {
 
     ret = osDelay(ms);
     if ((ret != osEventTimeout) && (ret != osOK)) {
-        //printf("delay : ERROR : 0x%x \n", ret);
+        //printf("\r\n[ERROR] %s. 0x%x \n", __FUNCTION__, ret);
     }
 }
 
-void delayMicroseconds(uint32_t us)
-{
+void delayMicroseconds(uint32_t us) {
     int i;
     uint32_t t0, tn;
     int dfactor = 0;
 
-#if defined(BOARD_RTL8710AF)
-    dfactor = 10 * us - 10 + (40 * us / 100);
-#elif defined(BOARD_RTL8195AM)
-    dfactor = 20 * us - 10 + (81 * us / 100);
-#elif defined(RTL8722DM)
-    dfactor = 20 * us - 10 + (81 * us / 100);
-#elif defined(ARDUINO_AMBPRO2)
+#if defined(ARDUINO_AMBPRO2)
     // Best fit equation obtained experiementally from continuous asm("nop")
     dfactor = 166 * us - 16;
 #else
-#error "delayMicroseconds(): Unknown chip delay factor"
+    #error "delayMicroseconds(): Unknown chip delay factor"
 #endif
 
     if (us > 100) {

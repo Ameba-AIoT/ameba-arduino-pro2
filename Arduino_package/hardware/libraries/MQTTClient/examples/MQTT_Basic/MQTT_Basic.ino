@@ -12,6 +12,7 @@
  achieve the same result without blocking the main loop.
 
  Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-mqtt-upload-listen/
  */
 
 #include <WiFi.h>

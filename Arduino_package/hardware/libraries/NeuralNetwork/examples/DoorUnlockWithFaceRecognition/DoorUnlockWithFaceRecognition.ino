@@ -1,9 +1,38 @@
-// Point the camera at a target face and enter the following commands into the serial monitor,
-// Register face:           "REG={Name}"            Ensure that there is only one face detected in frame
-// Exit registration mode:  "EXIT"                  Stop trying to register a face before it is successfully registered
-// Reset registered faces:  "RESET"                 Forget all previously registered faces
-// Backup registered faces to flash:    "BACKUP"    Save registered faces to flash
-// Restore registered faces from flash: "RESTORE"   Load registered faces from flash
+/*
+
+ Example guide:
+ https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-recognition-unlock/
+
+ Face registration commands
+ --------------------------
+ Point the camera at a target face and enter the following commands into the serial monitor,
+ Register face:                       "REG={Name}"  Ensure that there is only one face detected in frame
+ Remove face:                         "DEL={Name}"  Remove a registered face
+ Reset registered faces:              "RESET"       Forget all previously registered faces
+ Backup registered faces to flash:    "BACKUP"      Save registered faces to flash
+ Restore registered faces from flash: "RESTORE"     Load registered faces from flash
+
+ This example takes snapshot of unrecognised personnel after the Face Registration mode is turned off.
+
+ NN Model Selection
+ -------------------
+ Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
+ Replace with NA_MODEL if they are not necessary for your selected NN Task.
+
+ NN task
+ =======
+ OBJECT_DETECTION/ FACE_DETECTION/ FACE_RECOGNITION
+
+ Models
+ =======
+ YOLOv3 model         DEFAULT_YOLOV3TINY   / CUSTOMIZED_YOLOV3TINY
+ YOLOv4 model         DEFAULT_YOLOV4TINY   / CUSTOMIZED_YOLOV4TINY
+ YOLOv7 model         DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
+ SCRFD model          DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
+ MobileFaceNet model  DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
+ No model             NA_MODEL
+
+*/
 
 #include "WiFi.h"
 #include "StreamIO.h"
@@ -19,14 +48,15 @@
 #define CHANNELNN   3 // RGB format video for NN only avaliable on channel 3
 
 // Customised resolution for NN
-#define NNWIDTH  576
-#define NNHEIGHT 320
+#define NNWIDTH     576
+#define NNHEIGHT    320
 
 // Pin Definition
-#define RED_LED    3
-#define GREEN_LED  4
-#define BUTTON_PIN 5
-#define SERVO_PIN  8
+#define RED_LED                   3
+#define GREEN_LED                 4
+#define BACKUP_FACE_BUTTON_PIN    5
+#define EN_REGMODE_BUTTON_PIN     6
+#define SERVO_PIN                 8
 
 VideoSetting configVID(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configJPEG(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
@@ -38,14 +68,14 @@ StreamIO videoStreamerFDFR(1, 1);
 StreamIO videoStreamerRGBFD(1, 1);
 AmebaServo myservo;
 
-char ssid[] = "yourNetwork";  // your network SSID (name)
-char pass[] = "Password";     // your network password
+char ssid[] = "Network_SSID";   // your network SSID (name)
+char pass[] = "Password";       // your network password
 int status = WL_IDLE_STATUS;
 
-int resultSize = 0;
 bool doorOpen = false;
-bool buttonState = false;
-bool systemOn = false;
+bool backupButtonState = false;
+bool RegModeButtonState = false;
+bool regMode = false;
 uint32_t img_addr = 0;
 uint32_t img_len = 0;
 String fileName;
@@ -58,12 +88,13 @@ void setup() {
     // GPIO Initialisation
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
-    pinMode(BUTTON_PIN, INPUT);
+    pinMode(BACKUP_FACE_BUTTON_PIN, INPUT);
+    pinMode(EN_REGMODE_BUTTON_PIN, INPUT);
     myservo.attach(SERVO_PIN);
-  
+
     Serial.begin(115200);
 
-    // attempt to connect to Wifi network:
+    // Attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
         Serial.println(ssid);
@@ -82,7 +113,7 @@ void setup() {
     // Configure RTSP with corresponding video format information
     rtsp.configVideo(configVID);
     rtsp.begin();
-  
+
     // Configure Face Recognition model
     facerecog.configVideo(configNN);
     facerecog.modelSelect(FACE_RECOGNITION, NA_MODEL, DEFAULT_SCRFD, DEFAULT_MOBILEFACENET);
@@ -95,6 +126,7 @@ void setup() {
     if (videoStreamer.begin() != 0) {
         Serial.println("StreamIO link start failed");
     }
+
     // Start data stream from video channel
     Camera.channelBegin(CHANNELVID);
     Camera.channelBegin(CHANNELJPEG);
@@ -107,20 +139,26 @@ void setup() {
     if (videoStreamerRGBFD.begin() != 0) {
         Serial.println("StreamIO link start failed");
     }
+
     // Start video channel for NN
     Camera.channelBegin(CHANNELNN);
 
     // Start OSD drawing on RTSP video channel
     OSD.configVideo(CHANNELVID, configVID);
     OSD.begin();
-    
+
+    // Restore any registered faces saved in flash
+    facerecog.restoreRegisteredFace();
+
     // Servo moves to position the angle 180 degree (LOCK CLOSE)
     myservo.write(180);
 }
 
 void loop() {
-    buttonState = digitalRead(BUTTON_PIN);
-    if ((buttonState == HIGH) && (systemOn == false)) {  // When button is being pressed, systemOn becomes true
+    backupButtonState  = digitalRead(BACKUP_FACE_BUTTON_PIN);
+    RegModeButtonState = digitalRead(EN_REGMODE_BUTTON_PIN);
+
+    if ((backupButtonState == HIGH) && (regMode == true)) { // Button is pressed when registration mode is on
         for (int count = 0; count < 3; count++) {
             digitalWrite(RED_LED, HIGH);
             digitalWrite(GREEN_LED, HIGH);
@@ -129,37 +167,49 @@ void loop() {
             digitalWrite(GREEN_LED, LOW);
             delay(500);
         }
-        systemOn = true;
-    } else if (buttonState == OFF) {
-        //Both LED remains on when button not pressed
-        systemOn = false;
+        facerecog.backupRegisteredFace(); // back up registered faces to flash
+        regMode = false; // Off registration mode
+    }
+
+    if (Serial.available() > 0) {
+        String input = Serial.readString();
+        input.trim();
+
+        if (regMode == true) {
+            if (input.startsWith(String("REG="))) {
+                String name = input.substring(4);
+                facerecog.registerFace(name);
+            } else if (input.startsWith(String("DEL="))) {
+                String name = input.substring(4);
+                facerecog.removeFace(name);
+            } else if (input.startsWith(String("RESET"))) {
+                facerecog.resetRegisteredFace();
+            } else if (input.startsWith(String("BACKUP"))) {
+                facerecog.backupRegisteredFace();
+            } else if (input.startsWith(String("RESTORE"))) {
+                facerecog.restoreRegisteredFace();
+            }
+        }
+    }
+
+    if (regMode == false) {
+        digitalWrite(RED_LED, LOW);
+        digitalWrite(GREEN_LED, LOW);
+        if ((RegModeButtonState == HIGH)) {
+            regMode = true;
+            digitalWrite(RED_LED, HIGH);
+            digitalWrite(GREEN_LED, HIGH);
+        }
+    } else {
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, HIGH);
     }
-    
-    if (Serial.available() > 0) {
-      String input = Serial.readString();
-      input.trim();
 
-      if (input.startsWith(String("REG="))) {
-        String name = input.substring(4);
-        facerecog.registerFace(name);
-      } else if (input.startsWith(String("EXIT"))) {
-        facerecog.exitRegisterMode();
-      } else if (input.startsWith(String("RESET"))) {
-        facerecog.resetRegisteredFace();
-      } else if (input.startsWith(String("BACKUP"))) {
-        facerecog.backupRegisteredFace();
-      } else if (input.startsWith(String("RESTORE"))) {
-        facerecog.restoreRegisteredFace();
-      }
-    }
-    
     // Take snapshot and open door for 10 seconds
-    if ((doorOpen == true) && (systemOn == true)) {
+    if ((doorOpen == true) && (regMode == false)) {
         fs.begin();
         File file = fs.open(String(fs.getRootPath()) + fileName + String(++counter) + ".jpg");
-    
+
         delay(1000);
         Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
         file.write((uint8_t*)img_addr, img_len);
@@ -167,15 +217,15 @@ void loop() {
         fs.end();
         myservo.write(0);
         Serial.println("Opening Door!");
-        
+
         delay(10000);
         myservo.write(180);
-        digitalWrite(RED_LED, HIGH);
-        digitalWrite(GREEN_LED, LOW);
+        digitalWrite(RED_LED, LOW);
+        digitalWrite(GREEN_LED, HIGH);
         doorOpen = false;
     }
 
-    delay(5000);
+    delay(2000);
     OSD.createBitmap(CHANNELVID);
     OSD.update(CHANNELVID);
 }
@@ -186,25 +236,25 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     uint16_t im_w = configVID.width();
 
     printf("Total number of faces detected = %d\r\n", facerecog.getResultCount());
-
     OSD.createBitmap(CHANNELVID);
+
     if (facerecog.getResultCount() > 0) {
-        if (systemOn == true) {
+        if (regMode == false) {
             if (facerecog.getResultCount() > 1) { // Door remain close when more than one face detected
                 doorOpen = false;
                 digitalWrite(RED_LED, HIGH);
                 digitalWrite(GREEN_LED, LOW);
             } else {
-                FaceRecognitionResult singleItem = results[0];
-                if (String(singleItem.name()) == String("unknown")) {  // Door remain close when unknown face detected
+                FaceRecognitionResult face = results[0];
+                if (String(face.name()) == String("unknown")) {  // Door remain close when unknown face detected
                     doorOpen = false;
                     digitalWrite(RED_LED, HIGH);
                     digitalWrite(GREEN_LED, LOW);
                 } else { // Door open when a single registered face detected
+                    doorOpen = true;
                     digitalWrite(RED_LED, LOW);
                     digitalWrite(GREEN_LED, HIGH);
-                    doorOpen = true;
-                    fileName = String(singleItem.name());
+                    fileName = String(face.name());
                 }
             }
         }
@@ -220,7 +270,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
         int ymax = (int)(item.yMax() * im_h);
 
         uint32_t osd_color;
-        int osd_layer;
+
         // Draw boundary box
         if (String(item.name()) == String("unknown")) {
             osd_color = OSD_COLOR_RED;

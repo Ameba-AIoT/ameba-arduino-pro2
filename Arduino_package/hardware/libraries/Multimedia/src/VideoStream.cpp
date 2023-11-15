@@ -44,9 +44,8 @@ VideoSetting::VideoSetting(uint8_t preset) {
             break;
         }
         default: {
-            printf("Invalid VideoSetting preset!\r\n");
+            printf("\r\n[ERROR] Invalid VideoSetting preset!\n");
             return;
-            break;
         }
     }
     _preset = preset;
@@ -70,7 +69,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
 
     if ((_snapshot == 1)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
-            printf("snapshot function not supported on selected encoder!\n\r");
+            printf("\r\n[ERROR] snapshot function not supported on selected encoder!\n");
             _snapshot = 0;
         }
     }
@@ -88,7 +87,10 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     } else if (_resolution == VIDEO_VGA) {
         _w = VIDEO_VGA_WIDTH;
         _h = VIDEO_VGA_HEIGHT;
-    }
+    } else if (_resolution == VIDEO_D1) {
+        _w = VIDEO_D1_WIDTH;
+        _h = VIDEO_D1_HEIGHT;
+    } 
 }
 
 VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot) {
@@ -104,11 +106,11 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     // Check resolution maximums
     if (_w > 1920) {
         _w = 1920;
-        printf("Maximum resolution 1920 x 1080 \r\n");
+        printf("\r\n[INFO] Maximum resolution 1920 x 1080 \n");
     }
     if (_h > 1080) {
         _h = 1080;
-        printf("Maximum resolution 1920 x 1080 \r\n");
+        printf("\r\n[INFO] Maximum resolution 1920 x 1080 \n");
     }
 
     // Check resolution minimums
@@ -117,20 +119,20 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
 
         if (_w < 352) {
             _w = 352;
-            printf("Minimum JPEG resolution 352 x 288 \r\n");
+            printf("\r\n[INFO] Minimum JPEG resolution 352 x 288 \n");
         }
         if (_h < 288) {
             _h = 288;
-            printf("Minimum JPEG resolution 352 x 288 \r\n");
+            printf("\r\n[INFO] Minimum JPEG resolution 352 x 288 \n");
         }
     } else {
         if (_w < 176) {
             _w = 176;
-            printf("Minimum resolution 176 x 144 \r\n");
+            printf("\r\n[INFO] Minimum resolution 176 x 144 \n");
         }
         if (_h < 144) {
             _h = 144;
-            printf("Minimum resolution 176 x 144 \r\n");
+            printf("\r\n[INFO] Minimum resolution 176 x 144 \n");
         }
     }
 
@@ -142,19 +144,19 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
         if ((_w + 16) <= 1920) {
             _w += 16;
         }
-        printf("Custom resolution must be a multiple of 16, new resolution: %d X %d\r\n", _w, _h);
+        printf("\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
     }
     if ( ((_h % 16) != 0) && (_h != 360) && (_h != 1080) ) {
         _h -= (_h % 16);
         if ((_h + 16) <= 1080) {
             _h += 16;
         }
-        printf("Custom resolution must be a multiple of 16, new resolution: %d X %d\r\n", _w, _h);
+        printf("\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
     }
 
     if((_snapshot == 1)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
-            printf("snapshot function not supported on selected encoder!\n\r");
+            printf("\r\n[ERROR] snapshot function not supported on selected encoder!\n");
             _snapshot = 0;
         }
     }
@@ -180,6 +182,14 @@ void VideoSetting::setJpegQuality(uint8_t quality) {
     _jpeg_qlevel = quality;
 }
 
+// 0 (default): 0 degree
+// 1: 90 degree (Rotate Right)
+// 2: 90 degree (Rotate Left)
+// 3: 180 degree
+void VideoSetting::setRotation(int angle) {
+    _rotation = angle;
+}
+
 uint16_t VideoSetting::width(void) {
     return _w;
 }
@@ -203,16 +213,17 @@ void Video::configVideoChannel(int ch, VideoSetting& config) {
     encoder[ch]         = config._encoder;
     snapshot[ch]        = config._snapshot;
     jpeg_qlevel[ch]     = config._jpeg_qlevel;
+    video_rotation[ch]  = config._rotation;
 
     // Video stream using VIDEO_JPEG requires setting bps = 0
     // if (encoder[ch] == VIDEO_JPEG) {
     //     bps[ch] = 0;
     // }
 
-    //printf("V1 %d    %d    %d    %d    %d    %d", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
-    //printf("V2 %d    %d    %d    %d    %d    %d", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
-    //printf("V3 %d    %d    %d    %d    %d    %d", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
-    //printf("V4 %d    %d    %d    %d    %d    %d", channelEnable[3], w[3], h[3]);
+    //printf("\r\n[INFO] V1 %d    %d    %d    %d    %d    %d\n", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
+    //printf("\r\n[INFO] V2 %d    %d    %d    %d    %d    %d\n", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
+    //printf("\r\n[INFO] V3 %d    %d    %d    %d    %d    %d\n", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
+    //printf("\r\n[INFO] V4 %d    %d    %d    %d    %d    %d\n", channelEnable[3], w[3], h[3]);
 }
 
 void Video::camInit(CameraSetting& config) {
@@ -229,11 +240,11 @@ void Video::videoInit(void) {
                                 channelEnable[2], w[2], h[2], bps[2], snapshot[2],
                                 channelEnable[3], w[3], h[3]);
     (void)heapSize;
-    //printf("\r\n[%s] VOE heap size is: %d\r\n", __FUNCTION__, heapSize);
+    //printf("\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
 
     for (int ch = 0; ch < 4; ch++) {
         if (channelEnable[ch]) {
-            //printf("%d  %d    %d    %d    %d    %d    %d    %d", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
+            //printf("\r\n[INFO] %d  %d    %d    %d    %d    %d    %d    %d\n", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
             videoModule[ch]._p_mmf_context = cameraInit();
 
             if (encoder[ch] == VIDEO_JPEG) {
@@ -249,9 +260,10 @@ void Video::videoInit(void) {
                             0,
                             0,
                             snapshot[ch],
-                            jpeg_qlevel[ch]);
+                            jpeg_qlevel[ch],
+                            video_rotation[ch]);
             } else if (ch == 3) {
-                //printf("V4 %d    %d    %d    %d", resolution[3], channelEnable[3], w[3], h[3]);
+                //printf("\r\n[INFO] V4 %d    %d    %d    %d\n", resolution[3], channelEnable[3], w[3], h[3]);
                 bps[3] = 1*1024*1024;
                 cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
                     channel[3],
@@ -264,7 +276,7 @@ void Video::videoInit(void) {
                     CAM_NN_GOP,
                     0);     // direct output flag
             } else {
-                //printf("%d  %d    %d    %d    %d    %d    %d    %d", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
+                //printf("\r\n[INFO] %d  %d    %d    %d    %d    %d    %d    %d\n", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
                 cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv, 
                             channel[ch],
                             encoder[ch],
@@ -276,7 +288,8 @@ void Video::videoInit(void) {
                             CAM_GOP,
                             CAM_RCMODE,
                             snapshot[ch],
-                            jpeg_qlevel[ch]);
+                            jpeg_qlevel[ch],
+                            video_rotation[ch]);
             }
         }
     }
@@ -355,47 +368,47 @@ void Video::setSnapshotCallback(int ch) {
 int Video::snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len) {
     image_addr[0] = jpeg_addr;
     image_len[0] = jpeg_len;
-    //printf("snapshot 0 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    //printf("\r\n[INFO] snapshot 0 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
 int Video::snapshotCB1(uint32_t jpeg_addr, uint32_t jpeg_len) {
     image_addr[1] = jpeg_addr;
     image_len[1] = jpeg_len;
-    //printf("snapshot 1 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    //printf("\r\n[INFO] snapshot 1 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
 int Video::snapshotCB2(uint32_t jpeg_addr, uint32_t jpeg_len) {
     image_addr[2] = jpeg_addr;
     image_len[2] = jpeg_len;
-    //printf("snapshot 2 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    //printf("\r\n[INFO] snapshot 2 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
 int Video::snapshotCB3(uint32_t jpeg_addr, uint32_t jpeg_len) {
     image_addr[3] = jpeg_addr;
     image_len[3] = jpeg_len;
-    //printf("snapshot 3 addr=%X, size=%d", (int)jpeg_addr, (int)jpeg_len);
+    //printf("\r\n[INFO] snapshot 3 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
 void Video::getImage(int ch, uint32_t* addr, uint32_t* len) {
     if (snapshot[ch] == 1) {
-        //printf("Taking snapshot channel = %d\r\n", ch);
+        //printf("\r\n[INFO] Taking snapshot channel = %d\n", ch);
         image_addr[ch] = 0;
         image_len[ch] = 0;
         cameraSnapshot(videoModule[ch]._p_mmf_context->priv, 1); // 1 does not represent ch, it represents mode
         while ((image_addr[ch] == 0) || (image_len[ch] == 0)) {
             //wait for jpeg data to arrive
-            //printf("wait for jpeg data......\r\n");
+            //printf("\r\n[INFO] wait for jpeg data......\n");
             delay(10);
         }
         *addr = image_addr[ch];
         *len = image_len[ch];
 //        printSnapshotInfo();
     } else {
-        //printf("Snapshot disabled\r\n");
+        //printf("\r\n[ERROR] Snapshot disabled\n");
         *addr = (uint32_t)NULL;
         *len = (uint32_t)NULL;
     }
@@ -408,14 +421,13 @@ void Video::setFPS(int fps) {
 void Video::printInfo(void) {
     for (int ch = 0; ch < 4; ch++) {
         if (channelEnable[ch] == 1) {
-            printf("Channel: %d\r\n", channel[ch]);
-            printf("Encoder type: %s\r\n", encoderArray[encoder[ch]].c_str());
-            printf("Resolution: %s\r\n", resolutionArray[resolution[ch]].c_str());
-            printf("Video width: %d\r\n", w[ch]);
-            printf("Video height: %d\r\n", h[ch]);
-            printf("fps: %d\r\n", fps[ch]);
-            printf("bps: %d\r\n", bps[ch]);
-            printf("\r\n");
+            printf("\r\n[INFO] Channel: %d\n", channel[ch]);
+            printf("\r\n[INFO] Encoder type: %s\n", encoderArray[encoder[ch]].c_str());
+            printf("\r\n[INFO] Resolution: %s\n", resolutionArray[resolution[ch]].c_str());
+            printf("\r\n[INFO] Video width: %d\n", w[ch]);
+            printf("\r\n[INFO] Video height: %d\n", h[ch]);
+            printf("\r\n[INFO] fps: %d\n", fps[ch]);
+            printf("\r\n[INFO] bps: %ld\n", bps[ch]);
         }
     }
 }

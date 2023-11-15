@@ -21,7 +21,7 @@ AAD::AAD(void) {
         _p_mmf_context = mm_module_open(&aad_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("AAD init failed\r\n");
+        printf("\r\n[ERROR] AAD init failed\n");
         return;
     }
 }
@@ -34,7 +34,7 @@ AAD::~AAD(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("AAD deinit failed\r\n");
+        printf("\r\n[ERROR] AAD deinit failed\n");
     }
 }
 
@@ -70,10 +70,10 @@ void G711D::configAudio(AudioSetting& config) {
     audio_params_t* _audioParams = &(config._audioParams);
 
     if (config._sampleRate > 16000) {
-        printf("Audio sample rate incompatible with G711 codec!\r\n");
+        printf("\r\n[ERROR] Audio sample rate incompatible with G711 codec!\n");
     }
     if (_audioParams->word_length != WL_16BIT) {
-        printf("Audio word length incompatible with G711 codec!\r\n");
+        printf("\r\n[ERROR] Audio word length incompatible with G711 codec!\n");
     }
 }
 
@@ -96,7 +96,7 @@ void G711D::begin(void) {
         _p_mmf_context = mm_module_open(&g711_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("G711D init failed\r\n");
+        printf("\r\n[ERROR] G711D init failed\n");
         return;
     }
     mm_module_ctrl(_p_mmf_context, CMD_G711_SET_PARAMS, (int)&_g711Params);
@@ -112,7 +112,7 @@ void G711D::end(void) {
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("G711D deinit failed\r\n");
+        printf("\r\n[ERROR] G711D deinit failed\n");
     }
 }
 
