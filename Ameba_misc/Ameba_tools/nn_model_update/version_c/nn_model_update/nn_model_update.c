@@ -103,6 +103,8 @@ const char* pathTempJSON(const char* directory_path, const char* ext, const char
 cJSON* loadJSONFile(const char* directory_path);
 /* Function to update JSON */
 int writeJSON(const char* f_path);
+/* Function to search for a keyword in a path and return the path up to that keyword */
+char* findKeywordPath(const char* path, const char* keyword);
 
 
 /* Declear global vairables */
@@ -116,6 +118,7 @@ const char* key_amb_header = "#include";
 const char* key_amb_customized = "CUSTOMIZED";
 const char* key_json = "build";
 const char* key_amb = "Arduino15";
+const char* key_portable = "portable";
 const char* key_ino = ".ino";
 const char* ext_json = ".json";
 const char* key_amb_default = "DEFAULT";
@@ -127,6 +130,7 @@ const char* dir_example = "NA";
 /* Declear common file paths */
 #ifdef _WIN32
 char* path_arduino15_add = "\\AppData\\Local\\Arduino15";
+char* path_arduino15_add_portable = "";						// TODO: added for portable
 char* path_ambpro2_add = "\\packages\\realtek\\hardware\\AmebaPro2\\";
 char* path_model_add = "\\variants\\common_nn_models";
 char* path_library_add = "\\libraries\\";
@@ -134,6 +138,7 @@ char* path_txtfile_add = "\\misc\\";
 char* backspace = "\\";
 #elif __linux__
 char* path_arduino15_add = "/.arduino15";
+char* path_arduino15_add_portable = "";						// TODO: added for portable
 char* path_ambpro2_add = "/packages/realtek/hardware/AmebaPro2/";
 char* path_model_add = "/variants/common_nn_models";
 char* path_library_add = "/libraries/";
@@ -141,6 +146,7 @@ char* path_txtfile_add = "/misc/";
 char* backspace = "/";
 #else
 char* path_arduino15_add = "/Library/Arduino15";
+char* path_arduino15_add_portable = "";						// TODO: added for portable
 char* path_ambpro2_add = "/packages/realtek/hardware/AmebaPro2/";
 char* path_model_add = "/variants/common_nn_models";
 char* path_library_add = "/libraries/";
@@ -184,7 +190,13 @@ int main(int argc, char* argv[]) {
 	strcpy(path_root, getenv("HOME"));
 	strcpy(path_arduino15, getenv("HOME"));
 #endif
-	strcat(path_arduino15, path_arduino15_add);
+	// Handle portable root
+	if (strstr(path_tools, "portable")) {
+		strcpy(path_arduino15, findKeywordPath(path_tools, key_portable));
+	}
+	else {
+		strcat(path_arduino15, path_arduino15_add);
+	}
 	strcpy(path_pro2, path_arduino15);
 	strcat(path_pro2, path_ambpro2_add);
 	strcpy(path_model, path_pro2);
@@ -226,6 +238,27 @@ int main(int argc, char* argv[]) {
 #ifndef __MINGW64__
 //extern int mkdir(char* filename);
 #endif
+
+char* findKeywordPath(const char* path, const char* keyword) {
+	static char result[1024]; // Static buffer for the result
+	char* found;
+
+	// Search for the keyword in the path
+	found = strstr(path, keyword);
+	if (found != NULL) {
+		// Calculate the length up to the end of the keyword
+		int length = found - path + strlen(keyword);
+		// Copy the relevant part of the path to the result
+		strncpy(result, path, length);
+		// Null-terminate the result string
+		result[length] = '\0';
+		return result;
+	}
+	else {
+		// Return NULL if the keyword is not found
+		return NULL;
+	}
+}
 
 void copyFile(const char* sourcePath, const char* destinationPath) {
 	FILE* sourceFile;
