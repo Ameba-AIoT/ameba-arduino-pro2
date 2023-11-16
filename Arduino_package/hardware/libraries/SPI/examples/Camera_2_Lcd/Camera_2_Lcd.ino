@@ -21,6 +21,9 @@
  * 
  * For more information about our company, please visit: www.makdev.net
  * 
+ *  1.Based on AmebaILI9341.h, implement the functionality to display Camera output on TFT LCD and utilize the SD Card feature to achieve basic photo capture.
+ *
+ *  2.Before starting the project, please install the TJpg_Decoder library. In the library's configuration file, User_Config.h, comment out line 5 which reads: #define TJPGD_LOAD_SD_LIBRARY
  *******************************************************/
  
  
