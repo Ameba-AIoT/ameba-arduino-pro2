@@ -28,6 +28,8 @@ extern "C" {
 #include <string.h>
 #include "PinNames.h"
 #include "i2c_api.h"
+#include "wait_api.h"
+#include "ex_api.h"
 //#include "i2c_slave.h"
 
 i2c_t i2cwire0;
@@ -50,6 +52,10 @@ TwoWire::TwoWire(void *pWireObj, uint32_t dwSDAPin, uint32_t dwSCLPin) {
     this->txBufferLength = 0;
     this->twiClock = this->TWI_CLOCK;
 }
+
+int MBED_I2C_SLAVE_ADDR0 = 0x00;
+int I2C_DATA_LENGTH      =  1; //125
+int flag = 0;
 
 void TwoWire::begin() {
     amb_ard_pin_check_fun(SDA_pin, PIO_I2C);
@@ -156,13 +162,29 @@ void TwoWire::beginTransmission(int address) {
 uint8_t TwoWire::endTransmission(uint8_t sendStop) {
     int length;
     uint8_t error = 0;
+    i2c_reset(((i2c_t *)this->pI2C));
+    // toggle flag to normal 
+    if (flag == 1) {
+        flag = 0 ;
+    }
 
+    i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
+    i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
+    i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_TX_COMPLETE, i2c_callback_set_flag);
     length = i2c_write(((i2c_t *)this->pI2C), ((int)this->txAddress), ((const char*)&this->txBuffer[0]), ((int)this->txBufferLength), ((int)sendStop));
+   	wait_ms(10);
+    i2c_reset(((i2c_t *)this->pI2C));
+
     if ((txBufferLength > 0) && (length <= 0)) {
         error = 1;
     }
-
+    if (flag == 0) {
+        error = -1; // Error for wrong slave address
+    } else {
+        error = 0;
+    }
     txBufferLength = 0; // empty buffer
+
     return error;
 }
 
@@ -172,11 +194,16 @@ uint8_t TwoWire::endTransmission(void) {
     return endTransmission(true);
 }
 
+void TwoWire::i2c_callback_set_flag(void *userdata) {
+    flag = 1;
+}
+
 size_t TwoWire::write(uint8_t data) {
     if (txBufferLength >= BUFFER_LENGTH) {
         return 0;
     }
     txBuffer[txBufferLength++] = data;
+
     return 1;
 }
 
@@ -268,4 +295,4 @@ size_t TwoWire::slaveWrite(uint8_t *buffer, size_t len) {
 #endif
 
 TwoWire Wire  = TwoWire((void *)(&i2cwire0), 12, 13);
-TwoWire Wire1  = TwoWire((void *)(&i2cwire1), 9, 10);
+TwoWire Wire1 = TwoWire((void *)(&i2cwire1), 9, 10);

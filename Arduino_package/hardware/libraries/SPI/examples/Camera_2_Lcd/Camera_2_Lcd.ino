@@ -25,8 +25,7 @@
  *
  *  2.Before starting the project, please install the TJpg_Decoder library. In the library's configuration file, User_Config.h, comment out line 5 which reads: #define TJPGD_LOAD_SD_LIBRARY
  *******************************************************/
- 
- 
+
 #include "VideoStream.h"
 #include "SPI.h"
 #include "AmebaILI9341.h"
@@ -34,13 +33,13 @@
 #include "TJpg_Decoder.h"
 #include "AmebaFatFS.h"
 
-#define CHANNEL 0
+#define CHANNEL         0
 
 #define TFT_RESET       5
 #define TFT_DC          4
 #define TFT_CS          SPI_SS
 
-#define FILENAME  "ximg_"
+#define FILENAME        "ximg_"
 
 AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET);
 
@@ -57,71 +56,56 @@ int button_State = 0;
 bool Camer_cap;
 uint32_t count;
 
-void button_Handler(uint32_t id,uint32_t event)
-{
-  if(button_State == 0)
-  {
-    button_State = 1;
-  }
+void button_Handler(uint32_t id, uint32_t event) {
+    if (button_State == 0) {
+        button_State = 1;
+    }
 }
 
-bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap)
-{
-  tft.drawBitmap(x,y,w,h,bitmap);
+bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) {
+    tft.drawBitmap(x, y, w, h, bitmap);
 
-  // Return 1 to decode next block
-  return 1;
+    // Return 1 to decode next block
+    return 1;
 }
 
 void setup() {
-  
-  Serial.begin(115200);
-  
-  Serial.println("TFT ILI9341 "); 
+    Serial.begin(115200);
 
-  SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);
-  pinMode(button,INPUT_IRQ_FALL);
-  digitalSetIrqHandler(button,button_Handler);
+    Serial.println("TFT ILI9341 "); 
 
-  Camera.configVideoChannel(CHANNEL, config);
-  Camera.videoInit();
-  Camera.channelBegin(CHANNEL);
+    SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);
+    pinMode(button,INPUT_IRQ_FALL);
+    digitalSetIrqHandler(button,button_Handler);
 
-    
-  tft.begin();
-  tft.setRotation(1);
+    Camera.configVideoChannel(CHANNEL, config);
+    Camera.videoInit();
+    Camera.channelBegin(CHANNEL);
 
-  // The jpeg image can be scaled by a factor of 1, 2, 4, or 8
-  TJpgDec.setJpgScale(2);
+    tft.begin();
+    tft.setRotation(1);
+
+    // The jpeg image can be scaled by a factor of 1, 2, 4, or 8
+    TJpgDec.setJpgScale(2);
 
 
-  // The decoder must be given the exact name of the rendering function above
-  TJpgDec.setCallback(tft_output);
-
-
+    // The decoder must be given the exact name of the rendering function above
+    TJpgDec.setCallback(tft_output);
 }
 
 void loop() {
-    
     Camera.getImage(CHANNEL, &img_addr, &img_len);
-    if(button_State == 1)
-    {
-      fs.begin();
-      File file = fs.open(String(fs.getRootPath()) + String(FILENAME) + String(count) + String(".jpg"));
-      file.write((uint8_t *)img_addr,img_len);
-      delay(1);
-      file.close();
-      fs.end();
-      count++;
-      button_State = 0;
+    if (button_State == 1) {
+        fs.begin();
+        File file = fs.open(String(fs.getRootPath()) + String(FILENAME) + String(count) + String(".jpg"));
+        file.write((uint8_t *)img_addr,img_len);
+        delay(1);
+        file.close();
+        fs.end();
+        count++;
+        button_State = 0;
     }
 
     TJpgDec.getJpgSize(0, 0, (uint8_t *)img_addr, img_len);
     TJpgDec.drawJpg(0, 0, (uint8_t *)img_addr, img_len);
-
 }
-
-
-
-
-
