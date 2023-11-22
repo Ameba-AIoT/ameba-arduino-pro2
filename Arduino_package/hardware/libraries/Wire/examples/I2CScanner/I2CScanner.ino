@@ -7,7 +7,7 @@
 /*
 
  Example guide:
- TBD
+ https://www.amebaiot.com/en/amebapro2-arduino-i2c-scan/
  */
 
 #include <Wire.h>
