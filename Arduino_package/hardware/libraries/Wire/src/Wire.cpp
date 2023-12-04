@@ -137,9 +137,12 @@ uint8_t TwoWire::requestFrom(int address, int quantity, int sendStop) {
 void TwoWire::beginTransmission(uint8_t address) {
     // save address of target and empty buffer
     // If target address changes, wait for 50us to avoid losing next data packet, tested ok down to 10us
+
+    // Top comment is original comment, currently for I2C Scanner, this delay is creating a huge scan time, removed to make the scanning much faster. 
+    // Seems like unnecessary delay: To be tested by QC.
     if (txAddress != address) {
        txAddress = address;
-       delay(50);
+    //    delay(50);
     }
     txBufferLength = 0;
 }
@@ -172,7 +175,7 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop) {
     i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
     i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_TX_COMPLETE, i2c_callback_set_flag);
     length = i2c_write(((i2c_t *)this->pI2C), ((int)this->txAddress), ((const char*)&this->txBuffer[0]), ((int)this->txBufferLength), ((int)sendStop));
-   	wait_ms(10);
+   	hal_delay_us(200);
     i2c_reset(((i2c_t *)this->pI2C));
 
     if ((txBufferLength > 0) && (length <= 0)) {
