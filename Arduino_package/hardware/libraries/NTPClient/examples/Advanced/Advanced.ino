@@ -1,14 +1,13 @@
 /*
 
- Example guide:
- https://www.amebaiot.com/en/amebad-arduino-ntpclient/
+ Example guide: TBD
  */
 
 #include <NTPClient.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-char ssid[] = "NetworkSSID";
+char ssid[] = "Network_SSID";
 char pass[] = "Password";
 
 WiFiUDP ntpUDP;
