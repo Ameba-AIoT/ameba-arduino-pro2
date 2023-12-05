@@ -21,6 +21,7 @@
 #define CMD_VIPNN_SET_RES_MAX_CNT  	    MM_MODULE_CMD(0x19)  // max number of result structure
 #define CMD_VIPN_SET_SAVE_OUT_TENSOR	MM_MODULE_CMD(0x1A)  // store output tensor to result structure
 
+#define CMD_VIPNN_SET_USR_OUTPUT_BUF    MM_MODULE_CMD(0x1B)  // set user defined output buffer
 
 #define CMD_VIPNN_APPLY				    MM_MODULE_CMD(0x20)  // for hardware module
 
@@ -28,6 +29,8 @@
 #define VIPNN_MODEL_MEM  1
 
 #define MAX_OUT_BUFFER_CNT 16
+
+#define MAX_IO_NUM  20
 
 #if defined(CONFIG_UNITEST) && (CONFIG_UNITEST == 1)
 //----------------------------------------------------------------------------
@@ -114,6 +117,12 @@ typedef struct nn_data_param_s {
 	int size_in_byte;
 } nn_data_param_t;
 
+//preprocess return type
+#define PP_ERROR        (-1)
+#define PP_USE_RESULT   0
+#define PP_SKIP_INF     1
+#define PP_USE_INPUT    2
+
 typedef void (*disp_postprcess_t)(void *, void *);
 typedef void (*nn_cascade_input_setup_t)(void *, int, nn_data_param_t *);
 typedef int (*nn_preprocess_t)(void *data_in, nn_data_param_t *data_param, void *tensor_in, nn_tensor_param_t *tensor_param);
@@ -124,6 +133,7 @@ typedef int (*nn_get_nb_size_t)(void);
 typedef void (*nn_free_model_t)(void *);
 typedef void (*nn_set_confidence_thresh_t)(void *confidence_thresh);
 typedef void (*nn_set_nms_thresh_t)(void *nms_thresh);
+typedef void (*nn_set_init_info_t)(void *model);
 typedef void (*nn_release_t)(void);
 
 #define MODEL_SRC_MEM	0
@@ -137,6 +147,9 @@ typedef struct nnmodel_s {
 	nn_postprocess_t 	postprocess;
 	nn_free_model_t		freemodel;
 	int					model_src;
+
+	// setup model init info for pre/post-processing
+	nn_set_init_info_t  set_init_info;
 
 	// setup by nn modoule
 	nn_tensor_param_t input_param;
@@ -154,6 +167,9 @@ typedef struct nnmodel_s {
 
 	const char *name;
 
+	// model nb content
+	void *model_content;
+
 	// private for model
 	void *priv;
 } nnmodel_t;
@@ -166,6 +182,11 @@ typedef struct vipnn_measure_s {
 	int count;
 } vipnn_measure_t;
 
+typedef struct usr_output_tensor_s {
+	void *pbuf[MAX_IO_NUM];     // inference result can be saved in user specified buf
+	uint32_t size[MAX_IO_NUM];  // user specified buf size
+} usr_output_tensor_t;
+
 typedef struct vipnn_param_s {
 	char model_file[64];
 	uint8_t *model_mem;
@@ -173,14 +194,11 @@ typedef struct vipnn_param_s {
 
 	int fps;
 
-	int in_width, in_height;
-	rect_t roi;
-
-	int m_width, m_height;		// should read from model, not user setting
-
 	int out_res_size;			// size for storing a output result
 	int out_res_max_cnt;		// max output result count
 	int save_out_tensor;		// control to save output tensor raw data, for pc analysis
+
+	usr_output_tensor_t *usr_output;
 
 	nn_data_param_t *in_param;
 	nnmodel_t *model;
@@ -202,7 +220,6 @@ typedef enum {
 typedef int (*vipnn_preproc_t)(void *, void *, void *, void *, uint32_t);
 typedef int (*vipnn_postproc_t)(void *, void *, void *);
 
-#define MAX_IO_NUM              20
 
 typedef enum {
 	VIPNN_NORMAL_OUTPUT = 0,
@@ -239,6 +256,9 @@ typedef struct vipnn_ctx_s {
 	vipnn_out_type_t module_out_type;
 
 	vipnn_measure_t measure;
+
+	void *pre_tensor[MAX_IO_NUM];
+	int pre_tensor_size[MAX_IO_NUM];
 
 	void *tmp_item;
 } vipnn_ctx_t;

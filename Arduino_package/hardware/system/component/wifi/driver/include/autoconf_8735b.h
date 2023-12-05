@@ -66,8 +66,9 @@
 #define CONFIG_RX_REORDER_WIN_SIZE 16
 
 /* Configurations for WiFi driver setting */
+#define RX_AMSDU_4K
 #define CONFIG_FAST_PSCAN_THRESHOLD -50
-
+#define AVG_DATA_RATE_CNT 10
 /* Configurations for power saving */
 #define CONFIG_POWER_SAVING
 #ifdef CONFIG_POWER_SAVING
@@ -113,6 +114,7 @@
 #define CONFIG_WOWLAN_IO_WDT
 #define CONFIG_WOWLAN_CONTROL
 #define CONFIG_WOWLAN_BCN_TRACK
+#define CONFIG_WOWLAN_PNO
 
 /* For efuse or flash config start */
 #define CONFIG_EFUSE_SEPARATE

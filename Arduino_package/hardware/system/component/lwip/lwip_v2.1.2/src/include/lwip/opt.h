@@ -1593,7 +1593,7 @@
  * LWIP_NETIF_API==1: Support netif api (in netifapi.c)
  */
 #if !defined LWIP_NETIF_API || defined __DOXYGEN__
-#define LWIP_NETIF_API                  0
+#define LWIP_NETIF_API                  1
 #endif
 
 /**

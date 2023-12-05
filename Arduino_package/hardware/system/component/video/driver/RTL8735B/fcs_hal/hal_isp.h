@@ -213,7 +213,8 @@ typedef struct {
 
 typedef struct {
 
-	uint16_t y_mean[256];
+	//uint16_t y_mean[256];
+	uint32_t hist[256];
 	uint32_t frame_count;
 	uint32_t win_cnt;
 	uint32_t reserved[2];
@@ -223,9 +224,11 @@ typedef struct {
 typedef struct {
 
 
-	uint16_t r_mean[256]; /* 12.0 bit precision */
-	uint16_t g_mean[256]; /* 12.0 bit precision */
-	uint16_t b_mean[256]; /* 12.0 bit precision */
+	//uint16_t r_mean[256]; /* 12.0 bit precision */
+	//uint16_t g_mean[256]; /* 12.0 bit precision */
+	//uint16_t b_mean[256]; /* 12.0 bit precision */
+	uint16_t rg[256]; /* 3.8 bit precision */
+	uint16_t bg[256]; /* 3.8 bit precision */
 	uint32_t frame_count;
 	uint32_t win_cnt;
 	uint32_t reserved[2];
@@ -256,9 +259,9 @@ typedef struct {
 
 	u32 time_stamp;
 
-	uint32_t rmean;
-	uint32_t gmean;
-	uint32_t bmean;
+	uint32_t wdr_hist_contrast;
+	uint32_t wdr_hist_contrast_origin;
+	uint32_t reserved;
 
 } isp_statis_meta_t;
 
@@ -332,6 +335,7 @@ struct isp_iq_cali_nlsc {
 	struct isp_iq_cali_point r_center;
 	struct isp_iq_cali_point g_center;
 	struct isp_iq_cali_point b_center;
+	float curve_ratio;
 } __attribute__((packed));
 
 struct isp_iq_cali_mlsc_u8 {
@@ -408,5 +412,6 @@ int hal_isp_set_mask(isp_mask_group_t *input_mask);
 int hal_isp_config_iq_calibration(int config_flag);
 void hal_isp_set_hdr_mode(uint32_t hdr_mode);
 void hal_isp_set_mirrorflip_mode(uint32_t mirrorflip_mode);
+int hal_isp_set_stream_fps(uint32_t ch, uint32_t fps);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

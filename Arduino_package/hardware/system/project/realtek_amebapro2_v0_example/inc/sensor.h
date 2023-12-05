@@ -58,6 +58,8 @@ struct sensor_params_t {
 #define SENSOR_GC5035		0x0E
 #define SENSOR_PS5268		0x0F
 #define SENSOR_SC2310		0x10
+#define SENSOR_PS5420_HDR		0x11
+#define SENSOR_PS5270_HDR		0x12
 #endif
 
 static const struct sensor_params_t sensor_params[] = {
@@ -78,6 +80,8 @@ static const struct sensor_params_t sensor_params[] = {
 	{2592, 1944, 30}, //GC5035
 	{1920, 1080, 30}, //PS5268
 	{1920, 1080, 30}, //SC2310
+	{1952, 1944, 30}, //PS5420_HDR
+	{1536, 1536, 30}, //PS5270_HDR
 };
 
 

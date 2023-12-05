@@ -35,9 +35,15 @@ typedef void (*md_disp_postprcess)(void *);
 
 typedef struct md_ctx_s {
 	void *parent;
+
+	int en_ae_stable;
+	eip_ae_stable_t ae_stable;
+
 	md_param_t params;
 	md_config_t md_config;
 	md_context_t *motion_detect_ctx;
+	md_result_t md_result;
+	eip_Y_data_t Y_data;
 	md_disp_postprcess disp_postproc;
 	unsigned long md_time0;
 	bool md_out_en;

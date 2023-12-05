@@ -1208,7 +1208,7 @@ int crypto_crc_cmd(const uint8_t *message, const uint32_t msglen, uint32_t *pCrc
  */
 int crypto_crc_dma(const uint8_t *message, const uint32_t msglen, uint32_t *pCrc);
 
-#if (defined(CONFIG_PLATFORM_8710C) && (CONFIG_PLATFORM_8710C == 1))
+#if (defined(CONFIG_PLATFORM_8710C) && (CONFIG_PLATFORM_8710C == 1)) || (defined(CONFIG_PLATFORM_8735B) && (CONFIG_PLATFORM_8735B == 1))
 
 #if defined(CONFIG_BUILD_SECURE)
 int NS_ENTRY crypto_random_generate_nsc(uint8_t *rn_buf, uint32_t rn_size);

@@ -462,6 +462,17 @@ int wifi_set_powersave_mode(u8 ips_mode, u8 lps_mode);
 int wifi_config_autoreconnect(__u8 mode, __u8 retry_times, __u16 timeout);
 
 /**
+ * @brief  Set reconnection mode with configuration.
+ * @param[in]  mode: Set 1/0 to enalbe/disable the reconnection mode.
+ * @param[in]  retry_times: The number of retry limit.
+ * @param[in]  timeout: The timeout value (in millisecond).
+ * @return  0 if success, otherwise return -1.
+ * @note  Defining CONFIG_AUTO_RECONNECT in "autoconf.h" needs to be
+ * 	done before compiling, or this API won't be effective.
+ */
+int wifi_config_autoreconnect_ms(__u8 mode, __u8 retry_times, __u16 timeout);
+
+/**
  * @brief  Get the result of setting reconnection mode.
  * @param[out]  mode: Point to the result of setting reconnection mode.
  * 	mode = 0 means autoreconnect is off
@@ -486,6 +497,14 @@ void wifi_set_no_beacon_timeout(unsigned char timeout_sec);
  * @return  RTW_SUCCESS or RTW ERROR.
  */
 int wifi_get_disconn_reason_code(unsigned short *reason_code);
+
+/**
+ * @brief  Get status code of latest connection failure with status.
+ * @param[out]  status_code: A pointer to the variable where the
+ * 	status code will be written.
+ * @return  RTW_SUCCESS or RTW ERROR.
+ */
+int wifi_get_status_code(unsigned short *status_code);
 
 /**
  * @brief  Used for switching WiFi mode
@@ -1196,6 +1215,26 @@ int wifi_wowlan_set_bcn_track(u8  start_window,
 							  u8  duration);
 #endif
 
+
+#if defined CONFIG_WOWLAN_PNO || defined __DOXYGEN__
+/**
+ * @brief   set pno parameters in wowlan
+ *
+ * @param[in]   start_window : start window size with tbtt
+ * @param[in]   max_window : max window size with tbtt
+ * @param[in]   increment_steps : window size increment steps with tbtt
+ * @param[in]   period : active scan period
+ * @param[in]   duration : pno scan duration
+ * @return  RTW_SUCCESS
+ */
+int wifi_wowlan_set_pno_scan(u8  start_window,
+							 u8  max_window,
+							 u8  increment_steps,
+							 u8  scan_period,
+							 u32 duration);
+#endif
+
+
 // WoWlan related
 //-------------------------------------------------------------//
 #if defined CONFIG_WOWLAN || defined __DOXYGEN__
@@ -1310,6 +1349,30 @@ int wifi_set_ra_start_rate(unsigned char rate);
  */
 int wifi_set_ra_max_rate(unsigned char max_rate);
 
+/**
+ * @brief  set 1st rate fallback step of Rate Adaptative
+ * @param[in]  step: The range is 1~4
+ * @return  0 if success, otherwise return -1.
+ */
+int wifi_set_ra_1st_fallback_step(unsigned char step);
+
+/**
+ * @brief  there is function for wifi_get_sta_avg_data_rate to get average wifi data MBPS.
+ * @param[in]  avg_rate: can be get the wifi data rate value(MBPS)
+ * @return  If the function succeeds, the return value is 0.
+ * 	Otherwise, return 1.
+ */
+int wifi_get_sta_avg_data_rate(OUT unsigned char *avg_rate);
+
+/**
+ * @brief  issue nulldata frame
+ * @param[in]  power_mode:
+ *  set 1 to power_mode 0
+ * 	set 0 to power_mode 1
+ * @return  If the function succeeds, the return value is 0.
+ * 	Otherwise, return 1.
+ */
+int wifi_issue_nulldata(unsigned int power_mode);
 /**
 * @}
 */

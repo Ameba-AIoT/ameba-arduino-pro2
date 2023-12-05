@@ -595,7 +595,8 @@ struct mlme_ext_priv {
 #endif /* CONFIG_IEEE80211W */
 
 	//struct fw_priv 	fwpriv;
-
+	u8	roam_en;
+	u8	roam_previous_ap[ETH_ALEN];
 	u8	cur_channel;
 	u8	cur_bwmode;
 	u8	cur_ch_offset;//PRIME_CHNL_OFFSET
@@ -656,7 +657,8 @@ struct mlme_ext_priv {
 	u8 reconnect_deauth_filtered;
 	u8 reconnect_times;
 	u8 reconnect_cnt;
-	u16 reconnect_timeout; // the unit is second
+	u16 reconnect_timeout;
+	u16 reconnect_timeout_unit; // the unit is ms
 	u8 saved_alg;
 	u8 saved_essid[32 + 1];
 	u8 saved_key[32];

@@ -24,11 +24,8 @@ enum isp_func_switch {
 #define ALS_MAX_ROW	5 //not recommed for adjusting this value
 
 typedef struct als_data_s {
-	short RValue[ALS_MAX_COL * ALS_MAX_ROW];
-	short GValue[ALS_MAX_COL * ALS_MAX_ROW];
-	short BValue[ALS_MAX_COL * ALS_MAX_ROW];
-	short RG_Ratio[ALS_MAX_COL * ALS_MAX_ROW];
-	short BG_Ratio[ALS_MAX_COL * ALS_MAX_ROW];
+	short Thr_Basic[ALS_MAX_COL * ALS_MAX_ROW];
+	short Thr_Advance[ALS_MAX_COL * ALS_MAX_ROW];
 } als_data_t;
 
 typedef struct als_config_s {

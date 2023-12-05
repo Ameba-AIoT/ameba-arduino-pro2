@@ -215,7 +215,7 @@ do {\
 #endif
 
 union Keytype {
-	u8   skey[16];
+	u8   skey[32];
 	u32  lkey[4];
 	//u8  llkey[32];
 };
@@ -589,6 +589,12 @@ struct	xmit_priv	{
 	u16 phy_tx_ok;
 	u16 phy_tx_drop;
 	u8 phy_data_ready;
+
+	//calulate the avg tx data rate
+	u16	rate_tx_cnt;
+	u8	data_rate_info[AVG_DATA_RATE_CNT];
+	u16	total_data_rate;
+	u8	avg_rate;
 
 	struct hw_xmit *hwxmits;
 	u8	hwxmit_entry;

@@ -18,6 +18,7 @@ long long int fatfs_ram_get_free_space_byte(void);
 FRESULT ram_scan_files(char *path);
 void fatfs_ram_list_files(void);
 FRESULT fatfs_ram_remove_file(char *name);
+int fatfs_ram_format(void *parm);
 
 int usb_ram_init(void);
 int usb_ram_deinit(void);
