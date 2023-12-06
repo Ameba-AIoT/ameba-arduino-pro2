@@ -24,7 +24,7 @@ ameba.soc_fw_path={build.system.path}/component/soc/8735b/fwlib/rtl8735b
 ameba.proj_path={build.system.path}/project/realtek_amebapro2_v0_example
 ameba.proj_app_path={build.system.path}/project/realtek_amebapro2_v0_example/GCC-RELEASE/application
 ameba.ble_path={build.system.path}/component/bluetooth
-ameba.nn_path={build.system.path}/project/realtek_amebapro2_v0_example/src/VIPLiteDrv_1.8.0
+ameba.nn_path={build.system.path}/project/realtek_amebapro2_v0_example/src/VIPLiteDrv_1.12.0
 
 ## compiler/toolchain path
 compiler.path={runtime.tools.{toolchain_p1_name}.path}/bin/
@@ -115,15 +115,15 @@ build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANU
 # Pre build process
 # -----------------
 ## combine toolchain
-recipe.hooks.prebuild.1.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
+recipe.hooks.prebuild.1.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p2.path}" {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
 recipe.hooks.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
 
-recipe.hooks.prebuild.2.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.2.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}"
 recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path}
 recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path}
 
-recipe.hooks.prebuild.3.pattern.windows = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_windows.exe {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.3.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/nn_model_update_windows.exe {build.path}" "{ameba.tools_path}"
 recipe.hooks.prebuild.3.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_linux {build.path} {ameba.tools_path}
 recipe.hooks.prebuild.3.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_macos {build.path} {ameba.tools_path}
 
@@ -172,7 +172,7 @@ recipe.size.pattern.macosx="{ameba.tools_path}/misc/amebasize" "{ameba.tools_pat
 recipe.size.regex=^(?:flash_ntz)\s+([0-9]+).*
 
 ## Export bin
-recipe.hooks.objcopy.postobjcopy.pattern.windows=cmd /c copy /y "{ameba.tools_path}\flash_ntz.bin" {build.path}
+recipe.hooks.objcopy.postobjcopy.pattern.windows=cmd /c copy /y "{ameba.tools_path}\flash_ntz.bin" "{build.path}"
 recipe.hooks.objcopy.postobjcopy.pattern.linux=cp -f {ameba.tools_path}/flash_ntz.bin {build.path}
 recipe.hooks.objcopy.postobjcopy.pattern.macosx=cp -f {ameba.tools_path}/flash_ntz.bin {build.path}
 recipe.output.tmp_file=flash_ntz.bin
