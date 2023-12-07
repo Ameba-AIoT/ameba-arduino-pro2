@@ -20,7 +20,7 @@ class AAD:public MMFModule {
 
     private:
         aad_params_t _aadParams = {
-            .type = TYPE_RTP_RAW,
+            .trans_type = AAD_TYPE_RTP_RAW,
             .sample_rate = 8000,
             .channel = 1,
         };
