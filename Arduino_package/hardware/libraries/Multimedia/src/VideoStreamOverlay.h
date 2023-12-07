@@ -4,6 +4,13 @@
 #include "VideoStream.h"
 #include "canvas.h"
 
+// DEFAULT is previously defined in wiring_constants.h
+#ifdef DEFAULT
+#undef DEFAULT
+#endif
+
+#include "osd_api.h"
+
 #define OSD_COLOR_RED       ARGB(0xff,0xff,0x00,0x00)
 #define OSD_COLOR_BLUE      ARGB(0xff,0x00,0x00,0xff)
 #define OSD_COLOR_GREEN     ARGB(0xff,0x00,0xff,0x00)
