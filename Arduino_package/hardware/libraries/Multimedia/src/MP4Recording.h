@@ -1,9 +1,12 @@
 #ifndef __MP4_RECORDING_H__
 #define __MP4_RECORDING_H__
 
-#include "mmf2_module.h"
+#define INT mp4_muxer_t
 #include "mp4_muxer.h"
+#undef INT
 
+#include "mmf2_module.h"
+//#include "mp4_muxer.h"
 #include "VideoStream.h"
 #include "AudioStream.h"
 
