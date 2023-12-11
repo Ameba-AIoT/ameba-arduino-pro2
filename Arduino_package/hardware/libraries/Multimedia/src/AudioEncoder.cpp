@@ -42,17 +42,17 @@ void AAC::configAudio(AudioSetting& config) {
     audio_params_t* _audioParams = &(config._audioParams);
 
     _aacParams.sample_rate = config._sampleRate;
-    switch (_audioParams->word_length) {
-        default:
-        case WL_16BIT: {
-            _aacParams.bit_length = FAAC_INPUT_16BIT;
-            break;
-        }
-        case WL_24BIT: {
-            _aacParams.bit_length = FAAC_INPUT_24BIT;
-            break;
-        }
-    }
+//    switch (_audioParams->word_length) {
+//        default:
+//        case WL_16BIT: {
+//            _aacParams.bit_length = FAAC_INPUT_16BIT;
+//            break;
+//        }
+//        case WL_24BIT: {
+//            _aacParams.bit_length = FAAC_INPUT_24BIT;
+//            break;
+//        }
+//    }
     _aacParams.channel = _audioParams->channel;
 }
 

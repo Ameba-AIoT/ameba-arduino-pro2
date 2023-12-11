@@ -115,6 +115,8 @@ void loop() {
 
 // User callback function for post processing of face detection results
 void FDPostProcess(std::vector<FaceDetectionResult> results) {
+    int count = 0;
+
     uint16_t im_h = config.height();
     uint16_t im_w = config.width();
 
@@ -139,7 +141,7 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
             int ymax = (int)(item.yMax() * im_h);
 
             // Draw boundary box
-            printf("Face %d confidence %d:\t%d %d %d %d\n\r", i, item.score(), xmin, xmax, ymin, ymax);
+            printf("Face %ld confidence %d:\t%d %d %d %d\n\r", i, item.score(), xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
             // Print identification text above boundary box
@@ -152,8 +154,14 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
                 int x = (int)(item.xFeature(j) * im_w);
                 int y = (int)(item.yFeature(j) * im_h);
                 OSD.drawPoint(CHANNEL, x, y, 8, OSD_COLOR_RED);
+                count++;
+                if (count == MAX_FACE_DET) {
+                  goto OSDUpdate;
+                }
             }
         }
     }
+    
+OSDUpdate:
     OSD.update(CHANNEL);
 }

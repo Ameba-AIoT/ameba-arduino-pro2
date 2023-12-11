@@ -88,16 +88,11 @@ void NNFaceDetection::setResultCallback(void (*fd_callback)(std::vector<FaceDete
 
 uint16_t NNFaceDetection::getResultCount(void) {
     uint16_t facedet_res_count = face_result_vector.size();
-#if 0
-    if (facedet_res_count > 14) {
-        facedet_res_count = 14;
-    }
-#endif
 
-// Temporary fix, as maximum number of OSD that can be drawn on each channel is 30.
-    if (facedet_res_count > 4) {
-            facedet_res_count = 4;
+    if (facedet_res_count > MAX_FACE_DET) {
+        facedet_res_count = MAX_FACE_DET;
     }
+
     return facedet_res_count;
 }
 

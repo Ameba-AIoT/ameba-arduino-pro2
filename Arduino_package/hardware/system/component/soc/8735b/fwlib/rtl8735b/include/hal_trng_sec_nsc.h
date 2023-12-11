@@ -3,7 +3,7 @@
 * @brief       The HAL Non-secure callable API implementation for GPIO
 *
 * @version     V1.00
-* @date        2020-11-12
+* @date        2023-11-10
 *
 * @note
 *
@@ -26,12 +26,10 @@
 * limitations under the License.
 *
 ******************************************************************************/
-
-
-
 #ifndef _HAL_TRNG_NSC_H_
 #define _HAL_TRNG_NSC_H_
 #include "cmsis.h"
+#include <arm_cmse.h>
 
 #ifdef  __cplusplus
 extern "C"
@@ -41,20 +39,23 @@ extern "C"
 
 #if defined(CONFIG_BUILD_SECURE)
 hal_status_t NS_ENTRY hal_trng_sec_init_nsc(void);
-hal_status_t  NS_ENTRY hal_trng_sec_deinit_nsc(void);
-u32  NS_ENTRY hal_trng_sec_get_rand_nsc(void);
+hal_status_t NS_ENTRY hal_trng_sec_deinit_nsc(void);
+u32 NS_ENTRY hal_trng_sec_get_rand_nsc(void);
+hal_status_t NS_ENTRY hal_trng_sec_get_rand_seed_nsc(uint8_t *seed_buf, uint32_t seed_size);
 #endif // end of #if defined(CONFIG_BUILD_SECURE)
 
 
 
 #if defined(CONFIG_BUILD_NONSECURE)
-hal_status_t   hal_trng_init_sec_nsc(void);
-hal_status_t  hal_trng_deinit_sec_nsc(void);
-u32  hal_trng_sec_get_rand_nsc(void);
+hal_status_t hal_trng_sec_init_nsc(void);
+hal_status_t hal_trng_sec_deinit_nsc(void);
+u32 hal_trng_sec_get_rand_nsc(void);
+hal_status_t hal_trng_sec_get_rand_seed_nsc(uint8_t *seed_buf, uint32_t seed_size);
 
 #define hal_trng_sec_init           hal_trng_sec_init_nsc
 #define hal_trng_sec_deinit         hal_trng_sec_deinit_nsc
 #define hal_trng_sec_get_rand       hal_trng_sec_get_rand_nsc
+#define hal_trng_sec_get_rand_seed  hal_trng_sec_get_rand_seed_nsc
 #endif  // end of "#if defined(CONFIG_BUILD_NONSECURE)"
 
 

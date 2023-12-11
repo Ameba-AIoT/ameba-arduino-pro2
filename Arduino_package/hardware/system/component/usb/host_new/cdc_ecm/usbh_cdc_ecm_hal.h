@@ -63,6 +63,7 @@ typedef struct {
 	usb_report_usbdata			report_data;
 	usb_cdc_ecm_attach          usb_attach;
 	usb_cdc_ecm_detach 			usb_detach;
+	u32							usb_task_priority;
 } usbh_cdc_ecm_user_cb_t;
 
 typedef struct {

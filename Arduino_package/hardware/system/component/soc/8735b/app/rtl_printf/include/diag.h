@@ -350,7 +350,6 @@ extern uint8_t ConfigBootLOG_EN;
 }while(0)
 #endif
 
-
 #define DBG_SSI_ERR(...)     do {\
     if (likely(ConfigDebugErr & _DBG_SSI_)) \
         _DbgDump("\r" SSI_ERR_PREFIX __VA_ARGS__);\

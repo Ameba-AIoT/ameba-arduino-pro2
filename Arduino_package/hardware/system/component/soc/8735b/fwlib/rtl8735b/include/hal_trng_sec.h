@@ -2,7 +2,7 @@
  * @file     hal_trng_sec.h
  * @brief    The HAL API implementation for the TRNG secure device.
  * @version  V1.00
- * @date     2021-12-23
+ * @date     2023-11-10
  *
  * @note
  *
@@ -45,7 +45,7 @@ hal_status_t hal_trng_sec_set_normal_ctrl(uint8_t rng_mode, uint8_t rbc_sel, uin
 hal_status_t hal_trng_sec_set_lfsr_ctrl(uint8_t lfsr_mod, uint32_t poly_lsb, uint32_t poly_msb);
 hal_status_t hal_trng_sec_set_selft_ctrl(uint8_t selft_en, uint8_t cmp_rep_mode, uint8_t cmp_adpt_mode, uint8_t adpt1_window_sel, uint8_t adpt2_window_sel);
 hal_status_t hal_trng_sec_load_default_setting(uint8_t selft_en);
-
+hal_status_t hal_trng_sec_get_rand_seed(uint8_t *seed_buf, uint32_t seed_size);
 #ifdef  __cplusplus
 }
 #endif

@@ -1,3 +1,143 @@
+<10/20/2023 12:00 Raymond_chu>
+Version : RTL8735B_VOE_1.4.8.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+
+	Video/ENC related
+	1. fixed cmd structure parameter order issue
+
+--------------------------------------------------------------------------
+
+<10/20/2023 12:00 Raymond_chu>
+Version : RTL8735B_VOE_1.4.8.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix hal_video_get_AE_statis & hal_video_get_AWB_statis fail issue
+	2. Enable CH3
+	3. Modify zoom max height to 2000
+
+	Video/ENC related
+	1. Added diff. encoder meta data setting, add IDRuserData, rename userData --> EncuserData/JPGUserData
+	   IDRuserData have IDRuserDataDuration to set durartion like GOP, real duration is IDRuserDataDuration* GOP
+            interface parameter
+                  input cml->userData -->
+                                   cml->IDRuserData
+                                   cml->IDRuserDataDuration
+                                   cml->EncuserData
+                                   cml->JPGuserData
+                  output e2o->meta_offset -->
+                                   e2o->enc_meta_offset/enc_meta_size
+                                   e2o->jpg_meta_offset/jpg_meta_size
+
+--------------------------------------------------------------------------
+
+<09/28/2023 12:00 Raymond_chu>
+Version : RTL8735B_VOE_1.4.7.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+
+
+	Video/ENC related
+	1. added check dynamic rc is running , if running hal_video_set_rc return fail.
+
+--------------------------------------------------------------------------	
+
+<09/22/2023 17:00 Juling>
+Version : RTL8735B_VOE_1.4.7.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix HDR sensor FCS fail issue
+	2. Standalone sensor driver
+	3. Improve VOE memory fragmentation
+
+	Video/ENC related
+	1. fixed H264 + JPEG on the same channel meta_offset fail issue
+	   e2o->meta_offset --> e2o->enc_meta_offset/e2o->jpg_meta_offset
+	
+--------------------------------------------------------------------------	
+
+<08/23/2023 17:00 Martin>
+Version : RTL8735B_VOE_1.4.6.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add API hal_video_set_isp_stream_fps to set stream fps up/down
+	2. 
+
+	Video/ENC related
+	1. 
+
+	
+--------------------------------------------------------------------------	
+
+<08/04/2023 17:00 Martin>
+Version : RTL8735B_VOE_1.4.5.2
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add wdr hist contrast 2 items for metadata
+	2. revise AE statis API output(remove y_mean, add hist )
+	3. revise AWB statis API output( remove r/g/b mean, add rg/bg)
+	4. Add initial isp setting log
+	Video/ENC related
+	1. modify receiver queue timeout information (no show fail)
+	2. modify osd2enc receiver queue show condition (EncMode/JpgMode --> open channel)
+	3. if HW bus access fail ForceI & set scene Change
+	4. move hal_voe_sema from open(out_cb)/close to init/deinit
+	5. polish video API error return
+	6. fixed video_open first SPS/PPS use out_buf_size overwrite issue
+	7. update error return for voe_open(isp locate buffer) and voe_close
+	8. if cml->vui_timing_info_enable disable, not renew SPS/PPS
+	
+--------------------------------------------------------------------------	
+<06/26/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. raw: add dump point for mask out
+	2. awb: force update AWB status to unstable for each algo ctrl (3A lib: ea63d5a)
+	3. lsc: add curve ratio to calibration structure
+	4. change flick_ctrl default value from 50Hz to Auto
+
+	Video/ENC related
+	1. fix non-free osd object.
+	2. improve locate memory sequence
+	3. add semephore protection during stream close.
+	
+	
+--------------------------------------------------------------------------	
+<06/15/2023 12:00 Martin>
+Version : RTL8735B_VOE_1.4.3.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. add 2nd register control for turning on mipi clk lane non-continuous mode
+	Video/ENC related
+	1. Add terminating FCS flow weak func and example code.
+	2. fixed ENC fail issue (inst structure fail)
+	
+
 --------------------------------------------------------------------------	
 <05/25/2023 12:00 Martin>
 Version : RTL8735B_VOE_1.4.3.0

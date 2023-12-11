@@ -116,6 +116,9 @@ enum {
 #define _FW_LINKED			WIFI_ASOC_STATE
 #define _FW_UNDER_SURVEY	WIFI_SITE_MONITOR
 
+#define CHK_MLME_STATE(adapter, state) check_fwstate(&((adapter)->mlmepriv), (state))
+#define MLME_IS_MESH(adapter) CHK_MLME_STATE(adapter, WIFI_MESH_STATE)
+
 enum dot11AuthAlgrthmNum {
 	dot11AuthAlgrthm_Open = 0,
 	dot11AuthAlgrthm_Shared,
@@ -414,6 +417,10 @@ struct mlme_priv {
 	//For fast reconnection to keep frame info temporarily
 	union recv_frame *p_copy_recv_frame;
 	unsigned short disassoc_reason;
+	unsigned short status_code;
+
+	//conenction_bssid information
+	u8	connecting_bssid[6];
 };
 
 #define RTW_AUTO_SCAN_REASON_UNSPECIFIED		0

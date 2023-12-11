@@ -175,6 +175,36 @@ struct security_priv {
 	u8	eap_phase;
 #endif
 
+#define DBG_SW_SEC_CNT
+#ifdef DBG_SW_SEC_CNT
+	u64 wep_sw_enc_cnt_bc;
+	u64 wep_sw_enc_cnt_mc;
+	u64 wep_sw_enc_cnt_uc;
+	u64 wep_sw_dec_cnt_bc;
+	u64 wep_sw_dec_cnt_mc;
+	u64 wep_sw_dec_cnt_uc;
+
+	u64 tkip_sw_enc_cnt_bc;
+	u64 tkip_sw_enc_cnt_mc;
+	u64 tkip_sw_enc_cnt_uc;
+	u64 tkip_sw_dec_cnt_bc;
+	u64 tkip_sw_dec_cnt_mc;
+	u64 tkip_sw_dec_cnt_uc;
+
+	u64 aes_sw_enc_cnt_bc;
+	u64 aes_sw_enc_cnt_mc;
+	u64 aes_sw_enc_cnt_uc;
+	u64 aes_sw_dec_cnt_bc;
+	u64 aes_sw_dec_cnt_mc;
+	u64 aes_sw_dec_cnt_uc;
+
+	u64 gcmp_sw_enc_cnt_bc;
+	u64 gcmp_sw_enc_cnt_mc;
+	u64 gcmp_sw_enc_cnt_uc;
+	u64 gcmp_sw_dec_cnt_bc;
+	u64 gcmp_sw_dec_cnt_mc;
+	u64 gcmp_sw_dec_cnt_uc;
+#endif /* DBG_SW_SEC_CNT */
 };
 
 struct sha256_state {
@@ -222,6 +252,15 @@ do{\
 		case _AES_:\
 			iv_len = 8;\
 			icv_len = 8;\
+			break;\
+		case _GCMP_:\
+		case _GCMP_256_:\
+			iv_len = 8;\
+			icv_len = 16;\
+			break;\
+		case _CCMP_256_:\
+			iv_len = 8;\
+			icv_len = 16;\
 			break;\
 		case _SMS4_:\
 			iv_len = 18;\
@@ -332,6 +371,11 @@ static inline u32 rotr(u32 val, int bits)
 		(a)[6] = (u8) (((u64) (val)) >> 8);	\
 		(a)[7] = (u8) (((u64) (val)) & 0xff);	\
 	} while (0)
+
+#define WPA_GET_BE64(a)	(((u64) (a)[0]) << 56) | (((u64) (a)[1]) << 48) | \
+		(((u64) (a)[2]) << 40) | (((u64) (a)[3]) << 32) | \
+		(((u64) (a)[4]) << 24) | (((u64) (a)[5]) << 16) | \
+		(((u64) (a)[6]) << 8) | ((u64) (a)[7])
 
 /* ===== start - public domain SHA256 implementation ===== */
 

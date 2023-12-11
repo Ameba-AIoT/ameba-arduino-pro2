@@ -1,12 +1,16 @@
 #ifndef __AUDIOENCODER_H__
 #define __AUDIOENCODER_H__
 
+#define INT machine_type_t
+#include "module_aac.h"
+#undef INT
+
 #include "VideoStream.h"
 #include "AudioStream.h"
 
 #include "faac.h"
 #include "faaccfg.h"
-#include "module_aac.h"
+//#include "module_aac.h"
 #include "module_g711.h"
 
 class AAC:public MMFModule {
@@ -20,11 +24,12 @@ class AAC:public MMFModule {
 
     private:
         aac_params_t _aacParams = {
+            .trans_type = AAC_TYPE_ADTS,
+            .object_type = AAC_AOT_LC,
             .sample_rate = 8000,
             .channel = 1,
-            .bit_length = FAAC_INPUT_16BIT,
-            .output_format = 1,
-            .mpeg_version = MPEG4,
+            .bitrate = 32000,
+            
             .mem_total_size = 10 * 1024,
             .mem_block_size = 128,
             .mem_frame_size = 1024,

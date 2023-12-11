@@ -41,7 +41,6 @@ typedef struct osd_render_obj_s {
 	int buff_used_index;
 	canvas_msg_t canvas_draw_msg[MAX_DRAW_MSG];
 	int canvas_draw_msg_count;
-	int canvas_draw_msg_count_last;
 } osd_render_obj_t;
 
 typedef struct osd_render_info_s {

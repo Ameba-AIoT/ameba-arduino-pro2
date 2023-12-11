@@ -655,6 +655,7 @@ uint32_t audio_get_tx_start_status(audio_t *obj);
 uint32_t audio_get_rx_start_status(audio_t *obj);
 void audio_dac_clk(audio_t *obj, BOOL dac_clk_en);
 void audio_adc_clk(audio_t *obj, BOOL adc_l_clk_en, BOOL adc_r_clk_en);
+void audio_poweroff(void);
 #endif
 
 

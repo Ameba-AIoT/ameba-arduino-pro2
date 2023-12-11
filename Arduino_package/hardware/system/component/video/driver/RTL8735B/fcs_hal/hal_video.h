@@ -197,7 +197,10 @@ typedef struct {
 	int cmd_status;
 
 	u32 time_stamp;			// time_stamp current time stamp
-	u32 meta_offset;		// metadata offset size
+	u32 enc_meta_offset;	// enc metadata offset size
+	u32 enc_meta_size;	 	// enc metadata size
+	u32 jpg_meta_offset;	// jpeg metadata offset size
+	u32 jpg_meta_size;	 	// jpeg metadata size
 
 	isp_statis_meta_t statis_data;
 	isp_meta_t isp_meta_data;
@@ -482,6 +485,7 @@ int hal_video_set_mask(int ch, BOOL fast_en);
 int hal_video_set_dynamic_zoom(int ch, isp_crop_t corp_info);
 u32 hal_video_get_video_timer_cur_time(void);
 int hal_video_config_isp_calibration(int iq_cali_flag);
+int hal_video_set_isp_stream_fps(int ch, uint32_t fps);
 
 extern hal_video_adapter_t vv_adapter;
 

@@ -68,6 +68,7 @@ int rltk_wlan_change_channel_plan(unsigned char channel_plan);
 int rltk_del_station(unsigned char wlan_idx, unsigned char *hwaddr);
 int rltk_get_auto_chl(unsigned char wlan_idx, unsigned char *channel_set, unsigned char channel_num);
 int rltk_wlan_get_disconn_reason_code(unsigned short *reason);
+int rltk_wlan_get_status_code(unsigned short *status_code);
 int rltk_change_mac_address_from_ram(int idx, unsigned char *mac);
 int rltk_wlan_set_wifi_mac_address(__u8 *wifi_mac);
 int rltk_wlan_get_wifi_mac_address(__u8 *mac);
@@ -76,12 +77,14 @@ int rltk_wlan_get_bt_mac_address(__u8 *mac);
 int rltk_wlan_get_ap_dtim(__u8 *dtim_period);
 int rltk_wlan_set_ra_start_rate(__u8 rate);
 int rltk_wlan_set_ra_max_rate(__u8 rate);
+int rltk_wlan_set_ra_1st_fallback_step(__u8 step);
 int rltk_wlan_set_ra_mask_en(__u8 enable);
 
 void rltk_psk_info_set(struct psk_info *psk_data);
 void rltk_psk_info_get(struct psk_info *psk_data);
 __u8 rltk_wlan_is_mp(void);
 
+int rltk_wlan_issue_nulldata(unsigned int power_mode);
 #ifdef CONFIG_WLAN_SWITCH_MODE
 int rltk_wlan_reinit_drv_sw(const char *ifname, rtw_mode_t mode);
 int rltk_set_mode_prehandle(rtw_mode_t curr_mode, rtw_mode_t next_mode, const char *ifname);
@@ -111,6 +114,7 @@ int rltk_wlan_get_txbuf_remain_pkt_num(void);
 int rltk_wlan_ap_switch_chl_and_inform_sta(unsigned char new_chl, unsigned char chl_switch_cnt, ap_channel_switch_callback_t callback);
 int rltk_wlan_set_cts2self_dur_and_send(unsigned char wlan_idx, unsigned short duration);
 int rltk_wlan_get_sta_max_data_rate(unsigned char *inidata_rate);
+int rltk_wlan_get_sta_avg_data_rate(unsigned char *avg_rate);
 void rltk_wlan_set_no_beacon_timeout(unsigned char timeout_sec);
 
 int rltk_wlan_csi_config(rtw_csi_action_parm_t *act_param);
@@ -157,6 +161,7 @@ extern int rtw_wx_set_gen_ie(unsigned char wlan_idx, char *buf, __u16 buf_len, _
 extern int rtw_pm_set(rtw_pm_option_t type, __u8 *param);
 #if CONFIG_AUTO_RECONNECT
 extern int rtw_wx_set_autoreconnect(__u8 mode, __u8 retry_times, __u16 timeout);
+extern int rtw_wx_set_autoreconnect_ms(__u8 mode, __u8 retry_times, __u16 timeout);
 extern int rtw_wx_get_autoreconnect(__u8 *mode);
 #endif
 extern int rtw_ex_get_channel_plan(__u8 idx, __u8 *channel_plan);

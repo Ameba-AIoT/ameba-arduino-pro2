@@ -19,7 +19,7 @@
 #include "mbedtls/ecdh.h"
 #include "mbedtls/ecdsa.h"
 #include "mbedtls/pk.h"
-#if defined(MBEDTLS_VERSION_NUMBER) && (MBEDTLS_VERSION_NUMBER==0x03000000)
+#if defined(MBEDTLS_VERSION_NUMBER) && (MBEDTLS_VERSION_NUMBER>=0x03000000)
 #define mbedtls_arc4_context void
 #else
 #include "mbedtls/arc4.h"

@@ -1,28 +1,25 @@
 /**
  * \file sha512.h
+ * \brief This file contains SHA-384 and SHA-512 definitions and functions.
  *
- * \brief SHA-384 and SHA-512 cryptographic hash function
+ * The Secure Hash Algorithms 384 and 512 (SHA-384 and SHA-512) cryptographic
+ * hash functions are defined in <em>FIPS 180-4: Secure Hash Standard (SHS)</em>.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0
  *
- *  Copyright (C) 2006-2013, Brainspark B.V.
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+ *  not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *  This file is part of PolarSSL (http://www.polarssl.org)
- *  Lead Maintainer: Paul Bakker <polarssl_maintainer at polarssl.org>
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *  All rights reserved.
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 #ifndef ROM_HOMEKIT_SHA512_H
 #define ROM_HOMEKIT_SHA512_H

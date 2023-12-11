@@ -427,6 +427,14 @@ struct pwrctrl_priv {
 	u8 bcntrack_duration;
 #endif
 
+#ifdef CONFIG_WOWLAN_PNO
+	u8 pno_start_window;
+	u8 pno_max_window;
+	u8 pno_increment_step;
+	u8 pno_scan_period;
+	u8 pno_duration;
+#endif
+
 #ifdef CONFIG_WOWLAN_NTP_OFFLOAD
 	u8  ntp_rsvd_page_locate;
 	u8 *ntp_pkt;

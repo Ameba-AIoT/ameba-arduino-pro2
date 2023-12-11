@@ -24,7 +24,12 @@ enum rts_osd2_blk_type {
 	rts_osd2_type_date,
 	rts_osd2_type_time,
 	rts_osd2_type_pict,
-	rts_osd2_type_text
+	rts_osd2_type_text,
+	rts_osd2_type_rect,
+	rts_osd2_type_pict_extn,
+	rts_osd2_type_text_extn,
+	rts_osd2_type_rect_extn,
+	rts_osd2_type_temp
 };
 
 enum rts_osd_err_code {
@@ -53,12 +58,6 @@ enum rts_osd_err_code {
 #define OSD_TEXT_BMP_BUF_SZ			(80*0x00000400)
 
 
-struct osd_info {
-	void *info;
-	char osd_type;
-	char update_flag;
-};
-
 enum rts_osd_err_code rts_osd_set_info(int osd_type, void *osd_info);
 void rts_osd_init_wo_sntp(int chn_id, int char_resize_w, int char_resize_h, int timezone_s);
 enum rts_osd_err_code rts_osd_init(int chn_id, int char_resize_w, int char_resize_h, int timezone_s);
@@ -86,5 +85,7 @@ void rts_osd_sync_from_sntp(int sntp_en);
 enum rts_osd_err_code rts_osd_get_available_block(int ch, int *num, int *available_block_idx);
 enum rts_osd_err_code rts_osd_update_info(int osd_type, void *osd_info);
 void rts_osd_fast_start_enable(int ch, BOOL en);
+enum rts_osd_err_code rts_osd_pict_resize(void *pd, void *pixels, int widthSource, int heightSource, int width, int height, enum rts_osd2_blk_fmt osd_format);
+unsigned int rts_osd_pict_heapsize_cal(int width, int height, enum rts_osd2_blk_fmt osd_format);
 
 #endif	// OSD_API_H

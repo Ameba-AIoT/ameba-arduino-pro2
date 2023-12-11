@@ -375,7 +375,9 @@ typedef struct {
 	i32 videoRange;
 	i32 sei;
 
-	u32 userData;
+	u32 EncuserData;
+
+
 	u32 gopSize;
 	char *gopCfg;
 	u32 gopLowdelay;
@@ -551,8 +553,10 @@ typedef struct {
 	u32 iq_cali_init_en;
 
 	u32 osd_block_num;
-
-	u32 rsvd[43];   //When add new element, please reduce same rsvd size
+	u32 IDRuserData;
+	u32 IDRuserDataDuration;		// Based on IDR frame 0: every
+	u32 JPGuserData;
+	u32 rsvd[40];   //When add new element, please reduce same rsvd size
 
 } __attribute__((aligned(32))) commandLine_s;
 

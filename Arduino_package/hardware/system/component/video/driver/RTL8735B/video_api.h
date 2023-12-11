@@ -44,6 +44,21 @@
 
 #define VIDEO_META_REV_BUF  0x1000
 #define VIDEO_START_CODE_DUMMY 0x03
+#define VIDEO_META_UUID_SIZE 0x10
+
+/*ENCODE TYPE*/
+//type : 0:HEVC 1:H264 2:JPEG 3:NV12 4:RGB 5:HEVC+JPEG 6:H264+JPEG
+enum encode_type {
+	VIDEO_HEVC = 0,
+	VIDEO_H264,
+	VIDEO_JPEG,
+	VIDEO_NV12,
+	VIDEO_RGB,
+	VIDEO_NV16,
+	VIDEO_HEVC_JPEG,
+	VIDEO_H264_JPEG
+};
+
 typedef struct encode_rc_parm_s {
 	unsigned int rcMode;
 	unsigned int iQp;		// for fixed QP
@@ -138,6 +153,7 @@ typedef struct video_pre_init_params_s {
 	uint32_t video_drop_frame;
 	uint32_t video_meta_offset;//the meta offset size
 	uint32_t video_meta_total_size;//the meta total size
+	uint8_t video_meta_uuid[VIDEO_META_UUID_SIZE];//
 } video_pre_init_params_t;
 
 typedef struct video_param_s {
@@ -175,6 +191,8 @@ typedef struct video_param_s {
 	uint32_t maxQp;
 	uint32_t fast_osd_en;
 	uint32_t scale_up_en;  //1.only support in ch0  2.width and height should both larger than sensor size  3.cannot be used with ROI crop  4.max scale up resolution is 2688x1944
+	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
+	uint32_t meta_enable;
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -194,9 +212,11 @@ typedef struct video_meta_s {
 	uint32_t video_addr;
 	uint32_t video_len;
 	uint32_t meta_offset;
+	uint32_t meta_size;
 	isp_meta_t *isp_meta_data;
 	isp_statis_meta_t *isp_statis_meta;
-	uint32_t user_buf[VIDEO_META_USER_SIZE];
+	uint8_t  *user_buf;
+	uint32_t user_buf_len;
 } video_meta_t;
 
 
@@ -209,12 +229,19 @@ hal_video_adapter_t *video_init(int iq_start_addr, int sensor_start_addr);
 
 void *video_deinit(void);
 
+void *video_poweroff(void);
+
 void video_set_isp_info(isp_info_t *info);
 
 int video_buf_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_shapshot,
 				   int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_shapshot,
 				   int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_shapshot,
 				   int v4_enable, int v4_w, int v4_h);
+
+int video_buf_heap_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_enctype, int v1_jpg_only_shapshot,
+						int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_enctype, int v2_jpg_only_shapshot,
+						int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_enctype, int v3_jpg_only_shapshot,
+						int v4_enable, int v4_w, int v4_h);
 
 void video_buf_release(void);
 
@@ -297,11 +324,21 @@ int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int
 
 void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
 
-void video_sei_write(unsigned char *video_output, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input, int user_length);
+void video_pre_init_load_params_from_flash(void);
 
-void video_sei_read(unsigned char *video_input, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input, int user_length);
+void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data,
+									int save_to_flash); //save_to_flash 0: only save to pre init structure, 1: save to flash
+
+int video_pre_init_get_meta_enable(void);
+
+void video_sei_write(video_meta_t *m_parm);
+
+void video_sei_read(unsigned char *uuid, unsigned char *video_input, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input,
+					int user_length);
 
 int video_get_meta_offset(void);
+
+int video_open_status(void);//0:No video open 1:video open
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

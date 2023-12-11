@@ -61,7 +61,7 @@ void mapping_matrix_init(
     opus_int32 data_size
 );
 
-#ifndef DISABLE_FLOAT_API
+#if defined(ENABLE_EXTERNAL_FLOAT_API) //#ifndef DISABLE_FLOAT_API
 void mapping_matrix_multiply_channel_in_float(
     const MappingMatrix *matrix,
     const float *input,

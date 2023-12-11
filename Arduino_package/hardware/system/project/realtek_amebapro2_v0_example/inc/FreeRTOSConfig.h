@@ -57,6 +57,7 @@ extern uint32_t SystemCoreClock;
 
 #if defined(CONFIG_BUILD_SECURE) || defined(CONFIG_BUILD_NONSECURE)
 #define configENABLE_TRUSTZONE							1
+#define secureconfigMAX_SECURE_CONTEXTS					64
 #else
 #define configENABLE_TRUSTZONE							0
 #define configRUN_FREERTOS_SECURE_ONLY					1
