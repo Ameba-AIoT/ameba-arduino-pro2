@@ -1,6 +1,6 @@
 /*
 
- Example guide: TBD
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-ntpclient/
  */
 
 #include <NTPClient.h>
