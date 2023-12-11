@@ -15,7 +15,7 @@
  and the other half byte as data signal.
  So different LCD may correspond different bit mapping of these pins.
 
- Example guide:TBD
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-i2c-lcd/
  */
 
 #include <Wire.h>
