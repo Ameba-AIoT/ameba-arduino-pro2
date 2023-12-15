@@ -21,7 +21,7 @@ uint32_t Video::image_len[4] = {0};
 void CameraSetting::setBrightness(int value) {
      if (value >= BRIGHTNESS_MIN && value <= BRIGHTNESS_MAX) {
         isp_set_brightness(value);
-        printf("[INFO] Brightness is set to %d. \n", value);
+        printf("[INFO] Brightness is set to %d. \r\n", value);
      } else {
         printf("[ERROR] Invalid Input. \r\n");
      }
@@ -29,13 +29,13 @@ void CameraSetting::setBrightness(int value) {
 
 void CameraSetting::getBrightness(void) {
     isp_get_brightness(&ret);
-    printf("[INFO] Brightness = %d \n", ret);
+    printf("[INFO] Brightness = %d \r\n", ret);
 }
 
 void CameraSetting::setContrast(int value) {
     if (value >= CONTRAST_MIN && value <= CONTRAST_MAX) {
         isp_set_contrast(value);
-        printf("[INFO] Contrast is set to %d. \n", value);
+        printf("[INFO] Contrast is set to %d. \r\n", value);
     } else {
         printf("[ERROR] Invalid Input. \r\n");
     }
@@ -49,7 +49,7 @@ void CameraSetting::getContrast(void) {
 void CameraSetting::setSaturation(int value) {
     if (value >= SATURATION_MIN && value <= SATURATION_MAX) {
         isp_set_saturation(value);
-        printf("[INFO] Saturation is set to %d. \n", value);
+        printf("[INFO] Saturation is set to %d. \r\n", value);
     } else {
         printf("[ERROR] Invalid Input. \r\n");
     }
@@ -63,7 +63,7 @@ void CameraSetting::getSaturation(void) {
 void CameraSetting::setSharpness(int value) {
     if (value >= SHARPNESS_MIN && value <= SHARPNESS_MAX) {
         isp_set_sharpness(value);
-        printf("[INFO] Sharpness is set to %d. \n", value);
+        printf("[INFO] Sharpness is set to %d. \r\n", value);
     } else {
         printf("[ERROR] Invalid Input. \r\n");
     }
@@ -71,16 +71,16 @@ void CameraSetting::setSharpness(int value) {
 
 void CameraSetting::getSharpness(void) {
     isp_get_sharpness(&ret);
-    printf("[INFO] Sharpness = %d \n", ret);
+    printf("[INFO] Sharpness = %d \r\n", ret);
 }
 
 // Len Distortion Correction
 void CameraSetting::setLDC(int enable) {
     isp_set_ldc(enable);
     if (enable == 0) {
-        printf("[INFO] Len Distortion Correction is Disabled. \n");
+        printf("[INFO] Len Distortion Correction is Disabled. \r\n");
     } else if (enable == 1) {
-        printf("[INFO] Len Distortion Correction is Enabled. \n");
+        printf("[INFO] Len Distortion Correction is Enabled. \r\n");
     } else {
         printf("[ERROR] Invalid Input. \r\n");
     }
@@ -89,9 +89,9 @@ void CameraSetting::setLDC(int enable) {
 void CameraSetting::getLDC(void) {
     isp_get_ldc(&ret);
     if (ret == 0) {
-        printf("[INFO] Len Distortion Correction is Disabled. \n");
+        printf("[INFO] Len Distortion Correction is Disabled. \r\n");
     } else if (ret == 1) {
-        printf("[INFO] Len Distortion Correction is Enabled. \n");
+        printf("[INFO] Len Distortion Correction is Enabled. \r\n");
     }
 }
 
@@ -99,11 +99,11 @@ void CameraSetting::getLDC(void) {
 void CameraSetting::setWDR(int enable) {
     isp_set_wdr_mode(enable);
     if (enable== 0) {
-        printf("[INFO] Wide Dynamic Range is Disabled. \n");
+        printf("[INFO] Wide Dynamic Range is Disabled. \r\n");
     } else if (enable == 1) {
-        printf("[INFO] Wide Dynamic Range is set to Manual. \n");
+        printf("[INFO] Wide Dynamic Range is set to Manual. \r\n");
     } else if (enable == 2) {
-        printf("[INFO] Wide Dynamic Range is set to Auto. \n");
+        printf("[INFO] Wide Dynamic Range is set to Auto. \r\n");
     } else {
         printf("[ERROR] Invalid Input. \r\n");
     }
@@ -112,11 +112,11 @@ void CameraSetting::setWDR(int enable) {
 void CameraSetting::getWDR(void) {
     isp_get_wdr_mode(&ret);
     if (ret == 0) {
-        printf("[INFO] Wide Dynamic Range = Disabled \n");
+        printf("[INFO] Wide Dynamic Range = Disabled \r\n");
     } else if (ret == 1) {
-        printf("[INFO] Wide Dynamic Range = Manual \n");
+        printf("[INFO] Wide Dynamic Range = Manual \r\n");
     } else if (ret == 2) {
-        printf("[INFO] Wide Dynamic Range = Auto \n");
+        printf("[INFO] Wide Dynamic Range = Auto \r\n");
     }
 }
 
@@ -125,12 +125,12 @@ void CameraSetting::setWDRLevel(int value) {
     if (ret == 1) {
         if (value >= 50 && value <= 100) {
             isp_set_wdr_level(value);
-            printf("[INFO] WDR level is set to %d. \n", value);
+            printf("[INFO] WDR level is set to %d. \r\n", value);
         } else {
-            printf("[INFO] Invalid value. WDR level value should be between 50 to 100. \n");
+            printf("[INFO] Invalid value. WDR level value should be between 50 to 100. \r\n");
         }
     } else {
-        printf("[ERROR] Please set WDR to Manual to set the WDR level manually. \n");
+        printf("[ERROR] Please set WDR to Manual to set the WDR level manually. \r\n");
     }
 }
 
