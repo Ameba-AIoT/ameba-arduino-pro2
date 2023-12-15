@@ -2,6 +2,7 @@
 #include "hal_video.h"
 #include "video_api.h"
 #include "module_video.h"
+#include "isp_ctrl_api.h"
 
 extern int incb[5];
 extern int enc_queue_cnt[5];
@@ -9,6 +10,21 @@ extern int enc_queue_cnt[5];
 uint32_t image_addr = 0;
 uint32_t image_len = 0;
 int voe_heap_size = 0;
+
+static isp_control ISPCtrl = {
+    .Brightness     = 0,
+    .Contrast       = 50,
+    .Saturation     = 50,
+    .Sharpness      = 50,
+    .LDC            = 0,
+    .WDRMode        = 0,
+    .WDRLevel       = 50,
+    .ExposureMode   = 1,
+    .AWB            = 1,
+    .GrayMode       = 0,
+    .PowerLineFreq  = 3,
+    .DayNightMode   = 0
+};
 
 static video_params_t video_params = {
     .stream_id       = 0,
@@ -45,6 +61,19 @@ static video_params_t video_v4_params = {
     }
 };
 
+void ISPControlReset(void) {
+    isp_set_brightness(ISPCtrl.Brightness);
+    isp_set_contrast(ISPCtrl.Contrast);
+    isp_set_saturation(ISPCtrl.Saturation);
+    isp_set_sharpness(ISPCtrl.Sharpness);
+    isp_set_ldc(ISPCtrl.LDC);
+    isp_set_wdr_mode(ISPCtrl.WDRMode);
+    isp_set_exposure_mode(ISPCtrl.ExposureMode);
+    isp_set_awb_ctrl(ISPCtrl.AWB);
+    isp_set_gray_mode(ISPCtrl.GrayMode);
+    isp_set_power_line_freq(ISPCtrl.PowerLineFreq);
+    isp_set_day_night(ISPCtrl.DayNightMode);
+}
 
 int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
                  int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,
