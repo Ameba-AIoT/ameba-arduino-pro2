@@ -150,7 +150,7 @@ class CameraSetting {
         void getAEGain(void);
         void setPowerLineFreq(int value);
         void getPowerLineFreq(void);
-        void setAWB(int AWBMode);
+        void setAWB(int enable);
         void getAWB(void);
         void getWBTemp(void);
         void setRedBalance(int value);
