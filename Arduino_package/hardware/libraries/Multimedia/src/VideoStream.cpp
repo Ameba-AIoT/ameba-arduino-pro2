@@ -198,15 +198,15 @@ void CameraSetting::getAEGain(void) {
     printf("\r\n[INFO] AE Gain = %d\n", ret);
 }
 
-void CameraSetting::setPowerLineFreq(int value) {
-    isp_set_power_line_freq(value);
-    if (value == 0) {
+void CameraSetting::setPowerLineFreq(int enable) {
+    isp_set_power_line_freq(enable);
+    if (enable == 0) {
         printf("\r\n[INFO] Power Line Frequency is disabled.\n");
-    } else if (value == 1) {
+    } else if (enable == 1) {
         printf("\r\n[INFO] Power Line Frequency is 50Hz.\n");
-    } else if (value == 2) {
+    } else if (enable == 2) {
         printf("\r\n[INFO] Power Line Frequency is 60Hz.\n");
-    } else if (value == 3) {
+    } else if (enable == 3) {
         printf("\r\n[INFO] Power Line Frequency is Auto.\n");
     }
 }

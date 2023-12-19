@@ -148,7 +148,7 @@ class CameraSetting {
         void getExposureTime(void);
         void setAEGain(int value);
         void getAEGain(void);
-        void setPowerLineFreq(int value);
+        void setPowerLineFreq(int enable);
         void getPowerLineFreq(void);
         void setAWB(int enable);
         void getAWB(void);
