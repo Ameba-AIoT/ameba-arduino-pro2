@@ -552,7 +552,9 @@ struct mlme_ext_info {
 #define PSCAN_DISABLE_MASK    0xFE //disable PSCAN_ENABLE
 #define PSCAN_CLEAR_SSID_DONE 0x7F //clear PSCAN_SET_SSID_DONE
 #define PSCAN_CLEAR_PASSIVE_SCAN 0xF7 //clear PSCAN_PASSIVE_SCAN
-#define PSCAN_RETRY_TIMES        14 //the retry times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES        7 //the retry times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES_MIN    1 //the retry minimum times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES_MAX    20 //the retry maxxmum times of resending probe request when PSCAN_FAST_SURVEY is set
 
 typedef struct _RT_CHANNEL_INFO {
 	u8				ChannelNum;		// The channel number.

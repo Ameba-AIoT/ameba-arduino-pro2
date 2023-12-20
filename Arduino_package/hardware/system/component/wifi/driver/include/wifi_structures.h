@@ -479,6 +479,7 @@ struct  wifi_user_conf {
 	bit 4: (0: enable reordering immediately upon receiving ADDBA REQ, 1(default): enable reordering after REORDER_WAIT_TIME to fix issue that some data packets with "invalid" seqnum are sent between ADDBA REQ and ADDBA RSP)
 	bit 5: (0(default): disable issue encryption wpa3 deauth, 1: enable issue encryption wpa3 deauth)
 	bit 6: (0(default): disable gcmp128/gcmp256 wifi connection, 1: enable gcmp128/gcmp256 wifi connection)
+	bit 7: (0(default): disable wpa3 transition to force wpa2 security connection, 1: enable wpa3 transition to force wpa2 security connection)
 	*/
 	unsigned char ap_compatibilty_enabled;
 
@@ -512,6 +513,9 @@ struct  wifi_user_conf {
 	The active_keepalive_interval is used to configure active keepalive packet interval(unit: second)
 	*/
 	unsigned char active_keepalive_interval;
+
+	//provide fast scan retry times for upper layer to revise
+	unsigned char fast_pscan_retry_times_max;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 

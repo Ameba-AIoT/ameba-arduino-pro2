@@ -190,7 +190,7 @@ void FRPostProcess(std::vector<FaceRecognitionResult> results) {
     OSD.createBitmap(CHANNELVID);
 
     if (facerecog.getResultCount() > 0) {
-        for (uint32_t i = 0; i < facerecog.getResultCount(); i++) {
+        for (int i = 0; i < facerecog.getResultCount(); i++) {
             FaceRecognitionResult item = results[i];
             // Result coordinates are floats ranging from 0.00 to 1.00
             // Multiply with RTSP resolution to get coordinates in pixels

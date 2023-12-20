@@ -59,4 +59,5 @@ void als_set_dbglevel(enum als_dbg_level enable);
 void als_get_version(void);
 void als_get_statist(als_data_t *als_data);
 int als_ifSwitch(als_config_t *als_config, als_data_t *als_data);
+int isp_get_ifAEstable(int *sETGainOri, int iDealyMs);
 #endif

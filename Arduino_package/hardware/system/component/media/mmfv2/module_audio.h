@@ -22,7 +22,6 @@ typedef enum {
 } audio_mic_type;
 
 #define CMD_AUDIO_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
-#define CMD_AUDIO_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
 #define CMD_AUDIO_GET_PARAMS            MM_MODULE_CMD(0x01)  // get parameter
 #define CMD_AUDIO_SET_SAMPLERATE        MM_MODULE_CMD(0x02)
 #define CMD_AUDIO_SET_WORDLENGTH        MM_MODULE_CMD(0x03)
@@ -47,6 +46,9 @@ typedef enum {
 #define CMD_AUDIO_RUN_AEC               MM_MODULE_CMD(0x15)
 #define CMD_AUDIO_RUN_AGC               MM_MODULE_CMD(0x16)
 #define CMD_AUDIO_RUN_VAD               MM_MODULE_CMD(0x17)
+#define CMD_AUDIO_GET_NS_RUN            MM_MODULE_CMD(0x09)
+#define CMD_AUDIO_GET_AEC_RUN           MM_MODULE_CMD(0x0F)
+#define CMD_AUDIO_GET_AGC_RUN           MM_MODULE_CMD(0x2E)
 
 #define CMD_AUDIO_SET_AEC_LEVEL         MM_MODULE_CMD(0x18)
 #define CMD_AUDIO_SET_MIC_ENABLE        MM_MODULE_CMD(0x19)

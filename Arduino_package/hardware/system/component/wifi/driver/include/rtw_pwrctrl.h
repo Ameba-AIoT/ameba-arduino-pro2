@@ -392,6 +392,8 @@ struct pwrctrl_priv {
 	u8  arpreq_enable;
 	u8  arpreq_powerbit;
 	u8  arpreq_dtim1to;
+	u8  arpreq_null0;
+	u8  arpreq_wait_response;
 	u8  arpreq_rsvd_page_locate;
 #endif
 
