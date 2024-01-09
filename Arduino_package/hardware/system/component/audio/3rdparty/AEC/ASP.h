@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+#define TX_CURRENT_STATUS_MASK  (0x01 << 0)
+#define RX_CURRENT_STATUS_MASK  (0x01 << 1)
+#define TX_LASTFRAME_STATUS_MASK  (0x01 << 2)
+#define RX_LASTFRAME_STATUS_MASK  (0x01 << 3)
+
 typedef enum {
 	SPEEX_AEC,
 	WEBRTC_AEC,
@@ -67,6 +72,36 @@ typedef struct CTBF_cfg_s {
 	int16_t mic_array_type;
 } CTBF_cfg_t;
 
+typedef struct VQE_SND_STATE_s {
+	int16_t DoA;              //in degrees
+	int16_t ERLE;             //in dB
+	int16_t SinLvldB;         //in dBFs
+	int16_t SoutLvldB;        //indBFs after AGC (if AGC is enabled)
+	int16_t DTState;          //0 = single talk  or 1 = doulble talk
+	int16_t HCDetectState;    //1 = detected, 0 = not detected
+	uint8_t AECRun;
+	uint8_t AGCRun;
+	uint8_t NSRun;
+	uint8_t BFRun;
+
+	int16_t Reserve1;
+	int16_t Reserve2;
+	int16_t Reserve3;
+} VQE_SND_STATE_t;
+
+typedef struct VQE_RCV_STATE_s {
+	int16_t RinLvldB;
+	int16_t RoutLvldB;
+	int16_t HCDetectState;    //1 = detected, 0 = not detected
+	uint8_t AGCRun;
+	uint8_t NSRun;
+
+	int16_t Reserve1;
+	int16_t Reserve2;
+	int16_t Reserve3;
+} VQE_RCV_STATE_t;
+
+
 void VQE_SND_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, CTBF_cfg_t *RX_BF,
 				  float snd_amplification);
 int VQE_SND_process(const int16_t *farend, const int16_t *mic1, const int16_t *mic2, int16_t *out);
@@ -89,6 +124,8 @@ void AGC_destory(void);
 void AEC_set_print(uint8_t flag);
 const char *ASP_get_version(void);
 void ASP_print_version(void);
+void VQE_SND_get_status(VQE_SND_STATE_t *snd_state);
+void VQE_RCV_get_status(VQE_RCV_STATE_t *rcv_state);
 #else
 
 /**

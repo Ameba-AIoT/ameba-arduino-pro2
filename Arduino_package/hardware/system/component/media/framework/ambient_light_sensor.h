@@ -53,19 +53,19 @@
 
 #define AP1522D_STATUS_R_RDY          (BIT(0))
 
-void  ap1522d_init();
+void  ap1522d_init(void);
 void  ap1522d_power(int poweron);
 void  ap1522d_reset(int enable);
 
-int   ap1522d_ready();
+int   ap1522d_ready(void);
 
 void  ap1522d_get_sense_n_dark(unsigned int *sense, unsigned int *dark);
 
 void  ap1522d_set_gain(int gain);
-int   ap1522d_get_gain();
+int   ap1522d_get_gain(void);
 
 void  ap1522d_set_tig(float tig);
-float ap1522d_get_tig();
+float ap1522d_get_tig(void);
 
 int   ap1522d_calculate_lux(unsigned int sense, unsigned int dark, int gain, float tig);
 

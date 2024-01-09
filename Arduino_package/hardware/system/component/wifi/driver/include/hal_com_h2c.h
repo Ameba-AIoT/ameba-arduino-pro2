@@ -89,6 +89,7 @@ enum h2c_cmd {
 	H2C_BT_CONTROL = 0x68,
 	H2C_BT_WIFI_CTRL = 0x69,
 	H2C_BT_FW_PATCH = 0x6A,
+	H2C_BT_TDMA_PORT = 0x71,
 
 	/* WOWLAN Class: 100 */
 	H2C_WOWLAN = 0x80,
@@ -161,6 +162,7 @@ enum h2c_cmd {
 #define H2C_BCN_TRACK_LEN 7
 #define H2C_NTP_CTRL_LEN 5
 #define H2C_PNO_SCAN_SET_LEN 7
+#define H2C_BT_TDMA_PORT_LEN 1
 
 #ifdef CONFIG_MCC_MODE
 #define H2C_MCC_CTRL_LEN			7

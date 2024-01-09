@@ -85,9 +85,9 @@ int check_upload_process_image_upload = 0;
 string auto_board, auto_user_selection, flash_erase_mode_user_selection, flash_speed;
 string serial_port, auto_tool_name, flash_tool_name;
 string fw1_address, ISP_address_PT_ISP_IQ, NN_address_PT_NN_MDL;
-//string fw1_address = "0x80000";
-//string ISP_address_PT_ISP_IQ = "0x400000";
-//string NN_address_PT_NN_MDL = "0x840000";
+//string fw1_address = "0x60000";
+//string ISP_address_PT_ISP_IQ = "0x460000";
+//string NN_address_PT_NN_MDL = "0x530000";
 int upload_delay = 1000; // 1s
 
 string arduino_firmware_fileName = "arduino_firmware.bin";

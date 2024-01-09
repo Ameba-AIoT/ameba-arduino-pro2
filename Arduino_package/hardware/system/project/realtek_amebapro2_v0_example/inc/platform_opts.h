@@ -14,17 +14,27 @@
 * User data for common flash usage
 */
 #define USER_DATA_BASE          0xF00000
-#define FAST_RECONNECT_DATA		USER_DATA_BASE // 4KB		Using flt and NAND block 120
-#define BT_FTL_BKUP_ADDR		(USER_DATA_BASE + 0x01000) // 12KB
-#define SECURE_STORAGE_BASS		(USER_DATA_BASE + 0x04000) // 4KB
-#define FACE_FEATURE_DATA		(USER_DATA_BASE + 0x05000) /*!< FACE data begin address, default size used is 32KB (can be adjusted based on user requirement)*/
-#define ISP_FW_LOCATION		    (USER_DATA_BASE + 0x0C000) //Store the ISP index
-#define NOR_FLASH_FCS           (USER_DATA_BASE + 0x0D000) //Store the FCS data
+#define FAST_RECONNECT_DATA     USER_DATA_BASE // 4KB		Using flt and NAND block 120
+#define BT_FTL_BKUP_ADDR        (USER_DATA_BASE + 0x01000) // 12KB
+#define SECURE_STORAGE_BASS     (USER_DATA_BASE + 0x04000) // 4KB
+#define FACE_FEATURE_DATA       (USER_DATA_BASE + 0x05000) //Face recognition feature data begin address, default size used is 28KB (can be adjusted based on user requirement)
+#define ISP_FW_LOCATION         (USER_DATA_BASE + 0x0C000) //Store the ISP index
+#define FLASH_FCS_DATA          (USER_DATA_BASE + 0x0D000) //Store the FCS data
 #define TUNING_IQ_FW            (USER_DATA_BASE + 0x10000) //Store the Tuning IQ data(max size: 256K, 0xF10000~0xF50000)
 #define CALI_IQ_FW              (USER_DATA_BASE + 0x60000) //Store the mp calibration IQ data(max size: 16K, 0xF60000~0xF64000)
-#define NAND_APP_BASE			0x4000000 /*NAND FLASH FILESYSTEM begin address It need to alignment block size, the default is 512 BLOCK*/
-#define FLASH_APP_BASE			0xE00000  //TODO: configure flash file system size here
-#define NAND_FLASH_FCS          0x7080000 //900*128*1024
+#define USER_DATA_END           (USER_DATA_BASE + 0x64000)
+#define NOR_FLASH_END           0x1000000  //16MB by default
+/**
+* Nor/Nand Flash FCS data
+*/
+#define NOR_FLASH_FCS           FLASH_FCS_DATA
+#define NAND_FLASH_FCS          0x7080000 //= 900(block index) * 64(page number per block) * 2048(page size)
+/**
+* Flash file system configurations
+*/
+#define NAND_APP_BASE           0x4000000 //NAND FLASH FILESYSTEM begin address It need to alignment block size, the default is 512 BLOCK. = 512(block index) * 64(page number per block) * 2048(page size)
+#define FLASH_APP_BASE          USER_DATA_END  //Nor flash file system base address
+#define FLASH_FILESYS_SIZE      (NOR_FLASH_END - FLASH_APP_BASE)  //flash file system size(Nor and Nand)
 
 /**
  * For AT cmd Log service configurations

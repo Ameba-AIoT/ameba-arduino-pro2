@@ -59,6 +59,24 @@ enum encode_type {
 	VIDEO_H264_JPEG
 };
 
+//#define USE_ISP_RETENTION_DATA
+#ifdef USE_ISP_RETENTION_DATA
+typedef struct isp_retention_data_s {
+	uint32_t checksum;
+	uint32_t ae_exposure;
+	uint32_t ae_gain;
+	uint32_t awb_rgain;
+	uint32_t awb_bgain;
+	//uint32_t als_value; //user can check als to decide using isp init setting or not
+} isp_retention_data_t;
+#endif
+
+enum isp_init_option {
+	SAVE_TO_STRUCTURE = 0,
+	SAVE_TO_FLASH,
+	SAVE_TO_RETENTION
+};
+
 typedef struct encode_rc_parm_s {
 	unsigned int rcMode;
 	unsigned int iQp;		// for fixed QP
@@ -121,6 +139,12 @@ typedef struct video_sps_pps_info_s {
 	int enable;
 } video_sps_pps_info_t;
 
+#define MASK_MAX_NUM 5
+#define MASK_GRID 0X00
+#define MASK_RECT_ID_0 0X01
+#define MASK_RECT_ID_1 0X02
+#define MASK_RECT_ID_2 0X03
+#define MASK_RECT_ID_3 0X04
 typedef struct video_pre_init_params_s {
 	uint32_t meta_enable;
 	uint32_t meta_size;
@@ -130,17 +154,16 @@ typedef struct video_pre_init_params_s {
 	video_isp_initial_items_t init_isp_items;
 	uint32_t fast_mask_en;
 	struct private_mask_s {
-		uint32_t en;
-		uint32_t grid_mode;
-		uint32_t id;//0~3 only for rect-mode
+		uint32_t enable;
 		uint32_t color;
-		uint32_t start_x;//2-align
-		uint32_t start_y;//2-align
-		uint32_t w;//16-align when grid-mode
-		uint32_t h;
+		uint32_t en[MASK_MAX_NUM];
+		uint32_t start_x[MASK_MAX_NUM];//2-align
+		uint32_t start_y[MASK_MAX_NUM];//2-align
+		uint32_t w[MASK_MAX_NUM];//16-align when grid-mode
+		uint32_t h[MASK_MAX_NUM];
 		uint32_t cols;//8-align
 		uint32_t rows;
-		uint32_t bitmap[40];
+		uint8_t bitmap[160];
 	} fast_mask;
 	uint32_t voe_dbg_disable;
 	uint32_t isp_ae_enable;
@@ -324,10 +347,9 @@ int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int
 
 void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
 
-void video_pre_init_load_params_from_flash(void);
+void video_pre_init_load_params(enum isp_init_option save_option);
 
-void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data,
-									int save_to_flash); //save_to_flash 0: only save to pre init structure, 1: save to flash
+void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data, enum isp_init_option save_option); //save_to_flash 0: only save to pre init structure, 1: save to flash, 2: save to sram retention
 
 int video_pre_init_get_meta_enable(void);
 

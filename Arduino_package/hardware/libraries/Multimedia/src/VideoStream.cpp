@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "video_drv.h"
+#include "isp_ctrl_api.h"
 
 #ifdef __cplusplus
 }
@@ -15,6 +16,323 @@ Video Camera;
 
 uint32_t Video::image_addr[4] = {0};
 uint32_t Video::image_len[4] = {0};
+
+// (Image Tuning)
+void CameraSetting::setBrightness(int value) {
+     if (value >= BRIGHTNESS_MIN && value <= BRIGHTNESS_MAX) {
+        isp_set_brightness(value);
+        printf("\r\n[INFO] Brightness is set to %d.\n", value);
+     } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+     }
+}
+
+void CameraSetting::getBrightness(void) {
+    isp_get_brightness(&ret);
+    printf("\r\n[INFO] Brightness = %d\n", ret);
+}
+
+void CameraSetting::setContrast(int value) {
+    if (value >= CONTRAST_MIN && value <= CONTRAST_MAX) {
+        isp_set_contrast(value);
+        printf("\r\n[INFO] Contrast is set to %d.\n", value);
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getContrast(void) {
+    isp_get_contrast(&ret);
+    printf("\r\n[INFO] Contrast = %d \n", ret);
+}
+
+void CameraSetting::setSaturation(int value) {
+    if (value >= SATURATION_MIN && value <= SATURATION_MAX) {
+        isp_set_saturation(value);
+        printf("\r\n[INFO] Saturation is set to %d.\n", value);
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getSaturation(void) {
+    isp_get_saturation(&ret);
+    printf("\r\n[INFO] Saturation = %d\n", ret);
+}
+
+void CameraSetting::setSharpness(int value) {
+    if (value >= SHARPNESS_MIN && value <= SHARPNESS_MAX) {
+        isp_set_sharpness(value);
+        printf("\r\n[INFO] Sharpness is set to %d.\n", value);
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getSharpness(void) {
+    isp_get_sharpness(&ret);
+    printf("\r\n[INFO] Sharpness = %d \n", ret);
+}
+
+// Len Distortion Correction
+void CameraSetting::setLDC(int enable) {
+    isp_set_ldc(enable);
+    if (enable == 0) {
+        printf("\r\n[INFO] Len Distortion Correction is Disabled.\n");
+    } else if (enable == 1) {
+        printf("[INFO] Len Distortion Correction is Enabled.\n");
+    } else {
+        printf("\r\n[ERROR] Invalid Input. \n");
+    }
+}
+
+void CameraSetting::getLDC(void) {
+    isp_get_ldc(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Len Distortion Correction is Disabled.\n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Len Distortion Correction is Enabled.\n");
+    }
+}
+
+// Wide Dynamic Range
+void CameraSetting::setWDR(int enable) {
+    isp_set_wdr_mode(enable);
+    if (enable== 0) {
+        printf("\r\n[INFO] Wide Dynamic Range is Disabled.\n");
+    } else if (enable == 1) {
+        printf("\r\n[INFO] Wide Dynamic Range is set to Manual.\n");
+    } else if (enable == 2) {
+        printf("\r\n[INFO] Wide Dynamic Range is set to Auto.\n");
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getWDR(void) {
+    isp_get_wdr_mode(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Wide Dynamic Range = Disabled \n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Wide Dynamic Range = Manual \n");
+    } else if (ret == 2) {
+        printf("\r\n[INFO] Wide Dynamic Range = Auto \n");
+    }
+}
+
+void CameraSetting::setWDRLevel(int value) {
+    getWDR();
+    if (ret == 1) {
+        if (value >= 50 && value <= 100) {
+            isp_set_wdr_level(value);
+            printf("\r\n[INFO] WDR level is set to %d.\n", value);
+        } else {
+            printf("\r\n[INFO] Invalid value. WDR level value should be between 50 to 100.\n");
+        }
+    } else {
+        printf("\r\n[ERROR] Please set WDR to Manual to set the WDR level manually.\n");
+    }
+}
+
+void CameraSetting::getWDRLevel(void) {
+    isp_get_wdr_level(&ret);
+    printf("\r\n[INFO] WDR level = %d\n", ret);
+}
+
+// AE (Auto Exposure)
+void CameraSetting::setExposureMode(int enable) {
+    isp_set_exposure_mode(enable);
+    if (enable == 0) {
+        printf("\r\n[INFO] Exposure Mode is set to Manual.\n");
+    } else if (enable == 1) {
+        printf("\r\n[INFO] Exposure Mode is set to Auto.\n");
+    } else {
+         printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getExposureMode(void) {
+    isp_get_exposure_mode(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Exposure Mode = Manual\n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Exposure Mode = Auto\n");
+    }
+}
+
+void CameraSetting::setExposureTime(int time) { // duration in us
+    getExposureMode();
+    if (ret == 0) {
+        if (time <= EXPOSURETIME_MAX) {
+            isp_set_exposure_time(time);
+            printf("\r\n[INFO] Exposure time is set to %dus.\n", time);
+        } else {
+            printf ("\r\n[ERROR] Exposure Time should be less than or equals to 33333us.\n");
+        }
+    } else {
+        printf("\r\n[ERROR] Please set Exposure Mode to Manual to set the Exposure Time manually.\n");
+    }
+}
+
+void CameraSetting::getExposureTime(void) { // duration in us
+    isp_get_exposure_time(&ret);
+    printf("\r\n[INFO] Exposure time = %dus\n", ret);
+}
+
+void CameraSetting::setAEGain(int value) {
+    getExposureMode();
+    if (ret == 0) {
+        if (value >= AEGAIN_MIN && value <= AEGAIN_MAX) {
+            isp_set_ae_gain(value);
+            printf("\r\n[INFO] AE Gain is set to %d.\n", value);
+        } else {
+            printf("\r\n[ERROR] Invalid Input.\n");
+        }
+    } else if (ret == 1) {
+        printf("\r\n[ERROR] Please set Exposure Mode to Manual to set the AE Gain manually.\n");
+    }
+}
+
+void CameraSetting::getAEGain(void) {
+    isp_get_ae_gain(&ret);
+    printf("\r\n[INFO] AE Gain = %d\n", ret);
+}
+
+void CameraSetting::setPowerLineFreq(int enable) {
+    isp_set_power_line_freq(enable);
+    if (enable == 0) {
+        printf("\r\n[INFO] Power Line Frequency is disabled.\n");
+    } else if (enable == 1) {
+        printf("\r\n[INFO] Power Line Frequency is 50Hz.\n");
+    } else if (enable == 2) {
+        printf("\r\n[INFO] Power Line Frequency is 60Hz.\n");
+    } else if (enable == 3) {
+        printf("\r\n[INFO] Power Line Frequency is Auto.\n");
+    }
+}
+
+void CameraSetting::getPowerLineFreq(void) {
+    isp_get_power_line_freq(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Power Line Frequency = disabled.\n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Power Line Frequency = 50Hz.\n");
+    } else if (ret == 2) {
+        printf("\r\n[INFO] Power Line Frequency = 60Hz.\n");
+    } else if (ret == 3) {
+        printf("\r\n[INFO] Power Line Frequency = Auto.\n");
+    }
+}
+
+// AWB (Auto White Balance)
+void CameraSetting::setAWB(int enable) {
+    isp_set_awb_ctrl(enable);
+    if (enable == 0) {
+        printf("\r\n[INFO] Auto White Balance is set to Manual.\n");
+    } else if (enable == 1) {
+        printf("\r\n[INFO] Auto White Balance is set to Auto.\n");
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getAWB(void) {
+    isp_get_awb_ctrl(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Auto White Balance = Manual.\n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Auto White Balance = Auto.\n");
+    }
+}
+
+void CameraSetting::getWBTemp(void) {
+    isp_get_wb_temperature(&ret);
+    printf("\r\n[INFO] White Balance Temperature = %d\n", ret);
+}
+
+void CameraSetting::setRedBalance(int value) {
+    getAWB();
+    if (ret == 0) {
+        if (value >= REDBALANCE_MIN && value <= REDBALANCE_MAX) {
+            isp_set_red_balance(value);
+            printf("\r\n[INFO] Red balance is set to %d.\n", value);
+        } else {
+            printf("\r\n[ERROR] Invalid Input.\n");
+        }
+    } else {
+        printf("\r\n[ERROR] Please set AWB to Manual to adjust the temperature manually.\n");
+    }
+}
+
+void CameraSetting::getRedBalance(void) {
+    isp_get_red_balance(&ret);
+    printf("\r\n[INFO] Red balance = %d\n", ret);
+}
+
+void CameraSetting::setBlueBalance(int value) {
+    getAWB();
+    if (ret == 0) {
+        if (value >= BLUEBALANCE_MIN && value <= BLUEBALANCE_MAX) {
+            isp_set_blue_balance(value);
+            printf("\r\n[INFO] Blue balance is set to %d.\n", value);
+        } else {
+            printf("\r\n[ERROR] Invalid Input.\n");
+        }
+    } else if (ret == 1) {
+        printf("\r\n[ERROR] Please set AWB to Manual to adjust the temperature manually.\n");
+    }
+}
+
+void CameraSetting::getBlueBalance(void) {
+    isp_get_blue_balance(&ret);
+    printf("\r\n[INFO] Blue balance = %d\n", ret);
+}
+
+// Mode
+void CameraSetting::setGrayMode(int enable) {
+    isp_set_gray_mode(enable);
+    if (enable == 0) {
+        printf("\r\n[INFO] Not Gray Mode\n");
+    } else if (enable == 1) {
+        printf("\r\n[INFO] Gray Mode\n");
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getGrayMode(void) {
+    isp_get_gray_mode(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Not Gray Mode\n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Gray Mode\n");
+    }
+}
+
+void CameraSetting::setDayNightMode(int enable) {
+    isp_set_day_night(enable);
+    if (enable == 0) {
+        printf("\r\n[INFO] Day Mode\n");
+    } else if (enable == 1) {
+        printf("\r\n[INFO] Night Mode\n");
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getDayNightMode(void) {
+    isp_get_day_night(&ret);
+    if (ret == 0) {
+        printf("\r\n[INFO] Day Mode\n");
+    } else if (ret == 1) {
+        printf("\r\n[INFO] Night Mode\n");
+    }
+}
+
+void CameraSetting::reset(void) {
+    ISPControlReset();
+    printf("\r\n[INFO] ISP Control Reset.\n");
+}
 
 VideoSetting::VideoSetting(uint8_t preset) {
     switch (preset) {
