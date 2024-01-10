@@ -1,5 +1,5 @@
 /*
-  Example guide: 
+  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
 
   // "DAYNIGHT="  Set Day/Night Mode: 0: Day, 1: Night
   // "DAYNIGHT"   Get value of DayNight Mode to determine whether is day or night mode

@@ -1,5 +1,5 @@
 /*
-  Example guide: 
+  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
 
   // "BRIGHTNESS="  Set Brightness: Range from -64 to 64
   // "BRIGHTNESS"   Get Brightness level

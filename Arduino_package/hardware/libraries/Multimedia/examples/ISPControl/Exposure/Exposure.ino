@@ -1,5 +1,5 @@
 /*
-  Example guide:
+  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
 
   // "AE="          Set Auto Exposure, 0: Manual, 1: Auto
   // "AE"           Get value of Auto Exposure
