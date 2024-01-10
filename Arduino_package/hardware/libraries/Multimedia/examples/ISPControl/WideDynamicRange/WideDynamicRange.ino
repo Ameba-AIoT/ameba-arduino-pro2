@@ -1,10 +1,10 @@
 /*
-  Example guide: 
+  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
 
   // "WDR="       Set Wide Dynamic Range, 0: Disabled, 1: Manual, 2: Auto
   // "WDR"        Get value of WDR
-  // "WDRLVL="    Set WDR level: Range from 0 to 100
-  // "WDRLVL"     Get WDR level
+  // "LEVEL="     Set WDR level: Range from 0 to 100
+  // "LEVEL"      Get WDR level
   // "RESET"      Reset to default
 */
 
