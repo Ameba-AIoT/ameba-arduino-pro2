@@ -1,5 +1,5 @@
 /*
-  Example guide: 
+  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
 
   // "AWB="         Set Auto White Balance, 0:Manual, 1: Auto
   // "AWB"          Get value of Auto White Balance
@@ -7,7 +7,7 @@
   // "RED"          Get Red balance gain
   // "BLUE="        Set Blue balance gain: Range from 256 to 2047
   // "BLUE"         Get Blue balance gain
-  // "WBTEMP="      Get White Balance Temperature
+  // "WBTEMP"       Get White Balance Temperature
   // "RESET"        Reset to default
 */
 
