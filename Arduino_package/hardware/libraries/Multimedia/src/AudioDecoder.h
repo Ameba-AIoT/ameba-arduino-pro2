@@ -21,6 +21,7 @@ class AAD:public MMFModule {
     private:
         aad_params_t _aadParams = {
             .trans_type = AAD_TYPE_RTP_RAW,
+            .object_type = AAD_AOT_LC,
             .sample_rate = 8000,
             .channel = 1,
         };
