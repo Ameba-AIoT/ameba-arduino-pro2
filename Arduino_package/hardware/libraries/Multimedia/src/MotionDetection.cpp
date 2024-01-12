@@ -61,8 +61,8 @@ void MotionDetection::begin(void) {
         mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 1);
         mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
     }
-    mm_module_ctrl(_p_mmf_context, CMD_EIP_SET_MD_EN, 1);
-    mm_module_ctrl(_p_mmf_context, CMD_EIP_SET_STATUS, EIP_STATUS_START);
+    MDBegin(_p_mmf_context, 1);
+    setMDStatus(_p_mmf_context);
 }
 
 void MotionDetection::end(void) {

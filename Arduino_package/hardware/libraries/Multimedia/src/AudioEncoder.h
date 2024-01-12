@@ -1,16 +1,12 @@
 #ifndef __AUDIOENCODER_H__
 #define __AUDIOENCODER_H__
 
-#define INT machine_type_t
-#include "module_aac.h"
-#undef INT
-
 #include "VideoStream.h"
 #include "AudioStream.h"
 
 #include "faac.h"
 #include "faaccfg.h"
-//#include "module_aac.h"
+#include "module_aac.h"
 #include "module_g711.h"
 
 class AAC:public MMFModule {

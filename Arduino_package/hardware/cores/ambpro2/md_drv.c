@@ -31,3 +31,11 @@ void setMDTrigBlock(mm_context_t *p, uint16_t count) {
 void getMDResult(mm_context_t *p, md_result_t* md_result) {
     mm_module_ctrl(p, CMD_EIP_GET_MD_RESULT, (int)md_result);
 }
+
+void MDBegin(mm_context_t *p, int start) {
+     mm_module_ctrl(p, CMD_EIP_SET_MD_EN, 1);
+}
+
+void setMDStatus(mm_context_t *p) {
+    mm_module_ctrl(p, CMD_EIP_SET_STATUS, EIP_STATUS_START);
+}

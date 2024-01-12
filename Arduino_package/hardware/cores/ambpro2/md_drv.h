@@ -18,6 +18,10 @@ void setMDTrigBlock(mm_context_t *p, uint16_t count);
 
 void getMDResult(mm_context_t *p, md_result_t* md_result);
 
+void MDBegin(mm_context_t *p, int start);
+
+void setMDStatus(mm_context_t *p);
+
 //extern int md_control(mm_context_t *p, int cmd, int arg);
 
 #endif
