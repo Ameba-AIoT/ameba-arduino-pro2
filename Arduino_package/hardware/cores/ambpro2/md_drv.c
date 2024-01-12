@@ -33,7 +33,7 @@ void getMDResult(mm_context_t *p, md_result_t* md_result) {
 }
 
 void MDBegin(mm_context_t *p, int start) {
-     mm_module_ctrl(p, CMD_EIP_SET_MD_EN, 1);
+     mm_module_ctrl(p, CMD_EIP_SET_MD_EN, start);
 }
 
 void setMDStatus(mm_context_t *p) {
