@@ -66,6 +66,7 @@ void setup() {
 
     audioStreamer2.registerInput(rtp);
     audioStreamer2.registerOutput(decoder);
+    audioStreamer2.setStackSize();
     audioStreamer2.begin();
 
     audioStreamer3.registerInput(decoder);
