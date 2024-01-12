@@ -84,10 +84,10 @@ class MotionDetectionResult {
 
 class MotionDetection:public MMFModule {
     public:
-        MotionDetection(uint8_t row = 18, uint8_t col = 32);
+        MotionDetection(uint8_t row = 32, uint8_t col = 32);
         ~MotionDetection(void);
 
-        void configResolution(uint8_t row = 18, uint8_t col = 32);
+        void configResolution(uint8_t row = 32, uint8_t col = 32);
         void configVideo(VideoSetting& config);
         void begin(void);
         void end(void);
@@ -107,8 +107,8 @@ class MotionDetection:public MMFModule {
         
         static std::vector<MotionDetectionResult> md_result_vector;
         static void (*MD_user_CB)(std::vector<MotionDetectionResult>);
-    
-        md_param_t md_param = {0};
+
+        eip_param_t md_eip_param = {0};
         motion_detect_threshold_t md_thr = {2,3};
         uint16_t trigCount = 0;
 };
