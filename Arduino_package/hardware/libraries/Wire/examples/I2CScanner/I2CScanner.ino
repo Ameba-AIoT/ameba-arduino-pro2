@@ -13,7 +13,7 @@
 #include <Wire.h>
 
 void setup() {
-    Wire1.begin();
+    Wire.begin();
 
     Serial.begin(115200);
     while (!Serial);             // Leonardo: wait for serial monitor
@@ -32,9 +32,9 @@ void loop() {
         // The i2c_scanner uses the return value of
         // the Write.endTransmisstion to see if
         // a device did acknowledge to the address.
-        Wire1.beginTransmission(address);
-        Wire1.write(x);
-        error = Wire1.endTransmission();
+        Wire.beginTransmission(address);
+        Wire.write(x);
+        error = Wire.endTransmission();
 
         if (error == 0) {
             Serial.print("I2C device found at address 0x");
