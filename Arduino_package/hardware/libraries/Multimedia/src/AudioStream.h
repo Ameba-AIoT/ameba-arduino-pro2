@@ -2,6 +2,7 @@
 #define __AUDIOSTREAM_H__
 
 #define CONFIG_NEWAEC 1
+#define CONFIG_PLATFORM_8735B 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,6 +17,7 @@ extern "C" {
 #endif
 
 #include "VideoStream.h"
+#include "ASP.h"
 
 typedef enum {
     CODEC_AAC = AV_CODEC_ID_MP4A_LATM,
@@ -45,6 +47,10 @@ class AudioSetting {
 //            .spk_l_eq[0]    = {1, 0x01ca2925, 0x1c000000, 0x02000000, 0x038ea551, 0x1e6600bf}, //USE EQ for HPF 200Hz @ sample rate 8kHz
             .ADC_gain       = 0x7F, // 0x00 - 0x7F
             .DAC_gain       = 0x7F, // 0x00 - 0xAF
+            .ADC_mute       = 0,
+            .DAC_mute       = 0,
+            .enable_record  = 0,
+            .avsync_en      = 0,
         };
 };
 
@@ -75,10 +81,12 @@ class Audio:public MMFModule {
         uint8_t _audioStarted = 0;
         RX_cfg_t _rxASPParams = {
             .aec_cfg = {
-                .AEC_EN = 0,
+                .AEC_EN = 1,
                 .EchoTailLen = 64,
                 .CNGEnable = 1,
                 .PPLevel = 6,
+                .DTControl = 1,
+                .ConvergenceTime = 100,
                 },
             .agc_cfg = {
                 .AGC_EN = 0,
@@ -88,15 +96,16 @@ class Audio:public MMFModule {
                 .AttackTime = 20,
                 .ReleaseTime = 20,
                 .Ratio = {50, 50, 50},
-                .Threshold = {20, 30, 40},
+                .Threshold = {20, 30, 50},
                 .KneeWidth = 0,
-                .NoiseFloorAdaptEnable = 1,
+                .NoiseFloorAdaptEnable = 0,
                 .RMSDetectorEnable = 0,
                 },
             .ns_cfg = {
                 .NS_EN = 0,
                 .NSLevel = 15,
                 .HPFEnable = 0,
+                .QuickConvergenceEnable = 0,
                 }
         };
         TX_cfg_t _txASPParams = {
