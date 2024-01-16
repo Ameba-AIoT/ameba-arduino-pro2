@@ -81,7 +81,7 @@ class Audio:public MMFModule {
         uint8_t _audioStarted = 0;
         RX_cfg_t _rxASPParams = {
             .aec_cfg = {
-                .AEC_EN = 1,
+                .AEC_EN = 0,
                 .EchoTailLen = 64,
                 .CNGEnable = 1,
                 .PPLevel = 6,
