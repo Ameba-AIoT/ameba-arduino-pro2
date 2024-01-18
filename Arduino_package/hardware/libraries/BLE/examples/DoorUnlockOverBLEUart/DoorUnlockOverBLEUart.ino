@@ -23,10 +23,10 @@
 #define STRING_BUF_SIZE 100
 
 // Pin Definition
-#define RED_LED    3
-#define GREEN_LED  4
+#define RED_LED 3
+#define GREEN_LED 4
 #define BUTTON_PIN 5
-#define SERVO_PIN  8
+#define SERVO_PIN 8
 
 VideoSetting configJPEG(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
 AmebaServo myservo;
@@ -49,7 +49,8 @@ long counter = 0;
 // File Initialization
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     // GPIO Initialisation
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
@@ -57,7 +58,7 @@ void setup() {
     myservo.attach(SERVO_PIN);
 
     Serial.begin(115200);
-    
+
     // BLE Setup
     BLE.setDeviceName("AMEBA_BLE");
     advdata.addFlags();
@@ -90,19 +91,23 @@ void setup() {
 
     // Start BLE
     BLE.beginPeripheral();
-    
+
     // Servo moves to position the angle 180 degree (LOCK CLOSE)
     myservo.write(180);
 }
 
-void loop() {
+void loop()
+{
     buttonState = digitalRead(BUTTON_PIN);
-    if ((buttonState == ON) && (systemOn == false)) {  // When button is being pressed, systemOn becomes true
-        Tx.writeString("Door Bell Pressed.\n");        // Send notification to connected BLE Device
-        if (BLE.connected(0) && notify) {
+    if ((buttonState == ON) && (systemOn == false))
+    {                                           // When button is being pressed, systemOn becomes true
+        Tx.writeString("Door Bell Pressed.\n"); // Send notification to connected BLE Device
+        if (BLE.connected(0) && notify)
+        {
             Tx.notify(0);
         }
-        for (int count = 0; count < 3; count++) {
+        for (int count = 0; count < 3; count++)
+        {
             digitalWrite(RED_LED, HIGH);
             digitalWrite(GREEN_LED, HIGH);
             delay(500);
@@ -111,37 +116,43 @@ void loop() {
             delay(500);
         }
         systemOn = true;
-    } else {
-        //Both LED remains on when button not pressed
+    }
+    else
+    {
+        // Both LED remains on when button not pressed
         systemOn = false;
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, HIGH);
     }
-    
-    if (Rx.readString() == String("Open\n")) {
+
+    if (Rx.readString() == String("Open\n"))
+    {
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, HIGH);
-        fileName = String("Authorized");  // File name for Authorized Door Opening
+        fileName = String("Authorized"); // File name for Authorized Door Opening
         doorOpen = true;
         Rx.writeString("Done\n"); // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
-    } else if (Rx.readString() == String("Snapshot\n")) { // When BLE Command "Snapshot" being received
+    }
+    else if (Rx.readString() == String("Snapshot\n"))
+    { // When BLE Command "Snapshot" being received
         fs.begin();
         File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg"); // File name for Snapshot taken
         delay(1000);
         Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
-        file.write((uint8_t*)img_addr, img_len);
+        file.write((uint8_t *)img_addr, img_len);
         file.close();
         fs.end();
         Rx.writeString("Done\n"); // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
     }
 
     // Take snapshot and open door for 10 seconds
-    if ((doorOpen == true) && (systemOn == true)) {
+    if ((doorOpen == true) && (systemOn == true))
+    {
         fs.begin();
         File file = fs.open(String(fs.getRootPath()) + fileName + String(++counter) + ".jpg");
         delay(1000);
         Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
-        file.write((uint8_t*)img_addr, img_len);
+        file.write((uint8_t *)img_addr, img_len);
         file.close();
         fs.end();
         myservo.write(0);
@@ -155,9 +166,11 @@ void loop() {
 }
 
 // Callback function for Rx (Optional)
-void writeCB(BLECharacteristic* chr, uint8_t connID) {
+void writeCB(BLECharacteristic *chr, uint8_t connID)
+{
     printf("Characteristic %s write by connection %d :\n", chr->getUUID().str(), connID);
-    if (chr->getDataLen() > 0) {
+    if (chr->getDataLen() > 0)
+    {
         Serial.print("Received string: ");
         Serial.print(chr->readString());
         Serial.println();
@@ -165,12 +178,16 @@ void writeCB(BLECharacteristic* chr, uint8_t connID) {
 }
 
 // Callback function for Tx (Optional)
-void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
-    if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-      printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
-      notify = true;
-    } else {
-      printf("Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
-      notify = false;
+void notifCB(BLECharacteristic *chr, uint8_t connID, uint16_t cccd)
+{
+    if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY)
+    {
+        printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        notify = true;
+    }
+    else
+    {
+        printf("Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        notify = false;
     }
 }
