@@ -17,7 +17,7 @@
 
 // Choose between using AAC or G711 audio decoder
 AAD decoder;
-//G711E decoder;
+//G711D decoder;
 
 AudioSetting configA(0);
 Audio audio;
