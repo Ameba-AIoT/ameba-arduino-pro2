@@ -5,7 +5,7 @@
    Line Notify to the user's mobile phone, ensuring swift response and
    heightened security.
 
-    Example guide: https://www.amebaiot.com/zh/amebapro2-arduino-motion-notify/
+    Example guide: https://www.amebaiot.com/en/amebapro2-arduino-motion-notify/
 */
 
 #include <Arduino.h>
@@ -46,10 +46,34 @@ MotionDetection MD;
 AmebaFatFS fs;
 WiFiSSLClient wifiClient;
 
-int counter = 0;
 char buf[512];
 char *p;
 bool flag_motion = false;
+
+void mdPostProcess(std::vector<MotionDetectionResult> md_results) {
+    // Motion detection results is expressed as an array
+    // With 0 or 1 in each element indicating presence of motion
+    // Iterate through all elements to check for motion
+    // and calculate rectangles containing motion
+
+    OSD.createBitmap(CHANNEL);
+    if (MD.getResultCount() > 0) {
+        for (uint16_t i = 0; i < MD.getResultCount(); i++) {
+            MotionDetectionResult result = md_results[i];
+            int xmin = (int)(result.xMin() * config.width());
+            int xmax = (int)(result.xMax() * config.width());
+            int ymin = (int)(result.yMin() * config.height());
+            int ymax = (int)(result.yMax() * config.height());
+            //printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
+            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
+        }
+            flag_motion = true;
+    } else {
+        flag_motion = false;
+    }
+    OSD.update(CHANNEL);
+    delay(100);
+}
 
 void setup() {
     Serial.begin(115200);
@@ -77,6 +101,7 @@ void setup() {
 
     // Configure motion detection for low resolution RGB video stream
     MD.configVideo(configMD);
+    MD.setResultCallback(mdPostProcess);
     MD.begin();
 
     // Configure StreamIO object to stream data from high res video channel to RTSP
@@ -112,32 +137,6 @@ void setup() {
 }
 
 void loop() {
-    // Motion detection results is expressed as an array
-    // With 0 or 1 in each element indicating presence of motion
-    // Iterate through all elements to check for motion
-    // and calculate rectangles containing motion
-    std::vector<MotionDetectionResult> md_results = MD.getResult();
-    OSD.createBitmap(CHANNEL);
-
-    if (MD.getResultCount() > 0) {
-        counter++;
-        for (uint16_t i = 0; i < MD.getResultCount(); i++) {
-            MotionDetectionResult result = md_results[i];
-            int xmin = (int)(result.xMin() * config.width());
-            int xmax = (int)(result.xMax() * config.width());
-            int ymin = (int)(result.yMin() * config.height());
-            int ymax = (int)(result.yMax() * config.height());
-            // printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
-            OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
-        }
-        if (counter >= 5) {
-            flag_motion = true;
-        }
-    } else {
-        counter = 0;
-        flag_motion = false;
-    }
-
     if (flag_motion) {
         Serial.println("Motion Detected");
         // SD card init
@@ -174,9 +173,7 @@ void loop() {
         Camera.getImage(CHANNEL, &img_addr, &img_len);
         file.write((uint8_t *)img_addr, img_len);
         file.close();
-        // upadte OSD
-        OSD.update(CHANNEL);
-        delay(100);
+
         Serial.println("===================================");
         Serial.println("[INFO] Photo Captured ...");
         Serial.println("===================================");
@@ -187,7 +184,8 @@ void loop() {
         while (strlen(p) > 0) {
             /* list out file name image will be saved as "image.jpg" */
             if (strstr(p, FILENAME) != NULL) {
-                Serial.println("Found 'image.jpg' in the string.");
+                Serial.println("[INFO] Found 'image.jpg' in the string.");
+                Serial.println("[INFO] Processing file...");
             } else {
                 // Serial.println("Substring 'image.jpg' not found in the
                 // string.");
@@ -216,13 +214,14 @@ void loop() {
 
         // transfer file to Google Drive
         // https://github.com/fustyles/Arduino/tree/master/ESP32-CAM_GoogleDrive_Linenotify
+        Serial.println("[INFO] Uploading file to Google Drive...");
         String Data = myFoldername + myFilename + myImage;
         const char *myDomain = "script.google.com";
         String getAll = "", getBody = "";
-        Serial.println("Connect to " + String(myDomain));
+        Serial.println("[INFO] Connect to " + String(myDomain));
 
         if (wifiClient.connect(myDomain, 443)) {
-            Serial.println("Connection successful");
+            Serial.println("[INFO] Connection successful");
 
             wifiClient.println("POST " + myScript + " HTTP/1.1");
             wifiClient.println("Host: " + String(myDomain));
@@ -266,9 +265,9 @@ void loop() {
             Serial.println(getBody);
         } else {
             getBody = "Connected to " + String(myDomain) + " failed.";
-            Serial.println("Connected to " + String(myDomain) + " failed.");
+            Serial.println("[INFO] Connected to " + String(myDomain) + " failed.");
         }
-        Serial.println("File uploading done.");
+        Serial.println("[INFO] File uploading done.");
         Serial.println("===================================");
     } else {  // no motion detected
         Serial.print(".");
