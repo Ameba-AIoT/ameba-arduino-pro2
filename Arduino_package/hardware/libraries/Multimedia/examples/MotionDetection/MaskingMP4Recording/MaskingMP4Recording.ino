@@ -16,6 +16,10 @@ This example acts as a Security System based on Motion Detection, which would st
 #include "MotionDetection.h"
 #include "VideoStreamOverlay.h"
 
+#include "AmebaFatFS.h"
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
 // Channel 1 : 1280 x 720  30FPS H264
@@ -33,6 +37,17 @@ This example acts as a Security System based on Motion Detection, which would st
 #define GREEN_LED  4
 //#define BUZZER_PIN 7
 
+char path[128];
+
+WiFiUDP ntpUDP;
+
+AmebaFatFS fs;
+
+// You can specify the time server pool and the offset (in seconds, can be
+// changed later with setTimeOffset() ). Additionaly you can specify the
+// update interval (in milliseconds, can be changed using setUpdateInterval() ).
+NTPClient timeClient(ntpUDP, "sg.pool.ntp.org", 28800, 60000);
+
 AudioSetting configA(0);
 VideoSetting configV(VIDEO_FHD, CAM_FPS, VIDEO_H264, 0);
 VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);     // Low resolution RGB video for motion detection
@@ -44,12 +59,14 @@ MotionDetection MD;
 StreamIO videoStreamerMD(1, 1); // 1 Input RGB Video -> 1 Output MD
 StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output AAC
 StreamIO avMixStreamer(2, 2);   // 2 Input Video + Audio -> 2 Output MP4 + RTSP
+bool updatemodifiedtime = false;
 
 int recordingCount = 0;
 
 char ssid[] = "Network_SSID"; // your network SSID (name)
 char pass[] = "Password";     // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;
+
 
 void setup() {
     Serial.begin(115200);
@@ -66,6 +83,7 @@ void setup() {
         // wait 2 seconds for connection:
         delay(2000);
     }
+    timeClient.begin();
 
     // Configure camera video channel with video format information
     Camera.configVideoChannel(CHANNELVID, configV);
@@ -162,5 +180,27 @@ void loop() {
     }
     
     OSD.update(CHANNELVID);
+
+    //For updating last modified time after recording stop
+    int state = (int) mp4.getRecordingState();
+    if (state == 0 && updatemodifiedtime == false) {
+      timeClient.update();
+
+      uint16_t year = (uint16_t)timeClient.getYear();
+      uint16_t month = (uint16_t)timeClient.getMonth();
+      uint16_t date = (uint16_t)timeClient.getMonthDay();
+      uint16_t hour = (uint16_t)timeClient.getHours();
+      uint16_t minute = (uint16_t)timeClient.getMinutes();
+      uint16_t second = (uint16_t)timeClient.getSeconds();
+
+      sprintf(path, "%s%s%s", fs.getRootPath(), mp4.getRecordingFileName().c_str(), ".mp4");
+      fs.begin();
+      fs.setLastModTime(path, year, month, date, hour, minute, second); 
+      fs.end();
+      updatemodifiedtime = true;
+    }
+    else if (state == 1 && updatemodifiedtime == true) {
+      updatemodifiedtime = false;
+    }
     delay(100);
 }
