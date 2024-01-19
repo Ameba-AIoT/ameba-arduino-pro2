@@ -10,6 +10,28 @@
 #include "AudioEncoder.h"
 #include "MP4Recording.h"
 
+#include "AmebaFatFS.h"
+#include <NTPClient.h>
+#include <WiFi.h>
+#include <WiFiUdp.h>
+
+#define CHANNEL 0
+
+char path1[128];
+char path2[128];
+
+char ssid[] = "Network_SSID";
+char pass[] = "Password";
+
+WiFiUDP ntpUDP;
+
+AmebaFatFS fs;
+
+// You can specify the time server pool and the offset (in seconds, can be
+// changed later with setTimeOffset() ). Additionaly you can specify the
+// update interval (in milliseconds, can be changed using setUpdateInterval() ).
+NTPClient timeClient(ntpUDP, "sg.pool.ntp.org", 28800, 60000);
+
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
 // Channel 1 : 1280 x 720  30FPS H264
@@ -29,9 +51,18 @@ MP4Recording mp4_1;
 MP4Recording mp4_2;
 StreamIO audioStreamer(1, 1);  // 1 Input Audio -> 1 Output AAC
 StreamIO avMixStreamer(3, 2);  // 3 Input Video1 + Video2 + Audio -> 2 Output MP4_1 + MP4_2
+bool updatemodifiedtime1 = false;
+bool updatemodifiedtime2 = false;
 
 void setup() {
     Serial.begin(115200);
+
+    WiFi.begin(ssid, pass);
+    while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    }
+    timeClient.begin();
 
     // Configure both camera video channels with corresponding video format information
     Camera.configVideoChannel(0, configV1);
@@ -83,12 +114,54 @@ void setup() {
     mp4_1.begin();
     mp4_2.begin();
 
+    fs.begin();
     delay(1000);
     printInfo();
 }
 
 void loop() {
-    // do nothing
+    //For updating last modified time after recording stop
+    int state = (int) mp4_1.getRecordingState();
+    if (state == 0 && updatemodifiedtime1 == false) {
+      timeClient.update();
+
+      uint16_t year = (uint16_t)timeClient.getYear();
+      uint16_t month = (uint16_t)timeClient.getMonth();
+      uint16_t date = (uint16_t)timeClient.getMonthDay();
+      uint16_t hour = (uint16_t)timeClient.getHours();
+      uint16_t minute = (uint16_t)timeClient.getMinutes();
+      uint16_t second = (uint16_t)timeClient.getSeconds();
+
+      sprintf(path1, "%s%s%s", fs.getRootPath(), mp4_1.getRecordingFileName().c_str(), ".mp4");
+      fs.begin();
+      fs.setLastModTime(path1, year, month, date, hour, minute, second); 
+      updatemodifiedtime1 = true;
+    }
+    else if (state == 1 && updatemodifiedtime1 == true) {
+      updatemodifiedtime1 = false;
+    }
+
+    int state1 = (int) mp4_2.getRecordingState();
+    if (state1 == 0 && updatemodifiedtime2 == false) {
+      timeClient.update();
+
+      uint16_t year = (uint16_t)timeClient.getYear();
+      uint16_t month = (uint16_t)timeClient.getMonth();
+      uint16_t date = (uint16_t)timeClient.getMonthDay();
+      uint16_t hour = (uint16_t)timeClient.getHours();
+      uint16_t minute = (uint16_t)timeClient.getMinutes();
+      uint16_t second = (uint16_t)timeClient.getSeconds();
+
+      sprintf(path2, "%s%s%s", fs.getRootPath(), mp4_2.getRecordingFileName().c_str(), ".mp4");
+      fs.begin();
+      fs.setLastModTime(path2, year, month, date, hour, minute, second); 
+      updatemodifiedtime2 = true;
+    }
+    else if (state1 == 1 && updatemodifiedtime2 == true) {
+      updatemodifiedtime2 = false;
+    }
+
+    delay(100);
 }
 
 void printInfo(void) {

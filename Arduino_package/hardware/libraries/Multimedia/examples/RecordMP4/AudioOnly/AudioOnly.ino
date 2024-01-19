@@ -9,6 +9,25 @@
 #include "AudioEncoder.h"
 #include "MP4Recording.h"
 
+#include "AmebaFatFS.h"
+#include <NTPClient.h>
+#include <WiFi.h>
+#include <WiFiUdp.h>
+
+char path[128];
+
+char ssid[] = "Network_SSID";
+char pass[] = "Password";
+
+WiFiUDP ntpUDP;
+
+AmebaFatFS fs;
+
+// You can specify the time server pool and the offset (in seconds, can be
+// changed later with setTimeOffset() ). Additionaly you can specify the
+// update interval (in milliseconds, can be changed using setUpdateInterval() ).
+NTPClient timeClient(ntpUDP, "sg.pool.ntp.org", 28800, 60000);
+
 // Default audio preset configurations:
 // 0 :  8kHz Mono Analog Mic
 // 1 : 16kHz Mono Analog Mic
@@ -22,8 +41,17 @@ MP4Recording mp4;
 StreamIO audioStreamer1(1, 1);  // 1 Input Audio -> 1 Output AAC
 StreamIO audioStreamer2(1, 1);  // 1 Input AAC -> 1 Output MP4
 
+bool updatemodifiedtime = false;
+
 void setup() {
     Serial.begin(115200);
+
+    WiFi.begin(ssid, pass);
+    while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    }
+    timeClient.begin();
 
     // Configure audio peripheral for audio data output
     audio.configAudio(configA);
@@ -61,7 +89,29 @@ void setup() {
 }
 
 void loop() {
-    // do nothing
+    //For updating last modified time after recording stop
+    int state = (int) mp4.getRecordingState();
+    if (state == 0 && updatemodifiedtime == false) {
+      timeClient.update();
+
+      uint16_t year = (uint16_t)timeClient.getYear();
+      uint16_t month = (uint16_t)timeClient.getMonth();
+      uint16_t date = (uint16_t)timeClient.getMonthDay();
+      uint16_t hour = (uint16_t)timeClient.getHours();
+      uint16_t minute = (uint16_t)timeClient.getMinutes();
+      uint16_t second = (uint16_t)timeClient.getSeconds();
+
+      sprintf(path, "%s%s%s", fs.getRootPath(), mp4.getRecordingFileName().c_str(), ".mp4");
+      fs.begin();
+      fs.setLastModTime(path, year, month, date, hour, minute, second); 
+      fs.end();
+      updatemodifiedtime = true;
+    }
+    else if (state == 1 && updatemodifiedtime == true) {
+      updatemodifiedtime = false;
+    }
+    delay(100);
+    
 }
 
 void printInfo(void) {
