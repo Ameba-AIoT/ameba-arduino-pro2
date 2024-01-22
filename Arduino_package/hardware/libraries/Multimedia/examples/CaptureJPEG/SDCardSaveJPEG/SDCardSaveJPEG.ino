@@ -44,7 +44,6 @@ void setup() {
   timeClient.begin();
   timeClient.update();
 
-  
   uint16_t year = (uint16_t)timeClient.getYear();
   uint16_t month = (uint16_t)timeClient.getMonth();
   uint16_t date = (uint16_t)timeClient.getMonthDay();
@@ -56,7 +55,6 @@ void setup() {
   Camera.videoInit();
   Camera.channelBegin(CHANNEL);
   
-
   fs.begin();
   sprintf(path, "%s%s%s", fs.getRootPath(), filename, ".jpg"); 
   File file = fs.open(path);

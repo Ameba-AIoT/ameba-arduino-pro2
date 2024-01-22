@@ -111,7 +111,6 @@ void loop() {
       updatemodifiedtime = false;
     }
     delay(100);
-    
 }
 
 void printInfo(void) {

@@ -160,7 +160,6 @@ void loop() {
     else if (state1 == 1 && updatemodifiedtime2 == true) {
       updatemodifiedtime2 = false;
     }
-
     delay(100);
 }
 
