@@ -145,6 +145,38 @@ int NTPClient::getSeconds() const {
   return (this->getEpochTime() % 60);
 }
 
+int NTPClient::getYear() const {
+  time_t epoch_time = this->getEpochTime();
+  struct tm* timeinfo;
+  timeinfo = gmtime(&epoch_time);
+  
+  return ((timeinfo->tm_year)+1900);
+}
+
+int NTPClient::getMonth() const {
+  time_t epoch_time = this->getEpochTime();
+  struct tm* timeinfo;
+  timeinfo = gmtime(&epoch_time);
+
+  return ((timeinfo->tm_mon)+1);
+}
+
+int NTPClient::getMonthDay() const {
+  time_t epoch_time = this->getEpochTime();
+  struct tm* timeinfo;
+  timeinfo = gmtime(&epoch_time);
+
+  return timeinfo->tm_mday;
+}
+
+String NTPClient::getFormattedDate() const {
+  String MonthDayStr = String(this->getMonthDay());
+  String MonthStr = String(this->getMonth());
+  String YearStr = String(this->getYear());
+
+  return MonthDayStr + "/" + MonthStr + "/" + YearStr;
+}
+
 String NTPClient::getFormattedTime() const {
   unsigned long rawTime = this->getEpochTime();
   unsigned long hours = (rawTime % 86400L) / 3600;
