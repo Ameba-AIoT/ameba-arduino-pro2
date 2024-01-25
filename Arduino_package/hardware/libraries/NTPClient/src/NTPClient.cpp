@@ -17,6 +17,8 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ 
+ * 2024/01/23 Refined by Realtek
  */
 
 #include "NTPClient.h"
@@ -143,6 +145,38 @@ int NTPClient::getMinutes() const {
 }
 int NTPClient::getSeconds() const {
   return (this->getEpochTime() % 60);
+}
+
+int NTPClient::getYear() const {
+  time_t epoch_time = this->getEpochTime();
+  struct tm* timeinfo;
+  timeinfo = gmtime(&epoch_time);
+  
+  return ((timeinfo->tm_year)+1900);
+}
+
+int NTPClient::getMonth() const {
+  time_t epoch_time = this->getEpochTime();
+  struct tm* timeinfo;
+  timeinfo = gmtime(&epoch_time);
+
+  return ((timeinfo->tm_mon)+1);
+}
+
+int NTPClient::getMonthDay() const {
+  time_t epoch_time = this->getEpochTime();
+  struct tm* timeinfo;
+  timeinfo = gmtime(&epoch_time);
+
+  return timeinfo->tm_mday;
+}
+
+String NTPClient::getFormattedDate() const {
+  String MonthDayStr = String(this->getMonthDay());
+  String MonthStr = String(this->getMonth());
+  String YearStr = String(this->getYear());
+
+  return MonthDayStr + "/" + MonthStr + "/" + YearStr;
 }
 
 String NTPClient::getFormattedTime() const {

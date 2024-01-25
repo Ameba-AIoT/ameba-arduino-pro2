@@ -3,6 +3,7 @@
 #include "Arduino.h"
 
 #include <wifi_Udp.h>
+#include <ctime>
 
 #define SEVENZYYEARS 2208988800UL
 #define NTP_PACKET_SIZE 48
@@ -73,6 +74,9 @@ class NTPClient {
     int getHours() const;
     int getMinutes() const;
     int getSeconds() const;
+    int getYear() const;
+    int getMonth() const;
+    int getMonthDay() const;
 
     /**
      * Changes the time offset. Useful for changing timezones dynamically
@@ -99,4 +103,9 @@ class NTPClient {
      * Stops the underlying UDP client
      */
     void end();
+
+    /**
+     * @return time formatted like `dd:mm:yyyy`
+     */
+    String getFormattedDate() const;
 };
