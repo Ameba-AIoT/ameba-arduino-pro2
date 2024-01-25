@@ -59,8 +59,8 @@ void setup() {
 
     WiFi.begin(ssid, pass);
     while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+        delay(500);
+        Serial.print(".");
     }
     timeClient.begin();
 
@@ -120,45 +120,45 @@ void setup() {
 }
 
 void loop() {
+    uint16_t year, month, date, hour, minute, second;
+
     //For updating last modified time after recording stop
-    int state = (int) mp4_1.getRecordingState();
-    if (state == 0 && updatemodifiedtime1 == false) {
-      timeClient.update();
+    int state1 = (int)(mp4_1.getRecordingState());
+    if (state1 == 0 && updatemodifiedtime1 == false) {
+        timeClient.update();
 
-      uint16_t year = (uint16_t)timeClient.getYear();
-      uint16_t month = (uint16_t)timeClient.getMonth();
-      uint16_t date = (uint16_t)timeClient.getMonthDay();
-      uint16_t hour = (uint16_t)timeClient.getHours();
-      uint16_t minute = (uint16_t)timeClient.getMinutes();
-      uint16_t second = (uint16_t)timeClient.getSeconds();
+        year = (uint16_t)timeClient.getYear();
+        month = (uint16_t)timeClient.getMonth();
+        date = (uint16_t)timeClient.getMonthDay();
+        hour = (uint16_t)timeClient.getHours();
+        minute = (uint16_t)timeClient.getMinutes();
+        second = (uint16_t)timeClient.getSeconds();
 
-      sprintf(path1, "%s%s%s", fs.getRootPath(), mp4_1.getRecordingFileName().c_str(), ".mp4");
-      fs.begin();
-      fs.setLastModTime(path1, year, month, date, hour, minute, second); 
-      updatemodifiedtime1 = true;
+        sprintf(path1, "%s%s%s", fs.getRootPath(), mp4_1.getRecordingFileName().c_str(), ".mp4");
+        fs.begin();
+        fs.setLastModTime(path1, year, month, date, hour, minute, second);
+        updatemodifiedtime1 = true;
+    } else if (state1 == 1 && updatemodifiedtime1 == true) {
+        updatemodifiedtime1 = false;
     }
-    else if (state == 1 && updatemodifiedtime1 == true) {
-      updatemodifiedtime1 = false;
-    }
 
-    int state1 = (int) mp4_2.getRecordingState();
-    if (state1 == 0 && updatemodifiedtime2 == false) {
-      timeClient.update();
+    int state2 = (int)(mp4_2.getRecordingState());
+    if (state2 == 0 && updatemodifiedtime2 == false) {
+        timeClient.update();
 
-      uint16_t year = (uint16_t)timeClient.getYear();
-      uint16_t month = (uint16_t)timeClient.getMonth();
-      uint16_t date = (uint16_t)timeClient.getMonthDay();
-      uint16_t hour = (uint16_t)timeClient.getHours();
-      uint16_t minute = (uint16_t)timeClient.getMinutes();
-      uint16_t second = (uint16_t)timeClient.getSeconds();
+        year = (uint16_t)timeClient.getYear();
+        month = (uint16_t)timeClient.getMonth();
+        date = (uint16_t)timeClient.getMonthDay();
+        hour = (uint16_t)timeClient.getHours();
+        minute = (uint16_t)timeClient.getMinutes();
+        second = (uint16_t)timeClient.getSeconds();
 
-      sprintf(path2, "%s%s%s", fs.getRootPath(), mp4_2.getRecordingFileName().c_str(), ".mp4");
-      fs.begin();
-      fs.setLastModTime(path2, year, month, date, hour, minute, second); 
-      updatemodifiedtime2 = true;
-    }
-    else if (state1 == 1 && updatemodifiedtime2 == true) {
-      updatemodifiedtime2 = false;
+        sprintf(path2, "%s%s%s", fs.getRootPath(), mp4_2.getRecordingFileName().c_str(), ".mp4");
+        fs.begin();
+        fs.setLastModTime(path2, year, month, date, hour, minute, second);
+        updatemodifiedtime2 = true;
+    } else if (state2 == 1 && updatemodifiedtime2 == true) {
+        updatemodifiedtime2 = false;
     }
     delay(100);
 }

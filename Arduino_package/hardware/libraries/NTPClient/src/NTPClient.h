@@ -108,5 +108,4 @@ class NTPClient {
      * @return time formatted like `dd:mm:yyyy`
      */
     String getFormattedDate() const;
-
 };

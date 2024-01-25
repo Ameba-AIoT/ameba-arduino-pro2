@@ -35,13 +35,11 @@ char path[128];
 
 AmebaFatFS fs;
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
-    while (WiFi.status() != WL_CONNECTED)
-    {
+    while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
     }
@@ -54,8 +52,7 @@ void setup()
     fs.begin();
 }
 
-void loop()
-{
+void loop() {
     timeClient.update();
     uint16_t year = (uint16_t)timeClient.getYear();
     uint16_t month = (uint16_t)timeClient.getMonth();
