@@ -1,7 +1,7 @@
 *By completing this PR sufficiently, please help us to review and improve the quality of this PR and Release Notes*
 
 ### Checklist
-1. [ ] Please provide specific title taht describ the change (*eg. Update Readme.md*)
+1. [ ] Please provide specific title that describe the change (*eg. Update Readme.md*)
 2. [ ] Please provide related links (*eg. This Pull Request is a fix of #issue_number*)
 3. [ ] Please **update the license/declaration** if applicable (*eg. Usage of other projects/apis/libs code*)
 4. [ ] Please check [Contributing guide](https://github.com/ambiot/ambpro2_arduino/blob/dev/CONTRIBUTING.md)
