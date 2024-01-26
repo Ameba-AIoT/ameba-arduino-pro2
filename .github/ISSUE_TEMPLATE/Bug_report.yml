@@ -1,4 +1,4 @@
-name: Bug report
+name: Bug Report
 description: Report any bugs or issues
 labels: ["Status: Awaiting triage"]
 body:
@@ -11,7 +11,7 @@ body:
         * Please check and search in [List of existing issues](https://github.com/ambiot/ambpro2_arduino/issues?q=is%3Aopen+is%3Aissue)
         * If still experiencing the issue, please provide as many details as possible below about your hardware, environment setup and software.
   - type: input
-    id: Boards
+    id: br-boards
     attributes:
       label: Boards
       description: What is the hardware/module using?
@@ -19,7 +19,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: ex-hw
+    id: br-ex-hw
     attributes:
       label: External Hardware
       description: Any external hardware that Ameba board attached to?
@@ -27,7 +27,7 @@ body:
     validations:
        required: true
   - type: textarea
-    id: addon-hw
+    id: br-addon-hw
     attributes:
       label: Hardware Configuration
       description: Is anything else attached to the Hardware?
@@ -35,7 +35,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: version
+    id: br-version
     attributes:
       label: Version
       description: What version of ambpro2_arduino SDK? Please use the latest version if possible.
@@ -53,7 +53,7 @@ body:
     validations:
       required: true
   - type: input
-    id: IDE
+    id: br-ide
     attributes:
      label: IDE Name
      description: What is the IDE?
@@ -61,7 +61,7 @@ body:
     validations:
      required: true
   - type: input
-    id: os
+    id: br-os
     attributes:
       label: Operating System
       description: On which OS does this issue occur?
@@ -69,7 +69,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: auto-flash-mode
+    id: br-auto-flash-mode
     attributes:
       label: Auto Flash Mode
       description: Is auto flash mode enabled?
@@ -79,7 +79,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: erase-flash-mode
+    id: br-erase-flash-mode
     attributes:
       label: Erase All Flash Memory (16MB)
       description: Is erase flash enabled?
@@ -90,7 +90,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: standard-lib-mode
+    id: br-standard-lib
     attributes:
       label: Standard Lib
       description: Is Standard Lib enabled?
@@ -100,7 +100,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: upload-speed
+    id: br-upload-speed
     attributes:
       label: Upload Speed
       description: What is the Upload speed?
@@ -111,7 +111,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: Description
+    id: br-description
     attributes:
       label: Description
       description: Please describe the issue/bug here and expected behaviour
@@ -119,7 +119,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: sketch
+    id: br-sketch
     attributes:
       label: Sketch
       description: Please provide sketch/code that can be used to reproduce the bug/issue
@@ -128,7 +128,7 @@ body:
     validations:
      required: true
   - type: textarea
-    id: Debug
+    id: br-error
     attributes:
       label: Error/Debug Message
       description: Please provide error/debug message.
@@ -137,16 +137,16 @@ body:
     validations:
       required: true
   - type: textarea
-    id: remarks
+    id: br-remarks
     attributes:
       label: Reproduce remarks
       description: Is there additional information that will help to reproduce?
       placeholder: eg. disabled erase mode and there is no issues/tried under ubuntu18 did not work but macos and ubuntu22 works...
   - type: checkboxes
-    id: confirmation
+    id: br-confirmation
     attributes:
       label: I have checked online documentation, FAQ, GitHub Wiki and existing/closed issues.
-      description: Before opening a new issue, please check all the resources above.
+      description: Before opening a new issue, please check all resources above.
       options:
         - label: I confirm I have checked online documentation, FAQ, GitHub Wiki and existing/closed issues.
           required: true
