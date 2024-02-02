@@ -217,6 +217,7 @@ void Audio::begin(void) {
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_MESSAGE_LEVEL, 0);
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_PARAMS, (int)_audioParams);
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_RXASP_PARAM, (int)&_rxASPParams);
+    mm_module_ctrl(_p_mmf_context, CMD_AUDIO_RUN_AEC, 1);
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_TXASP_PARAM, (int)&_txASPParams);
     mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 6);
     mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);

@@ -115,7 +115,7 @@ typedef enum {
 } usbh_cdc_ecm_statistic_feature_selector_t;
 
 /* ConnectionSpeedChange Data Structure */
-typedef union {
+typedef struct {
 	u32 DLBitRate;      /* Contains the downlink bit rate, in bits per second, as sent on the IN pipe */
 	u32 ULBitRate;    /* Contains the uplink bit rate, in bits per second, as sent on the OUT pipe */
 } usbh_cdc_ecm_speed_change_t;
@@ -141,6 +141,8 @@ typedef enum {
 	CDC_ECM_STATE_SET_ETHERNET_MULTICAST_FILTER,
 	CDC_ECM_STATE_SET_ETHERNET_PACKET_FILTER,
 	CDC_ECM_STATE_GET_ETHERNET_STATISTIC,
+	CDC_ECM_STATE_SET_ETHERNET_REGISTER_1,
+	CDC_ECM_STATE_SET_ETHERNET_REGISTER_2,
 	CDC_ECM_STATE_SWITCH_TO_TRANSFER,
 	CDC_ECM_STATE_TRANSFER,
 	CDC_ECM_STATE_ERROR,
@@ -198,6 +200,7 @@ typedef struct {
 
 	u16                                 feature_selector;
 	u32                                 eth_statistic_count;
+	u32                                 set_register;
 
 	u16                                 packet_filter;
 	u8                                  muticast_filter[6 * 2];
@@ -215,7 +218,10 @@ typedef struct {
 	u8                                  *bulk_data_out_buf;
 	usbh_cdc_ecm_transfer_state_t       bulk_data_out_state;
 
-	u8                                  bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
+	//u8                                  bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
+	u8                                  *bulk_data_in_buf;
+	u32									ip_total_len;
+	//bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
 	volatile usbh_cdc_ecm_transfer_state_t      bulk_data_in_state;
 
 	usbh_cdc_ecm_state_t                state;
@@ -226,6 +232,33 @@ typedef struct {
 	usbh_cdc_ecm_state_cb_t             *cb;
 	usb_host_t                          *host;
 } usbh_cdc_ecm_host_t;
+
+
+#define MAX_SEND_PACKET 512
+#define MAX_RECV_PACKET 512
+
+typedef struct _usb_send_packet {
+	unsigned char packet[1536];
+	unsigned int packet_length;
+} usb_send_packet;
+typedef struct _usb_recv_packet {
+	unsigned char packet[1536];
+	unsigned int packet_length;
+} usb_recv_packet;
+
+typedef struct {
+	usb_send_packet *ecm_tx_packet;
+	usb_recv_packet *ecm_rx_packet;
+	_xqueue	tx_msg_queue;
+	_xqueue	rx_msg_queue;
+	_sema ecm_tx_sema;
+	int ecm_rx_packet_count;
+	int ecm_tx_packet_count;
+	struct task_struct task_ecm_send;
+	struct task_struct task_ecm_recv;
+	int ecm_rx_status;//0 idle
+	int init_status;
+} usb_trx_packeet_t;
 
 #pragma pack(pop)
 
@@ -251,5 +284,25 @@ u8 usbh_cdc_ecm_bulk_receive(void);
 u8 usbh_cdc_ecm_intr_receive(u8 *buf, u32 len);
 
 u16 usbh_cdc_ecm_get_usbin_mps(void);
+
+u8 usbh_cdc_ecm_set_ethernet_register_1(u32 value);
+u8 usbh_cdc_ecm_set_ethernet_register_2(u32 value);
+
+void usbh_ecm_record_speed_info(usbh_cdc_ecm_speed_change_t *value);
+void usbh_ecm_get_speed(usbh_cdc_ecm_speed_change_t *value);
+
+void usbh_ecm_trx_message_deinit(void);
+void usbh_ecm_trx_message_init(void);
+
+usb_send_packet *usbh_ecm_send_get_buf(void);
+usb_recv_packet *usbh_ecm_recv_get_buf(void);
+
+int usbh_cdc_ecm_tx_wait(void);
+void usbh_cdc_ecm_tx_up(void);
+int usbh_ecm_rx_get_message(usb_recv_packet *rx_packet);
+int usbh_ecm_tx_get_message(usb_send_packet *tx_packet);
+int usbh_ecm_rx_push_message(usb_send_packet *rx_packet);
+int usbh_ecm_tx_push_message(usb_send_packet *tx_packet);
+
 
 #endif  /* USBD_CDC_ECM_H */

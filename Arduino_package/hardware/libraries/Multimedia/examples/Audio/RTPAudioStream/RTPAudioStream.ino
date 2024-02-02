@@ -17,7 +17,7 @@
 
 // Choose between using AAC or G711 audio decoder
 AAD decoder;
-//G711E decoder;
+//G711D decoder;
 
 AudioSetting configA(0);
 Audio audio;
@@ -53,6 +53,7 @@ void setup() {
     // Configure StreamIO object to stream data from audio channel to AAC encoder
     audioStreamer1.registerInput(rtp);
     audioStreamer1.registerOutput(decoder);
+    audioStreamer1.setStackSize();
     audioStreamer1.begin();
 
     audioStreamer2.registerInput(decoder);

@@ -21,7 +21,12 @@ extern "C" {
 
 #define FTL_NOR_FLASH    0X00
 #define FTL_NAND_FLASH   0X01
-#define NOR_FLASH_SECTOR 4096
+
+#define NOR_FLASH_SECTOR            4096
+#define NAND_FLASH_BLOCK_PAGE_NUM   64
+#define NAND_PAGE_SIZE              2048
+#define NAND_FLASH_BLOCK_SIZE       (NAND_PAGE_SIZE * NAND_FLASH_BLOCK_PAGE_NUM)
+#define NAND_FLASH_BLOCK_COUNT      (FLASH_FILESYS_SIZE / NAND_FLASH_BLOCK_SIZE)
 
 int ftl_common_read(unsigned int address, unsigned char *buf, unsigned int size);
 int ftl_common_write(unsigned int address, unsigned char *buf, unsigned int size);

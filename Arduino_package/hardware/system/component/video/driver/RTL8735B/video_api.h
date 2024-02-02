@@ -44,6 +44,39 @@
 
 #define VIDEO_META_REV_BUF  0x1000
 #define VIDEO_START_CODE_DUMMY 0x03
+#define VIDEO_META_UUID_SIZE 0x10
+
+/*ENCODE TYPE*/
+//type : 0:HEVC 1:H264 2:JPEG 3:NV12 4:RGB 5:HEVC+JPEG 6:H264+JPEG
+enum encode_type {
+	VIDEO_HEVC = 0,
+	VIDEO_H264,
+	VIDEO_JPEG,
+	VIDEO_NV12,
+	VIDEO_RGB,
+	VIDEO_NV16,
+	VIDEO_HEVC_JPEG,
+	VIDEO_H264_JPEG
+};
+
+//#define USE_ISP_RETENTION_DATA
+#ifdef USE_ISP_RETENTION_DATA
+typedef struct isp_retention_data_s {
+	uint32_t checksum;
+	uint32_t ae_exposure;
+	uint32_t ae_gain;
+	uint32_t awb_rgain;
+	uint32_t awb_bgain;
+	//uint32_t als_value; //user can check als to decide using isp init setting or not
+} isp_retention_data_t;
+#endif
+
+enum isp_init_option {
+	SAVE_TO_STRUCTURE = 0,
+	SAVE_TO_FLASH,
+	SAVE_TO_RETENTION
+};
+
 typedef struct encode_rc_parm_s {
 	unsigned int rcMode;
 	unsigned int iQp;		// for fixed QP
@@ -106,6 +139,12 @@ typedef struct video_sps_pps_info_s {
 	int enable;
 } video_sps_pps_info_t;
 
+#define MASK_MAX_NUM 5
+#define MASK_GRID 0X00
+#define MASK_RECT_ID_0 0X01
+#define MASK_RECT_ID_1 0X02
+#define MASK_RECT_ID_2 0X03
+#define MASK_RECT_ID_3 0X04
 typedef struct video_pre_init_params_s {
 	uint32_t meta_enable;
 	uint32_t meta_size;
@@ -115,17 +154,16 @@ typedef struct video_pre_init_params_s {
 	video_isp_initial_items_t init_isp_items;
 	uint32_t fast_mask_en;
 	struct private_mask_s {
-		uint32_t en;
-		uint32_t grid_mode;
-		uint32_t id;//0~3 only for rect-mode
+		uint32_t enable;
 		uint32_t color;
-		uint32_t start_x;//2-align
-		uint32_t start_y;//2-align
-		uint32_t w;//16-align when grid-mode
-		uint32_t h;
+		uint32_t en[MASK_MAX_NUM];
+		uint32_t start_x[MASK_MAX_NUM];//2-align
+		uint32_t start_y[MASK_MAX_NUM];//2-align
+		uint32_t w[MASK_MAX_NUM];//16-align when grid-mode
+		uint32_t h[MASK_MAX_NUM];
 		uint32_t cols;//8-align
 		uint32_t rows;
-		uint32_t bitmap[40];
+		uint8_t bitmap[160];
 	} fast_mask;
 	uint32_t voe_dbg_disable;
 	uint32_t isp_ae_enable;
@@ -138,6 +176,7 @@ typedef struct video_pre_init_params_s {
 	uint32_t video_drop_frame;
 	uint32_t video_meta_offset;//the meta offset size
 	uint32_t video_meta_total_size;//the meta total size
+	uint8_t video_meta_uuid[VIDEO_META_UUID_SIZE];//
 } video_pre_init_params_t;
 
 typedef struct video_param_s {
@@ -175,6 +214,8 @@ typedef struct video_param_s {
 	uint32_t maxQp;
 	uint32_t fast_osd_en;
 	uint32_t scale_up_en;  //1.only support in ch0  2.width and height should both larger than sensor size  3.cannot be used with ROI crop  4.max scale up resolution is 2688x1944
+	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
+	uint32_t meta_enable;
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -194,9 +235,11 @@ typedef struct video_meta_s {
 	uint32_t video_addr;
 	uint32_t video_len;
 	uint32_t meta_offset;
+	uint32_t meta_size;
 	isp_meta_t *isp_meta_data;
 	isp_statis_meta_t *isp_statis_meta;
-	uint32_t user_buf[VIDEO_META_USER_SIZE];
+	uint8_t  *user_buf;
+	uint32_t user_buf_len;
 } video_meta_t;
 
 
@@ -209,12 +252,19 @@ hal_video_adapter_t *video_init(int iq_start_addr, int sensor_start_addr);
 
 void *video_deinit(void);
 
+void *video_poweroff(void);
+
 void video_set_isp_info(isp_info_t *info);
 
 int video_buf_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_shapshot,
 				   int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_shapshot,
 				   int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_shapshot,
 				   int v4_enable, int v4_w, int v4_h);
+
+int video_buf_heap_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_enctype, int v1_jpg_only_shapshot,
+						int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_enctype, int v2_jpg_only_shapshot,
+						int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_enctype, int v3_jpg_only_shapshot,
+						int v4_enable, int v4_w, int v4_h);
 
 void video_buf_release(void);
 
@@ -297,11 +347,20 @@ int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int
 
 void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
 
-void video_sei_write(unsigned char *video_output, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input, int user_length);
+void video_pre_init_load_params(enum isp_init_option save_option);
 
-void video_sei_read(unsigned char *video_input, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input, int user_length);
+void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data, enum isp_init_option save_option); //save_to_flash 0: only save to pre init structure, 1: save to flash, 2: save to sram retention
+
+int video_pre_init_get_meta_enable(void);
+
+void video_sei_write(video_meta_t *m_parm);
+
+void video_sei_read(unsigned char *uuid, unsigned char *video_input, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input,
+					int user_length);
 
 int video_get_meta_offset(void);
+
+int video_open_status(void);//0:No video open 1:video open
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

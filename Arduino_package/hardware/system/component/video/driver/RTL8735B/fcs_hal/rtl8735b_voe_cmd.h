@@ -136,6 +136,8 @@
 
 #define VOE_SET_IQ_CALI_ENABLE			 0x253
 
+#define VOE_ISP_SET_STM_FPS				 0x254
+
 //OSD
 #define VOE_OSD_QUERY                    0x260
 #define VOE_OSD_UPDATE                   0x261

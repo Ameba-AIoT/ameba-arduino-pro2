@@ -54,6 +54,7 @@ typedef struct opusc_ctx_s {
 	uint8_t *cache;
 	uint32_t cache_idx;
 	uint32_t stop;
+	uint32_t max_cache_size;
 } opusc_ctx_t;
 
 extern mm_module_t opusc_module;

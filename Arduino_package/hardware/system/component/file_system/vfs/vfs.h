@@ -11,6 +11,7 @@ extern "C" {
 #define MAX_FS_SIZE 4
 #define MAX_USER_SIZE 4
 #define MAX_READDIR_NUM 10
+#define MAX_NAMELIST_SIZE 1000
 typedef int(*qsort_compar)(const void *, const void *);
 
 #define VFS_O_ACCMODE	0x00000003
@@ -146,6 +147,7 @@ typedef struct {
 	int (*mount)(int interface);
 	int (*unmount)(int interface);
 	int (*get_interface)(int interface);
+	int (*format)(int interface);
 	const char	*TAG;
 	unsigned char drv_num;
 	void *fs;
@@ -178,6 +180,7 @@ int vfs_scan_vfs(int vfs_type);
 int vfs_register(vfs_opt *drv, int vfs_type);
 int find_vfs_number(const char *name, int *prefix_len, int *user_id);
 int vfs_user_mount(const char *prefix);
+int vfs_user_format(const char *prefix, int vfs_type, int interface);
 int vfs_status(void);
 /* access function */
 #define	F_OK		0	/* test for existence of file */

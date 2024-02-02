@@ -45,7 +45,11 @@
 #define MIN_BAUD_RATE 0x01              //!< Define minimum baud rate of flash controller
 #define MAX_BAUD_RATE 0x05              //!< Define maximum baud rate of flash controller
 #define MAX_AUTO_LENGTH 0x14            //!< Define maximum dummy cycle levels for timing tuning by flash controller(not PHY)
-#define SPI_FLASH_BASE 0x8000000       //!< Define flash memory address base
+#define SPI_FLASH_BASE 0x8000000        //!< Define flash memory address base
+
+#define FLASH_SPEED_625MHz 0            //!< Define flash speed at 62.5MHz
+#define FLASH_SPEED_100MHz 1            //!< Define flash speed at 100MHz
+#define FLASH_SPEED_125MHz 2            //!< Define flash speed at 125MHz
 
 /**
   \brief  Enumeration to define flash IO mode
@@ -159,6 +163,15 @@ typedef struct _valid_windows_s {
 	u32 dly_line_sp;                    //!< Temporarily available window of DPHY delay line starting point
 	u32 dly_line_ep;                    //!< Temporarily available window of DPHY delay line ending point
 } valid_windows_t, *pvalid_windows_t;
+
+/**
+  \brief  The data struct of User define setting
+*/
+typedef struct _spic_user_define_s {
+	u8 spic_bit_mode;                   //!< User define bit mode
+	u8 flash_speed;                     //!< User define flash speed
+} spic_user_define_t, *pspic_user_define_t;
+
 
 /**
   \brief  The data struct of flash controller stub functions. ROM code functions are accessed in RAM code through stub functions.
@@ -339,3 +352,4 @@ void spic_rtl_flush_fifo(SPIC_TypeDef *spic_dev);
 /** *@} */ /* End of group hal_spic */
 
 #endif /* RTL8195BHP_SPIC_H */
+

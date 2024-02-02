@@ -96,6 +96,23 @@ enum encode_type {
 #define v3_STREAMING_ID 2
 #define v4_STREAMING_ID 4
 
+// ISP control max and min values
+#define BRIGHTNESS_MIN      -64
+#define BRIGHTNESS_MAX      64
+#define CONTRAST_MIN        0
+#define CONTRAST_MAX        100
+#define SATURATION_MIN      0
+#define SATURATION_MAX      100
+#define SHARPNESS_MIN       0
+#define SHARPNESS_MAX       100
+#define EXPOSURETIME_MAX    33333
+#define AEGAIN_MIN          256
+#define AEGAIN_MAX          32768
+#define REDBALANCE_MIN      256
+#define REDBALANCE_MAX      2047
+#define BLUEBALANCE_MIN     256
+#define BLUEBALANCE_MAX     2047
+
 class MMFModule {
     friend class StreamIO;
     friend class Video;
@@ -107,7 +124,46 @@ class MMFModule {
 };
 
 class CameraSetting {
-    // To be done
+    friend class Video;
+
+    public:
+        void reset(void);
+        void setBrightness(int value);
+        void getBrightness(void);
+        void setContrast(int value);
+        void getContrast(void);
+        void setSaturation(int value);
+        void getSaturation(void);
+        void setSharpness(int value);
+        void getSharpness(void);
+        void setLDC(int enable);
+        void getLDC(void);
+        void setWDR(int enable);
+        void getWDR(void);
+        void setWDRLevel(int value);
+        void getWDRLevel(void);
+        void setExposureMode(int enable);
+        void getExposureMode(void);
+        void setExposureTime(int time);
+        void getExposureTime(void);
+        void setAEGain(int value);
+        void getAEGain(void);
+        void setPowerLineFreq(int enable);
+        void getPowerLineFreq(void);
+        void setAWB(int enable);
+        void getAWB(void);
+        void getWBTemp(void);
+        void setRedBalance(int value);
+        void getRedBalance(void);
+        void setBlueBalance(int value);
+        void getBlueBalance(void);
+        void setGrayMode(int enable);
+        void getGrayMode(void);
+        void setDayNightMode(int enable);
+        void getDayNightMode(void);
+
+    private:
+        int ret = 0;
 };
 
 class VideoSetting {

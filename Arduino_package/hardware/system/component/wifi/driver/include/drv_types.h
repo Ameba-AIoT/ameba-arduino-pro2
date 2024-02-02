@@ -853,6 +853,7 @@ struct _ADAPTER {
 	IFACE_ID1 is equals to VIRTUAL_ADAPTER*/
 	//u8 iface_id;
 #endif
+	wifi_connect_scan_list connection_scan_list;
 };
 
 #define dvobj_to_macidctl(dvobj) (&(dvobj->macid_ctl))

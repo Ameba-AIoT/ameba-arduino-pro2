@@ -11,6 +11,7 @@ typedef struct fatfs_flash_param_s {
 int fatfs_flash_init(void);
 int fatfs_flash_close(void);
 int fatfs_flash_get_param(fatfs_flash_params_t *param);
+int fatfs_flash_format(void *parm);
 int usb_flash_init(void);
 int usb_flash_deinit(void);
 int usb_flash_getcapacity(uint32_t *sector_count);

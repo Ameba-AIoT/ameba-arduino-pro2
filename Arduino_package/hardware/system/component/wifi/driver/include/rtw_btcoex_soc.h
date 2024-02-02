@@ -53,6 +53,17 @@ static char* wifi_state_dbg(enum_name enum_value) \
 	} \
 }
 
+#define COEX_CONCURRENT_STATE_TOSTRING_FUNCTION(MACRO_DEFINITION, enum_name) \
+static char* concurrent_state_dbg(enum_name enum_value) \
+{ \
+	switch(enum_value) \
+	{ \
+		MACRO_DEFINITION(COEX_ENUM_TOSTRING_CASE) \
+		default: \
+			return "##Error:coex_concurrent_state unknown enum_name ##"; \
+	} \
+}
+
 #define COEX_WIFI_EVENT_TOSTRING_FUNCTION(MACRO_DEFINITION, enum_name) \
 static char* wifi_event_dbg(enum_name enum_value) \
 { \
@@ -98,7 +109,17 @@ static char* wifi_event_dbg(enum_name enum_value) \
 	WIFI_STATE(COEX_STATE_WIFI_OTHER_MODE,=0x08) \
 	WIFI_STATE(COEX_STATE_WIFI_MAX,)
 
-//wifi state
+//wifi concurrent state
+#define COEX_CONCURRENT_STATE_ENUM(CONCURRENT_STATE) \
+	CONCURRENT_STATE(CONCURRENT_STATE_NONE,=0x00) \
+	CONCURRENT_STATE(CONCURRENT_STATE_AP_UNCONNECTED_STA_UNCONNECTED,=0x01) \
+	CONCURRENT_STATE(CONCURRENT_STATE_AP_CONNECTED_STA_UNCONNECTED,=0x02) \
+	CONCURRENT_STATE(CONCURRENT_STATE_AP_UNCONNECTED_STA_CONNECTED,=0x03) \
+	CONCURRENT_STATE(CONCURRENT_STATE_AP_CONNECTED_STA_CONNECTED,=0x04) \
+	CONCURRENT_STATE(CONCURRENT_STATE_MAX,)
+
+
+//wifi event
 #define COEX_WIFI_EVENT_ENUM(WIFI_EVENT) \
 	WIFI_EVENT(COEX_EVENT_WIFI_OFF,=0) \
 	WIFI_EVENT(COEX_EVENT_WIFI_ON,=1) \
@@ -113,24 +134,29 @@ static char* wifi_event_dbg(enum_name enum_value) \
 	WIFI_EVENT(COEX_EVENT_WIFI_MAX,)
 
 //Define bt state enum
-typedef enum coex_bt_state{
+typedef enum coex_bt_state {
 	COEX_BT_STATE_ENUM(TO_ENUM_ENTRY)
-}coex_bt_state;
+} coex_bt_state;
 
 //Define external bt state enum
-typedef enum coex_ext_bt_event{
+typedef enum coex_ext_bt_event {
 	EXT_BT_GPIO_EVENT_ENUM(TO_ENUM_ENTRY)
-}coex_ext_bt_event;
+} coex_ext_bt_event;
 
 //Define wifi state enum
-typedef enum coex_wifi_state{
+typedef enum coex_wifi_state {
 	COEX_WIFI_STATE_ENUM(TO_ENUM_ENTRY)
-}coex_wifi_state;
+} coex_wifi_state;
+
+//Define wifi concurrent state enum
+typedef enum coex_concurrent_state {
+	COEX_CONCURRENT_STATE_ENUM(TO_ENUM_ENTRY)
+} coex_concurrent_state;
 
 //Define wifi event enum
-typedef enum coex_wifi_event{
+typedef enum coex_wifi_event {
 	COEX_WIFI_EVENT_ENUM(TO_ENUM_ENTRY)
-}coex_wifi_event;
+} coex_wifi_event;
 /**
   * @brief  The enumeration is coex state indicated from wlan driver.
   */
@@ -160,6 +186,7 @@ struct wifi_tdma_scan_t {
 struct coex_t {
 	u8 coex_en;
 	u8 wifi_state;
+	u8 wifi_concurr_state;
 	u8 wifi_last_state;
 	u8 bt_state;
 	u16 state;
@@ -212,7 +239,7 @@ typedef struct _Ext_BT_state_GPIO {
 	TimerHandle_t xOneShotTimer;
 	BaseType_t xTimer1Started;
 	int total_count;
-}Ext_BT_state_GPIO;
+} Ext_BT_state_GPIO;
 
 #define COEX_MBOX_STACKSIZE						256
 #define GPIO_BT_STAT_IRQ_PIN					PF_0//PF_2//PF_0//PA_3

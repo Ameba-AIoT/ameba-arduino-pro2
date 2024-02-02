@@ -277,6 +277,7 @@ SECTIONS
 
 	.ram.retention.data :
 	{
+		*(.retention.table*)
 		*(.retention.data*)
 	} > RAM_RETENTION
 

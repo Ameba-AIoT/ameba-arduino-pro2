@@ -57,4 +57,12 @@ int		osd_pict_hide_custom(osd_pict_st *p);
 
 void *_fontlib_get(fontlib_e n, unsigned char *eng_bin, unsigned char *chi_bin);
 void _fontlib_free(fontlib_e n);
+
+enum rts_osd_err_code rts_osd_resize_1bpp(unsigned char *pd, unsigned char *pixels, int widthSource, int heightSource, int width, int height);
+enum rts_osd_err_code rts_osd_resize_1111(unsigned char *pd, unsigned char *pixels, int widthSource, int heightSource, int width, int height);
+enum rts_osd_err_code rts_osd_resize_2222(unsigned char *pd, unsigned char *pixels, int widthSource, int heightSource, int width, int height);
+enum rts_osd_err_code rts_osd_resize_4444(unsigned short *pd, unsigned short *pixels, int widthSource, int heightSource, int width, int height);
+enum rts_osd_err_code rts_osd_resize_5551(unsigned short *pd, unsigned short *pixels, int widthSource, int heightSource, int width, int height);
+enum rts_osd_err_code rts_osd_resize_8888(int *pd, int *pixels, int widthSource, int heightSource, int width, int height);
+
 #endif	// OSD_UTIL_CUSTOM_H

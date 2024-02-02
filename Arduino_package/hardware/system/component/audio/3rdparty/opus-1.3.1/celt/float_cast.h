@@ -133,7 +133,7 @@ static OPUS_INLINE opus_int32 float2int(float x) {return _mm_cvt_ss2si(_mm_set_s
         #define float2int(flt) ((int)(floor(.5+flt)))
 #endif
 
-#ifndef DISABLE_FLOAT_API
+#if defined(ENABLE_EXTERNAL_FLOAT_API)//#ifndef DISABLE_FLOAT_API
 static OPUS_INLINE opus_int16 FLOAT2INT16(float x)
 {
    x = x*CELT_SIG_SCALE;

@@ -70,11 +70,15 @@
 #define CMD_VIDEO_SET_SPS_PPS_INFO  MM_MODULE_CMD(0x45)
 #define CMD_VIDEO_GET_SPS_PPS_INFO  MM_MODULE_CMD(0x46)
 
+#define CMD_VIDEO_SET_RATE_CONTROL_FPS_STAGE		MM_MODULE_CMD(0x47)
+
 #define CMD_VIDEO_SET_EXT_INPUT     MM_MODULE_CMD(0x50)
 
 #define CMD_VIDEO_SPS_CB            MM_MODULE_CMD(0x51)
 
 #define CMD_VIDEO_PRE_INIT_PARM     MM_MODULE_CMD(0x52)
+#define CMD_VIDEO_PRE_INIT_LOAD  	MM_MODULE_CMD(0x53)
+#define CMD_VIDEO_PRE_INIT_SAVE  	MM_MODULE_CMD(0x54)
 
 #define MMF_VIDEO_DEFAULT_META_CB	(0xFFFFFFFF)
 
@@ -92,6 +96,10 @@ typedef struct rate_control_param {
 	uint32_t current_framerate;
 	uint32_t current_maxqp;
 	rate_ctrl_t rate_ctrl;
+	uint32_t minimum_framerate;
+	uint32_t ori_framerate;
+	uint32_t fps_stage[3];
+	uint32_t fps_stage_idx;
 } rate_ctrl_param_t;
 
 typedef struct video_ctx_s {
@@ -105,6 +113,7 @@ typedef struct video_ctx_s {
 	void (*change_parm_cb)(void *);
 	video_state_t state;
 	uint32_t timestamp_offset;
+	video_meta_t meta_data;
 	void (*meta_cb)(void *);
 	void (*sps_pps_cb)(void *);
 	rate_ctrl_param_t rate_ctrl_p;
@@ -117,6 +126,9 @@ int video_voe_presetting(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_s
 						 int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_shapshot,
 						 int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_shapshot,
 						 int v4_enable, int v4_w, int v4_h);
+
+int video_voe_presetting_by_params(const void *v1_params, int v1_jpg_only_shapshot, const void *v2_params, int v2_jpg_only_shapshot, const void *v3_params,
+								   int v3_jpg_only_shapshot, const void *v4_params);
 
 void video_voe_release(void);
 void video_set_sensor_id(int SensorName);

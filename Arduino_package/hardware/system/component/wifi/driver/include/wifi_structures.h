@@ -115,6 +115,7 @@ typedef struct {
 	int							key_id;
 	unsigned char				channel;        /**< set to 0 means full channel scan, set to other value means only scan on the specified channel */
 	unsigned char				pscan_option;   /**< used when the specified channel is set, set to 0 for normal partial scan, set to PSCAN_FAST_SURVEY for fast survey*/
+	unsigned char				roam_en;
 	rtw_joinstatus_callback_t	joinstatus_user_callback;   /**< user callback for processing joinstatus, please set to NULL if not use it */
 } rtw_network_info_t;
 
@@ -464,6 +465,7 @@ struct  wifi_user_conf {
 	unsigned char bAcceptAddbaReq;
 	unsigned char bIssueAddbaReq;	///< 0: disable issue addba request, 1: enable issue addba request
 	unsigned char addba_ampdu_size;
+	unsigned char addba_tx_num_th;	// issue ADDBA TX number threshold, 0: issue addba request after connection
 
 	unsigned char bCheckDestAddress; ///< 0: don't check dest mac and ip address for station, 1: check dest mac and ip address for station
 
@@ -474,6 +476,10 @@ struct  wifi_user_conf {
 	bit 2: (0(default): do not issue deauth at start of auth, 1: issue deauth at start of auth)
 	bit 3: (0: do not switch WEP auth algo unless WLAN_STATUS_NOT_SUPPORTED_AUTH_ALG, 1(default): switch WEP auth algo from shared key to open system in 1st REAUTH_TO)
 	other bits: reserved
+	bit 4: (0: enable reordering immediately upon receiving ADDBA REQ, 1(default): enable reordering after REORDER_WAIT_TIME to fix issue that some data packets with "invalid" seqnum are sent between ADDBA REQ and ADDBA RSP)
+	bit 5: (0(default): disable issue encryption wpa3 deauth, 1: enable issue encryption wpa3 deauth)
+	bit 6: (0(default): disable gcmp128/gcmp256 wifi connection, 1: enable gcmp128/gcmp256 wifi connection)
+	bit 7: (0(default): disable wpa3 transition to force wpa2 security connection, 1: enable wpa3 transition to force wpa2 security connection)
 	*/
 	unsigned char ap_compatibilty_enabled;
 
@@ -492,8 +498,24 @@ struct  wifi_user_conf {
 	bit 0: (0: disable 4way handshake debug, 1:  enable 4way handshake debug messenge)
 	bit 1: (0: disable wifi connection profile info, 1:  enable wifi connection profile info)
 	bit 2: (0: show wifi connection state, 1:  show wifi connection state time)
+	bit 3: (0: disable wifi connection flow debug, 1:  enable wifi connection flow debug)
+	bit 4: (0: disable wifi auto reconnection flow debug, 1:  enable auto reconnection flow debug)
 	*/
 	unsigned char wifi_debug_enabled;
+
+	/*
+	The active_keepalive_enabled is used to enable active keep alive to send keepalive packet.
+	bit 0: (0: disable to send unicast arp request, 1:  enable to send unicast arp request)
+	*/
+	unsigned char active_keepalive_enabled;
+
+	/*
+	The active_keepalive_interval is used to configure active keepalive packet interval(unit: second)
+	*/
+	unsigned char active_keepalive_interval;
+
+	//provide fast scan retry times for upper layer to revise
+	unsigned char fast_pscan_retry_times_max;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 
@@ -510,6 +532,9 @@ struct  wifi_default_conf {
 	/* RTS/CTS */
 	unsigned char rts_cts_en;	// 0: disable, 1: enable, 2: depend on driver
 	unsigned int rts_threshold; // default 2437
+
+	/* assoc setting*/
+	unsigned short listen_interval;
 } ;
 extern  struct wifi_default_conf wifi_default_config;
 
@@ -552,6 +577,14 @@ typedef struct {
 } rtw_csi_header_t;
 /** @} */
 
+#define WIFI_CONNECT_SCAN_NUM 10
+typedef struct {
+	int num;
+	unsigned char bssid[WIFI_CONNECT_SCAN_NUM][6];
+	unsigned char channel[WIFI_CONNECT_SCAN_NUM];
+	int rssi[WIFI_CONNECT_SCAN_NUM];
+	unsigned int rsn_len[WIFI_CONNECT_SCAN_NUM];
+} wifi_connect_scan_list;
 #ifdef	__cplusplus
 }
 #endif

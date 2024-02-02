@@ -52,7 +52,7 @@ INT16 AEC_Process(INT32 *AECMemory, INT16 *rin, INT16 *sin, INT16 *sout, AEC_RTC
 INT16 AEC_SET_PPLevel(INT32 *AECMemory, INT16 PPLevel);
 //INT16 AEC_SET_NSLevel (INT32 *AECMemory, INT16 NSLevel) ;
 //INT16 AEC_SET_AGCRefLevel (INT32 *AECMemory, INT16 RefLevel, INT16 NoiseGateLvl) ;
-//INT16 AEC_SET_Enable(INT32 *AECMemory, INT16 AECEnable);
+INT16 AEC_SET_Enable(INT32 *AECMemory, INT16 AECEnable);
 INT16 AEC_SET_ConvergenceTime(INT32 *ECMemory, INT16 ConvergeceTime);
 #ifdef __cplusplus
 }

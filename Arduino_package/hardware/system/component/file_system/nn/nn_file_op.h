@@ -7,5 +7,6 @@ void *nn_f_open(char *name, int mode);
 void nn_f_close(void *fr);
 int nn_f_read(void *fr, void *data, int size);
 int nn_f_seek(void *fr, int offset, int pos);
+int nn_f_tell(void *fr);
 
 #endif

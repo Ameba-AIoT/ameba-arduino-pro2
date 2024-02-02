@@ -225,3 +225,7 @@ extern uint32_t ConfigDebugMmfInfo;
 					MMF_PRINTK("\n\r" LINKER_INFO_PREFIX __VA_ARGS__);		\
 			}while(0)
 #endif
+
+void mm_set_abort_func(void (*func)(void));
+
+void mmf2_abort(void);

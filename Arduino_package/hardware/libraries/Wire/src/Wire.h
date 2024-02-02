@@ -22,6 +22,15 @@
 #define TwoWire_h
 
 #include "Stream.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "i2c_api.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #define BUFFER_LENGTH 128
 
@@ -35,7 +44,7 @@ class TwoWire : public Stream {
         void begin();
         void begin(uint8_t);
         void begin(int);
-        
+
         void end();
         
         void setClock(uint32_t);
@@ -50,10 +59,11 @@ class TwoWire : public Stream {
         void beginTransmission(int);
         uint8_t endTransmission(void);
         uint8_t endTransmission(uint8_t);
+        static void i2c_callback_set_flag(void *userdata);
 
         virtual size_t write(uint8_t);
         virtual size_t write(const uint8_t *, size_t);
-        
+
         virtual int available(void);
         virtual int read(void);
         virtual int peek(void);
@@ -65,19 +75,17 @@ class TwoWire : public Stream {
         using Print::write;
 
 #if 0
-    
-    void onReceive(void(*)(int));
-    void onRequest(void(*)(void));
+        void onReceive(void(*)(int));
+        void onRequest(void(*)(void));
 
-    size_t slaveWrite(int);
-    size_t slaveWrite(char *);
-    size_t slaveWrite(uint8_t *, size_t);
-    
+        size_t slaveWrite(int);
+        size_t slaveWrite(char *);
+        size_t slaveWrite(uint8_t *, size_t);
 #endif
 
     private:
         bool is_slave;
-        
+
         // RX Buffer
         uint8_t rxBuffer[BUFFER_LENGTH];
         uint8_t rxBufferIndex;
@@ -87,7 +95,6 @@ class TwoWire : public Stream {
         uint8_t txAddress;
         uint8_t txBuffer[BUFFER_LENGTH];
         uint8_t txBufferLength;
-
 
         // Callback user functions
         void (*user_onRequest)(void);

@@ -392,6 +392,8 @@ struct pwrctrl_priv {
 	u8  arpreq_enable;
 	u8  arpreq_powerbit;
 	u8  arpreq_dtim1to;
+	u8  arpreq_null0;
+	u8  arpreq_wait_response;
 	u8  arpreq_rsvd_page_locate;
 #endif
 
@@ -425,6 +427,14 @@ struct pwrctrl_priv {
 	u8 bcntrack_max_window;
 	u8 bcntrack_increment_step;
 	u8 bcntrack_duration;
+#endif
+
+#ifdef CONFIG_WOWLAN_PNO
+	u8 pno_start_window;
+	u8 pno_max_window;
+	u8 pno_increment_step;
+	u8 pno_scan_period;
+	u8 pno_duration;
 #endif
 
 #ifdef CONFIG_WOWLAN_NTP_OFFLOAD

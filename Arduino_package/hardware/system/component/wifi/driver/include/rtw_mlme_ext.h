@@ -552,7 +552,9 @@ struct mlme_ext_info {
 #define PSCAN_DISABLE_MASK    0xFE //disable PSCAN_ENABLE
 #define PSCAN_CLEAR_SSID_DONE 0x7F //clear PSCAN_SET_SSID_DONE
 #define PSCAN_CLEAR_PASSIVE_SCAN 0xF7 //clear PSCAN_PASSIVE_SCAN
-#define PSCAN_RETRY_TIMES        14 //the retry times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES        7 //the retry times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES_MIN    1 //the retry minimum times of resending probe request when PSCAN_FAST_SURVEY is set
+#define PSCAN_RETRY_TIMES_MAX    20 //the retry maxxmum times of resending probe request when PSCAN_FAST_SURVEY is set
 
 typedef struct _RT_CHANNEL_INFO {
 	u8				ChannelNum;		// The channel number.
@@ -595,7 +597,8 @@ struct mlme_ext_priv {
 #endif /* CONFIG_IEEE80211W */
 
 	//struct fw_priv 	fwpriv;
-
+	u8	roam_en;
+	u8	roam_previous_ap[ETH_ALEN];
 	u8	cur_channel;
 	u8	cur_bwmode;
 	u8	cur_ch_offset;//PRIME_CHNL_OFFSET
@@ -656,7 +659,8 @@ struct mlme_ext_priv {
 	u8 reconnect_deauth_filtered;
 	u8 reconnect_times;
 	u8 reconnect_cnt;
-	u16 reconnect_timeout; // the unit is second
+	u16 reconnect_timeout;
+	u16 reconnect_timeout_unit; // the unit is ms
 	u8 saved_alg;
 	u8 saved_essid[32 + 1];
 	u8 saved_key[32];

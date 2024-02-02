@@ -61,6 +61,7 @@ void setup() {
     // BLE Setup
     BLE.setDeviceName("AMEBA_BLE");
     advdata.addFlags();
+    advdata.addCompleteName("AMEBA_BLE");
     scndata.addCompleteServices(BLEUUID(UART_SERVICE_UUID));
 
     Rx.setWriteProperty(true);

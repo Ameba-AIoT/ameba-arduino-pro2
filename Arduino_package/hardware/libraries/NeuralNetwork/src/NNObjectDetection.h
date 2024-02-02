@@ -18,6 +18,8 @@ extern "C" {
 #undef max
 #include <vector>
 
+#define MAX_OBJ_DET 14
+
 class ObjectDetectionResult {
     friend class NNObjectDetection;
     public:

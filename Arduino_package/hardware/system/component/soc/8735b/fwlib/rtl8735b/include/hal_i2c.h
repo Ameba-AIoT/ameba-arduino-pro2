@@ -213,7 +213,10 @@ hal_status_t hal_i2c_send_poll_rtl8195bhp_patch(hal_i2c_adapter_t *phal_i2c_adap
 uint32_t hal_i2c_slv_send_poll_rtl8195bhp_patch(hal_i2c_adapter_t *phal_i2c_adapter);
 void hal_i2c_slv_irq_handler_rtl8195bhp_patch(void *data);
 void hal_i2c_reg_comm_irq(hal_i2c_adapter_t *phal_i2c_adapter, irq_handler_t handler);
-
+#ifdef ARDUINO_SDK
+/* move rom feature to ram for removing redundent log */
+void hal_rtl_i2c_mst_irq_handler_rtl8195bhp_arduino_patch(void *data);
+#endif
 
 /** @} */ /* End of group hs_hal_i2c */
 

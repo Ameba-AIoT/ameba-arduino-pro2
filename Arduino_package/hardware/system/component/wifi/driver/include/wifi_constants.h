@@ -82,6 +82,7 @@ extern "C" {
 #define WSEC_SWFLAG        0x0008    /**< WSEC SWFLAG */
 #define AES_CMAC_ENABLED        0x0010   /**< aes cmac enable */
 #define ENTERPRISE_ENABLED			0x0020   /**< enterprise enable */
+#define GCMP_ENABLED        0x0040      /**< gcmp enable */
 #define SHARED_ENABLED  0x00008000     /**< shared enable */
 #define WPA_SECURITY    0x00200000      /**< wpa */
 #define WPA2_SECURITY   0x00400000     /**< wpa2 */
@@ -194,6 +195,7 @@ typedef enum {
 	RTW_SECURITY_WPS_SECURE     = (WPS_ENABLED | AES_ENABLED),                      /**< WPS with AES security                   */
 
 	RTW_SECURITY_WPA3_AES_PSK 	= (WPA3_SECURITY | AES_ENABLED),                    /**< WPA3-SAE with AES security              */
+	RTW_SECURITY_WPA3_GCMP_PSK 	= (WPA3_SECURITY | GCMP_ENABLED),                    /**< WPA3-SAE with GCMP security              */
 	RTW_SECURITY_WPA2_WPA3_MIXED = (WPA2_SECURITY | WPA3_SECURITY | AES_ENABLED),   /**< WPA3-SAE/WPA2 with AES security         */
 
 	RTW_SECURITY_UNKNOWN        = -1,                                               /**< May be returned by scan function if security is unknown. Do not pass this to the join function! */
@@ -610,6 +612,9 @@ typedef enum {
 	RTW_JOINSTATUS_DISCONNECT,                 /**< disconnect */
 	RTW_JOINSTATUS_REJECT_CONNECTION_SECURITY,         /**< RTW_JOINSTATUS_REJECT_CONNECTION_SECURITY */
 	RTW_JOINSTATUS_SCANNING_EXTERNAL,          /**< external scanning phase */
+	RTW_JOINSTATUS_REJECT_UNSUPPORT_SECURITY,         /**< RTW_JOINSTATUS_REJECT_CONNECTION_SECURITY */
+	RTW_JOINSTATUS_TIMEOUT,         /**< RTW_JOINSTATUS_TIMEOUT */
+	RTW_JOINSTATUS_STATUS_CODE_FAIL,         /**< RTW_JOINSTATUS_STATUS_CODE_FAIL */
 	//TODO: RTW_JOINSTATUS_ABORTED,
 } rtw_join_status_t;
 

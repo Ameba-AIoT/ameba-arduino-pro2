@@ -25,6 +25,8 @@
 typedef void (*usb_report_usbdata)(u8 *buf, u32 len);
 typedef void (*usb_cdc_ecm_attach)(void);
 typedef void (*usb_cdc_ecm_detach)(void);
+typedef void (*usb_cdc_ecm_connect)(void);
+typedef void (*usb_cdc_ecm_disconnect)(void);
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -63,6 +65,9 @@ typedef struct {
 	usb_report_usbdata			report_data;
 	usb_cdc_ecm_attach          usb_attach;
 	usb_cdc_ecm_detach 			usb_detach;
+	u32							usb_task_priority;
+	usb_cdc_ecm_connect 		usb_connect;
+	usb_cdc_ecm_disconnect 		usb_disconnect;
 } usbh_cdc_ecm_user_cb_t;
 
 typedef struct {

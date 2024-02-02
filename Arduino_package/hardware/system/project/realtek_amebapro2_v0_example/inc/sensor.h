@@ -58,13 +58,23 @@ struct sensor_params_t {
 #define SENSOR_GC5035		0x0E
 #define SENSOR_PS5268		0x0F
 #define SENSOR_SC2310		0x10
+#define SENSOR_PS5420_HDR	0x11
+#define SENSOR_PS5270_HDR	0x12
+#define SENSOR_F53			0x13
+#define SENSOR_F55			0x14
+#define SENSOR_GC4663		0x15
+#define SENSOR_GC4663_HDR	0x16
+#define SENSOR_K351			0x17
+#define SENSOR_K351_HDR		0x18
+#define SENSOR_OV50A40		0x19
+#define SENSOR_SC301_HDR	0x1A
 #endif
 
 static const struct sensor_params_t sensor_params[] = {
 	{1920, 1080, 30}, //DUMMY
 	{1920, 1080, 30}, //SC2336
 	{1920, 1080, 30}, //GC2053
-	{2560, 1440, 15}, //GC4653
+	{2560, 1440, 24}, //GC4653
 	{1920, 1080, 30}, //F37
 	{1920, 1080, 30}, //IMX327
 	{1536, 1536, 30}, //F51
@@ -72,12 +82,22 @@ static const struct sensor_params_t sensor_params[] = {
 	{2048, 1536, 20}, //SC301
 	{1920, 1080, 30}, //IMX307
 	{1920, 1080, 30}, //SC2333
-	{2560, 1440, 15}, //GC4023
-	{1952, 1944, 30}, //PS5420
+	{2560, 1440, 24}, //GC4023
+	{1952, 1944, 24}, //PS5420
 	{1536, 1536, 30}, //PS5270
-	{2592, 1944, 30}, //GC5035
+	{2592, 1944, 15}, //GC5035
 	{1920, 1080, 30}, //PS5268
 	{1920, 1080, 30}, //SC2310
+	{1952, 1944, 24}, //PS5420_HDR
+	{1536, 1536, 30}, //PS5270_HDR
+	{1920, 1080, 30}, //SENSOR_F53
+	{1920, 1080, 30}, //SENSOR_F55
+	{2560, 1440, 24}, //SENSOR_GC4663
+	{2560, 1440, 20}, //SENSOR_GC4663_HDR
+	{2000, 2000, 24}, //SENSOR_K351
+	{2000, 2000, 20}, //SENSOR_K351_HDR
+	{2048, 1536, 30}, //SENSOR_OV50A40
+	{2048, 1536, 20}, //SENSOR_SC301_HDR
 };
 
 

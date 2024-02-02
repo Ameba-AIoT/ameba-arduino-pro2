@@ -35,7 +35,7 @@ extern "C"
 {
 #endif
 
-#define HIGH_SPEED_FLASH 0 //1:flash max speed is 100 MHz, 0:flash max speed is 62.5 MHz
+#define HIGH_SPEED_FLASH FLASH_SPEED_625MHz //62.5MHz: FLASH_SPEED_625MHz, 100MHz: FLASH_SPEED_100MHz, 125MHz: FLASH_SPEED_125MHz
 
 #define SPIC_BIT_MODE_SETTING SpicQuadIOMode  // Default for ram code using is qpi mode
 
@@ -90,4 +90,5 @@ BOOL spic_calibration(phal_spic_adaptor_t phal_spic_adaptor, u32 default_dummy_c
 
 
 #endif  // end of "#define _HAL_SPIC_H_"
+
 

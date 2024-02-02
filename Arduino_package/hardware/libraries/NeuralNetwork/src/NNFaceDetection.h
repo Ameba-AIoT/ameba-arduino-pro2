@@ -18,6 +18,8 @@ extern "C" {
 #undef max
 #include <vector>
 
+#define MAX_FACE_DET 10
+
 class FaceDetectionResult {
     friend class NNFaceDetection;
     

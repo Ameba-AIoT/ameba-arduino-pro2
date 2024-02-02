@@ -29,6 +29,6 @@
   You do not need to fill up the version.h anymore,
   only the maintenance supervisor fills it before formal release.
 */
-#define	RELEASE_DATE_8735B		20230516
+#define	RELEASE_DATE_8735B		20230809
 #define	COMMIT_BY_8735B			"WeiChi"
-#define	RELEASE_VERSION_8735B	46
+#define	RELEASE_VERSION_8735B	47

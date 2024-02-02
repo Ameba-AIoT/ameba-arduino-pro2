@@ -89,6 +89,7 @@ enum h2c_cmd {
 	H2C_BT_CONTROL = 0x68,
 	H2C_BT_WIFI_CTRL = 0x69,
 	H2C_BT_FW_PATCH = 0x6A,
+	H2C_BT_TDMA_PORT = 0x71,
 
 	/* WOWLAN Class: 100 */
 	H2C_WOWLAN = 0x80,
@@ -111,6 +112,7 @@ enum h2c_cmd {
 	H2C_PNO = 0x94,
 	H2C_TIMER_WDT = 0x95,
 	H2C_BCN_TRACK = 0x96,
+	H2C_PNO_SCAN_SET = 0x97,
 	H2C_NTP = 0x98,
 	H2C_RESET_TSF = 0xC0,
 	H2C_BCNHWSEQ = 0xC5,
@@ -159,6 +161,8 @@ enum h2c_cmd {
 #define H2C_TIMER_WDT_LEN 6
 #define H2C_BCN_TRACK_LEN 7
 #define H2C_NTP_CTRL_LEN 5
+#define H2C_PNO_SCAN_SET_LEN 7
+#define H2C_BT_TDMA_PORT_LEN 1
 
 #ifdef CONFIG_MCC_MODE
 #define H2C_MCC_CTRL_LEN			7
@@ -306,6 +310,15 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_BCN_TRACK_MAX_WINDOW(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
 #define SET_H2CCMD_BCN_TRACK_INCREMENTSTEP(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 #define SET_H2CCMD_BCN_TRACK_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
+
+/*_PNO_PARAM_SET_CMD_0x97*/
+#define SET_H2CCMD_PNO_SCAN_SET_ENABLE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
+#define SET_H2CCMD_PNO_SCAN_SET_TIME_LIMIT(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)
+#define SET_H2CCMD_PNO_SCAN_SET_SCAN_PERIOD(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 4, 4, __Value)
+#define SET_H2CCMD_PNO_SCAN_SET_START_WINDOW_SIZE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
+#define SET_H2CCMD_PNO_SCAN_SET_MAX_WINDOW_SIZE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+#define SET_H2CCMD_PNO_SCAN_SET_INCREMENT_STEP(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
+#define SET_H2CCMD_PNO_SCAN_SET_PNO_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 
 /* _NTP_CMD_0x98 */
 #define SET_H2CCMD_NTP_PARM_ENABLE(__pH2CCmd, __Value)			         SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)

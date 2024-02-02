@@ -41,16 +41,22 @@ extern "C"
         @{
 */
 
-#define FLASH_CMD_ENSO      0xB1            // enter secured OTP
-#define FLASH_CMD_EXSO      0xC1            // exit secured OTP
-#define FLASH_CMD_RDSCUR    0x2B            // read security register
-#define FLASH_CMD_WRSCUR    0x2F            // write security register    
-#define FLASH_CMD_EN4ADDR   0xB7            // Enter flash 4 bytes address mode
-#define FLASH_CMD_EXIT4ADDR 0xE9            // Exit flash 4 bytes address mode
+#define FLASH_CMD_ENSO      0xB1            //!< enter secured OTP
+#define FLASH_CMD_EXSO      0xC1            //!< exit secured OTP
+#define FLASH_CMD_RDSCUR    0x2B            //!< read security register
+#define FLASH_CMD_WRSCUR    0x2F            //!< write security register    
+#define FLASH_CMD_EN4ADDR   0xB7            //!< Enter flash 4 bytes address mode
+#define FLASH_CMD_EXIT4ADDR 0xE9            //!< Exit flash 4 bytes address mode
+#define FLASH_CMD_READ_4ADDR    0x13        //!< Read Command with 4 bytes address
+#define FLASH_CMD_FREAD_4ADDR   0x0C        //!< Fast Read Command with 4 bytes address
+#define FLASH_CMD_DREAD_4ADDR   0x3C        //!< Dual Output Read Command (1-1-2) with 4 bytes address
+#define FLASH_CMD_2READ_4ADDR   0xBC        //!< Dual IO Read Command (1-2-2) with 4 bytes address
+#define FLASH_CMD_QREAD_4ADDR   0x6C        //!< Quad Output Read Command (1-1-4) with 4 bytes address
+#define FLASH_CMD_4READ_4ADDR   0xEC        //!< Quad IO Read Command (1-4-4) with 4 bytes address, also for QPI(4-4-4)
 
-#define FLASH_ID_4ADDR      0x19            // if the third byte of flash id >= 0x19, flash needs the fourth address byte
-#define ExtAddrBytesShift   24              // shift 24 bits of address bytes
-#define ThreeAddrBytesMask  0xFFFFFF        // Mask of  24 bits of address bytes
+#define FLASH_ID_4ADDR      0x19            //!< if the third byte of flash id >= 0x19, flash needs the fourth address byte
+#define ExtAddrBytesShift   24              //!< shift 24 bits of address bytes
+#define ThreeAddrBytesMask  0xFFFFFF        //!< Mask of  24 bits of address bytes
 /**
 
         \addtogroup hs_hal_gdma_flash_func FLASH HAL RAM APIs

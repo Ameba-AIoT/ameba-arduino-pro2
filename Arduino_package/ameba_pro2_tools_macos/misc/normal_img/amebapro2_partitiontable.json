@@ -1,5 +1,5 @@
 {
-    "msg_level":3,
+    "msg_level":0,
 
 	"PROFILE":["PARTITIONTABLE"],
 	"PARTITIONTABLE":{
@@ -62,26 +62,26 @@
             "valid": true
         },
         "fw1":{
-            "start_addr" : "0x80000",
-            "length" : "0x380000",
+            "start_addr" : "0x60000",
+            "length" : "0x400000",
             "type": "PT_FW1",
             "valid": true
         },
 		"iq":{
-            "start_addr" : "0x400000",
+            "start_addr" : "0x460000",
             "length" : "0xC0000",
             "type": "PT_ISP_IQ",
             "valid": true
         },
         "fw2":{
-            "start_addr" : "0x4C0000",
+            "start_addr" : "0x520000",
             "length" : "0x10000",
             "type": "PT_FW2",
             "valid": true
         },
         "nn":{
-            "start_addr" : "0x4D0000",
-            "length" : "0x930000",
+            "start_addr" : "0x530000",
+            "length" : "0xA90000",
             "type": "PT_NN_MDL",
             "valid": true
         },

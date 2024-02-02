@@ -29,6 +29,7 @@ typedef struct {
 
 int osd_update_custom_init(void);
 int osd_update_custom(osd_text_info_st *text_info, osd_pict_st *p, BOOL ready2update, BOOL fast_start, int fontlib_idx);
+int osd_update_hide_custom(osd_text_info_st *text_info, osd_pict_st *p);
 int osd_update_custom_deinit(void);
 int osd_start(int ch, BOOL fast_start);
 int osd_update(enc2out_t *enc2out);

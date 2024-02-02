@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+#define TX_CURRENT_STATUS_MASK  (0x01 << 0)
+#define RX_CURRENT_STATUS_MASK  (0x01 << 1)
+#define TX_LASTFRAME_STATUS_MASK  (0x01 << 2)
+#define RX_LASTFRAME_STATUS_MASK  (0x01 << 3)
+
 typedef enum {
 	SPEEX_AEC,
 	WEBRTC_AEC,
@@ -20,7 +25,6 @@ typedef struct farend_pcm_pack {
 #if defined(CONFIG_PLATFORM_8735B) && (defined(CONFIG_NEWAEC) && CONFIG_NEWAEC) //consilient AEC only suppored on 8735 now
 typedef enum {
 	CT_ALC = 0,
-	CT_DRC,
 	CT_LIMITER,
 } CT_AGC_MODE;
 //Setting for ASP
@@ -28,9 +32,9 @@ typedef struct CTNS_cfg_s {
 	int16_t NS_EN;
 	int16_t NSLevel;
 	int16_t HPFEnable;
+	int16_t QuickConvergenceEnable; //QuickConvergenceEnable = 1 => NSGainSlowConvergenceEnable = 0
 
 	int16_t Reserve1;
-	int16_t Reserve2;
 } CTNS_cfg_t;
 
 typedef struct CTAGC_cfg_s {
@@ -60,11 +64,54 @@ typedef struct CTAEC_cfg_s {
 	int16_t Reserve1;
 } CTAEC_cfg_t;
 
+typedef struct CTBF_cfg_s {
+	int16_t BF_EN;
+	int16_t DOAEnable;
+	int16_t MM; //no of mics
+	int16_t mic_spacing;
+	int16_t mic_array_type;
+} CTBF_cfg_t;
+
+typedef struct VQE_SND_STATE_s {
+	int16_t DoA;              //in degrees
+	int16_t ERLE;             //in dB
+	int16_t SinLvldB;         //in dBFs
+	int16_t SoutLvldB;        //indBFs after AGC (if AGC is enabled)
+	int16_t DTState;          //0 = single talk  or 1 = doulble talk
+	int16_t HCDetectState;    //1 = detected, 0 = not detected
+	uint8_t AECRun;
+	uint8_t AGCRun;
+	uint8_t NSRun;
+	uint8_t BFRun;
+
+	int16_t Reserve1;
+	int16_t Reserve2;
+	int16_t Reserve3;
+} VQE_SND_STATE_t;
+
+typedef struct VQE_RCV_STATE_s {
+	int16_t RinLvldB;
+	int16_t RoutLvldB;
+	int16_t HCDetectState;    //1 = detected, 0 = not detected
+	uint8_t AGCRun;
+	uint8_t NSRun;
+
+	int16_t Reserve1;
+	int16_t Reserve2;
+	int16_t Reserve3;
+} VQE_RCV_STATE_t;
+
+
+void VQE_SND_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, CTBF_cfg_t *RX_BF,
+				  float snd_amplification);
+int VQE_SND_process(const int16_t *farend, const int16_t *mic1, const int16_t *mic2, int16_t *out);
 void AEC_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, float snd_amplification);
 int AEC_set_level(int level, CTAEC_cfg_t *RX_AEC);
 int NS_set_level_for_AEC(int level, CTNS_cfg_t *RX_NS);
+void AEC_set_runtime_en(uint8_t enable);
 int AEC_process(const int16_t *farend, const int16_t *nearend, int16_t *out);
 void AEC_destory(void);
+void VQE_SND_destory(void);
 
 void NS_init(int32_t sample_freq, CTNS_cfg_t *TX_NS);
 int NS_set_level_for_TX(int level, CTNS_cfg_t *TX_NS);
@@ -77,6 +124,8 @@ void AGC_destory(void);
 void AEC_set_print(uint8_t flag);
 const char *ASP_get_version(void);
 void ASP_print_version(void);
+void VQE_SND_get_status(VQE_SND_STATE_t *snd_state);
+void VQE_RCV_get_status(VQE_RCV_STATE_t *rcv_state);
 #else
 
 /**

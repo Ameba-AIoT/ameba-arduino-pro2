@@ -62,6 +62,10 @@ u8 otp_byte_read(u32 addr);
 
 void otp_get_chip_id(u32 *chip_id);
 
+int otp_rom_log_message_disable(void);
+
+int otp_rom_log_message_enable(void);
+
 #ifdef __cplusplus
 }
 #endif
