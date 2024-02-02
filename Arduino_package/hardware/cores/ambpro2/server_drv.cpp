@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 int ServerDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode, tBlockingMode blockMode) {
+    printf("\n\r[INFO]server_drv.cpp:  start_client");
     int sock;
     if (blockMode == BLOCKING_MODE) {
         //printf("\r\n[INFO] %s WiFi client is set to blocking mode \n", __FUNCTION__);

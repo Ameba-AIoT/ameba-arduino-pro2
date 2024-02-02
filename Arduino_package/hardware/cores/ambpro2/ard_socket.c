@@ -28,7 +28,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
         printf("\r\n[ERROR] %s Create socket failed\n", __FUNCTION__);
         return -1;
     }
-    //printf("\r\n[INFO] Create socket successfully\n");
+    printf("\r\n[INFO] Create socket successfully\n");
 
     // initialize structure dest
     struct sockaddr_in serv_addr;
@@ -41,7 +41,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     if (protMode == TCP_MODE) {
         //TCP MODE
         if (connect(_sock, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
-            //printf("\r\n[INFO] Connect to Server successfully!\r\n");
+            printf("\r\n[INFO] Connect to Server successfully!\r\n");
             timeout = 3000;
             lwip_setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
             timeout = 30000;
