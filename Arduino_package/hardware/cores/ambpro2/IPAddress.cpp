@@ -26,6 +26,9 @@
 
 // NeoJou
 extern "C" {
+#ifdef _LONG_CALL_
+#undef _LONG_CALL_
+#endif
 #define _LONG_CALL_ __attribute__((long_call))
 extern _LONG_CALL_ uint32_t DiagPrintf(const char* fmt, ...);
 }
