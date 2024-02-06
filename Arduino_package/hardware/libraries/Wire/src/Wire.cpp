@@ -176,7 +176,6 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop) {
     i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_TX_COMPLETE, i2c_callback_set_flag);
     length = i2c_write(((i2c_t *)this->pI2C), ((int)this->txAddress), ((const char*)&this->txBuffer[0]), ((int)this->txBufferLength), ((int)sendStop));
     hal_delay_us(this->txBufferLength*200);
-    i2c_reset(((i2c_t *)this->pI2C));
 
     if ((txBufferLength > 0) && (length <= 0)) {
         error = 1;
