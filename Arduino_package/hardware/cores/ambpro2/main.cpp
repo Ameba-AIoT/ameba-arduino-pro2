@@ -31,9 +31,11 @@ extern void voe_t2ff_prealloc(void);
 // Weak empty variant initialization function.
 // May be redefined by variant files.
 void initVariant() __attribute__((weak));
-void initVariant() { }
+void initVariant()
+{}
 
-void main_task (void*) {
+void main_task(void *)
+{
     delay(1);
     setup();
 
@@ -47,7 +49,8 @@ void main_task (void*) {
     vTaskDelete(NULL);
 }
 
-int main(void) {
+int main(void)
+{
     ameba_init();
     initVariant();
     voe_t2ff_prealloc();
@@ -57,7 +60,8 @@ int main(void) {
     }
     vTaskStartScheduler();
 
-    while(1);
+    while (1)
+        ;
 
     return 0;
 }

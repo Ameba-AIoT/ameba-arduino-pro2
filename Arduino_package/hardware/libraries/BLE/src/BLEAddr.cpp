@@ -1,22 +1,25 @@
 #include "BLEAddr.h"
 
-static uint8_t ctoi(char c) {
-    if((c >= 'A') && (c <= 'F')) {
+static uint8_t ctoi(char c)
+{
+    if ((c >= 'A') && (c <= 'F')) {
         return (c - 'A' + 0x0A);
     }
-    if((c >= 'a') && (c <= 'f')) {
+    if ((c >= 'a') && (c <= 'f')) {
         return (c - 'a' + 0x0A);
     }
-    if((c >= '0') && (c <= '9')) {
+    if ((c >= '0') && (c <= '9')) {
         return (c - '0' + 0x00);
     }
     return 0xFF;
 }
 
-BLEAddr::BLEAddr() {
+BLEAddr::BLEAddr()
+{
 }
 
-BLEAddr::BLEAddr(uint8_t (&addr)[6]) {
+BLEAddr::BLEAddr(uint8_t (&addr)[6])
+{
     _btAddr[0] = addr[0];
     _btAddr[1] = addr[1];
     _btAddr[2] = addr[2];
@@ -25,15 +28,17 @@ BLEAddr::BLEAddr(uint8_t (&addr)[6]) {
     _btAddr[5] = addr[5];
 }
 
-BLEAddr::BLEAddr(const char* str) {
+BLEAddr::BLEAddr(const char* str)
+{
     uint8_t idx = 5;
     uint32_t n = 0;
     uint8_t num = 0;
     uint8_t str_len = strlen(str);
 
-    if (str_len < 12)
+    if (str_len < 12) {
         return;
-     while (n < str_len) {
+    }
+    while (n < str_len) {
         if (str[n] == ':') {
             n++;
         } else {
@@ -45,21 +50,24 @@ BLEAddr::BLEAddr(const char* str) {
                 return;
             }
             _btAddr[idx] |= num;
-            
+
             idx--;
         }
     }
 }
 
-const char* BLEAddr::str() {
+const char* BLEAddr::str()
+{
     sprintf(_str, "%02X:%02X:%02X:%02X:%02X:%02X", _btAddr[5], _btAddr[4], _btAddr[3], _btAddr[2], _btAddr[1], _btAddr[0]);
     return _str;
 }
 
-uint8_t* BLEAddr::data() {
+uint8_t* BLEAddr::data()
+{
     return _btAddr;
 }
 
-bool BLEAddr::operator ==(const BLEAddr &addr) {
-    return(memcmp(_btAddr, addr._btAddr, 6) == 0);
+bool BLEAddr::operator==(const BLEAddr& addr)
+{
+    return (memcmp(_btAddr, addr._btAddr, 6) == 0);
 }

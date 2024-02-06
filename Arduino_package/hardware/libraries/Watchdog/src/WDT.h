@@ -11,18 +11,18 @@
 void wdt_dummy_task(void);
 
 class WDT {
-    public:
-        WDT(void);
-        WDT(int aon_en);
-        ~WDT(void);
+public:
+    WDT(void);
+    WDT(int aon_en);
+    ~WDT(void);
 
-        void init(uint32_t timeout_ms);
-        void start(void);
-        void stop(void);
-        void refresh(void);
-        void init_irq(wdt_irq_handler handler, uint32_t id);
+    void init(uint32_t timeout_ms);
+    void start(void);
+    void stop(void);
+    void refresh(void);
+    void init_irq(wdt_irq_handler handler, uint32_t id);
 
-    private:
-        int aon_wdt_check = 0;
+private:
+    int aon_wdt_check = 0;
 };
 #endif

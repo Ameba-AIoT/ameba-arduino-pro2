@@ -1,1 +1,1 @@
-//Empty header file to remove warnings
+// Empty header file to remove warnings

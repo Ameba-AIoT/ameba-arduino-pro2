@@ -11,14 +11,15 @@
 
 #include "WDT.h"
 
-#define AON_WDT_Enable                      (0)
+#define AON_WDT_Enable (0)
 #if AON_WDT_Enable == 0
-    #define RUN_CALLBACK_IF_WATCHDOG_BARKS  (0)
+#define RUN_CALLBACK_IF_WATCHDOG_BARKS (0)
 #endif
 
 WDT wdt(AON_WDT_Enable);
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // setup 5s watchdog
@@ -27,11 +28,11 @@ void setup() {
 #if AON_WDT_Enable
     // when WDT always on IRQ is not supported
 #else
-    #if RUN_CALLBACK_IF_WATCHDOG_BARKS
-        wdt.init_irq((wdt_irq_handler)my_watchdog_irq_handler, 0);
-    #else
-        // system would restart in default when watchdog barks
-    #endif
+#if RUN_CALLBACK_IF_WATCHDOG_BARKS
+    wdt.init_irq((wdt_irq_handler)my_watchdog_irq_handler, 0);
+#else
+    // system would restart in default when watchdog barks
+#endif
 #endif
 
     // enable watchdog timer
@@ -39,14 +40,17 @@ void setup() {
 
     Small_Task();
     Big_Task();
-    while(1);
+    while (1)
+        ;
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }
 
-void Small_Task(void) {
+void Small_Task(void)
+{
     Serial.println();
     Serial.println("......Doing small task......");
     wdt_dummy_task();
@@ -54,7 +58,8 @@ void Small_Task(void) {
     wdt.refresh();
 }
 
-void Big_Task(void) {
+void Big_Task(void)
+{
     Serial.println();
     Serial.println("......Doing big task, up to 10......");
     for (int i = 1; i <= 10; i++) {
@@ -66,7 +71,8 @@ void Big_Task(void) {
     wdt.refresh();
 }
 
-void my_watchdog_irq_handler(uint32_t id) {
+void my_watchdog_irq_handler(uint32_t id)
+{
     Serial.println("watchdog barks!!!");
     wdt.stop();
 }

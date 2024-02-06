@@ -49,12 +49,13 @@ Audio audio;
 AAC aac;
 MP4Recording mp4_1;
 MP4Recording mp4_2;
-StreamIO audioStreamer(1, 1);  // 1 Input Audio -> 1 Output AAC
-StreamIO avMixStreamer(3, 2);  // 3 Input Video1 + Video2 + Audio -> 2 Output MP4_1 + MP4_2
+StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output AAC
+StreamIO avMixStreamer(3, 2);    // 3 Input Video1 + Video2 + Audio -> 2 Output MP4_1 + MP4_2
 bool updatemodifiedtime1 = false;
 bool updatemodifiedtime2 = false;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -119,10 +120,11 @@ void setup() {
     printInfo();
 }
 
-void loop() {
+void loop()
+{
     uint16_t year, month, date, hour, minute, second;
 
-    //For updating last modified time after recording stop
+    // For updating last modified time after recording stop
     int state1 = (int)(mp4_1.getRecordingState());
     if (state1 == 0 && updatemodifiedtime1 == false) {
         timeClient.update();
@@ -163,7 +165,8 @@ void loop() {
     delay(100);
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

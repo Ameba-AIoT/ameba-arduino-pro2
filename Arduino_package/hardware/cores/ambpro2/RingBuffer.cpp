@@ -8,7 +8,7 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
@@ -19,13 +19,15 @@
 #include "RingBuffer.h"
 #include <string.h>
 
-RingBuffer::RingBuffer(void) {
+RingBuffer::RingBuffer(void)
+{
     memset((void *)_aucBuffer, 0, SERIAL_BUFFER_SIZE);
-    _iHead=0;
-    _iTail=0;
+    _iHead = 0;
+    _iTail = 0;
 }
 
-void RingBuffer::store_char(uint8_t c) {
+void RingBuffer::store_char(uint8_t c)
+{
     int i = (uint32_t)(_iHead + 1) % SERIAL_BUFFER_SIZE;
 
     // if we should be storing the received character into the location

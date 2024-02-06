@@ -19,7 +19,8 @@ BLERemoteService* UartService;
 BLERemoteCharacteristic* Rx;
 BLERemoteCharacteristic* Tx;
 
-void scanCB(T_LE_CB_DATA* p_data) {
+void scanCB(T_LE_CB_DATA* p_data)
+{
     foundDevice.parseScanInfo(p_data);
     if (foundDevice.hasName()) {
         if (foundDevice.getName() == String("AMEBA_BLE_DEV")) {
@@ -30,8 +31,9 @@ void scanCB(T_LE_CB_DATA* p_data) {
     }
 }
 
-void notificationCB (BLERemoteCharacteristic* chr, uint8_t* data, uint16_t len) {
-    char msg[len+1] = {0};
+void notificationCB(BLERemoteCharacteristic* chr, uint8_t* data, uint16_t len)
+{
+    char msg[len + 1] = {0};
     memcpy(msg, data, len);
     Serial.print("Notification received for chr UUID: ");
     Serial.println(chr->getUUID().str());
@@ -39,7 +41,8 @@ void notificationCB (BLERemoteCharacteristic* chr, uint8_t* data, uint16_t len) 
     Serial.println(String(msg));
 }
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     BLE.init();
@@ -81,7 +84,8 @@ void setup() {
     }
 }
 
-void loop() {
+void loop()
+{
     if (Serial.available()) {
         Rx->writeString(Serial.readString());
     }

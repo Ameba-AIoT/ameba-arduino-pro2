@@ -8,9 +8,9 @@
 extern "C" {
 #endif
 
-mm_context_t* mp4Init(void);
+mm_context_t *mp4Init(void);
 
-mm_context_t* mp4Deinit(mm_context_t *p);
+mm_context_t *mp4Deinit(mm_context_t *p);
 
 int mp4SetParams(void *p, mp4_params_t *params);
 

@@ -13,7 +13,8 @@ BLEAdvertData advdata;
 
 #define ENABLE_PIN 8
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     advdata.addFlags();
     advdata.addCompleteName("AMEBA_BLE_HID");
@@ -38,7 +39,8 @@ void setup() {
     BLE.beginPeripheral();
 }
 
-void loop() {
+void loop()
+{
     if (BLE.connected() && digitalRead(ENABLE_PIN)) {
         Serial.println("Sending keystrokes");
         keyboardDev.keyReleaseAll();
@@ -51,7 +53,7 @@ void loop() {
         delay(500);
         keyboardDev.consumerPress(HID_USAGE_CONSUMER_MUTE);
         delay(500);
-    keyboardDev.consumerRelease();
+        keyboardDev.consumerRelease();
     } else {
         delay(500);
     }

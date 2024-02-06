@@ -9,7 +9,8 @@
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     char buf[512];
     char *p;
 
@@ -31,6 +32,7 @@ void setup() {
     fs.end();
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

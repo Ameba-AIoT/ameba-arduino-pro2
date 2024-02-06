@@ -9,11 +9,12 @@ extern "C" {
 
 #include "amb_ard_pin_check.h"
 
-    //g_APinDescription[ard_pin_name].pinname;
-    //g_APinDescription[ard_pin_name].ulPinType;
-    //g_APinDescription[ard_pin_name].ulPinAttribute;
-    //g_APinDescription[ard_pin_name].ulPinMode;
-void amb_ard_pin_check_name(int pin) {
+// g_APinDescription[ard_pin_name].pinname;
+// g_APinDescription[ard_pin_name].ulPinType;
+// g_APinDescription[ard_pin_name].ulPinAttribute;
+// g_APinDescription[ard_pin_name].ulPinMode;
+void amb_ard_pin_check_name(int pin)
+{
     while (pin > TOTAL_GPIO_PIN_NUM) {
         printf("\r\n[ERROR] %s. The pin: %d beyond the pin mapping!!! \n", __FUNCTION__, pin);
         printf("\r\n[ERROR] Please check if pin or board is correct \n\r");
@@ -30,7 +31,8 @@ void amb_ard_pin_check_name(int pin) {
 // pin_type
 // TYPE_ANALOG                     (1UL<<21)
 // TYPE_DIGITAL                    (1UL<<22)
-void amb_ard_pin_check_type(int pin, uint32_t pin_type) {
+void amb_ard_pin_check_type(int pin, uint32_t pin_type)
+{
     amb_ard_pin_check_name(pin);
 
     char pin_type_name[128] = "";
@@ -63,7 +65,8 @@ void amb_ard_pin_check_type(int pin, uint32_t pin_type) {
 // PIO_IR                          (1UL<<7)
 // PIO_UART                        (1UL<<8)
 // PIO_SPI                         (1UL<<9)
-void amb_ard_pin_check_fun(int pin, uint32_t pin_fun) {
+void amb_ard_pin_check_fun(int pin, uint32_t pin_fun)
+{
     char pin_fun_name[128] = "";
 
     switch (pin_fun) {
@@ -109,4 +112,4 @@ void amb_ard_pin_check_fun(int pin, uint32_t pin_fun) {
 }
 #endif
 
-#endif // AMEBA_ARDUINO_Pin_Mapping_Check
+#endif    // AMEBA_ARDUINO_Pin_Mapping_Check

@@ -23,7 +23,7 @@
 #include <string.h>
 #include "UARTClassTwo.h"
 
-//#define SERIAL_TWO_UART_MODIFIABLE_BAUD_RATE 1
+// #define SERIAL_TWO_UART_MODIFIABLE_BAUD_RATE 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,19 +39,19 @@ static serial_t uart_obj;
 
 RingBuffer rx_buffer2;
 
-//volatile char rc = 0;
+// volatile char rc = 0;
 
-//void uart_send_str(serial_t *sobj, char *pstr)
-//{
-//    unsigned int i = 0;
+// void uart_send_str(serial_t *sobj, char *pstr)
+// {
+//     unsigned int i = 0;
+//     while (*(pstr + i) != 0) {
+//         serial_putc(sobj, *(pstr + i));
+//         i++;
+//     }
+// }
 
-//    while (*(pstr + i) != 0) {
-//        serial_putc(sobj, *(pstr + i));
-//        i++;
-//    }
-//}
-
-static void arduino_uart_irq_handler(uint32_t id, SerialIrq event) {
+static void arduino_uart_irq_handler(uint32_t id, SerialIrq event)
+{
     char c;
     RingBuffer *pRxBuffer = (RingBuffer *)id;
 
@@ -60,13 +60,14 @@ static void arduino_uart_irq_handler(uint32_t id, SerialIrq event) {
         pRxBuffer->store_char(c);
     }
 
-//    if (event == TxIrq && rc != 0) {
-//        uart_send_str(sobj, "\r\n8735b$");
-//        rc = 0;
-//    }
+    // if (event == TxIrq && rc != 0) {
+    //     uart_send_str(sobj, "\r\n8735b$");
+    //     rc = 0;
+    // }
 }
 
-UARTClassTwo::UARTClassTwo(int dwIrq, RingBuffer* pRx_buffer) {
+UARTClassTwo::UARTClassTwo(int dwIrq, RingBuffer *pRx_buffer)
+{
     _rx_buffer = pRx_buffer;
     _dwIrq = dwIrq;
 }
@@ -98,26 +99,27 @@ void UARTClassTwo::IrqHandler(void) {
 }
 #endif
 
-void UARTClassTwo::begin(const uint32_t dwBaudRate, uint8_t serial_config_value) {
-    //amb_ard_pin_check_fun(SERIAL2_TX, PIO_UART);
-    //amb_ard_pin_check_fun(SERIAL2_RX, PIO_UART);
+void UARTClassTwo::begin(const uint32_t dwBaudRate, uint8_t serial_config_value)
+{
+    // amb_ard_pin_check_fun(SERIAL2_TX, PIO_UART);
+    // amb_ard_pin_check_fun(SERIAL2_RX, PIO_UART);
 
     // Log, UART1
-    //serial_init(&log_uart_obj, PF_4, PF_3);
+    // serial_init(&log_uart_obj, PF_4, PF_3);
     ////serial_init(&log_uart_obj, PF_13, PF_12);
-    //serial_init(&log_uart_obj, PinName(g_APinDescription[LOG_TX].pinname), PinName(g_APinDescription[LOG_RX].pinname));
+    // serial_init(&log_uart_obj, PinName(g_APinDescription[LOG_TX].pinname), PinName(g_APinDescription[LOG_RX].pinname));
 
     // serial1, UART0
-    //serial_init(&uart_obj, PA_2, PA_3);
-    //serial_init(&uart_obj, PinName(g_APinDescription[SERIAL1_TX].pinname), PinName(g_APinDescription[SERIAL1_RX].pinname));
+    // serial_init(&uart_obj, PA_2, PA_3);
+    // serial_init(&uart_obj, PinName(g_APinDescription[SERIAL1_TX].pinname), PinName(g_APinDescription[SERIAL1_RX].pinname));
 
     // serial2, UART2
-    //serial_init(&uart_obj, PD_15, PD_16);
+    // serial_init(&uart_obj, PD_15, PD_16);
     serial_init(&uart_obj, PinName(g_APinDescription[SERIAL2_TX].pinname), PinName(g_APinDescription[SERIAL2_RX].pinname));
 
     // serial3, UART3
-    //serial_init(&uart_obj, PE_1, PE_2);
-    //serial_init(&uart_obj, PinName(g_APinDescription[SERIAL3_TX].pinname), PinName(g_APinDescription[SERIAL3_RX].pinname));
+    // serial_init(&uart_obj, PE_1, PE_2);
+    // serial_init(&uart_obj, PinName(g_APinDescription[SERIAL3_TX].pinname), PinName(g_APinDescription[SERIAL3_RX].pinname));
 
     uint32_t UART_BaudRate = dwBaudRate;
 
@@ -191,34 +193,39 @@ void UARTClassTwo::begin(const uint32_t dwBaudRate, uint8_t serial_config_value)
         case SERIAL_802:
             serial_format(&uart_obj, 8, ParityForced0, 2);
             break;
-      default:
-        serial_format(&uart_obj, 8, ParityNone, 1);
+        default:
+            serial_format(&uart_obj, 8, ParityNone, 1);
     }
 
     serial_irq_handler(&uart_obj, arduino_uart_irq_handler, (uint32_t)_rx_buffer);
     serial_irq_set(&uart_obj, RxIrq, 1);
-    //serial_irq_set(&uart_obj, TxIrq, 1);
+    // serial_irq_set(&uart_obj, TxIrq, 1);
 }
 
-void UARTClassTwo::end(void) {
+void UARTClassTwo::end(void)
+{
     // clear any received data
     _rx_buffer->_iHead = _rx_buffer->_iTail;
 
     serial_free(&uart_obj);
 }
 
-int UARTClassTwo::available(void) {
+int UARTClassTwo::available(void)
+{
     return (uint32_t)(SERIAL_BUFFER_SIZE + _rx_buffer->_iHead - _rx_buffer->_iTail) % SERIAL_BUFFER_SIZE;
 }
 
-int UARTClassTwo::peek(void) {
-    if (_rx_buffer->_iHead == _rx_buffer->_iTail)
+int UARTClassTwo::peek(void)
+{
+    if (_rx_buffer->_iHead == _rx_buffer->_iTail) {
         return -1;
+    }
 
     return _rx_buffer->_aucBuffer[_rx_buffer->_iTail];
 }
 
-int UARTClassTwo::read(void) {
+int UARTClassTwo::read(void)
+{
     // if the head isn't ahead of the tail, we don't have any characters
     if (_rx_buffer->_iHead == _rx_buffer->_iTail) {
         return -1;
@@ -229,22 +236,25 @@ int UARTClassTwo::read(void) {
     return uc;
 }
 
-void UARTClassTwo::flush(void) {
-// TODO: 
-// while ( serial_writable(&(this->sobj)) != 1 );
-/*
-  // Wait for transmission to complete
-  while ((_pUart->UART_SR & UART_SR_TXRDY) != UART_SR_TXRDY)
-    ;
-*/
+void UARTClassTwo::flush(void)
+{
+    // TODO:
+    // while ( serial_writable(&(this->sobj)) != 1 );
+    /*
+      // Wait for transmission to complete
+      while ((_pUart->UART_SR & UART_SR_TXRDY) != UART_SR_TXRDY)
+        ;
+    */
 }
 
-size_t UARTClassTwo::write(const uint8_t uc_data) {
+size_t UARTClassTwo::write(const uint8_t uc_data)
+{
     serial_putc(&uart_obj, (int)(uc_data));
     return 1;
 }
 
-bool Serial2_available() {
+bool Serial2_available()
+{
     return Serial2.available() > 0;
 }
 

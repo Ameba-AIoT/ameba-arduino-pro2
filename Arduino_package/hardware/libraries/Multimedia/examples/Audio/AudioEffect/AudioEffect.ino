@@ -17,14 +17,15 @@
 
 AudioSetting configA(PRESET);
 Audio audio;
-StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output Audio
+StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output Audio
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 int value;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     while (status != WL_CONNECTED) {
@@ -42,18 +43,18 @@ void setup() {
     // Noise suppression algorithm can help reduce background noise level, but will introduce echo
     // Reduce the noise suppression level to reduce the echo effect
     // Noise suppression level can be adjusted from 0 to 12
-    audio.configMicNS(0);   // Change to 1 to enable NS on microphone input
-    audio.configSpkNS(0);   // Change to 1 to enable NS on speaker output
-//    audio.configMicNS(0, 5);    // Noise suppression level 5
-//    audio.configSpkNS(0, 5);    // Noise suppression level 5
+    audio.configMicNS(0);    // Change to 1 to enable NS on microphone input
+    audio.configSpkNS(0);    // Change to 1 to enable NS on speaker output
+                             //    audio.configMicNS(0, 5);    // Noise suppression level 5
+                             //    audio.configSpkNS(0, 5);    // Noise suppression level 5
 
     // Automatic Gain Control algorithm for microphone and speaker
     // AGC can dynamically adjust the gain to maintain the audio loudness at a reference level
     // Reference loudness can be adjusted from 0 dBFS to -30 dBFS
-    audio.configMicAGC(0);   // Change to 1 to enable AGC on microphone input
-    audio.configSpkAGC(0);   // Change to 1 to enable AGC on speaker output
-//    audio.configMicAGC(0, 30);   // Target loudness level of -30 dBFS
-//    audio.configSpkAGC(0, 30);   // Target loudness level of -30 dBFS
+    audio.configMicAGC(0);    // Change to 1 to enable AGC on microphone input
+    audio.configSpkAGC(0);    // Change to 1 to enable AGC on speaker output
+                              //    audio.configMicAGC(0, 30);   // Target loudness level of -30 dBFS
+                              //    audio.configSpkAGC(0, 30);   // Target loudness level of -30 dBFS
 
     audio.begin();
 
@@ -65,11 +66,12 @@ void setup() {
     delay(1000);
 }
 
-void loop() {
+void loop()
+{
     // Increasing boost level will increase mic sensitivity and background noise
-    
+
     value = map(analogRead(A0), 0, 1020, 0, 3);
     audio.setAMicBoost(value);
-//    audio.setDMicBoost(value);
+    //    audio.setDMicBoost(value);
     delay(1000);
 }

@@ -12,7 +12,7 @@ extern "C" {
 #include "siso_drv.h"
 #include "avcodec.h"
 
-extern int vipnn_control(void *p, int cmd, int arg);
+extern int vipnn_control(void* p, int cmd, int arg);
 
 #ifdef __cplusplus
 }
@@ -22,19 +22,26 @@ extern int vipnn_control(void *p, int cmd, int arg);
 #undef max
 #include <vector>
 
-#define LIMIT(x, lower, upper) if(x<lower) x=lower; else if(x>upper) x=upper;
+#define LIMIT(x, lower, upper) \
+    if (x < lower) \
+        x = lower; \
+    else if (x > upper) \
+        x = upper;
 
 std::vector<FaceRecognitionResult> NNFaceDetectionRecognition::face_result_vector;
 void (*NNFaceDetectionRecognition::FR_user_CB)(std::vector<FaceRecognitionResult>);
 
-NNFaceDetectionRecognition::NNFaceDetectionRecognition(void) {
+NNFaceDetectionRecognition::NNFaceDetectionRecognition(void)
+{
 }
 
-NNFaceDetectionRecognition::~NNFaceDetectionRecognition(void) {
+NNFaceDetectionRecognition::~NNFaceDetectionRecognition(void)
+{
     end();
 }
 
-void NNFaceDetectionRecognition::configVideo(VideoSetting& config) {
+void NNFaceDetectionRecognition::configVideo(VideoSetting& config)
+{
     roi_nn.img.width = config._w;
     roi_nn.img.height = config._h;
     roi_nn.img.rgb = 0;
@@ -42,11 +49,12 @@ void NNFaceDetectionRecognition::configVideo(VideoSetting& config) {
     roi_nn.img.roi.xmax = config._w;
     roi_nn.img.roi.ymin = 0;
     roi_nn.img.roi.ymax = config._h;
-    roi_nn.codec_type =  AV_CODEC_ID_RGB888;
+    roi_nn.codec_type = AV_CODEC_ID_RGB888;
     fr_param.codec_type = AV_CODEC_ID_NN_RAW;
 }
 
-void NNFaceDetectionRecognition::begin(void) {
+void NNFaceDetectionRecognition::begin(void)
+{
     // Face Detection
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&vipnn_module);
@@ -55,21 +63,22 @@ void NNFaceDetectionRecognition::begin(void) {
         printf("\r\n[ERROR] NNFaceDetection init failed\n");
         return;
     }
-    if((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
+    if ((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
         printf("\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
 
     if (_nntask != FACE_RECOGNITION) {
         printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
-        while(1);
+        while (1)
+            ;
     }
 
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_OUTPUT, 1);
-    mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_RES_SIZE, sizeof(facedetect_res_t));	// result size
-    mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);		// result max count
+    mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_RES_SIZE, sizeof(facedetect_res_t));    // result size
+    mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);       // result max count
     mm_module_ctrl(_p_mmf_context, MM_CMD_SET_DATAGROUP, MM_GROUP_START);
     mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 1);
     mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
@@ -111,8 +120,8 @@ void NNFaceDetectionRecognition::begin(void) {
     vipnn_control(mbfacenet_ctx->priv, CMD_VIPNN_SET_CASCADE, 2);
     vipnn_control(mbfacenet_ctx->priv, CMD_VIPNN_SET_OUTPUT, 1);
     mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_IN_PARAMS, (int)&fr_param);
-    mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_SIZE, sizeof(face_feature_res_t));	// result size
-    mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);		// result max count
+    mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_SIZE, sizeof(face_feature_res_t));    // result size
+    mm_module_ctrl(mbfacenet_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);         // result max count
 
     mm_module_ctrl(mbfacenet_ctx, MM_CMD_SET_DATAGROUP, MM_GROUP_END);
     mm_module_ctrl(mbfacenet_ctx, MM_CMD_SET_QUEUE_LEN, 1);
@@ -120,7 +129,7 @@ void NNFaceDetectionRecognition::begin(void) {
     vipnn_control(mbfacenet_ctx->priv, CMD_VIPNN_APPLY, 0);
 
     // MMFv2 Face Recognition module configuration
-    mm_module_ctrl(facerecog_ctx, CMD_FRC_SET_THRES100, 99);  // 99/100 = 0.99 --> set a value to get lowest FP rate
+    mm_module_ctrl(facerecog_ctx, CMD_FRC_SET_THRES100, 99);    // 99/100 = 0.99 --> set a value to get lowest FP rate
     mm_module_ctrl(facerecog_ctx, CMD_FRC_SET_OSD_DRAW, (int)FRResultCallback);
 
     // SISO link VIPNN MobileFaceNet to FaceRecognition module
@@ -134,7 +143,8 @@ void NNFaceDetectionRecognition::begin(void) {
     sisoStart(mbfacenet_siso_ctx);
 }
 
-void NNFaceDetectionRecognition::end(void) {
+void NNFaceDetectionRecognition::end(void)
+{
     if (facerecog_siso_ctx == NULL) {
         return;
     }
@@ -177,11 +187,13 @@ void NNFaceDetectionRecognition::end(void) {
     }
 }
 
-void NNFaceDetectionRecognition::setResultCallback(void (*fr_callback)(std::vector<FaceRecognitionResult>)) {
+void NNFaceDetectionRecognition::setResultCallback(void (*fr_callback)(std::vector<FaceRecognitionResult>))
+{
     FR_user_CB = fr_callback;
 }
 
-uint16_t NNFaceDetectionRecognition::getResultCount(void) {
+uint16_t NNFaceDetectionRecognition::getResultCount(void)
+{
     uint16_t facerecog_res_count = face_result_vector.size();
     if (facerecog_res_count > 14) {
         facerecog_res_count = 14;
@@ -189,61 +201,71 @@ uint16_t NNFaceDetectionRecognition::getResultCount(void) {
     return facerecog_res_count;
 }
 
-FaceRecognitionResult NNFaceDetectionRecognition::getResult(uint16_t index) {
+FaceRecognitionResult NNFaceDetectionRecognition::getResult(uint16_t index)
+{
     if (index >= face_result_vector.size()) {
         return FaceRecognitionResult();
     }
     return face_result_vector[index];
 }
 
-std::vector<FaceRecognitionResult> NNFaceDetectionRecognition::getResult(void) {
+std::vector<FaceRecognitionResult> NNFaceDetectionRecognition::getResult(void)
+{
     return face_result_vector;
 }
 
-void NNFaceDetectionRecognition::registerFace(String name) {
+void NNFaceDetectionRecognition::registerFace(String name)
+{
     registerFace(name.c_str());
 }
 
-void NNFaceDetectionRecognition::registerFace(const char* name) {
+void NNFaceDetectionRecognition::registerFace(const char* name)
+{
     if (!facerecog_ctx) {
         return;
     }
     mm_module_ctrl(facerecog_ctx, CMD_FRC_REGISTER_MODE, (int)name);
 }
 
-void NNFaceDetectionRecognition::removeFace(String name) {
+void NNFaceDetectionRecognition::removeFace(String name)
+{
     removeFace(name.c_str());
 }
 
-void NNFaceDetectionRecognition::removeFace(const char* name) {
+void NNFaceDetectionRecognition::removeFace(const char* name)
+{
     if (!facerecog_ctx) {
         return;
     }
     mm_module_ctrl(facerecog_ctx, CMD_FRC_UNREGISTER_MODE, (int)name);
 }
 
-void NNFaceDetectionRecognition::resetRegisteredFace(void) {
+void NNFaceDetectionRecognition::resetRegisteredFace(void)
+{
     if (!facerecog_ctx) {
         return;
     }
     mm_module_ctrl(facerecog_ctx, CMD_FRC_RESET_FEATURES, 0);
 }
 
-void NNFaceDetectionRecognition::backupRegisteredFace(void) {
+void NNFaceDetectionRecognition::backupRegisteredFace(void)
+{
     if (!facerecog_ctx) {
         return;
     }
     mm_module_ctrl(facerecog_ctx, CMD_FRC_SAVE_FEATURES, 0);
 }
 
-void NNFaceDetectionRecognition::restoreRegisteredFace(void) {
+void NNFaceDetectionRecognition::restoreRegisteredFace(void)
+{
     if (!facerecog_ctx) {
         return;
     }
     mm_module_ctrl(facerecog_ctx, CMD_FRC_LOAD_FEATURES, 0);
 }
 
-void NNFaceDetectionRecognition::setThreshold(uint8_t threshold) {
+void NNFaceDetectionRecognition::setThreshold(uint8_t threshold)
+{
     if (!facerecog_ctx) {
         return;
     }
@@ -256,7 +278,8 @@ void NNFaceDetectionRecognition::setThreshold(uint8_t threshold) {
     mm_module_ctrl(facerecog_ctx, CMD_FRC_SET_THRES100, threshold);
 }
 
-void NNFaceDetectionRecognition::FRResultCallback(void *p, void *img_param) {
+void NNFaceDetectionRecognition::FRResultCallback(void* p, void* img_param)
+{
     (void)img_param;
     if (p == NULL) {
         return;
@@ -276,22 +299,27 @@ void NNFaceDetectionRecognition::FRResultCallback(void *p, void *img_param) {
     }
 }
 
-const char* FaceRecognitionResult::name(void) {
+const char* FaceRecognitionResult::name(void)
+{
     return result_name;
 }
 
-float FaceRecognitionResult::xMin(void) {
+float FaceRecognitionResult::xMin(void)
+{
     return ((float)result.xmin);
 }
 
-float FaceRecognitionResult::xMax(void) {
+float FaceRecognitionResult::xMax(void)
+{
     return ((float)result.xmax);
 }
 
-float FaceRecognitionResult::yMin(void) {
+float FaceRecognitionResult::yMin(void)
+{
     return ((float)result.ymin);
 }
 
-float FaceRecognitionResult::yMax(void) {
-   return ((float)result.ymax);
+float FaceRecognitionResult::yMax(void)
+{
+    return ((float)result.ymax);
 }

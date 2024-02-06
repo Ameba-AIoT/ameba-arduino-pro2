@@ -28,23 +28,23 @@ extern "C" {
 #include "gpio_ex_api.h"
 
 /* ADC */
-//analogin_t   adc0;
-//analogin_t   adc1;
-//analogin_t   adc2;
-//analogin_t   adc3;
-//analogin_t   adc4;
-//analogin_t   adc5;
-//analogin_t   adc6;
-//analogin_t   adc7;
+// analogin_t   adc0;
+// analogin_t   adc1;
+// analogin_t   adc2;
+// analogin_t   adc3;
+// analogin_t   adc4;
+// analogin_t   adc5;
+// analogin_t   adc6;
+// analogin_t   adc7;
 
-//static const float ADC_slope1 = (3.3)/(255.0 - 16.0);
-//static const float ADC_slope2 = (3.3 - 3.12)/(3454.0-3410.0);
+// static const float ADC_slope1 = (3.3)/(255.0 - 16.0);
+// static const float ADC_slope2 = (3.3 - 3.12)/(3454.0-3410.0);
 
 #ifdef FEATURE_DAC
 dac_t dac0;
 
 bool g_dac_enabled[] = {
-    false
+    false,
 };
 #endif
 
@@ -56,7 +56,8 @@ static float _offset = 0;
 static float _gain = 0;
 static int _calibrate_en = 0;
 
-void analogReadResolution(int res) {
+void analogReadResolution(int res)
+{
     if (res > 12) {
         printf("\r\n[INFO] Analog read has a maximum resolution of 12 bits. \n");
         _readResolution = 12;
@@ -65,15 +66,18 @@ void analogReadResolution(int res) {
     }
 }
 
-void analogWriteResolution(int res) {
+void analogWriteResolution(int res)
+{
     _writeResolution = res;
 }
 
-void analogWritePeriod(int us) {
+void analogWritePeriod(int us)
+{
     _writePeriod = us;
 }
 
-static inline uint32_t mapResolution(uint32_t value, uint32_t from, uint32_t to) {
+static inline uint32_t mapResolution(uint32_t value, uint32_t from, uint32_t to)
+{
     if (from == to) {
         return value;
     }
@@ -86,29 +90,32 @@ static inline uint32_t mapResolution(uint32_t value, uint32_t from, uint32_t to)
 
 eAnalogReference analog_reference = AR_DEFAULT;
 
-void analogReference(eAnalogReference ulMode) {
+void analogReference(eAnalogReference ulMode)
+{
     analog_reference = ulMode;
 }
 
-void analogSet(float gain, float offset){
+void analogSet(float gain, float offset)
+{
     _offset = offset;
     _gain = gain;
     _calibrate_en = 1;
 }
 
-uint32_t analogRead(uint32_t ulPin) {
+uint32_t analogRead(uint32_t ulPin)
+{
     void *pAdc_t;
     analogin_t *adc_obj;
 
     float ret = 0;
-//    float    voltage;
+    // float    voltage;
     float mv;
 
     amb_ard_pin_check_type(ulPin, TYPE_ANALOG);
     amb_ard_pin_check_fun(ulPin, PIO_ADC);
 
     if (_calibrate_en == 0) {
-        _offset = 0x83B; // copy from AmbD
+        _offset = 0x83B;    // copy from AmbD
         _gain = 0x2E25;
     }
 
@@ -181,15 +188,16 @@ uint32_t analogRead(uint32_t ulPin) {
     ret = analogin_read_u16(adc_obj);
 
     if (ret < 0xfa) {
-        mv = 0; // Ignore persistent low voltage measurement error
+        mv = 0;    // Ignore persistent low voltage measurement error
     } else {
-        mv = ((10 * ret - _offset) * 1000 / _gain); // Convert measured ADC value to millivolts
+        mv = ((10 * ret - _offset) * 1000 / _gain);    // Convert measured ADC value to millivolts
     }
-    ret = (mv/3300.0) * (1 << _readResolution); // Return user required resolution
+    ret = (mv / 3300.0) * (1 << _readResolution);    // Return user required resolution
     return ret;
 }
 
-void analogOutputInit(void) {
+void analogOutputInit(void)
+{
     // nop
 }
 
@@ -197,21 +205,20 @@ void analogOutputInit(void) {
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
 // to digital output.
-void analogWrite (uint32_t ulPin, int32_t ulValue) {
-    //amb_ard_pin_check_type(ulPin, TYPE_ANALOG);
+void analogWrite(uint32_t ulPin, int32_t ulValue)
+{
+    // amb_ard_pin_check_type(ulPin, TYPE_ANALOG);
 
 #ifdef FEATURE_DAC
-    if (ulPin == DAC0)
-    {
+    if (ulPin == DAC0) {
         if (g_dac_enabled[0] == false) {
             analogout_init(&dac0, DA_0);
             g_dac_enabled[0] = true;
         }
-        ulValue %= (1<<_writeResolution);
-        analogout_write(&dac0, ulValue * 1.0 / (1<<_writeResolution));
-    }
-    else
-#endif // #ifdef FEATURE_DAC
+        ulValue %= (1 << _writeResolution);
+        analogout_write(&dac0, ulValue * 1.0 / (1 << _writeResolution));
+    } else
+#endif    // #ifdef FEATURE_DAC
     {
         amb_ard_pin_check_fun(ulPin, PIO_PWM);
         if ((g_APinDescription[ulPin].ulPinMode & PWM_MODE_ENABLED) != PWM_MODE_ENABLED) {
@@ -220,7 +227,7 @@ void analogWrite (uint32_t ulPin, int32_t ulValue) {
             pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
             pwmout_init(obj, g_APinDescription[ulPin].pinname);
             pwmout_period_us(obj, _writePeriod);
-            pwmout_write(obj, ulValue * 1.0 / (1<<_writeResolution));
+            pwmout_write(obj, ulValue * 1.0 / (1 << _writeResolution));
             g_APinDescription[ulPin].ulPinMode |= PWM_MODE_ENABLED;
             g_APinDescription[ulPin].ulPinMode &= (~MODE_NOT_INITIAL);
         } else {
@@ -236,10 +243,11 @@ typedef struct _tone_argument {
     uint32_t timer_id;
 } tone_argument;
 
-void _tone_timer_handler(void const* argument) {
+void _tone_timer_handler(const void *argument)
+{
     // passed in value is a double pointer to a tone_argument struct
-    tone_argument** pptimer = (tone_argument**) argument;
-    tone_argument* arg = *pptimer;
+    tone_argument **pptimer = (tone_argument **)argument;
+    tone_argument *arg = *pptimer;
     // Stop the currently playing tone and delete the timer
     noTone(arg->ulPin);
     os_timer_delete_arduino(arg->timer_id);
@@ -248,10 +256,11 @@ void _tone_timer_handler(void const* argument) {
     free(arg);
 }
 
-void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
-    static tone_argument* ptimer = NULL;
+void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration)
+{
+    static tone_argument *ptimer = NULL;
 
-    //amb_ard_pin_check_type(ulPin, TYPE_ANALOG);
+    // amb_ard_pin_check_type(ulPin, TYPE_ANALOG);
     amb_ard_pin_check_fun(ulPin, PIO_PWM);
 
     if ((g_APinDescription[ulPin].ulPinMode & PWM_MODE_ENABLED) != PWM_MODE_ENABLED) {
@@ -262,8 +271,8 @@ void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
         if (frequency == 0) {
             pwmout_pulsewidth(obj, 0);
         } else {
-            pwmout_period(obj, 1.0/frequency);
-            pwmout_pulsewidth(obj, 1.0/(frequency * 2));
+            pwmout_period(obj, 1.0 / frequency);
+            pwmout_pulsewidth(obj, 1.0 / (frequency * 2));
         }
         g_APinDescription[ulPin].ulPinMode |= PWM_MODE_ENABLED;
         g_APinDescription[ulPin].ulPinMode &= (~MODE_NOT_INITIAL);
@@ -273,8 +282,8 @@ void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
         if (frequency == 0) {
             pwmout_pulsewidth(obj, 0);
         } else {
-            pwmout_period(obj, 1.0/frequency);
-            pwmout_pulsewidth(obj, 1.0/(frequency * 2));
+            pwmout_period(obj, 1.0 / frequency);
+            pwmout_pulsewidth(obj, 1.0 / (frequency * 2));
         }
     }
 
@@ -285,7 +294,7 @@ void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
             free(ptimer);
             ptimer = NULL;
         }
-        tone_argument* arg = (tone_argument *)(malloc(sizeof(tone_argument)));
+        tone_argument *arg = (tone_argument *)(malloc(sizeof(tone_argument)));
         arg->ulPin = ulPin;
         arg->timer_id = os_timer_create_arduino(_tone_timer_handler, 0, &ptimer);
         ptimer = arg;
@@ -294,7 +303,8 @@ void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
     delay(5);
 }
 
-void noTone(uint32_t ulPin) {
+void noTone(uint32_t ulPin)
+{
     pinRemoveMode(ulPin);
 }
 

@@ -39,12 +39,12 @@
 #include "NNFaceDetectionRecognition.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL     0
-#define CHANNELNN   3
+#define CHANNEL   0
+#define CHANNELNN 3
 
 // Customised resolution for NN
-#define NNWIDTH     576
-#define NNHEIGHT    320
+#define NNWIDTH  576
+#define NNHEIGHT 320
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -54,14 +54,15 @@ StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerFDFR(1, 1);
 StreamIO videoStreamerRGBFD(1, 1);
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
 IPAddress ip;
-int rtsp_portnum; 
+int rtsp_portnum;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // Attempt to connect to Wifi network:
@@ -78,7 +79,7 @@ void setup() {
 
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
-    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);    // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -121,12 +122,13 @@ void setup() {
     OSD.begin();
 }
 
-void loop() {
+void loop()
+{
     if (Serial.available() > 0) {
         String input = Serial.readString();
         input.trim();
 
-        if (input.startsWith(String("REG="))){
+        if (input.startsWith(String("REG="))) {
             String name = input.substring(4);
             facerecog.registerFace(name);
         } else if (input.startsWith(String("DEL="))) {
@@ -147,7 +149,8 @@ void loop() {
 }
 
 // User callback function for post processing of face recognition results
-void FRPostProcess(std::vector<FaceRecognitionResult> results) {
+void FRPostProcess(std::vector<FaceRecognitionResult> results)
+{
     uint16_t im_h = config.height();
     uint16_t im_w = config.width();
 

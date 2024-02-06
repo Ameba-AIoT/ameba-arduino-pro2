@@ -17,19 +17,20 @@
 
 // Choose between using AAC or G711 audio decoder
 AAD decoder;
-//G711D decoder;
+// G711D decoder;
 
 AudioSetting configA(0);
 Audio audio;
 RTP rtp;
-StreamIO audioStreamer1(1, 1);   // 1 Input RTP -> 1 Output decoder
-StreamIO audioStreamer2(1, 1);   // 1 Input decoder -> 1 Output Audio
+StreamIO audioStreamer1(1, 1);    // 1 Input RTP -> 1 Output decoder
+StreamIO audioStreamer2(1, 1);    // 1 Input decoder -> 1 Output Audio
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     while (status != WL_CONNECTED) {
@@ -44,8 +45,8 @@ void setup() {
     // Configure audio decoder
     // For G711 audio decoder, choose between u-law and a-law algorithm
     decoder.configAudio(configA);
-//    decoder.configCodec(CODEC_G711_PCMU);
-//    decoder.configCodec(CODEC_G711_PCMA);
+    // decoder.configCodec(CODEC_G711_PCMU);
+    // decoder.configCodec(CODEC_G711_PCMA);
     decoder.begin();
 
     rtp.begin();
@@ -61,5 +62,6 @@ void setup() {
     audioStreamer2.begin();
 }
 
-void loop() {
+void loop()
+{
 }

@@ -7,7 +7,8 @@
 
 #include <GTimer.h>
 
-void myhandler(uint32_t data) {
+void myhandler(uint32_t data)
+{
     Serial.print("I am timer!");
     Serial.println(data);
 
@@ -16,11 +17,12 @@ void myhandler(uint32_t data) {
     }
 }
 
-void setup() {
+void setup()
+{
     // Open serial communications and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
+        ;    // wait for serial port to connect. Needed for native USB port only
     }
 
     // User can access 8 timers on Ameba Pro2, this sketch will init all of them and let them fire 1 by 1
@@ -35,6 +37,7 @@ void setup() {
     GTimer.begin(7, 8 * 1000 * 1000, myhandler, false, 7);
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

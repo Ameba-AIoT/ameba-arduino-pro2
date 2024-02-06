@@ -24,10 +24,12 @@
 
 #include "BLEUUID.h"
 
-BLEUUID::BLEUUID() {
+BLEUUID::BLEUUID()
+{
 }
 
-BLEUUID::BLEUUID(const char* str) {
+BLEUUID::BLEUUID(const char* str)
+{
     char temp[] = {0, 0, 0};
 
     memset(_data, 0x00, sizeof(_data));
@@ -37,11 +39,11 @@ BLEUUID::BLEUUID(const char* str) {
     for (i = 0; (i <= (strlen(str) - 1)) && (_length < BLE_UUID_MAX_LENGTH); i += 2) {
         if (str[i] == '-') {
             i++;
-            //continue;
+            // continue;
         }
 
         temp[0] = str[i];
-        temp[1] = str[i+1];
+        temp[1] = str[i + 1];
 
         _data[_length] = strtoul(temp, NULL, 16);
 
@@ -55,13 +57,14 @@ BLEUUID::BLEUUID(const char* str) {
     } else {
         _length = 16;
     }
-    
+
     for (i = 0; i < _length; i++) {
         _dataNative[i] = _data[(_length - 1 - i)];
     }
 }
 
-BLEUUID::BLEUUID(uint8_t* data, uint8_t length) {
+BLEUUID::BLEUUID(uint8_t* data, uint8_t length)
+{
     if ((length == 2) || (length == 4) || (length == 16)) {
         _length = length;
         uint8_t i = 0;
@@ -72,20 +75,21 @@ BLEUUID::BLEUUID(uint8_t* data, uint8_t length) {
     }
 }
 
-const char* BLEUUID::str() {
+const char* BLEUUID::str()
+{
     if (_length == 2) {
-        sprintf(_str, "%02X%02X", 
+        sprintf(_str, "%02X%02X",
                 _dataNative[1], _dataNative[0]);
     }
 
     if (_length == 4) {
-        sprintf(_str, "%02X%02X%02X%02X", 
+        sprintf(_str, "%02X%02X%02X%02X",
                 _dataNative[3], _dataNative[2],
                 _dataNative[1], _dataNative[0]);
     }
 
     if (_length == 16) {
-        sprintf(_str, "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X", 
+        sprintf(_str, "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
                 _dataNative[15], _dataNative[14],
                 _dataNative[13], _dataNative[12],
                 _dataNative[11], _dataNative[10],
@@ -98,19 +102,22 @@ const char* BLEUUID::str() {
     return _str;
 }
 
-const uint8_t* BLEUUID::data() {
+const uint8_t* BLEUUID::data()
+{
     return _data;
 }
 
-const uint8_t* BLEUUID::dataNative() {
+const uint8_t* BLEUUID::dataNative()
+{
     return _dataNative;
 }
 
-uint8_t BLEUUID::length() {
+uint8_t BLEUUID::length()
+{
     return _length;
 }
 
-bool BLEUUID::operator ==(const BLEUUID &uuid) {
-    return(memcmp(_dataNative, uuid._dataNative, BLE_UUID_MAX_LENGTH) == 0);
+bool BLEUUID::operator==(const BLEUUID& uuid)
+{
+    return (memcmp(_dataNative, uuid._dataNative, BLE_UUID_MAX_LENGTH) == 0);
 }
-

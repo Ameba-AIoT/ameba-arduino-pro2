@@ -12,9 +12,10 @@
 
 int counter = 0;
 
-void myhandler(uint32_t data) {
+void myhandler(uint32_t data)
+{
     data = data;
-    counter ++;
+    counter++;
     Serial.println();
     Serial.print("counter: ");
     Serial.println(counter);
@@ -23,22 +24,25 @@ void myhandler(uint32_t data) {
         Serial.println("stop timer");
         GTimer.stop(TIMER_ID);
         // stop program here
-        while(1);
+        while (1)
+            ;
     }
 }
 
-void setup() {
+void setup()
+{
     // Open serial communications and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
+        ;    // wait for serial port to connect. Needed for native USB port only
     }
 
     // timer id 0, period 1s, invoke myhander
     GTimer.begin(TIMER_ID, (1 * 1000 * 1000), myhandler);
 }
 
-void loop() {
+void loop()
+{
     // reload timer once it's stopped
     Serial.print("Timer fire in : ");
     Serial.print(GTimer.read_us(TIMER_ID));

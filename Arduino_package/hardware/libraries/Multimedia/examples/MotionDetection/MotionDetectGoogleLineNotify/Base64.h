@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013 Adam Rudd.
  * See LICENSE for more information
- * https://github.com/adamvr/arduino-base64 
+ * https://github.com/adamvr/arduino-base64
  */
 #ifndef _BASE64_H
 #define _BASE64_H
@@ -77,4 +77,4 @@ int base64_enc_len(int inputLen);
  */
 int base64_dec_len(char *input, int inputLen);
 
-#endif // _BASE64_H
+#endif    // _BASE64_H

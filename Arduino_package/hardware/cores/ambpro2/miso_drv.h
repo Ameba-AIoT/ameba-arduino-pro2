@@ -7,7 +7,7 @@
 
 uint32_t misoCreate(void);
 void misoDestroy(void *);
-int  misoStart(void *);
+int misoStart(void *);
 void misoStop(void *);
 void misoPause(void *);
 void misoResume(void *);

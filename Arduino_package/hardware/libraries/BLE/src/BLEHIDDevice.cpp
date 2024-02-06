@@ -3,62 +3,67 @@
 BLEHIDDevice BLEHIDDev;
 
 uint8_t ble_hid_report_descriptor[] = {
-    TUD_HID_REPORT_DESC_KEYBOARD( HID_REPORT_ID(REPORT_ID_KEYBOARD) ),
-    TUD_HID_REPORT_DESC_CONSUMER( HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL) ),
-    TUD_HID_REPORT_DESC_MOUSE   ( HID_REPORT_ID(REPORT_ID_MOUSE) )
+    TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(REPORT_ID_KEYBOARD)),
+    TUD_HID_REPORT_DESC_CONSUMER(HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL)),
+    TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(REPORT_ID_MOUSE)),
 };
 
-void HIDnotifCB (BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
-    (void) connID;
+void HIDnotifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd)
+{
+    (void)connID;
     if (chr->getUUID() == BLEUUID(REPORT_CHAR_UUID)) {
         uint8_t id = chr->getReportRefID();
         uint8_t type = chr->getReportRefType();
-        (void) id;
-        (void) type;
+        (void)id;
+        (void)type;
         if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-            //printf("\r\n[INFO] Notifications enabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+            // printf("\r\n[INFO] Notifications enabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
         } else {
-            //printf("\r\n[INFO] Notifications disabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+            // printf("\r\n[INFO] Notifications disabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
         }
     } else {
         if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-            //printf("\r\n[INFO] Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+            // printf("\r\n[INFO] Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         } else {
-            //printf("\r\n[INFO] Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+            // printf("\r\n[INFO] Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         }
     }
 }
 
-void HIDwriteCB (BLECharacteristic* chr, uint8_t connID) {
-    (void) connID;
+void HIDwriteCB(BLECharacteristic* chr, uint8_t connID)
+{
+    (void)connID;
     if (chr->getUUID() == BLEUUID(REPORT_CHAR_UUID)) {
         uint8_t id = chr->getReportRefID();
         uint8_t type = chr->getReportRefType();
-        (void) id;
-        (void) type;
-        //printf("\r\n[INFO] Data written on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+        (void)id;
+        (void)type;
+        // printf("\r\n[INFO] Data written on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
     } else {
-        //printf("\r\n[INFO] Data written on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        // printf("\r\n[INFO] Data written on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
     }
 }
 
-void HIDreadCB (BLECharacteristic* chr, uint8_t connID) {
-    (void) connID;
+void HIDreadCB(BLECharacteristic* chr, uint8_t connID)
+{
+    (void)connID;
     if (chr->getUUID() == BLEUUID(REPORT_CHAR_UUID)) {
         uint8_t id = chr->getReportRefID();
         uint8_t type = chr->getReportRefType();
-        (void) id;
-        (void) type;
-        //printf("\r\n[INFO] Data read on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+        (void)id;
+        (void)type;
+        // printf("\r\n[INFO] Data read on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
     } else {
-        //printf("\r\n[INFO] Data read from Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        // printf("\r\n[INFO] Data read from Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
     }
 }
 
-BLEHIDDevice::BLEHIDDevice() {
+BLEHIDDevice::BLEHIDDevice()
+{
 }
 
-BLEHIDDevice::~BLEHIDDevice() {
+BLEHIDDevice::~BLEHIDDevice()
+{
     delete _pHIDInfoChar;
     delete _pReportMapChar;
     delete _pHIDControlChar;
@@ -83,11 +88,11 @@ BLEHIDDevice::~BLEHIDDevice() {
     delete _pHIDService;
     delete _pDISService;
     delete _pBASService;
-
 }
 
-void BLEHIDDevice::init() {
-// Generate HID required services and characteristics
+void BLEHIDDevice::init()
+{
+    // Generate HID required services and characteristics
     _pHIDService = new BLEService(HID_SERVICE_UUID);
     _pDISService = new BLEService(DIS_SERVICE_UUID);
     _pBASService = new BLEService(BATT_SERVICE_UUID);
@@ -113,7 +118,7 @@ void BLEHIDDevice::init() {
     _pManufacturerChar = new BLECharacteristic(MANUFACTURER_CHAR_UUID);
     _pModelChar = new BLECharacteristic(MODEL_CHAR_UUID);
 
-//Add characteristics to services
+    // Add characteristics to services
     _pHIDService->addCharacteristic(*_pHIDInfoChar);
     _pHIDService->addCharacteristic(*_pReportMapChar);
     _pHIDService->addCharacteristic(*_pHIDControlChar);
@@ -126,18 +131,18 @@ void BLEHIDDevice::init() {
     for (int i = 0; i < _numInputReports; i++) {
         _pHIDService->addCharacteristic(*(_pReportInputChar[i]));
     }
-    
+
     _pBASService->addCharacteristic(*_pBattLevelChar);
     _pDISService->addCharacteristic(*_pPNPChar);
     _pDISService->addCharacteristic(*_pManufacturerChar);
     _pDISService->addCharacteristic(*_pModelChar);
 
-//Configure required characteristics
-    // HID_INFO_CHAR_UUID                    "2A4A"
-    _hidInfo[0] = 0x11;     // bcdHID HID class specification version
-    _hidInfo[1] = 0x01;     // bcdHID HID class specification version
-    _hidInfo[2] = 0x00;     // bCountryCode
-    _hidInfo[3] = 0x02;     // Flags: Bit 0: RemoteWake = 0 | Bit 1: NormallyConnectable = 1
+    // Configure required characteristics
+    //  HID_INFO_CHAR_UUID                    "2A4A"
+    _hidInfo[0] = 0x11;    // bcdHID HID class specification version
+    _hidInfo[1] = 0x01;    // bcdHID HID class specification version
+    _hidInfo[2] = 0x00;    // bCountryCode
+    _hidInfo[3] = 0x02;    // Flags: Bit 0: RemoteWake = 0 | Bit 1: NormallyConnectable = 1
     _pHIDInfoChar->setProperties(GATT_CHAR_PROP_READ);
     _pHIDInfoChar->setPermissions(GATT_PERM_READ_ENCRYPTED_REQ);
     _pHIDInfoChar->setBufferLen(4);
@@ -145,7 +150,7 @@ void BLEHIDDevice::init() {
     _pHIDInfoChar->setReadCallback(HIDreadCB);
 
     // REPORT_MAP_CHAR_UUID                    "2A4B"
-    //Set HID report map
+    // Set HID report map
     setReportMap(ble_hid_report_descriptor, sizeof(ble_hid_report_descriptor));
     _pReportMapChar->setProperties(GATT_CHAR_PROP_READ);
     _pReportMapChar->setPermissions(GATT_PERM_READ_ENCRYPTED_REQ);
@@ -161,7 +166,7 @@ void BLEHIDDevice::init() {
     _pProtocolModeChar->setProperties(GATT_CHAR_PROP_READ | GATT_CHAR_PROP_WRITE_NO_RSP);
     _pProtocolModeChar->setPermissions(GATT_PERM_READ_ENCRYPTED_REQ | GATT_PERM_WRITE_ENCRYPTED_REQ);
     _pProtocolModeChar->setBufferLen(1);
-    _pProtocolModeChar->writeData8(1); // default of 1 for non-boot mode
+    _pProtocolModeChar->writeData8(1);    // default of 1 for non-boot mode
     _pProtocolModeChar->setWriteCallback(HIDwriteCB);
     _pProtocolModeChar->setReadCallback(HIDreadCB);
 
@@ -183,7 +188,7 @@ void BLEHIDDevice::init() {
     for (int i = 0; i < _numOutputReports; i++) {
         _pReportOutputChar[i]->setProperties(GATT_CHAR_PROP_READ | GATT_CHAR_PROP_WRITE | GATT_CHAR_PROP_WRITE_NO_RSP);
         _pReportOutputChar[i]->setPermissions(GATT_PERM_READ_ENCRYPTED_REQ | GATT_PERM_WRITE_ENCRYPTED_REQ);
-        _pReportOutputChar[i]->setReportRefDescriptor((i+1), 0x02);     //Report type 0x02 for output report
+        _pReportOutputChar[i]->setReportRefDescriptor((i + 1), 0x02);    // Report type 0x02 for output report
         _pReportOutputChar[i]->setWriteCallback(HIDwriteCB);
         _pReportOutputChar[i]->setReadCallback(HIDreadCB);
     }
@@ -193,7 +198,7 @@ void BLEHIDDevice::init() {
         _pReportInputChar[i]->setProperties(GATT_CHAR_PROP_READ | GATT_CHAR_PROP_NOTIFY);
         _pReportInputChar[i]->setPermissions(GATT_PERM_READ_ENCRYPTED_REQ);
         _pReportInputChar[i]->setNotifyProperty(TRUE);
-        _pReportInputChar[i]->setReportRefDescriptor((i+1), 0x01);     //Report type 0x01 for input report
+        _pReportInputChar[i]->setReportRefDescriptor((i + 1), 0x01);    // Report type 0x01 for input report
         _pReportInputChar[i]->setCCCDCallback(HIDnotifCB);
         _pReportInputChar[i]->setReadCallback(HIDreadCB);
     }
@@ -219,85 +224,97 @@ void BLEHIDDevice::init() {
     _pModelChar->setProperties(GATT_CHAR_PROP_READ);
     _pModelChar->setPermissions(GATT_PERM_READ);
     _pModelChar->writeString("Ameba_BLE_HID");
-
 }
 
-void BLEHIDDevice::setNumOutputReport(uint8_t numOutputReports) {
+void BLEHIDDevice::setNumOutputReport(uint8_t numOutputReports)
+{
     if (_pReportOutputChar == NULL) {
         // number of input reports can only be set before init is called
         _numOutputReports = numOutputReports;
     }
 }
 
-void BLEHIDDevice::setNumInputReport(uint8_t numInputReports) {
+void BLEHIDDevice::setNumInputReport(uint8_t numInputReports)
+{
     if (_pReportInputChar == NULL) {
         // number of input reports can only be set before init is called
         _numInputReports = numInputReports;
     }
 }
 
-void BLEHIDDevice::setReportMap(uint8_t* report_map, uint16_t len) {
+void BLEHIDDevice::setReportMap(uint8_t* report_map, uint16_t len)
+{
     _pReportMap = report_map;
     _pReportMapChar->setBufferLen(len);
     _pReportMapChar->setData(report_map, len);
 }
 
-void BLEHIDDevice::inputReport(uint8_t reportID, uint8_t* data, uint16_t len, uint8_t conn_id) {
-    if ((reportID-1) >= _numInputReports) {
+void BLEHIDDevice::inputReport(uint8_t reportID, uint8_t* data, uint16_t len, uint8_t conn_id)
+{
+    if ((reportID - 1) >= _numInputReports) {
         return;
     }
-    _pReportInputChar[reportID-1]->setData(data, len);
-    _pReportInputChar[reportID-1]->notify(conn_id);
+    _pReportInputChar[reportID - 1]->setData(data, len);
+    _pReportInputChar[reportID - 1]->notify(conn_id);
 }
 
-void BLEHIDDevice::setOutputReportCallback(uint8_t reportID, void (*fCallback) (BLECharacteristic* chr, uint8_t conn_id)) {
-    _pReportOutputChar[reportID-1]->setWriteCallback(fCallback);
+void BLEHIDDevice::setOutputReportCallback(uint8_t reportID, void (*fCallback)(BLECharacteristic* chr, uint8_t conn_id))
+{
+    _pReportOutputChar[reportID - 1]->setWriteCallback(fCallback);
 }
 
-void BLEHIDDevice::bootKeyboardReport(uint8_t* data, uint16_t len, uint8_t conn_id) {
+void BLEHIDDevice::bootKeyboardReport(uint8_t* data, uint16_t len, uint8_t conn_id)
+{
     _pBootKBInputChar->setData(data, len);
     _pBootKBInputChar->notify(conn_id);
 }
 
-void BLEHIDDevice::setHidInfo(uint16_t bcd, uint8_t country, uint8_t flags) {
-    memcpy(_hidInfo, &bcd, 2);     // bcdHID HID class specification version
-    _hidInfo[2] = country;     // bCountryCode
-    _hidInfo[3] = flags;     // Flags: Bit 0: RemoteWake = 0 | Bit 1: NormallyConnectable = 1
+void BLEHIDDevice::setHidInfo(uint16_t bcd, uint8_t country, uint8_t flags)
+{
+    memcpy(_hidInfo, &bcd, 2);    // bcdHID HID class specification version
+    _hidInfo[2] = country;        // bCountryCode
+    _hidInfo[3] = flags;          // Flags: Bit 0: RemoteWake = 0 | Bit 1: NormallyConnectable = 1
     _pHIDInfoChar->setData(_hidInfo, sizeof(_hidInfo));
 }
 
-void BLEHIDDevice::setBattLevel(uint8_t level) {
+void BLEHIDDevice::setBattLevel(uint8_t level)
+{
     _pBattLevelChar->writeData8(level);
 }
 
-void BLEHIDDevice::setPNPInfo(uint8_t sig, uint16_t vid, uint16_t pid, uint16_t version) {
+void BLEHIDDevice::setPNPInfo(uint8_t sig, uint16_t vid, uint16_t pid, uint16_t version)
+{
     _pnpInfo[0] = sig;
-    _pnpInfo[1] = (uint8_t) (vid >> 8);
-    _pnpInfo[2] = (uint8_t) (vid);
-    _pnpInfo[3] = (uint8_t) (pid >> 8);
-    _pnpInfo[4] = (uint8_t) (pid);
-    _pnpInfo[5] = (uint8_t) (version >> 8);
-    _pnpInfo[6] = (uint8_t) (version);
+    _pnpInfo[1] = (uint8_t)(vid >> 8);
+    _pnpInfo[2] = (uint8_t)(vid);
+    _pnpInfo[3] = (uint8_t)(pid >> 8);
+    _pnpInfo[4] = (uint8_t)(pid);
+    _pnpInfo[5] = (uint8_t)(version >> 8);
+    _pnpInfo[6] = (uint8_t)(version);
     _pPNPChar->setData(_pnpInfo, sizeof(_pnpInfo));
 }
 
-void BLEHIDDevice::setManufacturerString(const char* manufacturer) {
+void BLEHIDDevice::setManufacturerString(const char* manufacturer)
+{
     _pManufacturerChar->writeString(manufacturer);
 }
 
-void BLEHIDDevice::setModelString(const char* model) {
+void BLEHIDDevice::setModelString(const char* model)
+{
     _pModelChar->writeString(model);
 }
 
-BLEService& BLEHIDDevice::hidService() {
+BLEService& BLEHIDDevice::hidService()
+{
     return *_pHIDService;
 }
 
-BLEService& BLEHIDDevice::devInfoService() {
+BLEService& BLEHIDDevice::devInfoService()
+{
     return *_pDISService;
 }
 
-BLEService& BLEHIDDevice::battService() {
+BLEService& BLEHIDDevice::battService()
+{
     return *_pBASService;
 }
-

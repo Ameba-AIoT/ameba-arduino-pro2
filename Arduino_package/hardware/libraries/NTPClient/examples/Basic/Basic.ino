@@ -13,7 +13,8 @@ char pass[] = "Password";
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -23,10 +24,11 @@ void setup() {
         Serial.print(".");
     }
 
-  timeClient.begin();
+    timeClient.begin();
 }
 
-void loop() {
+void loop()
+{
     timeClient.update();
 
     Serial.println(timeClient.getFormattedTime());

@@ -1,26 +1,26 @@
 /*******************************************************
  * BLEV7RC_CAR_VIDEO.ino - BLE Remote Control Car Arduino Code
- * 
+ *
  * Author: Kevin Chen
  * Date: 2023/8/15
- * 
+ *
  * Version: 1.0.0
- * 
+ *
  * This code was written by Kevin Chen.
- * 
+ *
  * This is an open-source program, and it can be freely used, modified, and distributed under the following conditions:
- * 
+ *
  * 1. The original copyright notice must not be removed or modified.
  * 2. Projects or products using this code must acknowledge the original author's name and the source in applicable documentation, websites, or other related materials.
  * 3. Any derivative work based on this code must state its origin and retain the original copyright notice in its documentation.
  * 4. This code must not be used for any activities that may infringe upon the rights of others, be unlawful, or harmful, whether in a commercial or non-commercial environment.
- * 
+ *
  * This code is provided "as is" with no warranty, expressed or implied. The author is not liable for any losses or damages caused by using the code.
- * 
+ *
  * Users of BLEV7RC_CAR_VIDEO.ino assume all risks associated with its use, and the author shall not be held responsible for any consequences.
- * 
+ *
  * For more information about our company, please visit: www.makdev.net
- * 
+ *
  * Example guide:
  * https://www.amebaiot.com/en/amebapro2-arduino-ble-v7rc/
  *******************************************************/
@@ -38,13 +38,13 @@
 #define STRING_BUF_SIZE 100
 #define MaxNumValue     2
 
-#define value1  0
-#define value2  1
+#define value1 0
+#define value2 1
 
-#define MotoA_1A 16   //GPIO
-#define MotoA_1B 7    //PWM
-#define MotoB_1A 17   //GPIO
-#define MotoB_1B 8    //PWM
+#define MotoA_1A 16    // GPIO
+#define MotoA_1B 7     // PWM
+#define MotoB_1A 17    // GPIO
+#define MotoB_1B 8     // PWM
 
 #define CHANNEL 1
 
@@ -53,19 +53,19 @@
 // Channel 1 : 1280 x 720  30FPS H264
 // Channel 2 : 1920 x 1080 30FPS MJPEG
 
-//VideoSetting config(CHANNEL);
-VideoSetting config(VIDEO_D1,CAM_FPS,VIDEO_H264,0);
+// VideoSetting config(CHANNEL);
+VideoSetting config(VIDEO_D1, CAM_FPS, VIDEO_H264, 0);
 RTSP rtsp1;
 RTSP rtsp2;
-StreamIO videoStreamer(1, 2);   // 1 Input Video -> 1 Output RTSP
+StreamIO videoStreamer(1, 2);    // 1 Input Video -> 1 Output RTSP
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
 typedef struct {
     bool reciveCMDFlag;
-    int  ReciveValue;
+    int ReciveValue;
 } _rCMD;
 
 BLEService UartService(UART_SERVICE_UUID);
@@ -79,7 +79,8 @@ uint8_t Count;
 String CMDRefer[5] = {"SS2", "SS4", "SRT", "SR2", "SRV"};
 _rCMD bleReciveData[MaxNumValue];
 
-void forward() {
+void forward()
+{
     digitalWrite(MotoA_1A, 1);
     analogWrite(MotoA_1B, 5);
 
@@ -89,7 +90,8 @@ void forward() {
     delay(50);
 }
 
-void backward() {
+void backward()
+{
     digitalWrite(MotoA_1A, 0);
     analogWrite(MotoA_1B, 250);
 
@@ -99,7 +101,8 @@ void backward() {
     delay(50);
 }
 
-void turnRight() {
+void turnRight()
+{
     digitalWrite(MotoA_1A, 1);
     analogWrite(MotoA_1B, 5);
 
@@ -109,7 +112,8 @@ void turnRight() {
     delay(50);
 }
 
-void turnLeft() {
+void turnLeft()
+{
     digitalWrite(MotoA_1A, 0);
     analogWrite(MotoA_1B, 250);
 
@@ -119,7 +123,8 @@ void turnLeft() {
     delay(50);
 }
 
-void BrakeAll() {
+void BrakeAll()
+{
     digitalWrite(MotoA_1A, 0);
     analogWrite(MotoA_1B, 0);
 
@@ -129,12 +134,14 @@ void BrakeAll() {
     delay(50);
 }
 
-void readCB(BLECharacteristic* chr, uint8_t connID) {
+void readCB(BLECharacteristic* chr, uint8_t connID)
+{
     printf("Characteristic %s read by connection %d \n", chr->getUUID().str(), connID);
 }
 
-void writeCB(BLECharacteristic* chr, uint8_t connID) {
-    //printf("Characteristic %s write by connection %d :\n", chr->getUUID().str(), connID);
+void writeCB(BLECharacteristic* chr, uint8_t connID)
+{
+    // printf("Characteristic %s write by connection %d :\n", chr->getUUID().str(), connID);
     if (chr->getDataLen() > 0) {
         ParseCMDString(chr->readString());
         // Serial.print("Received string: ");
@@ -143,7 +150,8 @@ void writeCB(BLECharacteristic* chr, uint8_t connID) {
     }
 }
 
-void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
+void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd)
+{
     if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
         printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         notify = true;
@@ -153,7 +161,8 @@ void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
     }
 }
 
-void ParseCMDString(String cmd) {
+void ParseCMDString(String cmd)
+{
     int comdLength = cmd.length();
     int chkx;
     int CMDMaxNUM = sizeof(CMDRefer) / sizeof(String);
@@ -175,7 +184,7 @@ void ParseCMDString(String cmd) {
         while (x < (comdLength - 1)) {
             if ((x + 3) < comdLength) {
                 String _NumString = cmd.substring(x, (x + 4));
-                //Serial.println(_NumString);
+                // Serial.println(_NumString);
                 if (ValueIndex < MaxNumValue) {
                     if (bleReciveData[ValueIndex].ReciveValue != _NumString.toInt()) {
                         bleReciveData[ValueIndex].ReciveValue = _NumString.toInt();
@@ -189,7 +198,8 @@ void ParseCMDString(String cmd) {
     }
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");
@@ -209,7 +219,8 @@ void printInfo(void) {
     rtsp2.printInfo();
 }
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     advdata.addFlags(GAP_ADTYPE_FLAGS_LIMITED | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED);
@@ -273,18 +284,19 @@ void setup() {
     delay(1000);
     printInfo();
 
-    pinMode(MotoA_1A,OUTPUT);
-    pinMode(MotoA_1B,OUTPUT);
-    pinMode(MotoB_1A,OUTPUT);
-    pinMode(MotoB_1B,OUTPUT);
+    pinMode(MotoA_1A, OUTPUT);
+    pinMode(MotoA_1B, OUTPUT);
+    pinMode(MotoB_1A, OUTPUT);
+    pinMode(MotoB_1B, OUTPUT);
 
-    digitalWrite(MotoA_1A,0);
-    digitalWrite(MotoA_1B,0);
-    digitalWrite(MotoB_1A,0);
-    digitalWrite(MotoB_1B,0);
+    digitalWrite(MotoA_1A, 0);
+    digitalWrite(MotoA_1B, 0);
+    digitalWrite(MotoB_1A, 0);
+    digitalWrite(MotoB_1B, 0);
 }
 
-void loop() {
+void loop()
+{
     while (Count < MaxNumValue) {
         if (bleReciveData[Count].reciveCMDFlag) {
             bleReciveData[Count].reciveCMDFlag = false;

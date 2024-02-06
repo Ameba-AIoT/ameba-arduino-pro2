@@ -35,10 +35,11 @@ NTPClient timeClient(ntpUDP, "sg.pool.ntp.org", 28800, 60000);
 
 VideoSetting config(CHANNEL);
 MP4Recording mp4;
-StreamIO videoStreamer(1, 1);  // 1 Input Video -> 1 Output RTSP
+StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output RTSP
 bool updatemodifiedtime = false;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -76,9 +77,10 @@ void setup() {
     printInfo();
 }
 
-void loop() {
-    //For updating last modified time after recording stop
-    int state = (int) mp4.getRecordingState();
+void loop()
+{
+    // For updating last modified time after recording stop
+    int state = (int)mp4.getRecordingState();
     if (state == 0 && updatemodifiedtime == false) {
         timeClient.update();
 
@@ -100,7 +102,8 @@ void loop() {
     delay(100);
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

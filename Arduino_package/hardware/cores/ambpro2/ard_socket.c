@@ -5,19 +5,20 @@
 #include <platform_stdlib.h>
 #include <platform_opts.h>
 
-#define MAX_RECV_SIZE 1500
-#define MAX_SEND_SIZE 256
+#define MAX_RECV_SIZE   1500
+#define MAX_SEND_SIZE   256
 #define UDP_SERVER_PORT 5002
 #define TCP_SERVER_PORT 5003
 
-//static int EXAMPLE_IPV6 = 0;
+// static int EXAMPLE_IPV6 = 0;
 
-int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
+int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode)
+{
     int enable = 1;
     int timeout;
     int _sock;
 
-    //create socket
+    // create socket
     if (protMode == TCP_MODE) {
         // TCP
         _sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -37,9 +38,9 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
     serv_addr.sin_addr.s_addr = ipAddress;
     serv_addr.sin_port = htons(port);
 
-    //Connecting to server
+    // Connecting to server
     if (protMode == TCP_MODE) {
-        //TCP MODE
+        // TCP MODE
         if (connect(_sock, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
             printf("\r\n[INFO] Connect to Server successfully!\r\n");
             timeout = 3000;
@@ -55,7 +56,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode) {
             return -1;
         }
     } else {
-        //printf("\r\n[INFO] Udp client setup Server's information successful!\n");
+        // printf("\r\n[INFO] Udp client setup Server's information successful!\n");
     }
     return _sock;
 }
@@ -174,7 +175,8 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode) {
 }
 #endif
 
-int set_nonblocking(int fd) {
+int set_nonblocking(int fd)
+{
     int flags;
 
     flags = fcntl(fd, F_GETFL, 0);
@@ -188,10 +190,11 @@ int set_nonblocking(int fd) {
     return 0;
 }
 
-int start_server(uint16_t port, uint8_t protMode) {
+int start_server(uint16_t port, uint8_t protMode)
+{
     int _sock;
     int timeout;
-    //create socket
+    // create socket
     if (protMode == TCP_MODE) {
         timeout = 3000;
         _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -222,7 +225,7 @@ int start_server(uint16_t port, uint8_t protMode) {
         printf("\r\n[ERROR] %s On binding\r\n", __FUNCTION__);
         return -1;
     }
-    //lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
+    // lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
     return _sock;
 }
 
@@ -268,29 +271,32 @@ int start_server_v6(uint16_t port, uint8_t protMode) {
 }
 #endif
 
-int get_sock_errno(int sock) {
-// https://www.nongnu.org/lwip/2_1_x/upgrading.html
-// socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
-// All other/normal/synchronous errors are (and always were) available via 'errno'.
+int get_sock_errno(int sock)
+{
+    // https://www.nongnu.org/lwip/2_1_x/upgrading.html
+    // socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
+    // All other/normal/synchronous errors are (and always were) available via 'errno'.
 
-//    int so_error;
-//    socklen_t len = sizeof(so_error);
-//    lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
-//    return so_error;
+    //    int so_error;
+    //    socklen_t len = sizeof(so_error);
+    //    lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
+    //    return so_error;
 
     if (fcntl(sock, F_GETFL, 0) & O_NONBLOCK) {
-        //printf("\r\n[INFO] %s Non blocking\r\n", __FUNCTION__);
+        // printf("\r\n[INFO] %s Non blocking\r\n", __FUNCTION__);
         return 0;
     }
 
     return errno;
 }
 
-int set_sock_recv_timeout(int sock, int timeout) {
+int set_sock_recv_timeout(int sock, int timeout)
+{
     return lwip_setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 }
 
-void close_socket(int sock) {
+void close_socket(int sock)
+{
     lwip_close(sock);
 }
 
@@ -308,18 +314,20 @@ int get_ipv6_status(void) {
 #endif
 
 // TCP
-int sock_listen(int sock, int max) {
+int sock_listen(int sock, int max)
+{
     if (listen(sock, max) < 0) {
         // printf("\r\n ERROR on listening\r\n");
         printf("\r\n[ERROR] %s Listen socket failed, socket closed\n", __FUNCTION__);
         close_socket(sock);
         return -1;
     }
-    //printf("\r\n[INFO] Listen socket successfully\n");
+    // printf("\r\n[INFO] Listen socket successfully\n");
     return 0;
 }
 
-int get_available(int sock) {
+int get_available(int sock)
+{
     int enable = 1;
     int timeout;
     int client_fd;
@@ -348,7 +356,7 @@ int get_available(int sock) {
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
-        //printf("\r\n[INFO] Accept connection successfully\n");
+        // printf("\r\n[INFO] Accept connection successfully\n");
         printf("\r\n[INFO] A client connected to this server :\r\n[PORT]: %d\r\n[IP]:%s\r\n\r\n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
         return client_fd;
     }
@@ -393,7 +401,8 @@ int get_available_v6(int sock) {
 }
 #endif
 
-int recv_data(int sock, const uint8_t *data, uint32_t len, int flag) {
+int recv_data(int sock, const uint8_t *data, uint32_t len, int flag)
+{
     int ret;
 
     ret = lwip_recv(sock, (void *)data, len, flag);
@@ -401,16 +410,18 @@ int recv_data(int sock, const uint8_t *data, uint32_t len, int flag) {
     return ret;
 }
 
-int send_data(int sock, const uint8_t *data, uint32_t len, int flag) {
+int send_data(int sock, const uint8_t *data, uint32_t len, int flag)
+{
     int ret;
-    //printf("\r\n[INFO] %s send_data()\r\n", __FUNCTION__);
+    // printf("\r\n[INFO] %s send_data()\r\n", __FUNCTION__);
     ret = lwip_send(sock, data, len, flag);
 
     return ret;
 }
 
 // UDP
-int sendto_data(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port) {
+int sendto_data(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port)
+{
     int ret;
     struct sockaddr_in peer_addr;
 
@@ -443,7 +454,8 @@ int sendto_data_v6(int sock, const void *send_data, size_t len, uint32_t peer_ip
 }
 #endif
 
-int get_receive(int sock, uint8_t *data, int length, int flag, uint32_t *peer_addr, uint16_t *peer_port) {
+int get_receive(int sock, uint8_t *data, int length, int flag, uint32_t *peer_addr, uint16_t *peer_port)
+{
     int ret = 0;
     struct sockaddr from;
     socklen_t fromlen;

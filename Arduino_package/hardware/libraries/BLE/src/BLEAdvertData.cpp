@@ -16,10 +16,12 @@
 #include "gap_scan.h"
 #include "gap_storage_le.h"
 
-BLEAdvertData::BLEAdvertData() {
+BLEAdvertData::BLEAdvertData()
+{
 }
 
-void BLEAdvertData::clear() {
+void BLEAdvertData::clear()
+{
     memset(_data, 0, sizeof(_data));
     _dataSize = 0;
     _rssi = 0;
@@ -32,7 +34,8 @@ void BLEAdvertData::clear() {
     _manufacturerDataLength = 0;
 }
 
-void BLEAdvertData::addData(const uint8_t* data, uint8_t size) {
+void BLEAdvertData::addData(const uint8_t *data, uint8_t size)
+{
     if ((31 - _dataSize) < size) {
         printf("\r\n[INFO] Insufficient space in advertising data packet\n");
         return;
@@ -50,13 +53,15 @@ void BLEAdvertData::addData(const uint8_t* data, uint8_t size) {
 // GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED                0x04 //!< Discovery Mode: BR/EDR Not Supported
 // GAP_ADTYPE_FLAGS_SIMULTANEOUS_LE_BREDR_CONTROLLER   0x08 //!< Discovery Mode: Simultaneous LE and BR/EDR Controller Supported
 // GAP_ADTYPE_FLAGS_SIMULTANEOUS_LE_BREDR_HOST         0x10 //!< Discovery Mode: Simultaneous LE and BR/EDR Host Supported
-uint8_t BLEAdvertData::addFlags(uint8_t flags) {
+uint8_t BLEAdvertData::addFlags(uint8_t flags)
+{
     uint8_t data[3] = {2, GAP_ADTYPE_FLAGS, flags};
     addData(data, 3);
     return _dataSize;
 }
 
-uint8_t BLEAdvertData::addPartialServices(BLEUUID uuid) {
+uint8_t BLEAdvertData::addPartialServices(BLEUUID uuid)
+{
     _serviceList[_serviceCount++] = (uuid);
     switch (uuid.length()) {
         case 2: {
@@ -83,7 +88,8 @@ uint8_t BLEAdvertData::addPartialServices(BLEUUID uuid) {
     return _dataSize;
 }
 
-uint8_t BLEAdvertData::addCompleteServices(BLEUUID uuid) {
+uint8_t BLEAdvertData::addCompleteServices(BLEUUID uuid)
+{
     _serviceList[_serviceCount++] = (uuid);
     switch (uuid.length()) {
         case 2: {
@@ -110,8 +116,9 @@ uint8_t BLEAdvertData::addCompleteServices(BLEUUID uuid) {
     return _dataSize;
 }
 
-uint8_t BLEAdvertData::addCompleteServices(uint8_t uuidBitLength) {
-        switch (uuidBitLength) {
+uint8_t BLEAdvertData::addCompleteServices(uint8_t uuidBitLength)
+{
+    switch (uuidBitLength) {
         case 16: {
             uint8_t data[2] = {1, GAP_ADTYPE_16BIT_COMPLETE};
             addData(data, 2);
@@ -134,16 +141,18 @@ uint8_t BLEAdvertData::addCompleteServices(uint8_t uuidBitLength) {
 }
 
 // Refer to gap_le_types.h or Bluetooth specifications for full list of appearances
-uint8_t BLEAdvertData::addAppearance(uint16_t appearance) {
+uint8_t BLEAdvertData::addAppearance(uint16_t appearance)
+{
     _devAppearance = appearance;
-    uint8_t appHigh = (uint8_t)((appearance & 0xFF00)>> 8);
+    uint8_t appHigh = (uint8_t)((appearance & 0xFF00) >> 8);
     uint8_t appLow = (uint8_t)(appearance & 0x00FF);
     uint8_t data[4] = {3, GAP_ADTYPE_APPEARANCE, appLow, appHigh};
     addData(data, 4);
     return _dataSize;
 }
 
-uint8_t BLEAdvertData::addShortName(const char* str) {
+uint8_t BLEAdvertData::addShortName(const char *str)
+{
     _devName = String(str);
     uint8_t length = _devName.length();
     uint8_t data[(2 + length)] = {(uint8_t)(1 + length), GAP_ADTYPE_LOCAL_NAME_SHORT};
@@ -152,7 +161,8 @@ uint8_t BLEAdvertData::addShortName(const char* str) {
     return _dataSize;
 }
 
-uint8_t BLEAdvertData::addCompleteName(const char* str) {
+uint8_t BLEAdvertData::addCompleteName(const char *str)
+{
     _devName = String(str);
     uint8_t length = _devName.length();
     uint8_t data[(2 + length)] = {(uint8_t)(1 + length), GAP_ADTYPE_LOCAL_NAME_COMPLETE};
@@ -161,7 +171,8 @@ uint8_t BLEAdvertData::addCompleteName(const char* str) {
     return _dataSize;
 }
 
-void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data) {
+void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data)
+{
     T_LE_SCAN_INFO *scan_info = p_data->p_le_scan_info;
     clear();
 
@@ -186,7 +197,7 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data) {
             // AD Type, one octet.
             type = scan_info->data[pos];
 
-            //if (BTDEBUG) printf("\r\n[INFO] parseScanInfo: AD Structure Info: AD type 0x%x, AD Data Length %d\n", type, (length - 1));
+            // if (BTDEBUG) printf("\r\n[INFO] parseScanInfo: AD Structure Info: AD type 0x%x, AD Data Length %d\n", type, (length - 1));
 
             switch (type) {
                 case GAP_ADTYPE_FLAGS: {
@@ -235,7 +246,7 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data) {
                 case GAP_ADTYPE_LOCAL_NAME_SHORT:
                 case GAP_ADTYPE_LOCAL_NAME_COMPLETE: {
                     buffer[length - 1] = '\0';
-                    _devName = (String((char*)buffer));
+                    _devName = (String((char *)buffer));
                     break;
                 }
 
@@ -245,13 +256,13 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data) {
                 }
 
                 case GAP_ADTYPE_APPEARANCE: {
-                    _devAppearance = (((uint16_t)buffer[1] << 8)|(buffer[0]));
+                    _devAppearance = (((uint16_t)buffer[1] << 8) | (buffer[0]));
                     break;
                 }
 
                 case GAP_ADTYPE_MANUFACTURER_SPECIFIC: {
-                    uint8_t data_len = length - 3;      // adtype (-1), manufacturerID (-2)
-                    _manufacturer = (((uint16_t)buffer[1] << 8)|(buffer[0]));
+                    uint8_t data_len = length - 3;    // adtype (-1), manufacturerID (-2)
+                    _manufacturer = (((uint16_t)buffer[1] << 8) | (buffer[0]));
                     memcpy(_manufacturerData, (buffer + 2), data_len);
                     _manufacturerDataLength = data_len;
                     break;
@@ -260,7 +271,7 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data) {
                 default: {
                     uint8_t i = 0;
                     for (i = 0; i < (length - 1); i++) {
-                        //if (BTDEBUG) printf("\r\n[INFO] parseScanInfo: Unhandled Data = 0x%x\n", scan_info->data[(pos + i)]);
+                        // if (BTDEBUG) printf("\r\n[INFO] parseScanInfo: Unhandled Data = 0x%x\n", scan_info->data[(pos + i)]);
                     }
                     break;
                 }
@@ -270,70 +281,87 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data) {
     }
 }
 
-bool BLEAdvertData::hasFlags() {
+bool BLEAdvertData::hasFlags()
+{
     return (_flags > 0);
 }
 
-bool BLEAdvertData::hasUUID() {
+bool BLEAdvertData::hasUUID()
+{
     return (_serviceCount > 0);
 }
 
-bool BLEAdvertData::hasName() {
+bool BLEAdvertData::hasName()
+{
     return ((_devName.length()) > 0);
 }
 
-bool BLEAdvertData::hasManufacturer() {
+bool BLEAdvertData::hasManufacturer()
+{
     return (_manufacturerDataLength > 0);
 }
 
-T_GAP_ADV_EVT_TYPE BLEAdvertData::getAdvType() {
+T_GAP_ADV_EVT_TYPE BLEAdvertData::getAdvType()
+{
     return _advType;
 }
 
-T_GAP_REMOTE_ADDR_TYPE BLEAdvertData::getAddrType() {
+T_GAP_REMOTE_ADDR_TYPE BLEAdvertData::getAddrType()
+{
     return _addrType;
 }
 
-BLEAddr BLEAdvertData::getAddr() {
+BLEAddr BLEAdvertData::getAddr()
+{
     return _address;
 }
 
-int8_t BLEAdvertData::getRSSI() {
+int8_t BLEAdvertData::getRSSI()
+{
     return _rssi;
 }
 
-uint8_t BLEAdvertData::getFlags() {
+uint8_t BLEAdvertData::getFlags()
+{
     return _flags;
 }
 
-uint8_t BLEAdvertData::getServiceCount() {
+uint8_t BLEAdvertData::getServiceCount()
+{
     return _serviceCount;
 }
 
-BLEUUID* BLEAdvertData::getServiceList() {
+BLEUUID *BLEAdvertData::getServiceList()
+{
     return _serviceList;
 }
 
-String BLEAdvertData::getName() {
+String BLEAdvertData::getName()
+{
     return _devName;
 }
 
-int8_t BLEAdvertData::getTxPower() {
+int8_t BLEAdvertData::getTxPower()
+{
     return _txPower;
 }
 
-uint16_t BLEAdvertData::getAppearance() {
+uint16_t BLEAdvertData::getAppearance()
+{
     return _devAppearance;
 }
 
-uint16_t BLEAdvertData::getManufacturer() {
+uint16_t BLEAdvertData::getManufacturer()
+{
     return _manufacturer;
 }
 
-uint8_t BLEAdvertData::getManufacturerDataLength() {
+uint8_t BLEAdvertData::getManufacturerDataLength()
+{
     return _manufacturerDataLength;
 }
 
-uint8_t* BLEAdvertData::getManufacturerData() {
+uint8_t *BLEAdvertData::getManufacturerData()
+{
     return _manufacturerData;
 }

@@ -9,7 +9,8 @@
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     char buf[512];
     char path[512];
     char *p;
@@ -37,7 +38,8 @@ void setup() {
     fs.end();
 }
 
-void loop() {
+void loop()
+{
     // put your main code here, to run repeatedly:
     delay(1000);
 }

@@ -18,11 +18,13 @@
 
 uint8_t BLEScan::_scanProcessing = 0;
 
-BLEScan::BLEScan() {
+BLEScan::BLEScan()
+{
     _scanProcessing = 0;
 }
 
-void BLEScan::updateScanParams() {
+void BLEScan::updateScanParams()
+{
     le_scan_set_param(GAP_PARAM_SCAN_MODE, sizeof(_scanMode), &_scanMode);
     le_scan_set_param(GAP_PARAM_SCAN_INTERVAL, sizeof(_scanInterval), &_scanInterval);
     le_scan_set_param(GAP_PARAM_SCAN_WINDOW, sizeof(_scanWindow), &_scanWindow);
@@ -30,14 +32,16 @@ void BLEScan::updateScanParams() {
     le_scan_set_param(GAP_PARAM_SCAN_FILTER_DUPLICATES, sizeof(_scanFilterDuplicate), &_scanFilterDuplicate);
 }
 
-void BLEScan::startScan(uint32_t scanDuration_ms) {
+void BLEScan::startScan(uint32_t scanDuration_ms)
+{
     startScan();
     vTaskDelay(scanDuration_ms / portTICK_RATE_MS);
     stopScan();
     vTaskDelay(100 / portTICK_RATE_MS);
 }
 
-void BLEScan::startScan() {
+void BLEScan::startScan()
+{
     T_GAP_CAUSE cause;
     if (_scanProcessing) {
         printf("\r\n[ERROR] Scan is processing, please stop it first\n");
@@ -51,7 +55,8 @@ void BLEScan::startScan() {
     }
 }
 
-void BLEScan::stopScan() {
+void BLEScan::stopScan()
+{
     if (_scanProcessing) {
         le_scan_stop();
         _scanProcessing = 0;
@@ -60,7 +65,8 @@ void BLEScan::stopScan() {
     }
 }
 
-void BLEScan::setScanMode(uint8_t scanMode) {
+void BLEScan::setScanMode(uint8_t scanMode)
+{
     if (scanMode == GAP_SCAN_MODE_PASSIVE) {
         _scanMode = GAP_SCAN_MODE_PASSIVE;
     } else if (scanMode == GAP_SCAN_MODE_ACTIVE) {
@@ -68,23 +74,26 @@ void BLEScan::setScanMode(uint8_t scanMode) {
     }
 }
 
-void BLEScan::setScanInterval(uint16_t scanInt_ms) {
+void BLEScan::setScanInterval(uint16_t scanInt_ms)
+{
     if ((scanInt_ms >= 3) && (scanInt_ms <= 10240)) {
-        _scanInterval = (scanInt_ms*1000/625);
+        _scanInterval = (scanInt_ms * 1000 / 625);
     }
 }
 
-void BLEScan::setScanWindow(uint16_t scanWindow_ms) {
+void BLEScan::setScanWindow(uint16_t scanWindow_ms)
+{
     if ((scanWindow_ms * 1000 / 625) > _scanInterval) {
         printf("\r\n[ERROR] Scan window should be less than or equal to scan interval\n");
         return;
     }
     if ((scanWindow_ms >= 3) && (scanWindow_ms <= 10240)) {
-        _scanWindow = (scanWindow_ms*1000/625);
+        _scanWindow = (scanWindow_ms * 1000 / 625);
     }
 }
 
-void BLEScan::setScanDuplicateFilter(bool dupeFilter) {
+void BLEScan::setScanDuplicateFilter(bool dupeFilter)
+{
     if (dupeFilter) {
         _scanFilterDuplicate = GAP_SCAN_FILTER_DUPLICATE_ENABLE;
     } else {
@@ -92,42 +101,44 @@ void BLEScan::setScanDuplicateFilter(bool dupeFilter) {
     }
 }
 
-bool BLEScan::scanInProgress() {
+bool BLEScan::scanInProgress()
+{
     if (_scanProcessing) {
         return true;
     }
     return false;
 }
 
-void BLEScan::printScanInfo(T_LE_CB_DATA *p_data) {
+void BLEScan::printScanInfo(T_LE_CB_DATA *p_data)
+{
     char adv_type[20];
     char remote_addr_type[10];
     T_LE_SCAN_INFO *scan_info = p_data->p_le_scan_info;
 
     sprintf(adv_type,
             "%s",
-            (scan_info->adv_type ==GAP_ADV_EVT_TYPE_UNDIRECTED)? "CON_UNDIRECT":
-            (scan_info->adv_type ==GAP_ADV_EVT_TYPE_DIRECTED)? "CON_DIRECT":
-            (scan_info->adv_type ==GAP_ADV_EVT_TYPE_SCANNABLE)? "SCAN_UNDIRECT":
-            (scan_info->adv_type ==GAP_ADV_EVT_TYPE_NON_CONNECTABLE)? "NON_CONNECTABLE":
-            (scan_info->adv_type ==GAP_ADV_EVT_TYPE_SCAN_RSP)? "SCAN_RSP":"unknown");
+            (scan_info->adv_type == GAP_ADV_EVT_TYPE_UNDIRECTED) ? "CON_UNDIRECT" : (scan_info->adv_type == GAP_ADV_EVT_TYPE_DIRECTED)      ? "CON_DIRECT"
+                                                                                : (scan_info->adv_type == GAP_ADV_EVT_TYPE_SCANNABLE)       ? "SCAN_UNDIRECT"
+                                                                                : (scan_info->adv_type == GAP_ADV_EVT_TYPE_NON_CONNECTABLE) ? "NON_CONNECTABLE"
+                                                                                : (scan_info->adv_type == GAP_ADV_EVT_TYPE_SCAN_RSP)        ? "SCAN_RSP"
+                                                                                                                                            : "unknown");
 
     sprintf(remote_addr_type,
             "%s",
-            (scan_info->remote_addr_type == GAP_REMOTE_ADDR_LE_PUBLIC)? "public":
-            (scan_info->remote_addr_type == GAP_REMOTE_ADDR_LE_RANDOM)? "random":"unknown");
+            (scan_info->remote_addr_type == GAP_REMOTE_ADDR_LE_PUBLIC) ? "public" : (scan_info->remote_addr_type == GAP_REMOTE_ADDR_LE_RANDOM) ? "random"
+                                                                                                                                               : "unknown");
 
     printf("\r\n[INFO] ADVType\t\t\t| AddrType\t| BT_Addr\t\t| rssi\n");
     printf("\r\n[INFO] %s\t\t| %s\t| %02X:%02X:%02X:%02X:%02X:%02X\t| %d\n",
-            adv_type,
-            remote_addr_type,
-            (scan_info->bd_addr)[5],
-            (scan_info->bd_addr)[4],
-            (scan_info->bd_addr)[3],
-            (scan_info->bd_addr)[2],
-            (scan_info->bd_addr)[1],
-            (scan_info->bd_addr)[0],
-            scan_info->rssi);
+           adv_type,
+           remote_addr_type,
+           (scan_info->bd_addr)[5],
+           (scan_info->bd_addr)[4],
+           (scan_info->bd_addr)[3],
+           (scan_info->bd_addr)[2],
+           (scan_info->bd_addr)[1],
+           (scan_info->bd_addr)[0],
+           scan_info->rssi);
 
     uint8_t buffer[32];
     uint8_t pos = 0;
@@ -166,7 +177,7 @@ void BLEScan::printScanInfo(T_LE_CB_DATA *p_data) {
 
                     while (i >= 2) {
                         printf("\r\n[INFO] GAP_ADTYPE_16BIT_XXX: 0x%04X\n", *p_uuid);
-                        p_uuid ++;
+                        p_uuid++;
                         i -= 2;
                     }
                     break;
@@ -175,11 +186,11 @@ void BLEScan::printScanInfo(T_LE_CB_DATA *p_data) {
                 case GAP_ADTYPE_32BIT_MORE:
                 case GAP_ADTYPE_32BIT_COMPLETE: {
                     uint32_t *p_uuid = (uint32_t *)(buffer);
-                    uint8_t    i     = length - 1;
+                    uint8_t i = length - 1;
 
                     while (i >= 4) {
                         printf("\r\n[INFO] GAP_ADTYPE_32BIT_XXX: 0x%08X\n", (unsigned int)*p_uuid);
-                        p_uuid ++;
+                        p_uuid++;
                         i -= 4;
                     }
                     break;

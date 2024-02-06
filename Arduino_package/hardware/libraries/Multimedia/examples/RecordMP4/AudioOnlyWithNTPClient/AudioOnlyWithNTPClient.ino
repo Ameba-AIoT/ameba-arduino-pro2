@@ -38,12 +38,13 @@ AudioSetting configA(0);
 Audio audio;
 AAC aac;
 MP4Recording mp4;
-StreamIO audioStreamer1(1, 1);  // 1 Input Audio -> 1 Output AAC
-StreamIO audioStreamer2(1, 1);  // 1 Input AAC -> 1 Output MP4
+StreamIO audioStreamer1(1, 1);    // 1 Input Audio -> 1 Output AAC
+StreamIO audioStreamer2(1, 1);    // 1 Input AAC -> 1 Output MP4
 
 bool updatemodifiedtime = false;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -88,8 +89,9 @@ void setup() {
     printInfo();
 }
 
-void loop() {
-    //For updating last modified time after recording stop
+void loop()
+{
+    // For updating last modified time after recording stop
     int state = (int)(mp4.getRecordingState());
     if (state == 0 && updatemodifiedtime == false) {
         timeClient.update();
@@ -112,7 +114,8 @@ void loop() {
     delay(100);
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

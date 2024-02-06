@@ -1,19 +1,22 @@
 #include "Arduino.h"
 #include "AmebaFatFSFile.h"
 
-File::File(void) {
+File::File(void)
+{
     _file = NULL;
 }
 
-File::File(const char *filename) {
+File::File(const char *filename)
+{
     _file = NULL;
     open(filename);
 }
 
-bool File::open(const char *filename) {
+bool File::open(const char *filename)
+{
     FRESULT res = FR_OK;
 
-    _file = (FIL*) malloc(sizeof(FIL));
+    _file = (FIL *)malloc(sizeof(FIL));
     if (_file == NULL) {
         res = FR_INT_ERR;
         printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
@@ -31,12 +34,13 @@ bool File::open(const char *filename) {
         return false;
     }
     // Copy file name
-    char const* name = strrchr(filename, '/');
+    const char *name = strrchr(filename, '/');
     strncpy(_name, (name + 1), MAX_FILENAME_LEN);
     return true;
 }
 
-void File::close(void) {
+void File::close(void)
+{
     if (_file != NULL) {
         f_close(_file);
         free(_file);
@@ -44,11 +48,13 @@ void File::close(void) {
     }
 }
 
-size_t File::write(uint8_t c) {
+size_t File::write(uint8_t c)
+{
     return write(&c, 1);
 }
 
-size_t File::write(const uint8_t *buf, size_t size) {
+size_t File::write(const uint8_t *buf, size_t size)
+{
     FRESULT res = FR_OK;
     uint32_t writesize = 0;
 
@@ -62,16 +68,21 @@ size_t File::write(const uint8_t *buf, size_t size) {
     return writesize;
 }
 
-size_t File::write(const char *str) {
-    if (str == NULL) return 0;
+size_t File::write(const char *str)
+{
+    if (str == NULL) {
+        return 0;
+    }
     return write((const uint8_t *)str, strlen(str));
 }
 
-size_t File::write(const char *buf, size_t size) {
+size_t File::write(const char *buf, size_t size)
+{
     return write((const uint8_t *)buf, size);
 }
 
-int File::read(void) {
+int File::read(void)
+{
     FRESULT res = FR_OK;
     char c = -1;
     uint32_t readsize = 0;
@@ -85,7 +96,8 @@ int File::read(void) {
     return c;
 }
 
-int File::read(void *buf, size_t nbyte) {
+int File::read(void *buf, size_t nbyte)
+{
     FRESULT res = FR_OK;
     uint32_t readsize = 0;
 
@@ -98,7 +110,8 @@ int File::read(void *buf, size_t nbyte) {
     return readsize;
 }
 
-int File::peek(void) {
+int File::peek(void)
+{
     int c = -1;
     uint32_t pos = 0;
 
@@ -110,24 +123,27 @@ int File::peek(void) {
     return c;
 }
 
-int File::available(void) {
+int File::available(void)
+{
     int res = 0;
 
     if (_file != NULL) {
         uint32_t size = f_size(_file);
-        uint32_t pos  = f_tell(_file);
+        uint32_t pos = f_tell(_file);
         res = size - pos;
     }
     return res;
 }
 
-void File::flush(void) {
+void File::flush(void)
+{
     if (_file != NULL) {
         f_sync(_file);
     }
 }
 
-bool File::seek(uint32_t pos) {
+bool File::seek(uint32_t pos)
+{
     FRESULT res = FR_OK;
 
     if (_file != NULL) {
@@ -136,7 +152,8 @@ bool File::seek(uint32_t pos) {
     return (res == FR_OK);
 }
 
-uint32_t File::position(void) {
+uint32_t File::position(void)
+{
     uint32_t pos = 0;
 
     if (_file != NULL) {
@@ -145,7 +162,8 @@ uint32_t File::position(void) {
     return pos;
 }
 
-uint32_t File::size(void) {
+uint32_t File::size(void)
+{
     uint32_t size = 0;
 
     if (_file != NULL) {
@@ -154,15 +172,18 @@ uint32_t File::size(void) {
     return size;
 }
 
-File::operator bool() {
+File::operator bool()
+{
     return (_file != NULL);
 }
 
-bool File::isOpen(void) {
+bool File::isOpen(void)
+{
     return (_file != NULL);
 }
 
-const char* File::name(void) {
+const char *File::name(void)
+{
     if (_file != NULL) {
         return _name;
     }

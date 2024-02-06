@@ -15,15 +15,17 @@
  */
 
 const int trigger_pin = 12;
-const int echo_pin    = 11;
+const int echo_pin = 11;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     pinMode(trigger_pin, OUTPUT);
     pinMode(echo_pin, INPUT);
 }
 
-void loop() {
+void loop()
+{
     float duration, distance;
 
     // trigger a 10us HIGH pulse at trigger pin
@@ -32,7 +34,7 @@ void loop() {
     digitalWrite(trigger_pin, LOW);
 
     // measure time cost of pulse HIGH at echo pin
-    duration = pulseIn (echo_pin, HIGH);
+    duration = pulseIn(echo_pin, HIGH);
 
     // calculate the distance from duration
     distance = duration / 58;

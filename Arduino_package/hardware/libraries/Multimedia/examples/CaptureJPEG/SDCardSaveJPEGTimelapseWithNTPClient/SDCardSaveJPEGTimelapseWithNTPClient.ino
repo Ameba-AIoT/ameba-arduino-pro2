@@ -10,7 +10,7 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-#define CHANNEL 0
+#define CHANNEL  0
 #define INTERVAL 1000
 
 char ssid[] = "Network_SSID";
@@ -35,7 +35,8 @@ char path[128];
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -52,7 +53,8 @@ void setup() {
     fs.begin();
 }
 
-void loop() {
+void loop()
+{
     timeClient.update();
     uint16_t year = (uint16_t)timeClient.getYear();
     uint16_t month = (uint16_t)timeClient.getMonth();

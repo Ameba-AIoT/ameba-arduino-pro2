@@ -20,34 +20,33 @@ extern "C" {
 
 class AudioClassificationResult {
     friend class NNAudioClassification;
-    public:
-        int classID(void);
-        int score(void);
+public:
+    int classID(void);
+    int score(void);
 
-    private:
-        yamnet_res_t result = {0};
+private:
+    yamnet_res_t result = {0};
 };
 
-class NNAudioClassification :public NNModelSelection {
-    public:
-        NNAudioClassification (void);
-        ~NNAudioClassification (void);
+class NNAudioClassification: public NNModelSelection {
+public:
+    NNAudioClassification(void);
+    ~NNAudioClassification(void);
 
-        void configAudio (AudioSetting& config, uint16_t bitDepth = 16);
-        void begin (void);
-        void end (void);
+    void configAudio(AudioSetting &config, uint16_t bitDepth = 16);
+    void begin(void);
+    void end(void);
 
-        void setResultCallback(void (*ac_callback)(std::vector<AudioClassificationResult>));
-        uint16_t getResultCount(void);
-        AudioClassificationResult getResult(uint16_t index);
-        std::vector<AudioClassificationResult> getResult(void);
+    void setResultCallback(void (*ac_callback)(std::vector<AudioClassificationResult>));
+    uint16_t getResultCount(void);
+    AudioClassificationResult getResult(uint16_t index);
+    std::vector<AudioClassificationResult> getResult(void);
 
-    private:
-        static void ACResultCallback(void *p, void *img_param);
-        static std::vector<AudioClassificationResult> audio_result_vector;
-        static void (*AC_user_CB)(std::vector<AudioClassificationResult>);
+private:
+    static void ACResultCallback(void *p, void *img_param);
+    static std::vector<AudioClassificationResult> audio_result_vector;
+    static void (*AC_user_CB)(std::vector<AudioClassificationResult>);
 
-        nn_data_param_t audio_nn_params = {0};
-
+    nn_data_param_t audio_nn_params = {0};
 };
 #endif

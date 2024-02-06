@@ -15,10 +15,11 @@ BLEAdvertData advdata;
 
 // We need to define a HID gamepad report descriptor to replace the default keyboard and mouse descriptor
 uint8_t hid_gamepad_report_descriptor[] = {
-    TUD_HID_REPORT_DESC_GAMEPAD(HID_REPORT_ID(1))
+    TUD_HID_REPORT_DESC_GAMEPAD(HID_REPORT_ID(1)),
 };
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     advdata.addFlags();
     advdata.addCompleteName("AMEBA_BLE_HID");
@@ -46,14 +47,15 @@ void setup() {
     BLE.beginPeripheral();
 }
 
-void loop() {
+void loop()
+{
     if (BLE.connected() && digitalRead(ENABLE_PIN)) {
         Serial.println("Moving joysticks and pressing buttons");
         // Press buttons 5 and 16. Move all axes to max. Set DPAD (hat 1) to down right
-        padDev.gamepadReport( (GAMEPAD_BUTTON_4 | GAMEPAD_BUTTON_15) , GAMEPAD_HAT_DOWN_RIGHT, 32767, 32767, 32767, 32767, 32767, 32767);
+        padDev.gamepadReport((GAMEPAD_BUTTON_4 | GAMEPAD_BUTTON_15), GAMEPAD_HAT_DOWN_RIGHT, 32767, 32767, 32767, 32767, 32767, 32767);
         delay(1000);
         // Release button 5. Move all axes to min. Set DPAD (hat 1) to centred
-        padDev.gamepadReport( (GAMEPAD_BUTTON_15), GAMEPAD_HAT_CENTERED, -32767, -32767, -32767, -32767, -32767, -32767);
+        padDev.gamepadReport((GAMEPAD_BUTTON_15), GAMEPAD_HAT_CENTERED, -32767, -32767, -32767, -32767, -32767, -32767);
         delay(1000);
         // Release all buttons and set all axes to centered
         padDev.buttonReleaseAll();

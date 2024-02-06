@@ -23,37 +23,48 @@
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 
-WiFiServer::WiFiServer() : _port(1883) {
+WiFiServer::WiFiServer():
+    _port(1883)
+{
 }
 
-WiFiServer::WiFiServer(uint16_t port) {
+WiFiServer::WiFiServer(uint16_t port)
+{
     _port = port;
 }
 
-WiFiServer::WiFiServer(tProtMode portMode) : _port(1883) {
+WiFiServer::WiFiServer(tProtMode portMode):
+    _port(1883)
+{
     _portMode = portMode;
 }
 
-WiFiServer::WiFiServer(tBlockingMode blockMode) : _port(1883) {
+WiFiServer::WiFiServer(tBlockingMode blockMode):
+    _port(1883)
+{
     _is_blocked = blockMode;
 }
 
-WiFiServer::WiFiServer(uint16_t port, tProtMode portMode) {
+WiFiServer::WiFiServer(uint16_t port, tProtMode portMode)
+{
     _port = port;
     _portMode = portMode;
 }
 
-WiFiServer::WiFiServer(uint16_t port, tProtMode portMode, tBlockingMode blockMode) {
+WiFiServer::WiFiServer(uint16_t port, tProtMode portMode, tBlockingMode blockMode)
+{
     _port = port;
     _portMode = portMode;
     _is_blocked = blockMode;
 }
 
-WiFiServer::~WiFiServer() {
+WiFiServer::~WiFiServer()
+{
     stop();
 }
 
-void WiFiServer::begin() {
+void WiFiServer::begin()
+{
     _is_connected = false;
     _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
     if (_sock_ser < 0) {
@@ -61,11 +72,12 @@ void WiFiServer::begin() {
         printf("\r\n[ERROR] Socket connect failed \n");
     } else {
         _is_connected = true;
-        //printf("\r\n[INFO] Socket connect successfully \n");
+        // printf("\r\n[INFO] Socket connect successfully \n");
     }
 }
 
-WiFiClient WiFiServer::available(uint8_t* status) {
+WiFiClient WiFiServer::available(uint8_t* status)
+{
     int client_fd = (int)(status);
 
     client_fd = serverdrv.getAvailable(_sock_ser);
@@ -114,11 +126,13 @@ int WiFiServer::recv(uint8_t* buf, size_t size) {
 }
 #endif
 
-size_t WiFiServer::write(uint8_t b) {
+size_t WiFiServer::write(uint8_t b)
+{
     return write(&b, 1);
 }
 
-void WiFiServer::stop() {
+void WiFiServer::stop()
+{
     if (_sock_ser < 0) {
         return;
     }
@@ -128,11 +142,13 @@ void WiFiServer::stop() {
 }
 
 // set WiFi server to blocking/non-blocking mode
-void WiFiServer::setBlockingMode() {
+void WiFiServer::setBlockingMode()
+{
     _is_blocked = BLOCKING_MODE;
 }
 
-void WiFiServer::setNonBlockingMode() {
+void WiFiServer::setNonBlockingMode()
+{
     _is_blocked = NON_BLOCKING_MODE;
 }
 

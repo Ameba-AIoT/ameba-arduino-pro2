@@ -17,7 +17,8 @@ WiFiUDP ntpUDP;
 // update interval (in milliseconds, can be changed using setUpdateInterval() ).
 NTPClient timeClient(ntpUDP, "europe.pool.ntp.org", 3600, 60000);
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -29,7 +30,8 @@ void setup() {
     timeClient.begin();
 }
 
-void loop() {
+void loop()
+{
     timeClient.update();
 
     Serial.println(timeClient.getFormattedTime());

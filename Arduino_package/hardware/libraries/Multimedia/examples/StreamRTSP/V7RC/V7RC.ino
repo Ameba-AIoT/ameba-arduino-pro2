@@ -18,13 +18,14 @@
 
 VideoSetting config(VIDEO_D1, CAM_FPS, VIDEO_H264, 0);
 RTSP rtsp;
-StreamIO videoStreamer(1, 1);   // 1 Input Video -> 1 Output RTSP
+StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output RTSP
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // attempt to connect to Wifi network:
@@ -39,7 +40,7 @@ void setup() {
 
     // Configure camera video channel with video format information
     // Adjust the bitrate based on your WiFi network quality
-    //config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    // config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.videoInit();
 
@@ -61,11 +62,13 @@ void setup() {
     printInfo();
 }
 
-void loop() {
+void loop()
+{
     // Do nothing
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

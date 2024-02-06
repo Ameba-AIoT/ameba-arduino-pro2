@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include "NNModelSelection.h"
 
-void NNModelSelection::modelSelect(unsigned char nntask) {
+void NNModelSelection::modelSelect(unsigned char nntask)
+{
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -38,7 +39,8 @@ void NNModelSelection::modelSelect(unsigned char nntask) {
     }
 }
 
-void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel) {
+void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel)
+{
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -85,7 +87,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _yolomodel= NA_MODEL;
+            _yolomodel = NA_MODEL;
             break;
         }
         default:
@@ -103,13 +105,13 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _scrfdmodel= NA_MODEL;
-             break;
+            _scrfdmodel = NA_MODEL;
+            break;
         }
         default:
             _scrfdmodel = NA_MODEL;
     }
-    
+
     // MOBILEFACENET
     switch (facerecogmodel) {
         case DEFAULT_MOBILEFACENET: {
@@ -121,7 +123,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _mfnmodel= NA_MODEL;
+            _mfnmodel = NA_MODEL;
             break;
         }
         default:
@@ -139,7 +141,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _yamnetmodel= NA_MODEL;
+            _yamnetmodel = NA_MODEL;
             break;
         }
         default:
@@ -147,7 +149,8 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
     }
 }
 
-void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel) {
+void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel)
+{
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -194,7 +197,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _yolomodel= NA_MODEL;
+            _yolomodel = NA_MODEL;
             break;
         }
         default:
@@ -212,8 +215,8 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _scrfdmodel= NA_MODEL;
-             break;
+            _scrfdmodel = NA_MODEL;
+            break;
         }
         default:
             _scrfdmodel = NA_MODEL;
@@ -230,7 +233,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             break;
         }
         case NA_MODEL: {
-            _mfnmodel= NA_MODEL;
+            _mfnmodel = NA_MODEL;
             break;
         }
         default:

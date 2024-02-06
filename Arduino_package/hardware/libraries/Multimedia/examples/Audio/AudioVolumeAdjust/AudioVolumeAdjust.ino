@@ -17,11 +17,12 @@
 
 AudioSetting configA(PRESET);
 Audio audio;
-StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output Audio
+StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output Audio
 int micVolume;
 int spkVolume;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // Configure audio peripheral for audio data format
@@ -34,7 +35,8 @@ void setup() {
     audioStreamer.begin();
 }
 
-void loop() {
+void loop()
+{
     micVolume = map(analogRead(A0), 0, 1020, 0, 100);
     spkVolume = map(analogRead(A1), 0, 1020, 0, 100);
     printf("Mic: %d | Spk: %d \r\n", micVolume, spkVolume);

@@ -19,7 +19,8 @@
 #include "gap_scan.h"
 #include "gap_storage_le.h"
 
-BLEConnect::BLEConnect() {
+BLEConnect::BLEConnect()
+{
     _connReqParam.scan_interval = 0x40;
     _connReqParam.scan_window = 0x30;
     _connReqParam.conn_interval_min = 12;
@@ -30,37 +31,46 @@ BLEConnect::BLEConnect() {
     _connReqParam.ce_len_max = 2 * (_connReqParam.conn_interval_max - 1);
 }
 
-bool BLEConnect::connect(char* btAddr, T_GAP_REMOTE_ADDR_TYPE destAddrType, uint16_t scanTimeout) {
+bool BLEConnect::connect(char* btAddr, T_GAP_REMOTE_ADDR_TYPE destAddrType, uint16_t scanTimeout)
+{
     BLEAddr destAddr(btAddr);
     return connect(destAddr, destAddrType, scanTimeout);
 }
 
-bool BLEConnect::connect(uint8_t (&btAddr)[6], T_GAP_REMOTE_ADDR_TYPE destAddrType, uint16_t scanTimeout) {
+bool BLEConnect::connect(uint8_t (&btAddr)[6], T_GAP_REMOTE_ADDR_TYPE destAddrType, uint16_t scanTimeout)
+{
     BLEAddr destAddr(btAddr);
     return connect(destAddr, destAddrType, scanTimeout);
 }
 
-bool BLEConnect::connect(BLEAdvertData targetDevice, uint16_t scanTimeout) {
+bool BLEConnect::connect(BLEAdvertData targetDevice, uint16_t scanTimeout)
+{
     BLEAddr destAddr = targetDevice.getAddr();
     T_GAP_REMOTE_ADDR_TYPE destAddrType = targetDevice.getAddrType();
     return connect(destAddr, destAddrType, scanTimeout);
 }
 
-bool BLEConnect::connect(BLEAddr destAddr, T_GAP_REMOTE_ADDR_TYPE destAddrType, uint16_t scanTimeout) {
+bool BLEConnect::connect(BLEAddr destAddr, T_GAP_REMOTE_ADDR_TYPE destAddrType, uint16_t scanTimeout)
+{
     le_set_conn_param(GAP_CONN_PARAM_1M, &_connReqParamDefault);
     // init connection on default 1M PHYS
     T_GAP_CAUSE result = le_connect(GAP_CONN_PARAM_1M, destAddr.data(), destAddrType, _localAddrType, scanTimeout);
 
     if (result == GAP_CAUSE_SUCCESS) {
-        if (BTDEBUG) printf("\r\n[INFO] Connect successful to %s\n", destAddr.str());
+        if (BTDEBUG) {
+            printf("\r\n[INFO] Connect successful to %s\n", destAddr.str());
+        }
         return true;
     } else {
-        if (BTDEBUG) printf("\r\n[ERROR] Connect failed\n");
+        if (BTDEBUG) {
+            printf("\r\n[ERROR] Connect failed\n");
+        }
         return false;
     }
 }
 
-bool BLEConnect::disconnect(uint8_t connId) {
+bool BLEConnect::disconnect(uint8_t connId)
+{
     T_GAP_CAUSE result = le_disconnect(connId);
 
     if (result == GAP_CAUSE_SUCCESS) {
@@ -70,23 +80,26 @@ bool BLEConnect::disconnect(uint8_t connId) {
     }
 }
 
-void BLEConnect::setScanInterval(uint16_t scanInt_ms) {
-    if((scanInt_ms >= 3) && (scanInt_ms <= 10240)) {
-        _connReqParam.scan_interval = (scanInt_ms*1000/625);
+void BLEConnect::setScanInterval(uint16_t scanInt_ms)
+{
+    if ((scanInt_ms >= 3) && (scanInt_ms <= 10240)) {
+        _connReqParam.scan_interval = (scanInt_ms * 1000 / 625);
     }
 }
 
-void BLEConnect::setScanWindow(uint16_t scanWindow_ms) {
-    if ((scanWindow_ms*1000/625) > _connReqParam.scan_interval) {
+void BLEConnect::setScanWindow(uint16_t scanWindow_ms)
+{
+    if ((scanWindow_ms * 1000 / 625) > _connReqParam.scan_interval) {
         printf("\r\n[INFO] Scan window should be less than or equal to scan interval\n");
         return;
     }
-    if((scanWindow_ms >= 3) && (scanWindow_ms <= 10240)) {
-        _connReqParam.scan_window = (scanWindow_ms*1000/625);
+    if ((scanWindow_ms >= 3) && (scanWindow_ms <= 10240)) {
+        _connReqParam.scan_window = (scanWindow_ms * 1000 / 625);
     }
 }
 
-void BLEConnect::setConnInterval(uint16_t min_ms, uint16_t max_ms) {
+void BLEConnect::setConnInterval(uint16_t min_ms, uint16_t max_ms)
+{
     if ((min_ms < 8) || (min_ms > 4000) || (max_ms < 8) || (max_ms > 4000)) {
         printf("\r\n[ERROR] valid conn interval values range from 8ms to 4000ms \n");
         return;
@@ -95,13 +108,14 @@ void BLEConnect::setConnInterval(uint16_t min_ms, uint16_t max_ms) {
         printf("\r\n[ERROR] ConnInterval min_ms must be less than or equal to max_ms \n");
         return;
     }
-    _connReqParam.conn_interval_min = (uint16_t)(min_ms/1.25);
-    _connReqParam.conn_interval_max = (uint16_t)(max_ms/1.25);
+    _connReqParam.conn_interval_min = (uint16_t)(min_ms / 1.25);
+    _connReqParam.conn_interval_max = (uint16_t)(max_ms / 1.25);
     _connReqParam.ce_len_min = 2 * (_connReqParam.conn_interval_min - 1);
     _connReqParam.ce_len_max = 2 * (_connReqParam.conn_interval_max - 1);
 }
 
-void BLEConnect::setConnLatency(uint16_t latency) {
+void BLEConnect::setConnLatency(uint16_t latency)
+{
     if (latency > 0x01F3) {
         printf("\r\n[ERROR] valid conn latency values range from 0 to 499 \n");
         return;
@@ -109,15 +123,17 @@ void BLEConnect::setConnLatency(uint16_t latency) {
     _connReqParam.conn_latency = latency;
 }
 
-void BLEConnect::setConnTimeout(uint16_t timeout_ms) {
+void BLEConnect::setConnTimeout(uint16_t timeout_ms)
+{
     if ((timeout_ms < 100) || (timeout_ms > 32000)) {
         printf("\r\n[ERROR] valid conn interval values range from 100ms to 32000ms \n");
         return;
     }
-    _connReqParam.supv_tout = timeout_ms/10;
+    _connReqParam.supv_tout = timeout_ms / 10;
 }
 
-void BLEConnect::updateConnParams(uint8_t conn_id) {
+void BLEConnect::updateConnParams(uint8_t conn_id)
+{
     le_update_conn_param(conn_id,
                          _connReqParam.conn_interval_min,
                          _connReqParam.conn_interval_max,
@@ -127,15 +143,18 @@ void BLEConnect::updateConnParams(uint8_t conn_id) {
                          _connReqParam.ce_len_max);
 }
 
-bool BLEConnect::getConnInfo(uint8_t connId, T_GAP_CONN_INFO *pConnInfo) {
+bool BLEConnect::getConnInfo(uint8_t connId, T_GAP_CONN_INFO* pConnInfo)
+{
     return le_get_conn_info(connId, pConnInfo);
 }
 
-bool BLEConnect::getConnAddr(uint8_t connId, uint8_t* addr, uint8_t* addrType) {
+bool BLEConnect::getConnAddr(uint8_t connId, uint8_t* addr, uint8_t* addrType)
+{
     return le_get_conn_addr(connId, addr, addrType);
 }
 
-int8_t BLEConnect::getConnId(char* btAddr, uint8_t addrType) {
+int8_t BLEConnect::getConnId(char* btAddr, uint8_t addrType)
+{
     uint8_t connId = 0;
     BLEAddr destAddr(btAddr);
 
@@ -146,7 +165,8 @@ int8_t BLEConnect::getConnId(char* btAddr, uint8_t addrType) {
     }
 }
 
-int8_t BLEConnect::getConnId(uint8_t* btAddr, uint8_t addrType) {
+int8_t BLEConnect::getConnId(uint8_t* btAddr, uint8_t addrType)
+{
     uint8_t connId = 0;
 
     if (le_get_conn_id(btAddr, addrType, &connId)) {
@@ -156,7 +176,8 @@ int8_t BLEConnect::getConnId(uint8_t* btAddr, uint8_t addrType) {
     }
 }
 
-int8_t BLEConnect::getConnId(BLEAdvertData targetDevice) {
+int8_t BLEConnect::getConnId(BLEAdvertData targetDevice)
+{
     uint8_t connId = 0;
     uint8_t* btAddr = targetDevice.getAddr().data();
     uint8_t addrType = targetDevice.getAddrType();

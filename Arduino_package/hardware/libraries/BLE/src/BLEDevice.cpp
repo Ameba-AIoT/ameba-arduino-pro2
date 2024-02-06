@@ -41,9 +41,9 @@ BLESecurity* BLEDevice::_pBLESecurity = nullptr;
 BLEService* BLEDevice::_servicePtrList[BLE_MAX_SERVICE_COUNT] = {};
 uint8_t BLEDevice::_serviceCount = 0;
 BLEClient* BLEDevice::_clientPtrList[BLE_CENTRAL_APP_MAX_LINKS] = {};
-void *BLEDevice::_appTaskHandle = NULL;   //!< main task handle
-void *BLEDevice::_evtQueueHandle = NULL;  //!< Event queue handle
-void *BLEDevice::_ioQueueHandle = NULL;   //!< IO queue handle
+void* BLEDevice::_appTaskHandle = NULL;     //!< main task handle
+void* BLEDevice::_evtQueueHandle = NULL;    //!< Event queue handle
+void* BLEDevice::_ioQueueHandle = NULL;     //!< IO queue handle
 T_GAP_DEV_STATE BLEDevice::_gapDevState = {0, 0, 0, 0, 0};
 T_GAP_CONN_STATE BLEDevice::_gapConnState = GAP_CONN_STATE_DISCONNECTED;
 T_APP_LINK BLEDevice::_bleCentralAppLinkTable[BLE_CENTRAL_APP_MAX_LINKS];
@@ -55,12 +55,14 @@ T_GAP_PHYS_OPTIONS BLEDevice::phy_options = GAP_PHYS_OPTIONS_CODED_PREFER_NO;
 const u8 ftl_phy_page_num = 3;
 const u32 ftl_phy_page_start_addr = BT_FTL_BKUP_ADDR;
 
-BLEDevice::BLEDevice() {
+BLEDevice::BLEDevice()
+{
 }
 
 // allocate memory and low level resources for BT
 // call this method before doing anything BT related
-void BLEDevice::init() {
+void BLEDevice::init()
+{
     T_GAP_DEV_STATE new_state;
     if (!(wifi_is_running(WLAN0_IDX) || wifi_is_running(WLAN1_IDX))) {
         wiFiDrv.wifiDriverInit();
@@ -70,7 +72,7 @@ void BLEDevice::init() {
         printf("\r\n[INFO] WiFi not up\n");
     }
 
-    le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
+    le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
     if (new_state.gap_init_state == GAP_INIT_STATE_STACK_READY) {
         printf("\r\n[INFO] BT Stack already on\n");
     } else {
@@ -81,9 +83,10 @@ void BLEDevice::init() {
 }
 
 // free up memory and low level resources used by BT
-void BLEDevice::deinit() {
+void BLEDevice::deinit()
+{
     T_GAP_DEV_STATE new_state;
-    le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
+    le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
     if (new_state.gap_init_state != GAP_INIT_STATE_STACK_READY) {
         printf("\r\n[INFO] BT Stack is not running\n");
     } else {
@@ -96,7 +99,8 @@ void BLEDevice::deinit() {
 }
 
 // Peripheral should use connId = 0
-bool BLEDevice::connected(uint8_t connId) {
+bool BLEDevice::connected(uint8_t connId)
+{
     T_GAP_CONN_INFO connInfo;
     if (configConnection()->getConnInfo(connId, &connInfo)) {
         if (connInfo.conn_state == GAP_CONN_STATE_CONNECTED) {
@@ -112,7 +116,8 @@ bool BLEDevice::connected(uint8_t connId) {
 // other devices will see this name after connection is established
 // note: this is seperate from the device name sent in advertising packets
 // note: this name and advertised name can be different, but ideally should be set as indentical
-void BLEDevice::setDeviceName(String devName) {
+void BLEDevice::setDeviceName(String devName)
+{
     // Set the Device Name in GAP, which will be visible after a connection is established
     if (devName.length() > GAP_DEVICE_NAME_LEN) {
         printf("\r\n[ERROR] Device name too long, maximum of %d chars\n", (GAP_DEVICE_NAME_LEN - 1));
@@ -123,45 +128,52 @@ void BLEDevice::setDeviceName(String devName) {
 // set BLE GAP device appearance
 // default appearance is GAP_GATT_APPEARANCE_UNKNOWN
 // refer to Bluetooth specifications for full list of possible appearances
-void BLEDevice::setDeviceAppearance(uint16_t devAppearance) {
+void BLEDevice::setDeviceAppearance(uint16_t devAppearance)
+{
     _appearance = devAppearance;
 }
 
-BLEAdvert* BLEDevice::configAdvert() {
+BLEAdvert* BLEDevice::configAdvert()
+{
     if (_pBLEAdvert == nullptr) {
         _pBLEAdvert = new BLEAdvert();
     }
     return (_pBLEAdvert);
 }
 
-BLEScan* BLEDevice::configScan() {
+BLEScan* BLEDevice::configScan()
+{
     if (_pBLEScan == nullptr) {
         _pBLEScan = new BLEScan();
     }
     return (_pBLEScan);
 }
 
-BLEConnect* BLEDevice::configConnection() {
-    if(_pBLEConn == nullptr) {
+BLEConnect* BLEDevice::configConnection()
+{
+    if (_pBLEConn == nullptr) {
         _pBLEConn = new BLEConnect();
     }
     return (_pBLEConn);
 }
 
-BLESecurity* BLEDevice::configSecurity() {
-    if(_pBLESecurity == nullptr) {
+BLESecurity* BLEDevice::configSecurity()
+{
+    if (_pBLESecurity == nullptr) {
         _pBLESecurity = new BLESecurity();
     }
     return (_pBLESecurity);
 }
 
-void BLEDevice::setScanCallback(void (*scanCB)(T_LE_CB_DATA*)) {
+void BLEDevice::setScanCallback(void (*scanCB)(T_LE_CB_DATA*))
+{
     _pScanCB = scanCB;
 }
 
 // starts the BLE stack to operate as a central device
 // note: central devices should not advertise to other devices
-void BLEDevice::beginCentral(uint8_t connCount) {
+void BLEDevice::beginCentral(uint8_t connCount)
+{
     T_GAP_DEV_STATE new_state;
     if (_bleState != 0) {
         printf("\r\n[ERROR] BLE already running, unable to start central\n");
@@ -172,7 +184,7 @@ void BLEDevice::beginCentral(uint8_t connCount) {
 
     if (connCount <= BLE_CENTRAL_APP_MAX_LINKS) {
         gap_config_max_le_link_num(connCount);
-        //gap_config_max_le_paired_device(BLE_CENTRAL_APP_MAX_LINKS);
+        // gap_config_max_le_paired_device(BLE_CENTRAL_APP_MAX_LINKS);
         le_gap_init(connCount);
     } else {
         printf("\r\n[ERROR] Recommended max link count exceeded\n");
@@ -189,30 +201,36 @@ void BLEDevice::beginCentral(uint8_t connCount) {
 
     // update scan parameters
     configScan()->updateScanParams();
-    if (BTDEBUG) printf("\r\n[INFO] Scan update\n");
+    if (BTDEBUG) {
+        printf("\r\n[INFO] Scan update\n");
+    }
 
     // configure pairing and bonding parameters
     configSecurity()->setupGAPBondManager();
 
     // register callback to handle app GAP message
     le_register_app_cb(gapCallbackDefault);
-    if (BTDEBUG) printf("\r\n[INFO] GAP cb reg\n");
+    if (BTDEBUG) {
+        printf("\r\n[INFO] GAP cb reg\n");
+    }
 
     // start BLE main task to handle IO and GAP msg
-    os_task_create(&_appTaskHandle, "BLE_Central_Task", BLEMainTask, 0, 1024*2, 1);
-    if (BTDEBUG) printf("\r\n[INFO] Task create\n");
+    os_task_create(&_appTaskHandle, "BLE_Central_Task", BLEMainTask, 0, 1024 * 2, 1);
+    if (BTDEBUG) {
+        printf("\r\n[INFO] Task create\n");
+    }
 
-    //Wait BT init complete
+    // Wait BT init complete
     do {
         vTaskDelay(100 / portTICK_RATE_MS);
-        le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
-    } while(new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
-
+        le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
+    } while (new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
 }
 
 // starts the BLE stack to operate as a peripheral device
 // note: peripheral devices should not scan for other devices
-void BLEDevice::beginPeripheral() {
+void BLEDevice::beginPeripheral()
+{
     T_GAP_DEV_STATE new_state;
     if (_bleState != 0) {
         printf("\r\n[ERROR] BLE already running, unable to start peripheral\n");
@@ -220,7 +238,7 @@ void BLEDevice::beginPeripheral() {
     } else {
         _bleState = 1;
     }
-    uint8_t  slave_init_mtu_req = true;
+    uint8_t slave_init_mtu_req = true;
 
     gap_config_max_le_link_num(1);
     gap_config_max_le_paired_device(3);
@@ -238,29 +256,35 @@ void BLEDevice::beginPeripheral() {
 
     // update advertising parameters
     configAdvert()->updateAdvertParams();
-    if (BTDEBUG) printf("\r\n[INFO] Adv update\n");
+    if (BTDEBUG) {
+        printf("\r\n[INFO] Adv update\n");
+    }
 
     // configure pairing and bonding parameters
     configSecurity()->setupGAPBondManager();
 
     // register callback to handle app GAP message
     le_register_app_cb(gapCallbackDefault);
-    if (BTDEBUG) printf("\r\n[INFO] GAP cb reg\n");
+    if (BTDEBUG) {
+        printf("\r\n[INFO] GAP cb reg\n");
+    }
 
     // start BLE main task to handle IO and GAP msg
-    os_task_create(&_appTaskHandle, "BLE_Peripheral_Task", BLEMainTask, 0, 1024*2, 1);
-    if (BTDEBUG) printf("\r\n[INFO] Task create\n");
+    os_task_create(&_appTaskHandle, "BLE_Peripheral_Task", BLEMainTask, 0, 1024 * 2, 1);
+    if (BTDEBUG) {
+        printf("\r\n[INFO] Task create\n");
+    }
 
     // Wait BT init complete
     do {
         vTaskDelay(100 / portTICK_RATE_MS);
-        le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
+        le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
     } while (new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
-
 }
 
 // stops the BLE stack operating as a peripheral or central device
-void BLEDevice::end() {
+void BLEDevice::end()
+{
     T_GAP_DEV_STATE new_state;
     if (_bleState == 0) {
         printf("\r\n[ERROR] BLE not running, nothing to end\n");
@@ -289,13 +313,13 @@ void BLEDevice::end() {
     _serviceCount = 0;
 
     // check advertising state and stop advertising
-    le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
+    le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
     if (new_state.gap_adv_state != GAP_ADV_STATE_IDLE) {
         le_adv_stop();
     }
 
     // check scan state and stop scan
-    le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
+    le_get_gap_param(GAP_PARAM_DEV_STATE, &new_state);
     if (new_state.gap_scan_state != GAP_SCAN_STATE_SCANNING) {
         le_scan_stop();
     }
@@ -332,7 +356,8 @@ void BLEDevice::end() {
     }
 }
 
-void BLEDevice::configServer(uint8_t maxServiceCount) {
+void BLEDevice::configServer(uint8_t maxServiceCount)
+{
     if (maxServiceCount <= BLE_MAX_SERVICE_COUNT) {
         server_init(maxServiceCount);
         // register default service callback
@@ -342,16 +367,18 @@ void BLEDevice::configServer(uint8_t maxServiceCount) {
     }
 }
 
-void BLEDevice::configClient() {
-        client_init(BLE_CENTRAL_APP_MAX_LINKS);
-        // register default client callback
-        client_register_general_client_cb(appClientCallbackDefault);
+void BLEDevice::configClient()
+{
+    client_init(BLE_CENTRAL_APP_MAX_LINKS);
+    // register default client callback
+    client_register_general_client_cb(appClientCallbackDefault);
 }
 
-void BLEDevice::addService(BLEService& newService) {
+void BLEDevice::addService(BLEService& newService)
+{
     if (_serviceCount < (BLE_MAX_SERVICE_COUNT)) {
         T_SERVER_ID service_id;
-        if (false == server_add_service(&service_id, (uint8_t *)newService.generateServiceAttrTable(), newService._total_attr_count * sizeof(T_ATTRIB_APPL), _serviceCallbacksDefault)) {
+        if (false == server_add_service(&service_id, (uint8_t*)newService.generateServiceAttrTable(), newService._total_attr_count * sizeof(T_ATTRIB_APPL), _serviceCallbacksDefault)) {
             printf("\r\n[ERROR] server_add_service %s failed\n", newService.getUUID().str());
         } else {
             _servicePtrList[_serviceCount++] = &newService;
@@ -362,7 +389,8 @@ void BLEDevice::addService(BLEService& newService) {
     }
 }
 
-BLEClient* BLEDevice::addClient(uint8_t connId) {
+BLEClient* BLEDevice::addClient(uint8_t connId)
+{
     BLEClient* newClient = nullptr;
     if (connId >= BLE_CENTRAL_APP_MAX_LINKS) {
         printf("\r\n[ERROR] Invalid connection ID %d \n", connId);
@@ -395,20 +423,24 @@ BLEClient* BLEDevice::addClient(uint8_t connId) {
     return newClient;
 }
 
-void BLEDevice::getLocalAddr(uint8_t (&addr)[GAP_BD_ADDR_LEN]) {
-    uint8_t  btaddr[GAP_BD_ADDR_LEN] = {0};
+void BLEDevice::getLocalAddr(uint8_t (&addr)[GAP_BD_ADDR_LEN])
+{
+    uint8_t btaddr[GAP_BD_ADDR_LEN] = {0};
     gap_get_param(GAP_PARAM_BD_ADDR, btaddr);
     memcpy(addr, btaddr, sizeof(btaddr));
 }
 
-void BLEDevice::BLEMainTask(void *p_param) {
+void BLEDevice::BLEMainTask(void* p_param)
+{
     (void)p_param;
     uint8_t event;
     os_msg_queue_create(&_ioQueueHandle, 0x20, sizeof(T_IO_MSG));
     os_msg_queue_create(&_evtQueueHandle, 0x40, sizeof(uint8_t));
 
     gap_start_bt_stack(_evtQueueHandle, _ioQueueHandle, 0x20);
-    if (BTDEBUG) printf("\r\n[INFO] BT stack start\n");
+    if (BTDEBUG) {
+        printf("\r\n[INFO] BT stack start\n");
+    }
 
     while (true) {
         if (os_msg_recv(_evtQueueHandle, &event, 0xFFFFFFFF) == true) {

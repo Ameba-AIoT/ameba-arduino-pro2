@@ -11,13 +11,14 @@ AmebaFatFS fs;
 
 char filename[] = "test.txt";
 
-void setup() {
+void setup()
+{
     char path[128];
 
-    uint16_t year   = 2021;
-    uint16_t month  = 4;
-    uint16_t date   = 4;
-    uint16_t hour   = 12;
+    uint16_t year = 2021;
+    uint16_t month = 4;
+    uint16_t date = 4;
+    uint16_t hour = 12;
     uint16_t minute = 12;
     uint16_t second = 12;
 
@@ -36,6 +37,7 @@ void setup() {
     fs.end();
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

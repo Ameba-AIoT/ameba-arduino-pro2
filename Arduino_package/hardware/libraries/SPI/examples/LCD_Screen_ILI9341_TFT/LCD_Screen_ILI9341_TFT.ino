@@ -1,13 +1,13 @@
 /*
  * This sketch demonstrates how to use TFT LCD with ILI9314 api
- * 
+ *
  * Pre-requirement:
  *     an ILI9341 TFT LCD with SPI interface
- * 
+ *
  * An ILI9341 TFT LCD with SPI interface can be used with spi to
  * send command and data. We can draw text, line, circle, and
  * other picture on it.
- * 
+ *
  * Example guide:
  * https://www.amebaiot.com/en/amebapro2-arduino-spi-lcd/
  */
@@ -16,19 +16,20 @@
 #include "AmebaILI9341.h"
 #include "AmebaLogo.h"
 
-// For all supportted boards (AMB21/AMB22, AMB23, BW16/BW16-TypeC, AW-CU488_ThingPlus), 
+// For all supportted boards (AMB21/AMB22, AMB23, BW16/BW16-TypeC, AW-CU488_ThingPlus),
 // Select 2 GPIO pins connect to TFT_RESET and TFT_DC. And default SPI_SS/SPI1_SS connect to TFT_CS.
-#define TFT_RESET       5
-#define TFT_DC          4
-#define TFT_CS          SPI_SS
+#define TFT_RESET 5
+#define TFT_DC    4
+#define TFT_CS    SPI_SS
 
 AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET);
 
 #define ILI9341_SPI_FREQUENCY 20000000
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
-    Serial.println("ILI9341 Test!"); 
+    Serial.println("ILI9341 Test!");
 
     SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);
 
@@ -51,15 +52,16 @@ void setup() {
     delay(500);
 
     Serial.println("test Bitmap");
-    testBitmap(0,0,logoWidth,logoHeight,logo);
+    testBitmap(0, 0, logoWidth, logoHeight, logo);
     delay(500);
-    
+
     Serial.println("test Text");
     testText();
     delay(500);
 }
 
-void loop() {
+void loop()
+{
     for (int i = 0; i < 4; i++) {
         tft.setRotation(i);
         testText();
@@ -67,7 +69,8 @@ void loop() {
     }
 }
 
-unsigned long testFillScreen() {
+unsigned long testFillScreen()
+{
     tft.fillScreen(ILI9341_BLACK);
     tft.fillScreen(ILI9341_RED);
     tft.fillScreen(ILI9341_GREEN);
@@ -77,7 +80,8 @@ unsigned long testFillScreen() {
     return 0;
 }
 
-unsigned long testText() {
+unsigned long testText()
+{
     tft.clr();
 
     tft.setCursor(0, 0);
@@ -110,7 +114,8 @@ unsigned long testText() {
     return 0;
 }
 
-unsigned long testLines(uint16_t color) {
+unsigned long testLines(uint16_t color)
+{
     int x0, y0, x1, y1;
     int w = tft.getWidth();
     int h = tft.getHeight();
@@ -143,7 +148,7 @@ unsigned long testLines(uint16_t color) {
     }
 
     x1 = w;
-    for (y1=h; y1>=0; y1-=5) {
+    for (y1 = h; y1 >= 0; y1 -= 5) {
         tft.drawLine(x0, y0, x1, y1, color);
     }
 
@@ -155,7 +160,8 @@ unsigned long testLines(uint16_t color) {
     return 0;
 }
 
-void testRectangle(uint16_t color) {
+void testRectangle(uint16_t color)
+{
     int rw, rh;
     int div = 60;
     int w = tft.getWidth();
@@ -168,21 +174,23 @@ void testRectangle(uint16_t color) {
     }
 }
 
-void testCircles(uint8_t radius, uint16_t color) {
+void testCircles(uint8_t radius, uint16_t color)
+{
     int x, y;
     int w = tft.getWidth();
     int h = tft.getHeight();
 
     tft.clr();
 
-    for(x = radius; x < w; x += radius * 2) {
-        for(y = radius; y < h; y += radius * 2) {
+    for (x = radius; x < w; x += radius * 2) {
+        for (y = radius; y < h; y += radius * 2) {
             tft.drawCircle(x, y, radius, color);
         }
     }
 }
 
-void testBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color) {
+void testBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color)
+{
     tft.clr();
     tft.drawBitmap(x, y, w, h, color);
     delay(500);

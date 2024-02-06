@@ -1,4 +1,3 @@
-
 // Debugging requires the use of a SEGGER JLink debug probe, and that SEGGER JLink Software Pack is installed
 // For Windows, SEGGER JLink Software Pack should be installed at C:/Program Files/SEGGER/JLink/
 // SEGGER JLink Software Pack can be downloaded at https://www.segger.com/downloads/jlink/
@@ -23,7 +22,8 @@
 #define LED_PIN LED_BUILTIN
 
 int i;
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     pinMode(LED_PIN, OUTPUT);
     for (i = 0; i < 10; i++) {
@@ -35,14 +35,15 @@ void setup() {
     i = 0;
 }
 
-void loop() {
+void loop()
+{
     i++;
     digitalWrite(LED_PIN, HIGH);
     delay(500);
     if ((i % 10) == 0) {
         Serial.println(i);
-        //RTL8735B only supports a maximum of 4 hardware breakpoints. If you need more breakpoints, you can use either of the instructions below (__BKPT() or __asm__("BKPT")) to add a software breakpoint in program execution
-        //Note: To continue program execution from a software breakpoint, use "Step Over" first before "Continue"
+        // RTL8735B only supports a maximum of 4 hardware breakpoints. If you need more breakpoints, you can use either of the instructions below (__BKPT() or __asm__("BKPT")) to add a software breakpoint in program execution
+        // Note: To continue program execution from a software breakpoint, use "Step Over" first before "Continue"
         //__BKPT();
         //__asm__("BKPT");
     }

@@ -31,18 +31,21 @@ static void uart_irq(uint32_t id, SerialIrq event) {
 }
 #endif
 
-void PM_rtc_handler(void) {
+void PM_rtc_handler(void)
+{
 }
 
-void PM_gpio_irq_handler(uint32_t id, gpio_irq_event event) {
+void PM_gpio_irq_handler(uint32_t id, gpio_irq_event event)
+{
 }
 
-void PM_Gtimer_timeout_handler(uint32_t id) {
+void PM_Gtimer_timeout_handler(uint32_t id)
+{
 }
 
 
-PMClass::PMClass(void) {};
-PMClass::~PMClass(void) {};
+PMClass::PMClass(void){};
+PMClass::~PMClass(void){};
 
 /**
   * @brief      Initializes the PowerMode settings for device, include type of the mode, wake up sources and related source settings.
@@ -60,7 +63,8 @@ PMClass::~PMClass(void) {};
                                for Gtimer0, duration, in seconds
   * @retval     none
   */
-void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_setting) {
+void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_setting)
+{
     PM_wakeup_setting = wakeup_setting;
 
     pinMode(LED_B, OUTPUT_PULLDOWN);
@@ -70,15 +74,15 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
         if (wakeup_source == 0) {
             PM_wakeup_source = DS_AON_TIMER;
 
-            uint32_t * PM_Aontimer_setting = (uint32_t *)PM_wakeup_setting;
+            uint32_t *PM_Aontimer_setting = (uint32_t *)PM_wakeup_setting;
             PM_clock = PM_Aontimer_setting[0];
             PM_sleep_duration = PM_Aontimer_setting[1] * 1000 * 1000;
-            //PA_2 & PA_3 default pullup, need to be set according to external circuit
+            // PA_2 & PA_3 default pullup, need to be set according to external circuit
             gpio_init(&PM_GPIO_1, PA_2);
             gpio_pull_ctrl(&PM_GPIO_1, PullDown);
             gpio_init(&PM_GPIO_2, PA_3);
             gpio_pull_ctrl(&PM_GPIO_2, PullDown);
-        } else if (wakeup_source == 1){
+        } else if (wakeup_source == 1) {
             PM_wakeup_source = DS_AON_GPIO;
 
             if ((g_APinDescription[PM_wakeup_setting].pinname) == PA_1) {
@@ -102,7 +106,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
             gpio_irq_init(&PM_GPIO_IRQ, (PinName)(g_APinDescription[PM_wakeup_setting].pinname), NULL, (uint32_t)&PM_GPIO_IRQ);
             gpio_irq_pull_ctrl(&PM_GPIO_IRQ, PullDown);
             gpio_irq_set(&PM_GPIO_IRQ, IRQ_RISE, 1);
-        } else if (wakeup_source == 2){
+        } else if (wakeup_source == 2) {
             PM_wakeup_source = DS_RTC;
         } else {
             printf("\r\n[ERROR] DeepSlesp wakeup source selection fail. \n");
@@ -115,7 +119,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
         if (wakeup_source == 0) {
             PM_wakeup_source = SLP_AON_TIMER;
 
-            uint32_t * PM_Aontimer_setting = (uint32_t *)PM_wakeup_setting;
+            uint32_t *PM_Aontimer_setting = (uint32_t *)PM_wakeup_setting;
             PM_clock = PM_Aontimer_setting[0];
             PM_sleep_duration = PM_Aontimer_setting[1] * 1000 * 1000;
 
@@ -165,8 +169,8 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                 case PF_13:
                 case PF_14:
                 case PF_15:
-                // case PF_16:
-                // case PF_17:
+                    // case PF_16:
+                    // case PF_17:
                     break;
                 default:
                     printf("\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
@@ -174,24 +178,24 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                     return;
             }
 
-            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18)); //SWR 1.35V
+            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));    // SWR 1.35V
             hal_delay_ms(5);
             gpio_irq_init(&PM_GPIO_IRQ, (PinName)(g_APinDescription[PM_wakeup_setting].pinname), PM_gpio_irq_handler, (uint32_t)&PM_GPIO_IRQ);
             gpio_irq_pull_ctrl(&PM_GPIO_IRQ, PullDown);
             gpio_irq_set(&PM_GPIO_IRQ, IRQ_RISE, 1);
 
             // set gpio pull control
-            HAL_WRITE32(0x40009850, 0x0, 0x4f004f); //GPIOF_1/GPIOF_0
+            HAL_WRITE32(0x40009850, 0x0, 0x4f004f);    // GPIOF_1/GPIOF_0
             // HAL_WRITE32(0x40009854, 0x0, 0x8f004f); //GPIOF_3/GPIOF_2
             // HAL_WRITE32(0x40009858, 0x0, 0x4f008f); //GPIOF_5/GPIOF_4
-            HAL_WRITE32(0x40009854, 0x0, (((HAL_READ32(0x40009854, 0x0))&0xFFFF0000)|0x4f));        //GPIOF_2
-            HAL_WRITE32(0x40009858, 0x0, (((HAL_READ32(0x40009858, 0x0))&0x0000FFFF)|0x4f0000));    //GPIOF_5
-            HAL_WRITE32(0x4000985c, 0x0, 0x4f004f); //GPIOF_7/GPIOF_6
-            HAL_WRITE32(0x40009860, 0x0, 0x4f004f); //GPIOF_9/GPIOF_8
-            HAL_WRITE32(0x40009864, 0x0, 0x4f004f); //GPIOF_11/GPIOF_10
-            HAL_WRITE32(0x40009868, 0x0, 0x4f004f); //GPIOF_13/GPIOF_12
-            HAL_WRITE32(0x4000986C, 0x0, 0x4f004f); //GPIOF_15/GPIOF_14
-            HAL_WRITE32(0x40009870, 0x0, 0x4f004f); //GPIOF_17/GPIOF_16
+            HAL_WRITE32(0x40009854, 0x0, (((HAL_READ32(0x40009854, 0x0)) & 0xFFFF0000) | 0x4f));        // GPIOF_2
+            HAL_WRITE32(0x40009858, 0x0, (((HAL_READ32(0x40009858, 0x0)) & 0x0000FFFF) | 0x4f0000));    // GPIOF_5
+            HAL_WRITE32(0x4000985c, 0x0, 0x4f004f);                                                     // GPIOF_7/GPIOF_6
+            HAL_WRITE32(0x40009860, 0x0, 0x4f004f);                                                     // GPIOF_9/GPIOF_8
+            HAL_WRITE32(0x40009864, 0x0, 0x4f004f);                                                     // GPIOF_11/GPIOF_10
+            HAL_WRITE32(0x40009868, 0x0, 0x4f004f);                                                     // GPIOF_13/GPIOF_12
+            HAL_WRITE32(0x4000986C, 0x0, 0x4f004f);                                                     // GPIOF_15/GPIOF_14
+            HAL_WRITE32(0x40009870, 0x0, 0x4f004f);                                                     // GPIOF_17/GPIOF_16
             // HAL_WRITE32(0x4000Ae04, 0x0, 0x20000); //GPIOF_17(VDD_DDR_EN) INPUT MODE
 
             gpio_init(&PM_GPIO_1, PA_2);
@@ -202,7 +206,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
             PM_wakeup_source = SLP_UART;
             PM_clock = 1;
 
-            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18)); //SWR 1.35V
+            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));    // SWR 1.35V
             hal_delay_ms(5);
 #if 0
             //serial_init(&PM_UART, PA_2, PA_3);
@@ -225,7 +229,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
 
             gpio_init(&PM_GPIO_1, PA_2);
             gpio_pull_ctrl(&PM_GPIO_1, PullDown);
-            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18)); //SWR 1.35V
+            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));    // SWR 1.35V
             hal_delay_ms(5);
         } else if (wakeup_source == 6) {
             // PWM TBD
@@ -252,7 +256,8 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t wakeup_sett
                 sec: Start time by sec. 0 to 59.
   * @retval     none
   */
-void PMClass::start(int year, int month, int day, int hour, int min, int sec) {
+void PMClass::start(int year, int month, int day, int hour, int min, int sec)
+{
     if (PM_begin_check == 1) {
         PM_begin_check = 0;
         if (PM_wakeup_source == DS_RTC) {
@@ -263,9 +268,9 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec) {
                 long long initTime = rtc.SetEpoch(year, month, day, hour, min, sec);
                 rtc.Write(initTime);
             }
-            uint32_t * PM_rtc_alarm = (uint32_t *)PM_wakeup_setting;
+            uint32_t *PM_rtc_alarm = (uint32_t *)PM_wakeup_setting;
             rtc.EnableAlarm((PM_rtc_alarm[0] + day), (PM_rtc_alarm[1] + hour), (PM_rtc_alarm[2] + min), (PM_rtc_alarm[3] + sec), PM_rtc_handler);
-            //rtc_set_alarm_time(10, PM_rtc_handler);
+            // rtc_set_alarm_time(10, PM_rtc_handler);
         }
         DeepSleep(PM_wakeup_source, PM_sleep_duration, PM_clock);
     } else if (PM_begin_check == 2) {
@@ -278,10 +283,10 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec) {
                 long long initTime = rtc.SetEpoch(year, month, day, hour, min, sec);
                 rtc.Write(initTime);
             }
-            uint32_t * PM_rtc_alarm = (uint32_t *)PM_wakeup_setting;
+            uint32_t *PM_rtc_alarm = (uint32_t *)PM_wakeup_setting;
             rtc.EnableAlarm((PM_rtc_alarm[0] + day), (PM_rtc_alarm[1] + hour), (PM_rtc_alarm[2] + min), (PM_rtc_alarm[3] + sec), PM_rtc_handler);
         } else if (PM_wakeup_source == SLP_GTIMER) {
-            //PM_GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
+            // PM_GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
             GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
         }
         Standby(PM_wakeup_source, PM_sleep_duration, PM_clock, 0);

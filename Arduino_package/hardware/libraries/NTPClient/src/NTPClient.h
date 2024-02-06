@@ -5,30 +5,30 @@
 #include <wifi_Udp.h>
 #include <ctime>
 
-#define SEVENZYYEARS 2208988800UL
-#define NTP_PACKET_SIZE 48
+#define SEVENZYYEARS           2208988800UL
+#define NTP_PACKET_SIZE        48
 #define NTP_DEFAULT_LOCAL_PORT 1337
 
 class NTPClient {
-  private:
-    UDP*          _udp;
-    bool          _udpSetup       = false;
+private:
+    UDP* _udp;
+    bool _udpSetup = false;
 
-    const char*   _poolServerName = "pool.ntp.org"; // Default time server
-    IPAddress     _poolServerIP;
-    int           _port           = NTP_DEFAULT_LOCAL_PORT;
-    long          _timeOffset     = 0;
+    const char* _poolServerName = "pool.ntp.org";    // Default time server
+    IPAddress _poolServerIP;
+    int _port = NTP_DEFAULT_LOCAL_PORT;
+    long _timeOffset = 0;
 
-    unsigned long _updateInterval = 60000;  // In ms
+    unsigned long _updateInterval = 60000;    // In ms
 
-    unsigned long _currentEpoc    = 0;      // In s
-    unsigned long _lastUpdate     = 0;      // In ms
+    unsigned long _currentEpoc = 0;    // In s
+    unsigned long _lastUpdate = 0;     // In ms
 
-    byte          _packetBuffer[NTP_PACKET_SIZE];
+    byte _packetBuffer[NTP_PACKET_SIZE];
 
-    void          sendNTPPacket();
+    void sendNTPPacket();
 
-  public:
+public:
     NTPClient(UDP& udp);
     NTPClient(UDP& udp, long timeOffset);
     NTPClient(UDP& udp, const char* poolServerName);

@@ -12,7 +12,8 @@ extern mm_module_t rtp_module;
 }
 #endif
 
-RTP::RTP(void) {
+RTP::RTP(void)
+{
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&rtp_module);
     }
@@ -22,7 +23,8 @@ RTP::RTP(void) {
     }
 }
 
-RTP::~RTP(void) {
+RTP::~RTP(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -34,11 +36,13 @@ RTP::~RTP(void) {
     }
 }
 
-void RTP::configPort(uint16_t port) {
+void RTP::configPort(uint16_t port)
+{
     _rtpParams.port = port;
 }
 
-void RTP::begin(void) {
+void RTP::begin(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -49,14 +53,15 @@ void RTP::begin(void) {
     mm_module_ctrl(_p_mmf_context, CMD_RTP_STREAMING, 1);
 }
 
-void RTP::end(void) {
+void RTP::end(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
     mm_module_ctrl(_p_mmf_context, CMD_RTP_STREAMING, 0);
 }
 
-uint16_t RTP::getPort(void) {
+uint16_t RTP::getPort(void)
+{
     return _rtpParams.port;
 }
-

@@ -7,7 +7,7 @@
 
 uint32_t sisoCreate(void);
 void sisoDestroy(void *);
-int  sisoStart(void *);
+int sisoStart(void *);
 void sisoStop(void *);
 void sisoPause(void *);
 void sisoResume(void *);

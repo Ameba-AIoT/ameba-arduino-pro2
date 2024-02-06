@@ -12,13 +12,15 @@ extern "C" {
 }
 #endif
 
-#define VID_CH_IDX 0
+#define VID_CH_IDX   0
 #define AUDIO_CH_IDX 1
 
-RTSP::RTSP(void) {
+RTSP::RTSP(void)
+{
 }
 
-RTSP::~RTSP(void) {
+RTSP::~RTSP(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -30,7 +32,8 @@ RTSP::~RTSP(void) {
     }
 }
 
-void RTSP::configVideo(VideoSetting& config) {
+void RTSP::configVideo(VideoSetting &config)
+{
     // RTSPInit if not previously done so
     if (_p_mmf_context == NULL) {
         _p_mmf_context = RTSPInit();
@@ -46,7 +49,7 @@ void RTSP::configVideo(VideoSetting& config) {
 
     if (AV_Codec_ID == VIDEO_JPEG) {
         AV_Codec_ID = AV_CODEC_ID_MJPEG;
-        RTSP_bps = 0; 
+        RTSP_bps = 0;
     } else if ((AV_Codec_ID == VIDEO_HEVC) || (AV_Codec_ID == VIDEO_HEVC_JPEG)) {
         AV_Codec_ID = AV_CODEC_ID_H265;
     } else if ((AV_Codec_ID == VIDEO_H264) || (AV_Codec_ID == VIDEO_H264_JPEG)) {
@@ -57,7 +60,8 @@ void RTSP::configVideo(VideoSetting& config) {
     RTSPSetApply(_p_mmf_context->priv);
 }
 
-void RTSP::configAudio(AudioSetting& config, Audio_Codec_T codec) {
+void RTSP::configAudio(AudioSetting &config, Audio_Codec_T codec)
+{
     // RTSPInit if not previously done so
     if (_p_mmf_context == NULL) {
         _p_mmf_context = RTSPInit();
@@ -75,7 +79,8 @@ void RTSP::configAudio(AudioSetting& config, Audio_Codec_T codec) {
     RTSPSetApply(_p_mmf_context->priv);
 }
 
-void RTSP::begin(void) {
+void RTSP::begin(void)
+{
     if (_p_mmf_context == NULL) {
         printf("\r\n[ERROR] Need RTSP init first\n");
     } else {
@@ -83,21 +88,24 @@ void RTSP::begin(void) {
     }
 }
 
-void RTSP::end(void) {
+void RTSP::end(void)
+{
     if (_p_mmf_context == NULL) {
         printf("\r\n[ERROR] Need RTSP init first\n");
     }
     RTSPSetStreaming((void *)_p_mmf_context, 0);
 }
 
-int RTSP::getPort(void) {
+int RTSP::getPort(void)
+{
     if (_p_mmf_context == NULL) {
         printf("\r\n[ERROR] Need RTSP init first\n");
     }
     return RTSPGetPort(_p_mmf_context->priv);
 }
 
-void RTSP::printInfo(void) {
+void RTSP::printInfo(void)
+{
     int port = getPort();
     printf("\r\n[INFO] %d\n", port);
 }
