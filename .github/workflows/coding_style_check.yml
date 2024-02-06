@@ -1,8 +1,8 @@
 # This workflow runs coding_style_check test for Ameba Arduino SDK
 
 name: Check mbed coding style
-on: #[push, pull_request]
-  workflow_dispatch:
+on: [push, pull_request]
+#  workflow_dispatch:
 jobs:
   formatting-check:
     name: Run clang-format check
