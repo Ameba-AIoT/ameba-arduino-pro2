@@ -150,7 +150,7 @@ long Stream::parseInt(char skipChar)
     }
 
     do {
-        // ignore this charactor
+        // ignore this character
         if (c == skipChar) {
         } else if (c == '-') {
             isNegative = true;
@@ -194,7 +194,7 @@ float Stream::parseFloat(char skipChar)
     //    }
 
     do {
-        // ignore this charactor
+        // ignore this character
         if (c == skipChar) {
         } else if (c == '-') {
             isNegative = true;

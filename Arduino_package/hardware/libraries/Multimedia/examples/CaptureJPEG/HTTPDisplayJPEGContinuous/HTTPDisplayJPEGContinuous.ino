@@ -95,7 +95,7 @@ void loop()
             }
         }
         client.stop();
-        Serial.println("client disonnected");
+        Serial.println("client disconnected");
     } else {
         Serial.println("waiting for client connection");
         delay(1000);

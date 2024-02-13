@@ -12,7 +12,7 @@
 #include "VideoStreamOverlay.h"
 
 #define CHANNEL   0    // High resolution video channel for streaming
-#define CHANNELMD 3    // RGB format video for motion detection only avaliable on channel 3
+#define CHANNELMD 3    // RGB format video for motion detection only available on channel 3
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);     // High resolution video for streaming
 VideoSetting configMD(VIDEO_VGA, 10, VIDEO_RGB, 0);    // Low resolution RGB video for motion detection

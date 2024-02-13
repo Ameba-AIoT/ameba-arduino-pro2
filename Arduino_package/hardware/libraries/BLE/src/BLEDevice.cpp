@@ -94,7 +94,7 @@ void BLEDevice::deinit()
         bte_deinit();
         bt_trace_deinit();
         memset(&_gapDevState, 0, sizeof(T_GAP_DEV_STATE));
-        printf("\r\n[INFO] BT Stack deinitalized\n");
+        printf("\r\n[INFO] BT Stack deinitialized\n");
     }
 }
 
@@ -114,8 +114,8 @@ bool BLEDevice::connected(uint8_t connId)
 
 // set BLE GAP device name
 // other devices will see this name after connection is established
-// note: this is seperate from the device name sent in advertising packets
-// note: this name and advertised name can be different, but ideally should be set as indentical
+// note: this is separate from the device name sent in advertising packets
+// note: this name and advertised name can be different, but ideally should be set as identical
 void BLEDevice::setDeviceName(String devName)
 {
     // Set the Device Name in GAP, which will be visible after a connection is established

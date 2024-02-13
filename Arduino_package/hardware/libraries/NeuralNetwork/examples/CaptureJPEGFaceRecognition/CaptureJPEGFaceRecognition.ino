@@ -44,7 +44,7 @@
 
 #define CHANNELVID  0    // Channel for RTSP streaming
 #define CHANNELJPEG 1    // Channel for taking snapshots
-#define CHANNELNN   3    // RGB format video for NN only avaliable on channel 3
+#define CHANNELNN   3    // RGB format video for NN only available on channel 3
 
 // Customised resolution for NN
 #define NNWIDTH  576

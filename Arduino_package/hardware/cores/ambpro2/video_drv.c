@@ -263,7 +263,7 @@ mm_context_t *cameraDeinit(mm_context_t *p)
             // printf("\r\n[INFO] module close - free port\n");
         }
     }
-    // cannot delete item after destory
+    // cannot delete item after destroy
     video_destroy(video_data->priv);
     free(video_data);
     // printf("\r\n[INFO] module close - free context\n");

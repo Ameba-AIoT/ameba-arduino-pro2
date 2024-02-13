@@ -19,7 +19,7 @@ extern "C" {
 #include "wifi_fast_connect.h"
 #include "lwip/err.h"
 #include "osdep_service.h"
-// modifed here
+// modified here
 #include "lwip/netif.h"
 #include "lwip/api.h"
 #include <dhcp/dhcps.h>
@@ -255,7 +255,7 @@ int8_t WiFiDrv::wifiSetKey(char* ssid, uint8_t ssid_len, uint8_t key_idx, const 
 
 #if 0
     const unsigned char* k = (const unsigned char *)key;
-    // convert hex sring to hex value
+    // convert hex string to hex value
     for (int i = 0,int idx = 0; i < len; i++) {
         if ((k[i] >= '0') && (k[i] <= '9')) {
             password[idx] += (k[i] - '0');

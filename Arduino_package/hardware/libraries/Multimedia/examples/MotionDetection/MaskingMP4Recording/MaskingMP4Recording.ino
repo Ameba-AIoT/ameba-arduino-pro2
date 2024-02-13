@@ -1,6 +1,6 @@
 /*
 This example acts as a Security System based on Motion Detection, which would start to record a
- 30 seconds long MP4 video everytime motion is detected. (Alarm function could be initiated as well, but on default disabled)
+ 30 seconds long MP4 video every time motion is detected. (Alarm function could be initiated as well, but on default disabled)
 
  Example guide:
  https://www.amebaiot.com/en/amebapro2-arduino-video-motion-mp4/
@@ -27,7 +27,7 @@ This example acts as a Security System based on Motion Detection, which would st
 // 3 : 16kHz Mono Digital PDM Mic
 
 #define CHANNELVID 0    // Channel for RTSP streaming & MP4 recording
-#define CHANNELMD  3    // RGB format video for motion detection only avaliable on channel 3
+#define CHANNELMD  3    // RGB format video for motion detection only available on channel 3
 
 // Pin Definition
 #define GREEN_LED 4

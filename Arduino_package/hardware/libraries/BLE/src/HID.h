@@ -1024,7 +1024,7 @@ enum {
     HID_USAGE_PAGE(HID_USAGE_PAGE_DESKTOP), \
         HID_USAGE(HID_USAGE_DESKTOP_KEYBOARD), \
         HID_COLLECTION(HID_COLLECTION_APPLICATION), /* Report ID if any */ \
-        __VA_ARGS__                                 /* 8 bits Modifier Keys (Shfit, Control, Alt) */ \
+        __VA_ARGS__                                 /* 8 bits Modifier Keys (Shift, Control, Alt) */ \
         HID_USAGE_PAGE(HID_USAGE_PAGE_KEYBOARD), \
         HID_USAGE_MIN(224), \
         HID_USAGE_MAX(231), \

@@ -55,7 +55,7 @@ void delayMicroseconds(uint32_t us)
     int dfactor = 0;
 
 #if defined(ARDUINO_AMBPRO2)
-    // Best fit equation obtained experiementally from continuous asm("nop")
+    // Best fit equation obtained experimentally from continuous asm("nop")
     dfactor = 166 * us - 16;
 #else
 #error "delayMicroseconds(): Unknown chip delay factor"

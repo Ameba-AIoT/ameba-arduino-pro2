@@ -10,7 +10,7 @@
 #include <mbedtls/entropy.h>
 #include <FreeRTOS.h>
 
-#define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messsages, 5 to enable all debug messages
+#define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messages, 5 to enable all debug messages
 #define MBEDTLS_EXPORT_KEY          0
 
 static mbedtls_ctr_drbg_context *drbg_ctx = NULL;
@@ -128,7 +128,7 @@ reset:
     }
 }
 
-// Adding definition here as complier was not able to find this function
+// Adding definition here as compiler was not able to find this function
 extern int mbedtls_ssl_conf_psk(mbedtls_ssl_config *conf,
                                 const unsigned char *psk,
                                 size_t psk_len,

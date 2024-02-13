@@ -24,7 +24,7 @@ WiFiUDP ntpUDP;
 AmebaFatFS fs;
 
 // You can specify the time server pool and the offset (in seconds, can be
-// changed later with setTimeOffset() ). Additionaly you can specify the
+// changed later with setTimeOffset() ). Additionally you can specify the
 // update interval (in milliseconds, can be changed using setUpdateInterval() ).
 NTPClient timeClient(ntpUDP, "sg.pool.ntp.org", 28800, 60000);
 

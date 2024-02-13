@@ -16,7 +16,7 @@
 #include "AmebaILI9341.h"
 #include "AmebaLogo.h"
 
-// For all supportted boards (AMB21/AMB22, AMB23, BW16/BW16-TypeC, AW-CU488_ThingPlus),
+// For all supported boards (AMB21/AMB22, AMB23, BW16/BW16-TypeC, AW-CU488_ThingPlus),
 // Select 2 GPIO pins connect to TFT_RESET and TFT_DC. And default SPI_SS/SPI1_SS connect to TFT_CS.
 #define TFT_RESET 5
 #define TFT_DC    4

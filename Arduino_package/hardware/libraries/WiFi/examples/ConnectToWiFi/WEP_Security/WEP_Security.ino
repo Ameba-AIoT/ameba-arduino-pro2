@@ -56,7 +56,7 @@ char pass[] = "D0D0D";    // your network password, Exactly 5 or 13 ASCII charac
 #error    // Error unsupported password type
 #endif
 
-int status = WL_IDLE_STATUS;    // Indicater of Wifi status
+int status = WL_IDLE_STATUS;    // Indicator of Wifi status
 
 void setup()
 {

@@ -51,7 +51,7 @@ public:
 private:
     int getAttribute(char *path, unsigned char *attr);
 
-    // structures containg FATFS parameters for sdcard drive
+    // structures containing FATFS parameters for sdcard drive
     fatfs_sd_params_t fatfs_sd;
 };
 

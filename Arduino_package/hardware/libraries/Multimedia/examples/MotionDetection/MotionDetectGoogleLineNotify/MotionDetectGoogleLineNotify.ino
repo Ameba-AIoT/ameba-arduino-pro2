@@ -20,7 +20,7 @@
 
 // User Configuration
 #define CHANNEL   0              // Video channel for streaming & snapshot
-#define CHANNELMD 3              // RGB format video for motion detection only avaliable on channel 3
+#define CHANNELMD 3              // RGB format video for motion detection only available on channel 3
 #define FILENAME  "image.jpg"    // Save as jpg image in SD Card
 
 // Enter your Google Script and Line Notify details

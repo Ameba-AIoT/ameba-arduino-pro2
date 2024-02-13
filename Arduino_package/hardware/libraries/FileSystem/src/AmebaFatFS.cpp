@@ -11,7 +11,7 @@ extern phal_sdhost_adapter_t psdioh_adapter;
 
 AmebaFatFS::AmebaFatFS(void)
 {
-    // init to no card intialized
+    // init to no card initialized
     fatfs_sd.drv_num = -1;
 }
 

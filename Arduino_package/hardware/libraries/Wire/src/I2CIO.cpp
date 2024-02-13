@@ -199,7 +199,7 @@ bool I2CIO::isAvailable(uint8_t i2cAddr)
     error = _i2c_bus->endTransmission();
     if (error == 0) {
         return true;
-    } else {    // Some error occured
+    } else {    // Some error occurred
         return false;
     }
 }
