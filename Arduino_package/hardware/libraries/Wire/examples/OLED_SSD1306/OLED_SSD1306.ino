@@ -20,7 +20,6 @@
  Modified by Realtek SG SD3 13/02/2024
  **************************************************************************/
 
-// #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_OLED_libraries/Adafruit_GFX.h>
 #include <Adafruit_OLED_libraries/Adafruit_SSD1306.h>
