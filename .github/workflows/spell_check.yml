@@ -22,7 +22,6 @@ jobs:
       uses: codespell-project/actions-codespell@v2
       with:
         skip: Arduino_package/hardware/libraries/NeuralNetwork/examples/AudioClassification/AudioClassList.h
-# DHT.cpp - celcius
-        ignore_words_list: ameba,celcius
+        ignore_words_list: ameba
 #        ignore_words_file: Ameba_misc/Spell_Check_Ignore/.codespellignore
         path: ${{ matrix.path }}
