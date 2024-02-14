@@ -8,7 +8,6 @@
 #include "WProgram.h"
 #endif
 #include "Adafruit_OLED_libraries/gfxfont.h"
-#include <Adafruit_OLED_libraries/Adafruit_I2CDevice.h>
 
 /// A generic graphics superclass that can handle all sorts of drawing. At a
 /// minimum you can subclass and provide drawPixel(). At a maximum you can do a
