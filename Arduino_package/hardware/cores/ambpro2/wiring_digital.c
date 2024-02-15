@@ -44,8 +44,8 @@ void pinMode(uint32_t ulPin, uint32_t ulMode)
 {
     void *pGpio_t;
 
-    // amb_ard_pin_check_name(ulPin);
-    amb_ard_pin_check_type(ulPin, TYPE_DIGITAL);
+    amb_ard_pin_check_name(ulPin);
+    // amb_ard_pin_check_type(ulPin, TYPE_DIGITAL);
 
     if ((g_APinDescription[ulPin].ulPinMode & 0x000000FF) == ulMode) {
         // Nothing changes
@@ -168,7 +168,7 @@ void digitalWrite(uint32_t ulPin, uint32_t ulVal)
     gpio_t *pGpio_t;
 
     amb_ard_pin_check_type(ulPin, TYPE_DIGITAL);
-    amb_ard_pin_check_fun(ulPin, PIO_GPIO);
+    // amb_ard_pin_check_fun(ulPin, PIO_GPIO);
 
     if (((g_APinDescription[ulPin].ulPinMode & PWM_MODE_ENABLED) == PWM_MODE_ENABLED) || ((g_APinDescription[ulPin].ulPinMode & ADC_MODE_ENABLED) == ADC_MODE_ENABLED)) {
         pinMode(ulPin, (g_APinDescription[ulPin].ulPinMode));
@@ -184,7 +184,7 @@ int digitalRead(uint32_t ulPin)
     int pin_status;
 
     amb_ard_pin_check_type(ulPin, TYPE_DIGITAL);
-    amb_ard_pin_check_fun(ulPin, PIO_GPIO);
+    // amb_ard_pin_check_fun(ulPin, PIO_GPIO);
 
     if (((g_APinDescription[ulPin].ulPinMode & PWM_MODE_ENABLED) == PWM_MODE_ENABLED) || ((g_APinDescription[ulPin].ulPinMode & ADC_MODE_ENABLED) == ADC_MODE_ENABLED)) {
         pinMode(ulPin, (g_APinDescription[ulPin].ulPinMode));
@@ -201,7 +201,7 @@ void digitalChangeDir(uint32_t ulPin, uint8_t direction)
     // u32 RegValue;
 
     amb_ard_pin_check_type(ulPin, TYPE_DIGITAL);
-    amb_ard_pin_check_fun(ulPin, PIO_GPIO);
+    // amb_ard_pin_check_fun(ulPin, PIO_GPIO);
 
     if ((g_APinDescription[ulPin].ulPinMode & PWM_MODE_ENABLED) == PWM_MODE_ENABLED) {
         pinMode(ulPin, (g_APinDescription[ulPin].ulPinMode));

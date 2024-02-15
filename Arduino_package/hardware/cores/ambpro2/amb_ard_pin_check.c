@@ -33,25 +33,22 @@ void amb_ard_pin_check_name(int pin)
 // TYPE_DIGITAL                    (1UL<<22)
 void amb_ard_pin_check_type(int pin, uint32_t pin_type)
 {
-    amb_ard_pin_check_name(pin);
+    // char pin_type_name[128] = "";
+    uint32_t check_bit = g_APinDescription[pin].ulPinType & pin_type;
 
-    char pin_type_name[128] = "";
-
-    switch (pin_type) {
+    switch (check_bit) {
         case TYPE_ANALOG:
-            strcpy(pin_type_name, "TYPE_ANALOG");
+            // strcpy(pin_type_name, "TYPE_ANALOG");
             break;
         case TYPE_DIGITAL:
-            strcpy(pin_type_name, "TYPE_DIGITAL");
+            // strcpy(pin_type_name, "TYPE_DIGITAL");
             break;
         default:
-            printf("\r\n[ERROR] %s. Incorrect pin_type input!!! \n", __FUNCTION__);
-    }
-
-    while ((g_APinDescription[pin].ulPinType & pin_type) != pin_type) {
-        printf("\r\n[ERROR] %s. %s is not supported by the pin: %d !!! \n", __FUNCTION__, pin_type_name, pin);
-        printf("\r\n[ERROR] Please check if pin or board is correct \n");
-        delay(5000);
+            while (1) {
+                printf("\r\n[ERROR] %s. Incorrect pin: %d !!! \n", __FUNCTION__, pin);
+                printf("\r\n[ERROR] Please check if pin or board is correct \n");
+                delay(5000);
+            }
     }
 }
 
@@ -67,44 +64,43 @@ void amb_ard_pin_check_type(int pin, uint32_t pin_type)
 // PIO_SPI                         (1UL<<9)
 void amb_ard_pin_check_fun(int pin, uint32_t pin_fun)
 {
-    char pin_fun_name[128] = "";
+    // char pin_fun_name[128] = "";
+    uint32_t check_bit = g_APinDescription[pin].ulPinAttribute & pin_fun;
 
-    switch (pin_fun) {
+    switch (check_bit) {
         case PIO_GPIO:
-            strcpy(pin_fun_name, "PIO_GPIO");
+            // strcpy(pin_fun_name, "PIO_GPIO");
             break;
         case PIO_PWM:
-            strcpy(pin_fun_name, "PIO_PWM");
+            // strcpy(pin_fun_name, "PIO_PWM");
             break;
         case PIO_I2C:
-            strcpy(pin_fun_name, "PIO_I2C");
+            // strcpy(pin_fun_name, "PIO_I2C");
             break;
         case PIO_ADC:
-            strcpy(pin_fun_name, "PIO_ADC");
+            // strcpy(pin_fun_name, "PIO_ADC");
             break;
         case PIO_DAC:
-            strcpy(pin_fun_name, "PIO_DAC");
+            // strcpy(pin_fun_name, "PIO_DAC");
             break;
         case PIO_GPIO_IRQ:
-            strcpy(pin_fun_name, "PIO_GPIO_IRQ");
+            // strcpy(pin_fun_name, "PIO_GPIO_IRQ");
             break;
         case PIO_IR:
-            strcpy(pin_fun_name, "PIO_IR");
+            // strcpy(pin_fun_name, "PIO_IR");
             break;
         case PIO_UART:
-            strcpy(pin_fun_name, "PIO_UART");
+            // strcpy(pin_fun_name, "PIO_UART");
             break;
         case PIO_SPI:
-            strcpy(pin_fun_name, "PIO_SPI");
+            // strcpy(pin_fun_name, "PIO_SPI");
             break;
         default:
-            printf("\r\n[ERROR] %s. Incorrect pin_fun input!!! \n", __FUNCTION__);
-    }
-
-    while ((g_APinDescription[pin].ulPinAttribute & pin_fun) != pin_fun) {
-        printf("\r\n[ERROR] %s. %s is not supported by the pin: %d !!! \n", __FUNCTION__, pin_fun_name, pin);
-        printf("\r\n[ERROR] Please check if pin or board is correct \n");
-        delay(5000);
+            while (1) {
+                printf("\r\n[ERROR] %s. Incorrect pin: %d !!! \n", __FUNCTION__, pin);
+                printf("\r\n[ERROR] Please check if pin or board is correct \n");
+                delay(5000);
+            }
     }
 }
 
