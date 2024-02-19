@@ -22,5 +22,5 @@ jobs:
       with:
         clang-format-version: '17'
         check-path: ${{ matrix.path }}
-        clang-format-style-path: Ameba_misc/Coding_Style/coding_style_mbed/.clang-format
+        clang-format-style-path: .github/Coding_Style/coding_style_mbed/.clang-format
         fallback-style: 'Mozilla' # optional
