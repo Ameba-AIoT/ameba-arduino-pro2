@@ -54,6 +54,12 @@ void yield(void);
 extern int dbg_printf(const char *fmt, ...);
 extern int dbg_sprintf(char *str, const char *fmt, ...);
 
+#ifdef Arduino_LOAD_MODEL_FLASH
+#define ARDUINO_LOAD_MODEL 0x01    // FLASH
+#elif Arduino_LOAD_MODEL_SD
+#define ARDUINO_LOAD_MODEL 0x02    // SD CARD
+#endif
+
 #ifndef Arduino_STD_PRINTF
 #ifndef printf
 #define printf dbg_printf
