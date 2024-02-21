@@ -100,19 +100,17 @@ void TwoWire::setClock(uint32_t frequency)
 
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop)
 {
-    int read = 0;
-
     if (quantity > BUFFER_LENGTH) {
         quantity = BUFFER_LENGTH;
     }
 
     // perform blocking read into buffer
-    read = i2c_read(((i2c_t *)this->pI2C), ((int)address), ((char *)&this->rxBuffer[0]), ((int)quantity), ((int)sendStop));
+    i2c_read(((i2c_t *)this->pI2C), ((int)address), reinterpret_cast<char *>(this->rxBuffer), ((int)quantity), ((int)sendStop));
 
     // i2c_read error;
-    if (read != 0) {
-        printf("\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
-    }
+    // if (read != 0) {
+    //     printf("\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
+    // }
 
     /*//i2c_read error;
     if (read != quantity) {
@@ -187,7 +185,7 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
     i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
     i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
     i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_TX_COMPLETE, i2c_callback_set_flag);
-    length = i2c_write(((i2c_t *)this->pI2C), ((int)this->txAddress), ((const char *)&this->txBuffer[0]), ((int)this->txBufferLength), ((int)sendStop));
+    length = i2c_write(((i2c_t *)this->pI2C), ((int)this->txAddress), reinterpret_cast<char *>(this->txBuffer), ((int)this->txBufferLength), ((int)sendStop));
     hal_delay_us(this->txBufferLength * 200);
 
     if ((txBufferLength > 0) && (length <= 0)) {
