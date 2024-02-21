@@ -2,7 +2,7 @@ INCLUDE "romsym_is.so"
 
 /* unit - Mega byte */
 DDR_SIZE = 128;
-NN_SIZE = 16;
+NN_SIZE = 36;
 
 DDR_END = 0x70000000 + (DDR_SIZE - NN_SIZE)*1024*1024;
 NN_END  = 0x70000000 + (DDR_SIZE)*1024*1024;

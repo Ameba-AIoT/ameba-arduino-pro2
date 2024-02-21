@@ -3,6 +3,7 @@ menu.EraseFlash=* Erase All Flash Memory (16MB)
 menu.AutoUploadMode=* Auto Flash Mode
 menu.StdLibInit=* Standard Lib
 menu.UploadBaudrate=* Upload Speed
+menu.LoadNNModelSource=* NN Model Load From
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -55,4 +56,10 @@ Ameba_AMB82-MINI.menu.UploadBaudrate.1M=1000000
 Ameba_AMB82-MINI.menu.UploadBaudrate.1M.upload.speed=1000000
 Ameba_AMB82-MINI.menu.UploadBaudrate.230400=230400
 Ameba_AMB82-MINI.menu.UploadBaudrate.230400.upload.speed=230400
+
+Ameba_AMB82-MINI.menu.LoadNNModelSource.flash=Flash
+Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_LOAD_MODEL_FLASH
+Ameba_AMB82-MINI.menu.LoadNNModelSource.sd=SD Card
+Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_LOAD_MODEL_SD
+
 ##############################################################

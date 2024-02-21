@@ -1,8 +1,18 @@
 #include <Arduino.h>
 #include "NNModelSelection.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "nn_file_op.h"
+#ifdef __cplusplus
+}
+#endif
+
+extern void nn_load_model_src_sel(uint32_t);
 
 void NNModelSelection::modelSelect(unsigned char nntask)
 {
+    nn_load_model_src_sel(ARDUINO_LOAD_MODEL);
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -41,6 +51,7 @@ void NNModelSelection::modelSelect(unsigned char nntask)
 
 void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel)
 {
+    nn_load_model_src_sel(ARDUINO_LOAD_MODEL);
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -151,6 +162,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
 
 void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel)
 {
+    nn_load_model_src_sel(ARDUINO_LOAD_MODEL);
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
