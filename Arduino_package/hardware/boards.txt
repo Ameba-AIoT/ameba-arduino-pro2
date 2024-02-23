@@ -1,4 +1,3 @@
-
 menu.EraseFlash=* Erase All Flash Memory (16MB)
 menu.AutoUploadMode=* Auto Flash Mode
 menu.StdLibInit=* Standard Lib
@@ -19,9 +18,10 @@ Ameba_AMB82-MINI.build.f_cpu=500000000L
 Ameba_AMB82-MINI.build.usb_product="AMB82-MINI"
 Ameba_AMB82-MINI.build.board=AMEBA
 Ameba_AMB82-MINI.build.core=ambpro2
-#Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.menu_flags}
 Ameba_AMB82-MINI.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
 Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
+Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags}
 
 Ameba_AMB82-MINI.upload.tool=ameba_pro2_tools
 Ameba_AMB82-MINI.upload.protocol=usb_serial
@@ -46,9 +46,9 @@ Ameba_AMB82-MINI.menu.AutoUploadMode.Enable=Enable
 Ameba_AMB82-MINI.menu.AutoUploadMode.Enable.upload.auto_mode=Enable
 
 Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.Arduino_STD_PRINTF_flags=-DArduino_STD_PRINTF
 Ameba_AMB82-MINI.menu.StdLibInit.Disable=Disable
-Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags}
+Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.Arduino_STD_PRINTF_flags=
 
 Ameba_AMB82-MINI.menu.UploadBaudrate.2M=2000000
 Ameba_AMB82-MINI.menu.UploadBaudrate.2M.upload.speed=2000000
@@ -58,8 +58,8 @@ Ameba_AMB82-MINI.menu.UploadBaudrate.230400=230400
 Ameba_AMB82-MINI.menu.UploadBaudrate.230400.upload.speed=230400
 
 Ameba_AMB82-MINI.menu.LoadNNModelSource.flash=Flash
-Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_LOAD_MODEL_FLASH
+Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_FLASH
 Ameba_AMB82-MINI.menu.LoadNNModelSource.sd=SD Card
-Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} -DArduino_LOAD_MODEL_SD
+Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
 
 ##############################################################

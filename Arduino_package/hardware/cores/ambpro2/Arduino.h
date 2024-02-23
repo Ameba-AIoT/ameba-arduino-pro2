@@ -56,8 +56,12 @@ extern int dbg_sprintf(char *str, const char *fmt, ...);
 
 #ifdef Arduino_LOAD_MODEL_FLASH
 #define ARDUINO_LOAD_MODEL 0x01    // FLASH
-#elif Arduino_LOAD_MODEL_SD
+#else
+#ifdef Arduino_LOAD_MODEL_SD
 #define ARDUINO_LOAD_MODEL 0x02    // SD CARD
+#else
+#error Please choose between Flash or SD card in the Menu.
+#endif
 #endif
 
 #ifndef Arduino_STD_PRINTF
