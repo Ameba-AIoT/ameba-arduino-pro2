@@ -302,12 +302,14 @@ const char* input2model(const char* input) {
 		{"CUSTOMIZED_MOBILEFACENET", "mobilefacenet_i16"},
 		{"CUSTOMIZED_SCRFD",         "scrfd640"},
 		{"CUSTOMIZED_YAMNET",        "yamnet_fp16"},
+		{"CUSTOMIZED_IMGCLASS",		 "img_class"},
 		{"DEFAULT_YOLOV3TINY",       "yolov3_tiny"},
 		{"DEFAULT_YOLOV4TINY",       "yolov4_tiny"},
 		{"DEFAULT_YOLOV7TINY",       "yolov7_tiny"},
 		{"DEFAULT_MOBILEFACENET",    "mobilefacenet_i8"},
 		{"DEFAULT_SCRFD",            "scrfd320p"},
 		{"DEFAULT_YAMNET",			 "yamnet_fp16"},
+		{"DEFAULT_IMGCLASS",		 "img_class"},
 	};
 
 	int mapping_size = sizeof(model_mapping) / sizeof(model_mapping[0]);
@@ -338,9 +340,12 @@ const char* input2header(const char* input) {
 	else if (strcmp(input, "yamnet_fp16") == 0) {
 		header = "NNAudioClassification.h";
 	}
+	else if (strcmp(input, "img_class") == 0) {
+		header = "NNImageClassification.h";
+	}
 	else if (strcmp(input, "None") == 0) {
 		header = "NA";
-	}
+	} 
 
 	return header;
 }
@@ -732,10 +737,12 @@ int writeTXT(const char* path) {
 	char model_name_fd[MAX_PATH_LENGTH] = "";
 	char model_name_fr[MAX_PATH_LENGTH] = "";
 	char model_name_ac[MAX_PATH_LENGTH] = "";
+	char model_name_ic[MAX_PATH_LENGTH] = "";
 	char header_od[MAX_PATH_LENGTH] = "NA";
 	char header_fd[MAX_PATH_LENGTH] = "NA";
 	char header_fr[MAX_PATH_LENGTH] = "NA";
 	char header_ac[MAX_PATH_LENGTH] = "NA";
+	char header_ic[MAX_PATH_LENGTH] = "NA";
 	char header_all[MAX_PATH_LENGTH] = "";
 	char line_strip_header[MAX_PATH_LENGTH] = "NA";
 	char line_strip_headerNN[MAX_PATH_LENGTH] = "NA";
@@ -827,7 +834,7 @@ int writeTXT(const char* path) {
 					strcpy(model_type, token);
 					if (PRINT_DEBUG) printf("[%d] Model Type: %s\n", __LINE__, model_type);
 				}
-
+	
 				/* ------------------ object detection ------------------*/
 				token = strtok(NULL, ", ");
 				if (PRINT_DEBUG) printf("[%d]  Param 1: %s\n", __LINE__, token);
@@ -851,8 +858,13 @@ int writeTXT(const char* path) {
 							}
 							else {
 								// IDE2
+#ifdef _WIN32
 								char* example_name = strrchr(path_example, '\\');   // find the last "\"
 								removeChar(example_name, '\\');
+#else
+								char* example_name = strrchr(path_example, '/');   // find the last "/"
+								removeChar(example_name, '/');
+#endif
 								listExampleDir(path_library, example_name);
 								strcpy(dir_example, folder_example);                // update example directory name
 							}
@@ -913,8 +925,13 @@ int writeTXT(const char* path) {
 							}
 							else {
 								// IDE2
+#ifdef _WIN32
 								char* example_name = strrchr(path_example, '\\');   // find the last "\"
 								removeChar(example_name, '\\');
+#else
+								char* example_name = strrchr(path_example, '/');   // find the last "/"
+								removeChar(example_name, '/');
+#endif
 								listExampleDir(path_library, example_name);
 								strcpy(dir_example, folder_example);                // update example directory name
 							}
@@ -976,8 +993,13 @@ int writeTXT(const char* path) {
 								}
 								else {
 									// IDE2
+#ifdef _WIN32
 									char* example_name = strrchr(path_example, '\\');   // find the last "\"
 									removeChar(example_name, '\\');
+#else
+									char* example_name = strrchr(path_example, '/');   // find the last "/"
+									removeChar(example_name, '/');
+#endif
 									listExampleDir(path_library, example_name);
 									strcpy(dir_example, folder_example);                // update example directory name
 								}
@@ -1033,8 +1055,13 @@ int writeTXT(const char* path) {
 											extractRootDirectory((char*)path_example, dir_example);
 										}
 										else {
+#ifdef _WIN32
 											char* example_name = strrchr(path_example, '\\');   // find the last "\"
 											removeChar(example_name, '\\');
+#else
+											char* example_name = strrchr(path_example, '/');   // find the last "/"
+											removeChar(example_name, '/');
+#endif
 											listExampleDir(path_library, example_name);
 											strcpy(dir_example, folder_example);                // update example directory name
 										}
@@ -1069,6 +1096,74 @@ int writeTXT(const char* path) {
 								}
 								else { token = "NA_MODEL"; }
 								strcpy(model_name_ac, token);
+
+								/*-------------- image classification --------------*/
+								token = strtok(NULL, ", ");
+								if (token != NULL) {
+									if (PRINT_DEBUG) printf("[%d]  Param 5: %s\n", __LINE__, token);
+
+									// FACE_RECOGNITION example: check model combination rules
+									if (strcmp(model_type, "IMAGE_CLASSIFICATIION") == 0) {
+										if (strcmp(token, "NA_MODEL") == 0 || strstr(token, "IMGCLASS") == NULL) {
+											goto error_combination;
+										}
+									}
+
+									// check customized IC model
+									if (strstr(token, key_amb_customized) != NULL) {
+										if (PRINT_DEBUG) printf("[%d]ic key_amb_customized\n", __LINE__);
+										if (PRINT_DEBUG) printf("[%d]customized ic: %s\n", __LINE__, input2model(token));
+										if (PRINT_DEBUG) printf("[%d]path_example: %s\n", __LINE__, path_example);
+
+										if (strcmp(path_example, "Temp") == 0) {
+											// IDE1
+											extractRootDirectory((char*)path_example, dir_example);
+										}
+										else {
+											// IDE2
+#ifdef _WIN32
+											char* example_name = strrchr(path_example, '\\');   // find the last "\"
+											removeChar(example_name, '\\');
+#else
+											char* example_name = strrchr(path_example, '/');   // find the last "/"
+											removeChar(example_name, '/');
+#endif
+											listExampleDir(path_library, example_name);
+											strcpy(dir_example, folder_example);                // update example directory name
+										}
+
+										DIR* dir;
+										struct dirent* entry;
+										int count = 0;
+										int count_match = 0;
+
+										// check weather dir is valid
+										if ((dir = opendir(dir_example)) != NULL) {
+											/* print all the files and directories within directory */
+											while ((entry = readdir(dir)) != NULL) {
+												if (entry->d_type == DT_REG) {
+													count++;
+												}
+												if (strstr(entry->d_name, ".nb") != NULL) {
+													if (strstr(entry->d_name, "fer")) {
+														if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
+														count_match++;
+													}
+												}
+											}
+										}
+										if (count <= 1) {
+											goto error_customized_missing;
+										}
+										if (count_match == 0) {
+											goto error_customized_mismatch;
+										}
+									}
+									if (token != NULL) {
+										strcpy(model_name_ic, token);
+									}
+								}
+
 							}
 						}
 					}
@@ -1082,6 +1177,7 @@ int writeTXT(const char* path) {
 						strcpy(model_name_fd, "NA_MODEL");
 						strcpy(model_name_fr, "NA_MODEL");
 						strcpy(model_name_ac, "NA_MODEL");
+						strcpy(model_name_ic, "NA_MODEL");
 					}
 					if (strcmp(model_type, "FACE_DETECTION") == 0) {
 						//if (strcmp(model_type, "FACE_DETECTION") == 0 && strcmp(input2model(model_name_fd), "NA") == 0) {
@@ -1089,6 +1185,7 @@ int writeTXT(const char* path) {
 						strcpy(model_name_fd, "DEFAULT_SCRFD");
 						strcpy(model_name_fr, "NA_MODEL");
 						strcpy(model_name_ac, "NA_MODEL");
+						strcpy(model_name_ic, "NA_MODEL");
 					}
 					if (strcmp(model_type, "FACE_RECOGNITION") == 0) {
 						//if (strcmp(model_type, "FACE_RECOGNITION") == 0 && strcmp(input2model(model_name_fr), "NA") == 0) {
@@ -1096,13 +1193,23 @@ int writeTXT(const char* path) {
 						strcpy(model_name_fd, "DEFAULT_SCRFD");
 						strcpy(model_name_fr, "DEFAULT_MOBILEFACENET");
 						strcpy(model_name_ac, "NA_MODEL");
+						strcpy(model_name_ic, "NA_MODEL");
 					}
-					// TODO: add AUDIO_CLASSIFICATION
+					// AUDIO_CLASSIFICATION
 					if (strcmp(model_type, "AUDIO_CLASSIFICATION") == 0) {
 						strcpy(model_name_od, "NA_MODEL");
 						strcpy(model_name_fd, "NA_MODEL");
 						strcpy(model_name_fr, "NA_MODEL");
 						strcpy(model_name_ac, "DEFAULT_YAMNET");
+						strcpy(model_name_ic, "NA_MODEL");
+					}
+					// IMAGE_CLASSIFICATION
+					if (strcmp(model_type, "IMAGE_CLASSIFICATION") == 0) {
+						strcpy(model_name_od, "NA_MODEL");
+						strcpy(model_name_fd, "NA_MODEL");
+						strcpy(model_name_fr, "NA_MODEL");
+						strcpy(model_name_ac, "NA_MODEL");
+						strcpy(model_name_ic, "DEFAULT_IMGCLASS");
 					}
 				}
 			}
@@ -1121,6 +1228,7 @@ int writeTXT(const char* path) {
 	if (PRINT_DEBUG) printf("[%d] Model Name FD: %s\n", __LINE__, input2model(model_name_fd));
 	if (PRINT_DEBUG) printf("[%d] Model Name FR: %s\n", __LINE__, input2model(model_name_fr));
 	if (PRINT_DEBUG) printf("[%d] Model Name AC: %s\n", __LINE__, input2model(model_name_ac));
+	if (PRINT_DEBUG) printf("[%d] Model Name IC: %s\n", __LINE__, input2model(model_name_ic));
 	if (PRINT_DEBUG) printf("-------------------------------------\n");
 
 
@@ -1128,8 +1236,8 @@ int writeTXT(const char* path) {
 	updateTXT("----------------------------------");
 	updateTXT("Current ino contains model(s):");
 
-	if (strlen(model_name_od) == 0 && strlen(model_name_fd) == 0 && strlen(model_name_fr) == 0 && strlen(model_name_ac) == 0) {
-		for (int i = 0; i < 4; i++) {
+	if (strlen(model_name_od) == 0 && strlen(model_name_fd) == 0 && strlen(model_name_fr) == 0 && strlen(model_name_ac) == 0 && strlen(model_name_ic) == 0) {
+		for (int i = 0; i < 5; i++) {
 			updateTXT("NA");
 		}
 	}
@@ -1138,6 +1246,7 @@ int writeTXT(const char* path) {
 		updateTXT(input2model(model_name_fd));
 		updateTXT(input2model(model_name_fr));
 		updateTXT(input2model(model_name_ac));
+		updateTXT(input2model(model_name_ic));
 	}
 
 	updateTXT("-----------------------------------");
@@ -1162,12 +1271,16 @@ int writeTXT(const char* path) {
 				if (strstr(line, "Audio") != NULL) {
 					extractString(line, header_ac);
 				}
+				if (strstr(line, "Image") != NULL) {
+					extractString(line, header_ic);
+				}
 			}
 		}
 		if (PRINT_DEBUG) printf("[%d] Extracted OD header: %s\n", __LINE__, header_od);
 		if (PRINT_DEBUG) printf("[%d] Extracted FD header: %s\n", __LINE__, header_fd);
 		if (PRINT_DEBUG) printf("[%d] Extracted FR header: %s\n", __LINE__, header_fr);
 		if (PRINT_DEBUG) printf("[%d] Extracted AC header: %s\n", __LINE__, header_ac);
+		if (PRINT_DEBUG) printf("[%d] Extracted IC header: %s\n", __LINE__, header_ac);
 		if (PRINT_DEBUG) printf("-------------------------------------\n");
 		fclose(f_headerNN);
 	}
@@ -1181,7 +1294,7 @@ int writeTXT(const char* path) {
 	updateTXT(header_fd);
 	updateTXT(header_fr);
 	updateTXT(header_ac);
-
+	updateTXT(header_ic);
 	updateTXT("----------------------------------");
 	updateTXT("Current ino video status:");
 
