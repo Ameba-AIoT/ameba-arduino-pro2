@@ -326,8 +326,8 @@ typedef struct yamnet_res_s {
 } yamnet_res_t;
 
 typedef struct classification_res_s {
-    float prob;
-	int	  class_id;
+	float prob;
+	int class_id;
 } classification_res_t;
 
 #if !defined(PC_SIMULATION)
