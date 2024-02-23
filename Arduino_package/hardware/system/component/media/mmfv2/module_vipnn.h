@@ -325,6 +325,11 @@ typedef struct yamnet_res_s {
 	float prob;
 } yamnet_res_t;
 
+typedef struct classification_res_s {
+	float prob;
+	int class_id;
+} classification_res_t;
+
 #if !defined(PC_SIMULATION)
 extern mm_module_t vipnn_module;
 #endif
