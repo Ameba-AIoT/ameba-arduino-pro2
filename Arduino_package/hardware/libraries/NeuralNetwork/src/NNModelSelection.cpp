@@ -178,7 +178,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             _imgclassmodel = DEFAULT_IMGCLASS;
             break;
         }
-        case CUSTOMIZED_YAMNET: {
+        case CUSTOMIZED_IMGCLASS: {
             _imgclassmodel = CUSTOMIZED_IMGCLASS;
             break;
         }
