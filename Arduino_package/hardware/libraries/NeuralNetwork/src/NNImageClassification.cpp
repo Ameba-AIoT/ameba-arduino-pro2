@@ -89,11 +89,6 @@ void NNImageClassification::begin(void)
         use_roi = 0;
     }
 
-    // if (_nntask != IMAGE_CLASSIFICATION && _nntask != DEFAULT_IMGCLASS && _nntask != CUSTOMIZED_IMGCLASS) {
-    // printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
-    // while(1) {}
-    // }
-
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&img_classification);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ICResultCallback);
