@@ -3,12 +3,15 @@ Pre Release Version 4.0.7
 Version 4.0.7 – 2024/02/06
 Version 4.0.7 – 2024/02/22
 Version 4.0.7 – 2024/02/23
+Version 4.0.7 - 2024/02/29
 
 Feature:
 - Add I2C OLED SSD1306 example and libs
 - Add load NN model using SD card feature
 - Add MPU6050 support
 - Add image classification (emotion detection)
+- Bug fix for image classification example
+- Add HTTP_Post_MP4_Whisper_Server example
 
 API Updates:
 - Update SDK code base by passing coding style check
@@ -20,6 +23,7 @@ API Updates:
     - enhance the logic of checking
     - speed up the proces
 - Update board.txt and Arduino.h
+- Update Arduino.h
 
 Misc:
 - Add GitHub Action
@@ -32,3 +36,12 @@ Misc:
 - Update PULL_REQUEST_TEMPLATE.md
 - Update ameba_pro2_tools 1.2.17
     - image classification
+- Update ameba_pro2_tools 1.2.18
+    - Avoid permission denied error of MacOS M1/M2 and Intel
+    - UPdate Makefile and cpp files
+    - Update .json files
+- Update workflows
+    - Add txt files for release commit and release log
+    - Add sdk_release.yml
+    - Add scripts folder 
+    - Add submodule for python scripts
