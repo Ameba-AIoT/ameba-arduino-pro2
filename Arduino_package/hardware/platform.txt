@@ -117,21 +117,24 @@ compiler.ameba.ar.list= "{runtime.platform.path}/variants/common_libs/libfaac.a"
 build.usb_manufacturer="Unknown"
 build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
 
-
 # Pre build process
 # -----------------
+#Give permission to tools for linux and macos
+recipe.hooks.prebuild.1.pattern.linux = chmod -R 777 "{runtime.tools.ameba_pro2_tools.path}"
+recipe.hooks.prebuild.1.pattern.macosx= chmod -R 777 "{runtime.tools.ameba_pro2_tools.path}"
+
 ## combine toolchain
-recipe.hooks.prebuild.1.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p2.path}" {toolchain_version_p1} {toolchain_version_p2}
-recipe.hooks.prebuild.1.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
-recipe.hooks.prebuild.1.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
-
-recipe.hooks.prebuild.2.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}"
-recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path}
-recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path}
-
-recipe.hooks.prebuild.3.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/nn_model_update_windows.exe" "{build.path}" "{ameba.tools_path}"
-recipe.hooks.prebuild.3.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_linux {build.path} {ameba.tools_path}
-recipe.hooks.prebuild.3.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_macos {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.2.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p2.path}" {toolchain_version_p1} {toolchain_version_p2}
+recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
+recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
+ 
+recipe.hooks.prebuild.3.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}"
+recipe.hooks.prebuild.3.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.3.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path}
+ 
+recipe.hooks.prebuild.4.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/nn_model_update_windows.exe" "{build.path}" "{ameba.tools_path}"
+recipe.hooks.prebuild.4.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_linux {build.path} {ameba.tools_path}
+recipe.hooks.prebuild.4.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_macos {build.path} {ameba.tools_path}
 
 # Ameba compile patterns
 # ----------------------
