@@ -1,0 +1,57 @@
+Release Version 4.0.6
+
+Version 4.0.6 – 2024/02/02
+
+Feature:
+
+Add example I2CScanner
+Add example Camera_2_Lcd
+Add example NTPClient
+Add example I2C_LCD_HelloWorld
+Update example RTSPFaceDetection
+Add example ISP Control
+Add Examples for Image Tuning, Mode, AWB. WDR and AE
+Update example RTPAudioStream
+Fix G711E typo to G711D
+Update example EchoCancellation stack size
+Fix issue for BLE name not noticed in scan list
+Update AEC_EN to be 0 by default.
+Update example MotionDetectGoogleLineNotify
+Add NTP examples to change lastmodifiedtime after saving images/ mp4 files
+NTPClient library with new APIs to get formatted date. 6 new examples to use NTPClient to change last modified date on SDcard after saving images or video to SD Card
+Update log for MQTT
+API Updates:
+
+Update code base and libs
+Update Wire APIs
+Fix I2C scan and Master Sender issues
+Update AudioEncoder, AudioDecoder, VideoStreamOverlay, NNFaceDetection, NNObjjectDetection API
+Update AudioEncoder.h
+Update MP4Recording.h
+Add ISP Control API
+Update keywords.txt
+Update VideoStream.cpp
+Update VideoStream.h
+Update ard_socket.c
+Update Motion Detection API (EIP)
+Update MD API
+Update libarduino.a
+Misc:
+
+Update platform.txt
+fix compile issue when username has space
+Add more includes for new code base
+Update new addresses for new partition table
+Update ameba_pro2_tools 1.2.16
+Update tools to compatible with Ubuntu
+Update all bins for new code base
+Add signature to elf2bin.win.exe
+Update all system bins sync with new partition table
+Update sensor_f37.bin
+Update AmebaEink.zip
+Add issue template
+Add PULL_REQUEST_TEMPLATE.md
+Add CODE_OF_CONDUCT.md
+Add CONTRIBUTING.md
+Add LICENSE
+Minor update for coding style and clear warnings

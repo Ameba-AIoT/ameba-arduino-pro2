@@ -1,0 +1,26 @@
+# This workflow runs coding_style_check test for Ameba Arduino SDK
+
+name: Check mbed coding style
+on: [push, pull_request]
+#  workflow_dispatch:
+jobs:
+  formatting-check:
+    name: Run clang-format check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - 'Arduino_package/hardware/cores'
+          - 'Arduino_package/hardware/libraries'
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Run C/C++/header files check
+      uses: M-ichae-l/clang-format-action@v1.0.0
+      with:
+        clang-format-version: '17'
+        check-path: ${{ matrix.path }}
+        clang-format-style-path: .github/Coding_Style/coding_style_mbed/.clang-format
+        fallback-style: 'Mozilla' # optional
