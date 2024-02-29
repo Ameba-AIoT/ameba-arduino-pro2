@@ -1,0 +1,17 @@
+Feature:
+- Bug fix for image classification example
+- Add HTTP_Post_MP4_Whisper_Server example
+
+API Updates:
+- Update Arduino.h
+
+Misc:
+- Update ameba_pro2_tools 1.2.18
+    - Avoid permission denied error of MacOS M1/M2 and Intel
+    - UPdate Makefile and cpp files
+    - Update .json files
+- Update workflows
+    - Add txt files for release commit and release log
+    - Add sdk_release.yml
+    - Add scripts folder 
+    - Add submodule for python scripts

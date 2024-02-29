@@ -1,0 +1,102 @@
+name: SDK Release Dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Type of release, E(arly)/R(egular)"
+        required: true
+        default: 'E'
+        choices: [E, R]
+
+env:
+  REPO_NAME: "ameba_pro2"
+  JSON_LINK_DEV: "https://github.com/ambiot/ambpro2_arduino/blob/dev/Arduino_package/package_realtek_amebapro2_early_index.json"
+  JSON_LINK_MAIN: "https://github.com/ambiot/ambpro2_arduino/blob/main/Arduino_package/package_realtek_amebapro2_index.json"
+  RRLEASE_BRANCH_NAME: "main"
+  RRLEASE_COMMIT_LOG: "./.github/release_commit_log.txt"
+  RRLEASE_LOG: "./.github/release_log.txt"
+
+jobs:
+  SDK_Release_Workflow:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out code with submodules
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+#      - name: Steup python env
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.12.2'
+
+      - name: Check branch and input
+        run: |
+          echo "Current branch (full ref): $GITHUB_REF"
+          if [[ "${{ github.event.inputs.release_type }}" == "E" ]]; then
+            if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+              echo "Continue with $GITHUB_REF"
+            else
+              echo "Error branch selection"
+              exit 1
+            fi
+          elif [[ "${{ github.event.inputs.release_type }}" == "R" ]]; then
+            if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "Continue with $GITHUB_REF"
+            else
+              echo "Error branch selection"
+              exit 1
+            fi
+          else
+            echo "Invalid release type specified. Please choose E or R."
+            exit 1
+          fi
+
+      - name: Latest tag
+        run: |
+          echo "LAST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: Zip packages
+        run: |
+          bash .github/Scripts/Bash/tar_package.sh
+          echo "PACKAGE_SHA=$(sha256sum ./Arduino_package/release/TEMP.tar.gz | awk '{print $1}')" >> $GITHUB_ENV
+          echo "PACKAGE_SIZE=$(ls -l ./Arduino_package/release/TEMP.tar.gz | awk '{print $5}')" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Execute python script
+        run: |
+          echo "Release type: ${{ github.event.inputs.release_type }}"
+          if [[ "${{ github.event.inputs.release_type }}" == "E" ]]; then
+            echo "Performing Early release workflow..."
+            python .github/Scripts/Python/python_script_public/ameba_arduino_release_package_maker.py ${{ env.REPO_NAME }} E ${{ env.LAST_TAG }} ${{ env.PACKAGE_SHA }} ${{ env.PACKAGE_SIZE }} ${{ env.JSON_LINK_DEV }} ${{ env.RRLEASE_BRANCH_NAME }}
+            python .github/Scripts/Python/python_script_public/ameba_arduino_release_notes_maker.py E ${{ env.RRLEASE_LOG }} ${{ env.RRLEASE_COMMIT_LOG }} ${{ env.LAST_TAG }}
+          elif [[ "${{ github.event.inputs.release_type }}" == "R" ]]; then
+            echo "Performing Regular release workflow..."
+            python .github/Scripts/Python/python_script_public/ameba_arduino_release_package_maker.py ${{ env.REPO_NAME }} R ${{ env.LAST_TAG }} ${{ env.PACKAGE_SHA }} ${{ env.PACKAGE_SIZE }} ${{ env.JSON_LINK_MAIN }} ${{ env.RRLEASE_BRANCH_NAME }}
+            python .github/Scripts/Python/python_script_public/ameba_arduino_release_notes_maker.py R ${{ env.RRLEASE_LOG }} ${{ env.RRLEASE_COMMIT_LOG }} ${{ env.LAST_TAG }}
+          else
+            echo "Invalid release type specified. Please choose E or R."
+            exit 1
+          fi
+        shell: bash
+
+      - name: Set commit message
+        id: commit_message_step
+        run: |
+          echo 'commit_message<<EOF' >> $GITHUB_OUTPUT
+          cat ./temp_release_commit_log.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - run: rm -rf temp_release_commit_log.txt
+
+      - name: Commit to the branch
+        uses: stefanzweifel/git-auto-commit-action@v5
+        id: commit
+        with:
+          commit_message: ${{ steps.commit_message_step.outputs.commit_message }}
+

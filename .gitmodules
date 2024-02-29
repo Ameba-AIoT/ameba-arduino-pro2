@@ -1,3 +1,6 @@
 [submodule ".github/Coding_Style"]
 	path = .github/Coding_Style
 	url = https://github.com/M-ichae-l/Coding_Style
+[submodule ".github/Scripts/Python/python_script_public"]
+	path = .github/Scripts/Python/python_script_public
+	url = https://github.com/M-ichae-l/python_script_public

@@ -1,0 +1,1 @@
+tar -zcf ./Arduino_package/release/TEMP.tar.gz Arduino_package/hardware/

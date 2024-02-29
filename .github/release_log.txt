@@ -1,0 +1,34 @@
+Pre Release Version 4.0.7
+
+Version 4.0.7 – 2024/02/06
+Version 4.0.7 – 2024/02/22
+Version 4.0.7 – 2024/02/23
+
+Feature:
+- Add I2C OLED SSD1306 example and libs
+- Add load NN model using SD card feature
+- Add MPU6050 support
+- Add image classification (emotion detection)
+
+API Updates:
+- Update SDK code base by passing coding style check
+- Update Wire.cpp
+    - Remove additional i2c_reset in endTransmission()
+- Update IPAddress.cpp
+- Update SPI.h
+- Update the pin_check related
+    - enhance the logic of checking
+    - speed up the proces
+- Update board.txt and Arduino.h
+
+Misc:
+- Add GitHub Action
+    - mbed coding style check coding_style_check.yml
+        - Actions run every 'push' and 'pull_request'
+    - label related Bug_report.yml
+    - spell_check.yml
+        - Enable "Check word spell"
+        - Actions run every 'push' and 'pull_request'
+- Update PULL_REQUEST_TEMPLATE.md
+- Update ameba_pro2_tools 1.2.17
+    - image classification
