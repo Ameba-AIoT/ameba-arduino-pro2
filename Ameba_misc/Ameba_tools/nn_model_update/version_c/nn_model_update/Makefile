@@ -15,6 +15,7 @@ else ifeq ($(UNAME), Darwin)
     AR = ar
     RCS = rcs
     CFLAGS = -c
+	ARCH_FLAGS = -arch x86_64 -arch arm64
     LDFLAGS = -L. -lcjson -L/Library/Developer/CommandLineTools/usr/lib/swift_static/macosx/ -Bstatic
     OUTPUT = nn_model_update_macos
 else
@@ -23,11 +24,11 @@ endif
 
 # Target rule for Linux and macOS
 nn_model_update: cJSON.o libcjson.a
-	$(CC) nn_model_update.c -o $(OUTPUT) $(LDFLAGS)
+	$(CC) $(ARCH_FLAGS) nn_model_update.c -o $(OUTPUT) $(LDFLAGS)
 
 # Dependency rules
 cJSON.o: cJSON.c
-	$(CC) $(CFLAGS) cJSON.c
+	$(CC) $(CFLAGS) $(ARCH_FLAGS) cJSON.c
 
 libcjson.a: cJSON.o
 	$(AR) $(RCS) libcjson.a cJSON.o
