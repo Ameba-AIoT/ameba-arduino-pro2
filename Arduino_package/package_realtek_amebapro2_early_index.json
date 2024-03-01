@@ -20,8 +20,8 @@
           },
           "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2-4.0.7-build20240229.tar.gz",
           "archiveFileName": "ameba_pro2-4.0.7-build20240229.tar.gz",
-          "checksum": "SHA-256:a97556c9993eb527f0506037ec5433c5e41e6417e005b783e0f6fde21aaa93c3",
-          "size": "95298785",
+          "checksum": "SHA-256:46933339d2a6cd89ff85a2bf18cc4a31b30b1bb8d189603133040db8c4f6d08f",
+          "size": "95115326",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
