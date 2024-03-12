@@ -83,7 +83,8 @@ typedef struct {
 
 bool usbh_cdc_ecm_on(usbh_cdc_ecm_user_cb_t *arg);//Init the ecm procedure
 bool usbh_cdc_ecm_off(void);//Deinit the ecm
-bool usbd_cdc_ecm_status(void);//Get the ecm status
-bool usbd_cdc_ecm_ethernt_status(void);//Get the ethernet status
+bool usbh_cdc_ecm_status(void);//Get the ecm status
+bool usbh_cdc_ecm_ethernt_status(void);//Get the ethernet status
+bool usbh_cdc_ecm_enumeration_status(void);
 #endif  /* USBH_CDC_ECM_HAL_H */
 

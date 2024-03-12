@@ -519,7 +519,7 @@ struct pollfd
 #define LWIP_TIMEVAL_PRIVATE 1
 #endif
 
-#if LWIP_TIMEVAL_PRIVATE
+#if LWIP_TIMEVAL_PRIVATE && !defined(_TIMEVAL_DEFINED) //* Added by Realtek */
 struct timeval {
   long    tv_sec;         /* seconds */
   long    tv_usec;        /* and microseconds */

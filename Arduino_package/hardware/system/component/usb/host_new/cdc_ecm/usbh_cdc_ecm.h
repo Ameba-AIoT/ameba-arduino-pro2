@@ -214,12 +214,18 @@ typedef struct {
 	u8                                  *intr_in_buf;
 	usbh_cdc_ecm_transfer_state_t       intr_in_state;
 
+	u8                                  bulk_data_out_idle_state_cnt;
+	u32									bulk_out_recover_timer_1;
+	u32									bulk_out_recover_timer_2;
 	u32                                 bulk_data_out_len;
 	u8                                  *bulk_data_out_buf;
 	usbh_cdc_ecm_transfer_state_t       bulk_data_out_state;
 
 	//u8                                  bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
 	u8                                  *bulk_data_in_buf;
+	u8                                  bulk_data_in_idle_state_cnt;
+	u32									bulk_in_recover_timer_1;
+	u32									bulk_in_recover_timer_2;
 	u32									ip_total_len;
 	//bulk_data_in_buf[USBH_CDC_ECM_BULK_BUF_MAX_SIZE];
 	volatile usbh_cdc_ecm_transfer_state_t      bulk_data_in_state;
@@ -234,7 +240,7 @@ typedef struct {
 } usbh_cdc_ecm_host_t;
 
 
-#define MAX_SEND_PACKET 512
+#define MAX_SEND_PACKET 1//512
 #define MAX_RECV_PACKET 512
 
 typedef struct _usb_send_packet {

@@ -133,7 +133,10 @@ struct codec_info {
 /*av codec tables*/
 //#include "section_config.h"
 //SDRAM_DATA_SECTION
-static const struct codec_info av_codec_tables[] = {
+#define AVCODEC_SIZE 13
+
+// TODO: fill all infomation
+static const struct codec_info av_codec_tables[AVCODEC_SIZE] = {
 	{AV_CODEC_ID_MJPEG, "MJPEG", RTP_PT_JPEG, 90000, 0, 0},
 	{AV_CODEC_ID_H264, "H264", RTP_PT_DYN_BASE, 90000, 0, 0},
 	{AV_CODEC_ID_PCMU, "PCMU", RTP_PT_PCMU, 8000, 1, 0},
@@ -143,7 +146,7 @@ static const struct codec_info av_codec_tables[] = {
 	{AV_CODEC_ID_H265, "H265", RTP_PT_DYN_BASE, 90000, 0, 0},
 	{AV_CODEC_ID_OPUS, "opus", RTP_PT_DYN_BASE, 48000, 2, 0}
 };
-#define AVCODEC_SIZE 13
+
 
 void get_codec_by_id(struct codec_info *c, int id);
 

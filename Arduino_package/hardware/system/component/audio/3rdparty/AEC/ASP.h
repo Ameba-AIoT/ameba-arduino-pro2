@@ -22,7 +22,7 @@ typedef struct farend_pcm_pack {
 	unsigned int length;
 } farend_pcm_pack;
 
-#if defined(CONFIG_PLATFORM_8735B) && (defined(CONFIG_NEWAEC) && CONFIG_NEWAEC) //consilient AEC only suppored on 8735 now
+#if (defined(CONFIG_NEWAEC) && CONFIG_NEWAEC)
 typedef enum {
 	CT_ALC = 0,
 	CT_LIMITER,
@@ -41,16 +41,15 @@ typedef struct CTAGC_cfg_s {
 	int16_t AGC_EN;
 	CT_AGC_MODE AGCMode;
 	int16_t ReferenceLvl;
-	int16_t RefThreshold;
+	int16_t RatioFormat;    // Ratio format: 0 => integer, range 1~50, 1 => 8.8 fix point, range 26~50*256 (mapping 26/256~50)
 	int16_t AttackTime;
 	int16_t ReleaseTime;
 	int16_t Ratio[3];
-	int16_t Threshold[3]; // Threshold1, Threshold2, NoiseGateLvl
+	int16_t Threshold[3];   // Threshold1, Threshold2, NoiseGateLvl
 	int16_t KneeWidth;
 	int16_t NoiseFloorAdaptEnable;
 	int16_t RMSDetectorEnable;
-
-	int16_t Reserve1;
+	int16_t MaxGainLimit;
 } CTAGC_cfg_t;
 
 typedef struct CTAEC_cfg_s {
@@ -70,6 +69,10 @@ typedef struct CTBF_cfg_s {
 	int16_t MM; //no of mics
 	int16_t mic_spacing;
 	int16_t mic_array_type;
+
+	int16_t Reserve1;
+	int16_t Reserve2;
+	int16_t Reserve3;
 } CTBF_cfg_t;
 
 typedef struct VQE_SND_STATE_s {
@@ -84,9 +87,10 @@ typedef struct VQE_SND_STATE_s {
 	uint8_t NSRun;
 	uint8_t BFRun;
 
-	int16_t Reserve1;
-	int16_t Reserve2;
-	int16_t Reserve3;
+	uint8_t Reserve1;
+	uint8_t Reserve2;
+	uint8_t Reserve3;
+	uint8_t Reserve4;
 } VQE_SND_STATE_t;
 
 typedef struct VQE_RCV_STATE_s {
@@ -96,9 +100,10 @@ typedef struct VQE_RCV_STATE_s {
 	uint8_t AGCRun;
 	uint8_t NSRun;
 
-	int16_t Reserve1;
-	int16_t Reserve2;
-	int16_t Reserve3;
+	uint8_t Reserve1;
+	uint8_t Reserve2;
+	uint8_t Reserve3;
+	uint8_t Reserve4;
 } VQE_RCV_STATE_t;
 
 

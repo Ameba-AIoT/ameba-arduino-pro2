@@ -33,15 +33,15 @@
 #define MMIC_CMD_SET_OUT_STAT2      0x42
 #define MMIC_CMD_SET_OUT_STAT3      0x43
 
-#define MMIC_STAT_MASK				0x0F
-#define MMIC_STAT_INIT            	0x00
-#define MMIC_STAT_EXIT            	0x01
-#define MMIC_STAT_RUN             	0x02
-#define MMIC_STAT_PAUSE            	0x04
-#define MMIC_STAT_SET_MASK			0xF0
-#define MMIC_STAT_SET_EXIT        	0x10
-#define MMIC_STAT_SET_PAUSE			0x20
-#define MMIC_STAT_SET_RUN			0x40
+#define MMIC_STAT_MASK				0x0FUL
+#define MMIC_STAT_INIT            	0x00UL
+#define MMIC_STAT_EXIT            	0x01UL
+#define MMIC_STAT_RUN             	0x02UL
+#define MMIC_STAT_PAUSE            	0x04UL
+#define MMIC_STAT_SET_MASK			0xF0UL
+#define MMIC_STAT_SET_EXIT        	0x10UL
+#define MMIC_STAT_SET_PAUSE			0x20UL
+#define MMIC_STAT_SET_RUN			0x40UL
 //
 #define MM_OUTPUT_MASK				0xf0
 #define MM_OUTPUT					0x10

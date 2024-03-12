@@ -624,7 +624,7 @@ provide richer profiling information of the internal NN/TP. This feature needs h
                  Calculate the checksum in vip_create_network() stage, will increase it excecution time.
 */
 #ifndef vpmdENABLE_CHECKSUM
-#define vpmdENABLE_CHECKSUM                  1
+#define vpmdENABLE_CHECKSUM                  0
 #endif
 
 /*

@@ -89,5 +89,42 @@ int sensor_external_set_gray_mode(int enable, int led_level);
  * @return 0 for success
  */
 int sensor_external_loop(void);
-void ss_set_dbglevel(int enable);
+
+/**
+ * command for get / set for sensor_service varialbe
+ *
+ * @tyep: refer to ss_cmd_type
+ * @index: refer to ss_cmd_index
+ * @value: write / read value
+ */
+void ss_cmd(int type, int index, int *value);
+
+enum ss_cmd_type {
+	SS_GET_CMD = 0,
+	SS_SET_CMD,
+};
+
+enum ss_dbg_level {
+	SS_DBG_NONE = 0,
+	SS_DBG_ENABLE,
+};
+
+enum ss_cmd_index {
+	SS_IDX_DBG_LEVEL = 0,
+	SS_IDX_EN_AUTO_IR,
+	SS_IDX_IR_STRENGTH,
+	SS_IDX_SW_LUX,
+};
+
+#define COUNT_IR_LED_STEP 3
+#define IR_MAX_STRENGTH	100
+#define IR_MIN_STRENGTH	50
+
+typedef struct auto_ir_config_s {
+	int ir_led_step[COUNT_IR_LED_STEP];
+	short def_irled_idx;
+	short thr_ir_darkder;
+	short thr_ir_brighter;
+} auto_ir_config_t;
+
 #endif

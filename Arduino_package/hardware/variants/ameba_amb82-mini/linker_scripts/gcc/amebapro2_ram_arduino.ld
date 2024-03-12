@@ -277,8 +277,10 @@ SECTIONS
 
 	.ram.retention.data :
 	{
+		__retention_start__ = .;
 		*(.retention.table*)
 		*(.retention.data*)
+		__retention_end__ = .;
 	} > RAM_RETENTION
 
 	.ram.bss (NOLOAD):

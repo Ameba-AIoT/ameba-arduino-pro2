@@ -213,4 +213,9 @@
 *  GPIO: F12(IR_CUT) F13(IR_LED)
 */
 #define CONFIG_RTK_EVB_IR_CTRL 0
+
+/* For NN configuration */
+#define CONFIG_NN_AES_ENCRYPTION        0
+#define CONFIG_NN_HASH_SIGNATURE_CHECK  0
+
 #endif

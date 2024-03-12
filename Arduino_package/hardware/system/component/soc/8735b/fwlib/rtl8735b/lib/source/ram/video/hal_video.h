@@ -821,6 +821,16 @@ static __inline__ int hal_video_set_mipi_clk_nonctn(int ch, int clk_noncontinuou
 	return OK;
 }
 
+static __inline__ int hal_video_fcs_en(int ch, int en)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->fcs = en;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
 
 #endif // #if !defined (CONFIG_VOE_PLATFORM) || !CONFIG_VOE_PLATFORM // Run on TM9
 /** @} */ /* End of group hal_enc */

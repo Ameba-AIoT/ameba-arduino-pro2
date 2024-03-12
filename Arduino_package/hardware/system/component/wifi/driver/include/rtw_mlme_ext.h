@@ -639,9 +639,11 @@ struct mlme_ext_priv {
 	u64 TSFValue;
 	u8	tsf_shift_done;
 	u8	tsf_shift_cnt;
+	u16	tsf_shift_min_backup;
 	u16	tsf_shift_min;
 	u16	tsf_shift_max;
 	u16	tsf_shift_set;
+	u16	tsf_interval;
 	unsigned char bstart_bss;
 
 #ifdef CONFIG_80211D

@@ -285,6 +285,8 @@ struct pwrctrl_priv {
 	u8		bHWPwrPindetect;
 	u8		bkeepfwalive;
 	u8		brfoffbyhw;
+	u8		bTSSItraining;			// tssi training
+	u8		tssi_avg_num;			// tssi average number
 	unsigned long PS_BBRegBackup[PSBBREG_TOTALCNT];
 
 #ifdef CONFIG_INTEL_PROXIM
@@ -331,6 +333,7 @@ struct pwrctrl_priv {
 	u8  tcp_keep_alive_wake_sys;
 	u8 *tcp_keep_alive_pkt;
 	u32 tcp_keep_alive_pkt_size;
+	u8	tcp_keep_alive_power_bit;
 #ifdef CONFIG_WOWLAN_DTIMTO
 	u8  tcp_keep_alive_dtimto_enable;
 	u8  tcp_keep_alive_dtimto_retry_inc;
@@ -435,6 +438,7 @@ struct pwrctrl_priv {
 	u8 pno_increment_step;
 	u8 pno_scan_period;
 	u8 pno_duration;
+	u8 pno_interval_time;
 #endif
 
 #ifdef CONFIG_WOWLAN_NTP_OFFLOAD

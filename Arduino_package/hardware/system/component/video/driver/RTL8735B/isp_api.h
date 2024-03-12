@@ -36,6 +36,12 @@ typedef struct als_config_s {
 	char Mask[ALS_MAX_COL * ALS_MAX_ROW];
 } als_config_t;
 
+typedef enum {
+	ALS_MODE_RGB = 0,
+	ALS_MODE_IR_Entry,
+	ALS_MODE_IR_Stable,
+} Als_mode_t;
+
 enum als_dbg_level {
 	ALS_DBG_NONE = 0,
 	ALS_DBG_SWITCH,

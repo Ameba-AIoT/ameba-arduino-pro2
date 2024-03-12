@@ -51,6 +51,8 @@ void hal_wdt_enable(void);
 void hal_wdt_disable(void);
 void hal_wdt_refresh(void);
 void hal_wdt_reg_irq(irq_handler_t handler, void *arg);
+void hal_wdt_reg_irq_s4ns(irq_handler_t handler);
+void hal_wdt_s2ns_handler_call(void *arg);
 void hal_wdt_unreg_irq(void);
 void hal_wdt_reset(u8 reset);
 void hal_wdt_aon_enable(void);
