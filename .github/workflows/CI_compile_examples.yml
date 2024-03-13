@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "Exit with $GITHUB_REF"
           exit 1
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' }}
+        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' && github.event.pull_request.base.ref != 'dev' && github.event.pull_request.base.ref != 'main'}}
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -90,7 +90,7 @@ jobs:
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
           verbose: false
           enable-deltas-report: false
-        if: github.ref == 'refs/heads/dev'
+        if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
 
       - name: Compile examples main
         uses: arduino/compile-sketches@v1.1.0
@@ -108,4 +108,4 @@ jobs:
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
           verbose: false
           enable-deltas-report: false
-        if: github.ref == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main' }}
