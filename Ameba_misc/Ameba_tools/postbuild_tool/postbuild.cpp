@@ -3,19 +3,19 @@
 Compile:
 
 windows:
-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
+g++.exe -o postbuild_windows.exe postbuild.cpp -static
 strip postbuild_windows.exe
-### g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static ico-out.o -static
-### mingw32-g++.exe -o postbuild_windows.exe postbuild_windows.cpp -static
+### g++.exe -o postbuild_windows.exe postbuild.cpp -static ico-out.o -static
+### mingw32-g++.exe -o postbuild_windows.exe postbuild.cpp -static
 
 If you encounter any issue while generating exe with icon, you may refer to: https://www.rodneybeede.com/programming/compiling_a_c___windows_executable_with_a_custom_icon.html
 
 linux:
-g++ -o postbuild_linux postbuild_linux.cpp -static
+g++ -o postbuild_linux postbuild.cpp -static
 strip postbuild_linux
 
 macos:
-g++ -arch x86_64 -arch arm64 -o postbuild_macos postbuild_macos.cpp
+g++ -arch x86_64 -arch arm64 -o postbuild_macos postbuild.cpp
 strip postbuild_macos
 
 */
@@ -41,13 +41,51 @@ string ino_name_buf[100];
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
 
+#if defined(__WIN32__) // MINGW64
+void replaceAll( string& source, const string& from, const string& to ) {
+    string newString;
+    newString.reserve(source.length()); //avoids a few memory allocations
+
+    string::size_type lastPos = 0;
+    string::size_type findPos;
+
+    while (string::npos != (findPos = source.find(from, lastPos))) {
+        newString.append( source, lastPos, (findPos - lastPos));
+        newString += to;
+        lastPos = findPos + from.length();
+    }
+
+    // Care for the rest after last occurrence
+    newString += source.substr(lastPos);
+
+    source.swap(newString);
+}
+#endif
+
 //void readtxt(int line_number, int mode_isp_nn) {
 void readtxt(int mode_isp_ino) {
+#if defined(__WIN32__) // MINGW64
+    string str;
+    int str_count = 0;
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     ifstream myFile_Handler;
     string myLine;
     int str_count = 0;
+#else
+    #error compiler is not supported!
+#endif
 
     if (mode_isp_ino == 0) {
+#if defined(__WIN32__) // MINGW64
+        ifstream file("misc/video_img/sensor_bin_name.txt");
+        while (std::getline(file, str)) {
+            isp_file_name_buf[str_count] = str;
+            str_count++;
+            //if (str_count == line_number) {
+            //    break;
+            //}
+        }
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
         myFile_Handler.open("misc/video_img/sensor_bin_name.txt");
 
         if(myFile_Handler.is_open()) {
@@ -65,6 +103,9 @@ void readtxt(int mode_isp_ino) {
         } else {
             cout << "Unable to open the file!" << endl;
         }
+#else
+    #error compiler is not supported!
+#endif
         fc_data_name = isp_file_name_buf[0];
         voe_name = isp_file_name_buf[1];
         iq_name = isp_file_name_buf[2];
@@ -72,6 +113,16 @@ void readtxt(int mode_isp_ino) {
         isp_fw_dummy_name = isp_file_name_buf[4];
 
     } else if (mode_isp_ino == 1) {
+#if defined(__WIN32__) // MINGW64
+        ifstream file("misc/ino_validation.txt");
+        while (std::getline(file, str)) {
+            ino_name_buf[str_count] = str;
+            str_count++;
+            //if (str_count == line_number) {
+            //    break;
+            //}
+        }
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
         myFile_Handler.open("misc/ino_validation.txt");
 
         if(myFile_Handler.is_open()) {
@@ -84,6 +135,9 @@ void readtxt(int mode_isp_ino) {
         } else {
             cout << "Unable to open the file!" << endl;
         }
+#else
+    #error compiler is not supported!
+#endif
         nn_model_yolotiny_name = ino_name_buf[2];
         nn_model_srcfd_name = ino_name_buf[3];
         nn_model_mobilefacenet_name = ino_name_buf[4];
@@ -136,6 +190,45 @@ int main(int argc, char *argv[]) {
     common_nn_models_path = argv[6];
 
     // 1. remove previous files
+#if defined(__WIN32__) // MINGW64
+    cmd = "if exist application.ntz del application.ntz";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "if exist *.json del *.json";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "if exist *.axf del *.axf";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "if exist *.map del *.map";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "if exist *.asm del *.asm";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "if exist *.bin del *.bin";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "if exist *.nb del *.nb";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmd = "copy image_tool\\flash_loader_nor.bin .\\";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmdss.clear();
+    cmdss << "xcopy /y " << "misc\\normal_img" << " .\\";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     cmd = "rm -f application.ntz";
     cout << cmd << endl;
     system(cmd.c_str());
@@ -171,59 +264,82 @@ int main(int argc, char *argv[]) {
     cmd = "cp misc/normal_img/* ./";
     cout << cmd << endl;
     system(cmd.c_str());
-
+#else
+    #error compiler is not supported!
+#endif
     readtxt(0);
     readtxt(1);
     isp_bin_check(isp_bin_check_name);
     nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5);
 
+#if defined(__WIN32__) // MINGW64
+    string string_temp_1 = "copy misc\\video_img\\";
+    string string_temp_2 = " .\\";
+    string string_temp_3 = "copy misc\\nn_img\\";
+    string string_temp_4 = "xcopy /y ";
+    string string_temp_5 = "";
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
+    string string_temp_1 = "cp misc/video_img/";
+    string string_temp_2 = " ./";
+    string string_temp_3 = "cp misc/nn_img/";
+    string string_temp_4 = "cp ";
+    string string_temp_5 = "/*";
+#else
+    #error compiler is not supported!
+#endif
     if (isp_selection_check == 1) {
         cmdss.clear();
-        cmdss << "cp misc/video_img/" << voe_name << " ./";
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-
-        cmd = "cp misc/video_img/amebapro2_isp_iq.json ./";
-        cout << cmd << endl;
-        system(cmd.c_str());
-
-        cmd = "cp misc/video_img/amebapro2_sensor_set.json ./";
-        cout << cmd << endl;
-        system(cmd.c_str());
-
-        cmdss.clear();
-        cmdss << "cp misc/video_img/" << fc_data_name << " ./";
+        cmdss << string_temp_1 << voe_name << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << "cp misc/video_img/" << iq_name << " ./";
+        cmdss << string_temp_1 << "amebapro2_isp_iq.json" << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << "cp misc/video_img/" << sensor_name << " ./";
+        cmdss << string_temp_1 << "amebapro2_sensor_set.json" << string_temp_2;
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << fc_data_name << string_temp_2;
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << iq_name << string_temp_2;
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << sensor_name << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
         cmdss.clear();
-        cmdss << "cp misc/video_img/" << isp_fw_dummy_name << " ./";
+        cmdss << string_temp_1 << isp_fw_dummy_name << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
 
     if (nn_model_selection_check == 1) {
-        cmd = "cp misc/nn_img/amebapro2_nn_model.json ./";
+        cmdss.clear();
+        cmdss << string_temp_3 << "amebapro2_nn_model.json" << string_temp_2;
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << "cp " << common_nn_models_path << "/* ./";
+        cmdss << string_temp_4 << common_nn_models_path << string_temp_5 << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
@@ -231,20 +347,37 @@ int main(int argc, char *argv[]) {
 
     // 2. copy elf application.ntz to current folder
     cmdss.clear();
-    cmdss << "cp " << argv[2] << " ./";
+    cmdss << string_temp_4 << argv[2] << string_temp_2;
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "cp " << argv[5] << " ./";
+    cmdss << string_temp_4 << argv[5] << string_temp_2;
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     // 3. generate information files
     path_arm_none_eabi_gcc.assign(argv[3]);
+#if defined(__WIN32__) // MINGW64
+    replaceAll(path_arm_none_eabi_gcc, "/", "\\");
 
+    cmdss.clear();
+    cmdss << "\"" << path_arm_none_eabi_gcc << "arm-none-eabi-nm.exe\" application.ntz | sort > application.ntz.nm.map";
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+//    fin.open("application.ntz.nm.map");
+//    while (getline(fin, line)) {
+//        lines.push_back(line);
+//    }
+//    fin.close();
+
+    cmdss.clear();
+    cmdss << "\"" <<path_arm_none_eabi_gcc << "arm-none-eabi-objdump.exe\" -d application.ntz > application.ntz.asm";
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     cmdss.clear();
     cmdss << path_arm_none_eabi_gcc << "arm-none-eabi-nm application.ntz | sort > application.ntz.nm.map";
     getline(cmdss, cmd);
@@ -253,12 +386,18 @@ int main(int argc, char *argv[]) {
 
     cmdss.clear();
     cmdss << path_arm_none_eabi_gcc << "arm-none-eabi-objdump -d application.ntz > application.ntz.asm";
+#else
+    #error compiler is not supported!
+#endif
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     // 3.1 check if any forbidden symbols
     path_symbol_black_list.assign(argv[4]);
+#if defined(__WIN32__) // MINGW64
+    replaceAll(path_symbol_black_list, "/", "\\");
+#endif
     fin.open(path_symbol_black_list.c_str(), ifstream::in);
     cout << path_symbol_black_list << endl;
     ret = 0;
@@ -299,6 +438,23 @@ int main(int argc, char *argv[]) {
 
     // 8. generate .bin
     // 8.1 firmware.bin firmware_isp_iq.bin nn_model.bin
+#if defined(__WIN32__) // MINGW64
+    cmd = "copy application.ntz application.ntz.axf";
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    //cmdss.clear();
+    //cmdss << "\"" <<path_arm_none_eabi_gcc << "arm-none-eabi-objcopy.exe\" -j .bluetooth_trace.text -Obinary application.ntz.axf APP.trace";
+    //getline(cmdss, cmd);
+    //cout << cmd << endl;
+    //system(cmd.c_str());
+
+    //cmdss.clear();
+    //cmdss << "\"" << path_arm_none_eabi_gcc << "arm-none-eabi-objcopy.exe\" -R .bluetooth_trace.text application.ntz.axf -w";
+    //getline(cmdss, cmd);
+    //cout << cmd << endl;
+    //system(cmd.c_str());
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     cmd = "cp application.ntz application.ntz.axf";
     cout << cmd << endl;
     system(cmd.c_str());
@@ -314,54 +470,85 @@ int main(int argc, char *argv[]) {
     //getline(cmdss, cmd);
     //cout << cmd << endl;
     //system(cmd.c_str());
+#else
+    #error compiler is not supported!
+#endif
 
+#if defined(__WIN32__) // MINGW64
+    string_temp_5 = ".\\misc\\elf2bin.win.exe ";
+#elif defined(__linux__) // ubuntu 32 bits
+    string_temp_5 = "./misc/elf2bin.linux ";
+#elif defined(__APPLE__) // OS X 64bits
+    string_temp_5 = "./misc/elf2bin.darwin ";
+#else
+    #error compiler is not supported!
+#endif
     if (isp_selection_check == 1) {
-        cmd = "./misc/elf2bin.darwin convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+        cmdss.clear();
+        cmdss << string_temp_5 << "convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.darwin convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+        cmdss.clear();
+        cmdss << string_temp_5 << "convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.darwin convert amebapro2_firmware.json FIRMWARE firmware.bin";
+        cmdss.clear();
+        cmdss << string_temp_5 << "convert amebapro2_firmware.json FIRMWARE firmware.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
-        cmd = "./misc/elf2bin.darwin convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
+        cmdss.clear();
+        cmdss << string_temp_5 << "convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
 
     if (nn_model_selection_check == 1) {
-        cmd = "./misc/elf2bin.darwin convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
+        cmdss.clear();
+        cmdss << string_temp_5 << "convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmd = "./misc/elf2bin.darwin convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
+        cmdss.clear();
+        cmdss << string_temp_5 << "convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
+        getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
 
     cmdss.clear();
-    cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    cmdss << string_temp_5 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();
-        cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_5 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
         cmdss.clear();
-        cmdss << "./misc/elf2bin.darwin " << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_5 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
+
+#if 0
+    // 9. add checksum
+    // cmd = ".\\tools\\windows\\checksum.exe ota.bin";
+    // cout << cmd << endl;
+    // system(cmd.c_str());
+#endif
 
     return 0;
 }

@@ -88,12 +88,12 @@ void readtxt(int mode_isp_ino) {
         nn_model_srcfd_name = ino_name_buf[3];
         nn_model_mobilefacenet_name = ino_name_buf[4];
         nn_model_yamnet_name = ino_name_buf[5];
-		nn_model_imgclass_name = ino_name_buf[6];
+        nn_model_imgclass_name = ino_name_buf[6];
         nn_header_name1 = ino_name_buf[9];
         nn_header_name2 = ino_name_buf[10];
         nn_header_name3 = ino_name_buf[11];
         nn_header_name4 = ino_name_buf[12];
-		nn_header_name5 = ino_name_buf[13];
+        nn_header_name5 = ino_name_buf[13];
         isp_bin_check_name = ino_name_buf[16];
     }
 }
