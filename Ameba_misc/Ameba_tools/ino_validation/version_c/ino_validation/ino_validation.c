@@ -155,14 +155,14 @@ char path_model[MAX_PATH_LENGTH];
 char path_library[MAX_PATH_LENGTH];
 char path_txtfile[MAX_PATH_LENGTH];
 char folder_example[MAX_PATH_LENGTH];
-
+char model_select_src[64];
 // -------------------------------
 //           Main
 // -------------------------------
 int main(int argc, char* argv[]) {
 	setlocale(LC_ALL, "en_US.UTF-8");
 	// Check if the number of input arguments is correct 
-	if (argc != 3) {
+	if (argc != 4) {
 		if (PRINT_DEBUG) printf("[Error] [%d] Incorrect number of input parameters. Expected 2 parameters.\r\n", __LINE__);
 		exit(1);
 	}
@@ -170,6 +170,7 @@ int main(int argc, char* argv[]) {
 	// Retrieve the input parameters 
 	const char* path_build = argv[1];
 	const char* path_tools = argv[2];
+	const char* model_src = argv[3];
 
 	// Retrive root path
 #ifdef _WIN32
@@ -194,6 +195,7 @@ int main(int argc, char* argv[]) {
 	strcat(path_library, path_library_add);
 	strcpy(path_txtfile, argv[2]);
 	strcat(path_txtfile, path_txtfile_add);
+	strcpy(model_select_src, model_src);
 
 	// Check if contains more than 1 SDK
 
@@ -201,6 +203,7 @@ int main(int argc, char* argv[]) {
 	// Print the input parameters 
 	printf("Parameter 1      = %s\n", path_build);
 	printf("Parameter 2      = %s\n", path_tools);
+	printf("Parameter 3      = %s\n", model_select_src);
 	//printf("USERPROFILE      = %s\n", getenv("USERPROFILE"));
 	//printf("HOMEDRIVE        = %s\n", getenv("HOMEDRIVE"));
 	//printf("HOMEPATH         = %s\n", getenv("HOMEPATH"));
@@ -850,53 +853,54 @@ int writeTXT(const char* path) {
 							if (PRINT_DEBUG) printf("[%d] od key_amb_customized\n", __LINE__);
 							if (PRINT_DEBUG) printf("[%d] customized od: %s\n", __LINE__, input2model(token));
 							if (PRINT_DEBUG) printf("[%d] path example %s\r\n", __LINE__, path_example);
-
-							if (strcmp(path_example, "Temp") == 0) {
-								// IDE1
-								if (PRINT_DEBUG) printf("[%d] ------------qqz IDE1\r\n", __LINE__);
-								extractRootDirectory((char*)path_example, dir_example);
-							}
-							else {
-								// IDE2
+							if (strcmp(model_select_src, "LoadFromFlash") == 0) {
+								if (strcmp(path_example, "Temp") == 0) {
+									// IDE1
+									if (PRINT_DEBUG) printf("[%d] ------------qqz IDE1\r\n", __LINE__);
+									extractRootDirectory((char*)path_example, dir_example);
+								}
+								else {
+									// IDE2
 #ifdef _WIN32
-								char* example_name = strrchr(path_example, '\\');   // find the last "\"
-								removeChar(example_name, '\\');
+									char* example_name = strrchr(path_example, '\\');   // find the last "\"
+									removeChar(example_name, '\\');
 #else
-								char* example_name = strrchr(path_example, '/');   // find the last "/"
-								removeChar(example_name, '/');
+									char* example_name = strrchr(path_example, '/');   // find the last "/"
+									removeChar(example_name, '/');
 #endif
-								listExampleDir(path_library, example_name);
-								strcpy(dir_example, folder_example);                // update example directory name
-							}
+									listExampleDir(path_library, example_name);
+									strcpy(dir_example, folder_example);                // update example directory name
+								}
 
-							DIR* dir;
-							struct dirent* entry;
-							int count = 0;
-							int count_match = 0;
+								DIR* dir;
+								struct dirent* entry;
+								int count = 0;
+								int count_match = 0;
 
-							// check weather dir is valid
-							if ((dir = opendir(dir_example)) != NULL) {
-								// print all the files and directories within directory 
-								while ((entry = readdir(dir)) != NULL) {
-									if (entry->d_type == DT_REG) {
-										count++;
-									}
-									if (strstr(entry->d_name, ".nb") != NULL) {
-										if (strstr(entry->d_name, input2model(token))) {
-											if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
-											count_match++;
+								// check weather dir is valid
+								if ((dir = opendir(dir_example)) != NULL) {
+									// print all the files and directories within directory 
+									while ((entry = readdir(dir)) != NULL) {
+										if (entry->d_type == DT_REG) {
+											count++;
 										}
-										/*		else {
-													goto error_customized_mismatch;
-												}*/
+										if (strstr(entry->d_name, ".nb") != NULL) {
+											if (strstr(entry->d_name, input2model(token))) {
+												if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
+												count_match++;
+											}
+											/*		else {
+														goto error_customized_mismatch;
+													}*/
+										}
 									}
 								}
-							}
-							if (count <= 1) {
-								goto error_customized_missing;
-							}
-							if (count_match == 0) {
-								goto error_customized_mismatch;
+								if (count <= 1) {
+									goto error_customized_missing;
+								}
+								if (count_match == 0) {
+									goto error_customized_mismatch;
+								}
 							}
 						}
 					}
@@ -919,74 +923,7 @@ int writeTXT(const char* path) {
 							printf("[%d]customized fd: %s\n", __LINE__, input2model(token));
 							printf("[%d]path_example: %s\n", __LINE__, path_example);
 #endif
-							if (strcmp(path_example, "Temp") == 0) {
-								// IDE1
-								extractRootDirectory((char*)path_example, dir_example);
-							}
-							else {
-								// IDE2
-#ifdef _WIN32
-								char* example_name = strrchr(path_example, '\\');   // find the last "\"
-								removeChar(example_name, '\\');
-#else
-								char* example_name = strrchr(path_example, '/');   // find the last "/"
-								removeChar(example_name, '/');
-#endif
-								listExampleDir(path_library, example_name);
-								strcpy(dir_example, folder_example);                // update example directory name
-							}
-
-							DIR* dir;
-							struct dirent* entry;
-							int count = 0;
-							int count_match = 0;
-
-							// check weather dir is valid
-							if ((dir = opendir(dir_example)) != NULL) {
-								/* print all the files and directories within directory */
-								while ((entry = readdir(dir)) != NULL) {
-									if (entry->d_type == DT_REG) {
-										count++;
-									}
-									if (strstr(entry->d_name, ".nb") != NULL) {
-										if (strstr(entry->d_name, "scrfd")) {
-											if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
-											count_match++;
-										}
-										/*	else {
-												goto error_customized_mismatch;
-											}*/
-									}
-								}
-							}
-							if (count <= 1) {
-								goto error_customized_missing;
-							}
-							if (count_match == 0) {
-								goto error_customized_mismatch;
-							}
-						}
-
-						strcpy(model_name_fd, token);
-
-						/*-------------- face recognition --------------*/
-						token = strtok(NULL, ", ");
-						if (token != NULL) {
-							if (PRINT_DEBUG) printf("[%d]  Param 3: %s\n", __LINE__, token);
-
-							// FACE_RECOGNITION example: check model combination rules
-							if (strcmp(model_type, "FACE_RECOGNITION") == 0) {
-								if (strcmp(model_name_fd, "NA_MODEL") == 0 || strstr(model_name_fd, "SCRFD") == NULL || strcmp(token, "NA_MODEL") == 0 || strstr(token, "MOBILEFACENET") == NULL) {
-									goto error_combination;
-								}
-							}
-
-							// check customized FR model
-							if (strstr(token, key_amb_customized) != NULL) {
-								if (PRINT_DEBUG) printf("[%d]fr key_amb_customized\n", __LINE__);
-								if (PRINT_DEBUG) printf("[%d]customized fr: %s\n", __LINE__, input2model(token));
-								if (PRINT_DEBUG) printf("[%d]path_example: %s\n", __LINE__, path_example);
-
+							if (strcmp(model_select_src, "LoadFromFlash") == 0) {
 								if (strcmp(path_example, "Temp") == 0) {
 									// IDE1
 									extractRootDirectory((char*)path_example, dir_example);
@@ -1017,10 +954,13 @@ int writeTXT(const char* path) {
 											count++;
 										}
 										if (strstr(entry->d_name, ".nb") != NULL) {
-											if (strstr(entry->d_name, "mobilefacenet")) {
+											if (strstr(entry->d_name, "scrfd")) {
 												if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
 												count_match++;
 											}
+											/*	else {
+													goto error_customized_mismatch;
+												}*/
 										}
 									}
 								}
@@ -1029,6 +969,73 @@ int writeTXT(const char* path) {
 								}
 								if (count_match == 0) {
 									goto error_customized_mismatch;
+								}
+							}
+						}
+
+						strcpy(model_name_fd, token);
+
+						/*-------------- face recognition --------------*/
+						token = strtok(NULL, ", ");
+						if (token != NULL) {
+							if (PRINT_DEBUG) printf("[%d]  Param 3: %s\n", __LINE__, token);
+
+							// FACE_RECOGNITION example: check model combination rules
+							if (strcmp(model_type, "FACE_RECOGNITION") == 0) {
+								if (strcmp(model_name_fd, "NA_MODEL") == 0 || strstr(model_name_fd, "SCRFD") == NULL || strcmp(token, "NA_MODEL") == 0 || strstr(token, "MOBILEFACENET") == NULL) {
+									goto error_combination;
+								}
+							}
+
+							// check customized FR model
+							if (strstr(token, key_amb_customized) != NULL) {
+								if (PRINT_DEBUG) printf("[%d]fr key_amb_customized\n", __LINE__);
+								if (PRINT_DEBUG) printf("[%d]customized fr: %s\n", __LINE__, input2model(token));
+								if (PRINT_DEBUG) printf("[%d]path_example: %s\n", __LINE__, path_example);
+								if (strcmp(model_select_src, "LoadFromFlash") == 0) {
+									if (strcmp(path_example, "Temp") == 0) {
+										// IDE1
+										extractRootDirectory((char*)path_example, dir_example);
+									}
+									else {
+										// IDE2
+#ifdef _WIN32
+										char* example_name = strrchr(path_example, '\\');   // find the last "\"
+										removeChar(example_name, '\\');
+#else
+										char* example_name = strrchr(path_example, '/');   // find the last "/"
+										removeChar(example_name, '/');
+#endif
+										listExampleDir(path_library, example_name);
+										strcpy(dir_example, folder_example);                // update example directory name
+									}
+
+									DIR* dir;
+									struct dirent* entry;
+									int count = 0;
+									int count_match = 0;
+
+									// check weather dir is valid
+									if ((dir = opendir(dir_example)) != NULL) {
+										/* print all the files and directories within directory */
+										while ((entry = readdir(dir)) != NULL) {
+											if (entry->d_type == DT_REG) {
+												count++;
+											}
+											if (strstr(entry->d_name, ".nb") != NULL) {
+												if (strstr(entry->d_name, "mobilefacenet")) {
+													if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
+													count_match++;
+												}
+											}
+										}
+									}
+									if (count <= 1) {
+										goto error_customized_missing;
+									}
+									if (count_match == 0) {
+										goto error_customized_mismatch;
+									}
 								}
 							}
 							if (token != NULL) {
@@ -1050,47 +1057,48 @@ int writeTXT(const char* path) {
 										if (PRINT_DEBUG) printf("[%d] ac key_amb_customized\n", __LINE__);
 										if (PRINT_DEBUG) printf("[%d] customized ac: %s\n", __LINE__, input2model(token));
 										if (PRINT_DEBUG) printf("[%d] path example %s\r\n", __LINE__, path_example);
-
-										if (strcmp(path_example, "Temp") == 0) {
-											extractRootDirectory((char*)path_example, dir_example);
-										}
-										else {
+										if (strcmp(model_select_src, "LoadFromFlash") == 0) {
+											if (strcmp(path_example, "Temp") == 0) {
+												extractRootDirectory((char*)path_example, dir_example);
+											}
+											else {
 #ifdef _WIN32
-											char* example_name = strrchr(path_example, '\\');   // find the last "\"
-											removeChar(example_name, '\\');
+												char* example_name = strrchr(path_example, '\\');   // find the last "\"
+												removeChar(example_name, '\\');
 #else
-											char* example_name = strrchr(path_example, '/');   // find the last "/"
-											removeChar(example_name, '/');
+												char* example_name = strrchr(path_example, '/');   // find the last "/"
+												removeChar(example_name, '/');
 #endif
-											listExampleDir(path_library, example_name);
-											strcpy(dir_example, folder_example);                // update example directory name
-										}
+												listExampleDir(path_library, example_name);
+												strcpy(dir_example, folder_example);                // update example directory name
+											}
 
-										DIR* dir;
-										struct dirent* entry;
-										int count = 0;
-										int count_match = 0;
+											DIR* dir;
+											struct dirent* entry;
+											int count = 0;
+											int count_match = 0;
 
-										// check weather dir is valid
-										if ((dir = opendir(dir_example)) != NULL) {
-											// print all the files and directories within directory 
-											while ((entry = readdir(dir)) != NULL) {
-												if (entry->d_type == DT_REG) {
-													count++;
-												}
-												if (strstr(entry->d_name, ".nb") != NULL) {
-													if (strstr(entry->d_name, input2model(token))) {
-														if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
-														count_match++;
+											// check weather dir is valid
+											if ((dir = opendir(dir_example)) != NULL) {
+												// print all the files and directories within directory 
+												while ((entry = readdir(dir)) != NULL) {
+													if (entry->d_type == DT_REG) {
+														count++;
+													}
+													if (strstr(entry->d_name, ".nb") != NULL) {
+														if (strstr(entry->d_name, input2model(token))) {
+															if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
+															count_match++;
+														}
 													}
 												}
 											}
-										}
-										if (count <= 1) {
-											goto error_customized_missing;
-										}
-										if (count_match == 0) {
-											goto error_customized_mismatch;
+											if (count <= 1) {
+												goto error_customized_missing;
+											}
+											if (count_match == 0) {
+												goto error_customized_mismatch;
+											}
 										}
 									}
 								}
@@ -1114,56 +1122,56 @@ int writeTXT(const char* path) {
 										if (PRINT_DEBUG) printf("[%d]ic key_amb_customized\n", __LINE__);
 										if (PRINT_DEBUG) printf("[%d]customized ic: %s\n", __LINE__, input2model(token));
 										if (PRINT_DEBUG) printf("[%d]path_example: %s\n", __LINE__, path_example);
-
-										if (strcmp(path_example, "Temp") == 0) {
-											// IDE1
-											extractRootDirectory((char*)path_example, dir_example);
-										}
-										else {
-											// IDE2
+										if (strcmp(model_select_src, "LoadFromFlash") == 0) {
+											if (strcmp(path_example, "Temp") == 0) {
+												// IDE1
+												extractRootDirectory((char*)path_example, dir_example);
+											}
+											else {
+												// IDE2
 #ifdef _WIN32
-											char* example_name = strrchr(path_example, '\\');   // find the last "\"
-											removeChar(example_name, '\\');
+												char* example_name = strrchr(path_example, '\\');   // find the last "\"
+												removeChar(example_name, '\\');
 #else
-											char* example_name = strrchr(path_example, '/');   // find the last "/"
-											removeChar(example_name, '/');
+												char* example_name = strrchr(path_example, '/');   // find the last "/"
+												removeChar(example_name, '/');
 #endif
-											listExampleDir(path_library, example_name);
-											strcpy(dir_example, folder_example);                // update example directory name
-										}
+												listExampleDir(path_library, example_name);
+												strcpy(dir_example, folder_example);                // update example directory name
+											}
 
-										DIR* dir;
-										struct dirent* entry;
-										int count = 0;
-										int count_match = 0;
+											DIR* dir;
+											struct dirent* entry;
+											int count = 0;
+											int count_match = 0;
 
-										// check weather dir is valid
-										if ((dir = opendir(dir_example)) != NULL) {
-											/* print all the files and directories within directory */
-											while ((entry = readdir(dir)) != NULL) {
-												if (entry->d_type == DT_REG) {
-													count++;
-												}
-												if (strstr(entry->d_name, ".nb") != NULL) {
-													if (strstr(entry->d_name, "fer")) {
-														if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
-														count_match++;
+											// check weather dir is valid
+											if ((dir = opendir(dir_example)) != NULL) {
+												/* print all the files and directories within directory */
+												while ((entry = readdir(dir)) != NULL) {
+													if (entry->d_type == DT_REG) {
+														count++;
+													}
+													if (strstr(entry->d_name, ".nb") != NULL) {
+														if (strstr(entry->d_name, "fer")) {
+															if (PRINT_DEBUG) printf("[%d] %s\n", __LINE__, entry->d_name);
+															count_match++;
+														}
 													}
 												}
 											}
-										}
-										if (count <= 1) {
-											goto error_customized_missing;
-										}
-										if (count_match == 0) {
-											goto error_customized_mismatch;
+											if (count <= 1) {
+												goto error_customized_missing;
+											}
+											if (count_match == 0) {
+												goto error_customized_mismatch;
+											}
 										}
 									}
 									if (token != NULL) {
 										strcpy(model_name_ic, token);
 									}
 								}
-
 							}
 						}
 					}
