@@ -59,7 +59,9 @@ Ameba_AMB82-MINI.menu.UploadBaudrate.230400.upload.speed=230400
 
 Ameba_AMB82-MINI.menu.LoadNNModelSource.flash=Flash
 Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_FLASH
+Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.model_src=LoadFromFlash
 Ameba_AMB82-MINI.menu.LoadNNModelSource.sd=SD Card
 Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
+Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.model_src=LoadFromSD
 
 ##############################################################

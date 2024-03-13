@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "NNObjectDetection.h"
+#include "SD_Model.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +11,7 @@ extern "C" {
 #include "model_yolo.h"
 #include "nn_utils/class_name.h"
 #include "avcodec.h"
+#include "vfs.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -101,29 +103,56 @@ void NNObjectDetection::begin(void)
     }
 
     if (_nntask != OBJECT_DETECTION) {
-        printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
-        while (1) {
+        if (ARDUINO_LOAD_MODEL == 0x02) {
+            printf("\r\n[INFO] Models loaded using SD Card\n");
+        } else {
+            while (1) {
+                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                delay(5000);
+            }
         }
     }
 
-    switch (_yolomodel) {
-        case DEFAULT_YOLOV3TINY:
-        case CUSTOMIZED_YOLOV3TINY: {
-            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-            // printf("\r\n[INFO] YOLOV3 running...\n");
-            break;
+    if (ARDUINO_LOAD_MODEL == 0x02) {
+        vfs_init(NULL);    // init filesystem
+        vfs_user_register("sd", VFS_FATFS, VFS_INF_SD);
+        switch (_yolomodel) {
+            case SD_YOLOV3TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny_from_sd);
+                // printf("\r\n[INFO] YOLOV3 running...\n");
+                break;
+            }
+            case SD_YOLOV4TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny_from_sd);
+                // printf("\r\n[INFO] YOLOV4 running...\n");
+                break;
+            }
+            case SD_YOLOV7TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny_from_sd);
+                // printf("\r\n[INFO] YOLOV7 running...\n");
+                break;
+            }
         }
-        case DEFAULT_YOLOV4TINY:
-        case CUSTOMIZED_YOLOV4TINY: {
-            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-            // printf("\r\n[INFO] YOLOV4 running...\n");
-            break;
-        }
-        case DEFAULT_YOLOV7TINY:
-        case CUSTOMIZED_YOLOV7TINY: {
-            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-            // printf("\r\n[INFO] YOLOV7 running...\n");
-            break;
+    } else {
+        switch (_yolomodel) {
+            case DEFAULT_YOLOV3TINY:
+            case CUSTOMIZED_YOLOV3TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
+                // printf("\r\n[INFO] YOLOV3 running...\n");
+                break;
+            }
+            case DEFAULT_YOLOV4TINY:
+            case CUSTOMIZED_YOLOV4TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
+                // printf("\r\n[INFO] YOLOV4 running...\n");
+                break;
+            }
+            case DEFAULT_YOLOV7TINY:
+            case CUSTOMIZED_YOLOV7TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
+                // printf("\r\n[INFO] YOLOV7 running...\n");
+                break;
+            }
         }
     }
 

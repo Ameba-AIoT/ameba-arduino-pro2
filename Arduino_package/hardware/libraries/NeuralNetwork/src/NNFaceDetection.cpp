@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "NNFaceDetection.h"
+#include "SD_Model.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +10,7 @@ extern "C" {
 #include "module_vipnn.h"
 #include "model_scrfd.h"
 #include "avcodec.h"
+#include "vfs.h"
 // #include "roi_delta_qp/roi_delta_qp.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
@@ -16,6 +18,7 @@ extern int vipnn_control(void *p, int cmd, int arg);
 #ifdef __cplusplus
 }
 #endif
+
 
 #undef min
 #undef max
@@ -66,12 +69,23 @@ void NNFaceDetection::begin(void)
     }
 
     if (_nntask != FACE_DETECTION) {
-        printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
-        while (1)
-            ;
+        if (ARDUINO_LOAD_MODEL == 0x02) {
+            printf("\r\n[INFO] Models loaded using SD Card\n");
+        } else {
+            while (1) {
+                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                delay(5000);
+            }
+        }
     }
 
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
+    if (ARDUINO_LOAD_MODEL == 0x02) {
+        vfs_init(NULL);    // init filesystem
+        vfs_user_register("sd", VFS_FATFS, VFS_INF_SD);
+        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs_from_sd);
+    } else {
+        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&scrfd_fwfs);
+    }
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_SIZE, sizeof(facedetect_res_t));
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);

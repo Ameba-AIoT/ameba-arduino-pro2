@@ -2340,7 +2340,7 @@ static void img_rgb2gray(img_t *img)
     }
 }
 
-static int classification_preprocess(void *data_in, nn_data_param_t *data_param, void *tensor_in, nn_tensor_param_t *tensor_param)
+int classification_preprocess(void *data_in, nn_data_param_t *data_param, void *tensor_in, nn_tensor_param_t *tensor_param)
 {
     void **tensor = (void **)tensor_in;
     uint8_t *rgb_data = (uint8_t *)data_in;
@@ -2418,7 +2418,7 @@ static int prob_comparator(const void *pa, const void *pb)
 }
 
 classification_res_t *class_ret = NULL;
-static int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void *res)
+int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void *res)
 {
     void **tensor = (void **)tensor_out;
     __fp16 *tensor_out_ptr = (__fp16 *)tensor[0];

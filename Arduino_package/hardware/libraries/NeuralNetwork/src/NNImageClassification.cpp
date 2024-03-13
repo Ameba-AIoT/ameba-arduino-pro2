@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "NNImageClassification.h"
+#include "SD_Model.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +11,7 @@ extern "C" {
 #include "model_classification.h"
 #include "nn_utils/class_name.h"
 #include "avcodec.h"
+#include "vfs.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -89,7 +91,24 @@ void NNImageClassification::begin(void)
         use_roi = 0;
     }
 
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&img_classification);
+    if (_nntask != IMAGE_CLASSIFICATION) {
+        if (ARDUINO_LOAD_MODEL == 0x02) {
+            printf("\r\n[INFO] Models loaded using SD Card\n");
+        } else {
+            while (1) {
+                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                delay(5000);
+            }
+        }
+    }
+
+    if (ARDUINO_LOAD_MODEL == 0x02) {
+        vfs_init(NULL);    // init filesystem
+        vfs_user_register("sd", VFS_FATFS, VFS_INF_SD);
+        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&img_classification_from_sd);
+    } else {
+        vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&img_classification);
+    }
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_nn);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ICResultCallback);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_SIZE, sizeof(classification_res_t));
