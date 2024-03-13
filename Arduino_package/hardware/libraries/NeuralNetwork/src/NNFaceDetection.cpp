@@ -72,9 +72,10 @@ void NNFaceDetection::begin(void)
         if (ARDUINO_LOAD_MODEL == 0x02) {
             printf("\r\n[INFO] Models loaded using SD Card\n");
         } else {
-            printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
-            while (1)
-                ;
+            while (1) {
+                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                delay(5000);
+            }
         }
     }
 
