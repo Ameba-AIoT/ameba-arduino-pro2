@@ -60,7 +60,9 @@ jobs:
 
     steps:
       - name: Exit workflow (other branches)
-        run: exit 1
+        run: |
+          echo "Exit with $GITHUB_REF"
+          exit 1
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' }}
 
       - name: Checkout repository
