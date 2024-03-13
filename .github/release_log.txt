@@ -4,6 +4,7 @@ Version 4.0.7 – 2024/02/06
 Version 4.0.7 – 2024/02/22
 Version 4.0.7 – 2024/02/23
 Version 4.0.7 - 2024/02/29
+Version 4.0.7 - 2024/03/13
 
 Feature:
 - Add I2C OLED SSD1306 example and libs
@@ -12,6 +13,7 @@ Feature:
 - Add image classification (emotion detection)
 - Bug fix for image classification example
 - Add HTTP_Post_MP4_Whisper_Server example
+- Add integration example: Record MP4 + HTTP Post Request to Whisper Server.
 
 API Updates:
 - Update SDK code base by passing coding style check
@@ -24,6 +26,9 @@ API Updates:
     - speed up the proces
 - Update board.txt and Arduino.h
 - Update Arduino.h
+- Update the code base
+- Update NN APIs
+- Add SD_Model API
 
 Misc:
 - Add GitHub Action
@@ -45,3 +50,8 @@ Misc:
     - Add sdk_release.yml
     - Add scripts folder 
     - Add submodule for python scripts
+- Update ameba_pro2_tools 1.2.19
+    - Update tools to determine SD card or flash for loading NN model
+- Update platform.txt and board.txt to introduce a flag for the automated tools
+- Update workflows
+    - Add Create CI_compile_examples.yml
