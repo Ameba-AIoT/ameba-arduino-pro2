@@ -1,0 +1,114 @@
+#######################################
+# Syntax Coloring Map Camera
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+QRCodeScanner KEYWORD1
+Camera KEYWORD1
+VideoSetting KEYWORD1
+
+#######################################
+# QRCodeScanner.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+StartScanning KEYWORD2
+GetResultString KEYWORD2
+GetResultLength KEYWORD2
+ResultString LITERAL1
+ResultLength LITERAL1
+
+#######################################
+# VideoStream.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+reset	KEYWORD2
+setBrightness	KEYWORD2
+getBrightness	KEYWORD2
+setContrast	KEYWORD2
+getContrast	KEYWORD2
+setSaturation	KEYWORD2
+getSaturation	KEYWORD2
+setSharpness	KEYWORD2
+getSharpness	KEYWORD2
+setLDC	KEYWORD2
+getLDC	KEYWORD2
+setWDR	KEYWORD2
+getWDR	KEYWORD2
+setWDRLevel	KEYWORD2
+getWDRLevel	KEYWORD2
+setExposureMode	KEYWORD2
+getExposureMode	KEYWORD2
+setExposureTime	KEYWORD2
+getExposureTime	KEYWORD2
+setAEGain	KEYWORD2
+getAEGain	KEYWORD2
+setPowerLineFreq	KEYWORD2
+getPowerLineFreq	KEYWORD2
+setAWB	KEYWORD2
+getAWB	KEYWORD2
+getWBTemp	KEYWORD2
+setRedBalance	KEYWORD2
+getRedBalance	KEYWORD2
+setBlueBalance	KEYWORD2
+getBlueBalance	KEYWORD2
+setGrayMode	KEYWORD2
+getGrayMode	KEYWORD2
+setDayNightMode	KEYWORD2
+getDayNightMode	KEYWORD2
+		
+setBitrate	KEYWORD2
+setJpegQuality	KEYWORD2
+width	KEYWORD2
+height	KEYWORD2
+fps	KEYWORD2
+
+configVideoChannel	KEYWORD2
+camInit	KEYWORD2
+camDeinit	KEYWORD2
+videoInit	KEYWORD2
+videoDeinit	KEYWORD2
+channelBegin	KEYWORD2
+channelEnd	KEYWORD2
+getStream	KEYWORD2
+getImage	KEYWORD2
+setFPS	KEYWORD2
+printInfo	KEYWORD2
+
+VIDEO_QCIF	LITERAL1
+VIDEO_CIF	LITERAL1
+VIDEO_WVGA	LITERAL1
+VIDEO_VGA	LITERAL1
+VIDEO_D1  	LITERAL1
+VIDEO_HD	LITERAL1
+VIDEO_FHD	LITERAL1
+VIDEO_3M	LITERAL1
+VIDEO_5M	LITERAL1
+VIDEO_2K	LITERAL1
+
+VIDEO_HEVC	LITERAL1
+VIDEO_H264	LITERAL1
+VIDEO_JPEG	LITERAL1
+VIDEO_NV12	LITERAL1
+VIDEO_RGB	LITERAL1
+VIDEO_NV16	LITERAL1
+VIDEO_HEVC_JPEG	LITERAL1
+VIDEO_H264_JPEG	LITERAL1
+
+BRIGHTNESS_MIN	LITERAL1
+BRIGHTNESS_MAX	LITERAL1
+CONTRAST_MIN	LITERAL1
+CONTRAST_MAX	LITERAL1
+SATURATION_MIN	LITERAL1
+SATURATION_MAX	LITERAL1
+SHARPNESS_MIN	LITERAL1
+SHARPNESS_MAX	LITERAL1
+EXPOSURETIME_MAX	LITERAL1
+AEGAIN_MIN	LITERAL1
+AEGAIN_MAX	LITERAL1
+REDBALANCE_MIN	LITERAL1
+REDBALANCE_MAX	LITERAL1
+BLUEBALANCE_MIN	LITERAL1
+BLUEBALANCE_MAX	LITERAL1
