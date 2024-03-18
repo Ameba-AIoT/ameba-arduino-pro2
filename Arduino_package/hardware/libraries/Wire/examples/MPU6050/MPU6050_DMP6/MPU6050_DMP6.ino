@@ -26,7 +26,7 @@
 
 /*
  Example guide:
- TBD
+ https://www.amebaiot.com/en/amebapro2-arduino-i2c-mpu6050-dmp6/
 */
 
 /* ============================================
