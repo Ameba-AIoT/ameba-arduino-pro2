@@ -47,6 +47,7 @@ jobs:
           - Arduino_package/hardware/libraries/QRCodeScanner
           - Arduino_package/hardware/libraries/RTC
           # - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
+          - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
           - Arduino_package/hardware/libraries/SPI/examples/LCD_Screen_ILI9341_TFT
           - Arduino_package/hardware/libraries/Watchdog
           - Arduino_package/hardware/libraries/WiFi

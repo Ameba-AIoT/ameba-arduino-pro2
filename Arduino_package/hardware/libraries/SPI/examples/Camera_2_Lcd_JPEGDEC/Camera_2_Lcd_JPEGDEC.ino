@@ -61,7 +61,6 @@ uint32_t img_len = 0;
 
 int JPEGDraw(JPEGDRAW *pDraw)
 {
-
     tft.drawBitmap(pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight, pDraw->pPixels);
     return 1;    // continue decode
 } /* JPEGDraw() */
