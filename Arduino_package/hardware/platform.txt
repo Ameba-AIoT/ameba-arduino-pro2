@@ -107,7 +107,7 @@ compiler.define=-DARDUINO
 
 # Ameba archive list
 # -------------------
-compiler.ameba.ar.list= "{runtime.platform.path}/variants/common_libs/libfaac.a" "{runtime.platform.path}/variants/common_libs/libfmp4.a" "{runtime.platform.path}/variants/common_libs/libg711.a" "{runtime.platform.path}/variants/common_libs/libhaac.a" "{runtime.platform.path}/variants/common_libs/libhmp3.a" "{runtime.platform.path}/variants/common_libs/libhttp.a" "{runtime.platform.path}/variants/common_libs/libmmf.a" "{runtime.platform.path}/variants/common_libs/libmuxer.a" "{runtime.platform.path}/variants/common_libs/libnn.a" "{runtime.platform.path}/variants/common_libs/libopus.a" "{runtime.platform.path}/variants/common_libs/libopusenc.a" "{runtime.platform.path}/variants/common_libs/libopusfile.a" "{runtime.platform.path}/variants/common_libs/libqrcode.a" "{runtime.platform.path}/variants/common_libs/libsdcard.a" "{runtime.platform.path}/variants/common_libs/libusbd.a" "{runtime.platform.path}/variants/common_libs/libvideo_ntz.a" "{runtime.platform.path}/variants/common_libs/libwlan.a" "{runtime.platform.path}/variants/common_libs/libwps.a" "{runtime.platform.path}/variants/common_libs/btgap.a" "{runtime.platform.path}/variants/common_libs/hal_pmc.a" "{runtime.platform.path}/variants/common_libs/libsoc_ntz.a" "{runtime.platform.path}/variants/common_libs/libarduino.a" "{runtime.platform.path}/variants/common_libs/libispfeature.a" "{runtime.platform.path}/variants/common_libs/libctaec.a" "{runtime.platform.path}/variants/common_libs/liboutsrc.a" "{runtime.platform.path}/variants/common_libs/libVQE.a" "{runtime.platform.path}/variants/common_libs/libmd.a" "{runtime.platform.path}/variants/common_libs/libfdkaac.a"
+compiler.ameba.ar.list= "{runtime.platform.path}/variants/common_libs/libfaac.a" "{runtime.platform.path}/variants/common_libs/libfmp4.a" "{runtime.platform.path}/variants/common_libs/libg711.a" "{runtime.platform.path}/variants/common_libs/libhaac.a" "{runtime.platform.path}/variants/common_libs/libhmp3.a" "{runtime.platform.path}/variants/common_libs/libhttp.a" "{runtime.platform.path}/variants/common_libs/libmmf.a" "{runtime.platform.path}/variants/common_libs/libmuxer.a" "{runtime.platform.path}/variants/common_libs/libnn.a" "{runtime.platform.path}/variants/common_libs/libopus.a" "{runtime.platform.path}/variants/common_libs/libopusenc.a" "{runtime.platform.path}/variants/common_libs/libopusfile.a" "{runtime.platform.path}/variants/common_libs/libqrcode.a" "{runtime.platform.path}/variants/common_libs/libsdcard.a" "{runtime.platform.path}/variants/common_libs/libusbd.a" "{runtime.platform.path}/variants/common_libs/libvideo_ntz.a" "{runtime.platform.path}/variants/common_libs/libwlan.a" "{runtime.platform.path}/variants/common_libs/libwps.a" "{runtime.platform.path}/variants/common_libs/btgap.a" "{runtime.platform.path}/variants/common_libs/hal_pmc.a" "{runtime.platform.path}/variants/common_libs/libsoc_ntz.a" "{runtime.platform.path}/variants/common_libs/libarduino.a" "{runtime.platform.path}/variants/common_libs/libispfeature.a" "{runtime.platform.path}/variants/common_libs/libctaec.a" "{runtime.platform.path}/variants/common_libs/liboutsrc.a" "{runtime.platform.path}/variants/common_libs/libVQE.a" "{runtime.platform.path}/variants/common_libs/libmd.a" "{runtime.platform.path}/variants/common_libs/libfdkaac.a" "{runtime.platform.path}/variants/common_libs/libarduino_sensor_sel.a"
 
 
 # USB Flags
@@ -124,10 +124,10 @@ recipe.hooks.prebuild.1.pattern.linux = chmod -R 777 "{runtime.tools.ameba_pro2_
 recipe.hooks.prebuild.1.pattern.macosx= chmod -R 777 "{runtime.tools.ameba_pro2_tools.path}"
 
 ## combine toolchain
-recipe.hooks.prebuild.2.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p2.path}" {toolchain_version_p1} {toolchain_version_p2}
-recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
-recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2}
- 
+recipe.hooks.prebuild.2.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p2.path}" {toolchain_version_p1} {toolchain_version_p2} "{runtime.platform.path}" "{build.camera_opt}"
+recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2} "{runtime.platform.path}" "{build.camera_opt}"
+recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_p2.path} {toolchain_version_p1} {toolchain_version_p2} "{runtime.platform.path}" "{build.camera_opt}"
+
 recipe.hooks.prebuild.3.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
 recipe.hooks.prebuild.3.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path} {build.model_src}
 recipe.hooks.prebuild.3.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path} {build.model_src}
@@ -168,11 +168,11 @@ recipe.objcopy.hex.imagepath_appntzmap.windows="{build.path}\application.ntz.map
 recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
-recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}\variants\common_nn_models"
+recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}" "{build.camera_opt}"
 
-recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}/variants/common_nn_models"
+recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}" "{build.camera_opt}"
 
-recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}/variants/common_nn_models"
+recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}" "{build.camera_opt}"
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"

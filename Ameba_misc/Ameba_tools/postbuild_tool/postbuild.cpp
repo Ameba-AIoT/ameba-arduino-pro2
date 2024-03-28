@@ -32,7 +32,7 @@ using namespace std;
 
 string common_nn_models_path;
 
-string fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
+string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
 string isp_file_name_buf[100];
 
 string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name;
@@ -62,7 +62,6 @@ void replaceAll( string& source, const string& from, const string& to ) {
 }
 #endif
 
-//void readtxt(int line_number, int mode_isp_nn) {
 void readtxt(int mode_isp_ino) {
 #if defined(__WIN32__) // MINGW64
     string str;
@@ -96,7 +95,7 @@ void readtxt(int mode_isp_ino) {
                 //if (str_count == line_number) {
                 //    break;
                 //} else {
-                isp_file_name_buf[str_count-1].erase(isp_file_name_buf[str_count-1].size() - 1);
+                isp_file_name_buf[str_count - 1].erase(isp_file_name_buf[str_count-1].size() - 1);
                 //}
             }
             myFile_Handler.close();
@@ -106,11 +105,26 @@ void readtxt(int mode_isp_ino) {
 #else
     #error compiler is not supported!
 #endif
-        fc_data_name = isp_file_name_buf[0];
-        voe_name = isp_file_name_buf[1];
-        iq_name = isp_file_name_buf[2];
-        sensor_name = isp_file_name_buf[3];
-        isp_fw_dummy_name = isp_file_name_buf[4];
+
+        if (isp_camera_option == "JXF37") {
+            fc_data_name = isp_file_name_buf[0];
+            voe_name = isp_file_name_buf[1];
+            iq_name = isp_file_name_buf[2];
+            sensor_name = isp_file_name_buf[3];
+            isp_fw_dummy_name = isp_file_name_buf[4];
+            isp_sensor_set_json_name = "amebapro2_sensor_set0.json";
+            isp_sys_file_folder_name = "SENSOR_F37";
+        } else if (isp_camera_option == "GC5035") {
+            fc_data_name = isp_file_name_buf[0 + 6];
+            voe_name = isp_file_name_buf[1 + 6];
+            iq_name = isp_file_name_buf[2 + 6];
+            sensor_name = isp_file_name_buf[3 + 6];
+            isp_fw_dummy_name = isp_file_name_buf[4 + 6];
+            isp_sensor_set_json_name = "amebapro2_sensor_set1.json";
+            isp_sys_file_folder_name = "SENSOR_GC5035";
+        } else {
+            cout << "Unable to find correct camera option!" << endl;
+        }
 
     } else if (mode_isp_ino == 1) {
 #if defined(__WIN32__) // MINGW64
@@ -187,7 +201,15 @@ int main(int argc, char *argv[]) {
     // 0. change work folder
     chdir(argv[1]);
 
+#if defined(__WIN32__) // MINGW64
     common_nn_models_path = argv[6];
+    common_nn_models_path = common_nn_models_path + "\\variants\\common_nn_models";
+#elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
+    common_nn_models_path = argv[6];
+    common_nn_models_path = common_nn_models_path + "/variants/common_nn_models";
+#else
+    #error compiler is not supported!
+#endif
 
     // 1. remove previous files
 #if defined(__WIN32__) // MINGW64
@@ -219,12 +241,8 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmd = "copy image_tool\\flash_loader_nor.bin .\\";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
     cmdss.clear();
-    cmdss << "xcopy /y " << "misc\\normal_img" << " .\\";
+    cmdss << "xcopy /y " << "misc\\sys_img" << " .\\";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -257,16 +275,13 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmd = "cp image_tool/flash_loader_nor.bin ./";
-    cout << cmd << endl;
-    system(cmd.c_str());
-
-    cmd = "cp misc/normal_img/* ./";
+    cmd = "cp misc/sys_img/* ./";
     cout << cmd << endl;
     system(cmd.c_str());
 #else
     #error compiler is not supported!
 #endif
+    isp_camera_option = argv[7];
     readtxt(0);
     readtxt(1);
     isp_bin_check(isp_bin_check_name);
@@ -278,15 +293,33 @@ int main(int argc, char *argv[]) {
     string string_temp_3 = "copy misc\\nn_img\\";
     string string_temp_4 = "xcopy /y ";
     string string_temp_5 = "";
+    string string_temp_6 = "copy image_tool\\";
+    string string_temp_7 = "misc\\video_img\\";
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     string string_temp_1 = "cp misc/video_img/";
     string string_temp_2 = " ./";
     string string_temp_3 = "cp misc/nn_img/";
     string string_temp_4 = "cp ";
     string string_temp_5 = "/*";
+    string string_temp_6 = "cp image_tool/";
+    string string_temp_7 = "misc/video_img/";
 #else
     #error compiler is not supported!
 #endif
+
+    cmdss.clear();
+    cmdss << string_temp_6 << "flash_loader_nor.bin" << string_temp_2;
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+    cmdss.clear();
+    cmdss << string_temp_4 << string_temp_7 << isp_sys_file_folder_name << string_temp_5 << string_temp_2;
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
+
+
     if (isp_selection_check == 1) {
         cmdss.clear();
         cmdss << string_temp_1 << voe_name << string_temp_2;
@@ -301,7 +334,7 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_1 << "amebapro2_sensor_set.json" << string_temp_2;
+        cmdss << string_temp_1 << isp_sensor_set_json_name << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
@@ -475,35 +508,35 @@ int main(int argc, char *argv[]) {
 #endif
 
 #if defined(__WIN32__) // MINGW64
-    string_temp_5 = ".\\misc\\elf2bin.win.exe ";
+    string_temp_1 = ".\\misc\\elf2bin.win.exe ";
 #elif defined(__linux__) // ubuntu 32 bits
-    string_temp_5 = "./misc/elf2bin.linux ";
+    string_temp_1 = "./misc/elf2bin.linux ";
 #elif defined(__APPLE__) // OS X 64bits
-    string_temp_5 = "./misc/elf2bin.darwin ";
+    string_temp_1 = "./misc/elf2bin.darwin ";
 #else
     #error compiler is not supported!
 #endif
     if (isp_selection_check == 1) {
         cmdss.clear();
-        cmdss << string_temp_5 << "convert amebapro2_sensor_set.json ISP_SENSOR_SETS isp_iq.bin";
+        cmdss << string_temp_1 << "convert " << isp_sensor_set_json_name << " ISP_SENSOR_SETS isp_iq.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_5 << "convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
+        cmdss << string_temp_1 << "convert amebapro2_isp_iq.json FIRMWARE firmware_isp_iq.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_5 << "convert amebapro2_firmware.json FIRMWARE firmware.bin";
+        cmdss << string_temp_1 << "convert amebapro2_firmware.json FIRMWARE firmware.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
         cmdss.clear();
-        cmdss << string_temp_5 << "convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
+        cmdss << string_temp_1 << "convert amebapro2_firmware_NA_cam.json FIRMWARE firmware.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
@@ -511,33 +544,33 @@ int main(int argc, char *argv[]) {
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();
-        cmdss << string_temp_5 << "convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
+        cmdss << string_temp_1 << "convert amebapro2_fwfs_nn_models.json FWFS fwfs_nn_model.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_5 << "convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
+        cmdss << string_temp_1 << "convert amebapro2_nn_model.json FIRMWARE nn_model.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
 
     cmdss.clear();
-    cmdss << string_temp_5 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();
-        cmdss << string_temp_5 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
         cmdss.clear();
-        cmdss << string_temp_5 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());

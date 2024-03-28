@@ -1,0 +1,107 @@
+{
+    "msg_level":0,
+
+	"PROFILE":["PARTITIONTABLE"],
+	"PARTITIONTABLE":{
+		"manifest":"MANIFEST",
+		"images":[
+			"PARTAB"
+		]
+	},
+	"FLASH_PATTERN":{
+		"comment":"fixed pattern for flash calibration"
+	},
+	"MANIFEST":{
+		"label":"RTL8735B",
+		"vrf_alg": "NA_VRF_CHECK",
+		"tlv":[
+			{"type":"PK", "length":384, "value":"100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F"},
+			{"type":"TYPE_ID", "length":2, "value":"IMG_PT"},
+			{"type":"VERSION", "length":32, "value":"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"},
+			{"type":"TIMST", "length":8, "value":"auto"},
+			{"type":"IMGSZ", "length":4, "value":"auto"},
+			{"type":"ENCALG", "length":1, "value":"1"},
+			{"type":"ENCKN", "length":32, "value":"100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F"},
+			{"type":"ENCKS", "length":32, "value":"100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F"},
+			{"type":"ENCIV", "length":16, "value":"100102030405060708090A0B0C0D0E0F"},
+			{"type":"HSHALG", "length":1, "value":"1"},
+			{"type":"HSHKN", "length":32, "value":"100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F"},
+			{"type":"HSHKS", "length":32, "value":"100102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E5F"},
+			{"type":"IE_RESV", "length":32, "value":"auto"},
+			{"type":"HASH", "length":32, "value":"auto"}
+		]
+	},
+    "PARTAB":{
+        "table":{
+            "ota_trap":{
+                "valid": 0,
+                "level": 0,
+                "port": 0,
+                "pin": 0
+            },
+            "mp_trap":{
+                "valid": 0,
+                "level": 0,
+                "port": 0,
+                "pin": 0
+            },
+            "usr_len": 256,
+            "usr_bin":"user.bin",
+            "records":["boot_p", "boot_s","fw1","fw2","iq","nn","sysdata","fcsdata","mp"]
+        },
+        "boot_p":{
+            "start_addr" : "0x9000",
+            "length" : "0x27000",
+            "type": "PT_BL_PRI",
+            "valid": true
+        },
+        "boot_s":{
+            "start_addr" : "0x30000",
+            "length" : "0x27000",
+            "type": "PT_BL_SEC",
+            "valid": true
+        },
+        "fw1":{
+            "start_addr" : "0x60000",
+            "length" : "0x400000",
+            "type": "PT_FW1",
+            "valid": true
+        },
+		"iq":{
+            "start_addr" : "0x460000",
+            "length" : "0xC0000",
+            "type": "PT_ISP_IQ",
+            "valid": true
+        },
+        "fw2":{
+            "start_addr" : "0x520000",
+            "length" : "0x10000",
+            "type": "PT_FW2",
+            "valid": true
+        },
+        "nn":{
+            "start_addr" : "0x530000",
+            "length" : "0xA90000",
+            "type": "PT_NN_MDL",
+            "valid": true
+        },
+		"sysdata":{
+			"start_addr" : "0x7000",
+            "length" : "0x1000",
+            "type": "PT_SYSDATA",
+            "valid": true
+		},
+		"fcsdata":{
+			"start_addr" : "0x8000",
+            "length" : "0x1000",
+            "type": "PT_FCSDATA",
+            "valid": true
+		},
+        "mp":{
+            "start_addr" : "0xFC0000",
+        	"length" : "0x1000",
+        	"type": "PT_MP",
+        	"valid": false
+		}
+	}
+}

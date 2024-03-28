@@ -23,5 +23,6 @@
 #include <drv_types.h>
 
 void rtl8735b_btcoex_run_case(_adapter *padapter, u16 state);
+static void rtl8735b_log_out_gnt_bt(void);
 
 #endif /* ___RTL8735B_BTCOEX_H___ */

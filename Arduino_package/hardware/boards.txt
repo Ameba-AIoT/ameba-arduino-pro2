@@ -3,6 +3,7 @@ menu.AutoUploadMode=* Auto Flash Mode
 menu.StdLibInit=* Standard Lib
 menu.UploadBaudrate=* Upload Speed
 menu.LoadNNModelSource=* NN Model Load From
+menu.CameraOption=* Camera Options
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -63,5 +64,10 @@ Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.model_src=LoadFromFlash
 Ameba_AMB82-MINI.menu.LoadNNModelSource.sd=SD Card
 Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
 Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.model_src=LoadFromSD
+
+Ameba_AMB82-MINI.menu.CameraOption.jxf37=JXF37
+Ameba_AMB82-MINI.menu.CameraOption.jxf37.build.camera_opt=JXF37
+Ameba_AMB82-MINI.menu.CameraOption.gc5035=GC5035
+Ameba_AMB82-MINI.menu.CameraOption.gc5035.build.camera_opt=GC5035
 
 ##############################################################

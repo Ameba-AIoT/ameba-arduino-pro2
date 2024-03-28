@@ -46,7 +46,7 @@ extern "C" {
 
 void NS_ENTRY hal_DeepSleep_nsc(u8 Option, u32 SDuration, u8 Clock);
 void NS_ENTRY hal_SleepCG_nsc(u16 Option, u32 SDuration, u8 Clock, u8 SramOption);
-void NS_ENTRY hal_SleepPG_nsc(u16 Option, u32 SDuration, u8 Clock, u8 SramOption);
+u32 NS_ENTRY hal_SleepPG_nsc(u16 Option, u32 SDuration, u8 Clock, u8 SramOption);
 u8   NS_ENTRY hal_power_lib_version_nsc(void);
 void NS_ENTRY hal_syspll_peripll_spread_spectrum_en_nsc(u8 syspll_en, u8 peripll_en);
 u32  NS_ENTRY  hal_get_wake_reason_nsc(void);
@@ -58,7 +58,7 @@ void NS_ENTRY hal_aon_timer_clear_nsc(void);
 #if defined(CONFIG_BUILD_NONSECURE)
 void  hal_DeepSleep_nsc(u8 Option, u32 SDuration, u8 Clock);
 void  hal_SleepCG_nsc(u16 Option, u32 SDuration, u8 Clock, u8 SramOption);
-void  hal_SleepPG_nsc(u16 Option, u32 SDuration, u8 Clock, u8 SramOption);
+u32  hal_SleepPG_nsc(u16 Option, u32 SDuration, u8 Clock, u8 SramOption);
 u8    hal_power_lib_version_nsc(void);
 void  hal_syspll_peripll_spread_spectrum_en_nsc(u8 syspll_en, u8 peripll_en);
 u32   hal_get_wake_reason_nsc(void);

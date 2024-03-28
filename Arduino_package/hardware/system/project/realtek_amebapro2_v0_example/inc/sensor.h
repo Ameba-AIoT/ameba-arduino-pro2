@@ -38,8 +38,57 @@ struct sensor_params_t {
 	unsigned int sensor_fps;
 };
 
+
 #ifdef ARDUINO_SDK
+#define ARDUINO_SDK_SENSOR 1
+//#define ARDUINO_SDK_SENSOR 2
+#endif
+
+#ifdef ARDUINO_SDK
+
+#if ARDUINO_SDK_SENSOR == 1
 #define SENSOR_F37		0x00
+static const struct sensor_params_t sensor_params[] = {
+	{1920, 1080, 30}, //F37
+};
+#define SENSOR_MAX         1
+static const unsigned char sen_id[SENSOR_MAX] = {
+	SENSOR_F37,
+};
+#define USE_SENSOR      	SENSOR_F37
+static const      char manual_iq[SENSOR_MAX][64] = {
+	"iq_f37",
+};
+
+#elif ARDUINO_SDK_SENSOR == 2
+#define SENSOR_GC5035		0x00
+static const struct sensor_params_t sensor_params[] = {
+	{2592, 1944, 15}, //GC5035
+};
+#define SENSOR_MAX         1
+static const unsigned char sen_id[SENSOR_MAX] = {
+	SENSOR_GC5035,
+};
+#define USE_SENSOR      	SENSOR_GC5035
+static const      char manual_iq[SENSOR_MAX][64] = {
+	"iq_gc2053",
+};
+
+#else
+#define SENSOR_F37		0x00
+static const struct sensor_params_t sensor_params[] = {
+	{1920, 1080, 30}, //F37
+};
+#define SENSOR_MAX         5
+static const unsigned char sen_id[SENSOR_MAX] = {
+	SENSOR_F37,
+};
+#define USE_SENSOR      	SENSOR_F37
+static const      char manual_iq[SENSOR_MAX][64] = {
+	"iq_f37",
+};
+#endif
+
 #else
 #define SENSOR_DUMMY        0x00 //For dummy sensor, no support fast camera start
 #define SENSOR_SC2336       0x01
@@ -68,7 +117,6 @@ struct sensor_params_t {
 #define SENSOR_K351_HDR		0x18
 #define SENSOR_OV50A40		0x19
 #define SENSOR_SC301_HDR	0x1A
-#endif
 
 static const struct sensor_params_t sensor_params[] = {
 	{1920, 1080, 30}, //DUMMY
@@ -100,17 +148,26 @@ static const struct sensor_params_t sensor_params[] = {
 	{2048, 1536, 20}, //SENSOR_SC301_HDR
 };
 
-
 #define SENSOR_MAX         5
 
 static const unsigned char sen_id[SENSOR_MAX] = {
-	SENSOR_F37
+	SENSOR_DUMMY,
+	SENSOR_GC2053,
+	SENSOR_GC4653,
+	SENSOR_GC4023,
+	SENSOR_SC2333
 };
-#define USE_SENSOR      	SENSOR_F37
+#define USE_SENSOR      	SENSOR_GC2053
 
 static const      char manual_iq[SENSOR_MAX][64] = {
-	"iq_f37",
+	"iq",
+	"iq_gc2053",
+	"iq_gc4653",
+	"iq_gc4023",
+	"iq_sc2333",
 };
+#endif
+
 #define MANUAL_SENSOR_IQ	0xFF
 
 #define ENABLE_FCS      	0

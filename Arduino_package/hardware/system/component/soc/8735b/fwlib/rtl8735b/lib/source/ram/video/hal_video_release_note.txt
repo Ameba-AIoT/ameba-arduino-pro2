@@ -1,3 +1,16 @@
+<03/15/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.2.0
+Modified Files:
+All
+Change Notes:
+
+	Video/ENC related
+	1. Modify HEVC VPS max_num_reorder_pics, SPS max_num_reorder_pics
+	   Modify H264 VUI num_reorder_frames, max_dec_frame_buffering
+	2. Modify compressor from 0 to 3
+	3. Improve out_task & md_task close timing (TM)
+
+--------------------------------------------------------------------------
 <01/26/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.1.0
 Modified Files:

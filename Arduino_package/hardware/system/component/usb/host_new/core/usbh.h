@@ -155,6 +155,7 @@ typedef struct {
 /* USB host user callback */
 typedef struct {
 	u8(*process)(struct _usb_host_t *host, u8 id);		/* Allow usesr to handle class-independent events in application level */
+	u8(*nak)(struct _usb_host_t *host, u8 ch_num);
 } usbh_user_cb_t;
 
 /* USB host */

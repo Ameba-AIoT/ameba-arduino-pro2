@@ -73,6 +73,8 @@ extern "C"
 #define MODE_SYNC				4					// keep ISP on VOE, for channel
 #define MODE_EXT				5					// external input,  for channel
 
+//#define MV_CUINFO_EN
+
 /**
  * @addtogroup hal_enc Encoder
  * @ingroup 8735b_hal
