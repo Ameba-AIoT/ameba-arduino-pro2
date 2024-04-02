@@ -86,14 +86,14 @@ int main(int argc, char *argv[]) {
 
     cmdss.clear();
 //    cmdss << "cp -r ./" << argv[2] << "/* " << argv[1] << " 2> /dev/null " ;
-//    cmdss << "find ./ -mindepth 1 -maxdepth 1 -type d -name \"" << argv[3] << "\" | xargs -i cp -r {}/*" << " ./"<< argv[3];
+//    cmdss << "find ./ -mindepth 1 -maxdepth 1 -type d -name \"" << argv[2] << "\" | xargs -i cp -r {}/*" << " ./"<< argv[1];
     cmdss << "find ./" << argv[2] << " -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -i cp -r {}" << " ./"<< argv[1];
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "rm -rf " << argv[4] <<"/*";
+    cmdss << "rm -rf " << argv[4];
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
