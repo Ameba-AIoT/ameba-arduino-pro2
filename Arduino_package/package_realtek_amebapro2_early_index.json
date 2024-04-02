@@ -20,8 +20,8 @@
           },
           "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2-4.0.7-build20240328.tar.gz",
           "archiveFileName": "ameba_pro2-4.0.7-build20240328.tar.gz",
-          "checksum": "SHA-256:c55f6189be3f288391becfbdb10f1f3457e6841083fab64646debfb5ed2a7565",
-          "size": "96456717",
+          "checksum": "SHA-256:935a28ee8ce4f9e5a98e53bc8d3e2c596b196ba4cd44fbb9b51a615c0e54a657",
+          "size": "96344164",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -543,22 +543,22 @@
               "host": "i686-mingw32",
               "archiveFileName": "ameba_pro2_tools_windows-1.3.0.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.3.0.tar.gz",
-              "checksum": "SHA-256:7af872b860301578fdb2b846a92094ff14f2e36664c58b88b6e1203eec9b7b66",
-              "size": "4209243"
+              "checksum": "SHA-256:0786fa80c9ec964ac91e4fbc05d080b444e75b5352158c98882bec633b31a32e",
+              "size": "4209372"
             },
             {
               "host": "x86_64-pc-linux-gnu",
               "archiveFileName": "ameba_pro2_tools_linux-1.3.0.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.3.0.tar.gz",
-              "checksum": "SHA-256:0dc47ddd833115cafe3e7e0226c90e1916257aea8801d3d0f2341e3f0beb72b8",
-              "size": "5306092"
+              "checksum": "SHA-256:e5170894b23b42e125fdb4ef68dc528ed9b2f69fc1621863b4144854afa859c3",
+              "size": "5073482"
             },
             {
               "host": "x86_64-apple-darwin",
               "archiveFileName": "ameba_pro2_tools_macos-1.3.0.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.3.0.tar.gz",
-              "checksum": "SHA-256:4602977b89517578aab01cff1351ce6b5598c55154a52426c19b45ebb5f3a705",
-              "size": "969832"
+              "checksum": "SHA-256:ad71b52bbdfc73d13d61011c4d5957795bfe8522b39834d0c7cd31ea30a98de5",
+              "size": "969886"
             }
           ]
         },

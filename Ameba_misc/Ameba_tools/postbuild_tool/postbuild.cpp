@@ -16,7 +16,7 @@ strip postbuild_linux
 
 macos:
 g++ -arch x86_64 -arch arm64 -o postbuild_macos postbuild.cpp
-strip postbuild_macos
+### strip postbuild_macos
 
 */
 

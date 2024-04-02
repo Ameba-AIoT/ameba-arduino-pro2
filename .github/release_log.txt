@@ -5,7 +5,7 @@ Version 4.0.7 – 2024/02/22
 Version 4.0.7 – 2024/02/23
 Version 4.0.7 - 2024/02/29
 Version 4.0.7 - 2024/03/13
-Version 4.0.7 - 2024/03/28
+Version 4.0.7 - 2024/04/02
 
 Feature:
 - Add I2C OLED SSD1306 example and libs
@@ -19,7 +19,7 @@ Feature:
 - Update original Camera2LCD example by Kevin Chen
 
 API Updates:
-- Update SDK code base by passing coding style check
+- Update SDK code base
 - Update Wire.cpp
     - Remove additional i2c_reset in endTransmission()
 - Update IPAddress.cpp
@@ -27,12 +27,9 @@ API Updates:
 - Update the pin_check related
     - enhance the logic of checking
     - speed up the proces
-- Update board.txt and Arduino.h
 - Update Arduino.h
-- Update the code base
 - Update NN APIs
 - Add SD_Model API
-- Update the code base
 - Add HTTP Post Request image and voice recorded prompt
 - Add support for camera sensor GC5035
 
