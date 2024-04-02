@@ -90,7 +90,7 @@ jobs:
           libraries: |
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/AmebaEink.zip
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
-          verbose: false
+          verbose: true
           enable-deltas-report: false
         if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
 
