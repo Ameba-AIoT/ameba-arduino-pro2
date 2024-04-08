@@ -17,14 +17,18 @@ fatfs_version=r0.14
 littlefs_version=r2.41
 VIPLiteDrv_version=VIPLiteDrv_1.12.0
 
-toolchain_version_p1={toolchain_version}-p1
-toolchain_version_p2={toolchain_version}-p2
-toolchain_p1_name_path={toolchain_p1_name}-{toolchain_version_p1}
-toolchain_p2_name_path={toolchain_p2_name}-{toolchain_version_p2}
+toolchain_p1_version={toolchain_version}-p1
+toolchain_p2_version={toolchain_version}-p2
+toolchain_p1_runtime_name={toolchain_p1_name}-{toolchain_p1_version}
+toolchain_p2_runtime_name={toolchain_p2_name}-{toolchain_p2_version}
+toolchain_p1_name_path={toolchain_p1_name}/{toolchain_p1_version}
+toolchain_p2_name_path={toolchain_p2_name}/{toolchain_p2_version}
 
 # Ameba paths
 # ----------------------
-## package/SDK path
+## package/lib/SDK path
+hardware.path={runtime.platform.path}
+com_lib.path={hardware.path}/variants/common_libs
 ameba.sdk_path={build.system.path}
 ameba.component_path={build.system.path}/component
 ameba.soc_path={build.system.path}/component/soc/8735b
@@ -35,9 +39,10 @@ ameba.ble_path={build.system.path}/component/bluetooth
 ameba.nn_path={build.system.path}/project/realtek_amebapro2_v0_example/src/{VIPLiteDrv_version}
 
 ## compiler/toolchain path
-compiler.path={runtime.tools.{toolchain_p1_name_path}.path}/bin/
-toolchain.path={runtime.tools.{toolchain_p1_name_path}.path}
-toolchain_p2.path={runtime.tools.{toolchain_p2_name_path}.path}
+toolchain.path={runtime.tools.{toolchain_p1_runtime_name}.path}
+compiler.path={toolchain.path}/bin/
+toolchain_p1.path={toolchain.path}
+toolchain_p2.path={runtime.tools.{toolchain_p2_runtime_name}.path}
 
 ## tools path 
 ameba.tools_path={runtime.tools.ameba_pro2_tools.path}
@@ -109,7 +114,7 @@ compiler.define=-DARDUINO
 
 # Ameba archive list
 # -------------------
-compiler.ameba.ar.list= "{runtime.platform.path}/variants/common_libs/libfaac.a" "{runtime.platform.path}/variants/common_libs/libfmp4.a" "{runtime.platform.path}/variants/common_libs/libg711.a" "{runtime.platform.path}/variants/common_libs/libhaac.a" "{runtime.platform.path}/variants/common_libs/libhmp3.a" "{runtime.platform.path}/variants/common_libs/libhttp.a" "{runtime.platform.path}/variants/common_libs/libmmf.a" "{runtime.platform.path}/variants/common_libs/libmuxer.a" "{runtime.platform.path}/variants/common_libs/libnn.a" "{runtime.platform.path}/variants/common_libs/libopus.a" "{runtime.platform.path}/variants/common_libs/libopusenc.a" "{runtime.platform.path}/variants/common_libs/libopusfile.a" "{runtime.platform.path}/variants/common_libs/libqrcode.a" "{runtime.platform.path}/variants/common_libs/libsdcard.a" "{runtime.platform.path}/variants/common_libs/libusbd.a" "{runtime.platform.path}/variants/common_libs/libvideo_ntz.a" "{runtime.platform.path}/variants/common_libs/libwlan.a" "{runtime.platform.path}/variants/common_libs/libwps.a" "{runtime.platform.path}/variants/common_libs/btgap.a" "{runtime.platform.path}/variants/common_libs/hal_pmc.a" "{runtime.platform.path}/variants/common_libs/libsoc_ntz.a" "{runtime.platform.path}/variants/common_libs/libarduino.a" "{runtime.platform.path}/variants/common_libs/libispfeature.a" "{runtime.platform.path}/variants/common_libs/libctaec.a" "{runtime.platform.path}/variants/common_libs/liboutsrc.a" "{runtime.platform.path}/variants/common_libs/libVQE.a" "{runtime.platform.path}/variants/common_libs/libmd.a" "{runtime.platform.path}/variants/common_libs/libfdkaac.a" "{runtime.platform.path}/variants/common_libs/libarduino_sensor_sel.a"
+compiler.ameba.ar.list= "{com_lib.path}/libfaac.a" "{com_lib.path}/libfmp4.a" "{com_lib.path}/libg711.a" "{com_lib.path}/libhaac.a" "{com_lib.path}/libhmp3.a" "{com_lib.path}/libhttp.a" "{com_lib.path}/libmmf.a" "{com_lib.path}/libmuxer.a" "{com_lib.path}/libnn.a" "{com_lib.path}/libopus.a" "{com_lib.path}/libopusenc.a" "{com_lib.path}/libopusfile.a" "{com_lib.path}/libqrcode.a" "{com_lib.path}/libsdcard.a" "{com_lib.path}/libusbd.a" "{com_lib.path}/libvideo_ntz.a" "{com_lib.path}/libwlan.a" "{com_lib.path}/libwps.a" "{com_lib.path}/btgap.a" "{com_lib.path}/hal_pmc.a" "{com_lib.path}/libsoc_ntz.a" "{com_lib.path}/libarduino.a" "{com_lib.path}/libispfeature.a" "{com_lib.path}/libctaec.a" "{com_lib.path}/liboutsrc.a" "{com_lib.path}/libVQE.a" "{com_lib.path}/libmd.a" "{com_lib.path}/libfdkaac.a" "{com_lib.path}/libarduino_sensor_sel.a"
 
 
 # USB Flags
@@ -122,21 +127,21 @@ build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} -DUSBCON '-DUSB_MANU
 # Pre build process
 # -----------------
 #Give permission to tools for linux and macos
-recipe.hooks.prebuild.1.pattern.linux = chmod -R 777 "{runtime.tools.ameba_pro2_tools.path}"
-recipe.hooks.prebuild.1.pattern.macosx= chmod -R 777 "{runtime.tools.ameba_pro2_tools.path}"
+recipe.hooks.prebuild.1.pattern.linux = chmod -R 777 "{ameba.tools_path}"
+recipe.hooks.prebuild.1.pattern.macosx= chmod -R 777 "{ameba.tools_path}"
 
 ## combine toolchain
-recipe.hooks.prebuild.2.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p2.path}" {toolchain_p1_name} {toolchain_p2_name} "{runtime.platform.path}" "{build.camera_opt}"
-recipe.hooks.prebuild.2.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/prebuild_linux {toolchain.path} {toolchain_p2.path} {toolchain_p1_name} {toolchain_p2_name} "{runtime.platform.path}" "{build.camera_opt}"
-recipe.hooks.prebuild.2.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/prebuild_macos {toolchain.path} {toolchain_p2.path} {toolchain_p1_name} {toolchain_p2_name} "{runtime.platform.path}" "{build.camera_opt}"
+recipe.hooks.prebuild.2.pattern.windows = "{ameba.tools_path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p1_name_path}" "{toolchain_p2_name_path}" {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}"
+recipe.hooks.prebuild.2.pattern.linux = {ameba.tools_path}/prebuild_linux {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}"
+recipe.hooks.prebuild.2.pattern.macosx = {ameba.tools_path}/prebuild_macos {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}"
 
-recipe.hooks.prebuild.3.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
-recipe.hooks.prebuild.3.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/ino_validation_linux {build.path} {ameba.tools_path} {build.model_src}
-recipe.hooks.prebuild.3.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/ino_validation_macos {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.3.pattern.windows = "{ameba.tools_path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
+recipe.hooks.prebuild.3.pattern.linux = {ameba.tools_path}/ino_validation_linux {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.3.pattern.macosx = {ameba.tools_path}/ino_validation_macos {build.path} {ameba.tools_path} {build.model_src}
  
-recipe.hooks.prebuild.4.pattern.windows = "{runtime.tools.ameba_pro2_tools.path}/nn_model_update_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
-recipe.hooks.prebuild.4.pattern.linux = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_linux {build.path} {ameba.tools_path} {build.model_src}
-recipe.hooks.prebuild.4.pattern.macosx = {runtime.tools.ameba_pro2_tools.path}/nn_model_update_macos {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.4.pattern.windows = "{ameba.tools_path}/nn_model_update_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
+recipe.hooks.prebuild.4.pattern.linux = {ameba.tools_path}/nn_model_update_linux {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.4.pattern.macosx = {ameba.tools_path}/nn_model_update_macos {build.path} {ameba.tools_path} {build.model_src}
 
 # Ameba compile patterns
 # ----------------------
@@ -170,11 +175,11 @@ recipe.objcopy.hex.imagepath_appntzmap.windows="{build.path}\application.ntz.map
 recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
-recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}" "{build.camera_opt}"
+recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}"
 
-recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}" "{build.camera_opt}"
+recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}"
 
-recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{runtime.platform.path}" "{build.camera_opt}"
+recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}"
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"
@@ -194,11 +199,11 @@ recipe.output.save_file=flash_ntz.bin
 tools.ameba_pro2_tools.upload.params.verbose=
 tools.ameba_pro2_tools.upload.params.quiet=
 
-tools.ameba_pro2_tools.upload.pattern.windows="{runtime.tools.ameba_pro2_tools.path}/image_windows.exe" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "0x60000" "0x460000" "0x530000" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.windows="{ameba.tools_path}/image_windows.exe" "{ameba.tools_path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.exe" "Auto_Flash_Pro2_V3.3_win.exe" "0x60000" "0x460000" "0x530000" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.linux="{runtime.tools.ameba_pro2_tools.path}/image_linux" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "0x60000" "0x460000" "0x530000" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.linux="{ameba.tools_path}/image_linux" "{ameba.tools_path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.linux" "Auto_Flash_Pro2_V3.3_linux" "0x60000" "0x460000" "0x530000" {upload.verbose}
 
-tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.path}/image_macos" "{runtime.tools.ameba_pro2_tools.path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "0x60000" "0x460000" "0x530000" {upload.verbose}
+tools.ameba_pro2_tools.upload.pattern.macosx="{ameba.tools_path}/image_macos" "{ameba.tools_path}" "{serial.port}" "{board}" "{upload.auto_mode}" "{upload.erase_flash}" "{upload.speed}" "uartfwburn.darwin" "Auto_Flash_Pro2_V3.3_mac" "0x60000" "0x460000" "0x530000" {upload.verbose}
 
 #tools.ameba_pro2_tools.upload.network_pattern="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
 #tools.ameba_pro2_tools.upload.network_pattern.windows="{ameba.tools_path}/upload_ota.exe" -i "{serial.port}" -p "{network.port}" -f "{ameba.tools_path}\ota.bin"
@@ -206,7 +211,7 @@ tools.ameba_pro2_tools.upload.pattern.macosx="{runtime.tools.ameba_pro2_tools.pa
 
 # Debugger configuration (general options)
 # ----------------------------------------
-tools.gdb.path={runtime.tools.{toolchain_p1_name_path}.path}/bin/
+tools.gdb.path={compiler.path}
 tools.gdb.cmd=arm-none-eabi-gdb
 tools.gdb.cmd.windows=arm-none-eabi-gdb.exe
 tools.gdb.cmd.linux=arm-none-eabi-gdb
@@ -214,7 +219,7 @@ tools.gdb.debug.pattern="{path}/{cmd}" --interpreter=mi2 -ex "set pagination off
 
 debug.executable={build.path}/application.ntz
 debug.toolchain=gcc
-debug.toolchain.path={runtime.tools.{toolchain_p1_name_path}.path}/bin/
+debug.toolchain.path={compiler.path}
 debug.toolchain.prefix=arm-none-eabi-
 
 # Options for JLink GDB server

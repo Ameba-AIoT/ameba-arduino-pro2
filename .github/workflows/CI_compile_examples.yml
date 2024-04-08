@@ -46,12 +46,12 @@ jobs:
           - Arduino_package/hardware/libraries/PowerMode
           - Arduino_package/hardware/libraries/QRCodeScanner
           - Arduino_package/hardware/libraries/RTC
-          # - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
           - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
           - Arduino_package/hardware/libraries/SPI/examples/LCD_Screen_ILI9341_TFT
           - Arduino_package/hardware/libraries/Watchdog
           - Arduino_package/hardware/libraries/WiFi
           - Arduino_package/hardware/libraries/Wire
+          # - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
 
     strategy:
       fail-fast: false
@@ -84,13 +84,12 @@ jobs:
           platforms: |
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json
               name: realtek:AmebaPro2
-            # Overwrite release version with the platform from the local path
             - source-path: Arduino_package/hardware/
               name: realtek:AmebaPro2
           libraries: |
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/AmebaEink.zip
-            - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
-          verbose: true
+            # - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
+          verbose: false
           enable-deltas-report: false
         if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
 
@@ -107,7 +106,7 @@ jobs:
               name: realtek:AmebaPro2
           libraries: |
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_zip_libraries/AmebaEink.zip
-            - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
+            # - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
           verbose: false
           enable-deltas-report: false
         if: ${{ github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main' }}

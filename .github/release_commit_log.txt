@@ -1,14 +1,8 @@
 Feature:
-- Add QR Code Scanning Example
-- Update original Camera2LCD example by Kevin Chen
 
 API Updates:
-- Update the code base
-- Add HTTP Post Request image and voice recorded prompt
-- Add support for camera sensor GC5035
 
 Misc:
-- Update ameba_pro2_tools 1.3.0
-    - Update tool source code for CPP version
-    - Update prebuild and postbuild tools
-    - Update tools for multi-sensor support
+- Update ameba_pro2_tools 1.3.1
+    - Update prebuild for linux os and macos compile issue fix
+    - Update platform.txt

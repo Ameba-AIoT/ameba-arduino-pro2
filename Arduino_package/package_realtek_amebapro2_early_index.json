@@ -537,6 +537,33 @@
         },
 		{
           "name": "ameba_pro2_tools",
+          "version": "1.3.1",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.3.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.3.1.tar.gz",
+              "checksum": "SHA-256:fd1f6de8847691dc0deaf67eb5e2c2bff15815e6d544abc7cfad92dcd49b0aa6",
+              "size": "4209382"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "archiveFileName": "ameba_pro2_tools_linux-1.3.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.3.1.tar.gz",
+              "checksum": "SHA-256:4ae5c38190b8cca04b6a7126ad71c6956a82598ee76683fe8f9f6116ad232dca",
+              "size": "5073456"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.3.1.tar.gz",
+              "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.3.1.tar.gz",
+              "checksum": "SHA-256:a9fd55a7e7718978728654afcd14e3f31c517b40bb9a29a2a34fa8f66d288bf4",
+              "size": "969882"
+            }
+          ]
+        },
+		{
+          "name": "ameba_pro2_tools",
           "version": "1.3.0",
           "systems": [
             {

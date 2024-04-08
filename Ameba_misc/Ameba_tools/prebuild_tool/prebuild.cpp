@@ -38,15 +38,15 @@ int main(int argc, char *argv[]) {
     chdir(argv[1]);
     chdir("../..");
 
-    isp_camera_option = argv[6];
+    isp_camera_option = argv[7];
 
 #if defined(__WIN32__) // MINGW64
     string string_temp_1 = "copy ";
     string string_temp_2 = "\\";
 
-    common_libs_path = argv[5];
+    common_libs_path = argv[6];
     common_libs_path = common_libs_path + "\\variants\\common_libs\\libarduino_sensor_sel.a";
-    common_sensor_sel_libs_path = argv[5];
+    common_sensor_sel_libs_path = argv[6];
     common_sensor_sel_libs_path = common_sensor_sel_libs_path + "\\variants\\common_sensor_sel_libs\\";
 
     cmdss.clear();
@@ -56,13 +56,13 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "if exist " << argv[2] << " xcopy /y /s \"" << argv[2] << "\" \"" << argv[1] << "\"";
+    cmdss << "if exist " << argv[3] << " xcopy /y /s \"" << argv[3] << "\" \"" << argv[2] << "\"";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "if exist " << argv[4] << " rmdir /s /q  " << argv[4];
+    cmdss << "if exist " << argv[5] << " rmdir /s /q  " << argv[5];
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -71,9 +71,9 @@ int main(int argc, char *argv[]) {
     string string_temp_1 = "cp ";
     string string_temp_2 = "/";
 
-    common_libs_path = argv[5];
+    common_libs_path = argv[6];
     common_libs_path = common_libs_path + "/variants/common_libs/libarduino_sensor_sel.a";
-    common_sensor_sel_libs_path = argv[5];
+    common_sensor_sel_libs_path = argv[6];
     common_sensor_sel_libs_path = common_sensor_sel_libs_path + "/variants/common_sensor_sel_libs/";
 
     cmdss.clear();
@@ -82,18 +82,16 @@ int main(int argc, char *argv[]) {
     //cout << cmd << endl;
     system(cmd.c_str());
 
-    chdir(argv[1]);
-
     cmdss.clear();
-//    cmdss << "cp -r ./" << argv[2] << "/* " << argv[1] << " 2> /dev/null " ;
-//    cmdss << "find ./ -mindepth 1 -maxdepth 1 -type d -name \"" << argv[2] << "\" | xargs -i cp -r {}/*" << " ./"<< argv[1];
-    cmdss << "find ./" << argv[2] << " -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -i cp -r {}" << " ./"<< argv[1];
+//    cmdss << "cp -r ./" << argv[3] << "/* " << argv[2] << " 2> /dev/null " ;
+//    cmdss << "find ./ -mindepth 1 -maxdepth 1 -type d -name \"" << argv[3] << "\" | xargs -i cp -r {}/*" << " ./"<< argv[2];
+    cmdss << "find ./" << argv[3] << "/ -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -i cp -r {}" << " ./"<< argv[2] << "/";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "rm -rf " << argv[4];
+    cmdss << "rm -rf " << argv[5];
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
