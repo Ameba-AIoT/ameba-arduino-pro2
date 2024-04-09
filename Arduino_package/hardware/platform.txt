@@ -10,6 +10,8 @@ version=4.0.X
 toolchain_version=1.0.1
 toolchain_p1_name=ameba_pro2_toolchain
 toolchain_p2_name=ameba_pro2_toolchain2
+nn_tool_name=ameba_pro2_nn_models
+nn_tool_version=1.0.0
 freertos_version=freertos_v202012.00
 lwip_version=lwip_v2.1.2
 mbedtls_version=mbedtls-2.28.1
@@ -23,6 +25,7 @@ toolchain_p1_runtime_name={toolchain_p1_name}-{toolchain_p1_version}
 toolchain_p2_runtime_name={toolchain_p2_name}-{toolchain_p2_version}
 toolchain_p1_name_path={toolchain_p1_name}/{toolchain_p1_version}
 toolchain_p2_name_path={toolchain_p2_name}/{toolchain_p2_version}
+nn_tool_name_path={nn_tool_name}/{nn_tool_version}
 
 # Ameba paths
 # ----------------------
@@ -131,9 +134,9 @@ recipe.hooks.prebuild.1.pattern.linux = chmod -R 777 "{ameba.tools_path}"
 recipe.hooks.prebuild.1.pattern.macosx= chmod -R 777 "{ameba.tools_path}"
 
 ## combine toolchain
-recipe.hooks.prebuild.2.pattern.windows = "{ameba.tools_path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p1_name_path}" "{toolchain_p2_name_path}" {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}"
-recipe.hooks.prebuild.2.pattern.linux = {ameba.tools_path}/prebuild_linux {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}"
-recipe.hooks.prebuild.2.pattern.macosx = {ameba.tools_path}/prebuild_macos {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}"
+recipe.hooks.prebuild.2.pattern.windows = "{ameba.tools_path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p1_name_path}" "{toolchain_p2_name_path}" {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}" "{nn_tool_name_path}" "{nn_tool_name}"
+recipe.hooks.prebuild.2.pattern.linux = {ameba.tools_path}/prebuild_linux {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} {hardware.path} {build.camera_opt} {nn_tool_name_path} {nn_tool_name}
+recipe.hooks.prebuild.2.pattern.macosx = {ameba.tools_path}/prebuild_macos {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} {hardware.path} {build.camera_opt} {nn_tool_name_path} {nn_tool_name}
 
 recipe.hooks.prebuild.3.pattern.windows = "{ameba.tools_path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
 recipe.hooks.prebuild.3.pattern.linux = {ameba.tools_path}/ino_validation_linux {build.path} {ameba.tools_path} {build.model_src}
