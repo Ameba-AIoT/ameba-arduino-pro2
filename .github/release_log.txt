@@ -12,11 +12,10 @@ Feature:
 - Add load NN model using SD card feature
 - Add MPU6050 support
 - Add image classification (emotion detection)
-- Bug fix for image classification example
 - Add HTTP_Post_MP4_Whisper_Server example
-- Add integration example: Record MP4 + HTTP Post Request to Whisper Server.
+- Add integration example: Record MP4 + HTTP Post Request to Whisper Server
 - Add QR Code Scanning Example
-- Update original Camera2LCD example by Kevin Chen
+- Update original Camera2LCD example
 
 API Updates:
 - Update SDK code base

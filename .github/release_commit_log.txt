@@ -1,8 +1,19 @@
 Feature:
+- Add HTTP Post Request Json to FASTAPI server for LLM/VLM
+- Add VL53l0x example
 
 API Updates:
+- Add yolov7 reparam scripts
+- Add Pololu VL53l0x library
 
 Misc:
-- Update ameba_pro2_tools 1.3.1
-    - Update prebuild for linux os and macos compile issue fix
+- Update ameba_pro2_tools 1.3.2
+    - Update ino_validation tools
+    - Add tool cmodel_backup
+    - Rename nn_model_update tool as nn_json_modify
     - Update platform.txt
+    - Update tools source code (.cpp)
+    - Update postbuild.cpp
+- Add ameba_pro2_nn_models tool
+    - Reduce the SDK package size
+- Remove nn models from package
