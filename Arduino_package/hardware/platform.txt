@@ -141,10 +141,14 @@ recipe.hooks.prebuild.2.pattern.macosx = {ameba.tools_path}/prebuild_macos {tool
 recipe.hooks.prebuild.3.pattern.windows = "{ameba.tools_path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
 recipe.hooks.prebuild.3.pattern.linux = {ameba.tools_path}/ino_validation_linux {build.path} {ameba.tools_path} {build.model_src}
 recipe.hooks.prebuild.3.pattern.macosx = {ameba.tools_path}/ino_validation_macos {build.path} {ameba.tools_path} {build.model_src}
+
+recipe.hooks.prebuild.4.pattern.windows = "{ameba.tools_path}/cmodel_backup_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
+recipe.hooks.prebuild.4.pattern.linux = {ameba.tools_path}/cmodel_backup_linux {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.4.pattern.macosx = {ameba.tools_path}/cmodel_backup_macos {build.path} {ameba.tools_path} {build.model_src}
  
-recipe.hooks.prebuild.4.pattern.windows = "{ameba.tools_path}/nn_model_update_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
-recipe.hooks.prebuild.4.pattern.linux = {ameba.tools_path}/nn_model_update_linux {build.path} {ameba.tools_path} {build.model_src}
-recipe.hooks.prebuild.4.pattern.macosx = {ameba.tools_path}/nn_model_update_macos {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.5.pattern.windows = "{ameba.tools_path}/nn_json_modify_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
+recipe.hooks.prebuild.5.pattern.linux = {ameba.tools_path}/nn_json_modify_linux {build.path} {ameba.tools_path} {build.model_src}
+recipe.hooks.prebuild.5.pattern.macosx = {ameba.tools_path}/nn_json_modify_macos {build.path} {ameba.tools_path} {build.model_src}
 
 # Ameba compile patterns
 # ----------------------
