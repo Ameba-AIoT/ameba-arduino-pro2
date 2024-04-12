@@ -1,6 +1,6 @@
 /*
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-http-post-mp4/
+ TBD
 */
 
 #include "StreamIO.h"
@@ -10,6 +10,7 @@
 #include "WiFi.h"
 #include "AmebaFatFS.h"
 #include "Base64.h"
+#include "ArduinoJson.h"
 
 #define FILENAME "TestRecordingAudioOnly.mp4"
 
@@ -176,14 +177,21 @@ void encodeMP4andsendHttpPostRequest()
     char *encodedData = (char *)malloc(encodedLen);
     base64_encode(encodedData, (char *)fileinput, fileSize);
 
+    JsonDocument doc;
+
+    // Change "base64_string" to the key that you set in your server.
+    doc["base64_string"] = encodedData;
+    String jsonString;
+    serializeJson(doc, jsonString);
+
     if (wifiClient.connect(server, 8000)) {
         wifiClient.println("POST /audio HTTP/1.1");
         wifiClient.println("Host: " + String(server));
-        wifiClient.println("Content-Type: application/x-www-form-urlencoded");    // Use appropriate content type
-        wifiClient.println("Content-Length: " + String(encodedLen));              // Specify the length of the content
+        wifiClient.println("Content-Type: application/json");                    // Use appropriate content type
+        wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
         wifiClient.println("Connection: keep-alive");
-        wifiClient.println();             // Empty line indicates the end of headers
-        wifiClient.print(encodedData);    // Send the Base64 encoded audio data directly
+        wifiClient.println();            // Empty line indicates the end of headers
+        wifiClient.print(jsonString);    // Send the Base64 encoded audio data directly
         Serial.println("Binary sent");
     }
 }
