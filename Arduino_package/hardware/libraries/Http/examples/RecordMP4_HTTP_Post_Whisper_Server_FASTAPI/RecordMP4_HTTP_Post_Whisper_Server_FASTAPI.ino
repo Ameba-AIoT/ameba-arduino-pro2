@@ -179,18 +179,18 @@ void encodeMP4andsendHttpPostRequest()
 
     JsonDocument doc;
 
-    //Change "base64_string" to the key that you set in your server.
+    // Change "base64_string" to the key that you set in your server.
     doc["base64_string"] = encodedData;
     String jsonString;
-    serializeJson(doc,jsonString);
+    serializeJson(doc, jsonString);
 
     if (wifiClient.connect(server, 8000)) {
         wifiClient.println("POST /audio HTTP/1.1");
         wifiClient.println("Host: " + String(server));
-        wifiClient.println("Content-Type: application/json");    // Use appropriate content type
-        wifiClient.println("Content-Length: " + String(jsonString.length()));              // Specify the length of the content
+        wifiClient.println("Content-Type: application/json");                    // Use appropriate content type
+        wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
         wifiClient.println("Connection: keep-alive");
-        wifiClient.println();             // Empty line indicates the end of headers
+        wifiClient.println();            // Empty line indicates the end of headers
         wifiClient.print(jsonString);    // Send the Base64 encoded audio data directly
         Serial.println("Binary sent");
     }
