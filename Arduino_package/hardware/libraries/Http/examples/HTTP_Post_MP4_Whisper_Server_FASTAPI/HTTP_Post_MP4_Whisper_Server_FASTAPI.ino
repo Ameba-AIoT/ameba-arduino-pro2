@@ -1,12 +1,13 @@
 /*
 Example guide:
-https://www.amebaiot.com/en/amebapro2-arduino-http-post-mp4/
+TBD
 */
 
 #include <Arduino.h>
 #include "WiFi.h"
 #include "AmebaFatFS.h"
 #include "Base64.h"
+#include "ArduinoJson.h"
 
 #define FILENAME "TestRecordingAudioOnly.mp4"
 
@@ -68,39 +69,24 @@ void setup()
     char *encodedData = (char *)malloc(encodedLen);
     base64_encode(encodedData, (char *)fileinput, fileSize);
 
-    // Print or use the encoded data as needed
-    // Serial.println("Base64 Encoded Data:");
-    // Serial.println(encodedData);
-    // delay(1000);
+    JsonDocument doc;
+
+    doc["base64_string"] = encodedData;
+
+    String jsonString;
+
+    serializeJson(doc, jsonString);
+
+    // Serial.println(jsonString);
 
     if (wifiClient.connect(server, 8000)) {
-        // wifiClient.println("POST /audio HTTP/1.1");
-        // wifiClient.println("Host: " + String(server));
-        // wifiClient.println("Content-Type: multipart/form-data; boundary=boundary");
-        // wifiClient.println("Connection: keep-alive");
-
-        // // Calculate content length
-        // size_t contentLength = encodedLen + strlen("--boundary--\r\n");
-        // wifiClient.print("Content-Length: ");
-        // wifiClient.println(contentLength);
-
-        // // Send multipart/form-data body
-        // wifiClient.println("--boundary");
-        // wifiClient.println("Content-Disposition: form-data; name=\"audio\"; filename=\"TestRecordingAudioOnly.mp4\"");
-        // wifiClient.println("Content-Type: audio/mp4");
-        // wifiClient.println();
-        // wifiClient.print(encodedData);
-        // wifiClient.println();
-        // wifiClient.println("--boundary--");
-        // Serial.println("Binary sent");
-
         wifiClient.println("POST /audio HTTP/1.1");
         wifiClient.println("Host: " + String(server));
-        wifiClient.println("Content-Type: application/x-www-form-urlencoded");    // Use appropriate content type
-        wifiClient.println("Content-Length: " + String(encodedLen));              // Specify the length of the content
+        wifiClient.println("Content-Type: application/json");                    // Use appropriate content type
+        wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
         wifiClient.println("Connection: keep-alive");
-        wifiClient.println();             // Empty line indicates the end of headers
-        wifiClient.print(encodedData);    // Send the Base64 encoded audio data directly
+        wifiClient.println();            // Empty line indicates the end of headers
+        wifiClient.print(jsonString);    // Send the Base64 encoded audio data directly
         Serial.println("Binary sent");
     }
 }
