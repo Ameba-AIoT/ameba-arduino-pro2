@@ -105,7 +105,11 @@ int main(int argc, char *argv[]) {
 //    cmdss << "cp -r ./" << argv[3] << "/* " << argv[2] << " 2> /dev/null " ;
 //    cmdss << "find ./ -mindepth 1 -maxdepth 1 -type d -name \"" << argv[3] << "\" | xargs -i cp -r {}/*" << " ./"<< argv[2];
     cmdss.clear();
+#if defined(__APPLE__) // OS X 64bits
+    cmdss << "find ./" << argv[3] << "/ -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -I \"{}\" cp -r \"{}\"" << " ./"<< argv[2] << "/";
+#else
     cmdss << "find ./" << argv[3] << "/ -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -i cp -r {}" << " ./"<< argv[2] << "/";
+#endif
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -117,7 +121,11 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "find ./" << nn_tool_name_path << "/ -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -i cp -r {} ./"<< common_nn_libs_path << "/";
+#if defined(__APPLE__) // OS X 64bits
+    cmdss << "find ./" << nn_tool_name_path << "/ -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -I \"{}\" cp -r \"{}\" "<< common_nn_libs_path << "/";
+#else
+    cmdss << "find ./" << nn_tool_name_path << "/ -mindepth 1 -maxdepth 1 -type d -name \"*\" 2>/dev/null | xargs -i cp -r {} "<< common_nn_libs_path << "/";
+#endif
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
