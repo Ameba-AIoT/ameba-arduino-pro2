@@ -45,7 +45,7 @@ strip ino_validation_macos
 #include <cctype> // For std::isspace
 #endif
 
-#define PRINT_DEBUG         1
+#define PRINT_DEBUG         0
 #define MAX_PATH_LENGTH     1024
 
 #define NUMBER_OF_MODELS 5
@@ -994,7 +994,7 @@ int main(int argc, char* argv[]) {
 #endif
 	size_t path_tool_find_keyword = path_tools.find(key_portable);
 	if (path_tool_find_keyword != std::string::npos) {
-		path_arduino15 = path_arduino15.append(findKeywordPath(path_tools, key_portable));
+		path_arduino15 = findKeywordPath(path_tools, key_portable);
 	} else {
 		path_arduino15.append(path_arduino15_add);
 	}
