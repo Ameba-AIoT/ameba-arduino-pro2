@@ -31,7 +31,8 @@ float NNImageClassification::yscale;
 float NNImageClassification::yoffset;
 uint8_t NNImageClassification::use_roi;
 
-// void (*NNImageClassification::IC_user_CB)(std::vector<ImageClassificationResult>);
+void (*NNImageClassification::IC_user_CB)(std::vector<ImageClassificationResult>);
+std::vector<ImageClassificationResult> NNImageClassification::imgclass_result_vector;
 
 NNImageClassification::NNImageClassification(void)
 {
@@ -129,15 +130,59 @@ void NNImageClassification::end(void)
     }
 }
 
-void NNImageClassification::ICResultCallback(void *p)
+void NNImageClassification::setResultCallback(void (*ic_callback)(std::vector<ImageClassificationResult>))
 {
+    IC_user_CB = ic_callback;
+}
+
+uint16_t NNImageClassification::getResultCount(void)
+{
+    uint16_t ic_res_count = imgclass_result_vector.size();
+    return ic_res_count;
+}
+
+ImageClassificationResult NNImageClassification::getResult(uint16_t index)
+{
+    if (index >= imgclass_result_vector.size()) {
+        return ImageClassificationResult();
+    }
+    return imgclass_result_vector[index];
+}
+
+std::vector<ImageClassificationResult> NNImageClassification::getResult(void)
+{
+    return imgclass_result_vector;
+}
+
+void NNImageClassification::ICResultCallback(void *p, void *img_param)
+{
+    (void)img_param;
+
     if (p == NULL) {
         return;
     }
     vipnn_out_buf_t *out = (vipnn_out_buf_t *)p;
-    classification_res_t *res = (classification_res_t *)&out->res[0];
+    classification_res_t *result = (classification_res_t *)&out->res[0];
 
+    imgclass_result_vector.clear();
+    imgclass_result_vector.resize((size_t)out->res_cnt);
     for (int i = 0; i < out->res_cnt; i++) {
-        printf("%s: class %d, prob: %f\r\n", __func__, res[i].class_id, res[i].prob);
+        // printf("%s: class %d, prob: %f\r\n", __func__, res[i].class_id, res[i].prob);
+        imgclass_result_vector[i].result.class_id = (int)result[i].class_id;
+        imgclass_result_vector[i].result.prob = (float)result[i].prob;
     }
+
+    if (IC_user_CB != NULL) {
+        IC_user_CB(imgclass_result_vector);
+    }
+}
+
+int ImageClassificationResult::classID(void)
+{
+    return ((int)(result.class_id));
+}
+
+int ImageClassificationResult::score(void)
+{
+    return ((int)((result.prob) * 100));
 }

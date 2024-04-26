@@ -23,9 +23,11 @@ extern "C" {
 class ImageClassificationResult {
     friend class NNImageClassification;
 public:
-
+    int classID(void);
+    int score(void);
 
 private:
+    classification_res_t result = {0};
 };
 
 class NNImageClassification: public NNModelSelection {
@@ -38,10 +40,16 @@ public:
     void begin(void);
     void end(void);
 
-private:
-    static void ICResultCallback(void *p);
+    void setResultCallback(void (*ic_callback)(std::vector<ImageClassificationResult>));
+    uint16_t getResultCount(void);
+    ImageClassificationResult getResult(uint16_t index);
+    std::vector<ImageClassificationResult> getResult(void);
 
-    // static void (*IC_user_CB)(std::vector<ImageClassificationResult>);
+private:
+    // static void ICResultCallback(void *p);
+    static void ICResultCallback(void *p, void *img_param);
+    static std::vector<ImageClassificationResult> imgclass_result_vector;
+    static void (*IC_user_CB)(std::vector<ImageClassificationResult>);
 
     static float xscale;
     static float xoffset;

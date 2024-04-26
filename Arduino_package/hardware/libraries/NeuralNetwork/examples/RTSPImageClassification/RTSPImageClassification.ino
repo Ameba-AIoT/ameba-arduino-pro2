@@ -27,7 +27,7 @@
 #include "RTSP.h"
 #include "NNImageClassification.h"
 #include "VideoStreamOverlay.h"
-
+#include "EmotionClassList.h"
 
 #define CHANNEL   0
 #define CHANNELNN 3
@@ -80,7 +80,7 @@ void setup()
     // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
     imgclass.configVideo(configNN);
-    // imgclass.setResultCallback(ICPostProcess);
+    imgclass.setResultCallback(ICPostProcess);
     imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS);
     imgclass.begin();
 
@@ -110,4 +110,21 @@ void setup()
 void loop()
 {
     // Do nothing
+}
+
+// User callback function
+void ICPostProcess(std::vector<ImageClassificationResult> results)
+{
+    printf("No of Emotion Detected = %d\r\n", imgclass.getResultCount());
+
+    if (imgclass.getResultCount() > 0) {
+        for (int i = 0; i < imgclass.getResultCount(); i++) {
+            ImageClassificationResult imgclass_item = results[i];
+            int class_id = (int)imgclass_item.classID();
+            if (imgclassItemList[class_id].filter) {    // header file
+                int prob = imgclass_item.score();
+                printf("%d class %d, score: %d, emotion name: %s\r\n", i, class_id, prob, imgclassItemList[class_id].imgclassName);
+            }
+        }
+    }
 }
