@@ -2427,7 +2427,7 @@ int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void 
     fmt.format = &param->format[0];
     fmt.dim = &param->dim[0];
     int class_cnt = fmt.dim->size[0];
-    //printf("class_cnt = %d\r\n", class_cnt);
+    // printf("class_cnt = %d\r\n", class_cnt);
 
     if (class_ret == NULL) {
         class_ret = malloc(class_cnt * sizeof(classification_res_t));
@@ -2452,7 +2452,7 @@ int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void 
     }
 
     for (int i = 0; i < class_cnt; i++) {
-        //printf("class %d, prob %0.2f\n\r", class_ret[i].class_id, class_ret[i].prob);
+        // printf("class %d, prob %0.2f\n\r", class_ret[i].class_id, class_ret[i].prob);
         class_res[i] = class_ret[i];    // copy data to class_res for nn_set_object()
     }
 
