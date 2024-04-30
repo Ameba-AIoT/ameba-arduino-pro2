@@ -188,6 +188,7 @@ public:
     uint16_t _fps;
     uint32_t _bps;
     uint8_t _encoder;
+    // 0: none; 1: full; 2: crop;
     uint8_t _snapshot;
     uint8_t _jpeg_qlevel;
     int _rotation;
@@ -199,10 +200,13 @@ private:
 class Video {
 public:
     void configVideoChannel(int ch, VideoSetting& config);
+    //    void configVideoChannel(int ch, VideoSetting& config, int snapshot_xmin, int snapshot_ymin, int snapshot_xmax, int snapshot_ymax);
     void camInit(CameraSetting& config);
     void camDeinit(void);
     void videoInit(void);
+    void videoInit(int ch);
     void videoDeinit(void);
+    void videoDeinit(int ch);
     void channelBegin(int ch = 0);
     void channelEnd(int ch = 0);
     MMFModule getStream(int ch = 0);
@@ -228,7 +232,11 @@ private:
     uint16_t fps[4] = {0};
     uint32_t bps[4] = {0};
     uint8_t encoder[4] = {0};
-    uint8_t snapshot[4] = {0};
+    uint8_t snapshot[3][5] = {
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
     uint8_t jpeg_qlevel[4] = {0};
     int video_rotation[4] = {0};
     typedef struct roi_param_s {
@@ -243,6 +251,7 @@ private:
     static uint32_t image_addr[4];
     static uint32_t image_len[4];
     int MD_En;
+    int _heap_size = 0;
 };
 
 extern Video Camera;

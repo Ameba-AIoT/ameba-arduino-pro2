@@ -27,6 +27,7 @@ toolchain_p1_name_path={toolchain_p1_name}/{toolchain_p1_version}
 toolchain_p2_name_path={toolchain_p2_name}/{toolchain_p2_version}
 nn_tool_name_path={nn_tool_name}/{nn_tool_version}
 
+
 # Ameba paths
 # ----------------------
 ## package/lib/SDK path
@@ -49,7 +50,6 @@ toolchain_p2.path={runtime.tools.{toolchain_p2_runtime_name}.path}
 
 ## tools path 
 ameba.tools_path={runtime.tools.ameba_pro2_tools.path}
-
 
 ## include path
 ### ameba SDK

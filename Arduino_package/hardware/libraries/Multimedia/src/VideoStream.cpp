@@ -418,10 +418,11 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     _fps = fps;
     _bps = CAM_BPS;
     _encoder = encoder;
+    // 0: none; 1: full; 2: crop;
     _snapshot = snapshot;
     _jpeg_qlevel = 5;
 
-    if ((_snapshot == 1)) {
+    if ((_snapshot == 1) || (_snapshot == 2)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
             printf("\r\n[ERROR] snapshot function not supported on selected encoder!\n");
             _snapshot = 0;
@@ -453,6 +454,7 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     _fps = fps;
     _bps = CAM_BPS;
     _encoder = encoder;
+    // 0: none; 1: full; 2: crop;
     _snapshot = snapshot;
     _w = w;
     _h = h;
@@ -509,7 +511,7 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
         printf("\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
     }
 
-    if ((_snapshot == 1)) {
+    if ((_snapshot == 1) || (_snapshot == 2)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
             printf("\r\n[ERROR] snapshot function not supported on selected encoder!\n");
             _snapshot = 0;
@@ -573,7 +575,7 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
     fps[ch] = config._fps;
     bps[ch] = config._bps;
     encoder[ch] = config._encoder;
-    snapshot[ch] = config._snapshot;
+    snapshot[ch][0] = config._snapshot;
     jpeg_qlevel[ch] = config._jpeg_qlevel;
     video_rotation[ch] = config._rotation;
 
@@ -588,6 +590,30 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
     // printf("\r\n[INFO] V4 %d    %d    %d    %d    %d    %d\n", channelEnable[3], w[3], h[3]);
 }
 
+#if 0
+void Video::configVideoChannel(int ch, VideoSetting& config, int snapshot_xmin, int snapshot_ymin, int snapshot_xmax, int snapshot_ymax)
+{
+    // Copy in video stream settings for specified stream channel
+    channelEnable[ch] = 1;
+    resolution[ch] = config._resolution;
+    w[ch] = config._w;
+    h[ch] = config._h;
+    fps[ch] = config._fps;
+    bps[ch] = config._bps;
+    encoder[ch] = config._encoder;
+    if (config._snapshot == 2) {
+        snapshot[ch][1] = snapshot_xmin;
+        snapshot[ch][2] = snapshot_ymin;
+        snapshot[ch][3] = snapshot_xmax;
+        snapshot[ch][4] = snapshot_ymax;
+    }
+    snapshot[ch][0] = config._snapshot;
+
+    jpeg_qlevel[ch] = config._jpeg_qlevel;
+    video_rotation[ch] = config._rotation;
+}
+#endif
+
 void Video::camInit(CameraSetting& config)
 {
     // To be done
@@ -600,35 +626,65 @@ void Video::camDeinit(void)
 
 void Video::videoInit(void)
 {
-    int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0],
-                                channelEnable[1], w[1], h[1], bps[1], snapshot[1],
-                                channelEnable[2], w[2], h[2], bps[2], snapshot[2],
+    int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0][0],
+                                channelEnable[1], w[1], h[1], bps[1], snapshot[1][0],
+                                channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
                                 channelEnable[3], w[3], h[3]);
-    (void)heapSize;
+    _heap_size = heapSize;
     // printf("\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
 
     for (int ch = 0; ch < 4; ch++) {
-        if (channelEnable[ch]) {
-            // printf("\r\n[INFO] %d  %d    %d    %d    %d    %d    %d    %d\n", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
-            videoModule[ch]._p_mmf_context = cameraInit();
+        videoInit(ch);
+    }
+}
 
-            if (encoder[ch] == VIDEO_JPEG) {
-                bps[ch] = 0;
-                cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
-                           channel[ch],
-                           encoder[ch],
-                           resolution[ch],
-                           w[ch],
-                           h[ch],
-                           bps[ch],
-                           fps[ch],
-                           0,
-                           0,
-                           snapshot[ch],
-                           jpeg_qlevel[ch],
-                           video_rotation[ch]);
-            } else if (ch == 3) {
-                // printf("\r\n[INFO] V4 %d    %d    %d    %d\n", resolution[3], channelEnable[3], w[3], h[3]);
+void Video::videoInit(int ch)
+{
+    if (!_heap_size) {
+        int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0][0],
+                                    channelEnable[1], w[1], h[1], bps[1], snapshot[1][0],
+                                    channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
+                                    channelEnable[3], w[3], h[3]);
+        _heap_size = heapSize;
+    }
+    if (channelEnable[ch]) {
+        videoModule[ch]._p_mmf_context = cameraInit();
+
+        if (encoder[ch] == VIDEO_JPEG) {
+            bps[ch] = 0;
+            if (snapshot[ch][0] == 2) {
+                // TBD
+            } else {
+                if (ch == 3) {
+                    bps[3] = 1 * 1024 * 1024;
+                    cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
+                                 channel[3],
+                                 encoder[3],
+                                 resolution[3],
+                                 w[3],
+                                 h[3],
+                                 bps[3],
+                                 CAM_NN_FPS,
+                                 CAM_NN_GOP,
+                                 0);    // direct output flag
+                } else {
+                    cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                               channel[ch],
+                               encoder[ch],
+                               resolution[ch],
+                               w[ch],
+                               h[ch],
+                               bps[ch],
+                               fps[ch],
+                               0,
+                               0,
+                               snapshot[ch][0],
+                               jpeg_qlevel[ch],
+                               video_rotation[ch]);
+                }
+            }
+        } else {
+            if (ch == 3) {
                 bps[3] = 1 * 1024 * 1024;
                 cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
                              channel[3],
@@ -641,7 +697,6 @@ void Video::videoInit(void)
                              CAM_NN_GOP,
                              0);    // direct output flag
             } else {
-                // printf("\r\n[INFO] %d  %d    %d    %d    %d    %d    %d    %d\n", ch, resolution[ch], channelEnable[ch], w[ch], h[ch], bps[ch], encoder[ch], fps[ch]);
                 cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
                            channel[ch],
                            encoder[ch],
@@ -652,7 +707,7 @@ void Video::videoInit(void)
                            fps[ch],
                            CAM_GOP,
                            CAM_RCMODE,
-                           snapshot[ch],
+                           snapshot[ch][0],
                            jpeg_qlevel[ch],
                            video_rotation[ch]);
             }
@@ -662,11 +717,15 @@ void Video::videoInit(void)
 
 void Video::videoDeinit(void)
 {
-    uint8_t i;
-    for (i = 0; i < 4; i++) {
-        if (videoModule[i]._p_mmf_context != NULL) {
-            cameraDeinit(videoModule[i]._p_mmf_context);
-        }
+    for (int i = 0; i < 4; i++) {
+        videoDeinit(i);
+    }
+}
+
+void Video::videoDeinit(int ch)
+{
+    if (videoModule[(uint8_t)ch]._p_mmf_context != NULL) {
+        cameraDeinit(videoModule[(uint8_t)ch]._p_mmf_context);
     }
 }
 
@@ -677,11 +736,11 @@ void Video::channelBegin(int ch)
         case 1:
         case 2: {
             cameraStart(videoModule[ch]._p_mmf_context->priv, channel[ch]);
-            if ((encoder[ch] == VIDEO_JPEG) && (snapshot[ch] == 0)) {
+            if ((encoder[ch] == VIDEO_JPEG) && (snapshot[ch][0] == 0)) {
                 // Enable continuous JPEG capture for MJPEG video
                 cameraSnapshot(videoModule[ch]._p_mmf_context->priv, 2);
             }
-            if (snapshot[ch] == 1) {
+            if ((snapshot[ch][0] == 1) || (snapshot[ch][0] == 2)) {
                 setSnapshotCallback(ch);
             }
             break;
@@ -769,7 +828,7 @@ int Video::snapshotCB3(uint32_t jpeg_addr, uint32_t jpeg_len)
 
 void Video::getImage(int ch, uint32_t* addr, uint32_t* len)
 {
-    if (snapshot[ch] == 1) {
+    if ((snapshot[ch][0] == 1) || snapshot[ch][0] == 2) {
         // printf("\r\n[INFO] Taking snapshot channel = %d\n", ch);
         image_addr[ch] = 0;
         image_len[ch] = 0;
