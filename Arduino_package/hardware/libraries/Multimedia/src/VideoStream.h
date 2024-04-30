@@ -200,7 +200,7 @@ private:
 class Video {
 public:
     void configVideoChannel(int ch, VideoSetting& config);
-//    void configVideoChannel(int ch, VideoSetting& config, int snapshot_xmin, int snapshot_ymin, int snapshot_xmax, int snapshot_ymax);
+    //    void configVideoChannel(int ch, VideoSetting& config, int snapshot_xmin, int snapshot_ymin, int snapshot_xmax, int snapshot_ymax);
     void camInit(CameraSetting& config);
     void camDeinit(void);
     void videoInit(void);
@@ -232,7 +232,11 @@ private:
     uint16_t fps[4] = {0};
     uint32_t bps[4] = {0};
     uint8_t encoder[4] = {0};
-    uint8_t snapshot[3][5] = {{0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}};
+    uint8_t snapshot[3][5] = {
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
     uint8_t jpeg_qlevel[4] = {0};
     int video_rotation[4] = {0};
     typedef struct roi_param_s {

@@ -642,9 +642,9 @@ void Video::videoInit(int ch)
 {
     if (!_heap_size) {
         int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0][0],
-                                channelEnable[1], w[1], h[1], bps[1], snapshot[1][0],
-                                channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
-                                channelEnable[3], w[3], h[3]);
+                                    channelEnable[1], w[1], h[1], bps[1], snapshot[1][0],
+                                    channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
+                                    channelEnable[3], w[3], h[3]);
         _heap_size = heapSize;
     }
     if (channelEnable[ch]) {
@@ -658,6 +658,35 @@ void Video::videoInit(int ch)
                 if (ch == 3) {
                     bps[3] = 1 * 1024 * 1024;
                     cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
+                                 channel[3],
+                                 encoder[3],
+                                 resolution[3],
+                                 w[3],
+                                 h[3],
+                                 bps[3],
+                                 CAM_NN_FPS,
+                                 CAM_NN_GOP,
+                                 0);    // direct output flag
+                } else {
+                    cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                               channel[ch],
+                               encoder[ch],
+                               resolution[ch],
+                               w[ch],
+                               h[ch],
+                               bps[ch],
+                               fps[ch],
+                               0,
+                               0,
+                               snapshot[ch][0],
+                               jpeg_qlevel[ch],
+                               video_rotation[ch]);
+                }
+            }
+        } else {
+            if (ch == 3) {
+                bps[3] = 1 * 1024 * 1024;
+                cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
                              channel[3],
                              encoder[3],
                              resolution[3],
@@ -667,35 +696,6 @@ void Video::videoInit(int ch)
                              CAM_NN_FPS,
                              CAM_NN_GOP,
                              0);    // direct output flag
-                } else {
-                    cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
-                           channel[ch],
-                           encoder[ch],
-                           resolution[ch],
-                           w[ch],
-                           h[ch],
-                           bps[ch],
-                           fps[ch],
-                           0,
-                           0,
-                           snapshot[ch][0],
-                           jpeg_qlevel[ch],
-                           video_rotation[ch]);
-                }
-            }
-        } else {
-            if (ch == 3) {
-                bps[3] = 1 * 1024 * 1024;
-                cameraOpenNN(videoModule[3]._p_mmf_context, videoModule[3]._p_mmf_context->priv,
-                         channel[3],
-                         encoder[3],
-                         resolution[3],
-                         w[3],
-                         h[3],
-                         bps[3],
-                         CAM_NN_FPS,
-                         CAM_NN_GOP,
-                         0);    // direct output flag
             } else {
                 cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
                            channel[ch],
