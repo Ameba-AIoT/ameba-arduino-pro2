@@ -44,6 +44,11 @@
             },
             {
               "packager": "realtek",
+              "name": "ameba_pro2_nn_models",
+              "version": "1.0.0"
+            }
+          ]
+        },
 		{
           "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
           "architecture": "AmebaPro2",
