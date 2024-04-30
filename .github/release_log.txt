@@ -7,6 +7,7 @@ Version 4.0.7 - 2024/02/29
 Version 4.0.7 - 2024/03/13
 Version 4.0.7 - 2024/04/08
 Version 4.0.7 - 2024/04/12
+Version 4.0.7 - 2024/04/30
 
 Feature:
 - Add I2C OLED SSD1306 example and libs
@@ -19,6 +20,9 @@ Feature:
 - Update original Camera2LCD example
 - Add HTTP Post Request Json to FASTAPI server for LLM/VLM
 - Add VL53l0x example
+- Update Image Classification Example
+    - Add user callback function option
+    - Update keyword.txt
 
 API Updates:
 - Update SDK code base
@@ -36,6 +40,9 @@ API Updates:
 - Add support for camera sensor GC5035
 - Add yolov7 reparam scripts
 - Add Pololu VL53l0x library
+- Update video streaming API
+    - Update the "videoInit" API
+    - Update the "snapshot" API
 
 Misc:
 - Add GitHub Action
@@ -78,3 +85,6 @@ Misc:
 - Add ameba_pro2_nn_models tool
     - Reduce the SDK package size
 - Remove nn models from package
+- Update ameba_pro2_tools 1.3.3
+    - Update platform.txt to clear uploading issue
+    - Support portable Arduino IDE
