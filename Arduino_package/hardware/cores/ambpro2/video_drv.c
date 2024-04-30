@@ -39,6 +39,13 @@ static video_params_t video_params = {
     .jpeg_qlevel = 5,
     .use_static_addr = 1,
     .rotation = 0,
+    .jpeg_crop_parm = {
+                       .enable = 0,
+                       .xmin = 0,
+                       .ymin = 0,
+                       .xmax = 0,
+                       .ymax = 0,
+                       },
 };
 
 static video_params_t video_v4_params = {

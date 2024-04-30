@@ -43,7 +43,7 @@ void cameraStart(void *p, int channel);
 
 void cameraYUV(void *p);
 
-void cameraSnapshot(void *p, int channel);
+void cameraSnapshot(void *p, int arg);
 
 void cameraSnapshotRegCB(mm_context_t *p, int (*ssCB)(uint32_t, uint32_t));
 
