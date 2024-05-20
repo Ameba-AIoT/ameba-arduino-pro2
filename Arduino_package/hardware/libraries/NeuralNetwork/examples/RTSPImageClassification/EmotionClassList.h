@@ -1,1 +1,0 @@
-EmotionDetectionItem imgclassItemList[7] = {
