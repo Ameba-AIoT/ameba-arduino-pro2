@@ -46,7 +46,6 @@ private:
 
     static int _classID;
     static float _prob;
-    static float _class_cnt;
 
     nn_data_param_t roi_nn = {0};
 };

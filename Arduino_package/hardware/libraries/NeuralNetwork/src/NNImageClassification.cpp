@@ -181,7 +181,6 @@ void NNImageClassification::ICResultCallback(void *p, void *img_param)
     }
     free(output);
 
-    _class_cnt = out->res_cnt;
     _classID = result[max_idx].class_id;
     _prob = max_prob;
     // printf("id:%d prob:%f\r\n", result[max_idx].class_id, max_prob);
