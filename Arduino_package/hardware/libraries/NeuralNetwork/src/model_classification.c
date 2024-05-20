@@ -2320,11 +2320,17 @@ unsigned char golden_data_bin[] = {
 };
 unsigned int golden_data_bin_len = 2304;
 
+int input_image_color;
 
 // see amebapro2_fwfs_nn_models.json
 static void *classification_get_network_filename(void)
 {
     return (void *)"NN_MDL/img_class.nb";    // fix name for NN model binary
+}
+
+void get_input_image_color(int input_image_rgb)
+{
+    input_image_color = input_image_rgb;
 }
 
 static void img_rgb2gray(img_t *img)
@@ -2382,8 +2388,10 @@ int classification_preprocess(void *data_in, nn_data_param_t *data_param, void *
     //     fclose(f);
     // }
 
-    // convert rgb to gray for fer2013_cnn only
-    img_rgb2gray(&img_out);
+    // convert rgb to gray
+    if (input_image_color == 0) {
+        img_rgb2gray(&img_out);
+    }
 
     // debug: test with golden rgb data to make sure model is loaded and quantized correctly
     // memcpy(tensor_in_ptr, golden_data_bin, golden_data_bin_len);

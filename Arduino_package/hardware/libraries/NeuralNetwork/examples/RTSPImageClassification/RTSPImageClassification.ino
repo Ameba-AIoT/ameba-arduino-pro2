@@ -4,12 +4,12 @@
  TBD
 
  NN Model Selection
- Select Neural Network(NN) task and models using .modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
+ Select Neural Network(NN) task and models using .modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel, audclassmodel, imgclassmodel).
  Replace with NA_MODEL if they are not necessary for your selected NN Task.
 
  NN task
  =======
- OBJECT_DETECTION/ FACE_DETECTION/ FACE_RECOGNITION
+ OBJECT_DETECTION/ FACE_DETECTION/ FACE_RECOGNITION/ AUDIO CLASSIFICATION/ IMAGE CLASSIFICATION
 
  Models
  =======
@@ -18,6 +18,8 @@
  YOLOv7 model         DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
  SCRFD model          DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
  MobileFaceNet model  DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
+ YAMNET model         DEFAULT_YAMNET       / CUSTOMIZED_YAMNET
+ CNN model            DEFAULT_IMGCLASS     / CUSTOMIZED_IMGCLASS
  No model             NA_MODEL
  */
 
@@ -27,14 +29,18 @@
 #include "RTSP.h"
 #include "NNImageClassification.h"
 #include "VideoStreamOverlay.h"
-#include "EmotionClassList.h"
+#include "ClassificationClassList.h"
+
+// Color of images used to train the cnn model (RGB or Grayscale)
+#define IMAGERGB 1
 
 #define CHANNEL   0
 #define CHANNELNN 3
 
 // Lower resolution for NN processing
-#define NNWIDTH  576
-#define NNHEIGHT 320
+// Modify according to the model's input shape size
+#define NNWIDTH  224
+#define NNHEIGHT 224
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -80,6 +86,7 @@ void setup()
     // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
     imgclass.configVideo(configNN);
+    imgclass.configInputImageColor(IMAGERGB);
     imgclass.setResultCallback(ICPostProcess);
     imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS);
     imgclass.begin();
@@ -113,18 +120,11 @@ void loop()
 }
 
 // User callback function
-void ICPostProcess(std::vector<ImageClassificationResult> results)
+void ICPostProcess(void)
 {
-    printf("No of Emotion Detected = %d\r\n", imgclass.getResultCount());
-
-    if (imgclass.getResultCount() > 0) {
-        for (int i = 0; i < imgclass.getResultCount(); i++) {
-            ImageClassificationResult imgclass_item = results[i];
-            int class_id = (int)imgclass_item.classID();
-            if (imgclassItemList[class_id].filter) {    // header file
-                int prob = imgclass_item.score();
-                printf("%d class %d, score: %d, emotion name: %s\r\n", i, class_id, prob, imgclassItemList[class_id].imgclassName);
-            }
-        }
+    int class_id = imgclass.classID();
+    if (imgclassItemList[class_id].filter) {    // header file
+        float prob = imgclass.score();
+        printf("class %d, score: %f, name: %s\r\n", class_id, prob, imgclassItemList[class_id].imgclassName);
     }
 }
