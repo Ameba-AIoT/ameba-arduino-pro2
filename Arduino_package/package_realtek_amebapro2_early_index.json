@@ -574,22 +574,22 @@
               "host":"i686-mingw32",
               "archiveFileName":"ameba_pro2_nn_models-1.0.0.tar.gz",
               "url":"https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_nn_models-1.0.0.tar.gz",
-              "checksum":"SHA-256:c428084629547e1752dc927c6c1471f45942a7ddb3ab846407ec8d861e76ff84",
-              "size":"26910432"
+              "checksum":"SHA-256:8369d2620d189242446b882c89c228c290c2072294bb49fcebd8c734022f2b35",
+              "size":"30261119"
             },
             {
               "host":"x86_64-pc-linux-gnu",
               "archiveFileName":"ameba_pro2_nn_models-1.0.0.tar.gz",
               "url":"https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_nn_models-1.0.0.tar.gz",
-              "checksum":"SHA-256:c428084629547e1752dc927c6c1471f45942a7ddb3ab846407ec8d861e76ff84",
-              "size":"26910432"
+              "checksum":"SHA-256:8369d2620d189242446b882c89c228c290c2072294bb49fcebd8c734022f2b35",
+              "size":"30261119"
             },
             {
               "host":"x86_64-apple-darwin",
               "archiveFileName":"ameba_pro2_nn_models-1.0.0.tar.gz",
               "url":"https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_nn_models-1.0.0.tar.gz",
-              "checksum":"SHA-256:c428084629547e1752dc927c6c1471f45942a7ddb3ab846407ec8d861e76ff84",
-              "size":"26910432"
+              "checksum":"SHA-256:8369d2620d189242446b882c89c228c290c2072294bb49fcebd8c734022f2b35",
+              "size":"30261119"
             }
           ]
         },

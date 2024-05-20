@@ -115,10 +115,12 @@ getResult	KEYWORD2
 # NNImageClassification.h Methods (KEYWORD2) & Constants (LITERAL1)
 #######################################
 
+configInputImageColor	KEYWORD2
 configVideo	KEYWORD2
 configRegionOfInterest	KEYWORD2
 begin	KEYWORD2
 end	KEYWORD2
 setResultCallback	KEYWORD2
-getResultCount	KEYWORD2
-getResult	KEYWORD2
+ICResultCallback	KEYWORD2
+classID	KEYWORD2
+score	KEYWORD2
