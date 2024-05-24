@@ -70,7 +70,7 @@ std::string yolov7_model = "yolov7";
 std::string scrfd_model = "scrfd";
 std::string mobilefacenet_model = "mobilefacenet";
 std::string yamnet_model = "yamnet";
-std::string cnn_model = "fer2013";
+std::string cnn_model = "img_class";
 std::string cnn_key = "img";
 
 // Declare common file paths
@@ -366,7 +366,7 @@ std::string input_new, input_lower;
     model_mapping.insert(std::make_pair("scrfd320p", "scrfd_500m_bnkps_576x320_u8.nb"));
     model_mapping.insert(std::make_pair("scrfd640", "scrfd_500m_bnkps_640x640_u8.nb"));
     model_mapping.insert(std::make_pair("yamnet_fp16", "yamnet_fp16.nb"));
-    model_mapping.insert(std::make_pair("img_class", "fer2013_cnn.nb"));
+    model_mapping.insert(std::make_pair("img_class", "img_class_cnn.nb"));
 #else
     std::unordered_map<std::string, std::string> model_mapping = {
         {"yolov3_tiny", "yolov3_tiny.nb"},
@@ -377,7 +377,7 @@ std::string input_new, input_lower;
         {"scrfd320p", "scrfd_500m_bnkps_576x320_u8.nb"},
         {"scrfd640", "scrfd_500m_bnkps_640x640_u8.nb"},
         {"yamnet_fp16", "yamnet_fp16.nb"},
-        {"img_class", "fer2013_cnn.nb"},
+        {"img_class", "img_class_cnn.nb"},
     };
 #endif
     

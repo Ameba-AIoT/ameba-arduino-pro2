@@ -72,6 +72,6 @@
 	"img_class":	{
 		"name":	"img_class.nb",
 		"source":	"binary",
-		"file":	"fer2013_cnn.nb"
+		"file":	"img_class_cnn.nb"
 	}
 }
