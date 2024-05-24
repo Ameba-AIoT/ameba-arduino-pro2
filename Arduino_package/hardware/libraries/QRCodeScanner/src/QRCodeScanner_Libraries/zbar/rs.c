@@ -31,7 +31,7 @@ void rs_gf256_init(rs_gf256 *_gf, unsigned _ppoly)
 {
     unsigned p;
     int i;
-    /*Initialize the table of powers of a primtive root, alpha=0x02.*/
+    /*Initialize the table of powers of a primitive root, alpha=0x02.*/
     p = 1;
     for (i = 0; i < 256; i++) {
         _gf->exp[i] = _gf->exp[i + 255] = p;
