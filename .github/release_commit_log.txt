@@ -1,14 +1,13 @@
 Feature:
-- Update Image Classification Example
-    - Add user callback function option
-    - Update keyword.txt
+- Update QR code Scanner guide link
+- Update Image Classification
+- Update GTimer Oneshot Example
 
 API Updates:
-- Update video streaming API
-    - Update the "videoInit" API
-    - Update the "snapshot" API
+- Update debug_custom.json
+- Update WMath.cpp
+- Update CNN model file name
 
 Misc:
-- Update ameba_pro2_tools 1.3.3
-    - Update platform.txt to clear uploading issue
-    - Support portable Arduino IDE
+- Update ameba_pro2_tools 1.3.4
+    - sync with CNN update
