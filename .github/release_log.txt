@@ -24,8 +24,6 @@ Feature:
 - Update Image Classification Example
     - Add user callback function option
     - Update keyword.txt
-- Update QR code Scanner guide link
-- Update Image Classification
 - Update GTimer Oneshot Example
 
 API Updates:
