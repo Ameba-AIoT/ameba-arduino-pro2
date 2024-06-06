@@ -135,4 +135,5 @@ void video_set_sensor_id(int SensorName);
 void video_setup_sensor(void *sensor_setup_cb);
 void video_show_fps(int enable);
 int video_get_cb_fps(int chn);
+void video_set_fps_dropframe_mode(int drop_frame);
 #endif

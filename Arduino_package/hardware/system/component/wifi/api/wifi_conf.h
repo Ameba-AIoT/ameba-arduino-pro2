@@ -1115,6 +1115,13 @@ int wifi_set_dhcp_offload(void);
 #endif
 
 
+/**
+ * @brief  wakeup from wowlan by receiving any unicast packet
+ *
+ * @param[in]  enable : enable unicast wakeup
+ */
+void wifi_set_unicast_wakeup(u8 enable);
+
 
 #if defined CONFIG_ARP_KEEP_ALIVE || defined __DOXYGEN__
 /**
@@ -1223,7 +1230,8 @@ int wifi_wowlan_set_bcn_track(u8  start_window,
  * @param[in]   start_window : start window size with tbtt
  * @param[in]   max_window : max window size with tbtt
  * @param[in]   increment_steps : window size increment steps with tbtt
- * @param[in]   period : active scan period
+ * @param[in]   passive_cnt : passive scan count
+ * @param[in]   active_cnt : active scan count
  * @param[in]   duration : pno scan duration
  * @param[in]   interval_time : a set of scan period
  * @return  RTW_SUCCESS
@@ -1231,7 +1239,8 @@ int wifi_wowlan_set_bcn_track(u8  start_window,
 int wifi_wowlan_set_pno_scan(u8  start_window,
 							 u8  max_window,
 							 u8  increment_steps,
-							 u8  scan_period,
+							 u8  passive_cnt,
+							 u8  active_cnt,
 							 u32 duration,
 							 u8  interval_time);
 #endif

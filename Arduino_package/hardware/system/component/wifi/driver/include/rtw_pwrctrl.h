@@ -436,9 +436,10 @@ struct pwrctrl_priv {
 	u8 pno_start_window;
 	u8 pno_max_window;
 	u8 pno_increment_step;
-	u8 pno_scan_period;
 	u8 pno_duration;
 	u8 pno_interval_time;
+	u8 pno_passive_period;
+	u8 pno_active_period;
 #endif
 
 #ifdef CONFIG_WOWLAN_NTP_OFFLOAD

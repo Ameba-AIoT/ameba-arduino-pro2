@@ -1,3 +1,15 @@
+<03/28/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Improve RGB stream SW drop frame flow
+	2. Add release slot error handling
+	3. Soften the limitation of AE initial exp value
+
+--------------------------------------------------------------------------
 <03/15/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.2.0
 Modified Files:

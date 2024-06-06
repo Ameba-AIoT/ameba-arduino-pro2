@@ -402,6 +402,7 @@ int hal_isp_set_ctrl(uint32_t id, int *value);
 int hal_isp_set_init_ae(int init_exposure, int init_gain);
 int hal_isp_set_init_awb(int init_r_gain, int init_b_gain);
 void hal_isp_set_drop_frame_num(uint32_t num);
+void hal_isp_set_drop_frame_num_sw(uint32_t num);
 int hal_isp_set_init_dn_mode(int dn_mode);
 void hal_isp_set_direct_i2c_mode(uint32_t direct_i2c_mode);
 int hal_isp_set_init_gray_mode(int gray_mode);
