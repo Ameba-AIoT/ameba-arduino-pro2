@@ -264,6 +264,7 @@ typedef struct {
 	struct task_struct task_ecm_recv;
 	int ecm_rx_status;//0 idle
 	int init_status;
+	atomic_t tx_busy_status;
 } usb_trx_packeet_t;
 
 #pragma pack(pop)

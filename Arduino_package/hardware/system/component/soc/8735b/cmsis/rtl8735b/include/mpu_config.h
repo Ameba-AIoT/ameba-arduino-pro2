@@ -118,15 +118,17 @@
 #define MPU_REGION2_ATTR_IDX            0                   // the memory attribute indirect index of the MAIR0/1
 
 // MPU region 3 configuration
-#define MPU_REGION3_EN                  0   // If MPU region 3 configuration enabled
+#define MPU_REGION3_EN                  1   // If MPU region 3 configuration enabled
 // define MPU region 3 configuration
-#define MPU_REGION3_BASE                (0x20179E00)        /* region base, the address must be aligned to multiple of 32 bytes,
+extern uint32_t __sram_rev_start__[];
+extern uint32_t __sram_rev_end__[];
+#define MPU_REGION3_BASE                ((uint32_t)__sram_rev_start__)        /* region base, the address must be aligned to multiple of 32 bytes,
                                                                it should sync. with the linker script */
-#define MPU_REGION3_LIMIT               (0x20179FFF)        // region limit, it should sync. with linker script
+#define MPU_REGION3_LIMIT               ((uint32_t)__sram_rev_end__)        // region limit, it should sync. with linker script
 #define MPU_REGION3_XN                  MPU_EXEC_ALLOW      // eXecute Never attribute
 #define MPU_REGION3_AP                  MPU_UN_PRIV_RW      // Access permissions
 #define MPU_REGION3_SH                  MPU_OUT_SHAREABLE   // Shareability for Normal memory
-#define MPU_REGION3_ATTR_IDX            2                   // the memory attribute indirect index of the MAIR0/1
+#define MPU_REGION3_ATTR_IDX            0                   // the memory attribute indirect index of the MAIR0/1
 
 // MPU region 4 configuration
 #define MPU_REGION4_EN                  0   // If MPU region 4 configuration enabled

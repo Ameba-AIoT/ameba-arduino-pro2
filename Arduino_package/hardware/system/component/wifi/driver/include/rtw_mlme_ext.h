@@ -488,6 +488,7 @@ struct mlme_ext_info {
 	u8	assoc_AP_vendor;
 	u8	slotTime;
 	u8	preamble_mode;
+	u8	force_preamble_mode;
 	u8	WMM_enable;
 	u8  DTIM_period;
 	u8	ERP_enable;
