@@ -1,13 +1,6 @@
 Feature:
-- Update QR code Scanner guide link
-- Update Image Classification
-- Update GTimer Oneshot Example
 
 API Updates:
-- Update debug_custom.json
-- Update WMath.cpp
-- Update CNN model file name
+- Update SDK code base
 
 Misc:
-- Update ameba_pro2_tools 1.3.4
-    - sync with CNN update

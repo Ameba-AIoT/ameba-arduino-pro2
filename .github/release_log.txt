@@ -27,7 +27,6 @@ Feature:
 - Update GTimer Oneshot Example
 
 API Updates:
-- Update SDK code base
 - Update Wire.cpp
     - Remove additional i2c_reset in endTransmission()
 - Update IPAddress.cpp
