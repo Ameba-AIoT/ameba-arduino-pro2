@@ -9,6 +9,7 @@ Version 4.0.7 - 2024/04/08
 Version 4.0.7 - 2024/04/12
 Version 4.0.7 - 2024/04/30
 Version 4.0.7 - 2024/05/27
+Version 4.0.7 - 2024/06/10
 
 Feature:
 - Add I2C OLED SSD1306 example and libs
@@ -47,6 +48,7 @@ API Updates:
 - Update debug_custom.json
 - Update WMath.cpp
 - Update CNN model file name
+- Update SDK code base
 
 Misc:
 - Add GitHub Action
