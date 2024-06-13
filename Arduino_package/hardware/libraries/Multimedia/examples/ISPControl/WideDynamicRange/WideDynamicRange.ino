@@ -3,7 +3,7 @@
 
   // "WDR="       Set Wide Dynamic Range, 0: Disabled, 1: Manual, 2: Auto
   // "WDR"        Get value of WDR
-  // "LEVEL="     Set WDR level: Range from 0 to 100
+  // "LEVEL="     Set WDR level: Range from 50 to 100
   // "LEVEL"      Get WDR level
   // "RESET"      Reset to default
 */
