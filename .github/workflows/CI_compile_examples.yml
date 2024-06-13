@@ -75,7 +75,7 @@ jobs:
             Arduino_zip_libraries
 
       - name: Compile examples dev
-        uses: arduino/compile-sketches@v1.1.0
+        uses: arduino/compile-sketches@v1.1.1
         with:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
           sketch-paths: |
@@ -94,7 +94,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
 
       - name: Compile examples main
-        uses: arduino/compile-sketches@v1.1.0
+        uses: arduino/compile-sketches@v1.1.1
         with:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
           sketch-paths: |
