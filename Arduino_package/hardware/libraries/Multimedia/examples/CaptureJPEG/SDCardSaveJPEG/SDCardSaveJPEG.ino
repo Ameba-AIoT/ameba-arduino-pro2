@@ -7,7 +7,7 @@
 #include "VideoStream.h"
 #include "AmebaFatFS.h"
 
-#define CHANNEL 0
+#define CHANNEL  0
 #define FILENAME "image.jpg"
 
 VideoSetting config(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
@@ -17,7 +17,8 @@ uint32_t img_len = 0;
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     Camera.configVideoChannel(CHANNEL, config);
@@ -29,11 +30,12 @@ void setup() {
 
     delay(1000);
     Camera.getImage(CHANNEL, &img_addr, &img_len);
-    file.write((uint8_t*)img_addr, img_len);
+    file.write((uint8_t *)img_addr, img_len);
     file.close();
     fs.end();
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

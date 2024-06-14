@@ -45,5 +45,6 @@ typedef struct eip_ae_atable_s {
 void eip_gen_Y_data(eip_param_t *eip_param, unsigned char *image_buffer, uint32_t image_type, eip_Y_data_t *Y_data);
 void eip_gen_statistic_data(eip_param_t *eip_param, eip_Y_data_t *Y_data, eip_statis_infor_t *eip_statis_info);
 int eip_check_ae_stable(eip_ae_stable_t *ctx);
+void eip_malloc_use_eram(int enable); // default malloc with sram.
 
 #endif	// EIP_API_H

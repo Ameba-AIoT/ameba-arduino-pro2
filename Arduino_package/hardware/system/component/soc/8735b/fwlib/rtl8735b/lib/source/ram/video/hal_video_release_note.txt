@@ -1,3 +1,76 @@
+<03/28/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Improve RGB stream SW drop frame flow
+	2. Add release slot error handling
+	3. Soften the limitation of AE initial exp value
+
+--------------------------------------------------------------------------
+<03/15/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.2.0
+Modified Files:
+All
+Change Notes:
+
+	Video/ENC related
+	1. Modify HEVC VPS max_num_reorder_pics, SPS max_num_reorder_pics
+	   Modify H264 VUI num_reorder_frames, max_dec_frame_buffering
+	2. Modify compressor from 0 to 3
+	3. Improve out_task & md_task close timing (TM)
+
+--------------------------------------------------------------------------
+<01/26/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Support FCS RGB stream drop frame
+
+--------------------------------------------------------------------------
+<12/29/2023 12:00 Juling>
+Version : RTL8735B_VOE_1.5.0.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. FCS NV12+RGB
+	2. VOE drop frame issue
+
+--------------------------------------------------------------------------
+<11/14/2023 12:00 Juling>
+Version : RTL8735B_VOE_1.4.9.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release to check AWB_INTP_DELAY_FRAME
+	2. Sensor suspend/resume flow
+
+	Video/ENC related
+	1. Modify SEI max size from 2048 to no limit
+
+--------------------------------------------------------------------------
+<10/20/2023 12:00 Raymond_chu>
+Version : RTL8735B_VOE_1.4.8.1
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+
+	Video/ENC related
+	1. fixed cmd structure parameter order issue
+
+--------------------------------------------------------------------------
+
 <10/20/2023 12:00 Raymond_chu>
 Version : RTL8735B_VOE_1.4.8.0
 Modified Files:

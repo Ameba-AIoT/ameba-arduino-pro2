@@ -1,12 +1,14 @@
 #include "WDT.h"
 
-void wdt_dummy_task(void) {
+void wdt_dummy_task(void)
+{
     hal_delay_ms(1000);
 }
 
-WDT::WDT(int aon_en) {
+WDT::WDT(int aon_en)
+{
     aon_wdt_check = aon_en;
-};
+}
 
 WDT::~WDT(){};
 
@@ -18,8 +20,9 @@ WDT::~WDT(){};
  *  @return  None
  *
  */
-void WDT::init(uint32_t timeout_ms) {
-    //watchdog_init(timeout_ms);
+void WDT::init(uint32_t timeout_ms)
+{
+    // watchdog_init(timeout_ms);
     watchdog_init_arduino(timeout_ms, aon_wdt_check);
 }
 
@@ -30,7 +33,8 @@ void WDT::init(uint32_t timeout_ms) {
  *  @return  None
  *
  */
-void WDT::start(void) {
+void WDT::start(void)
+{
     watchdog_start();
 }
 
@@ -41,7 +45,8 @@ void WDT::start(void) {
  *  @return  None
  *
  */
-void WDT::stop(void) {
+void WDT::stop(void)
+{
     watchdog_stop();
 }
 
@@ -52,21 +57,23 @@ void WDT::stop(void) {
  *  @return  None
  *
  */
-void WDT::refresh(void) {
+void WDT::refresh(void)
+{
     watchdog_refresh();
 }
 
 /**
-*  @brief   Switch the watchdog timer to interrupt mode and
-*           register a watchdog timer timeout interrupt handler.
-*           The interrupt handler will be called when the watch-dog
-*           timer is timeout.
-*
-*  @param   handler: the callback function for WDT timeout interrupt.
-*           id: the parameter for the callback function
-*  @return  None
-*
-*/
-void WDT::init_irq(wdt_irq_handler handler, uint32_t id) {
+ *  @brief   Switch the watchdog timer to interrupt mode and
+ *           register a watchdog timer timeout interrupt handler.
+ *           The interrupt handler will be called when the watch-dog
+ *           timer is timeout.
+ *
+ *  @param   handler: the callback function for WDT timeout interrupt.
+ *           id: the parameter for the callback function
+ *  @return  None
+ *
+ */
+void WDT::init_irq(wdt_irq_handler handler, uint32_t id)
+{
     watchdog_irq_init(handler, id);
 }

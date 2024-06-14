@@ -8,45 +8,47 @@
 #include <WiFi.h>
 #include "AmebaFatFS.h"
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password
-int keyIndex = 0;                   // your network key Index number (needed only for WEP)
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
+int keyIndex = 0;                // your network key Index number (needed only for WEP)
 
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
-char filename_Web_test[] = "Web_test.html"; //name of the HTML file saved in SD card
+char filename_Web_test[] = "Web_test.html";    // name of the HTML file saved in SD card
 AmebaFatFS fs;
 
-void setup() {
-    Serial.begin(115200);         // initialize serial communication
+void setup()
+{
+    Serial.begin(115200);    // initialize serial communication
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to Network named: ");
-        Serial.println(ssid);                   // print the network name (SSID);
+        Serial.println(ssid);    // print the network name (SSID);
 
         // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
         status = WiFi.begin(ssid, pass);
         // wait 10 seconds for connection:
         delay(10000);
     }
-    server.begin();                           // start the web server on port 80
-    printWifiStatus();                        // you're connected now, so print out the status
+    server.begin();       // start the web server on port 80
+    printWifiStatus();    // you're connected now, so print out the status
 }
 
-void loop() {
+void loop()
+{
     char html_filepath[128];
-    
-    WiFiClient client = server.available();     // listen for incoming clients
 
-    if (client) {                               // if you get a client,
-        Serial.println("new client");           // print a message out the serial port
-        String currentLine = "";                // make a String to hold incoming data from the client
-        while (client.connected()) {            // loop while the client's connected
-            if (client.available()) {           // if there's bytes to read from the client,
-                char c = client.read();         // read a byte, then
-                Serial.write(c);                // print it out the serial monitor
-                if (c == '\n') {                // if the byte is a newline character
+    WiFiClient client = server.available();    // listen for incoming clients
+
+    if (client) {                          // if you get a client,
+        Serial.println("new client");      // print a message out the serial port
+        String currentLine = "";           // make a String to hold incoming data from the client
+        while (client.connected()) {       // loop while the client's connected
+            if (client.available()) {      // if there's bytes to read from the client,
+                char c = client.read();    // read a byte, then
+                Serial.write(c);           // print it out the serial monitor
+                if (c == '\n') {           // if the byte is a newline character
 
                     // if the current line is blank, you got two newline characters in a row.
                     // that's the end of the client HTTP request, so send a response:
@@ -62,11 +64,11 @@ void loop() {
                         sprintf(html_filepath, "%s%s", fs.getRootPath(), filename_Web_test);
                         File file = fs.open(html_filepath);
 
-                        if(file){
-                          while(file.available()){
-                            client.write(file.read());
-                          }
-                          file.close();
+                        if (file) {
+                            while (file.available()) {
+                                client.write(file.read());
+                            }
+                            file.close();
                         }
                         fs.end();
                         // break out of the while loop:
@@ -74,18 +76,19 @@ void loop() {
                     } else {    // if you got a newline, then clear currentLine:
                         currentLine = "";
                     }
-                } else if (c != '\r') {  // if you got anything else but a carriage return character,
+                } else if (c != '\r') {    // if you got anything else but a carriage return character,
                     currentLine += c;      // add it to the end of the currentLine
                 }
             }
         }
         // close the connection:
         client.stop();
-        Serial.println("client disonnected");
+        Serial.println("client disconnected");
     }
 }
 
-void printWifiStatus() {
+void printWifiStatus()
+{
     // print the SSID of the network you're attached to:
     Serial.println();
     Serial.print("SSID: ");

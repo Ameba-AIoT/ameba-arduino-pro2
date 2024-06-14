@@ -62,7 +62,7 @@ typedef struct media_access_s {
 	void (*media_init)(void *);
 	void (*media_deinit)(void *);
 	void *(*media_list_init)(void *p, char *listname);
-	int (*media_load_file)(void *p, uint32_t *frame, uint32_t *size, char *filepath);
+	int (*media_load_file)(void *p, uint8_t **frame, uint32_t *size, char *filepath);
 	int (*media_get_listname)(char *buf, int size, void *ctx);
 } media_access_t;
 

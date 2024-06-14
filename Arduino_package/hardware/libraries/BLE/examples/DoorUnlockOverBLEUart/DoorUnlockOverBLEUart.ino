@@ -15,7 +15,7 @@
 #define CHANNELJPEG 0
 
 // Define BLE UUID
-#define UART_SERVICE_UUID "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define UART_SERVICE_UUID      "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
@@ -49,7 +49,8 @@ long counter = 0;
 // File Initialization
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     // GPIO Initialisation
     pinMode(RED_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
@@ -57,7 +58,7 @@ void setup() {
     myservo.attach(SERVO_PIN);
 
     Serial.begin(115200);
-    
+
     // BLE Setup
     BLE.setDeviceName("AMEBA_BLE");
     advdata.addFlags();
@@ -90,15 +91,16 @@ void setup() {
 
     // Start BLE
     BLE.beginPeripheral();
-    
+
     // Servo moves to position the angle 180 degree (LOCK CLOSE)
     myservo.write(180);
 }
 
-void loop() {
+void loop()
+{
     buttonState = digitalRead(BUTTON_PIN);
-    if ((buttonState == ON) && (systemOn == false)) {  // When button is being pressed, systemOn becomes true
-        Tx.writeString("Door Bell Pressed.\n");        // Send notification to connected BLE Device
+    if ((buttonState == ON) && (systemOn == false)) {    // When button is being pressed, systemOn becomes true
+        Tx.writeString("Door Bell Pressed.\n");          // Send notification to connected BLE Device
         if (BLE.connected(0) && notify) {
             Tx.notify(0);
         }
@@ -112,27 +114,27 @@ void loop() {
         }
         systemOn = true;
     } else {
-        //Both LED remains on when button not pressed
+        // Both LED remains on when button not pressed
         systemOn = false;
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, HIGH);
     }
-    
+
     if (Rx.readString() == String("Open\n")) {
         digitalWrite(RED_LED, LOW);
         digitalWrite(GREEN_LED, HIGH);
-        fileName = String("Authorized");  // File name for Authorized Door Opening
+        fileName = String("Authorized");    // File name for Authorized Door Opening
         doorOpen = true;
-        Rx.writeString("Done\n"); // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
-    } else if (Rx.readString() == String("Snapshot\n")) { // When BLE Command "Snapshot" being received
+        Rx.writeString("Done\n");                            // Write a new string to Rx to prevent Rx.readstring() to keep reading "Open"
+    } else if (Rx.readString() == String("Snapshot\n")) {    // When BLE Command "Snapshot" being received
         fs.begin();
-        File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg"); // File name for Snapshot taken
+        File file = fs.open(String(fs.getRootPath()) + "SnapshotTaken" + String(++counter) + ".jpg");    // File name for Snapshot taken
         delay(1000);
         Camera.getImage(CHANNELJPEG, &img_addr, &img_len);
         file.write((uint8_t*)img_addr, img_len);
         file.close();
         fs.end();
-        Rx.writeString("Done\n"); // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
+        Rx.writeString("Done\n");    // Write a new string to Rx to prevent Rx.readstring() to keep reading "Snapshot"
     }
 
     // Take snapshot and open door for 10 seconds
@@ -155,7 +157,8 @@ void loop() {
 }
 
 // Callback function for Rx (Optional)
-void writeCB(BLECharacteristic* chr, uint8_t connID) {
+void writeCB(BLECharacteristic* chr, uint8_t connID)
+{
     printf("Characteristic %s write by connection %d :\n", chr->getUUID().str(), connID);
     if (chr->getDataLen() > 0) {
         Serial.print("Received string: ");
@@ -165,12 +168,13 @@ void writeCB(BLECharacteristic* chr, uint8_t connID) {
 }
 
 // Callback function for Tx (Optional)
-void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
+void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd)
+{
     if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-      printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
-      notify = true;
+        printf("Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        notify = true;
     } else {
-      printf("Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
-      notify = false;
+        printf("Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        notify = false;
     }
 }

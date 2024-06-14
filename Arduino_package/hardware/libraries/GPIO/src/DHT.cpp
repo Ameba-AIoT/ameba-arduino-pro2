@@ -25,8 +25,8 @@
 
 #include "DHT.h"
 
-#define MIN_INTERVAL 2000 /**< min interval value */
-#define TIMEOUT    UINT32_MAX /**< Used programmatically for timeout. Not a timeout duration. Type: uint32_t. */
+#define MIN_INTERVAL 2000       /**< min interval value */
+#define TIMEOUT      UINT32_MAX /**< Used programmatically for timeout. Not a timeout duration. Type: uint32_t. */
 
 /*!
  *  @brief  Instantiates a new DHT class
@@ -37,8 +37,9 @@
  *  @param  count
  *          number of sensors
  */
-DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
-    (void)(count);// Workaround to avoid compiler warning.
+DHT::DHT(uint8_t pin, uint8_t type, uint8_t count)
+{
+    (void)(count);    // Workaround to avoid compiler warning.
 
     _pin = pin;
     _type = type;
@@ -62,7 +63,8 @@ DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
  *          Optionally pass pull-up time (in microseconds) before DHT reading
  *starts. Default is 55 (see function declaration in DHT.h).
  */
-void DHT::begin(uint8_t usec) {
+void DHT::begin(uint8_t usec)
+{
     // set up the pins!
     pinMode(_pin, INPUT_PULLUP);
     // Using this value makes sure that millis() - lastreadtime will be
@@ -79,12 +81,13 @@ void DHT::begin(uint8_t usec) {
  *  @param  S
  *          Scale. Boolean value:
  *					- true = Fahrenheit
- *					- false = Celcius
+ *					- false = Celsius
  *  @param  force
  *          true if in force mode
  *	@return Temperature value in selected scale
  */
-float DHT::readTemperature(bool S, bool force) {
+float DHT::readTemperature(bool S, bool force)
+{
     float f = NAN;
 
     if (read(force)) {
@@ -131,7 +134,10 @@ float DHT::readTemperature(bool S, bool force) {
  *					value in Celsius
  *	@return float value in Fahrenheit
  */
-float DHT::convertCtoF(float c) { return c * 1.8 + 32; }
+float DHT::convertCtoF(float c)
+{
+    return c * 1.8 + 32;
+}
 
 /*!
  *  @brief  Converts Fahrenheit to Celsius
@@ -139,7 +145,10 @@ float DHT::convertCtoF(float c) { return c * 1.8 + 32; }
  *					value in Fahrenheit
  *	@return float value in Celsius
  */
-float DHT::convertFtoC(float f) { return (f - 32) * 0.55555; }
+float DHT::convertFtoC(float f)
+{
+    return (f - 32) * 0.55555;
+}
 
 /*!
  *  @brief  Read Humidity
@@ -147,7 +156,8 @@ float DHT::convertFtoC(float f) { return (f - 32) * 0.55555; }
  *					force read mode
  *	@return float value - humidity in percent
  */
-float DHT::readHumidity(bool force) {
+float DHT::readHumidity(bool force)
+{
     float f = NAN;
     if (read(force)) {
         switch (_type) {
@@ -173,7 +183,8 @@ float DHT::readHumidity(bool force) {
  *(default true)
  *	@return float heat index
  */
-float DHT::computeHeatIndex(bool isFahrenheit) {
+float DHT::computeHeatIndex(bool isFahrenheit)
+{
     float hi = computeHeatIndex(readTemperature(isFahrenheit), readHumidity(), isFahrenheit);
     return hi;
 }
@@ -190,7 +201,8 @@ float DHT::computeHeatIndex(bool isFahrenheit) {
  * 					true if fahrenheit, false if Celsius
  *	@return float heat index
  */
-float DHT::computeHeatIndex (float temperature, float percentHumidity, bool isFahrenheit) {
+float DHT::computeHeatIndex(float temperature, float percentHumidity, bool isFahrenheit)
+{
     float hi;
 
     if (!isFahrenheit) {
@@ -200,15 +212,7 @@ float DHT::computeHeatIndex (float temperature, float percentHumidity, bool isFa
     hi = 0.5 * (temperature + 61.0 + ((temperature - 68.0) * 1.2) + (percentHumidity * 0.094));
 
     if (hi > 79) {
-        hi = -42.379 +
-             2.04901523 * temperature +
-            10.14333127 * percentHumidity +
-            -0.22475541 * temperature*percentHumidity +
-            -0.00683783 * pow(temperature, 2) +
-            -0.05481717 * pow(percentHumidity, 2) +
-             0.00122874 * pow(temperature, 2) * percentHumidity +
-             0.00085282 * temperature*pow(percentHumidity, 2) +
-            -0.00000199 * pow(temperature, 2) * pow(percentHumidity, 2);
+        hi = -42.379 + 2.04901523 * temperature + 10.14333127 * percentHumidity + -0.22475541 * temperature * percentHumidity + -0.00683783 * pow(temperature, 2) + -0.05481717 * pow(percentHumidity, 2) + 0.00122874 * pow(temperature, 2) * percentHumidity + 0.00085282 * temperature * pow(percentHumidity, 2) + -0.00000199 * pow(temperature, 2) * pow(percentHumidity, 2);
 
         if ((percentHumidity < 13) && (temperature >= 80.0) && (temperature <= 112.0)) {
             hi -= ((13.0 - percentHumidity) * 0.25) * sqrt((17.0 - abs(temperature - 95.0)) * 0.05882);
@@ -227,23 +231,24 @@ float DHT::computeHeatIndex (float temperature, float percentHumidity, bool isFa
  *          true if using force mode
  *	@return float value
  */
-bool DHT::read(bool force) {
+bool DHT::read(bool force)
+{
 
     // Check if sensor was read less than two seconds ago and return early to use last reading.
     uint32_t currenttime = millis();
     if (!force && ((currenttime - _lastreadtime) < MIN_INTERVAL)) {
-        return _lastresult; // return last correct measurement
+        return _lastresult;    // return last correct measurement
     }
     _lastreadtime = currenttime;
 
     // Reset 40 bits of received data to zero.
     data[0] = data[1] = data[2] = data[3] = data[4] = 0;
-    //yield(); // Handle WiFi / reset software watchdog
+    // yield(); // Handle WiFi / reset software watchdog
 
     // Send start signal.  See DHT datasheet for full signal diagram:
     //   http://www.adafruit.com/datasheets/Digital%20humidity%20and%20temperature%20sensor%20AM2302.pdf
 
-    // Go into high impedence state to let pull-up raise data line level and
+    // Go into high impedance state to let pull-up raise data line level and
     // start the reading process.
     pinMode(_pin, INPUT_PULLUP);
     delay(1);
@@ -254,12 +259,12 @@ bool DHT::read(bool force) {
     switch (_type) {
         case DHT22:
         case DHT21:
-            delayMicroseconds(1100); // data sheet says "at least 1ms"
+            delayMicroseconds(1100);    // data sheet says "at least 1ms"
             break;
         case DHT11:
         default:
-            delay(20); // data sheet says at least 18ms, 20ms just to be safe
-        break;
+            delay(20);    // data sheet says at least 18ms, 20ms just to be safe
+            break;
     }
 
     uint32_t cycles[80];
@@ -297,15 +302,15 @@ bool DHT::read(bool force) {
         // the pulses are read into a array and then examined in a later step.
 
         for (int i = 0; i < 80; i += 2) {
-            cycles[i]   = expectPulse(LOW);
+            cycles[i] = expectPulse(LOW);
             cycles[(i + 1)] = expectPulse(HIGH);
         }
-    } // Timing critical code is now complete.
+    }    // Timing critical code is now complete.
 
     // Inspect pulses and determine which ones are 0 (high state cycle count < low
     // state cycle count), or 1 (high state cycle count > low state cycle count).
     for (int i = 0; i < 40; ++i) {
-        uint32_t lowCycles  = cycles[(2 * i)];
+        uint32_t lowCycles = cycles[(2 * i)];
         uint32_t highCycles = cycles[(2 * i + 1)];
         if ((lowCycles == TIMEOUT) || (highCycles == TIMEOUT)) {
             DEBUG_PRINTLN(F("DHT timeout waiting for pulse."));
@@ -322,11 +327,16 @@ bool DHT::read(bool force) {
     }
     delay(500);
     DEBUG_PRINTLN(F("Received from DHT:"));
-    DEBUG_PRINT(data[0], HEX); DEBUG_PRINT(F(", "));
-    DEBUG_PRINT(data[1], HEX); DEBUG_PRINT(F(", "));
-    DEBUG_PRINT(data[2], HEX); DEBUG_PRINT(F(", "));
-    DEBUG_PRINT(data[3], HEX); DEBUG_PRINT(F(", "));
-    DEBUG_PRINT(data[4], HEX); DEBUG_PRINT(F(" =? "));
+    DEBUG_PRINT(data[0], HEX);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(data[1], HEX);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(data[2], HEX);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(data[3], HEX);
+    DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(data[4], HEX);
+    DEBUG_PRINT(F(" =? "));
     DEBUG_PRINTLN((data[0] + data[1] + data[2] + data[3]) & 0xFF, HEX);
 
     // Check we read 40 bits and that the checksum matches.
@@ -347,7 +357,8 @@ bool DHT::read(bool force) {
 // This is adapted from Arduino's pulseInLong function (which is only available
 // in the very latest IDE versions):
 // https://github.com/arduino/Arduino/blob/master/hardware/arduino/avr/cores/arduino/wiring_pulse.c
-uint32_t DHT::expectPulse(bool level) {
+uint32_t DHT::expectPulse(bool level)
+{
     uint32_t count = 0;
 
     // On AVR platforms use direct GPIO port access as it's much faster and better for catching pulses that are 10's of microseconds in length:
@@ -355,7 +366,7 @@ uint32_t DHT::expectPulse(bool level) {
     uint8_t portState = level ? _bit : 0;
     while ((*portInputRegister(_port) & _bit) == portState) {
         if (count++ >= _maxcycles) {
-            return TIMEOUT; // Exceeded timeout, fail.
+            return TIMEOUT;    // Exceeded timeout, fail.
         }
     }
 
@@ -363,14 +374,14 @@ uint32_t DHT::expectPulse(bool level) {
     count = 1;
     while (digitalRead(_pin) == level) {
         if (count++ >= _maxcycles) {
-            return TIMEOUT; // Exceeded timeout, fail.
+            return TIMEOUT;    // Exceeded timeout, fail.
         }
     }
     return count;
 #else
     while (digitalRead(_pin) == level) {
         if (count++ >= _maxcycles) {
-      return TIMEOUT; // Exceeded timeout, fail.
+            return TIMEOUT;    // Exceeded timeout, fail.
         }
     }
 #endif

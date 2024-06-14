@@ -29,14 +29,15 @@ AudioSetting configA(0);
 Audio audio;
 AAC aac;
 RTSP rtsp;
-StreamIO audioStreamer(1, 1);   // 1 Input Audio -> 1 Output AAC
-StreamIO avMixStreamer(2, 1);   // 2 Input Video + Audio -> 1 Output RTSP
+StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output AAC
+StreamIO avMixStreamer(2, 1);    // 2 Input Video + Audio -> 1 Output RTSP
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // attempt to connect to Wifi network:
@@ -52,7 +53,7 @@ void setup() {
 
     // Configure camera video channel with video format information
     // Adjust the bitrate based on your WiFi network quality
-    //configV.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    // configV.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, configV);
     Camera.videoInit();
 
@@ -90,11 +91,13 @@ void setup() {
     printInfo();
 }
 
-void loop() {
+void loop()
+{
     // Do nothing
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

@@ -15,9 +15,9 @@
 #define DHTPIN 8
 
 // Uncomment whatever type you're using!
-#define DHTTYPE DHT11   // DHT 11
-//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
-//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+#define DHTTYPE DHT11    // DHT 11
+// #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+// #define DHTTYPE DHT21   // DHT 21 (AM2301)
 
 
 // Connect pin 1 (on the left) of the sensor to +5V
@@ -34,13 +34,15 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     Serial.println(F("DHTxx test!"));
     dht.begin();
 }
 
-void loop() {
+void loop()
+{
     // Wait a few seconds between measurements.
     delay(2000);
 

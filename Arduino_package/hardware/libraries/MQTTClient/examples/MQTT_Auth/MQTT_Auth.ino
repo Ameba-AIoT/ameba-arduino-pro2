@@ -11,19 +11,20 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-char mqttServer[]     = "cloud.amebaiot.com";
-char clientId[]       = "amebaClient";
-char clientUser[]     = "testuser";
-char clientPass[]     = "testpass";
-char publishTopic[]   = "outTopic";
+char mqttServer[] = "cloud.amebaiot.com";
+char clientId[] = "amebaClient";
+char clientUser[] = "testuser";
+char clientPass[] = "testpass";
+char publishTopic[] = "outTopic";
 char publishPayload[] = "hello world";
 char subscribeTopic[] = "inTopic";
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char* topic, byte* payload, unsigned int length)
+{
     Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("] ");
@@ -36,15 +37,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
 WiFiClient wifiClient;
 PubSubClient client(mqttServer, 1883, callback, wifiClient);
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     // wait for serial port to connect.
     while (!Serial) {
         ;
     }
 
-    //Attempt to connect to WiFi network
+    // Attempt to connect to WiFi network
     while (status != WL_CONNECTED) {
         Serial.print("\r\nAttempting to connect to SSID: ");
         Serial.println(ssid);
@@ -66,6 +68,7 @@ void setup() {
     }
 }
 
-void loop() {
+void loop()
+{
     client.loop();
 }

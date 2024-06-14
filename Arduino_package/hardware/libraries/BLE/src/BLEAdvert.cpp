@@ -13,52 +13,61 @@
 #include "gap_scan.h"
 #include "gap_storage_le.h"
 
-BLEAdvert::BLEAdvert() {
+BLEAdvert::BLEAdvert()
+{
 }
 
-void BLEAdvert::setAdvType(uint8_t advType) {
+void BLEAdvert::setAdvType(uint8_t advType)
+{
     if (advType <= GAP_ADTYPE_ADV_LDC_DIRECT_IND) {
         _advEvtType = advType;
     }
 }
 
-void BLEAdvert::setMinInterval(uint16_t minInt_ms) {
+void BLEAdvert::setMinInterval(uint16_t minInt_ms)
+{
     if ((minInt_ms >= 20) && (minInt_ms <= 10240)) {
-        _advIntMin = (minInt_ms*1000/625);
+        _advIntMin = (minInt_ms * 1000 / 625);
     }
 }
 
-void BLEAdvert::setMaxInterval(uint16_t maxInt_ms) {
+void BLEAdvert::setMaxInterval(uint16_t maxInt_ms)
+{
     if ((maxInt_ms >= 20) && (maxInt_ms <= 10240)) {
-        _advIntMax = (maxInt_ms*1000/625);
+        _advIntMax = (maxInt_ms * 1000 / 625);
     }
 }
 
-void BLEAdvert::setAdvData(BLEAdvertData adData) {
+void BLEAdvert::setAdvData(BLEAdvertData adData)
+{
     memcpy(_advData, adData._data, adData._dataSize);
     _advDataSize = adData._dataSize;
 }
 
-void BLEAdvert::setScanRspData(BLEAdvertData adData) {
+void BLEAdvert::setScanRspData(BLEAdvertData adData)
+{
     memcpy(_scanRspData, adData._data, adData._dataSize);
     _scanRspDataSize = adData._dataSize;
 }
 
-void BLEAdvert::setAdvData(uint8_t* pdata, uint8_t size) {
+void BLEAdvert::setAdvData(uint8_t* pdata, uint8_t size)
+{
     if (size <= 31) {
         memcpy(_advData, pdata, size);
         _advDataSize = size;
     }
 }
 
-void BLEAdvert::setScanRspData(uint8_t* pdata, uint8_t size) {
+void BLEAdvert::setScanRspData(uint8_t* pdata, uint8_t size)
+{
     if (size <= 31) {
         memcpy(_scanRspData, pdata, size);
         _scanRspDataSize = size;
     }
 }
 
-void BLEAdvert::updateAdvertParams() {
+void BLEAdvert::updateAdvertParams()
+{
     le_adv_set_param(GAP_PARAM_ADV_EVENT_TYPE, sizeof(_advEvtType), &(_advEvtType));
     le_adv_set_param(GAP_PARAM_ADV_DIRECT_ADDR_TYPE, sizeof(_advDirectType), &(_advDirectType));
     le_adv_set_param(GAP_PARAM_ADV_DIRECT_ADDR, sizeof(_advDirectAddr), (_advDirectAddr));
@@ -73,13 +82,15 @@ void BLEAdvert::updateAdvertParams() {
 }
 
 // direct methods to start and stop advertising
-// you should not be using these methods directly to start the BLE device stack, without first registering the callbacks and handlers. 
+// you should not be using these methods directly to start the BLE device stack, without first registering the callbacks and handlers.
 // BLEDevice::beginPeripheral() will start advertising by default
 // possible uses for these are to stop advertising to update advertising parameters and restart advertising
-void BLEAdvert::startAdv() {
+void BLEAdvert::startAdv()
+{
     le_adv_start();
 }
 
-void BLEAdvert::stopAdv() {
+void BLEAdvert::stopAdv()
+{
     le_adv_stop();
 }

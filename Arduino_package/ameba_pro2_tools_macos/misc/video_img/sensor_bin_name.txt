@@ -4,3 +4,9 @@ iq_f37.bin
 sensor_f37.bin
 firmware_isp_iq.bin
 ------------------
+fcs_data_dummy.bin
+voe.bin
+iq_gc2053.bin
+sensor_gc5035.bin
+firmware_isp_iq.bin
+------------------

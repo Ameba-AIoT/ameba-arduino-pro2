@@ -81,16 +81,48 @@ extern "C"
 /**
   \brief  Defines FEMAC Interrupt Status/Mask register (0x3C)
 */
+// IMR
+#define FEMAC_IMR_SHIFT_SWINT       26
+#define FEMAC_IMR_BIT_SWINT         ((u32)0x00000001 << 26)
+#define FEMAC_IMR_SHIFT_TDU         25
+#define FEMAC_IMR_BIT_TDU           ((u32)0x00000001 << 25)
 #define FEMAC_IMR_SHIFT_LINKCHG         24
 #define FEMAC_IMR_BIT_LINKCHG           ((u32)0x00000001 << 24)
+#define FEMAC_IMR_SHIFT_TER         23
+#define FEMAC_IMR_BIT_TER           ((u32)0x00000001 << 23)
 #define FEMAC_IMR_SHIFT_TOK             22
 #define FEMAC_IMR_BIT_TOK               ((u32)0x00000001 << 22)
+#define FEMAC_IMR_SHIFT_RDU         21
+#define FEMAC_IMR_BIT_RDU           ((u32)0x00000001 << 21)
 #define FEMAC_IMR_SHIFT_RER_OVF         20
 #define FEMAC_IMR_BIT_RER_OVF           ((u32)0x00000001 << 20)
+#define FEMAC_IMR_SHIFT_RER_RUNT    18
+#define FEMAC_IMR_BIT_RER_RUNT      ((u32)0x00000001 << 18)
+#define FEMAC_IMR_SHIFT_CNT_WRAP    17
+#define FEMAC_IMR_BIT_CNT_WRAP      ((u32)0x00000001 << 17)
 #define FEMAC_IMR_SHIFT_ROK             16
 #define FEMAC_IMR_BIT_ROK               ((u32)0x00000001 << 16)
+// ISR
+#define FEMAC_ISR_SHIFT_SWINT       10
+#define FEMAC_ISR_BIT_SWINT         ((u32)0x00000001 << 10)
+#define FEMAC_ISR_SHIFT_TDU         9
+#define FEMAC_ISR_BIT_TDU           ((u32)0x00000001 << 9)
+#define FEMAC_ISR_SHIFT_LINKCHG     8
+#define FEMAC_ISR_BIT_LINKCHG       ((u32)0x00000001 << 8)
+#define FEMAC_ISR_SHIFT_TER         7
+#define FEMAC_ISR_BIT_TER           ((u32)0x00000001 << 7)
+#define FEMAC_ISR_SHIFT_TOK         6
+#define FEMAC_ISR_BIT_TOK           ((u32)0x00000001 << 6)
+#define FEMAC_ISR_SHIFT_RDU         5
+#define FEMAC_ISR_BIT_RDU           ((u32)0x00000001 << 5)
 #define FEMAC_ISR_SHIFT_RER_OVF         4
 #define FEMAC_ISR_BIT_RER_OVF           ((u32)0x00000001 << 4)
+#define FEMAC_ISR_SHIFT_RER_RUNT    2
+#define FEMAC_ISR_BIT_RER_RUNT      ((u32)0x00000001 << 2)
+#define FEMAC_ISR_SHIFT_CNT_WRAP    1
+#define FEMAC_ISR_BIT_CNT_WRAP      ((u32)0x00000001 << 1)
+#define FEMAC_ISR_SHIFT_ROK         0
+#define FEMAC_ISR_BIT_ROK           ((u32)0x00000001 << 0)
 
 /**
   \brief  Defines FEMAC Receive Configuration register (0x44)
@@ -222,11 +254,17 @@ enum fephy_reg_addr {
   \brief  Defines Ethernet interrupt event.
 */
 enum  eth_int_event_e {
-	EthTxDone       = 0,
-	EthRxDone       = 1,
-	EthLinkUp       = 2,
-	EthLinkDown     = 3,
-	EthRx_RDU       = 4
+	EthIntRok       = 0,
+	EthIntCntWrap   = 1,
+	EthIntRerRunt   = 2,
+	EthIntRerOvf    = 3,
+	EthIntRdu       = 4,
+	EthIntTok       = 5,
+	EthIntTer       = 6,
+	EthIntLinkUp    = 7,
+	EthIntLinkDown  = 8,
+	EthIntTdu       = 9,
+	EthIntSwInt     = 10
 };
 
 /**

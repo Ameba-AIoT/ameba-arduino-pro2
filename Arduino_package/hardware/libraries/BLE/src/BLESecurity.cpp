@@ -7,38 +7,45 @@ void (*BLESecurity::_pKeyDisplayCB)(uint8_t conn_id, uint32_t passkey) = nullptr
 uint32_t (*BLESecurity::_pKeyInputCB)(uint8_t conn_id) = nullptr;
 bool (*BLESecurity::_pNumCompareCB)(uint8_t conn_id, uint32_t passkey) = nullptr;
 
-BLESecurity::BLESecurity() {
+BLESecurity::BLESecurity()
+{
 }
 
-void BLESecurity::setPairable(bool pairMode) {
+void BLESecurity::setPairable(bool pairMode)
+{
     if (pairMode) {
-    _authPairMode = GAP_PAIRING_MODE_PAIRABLE;
+        _authPairMode = GAP_PAIRING_MODE_PAIRABLE;
     } else {
-    _authPairMode = GAP_PAIRING_MODE_NO_PAIRING;
+        _authPairMode = GAP_PAIRING_MODE_NO_PAIRING;
     }
 }
 
-void BLESecurity::setAuthFlags(uint16_t authFlags) {
+void BLESecurity::setAuthFlags(uint16_t authFlags)
+{
     _authFlags = authFlags;
 }
 
-void BLESecurity::setIOCapability(uint8_t ioCap) {
+void BLESecurity::setIOCapability(uint8_t ioCap)
+{
     _authIoCap = ioCap;
 }
 
-void BLESecurity::setSecReqEnable(bool secReq) {
+void BLESecurity::setSecReqEnable(bool secReq)
+{
     if (secReq) {
-    _authSecReqEnable = true;
+        _authSecReqEnable = true;
     } else {
-    _authSecReqEnable = false;
+        _authSecReqEnable = false;
     }
 }
 
-void BLESecurity::setSecReqFlags(uint16_t secReqFlags) {
+void BLESecurity::setSecReqFlags(uint16_t secReqFlags)
+{
     _authSecReqFlags = secReqFlags;
 }
 
-void BLESecurity::setStaticPin(uint32_t pin) {
+void BLESecurity::setStaticPin(uint32_t pin)
+{
     // Maximum pin length of 6 digits
     if (pin <= GAP_PASSCODE_MAX) {
         _authPairMode = GAP_PAIRING_MODE_PAIRABLE;
@@ -53,19 +60,23 @@ void BLESecurity::setStaticPin(uint32_t pin) {
     }
 }
 
-void BLESecurity::setPasskeyDisplayCallback(void (*fCallback) (uint8_t conn_id, uint32_t passkey)) {
+void BLESecurity::setPasskeyDisplayCallback(void (*fCallback)(uint8_t conn_id, uint32_t passkey))
+{
     _pKeyDisplayCB = fCallback;
 }
 
-void BLESecurity::setPasskeyInputCallback(uint32_t (*fCallback) (uint8_t conn_id)) {
+void BLESecurity::setPasskeyInputCallback(uint32_t (*fCallback)(uint8_t conn_id))
+{
     _pKeyInputCB = fCallback;
 }
 
-void BLESecurity::setNumericComparisonCallback(bool (*fCallback) (uint8_t conn_id, uint32_t passkey)) {
+void BLESecurity::setNumericComparisonCallback(bool (*fCallback)(uint8_t conn_id, uint32_t passkey))
+{
     _pNumCompareCB = fCallback;
 }
 
-void BLESecurity::setupGAPBondManager() {
+void BLESecurity::setupGAPBondManager()
+{
     // Setup the GAP Bond Manager
     gap_set_param(GAP_PARAM_BOND_PAIRING_MODE, sizeof(_authPairMode), &_authPairMode);
     gap_set_param(GAP_PARAM_BOND_AUTHEN_REQUIREMENTS_FLAGS, sizeof(_authFlags), &_authFlags);
@@ -76,4 +87,3 @@ void BLESecurity::setupGAPBondManager() {
     le_bond_set_param(GAP_PARAM_BOND_SEC_REQ_ENABLE, sizeof(_authSecReqEnable), &_authSecReqEnable);
     le_bond_set_param(GAP_PARAM_BOND_SEC_REQ_REQUIREMENT, sizeof(_authSecReqFlags), &_authSecReqFlags);
 }
-

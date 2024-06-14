@@ -16,7 +16,8 @@ extern "C" {
 }
 #endif
 
-AAD::AAD(void) {
+AAD::AAD(void)
+{
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&aad_module);
     }
@@ -26,7 +27,8 @@ AAD::AAD(void) {
     }
 }
 
-AAD::~AAD(void) {
+AAD::~AAD(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -38,35 +40,41 @@ AAD::~AAD(void) {
     }
 }
 
-void AAD::configAudio(AudioSetting& config) {
+void AAD::configAudio(AudioSetting& config)
+{
     audio_params_t* _audioParams = &(config._audioParams);
 
     _aadParams.sample_rate = config._sampleRate;
     _aadParams.channel = _audioParams->channel;
 }
 
-void AAD::begin(void) {
+void AAD::begin(void)
+{
     mm_module_ctrl(_p_mmf_context, CMD_AAD_SET_PARAMS, (int)&_aadParams);
     mm_module_ctrl(_p_mmf_context, MM_CMD_SET_QUEUE_LEN, 6);
     mm_module_ctrl(_p_mmf_context, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
     mm_module_ctrl(_p_mmf_context, CMD_AAD_APPLY, 0);
 }
 
-void AAD::end(void) {
+void AAD::end(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
     mm_module_ctrl(_p_mmf_context, CMD_AAD_RESET, 0);
 }
 
-G711D::G711D(void) {
+G711D::G711D(void)
+{
 }
 
-G711D::~G711D(void) {
+G711D::~G711D(void)
+{
     end();
 }
 
-void G711D::configAudio(AudioSetting& config) {
+void G711D::configAudio(AudioSetting& config)
+{
     audio_params_t* _audioParams = &(config._audioParams);
 
     if (config._sampleRate > 16000) {
@@ -77,7 +85,8 @@ void G711D::configAudio(AudioSetting& config) {
     }
 }
 
-void G711D::configCodec(Audio_Codec_T codec) {
+void G711D::configCodec(Audio_Codec_T codec)
+{
     switch (codec) {
         default:
         case CODEC_G711_PCMU: {
@@ -91,7 +100,8 @@ void G711D::configCodec(Audio_Codec_T codec) {
     }
 }
 
-void G711D::begin(void) {
+void G711D::begin(void)
+{
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&g711_module);
     }
@@ -105,7 +115,8 @@ void G711D::begin(void) {
     mm_module_ctrl(_p_mmf_context, CMD_G711_APPLY, 0);
 }
 
-void G711D::end(void) {
+void G711D::end(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -115,4 +126,3 @@ void G711D::end(void) {
         printf("\r\n[ERROR] G711D deinit failed\n");
     }
 }
-

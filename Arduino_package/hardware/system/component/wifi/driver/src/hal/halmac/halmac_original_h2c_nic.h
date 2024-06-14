@@ -638,7 +638,8 @@
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 10, 1, value)
 #define PS_TUNING_PARA_II_SET_ARP_WAIT_RESPONSE(h2c_pkt, value)                 \
 	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 11, 1, value)
-
+#define PS_TUNING_PARA_II_SET_TXAGC_OFFLOAD(h2c_pkt, value)                 \
+	SET_BITS_TO_LE_4BYTE(h2c_pkt + 0X04, 24, 8, value)
 #else	
 #define PS_TUNING_PARA_II_GET_BCN_TO_PERIOD(h2c_pkt)                           \
 	LE_BITS_TO_4BYTE(h2c_pkt + 0X00, 8, 7)

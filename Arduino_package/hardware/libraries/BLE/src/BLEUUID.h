@@ -27,21 +27,21 @@
 #define BLE_UUID_MAX_LENGTH 16
 
 class BLEUUID {
-    public: 
-        BLEUUID();
-        BLEUUID(const char* str);      // Build a BLEUUID object from an UUID string. Use of hyphens (-) to seperate UUID sections in the string is acceptable.
-        BLEUUID(uint8_t* data, uint8_t length);
-        const char* str();
-        const uint8_t* data();
-        const uint8_t* dataNative();
-        uint8_t length();
-        bool operator ==(const BLEUUID &uuid);
+public:
+    BLEUUID();
+    BLEUUID(const char* str);    // Build a BLEUUID object from an UUID string. Use of hyphens (-) to separate UUID sections in the string is acceptable.
+    BLEUUID(uint8_t* data, uint8_t length);
+    const char* str();
+    const uint8_t* data();
+    const uint8_t* dataNative();
+    uint8_t length();
+    bool operator==(const BLEUUID& uuid);
 
-    private:
-        char _str[BLE_UUID_MAX_LENGTH * 2 + 5] = {0};
-        uint8_t _data[BLE_UUID_MAX_LENGTH] = {0};           // stores the UUID MSB in position 0, useful for printing as characters/strings
-        uint8_t _dataNative[BLE_UUID_MAX_LENGTH] = {0};     // stores the UUID LSB in position 0
-        uint8_t _length = 0;    // number of bytes(characters) of UUID
+private:
+    char _str[BLE_UUID_MAX_LENGTH * 2 + 5] = {0};
+    uint8_t _data[BLE_UUID_MAX_LENGTH] = {0};          // stores the UUID MSB in position 0, useful for printing as characters/strings
+    uint8_t _dataNative[BLE_UUID_MAX_LENGTH] = {0};    // stores the UUID LSB in position 0
+    uint8_t _length = 0;                               // number of bytes(characters) of UUID
 };
 
 #endif

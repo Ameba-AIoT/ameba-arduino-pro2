@@ -572,4 +572,7 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #define LWIP_SOCKET_SET_ERRNO           1
 #endif
 
+/* hook function to support ip route based on src ip */
+#define LWIP_HOOK_IP4_ROUTE_SRC         LwIP_ip4_route_src_hook
+
 #endif /* LWIP_HDR_LWIPOPTS_H */

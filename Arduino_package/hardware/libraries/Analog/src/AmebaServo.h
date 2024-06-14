@@ -17,17 +17,17 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* 
-  A servo is activated by creating an instance of the Servo class passing 
+/*
+  A servo is activated by creating an instance of the Servo class passing
   the desired pin to the attach() method.
-  The servos are pulsed in the background using the value most recently 
+  The servos are pulsed in the background using the value most recently
   written using the write() method.
 
-  Note that analogWrite of PWM on pins associated with the timer are 
+  Note that analogWrite of PWM on pins associated with the timer are
   disabled when the first servo is attached.
-  Timers are seized as needed in groups of 12 servos - 24 servos use two 
+  Timers are seized as needed in groups of 12 servos - 24 servos use two
   timers, 48 servos will use four.
-  The sequence used to sieze timers is defined in timers.h
+  The sequence used to seize timers is defined in timers.h
 
   The methods are:
 
@@ -35,14 +35,14 @@
 
     attach(pin )  - Attaches a servo motor to an i/o pin.
     attach(pin, min, max  ) - Attaches to a pin setting min and max values in microseconds
-    default min is 544, max is 2400  
- 
+    default min is 544, max is 2400
+
     write()     - Sets the servo angle in degrees.  (invalid angle that is valid as pulse in microseconds is treated as microseconds)
-    writeMicroseconds() - Sets the servo pulse width in microseconds 
-    read()      - Gets the last written servo pulse width as an angle between 0 and 180. 
+    writeMicroseconds() - Sets the servo pulse width in microseconds
+    read()      - Gets the last written servo pulse width as an angle between 0 and 180.
     readMicroseconds()   - Gets the last written servo pulse width in microseconds. (was read_us() in first release)
-    attached()  - Returns true if there is a servo attached. 
-    detach()    - Stops an attached servos from pulsing its i/o pin. 
+    attached()  - Returns true if there is a servo attached.
+    detach()    - Stops an attached servos from pulsing its i/o pin.
 
   2016/03/18 Refined by Realtek
 
@@ -51,20 +51,16 @@
 #ifndef _AMEBA_SERVO_H_
 #define _AMEBA_SERVO_H_
 
-#define Servo_VERSION           2       // software version of this library
+#define Servo_VERSION       2                   // software version of this library
+#define MIN_PULSE_WIDTH     544                 // the shortest pulse sent to a servo
+#define MAX_PULSE_WIDTH     2400                // the longest pulse sent to a servo
+#define DEFAULT_PULSE_WIDTH 1500                // default pulse width when servo is attached
+#define REFRESH_INTERVAL    20000               // minumim time to refresh servos in microseconds
+#define SERVOS_PER_TIMER    4                   // servos controlled by one timer
+#define MAX_SERVOS          SERVOS_PER_TIMER    // the maximum number of servos
+#define INVALID_SERVO       255                 // flag indicating an invalid servo index
 
-#define MIN_PULSE_WIDTH         544     // the shortest pulse sent to a servo  
-#define MAX_PULSE_WIDTH         2400    // the longest pulse sent to a servo 
-#define DEFAULT_PULSE_WIDTH     1500    // default pulse width when servo is attached
-#define REFRESH_INTERVAL        20000   // minumim time to refresh servos in microseconds 
-
-#define SERVOS_PER_TIMER        4       // the maximum number of servos controlled by one timer 
-#define MAX_SERVOS              SERVOS_PER_TIMER
-
-#define INVALID_SERVO           255     // flag indicating an invalid servo index
-
-class AmebaServo
-{
+class AmebaServo {
 public:
     AmebaServo();
 

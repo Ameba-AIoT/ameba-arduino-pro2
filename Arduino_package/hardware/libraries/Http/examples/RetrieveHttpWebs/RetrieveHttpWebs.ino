@@ -9,9 +9,9 @@
 #include <WiFiClient.h>
 
 // This example downloads the URL "http://www.amebaiot.com"
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                   // your network key Index number (needed only for WEP)
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;                // your network key Index number (needed only for WEP)
 
 // Name of the server we want to connect to
 const char kHostname[] = "www.amebaiot.com";
@@ -23,7 +23,8 @@ const int kNetworkTimeout = 30 * 1000;
 const int kNetworkDelay = 1000;
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to SSID: ");
@@ -36,7 +37,8 @@ void setup() {
     printWifiStatus();
 }
 
-void loop() {
+void loop()
+{
     int err = 0;
 
     WiFiClient c;
@@ -97,10 +99,12 @@ void loop() {
     http.stop();
 
     // And just stop, now that we've tried a download
-    while (1);
+    while (1)
+        ;
 }
 
-void printWifiStatus() {
+void printWifiStatus()
+{
     // print the SSID of the network you're attached to:
     Serial.print("SSID: ");
     Serial.println(WiFi.SSID());

@@ -4,41 +4,46 @@
 #include "gatt.h"
 #include "profile_server.h"
 
-BLECharacteristic::BLECharacteristic(BLEUUID uuid) {
+BLECharacteristic::BLECharacteristic(BLEUUID uuid)
+{
     setUUID(uuid);
-    _data_buf = (uint8_t*)malloc(_data_buf_len*sizeof(uint8_t));
+    _data_buf = (uint8_t*)malloc(_data_buf_len * sizeof(uint8_t));
 }
 
-BLECharacteristic::BLECharacteristic(const char* uuid) {
+BLECharacteristic::BLECharacteristic(const char* uuid)
+{
     setUUID(BLEUUID(uuid));
-    _data_buf = (uint8_t*)malloc(_data_buf_len*sizeof(uint8_t));
+    _data_buf = (uint8_t*)malloc(_data_buf_len * sizeof(uint8_t));
 }
 
-BLECharacteristic::~BLECharacteristic() {
+BLECharacteristic::~BLECharacteristic()
+{
     free(_userDesc);
     free(_data_buf);
 }
 
 //------------- Configure -------------//
 
-void BLECharacteristic::setUUID(BLEUUID uuid) {
+void BLECharacteristic::setUUID(BLEUUID uuid)
+{
     if ((uuid.length() == 2) || (uuid.length() == 16)) {
         _uuid = uuid;
     } else {
         printf("\r\n[ERROR] Characteristic: Only 16bit & 128bit UUIDs are supported for characteristics \n");
     }
-
 }
 
-BLEUUID BLECharacteristic::getUUID() {
+BLEUUID BLECharacteristic::getUUID()
+{
     return _uuid;
 }
 
-void BLECharacteristic::setBufferLen(uint16_t max_len) {
+void BLECharacteristic::setBufferLen(uint16_t max_len)
+{
     if (max_len > CHAR_VALUE_MAX_LEN) {
-        printf ("\r\n[ERROR] Characteristic %s: requested buffer size too large, maximum of %d \n", _uuid.str(), CHAR_VALUE_MAX_LEN);
+        printf("\r\n[ERROR] Characteristic %s: requested buffer size too large, maximum of %d \n", _uuid.str(), CHAR_VALUE_MAX_LEN);
     } else {
-        _data_buf = (uint8_t*) realloc(_data_buf, max_len*sizeof(uint8_t));
+        _data_buf = (uint8_t*)realloc(_data_buf, max_len * sizeof(uint8_t));
         if (_data_buf == NULL) {
             printf("\r\n[ERROR] Characteristic %s: Not enough memory to set buffer length \n", _uuid.str());
             _data_buf_len = 0;
@@ -48,11 +53,13 @@ void BLECharacteristic::setBufferLen(uint16_t max_len) {
     }
 }
 
-uint16_t BLECharacteristic::getBufferLen() {
+uint16_t BLECharacteristic::getBufferLen()
+{
     return _data_buf_len;
 }
 
-void BLECharacteristic::setReadProperty(bool value) {
+void BLECharacteristic::setReadProperty(bool value)
+{
     if (value) {
         setProperties(getProperties() | GATT_CHAR_PROP_READ);
     } else {
@@ -60,7 +67,8 @@ void BLECharacteristic::setReadProperty(bool value) {
     }
 }
 
-void BLECharacteristic::setWriteProperty(bool value) {
+void BLECharacteristic::setWriteProperty(bool value)
+{
     if (value) {
         setProperties(getProperties() | GATT_CHAR_PROP_WRITE);
     } else {
@@ -68,7 +76,8 @@ void BLECharacteristic::setWriteProperty(bool value) {
     }
 }
 
-void BLECharacteristic::setWriteNRProperty(bool value) {
+void BLECharacteristic::setWriteNRProperty(bool value)
+{
     if (value) {
         setProperties(getProperties() | GATT_CHAR_PROP_WRITE_NO_RSP);
     } else {
@@ -76,7 +85,8 @@ void BLECharacteristic::setWriteNRProperty(bool value) {
     }
 }
 
-void BLECharacteristic::setNotifyProperty(bool value) {
+void BLECharacteristic::setNotifyProperty(bool value)
+{
     if (value) {
         setProperties(getProperties() | GATT_CHAR_PROP_NOTIFY);
         _includeCCCDescriptor = 1;
@@ -90,13 +100,14 @@ void BLECharacteristic::setNotifyProperty(bool value) {
     }
 }
 
-void BLECharacteristic::setIndicateProperty(bool value) {
+void BLECharacteristic::setIndicateProperty(bool value)
+{
     if (value) {
         setProperties(getProperties() | GATT_CHAR_PROP_INDICATE);
         _includeCCCDescriptor = 1;
     } else {
         setProperties(getProperties() & ~GATT_CHAR_PROP_INDICATE);
-        if (getProperties() & GATT_CHAR_PROP_NOTIFY) {      // Check if notify still needs to use CCCD
+        if (getProperties() & GATT_CHAR_PROP_NOTIFY) {    // Check if notify still needs to use CCCD
             _includeCCCDescriptor = 1;
         } else {
             _includeCCCDescriptor = 0;
@@ -104,93 +115,110 @@ void BLECharacteristic::setIndicateProperty(bool value) {
     }
 }
 
-void BLECharacteristic::setProperties(uint8_t value) {
+void BLECharacteristic::setProperties(uint8_t value)
+{
     _char_properties = value;
 }
 
-uint8_t BLECharacteristic::getProperties() {
+uint8_t BLECharacteristic::getProperties()
+{
     return _char_properties;
 }
 
 
-void BLECharacteristic::setReadPermissions(uint32_t value) {
+void BLECharacteristic::setReadPermissions(uint32_t value)
+{
     // Check for valid read permission value
     uint32_t all_read_perms = (GATT_PERM_READ | GATT_PERM_READ_AUTHEN_REQ | GATT_PERM_READ_AUTHOR_REQ | GATT_PERM_READ_ENCRYPTED_REQ | GATT_PERM_READ_AUTHEN_SC_REQ);
     _char_attr_read_permissions = value & all_read_perms;
 }
 
-void BLECharacteristic::setWritePermissions(uint32_t value) {
+void BLECharacteristic::setWritePermissions(uint32_t value)
+{
     // Check for valid read permission value
     uint32_t all_write_perms = (GATT_PERM_WRITE | GATT_PERM_WRITE_AUTHEN_REQ | GATT_PERM_WRITE_AUTHOR_REQ | GATT_PERM_WRITE_ENCRYPTED_REQ | GATT_PERM_WRITE_AUTHEN_SC_REQ);
     _char_attr_write_permissions = value & all_write_perms;
 }
 
-void BLECharacteristic::setPermissions(uint32_t value) {
+void BLECharacteristic::setPermissions(uint32_t value)
+{
     uint32_t all_read_perms = (GATT_PERM_READ | GATT_PERM_READ_AUTHEN_REQ | GATT_PERM_READ_AUTHOR_REQ | GATT_PERM_READ_ENCRYPTED_REQ | GATT_PERM_READ_AUTHEN_SC_REQ);
     uint32_t all_write_perms = (GATT_PERM_WRITE | GATT_PERM_WRITE_AUTHEN_REQ | GATT_PERM_WRITE_AUTHOR_REQ | GATT_PERM_WRITE_ENCRYPTED_REQ | GATT_PERM_WRITE_AUTHEN_SC_REQ);
     _char_attr_read_permissions = value & all_read_perms;
     _char_attr_write_permissions = value & all_write_perms;
 }
 
-uint32_t BLECharacteristic::getPermissions() {
+uint32_t BLECharacteristic::getPermissions()
+{
     return (_char_attr_read_permissions & _char_attr_write_permissions);
 }
 
 //--------- Read Char Value --------//
 
-String BLECharacteristic::readString() {
+String BLECharacteristic::readString()
+{
     char datastring[_data_buf_len + 1] = {0};
     getData((uint8_t*)datastring, sizeof(datastring));
     return String(datastring);
 }
 
-uint8_t BLECharacteristic::readData8() {
+uint8_t BLECharacteristic::readData8()
+{
     uint8_t num = 0;
     getData(&num, sizeof(num));
     return num;
 }
 
-uint16_t BLECharacteristic::readData16() {
+uint16_t BLECharacteristic::readData16()
+{
     uint16_t num = 0;
-    getData((uint8_t*) &num, sizeof(num));
+    getData((uint8_t*)&num, sizeof(num));
     return num;
 }
 
-uint32_t BLECharacteristic::readData32() {
+uint32_t BLECharacteristic::readData32()
+{
     uint32_t num = 0;
-    getData((uint8_t*) &num, sizeof(num));
+    getData((uint8_t*)&num, sizeof(num));
     return num;
 }
 
 //--------- Write Char Value --------//
 
-bool BLECharacteristic::writeString(String str) {
+bool BLECharacteristic::writeString(String str)
+{
     return writeString(str.c_str());
 }
 
-bool BLECharacteristic::writeString(const char* str) {
-    return setData((uint8_t*) str, strlen(str));
+bool BLECharacteristic::writeString(const char* str)
+{
+    return setData((uint8_t*)str, strlen(str));
 }
 
-bool BLECharacteristic::writeData8(uint8_t num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLECharacteristic::writeData8(uint8_t num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
-bool BLECharacteristic::writeData16(uint16_t num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLECharacteristic::writeData16(uint16_t num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
-bool BLECharacteristic::writeData32(uint32_t num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLECharacteristic::writeData32(uint32_t num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
-bool BLECharacteristic::writeData32(int num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLECharacteristic::writeData32(int num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
 //--------- Modify Char Value ---------//
 
-bool BLECharacteristic::setData(uint8_t* data, uint16_t datalen) {
+bool BLECharacteristic::setData(uint8_t* data, uint16_t datalen)
+{
     if (datalen > _data_buf_len) {
         printf("\r\n[ERROR] Characteristic %s: setData size too large, data buffer size set to %d \n", _uuid.str(), _data_buf_len);
         return false;
@@ -201,7 +229,8 @@ bool BLECharacteristic::setData(uint8_t* data, uint16_t datalen) {
     return true;
 }
 
-uint16_t BLECharacteristic::getData(uint8_t* data, uint16_t datalen) {
+uint16_t BLECharacteristic::getData(uint8_t* data, uint16_t datalen)
+{
     if (datalen > _data_buf_len) {
         memcpy(data, _data_buf, _data_buf_len);
         return _data_buf_len;
@@ -210,15 +239,18 @@ uint16_t BLECharacteristic::getData(uint8_t* data, uint16_t datalen) {
     return datalen;
 }
 
-uint8_t* BLECharacteristic::getDataBuff() {
+uint8_t* BLECharacteristic::getDataBuff()
+{
     return _data_buf;
 }
 
-uint16_t BLECharacteristic::getDataLen() {
+uint16_t BLECharacteristic::getDataLen()
+{
     return _data_len;
 }
 
-void BLECharacteristic::notify(uint8_t conn_id) {
+void BLECharacteristic::notify(uint8_t conn_id)
+{
     if (!(getProperties() & GATT_CHAR_PROP_NOTIFY)) {
         printf("\r\n[ERROR] Characteristic %s: Notification property not enabled \n", _uuid.str());
         return;
@@ -226,7 +258,8 @@ void BLECharacteristic::notify(uint8_t conn_id) {
     server_send_data(conn_id, _pService->getServiceID(), _handle_index, _data_buf, _data_len, GATT_PDU_TYPE_NOTIFICATION);
 }
 
-void BLECharacteristic::indicate(uint8_t conn_id) {
+void BLECharacteristic::indicate(uint8_t conn_id)
+{
     if (!(getProperties() & GATT_CHAR_PROP_INDICATE)) {
         printf("\r\n[ERROR] Characteristic %s: Indication property not enabled \n", _uuid.str());
         return;
@@ -236,16 +269,18 @@ void BLECharacteristic::indicate(uint8_t conn_id) {
 
 //------------- Descriptors -------------//
 
-void BLECharacteristic::setUserDescriptor(const char* description) {
+void BLECharacteristic::setUserDescriptor(const char* description)
+{
     _includeUserDescriptor = 1;
     _userDescSize = strlen(description);
     free(_userDesc);
-    _userDesc = (char*)malloc((_userDescSize+1)*sizeof(char));
-    memset(_userDesc, 0, ((_userDescSize+1)*sizeof(char)));
+    _userDesc = (char*)malloc((_userDescSize + 1) * sizeof(char));
+    memset(_userDesc, 0, ((_userDescSize + 1) * sizeof(char)));
     strcpy(_userDesc, description);
 }
 
-void BLECharacteristic::setFormatDescriptor(uint8_t format, uint8_t exponent, uint16_t unit, uint16_t description) {
+void BLECharacteristic::setFormatDescriptor(uint8_t format, uint8_t exponent, uint16_t unit, uint16_t description)
+{
     _includeFormatDescriptor = 1;
     _fDescFormat = format;
     _fDescExponent = exponent;
@@ -253,53 +288,70 @@ void BLECharacteristic::setFormatDescriptor(uint8_t format, uint8_t exponent, ui
     _fDescDesc = description;
 }
 
-void BLECharacteristic::setReportRefDescriptor(uint8_t id, uint8_t type) {
+void BLECharacteristic::setReportRefDescriptor(uint8_t id, uint8_t type)
+{
     _includeReportRefDescriptor = 1;
     _reportDescID = id;
     _reportDescType = type;
 }
 
-uint8_t BLECharacteristic::getReportRefID() {
+uint8_t BLECharacteristic::getReportRefID()
+{
     return _reportDescID;
 }
 
-uint8_t BLECharacteristic::getReportRefType() {
+uint8_t BLECharacteristic::getReportRefType()
+{
     return _reportDescType;
 }
 
 //------------- Callbacks -------------//
 
-void BLECharacteristic::setReadCallback(void (*fCallback) (BLECharacteristic* chr, uint8_t conn_id)) {
+void BLECharacteristic::setReadCallback(void (*fCallback)(BLECharacteristic* chr, uint8_t conn_id))
+{
     _pReadCB = fCallback;
 }
 
-void BLECharacteristic::setWriteCallback(void (*fCallback) (BLECharacteristic* chr, uint8_t conn_id)) {
+void BLECharacteristic::setWriteCallback(void (*fCallback)(BLECharacteristic* chr, uint8_t conn_id))
+{
     _pWriteCB = fCallback;
 }
 
-void BLECharacteristic::setCCCDCallback(void (*fCallback) (BLECharacteristic* chr, uint8_t conn_id, uint16_t ccc_bits)) {
+void BLECharacteristic::setCCCDCallback(void (*fCallback)(BLECharacteristic* chr, uint8_t conn_id, uint16_t ccc_bits))
+{
     _pCccdCB = fCallback;
 }
 
 //---------- Private Methods ----------//
 
-uint8_t BLECharacteristic::getHandleIndex() {
+uint8_t BLECharacteristic::getHandleIndex()
+{
     if (_handle_index == 0) {
-        printf ("\r\n[ERROR] Characteristic %s: handle index unallocated \n", _uuid.str());
+        printf("\r\n[ERROR] Characteristic %s: handle index unallocated \n", _uuid.str());
     }
     return _handle_index;
 }
 
-uint8_t BLECharacteristic::getAttrCount() {
+uint8_t BLECharacteristic::getAttrCount()
+{
     uint8_t _char_attr_count = 2;
-    if (_includeCCCDescriptor) _char_attr_count += 1;
-    if (_includeUserDescriptor) _char_attr_count += 1;
-    if (_includeFormatDescriptor) _char_attr_count += 1;
-    if (_includeReportRefDescriptor) _char_attr_count += 1;
+    if (_includeCCCDescriptor) {
+        _char_attr_count += 1;
+    }
+    if (_includeUserDescriptor) {
+        _char_attr_count += 1;
+    }
+    if (_includeFormatDescriptor) {
+        _char_attr_count += 1;
+    }
+    if (_includeReportRefDescriptor) {
+        _char_attr_count += 1;
+    }
     return _char_attr_count;
 }
 
-uint8_t BLECharacteristic::generateCharacteristicAttrTable(T_ATTRIB_APPL* attr_tbl, uint8_t index) {
+uint8_t BLECharacteristic::generateCharacteristicAttrTable(T_ATTRIB_APPL* attr_tbl, uint8_t index)
+{
     uint8_t _attr_count = 0;
     _attr_count += generateAttrCharacteristicDeclaration(attr_tbl, index);
     _handle_index = index + 1;
@@ -310,7 +362,8 @@ uint8_t BLECharacteristic::generateCharacteristicAttrTable(T_ATTRIB_APPL* attr_t
 }
 
 // Generate characteristic declaration attribute and characteristic value attribute
-uint8_t BLECharacteristic::generateAttrCharacteristicDeclaration(T_ATTRIB_APPL* attr_tbl, uint8_t index) {
+uint8_t BLECharacteristic::generateAttrCharacteristicDeclaration(T_ATTRIB_APPL* attr_tbl, uint8_t index)
+{
     attr_tbl[index].flags = (ATTRIB_FLAG_VALUE_INCL);
     attr_tbl[index].type_value[0] = LO_WORD(GATT_UUID_CHARACTERISTIC);
     attr_tbl[index].type_value[1] = HI_WORD(GATT_UUID_CHARACTERISTIC);
@@ -320,19 +373,19 @@ uint8_t BLECharacteristic::generateAttrCharacteristicDeclaration(T_ATTRIB_APPL* 
     attr_tbl[index].permissions = GATT_PERM_READ;
 
     if (_uuid.length() == 2) {
-        attr_tbl[index+1].flags = (ATTRIB_FLAG_VALUE_APPL);
-        memcpy(attr_tbl[index+1].type_value, _uuid.dataNative(), 2);
+        attr_tbl[index + 1].flags = (ATTRIB_FLAG_VALUE_APPL);
+        memcpy(attr_tbl[index + 1].type_value, _uuid.dataNative(), 2);
     } else if (_uuid.length() == 16) {
-        attr_tbl[index+1].flags = (ATTRIB_FLAG_VALUE_APPL | ATTRIB_FLAG_UUID_128BIT);
-        memcpy(attr_tbl[index+1].type_value, _uuid.dataNative(), 16);
+        attr_tbl[index + 1].flags = (ATTRIB_FLAG_VALUE_APPL | ATTRIB_FLAG_UUID_128BIT);
+        memcpy(attr_tbl[index + 1].type_value, _uuid.dataNative(), 16);
     }
-    attr_tbl[index+1].value_len = 0;
-    attr_tbl[index+1].p_value_context = NULL;
+    attr_tbl[index + 1].value_len = 0;
+    attr_tbl[index + 1].p_value_context = NULL;
     if ((_char_properties & GATT_CHAR_PROP_READ) != 0) {
-        attr_tbl[index+1].permissions |= _char_attr_read_permissions;
+        attr_tbl[index + 1].permissions |= _char_attr_read_permissions;
     }
     if ((_char_properties & (GATT_CHAR_PROP_WRITE | GATT_CHAR_PROP_WRITE_NO_RSP | GATT_CHAR_PROP_WRITE_AUTHEN_SIGNED)) != 0) {
-        attr_tbl[index+1].permissions |= _char_attr_write_permissions;
+        attr_tbl[index + 1].permissions |= _char_attr_write_permissions;
     }
 
     // Return number of attributes added
@@ -340,7 +393,8 @@ uint8_t BLECharacteristic::generateAttrCharacteristicDeclaration(T_ATTRIB_APPL* 
 }
 
 // Generate required characteristic descriptor attributes
-uint8_t BLECharacteristic::generateAttrDescriptorDeclaration(T_ATTRIB_APPL* attr_tbl, uint8_t index) {
+uint8_t BLECharacteristic::generateAttrDescriptorDeclaration(T_ATTRIB_APPL* attr_tbl, uint8_t index)
+{
     uint8_t _desc_attr_count = 0;
 
     // Descriptor attribute permissions should follow characteristic attribute permissions
@@ -386,7 +440,7 @@ uint8_t BLECharacteristic::generateAttrDescriptorDeclaration(T_ATTRIB_APPL* attr
         attr_tbl[index].type_value[0] = LO_WORD(GATT_UUID_CHAR_USER_DESCR);
         attr_tbl[index].type_value[1] = HI_WORD(GATT_UUID_CHAR_USER_DESCR);
         attr_tbl[index].value_len = (_userDescSize);
-        attr_tbl[index].p_value_context = ((void *)_userDesc);
+        attr_tbl[index].p_value_context = ((void*)_userDesc);
         attr_tbl[index].permissions = _desc_read_permissions;
         index += 1;
     }
@@ -395,7 +449,7 @@ uint8_t BLECharacteristic::generateAttrDescriptorDeclaration(T_ATTRIB_APPL* attr
         attr_tbl[index].flags = (ATTRIB_FLAG_VALUE_INCL);
         attr_tbl[index].type_value[0] = LO_WORD(GATT_UUID_CHAR_FORMAT);
         attr_tbl[index].type_value[1] = HI_WORD(GATT_UUID_CHAR_FORMAT);
-        attr_tbl[index].type_value[2] = _fDescFormat;           // https://www.bluetooth.com/specifications/assigned-numbers/format-types/
+        attr_tbl[index].type_value[2] = _fDescFormat;    // https://www.bluetooth.com/specifications/assigned-numbers/format-types/
         attr_tbl[index].type_value[3] = _fDescExponent;
         attr_tbl[index].type_value[4] = LO_WORD(_fDescUnit);    // https://www.bluetooth.com/specifications/assigned-numbers/units/
         attr_tbl[index].type_value[5] = HI_WORD(_fDescUnit);
@@ -423,9 +477,10 @@ uint8_t BLECharacteristic::generateAttrDescriptorDeclaration(T_ATTRIB_APPL* attr
 }
 
 T_APP_RESULT BLECharacteristic::charAttrReadCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index,
-                                                        uint16_t offset, uint16_t *p_length, uint8_t **pp_value) {
+                                                            uint16_t offset, uint16_t* p_length, uint8_t** pp_value)
+{
 
-    T_APP_RESULT cause  = APP_RESULT_ATTR_NOT_FOUND;
+    T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     if (attrib_index != _handle_index) {
         printf("\r\n[ERROR] Characteristic %s: Char ID mismatch in read callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
         return cause;
@@ -448,10 +503,11 @@ T_APP_RESULT BLECharacteristic::charAttrReadCallbackDefault(uint8_t conn_id, T_S
 }
 
 T_APP_RESULT BLECharacteristic::charAttrWriteCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index,
-                                                        T_WRITE_TYPE write_type, uint16_t length, uint8_t *p_value,
-                                                        P_FUN_WRITE_IND_POST_PROC *p_write_ind_post_proc) {
+                                                             T_WRITE_TYPE write_type, uint16_t length, uint8_t* p_value,
+                                                             P_FUN_WRITE_IND_POST_PROC* p_write_ind_post_proc)
+{
 
-    T_APP_RESULT cause  = APP_RESULT_ATTR_NOT_FOUND;
+    T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     if (attrib_index != _handle_index) {
         printf("\r\n[ERROR] Characteristic %s: Char ID mismatch in write callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
         return cause;
@@ -461,7 +517,7 @@ T_APP_RESULT BLECharacteristic::charAttrWriteCallbackDefault(uint8_t conn_id, T_
     (void)write_type;
     (void)p_write_ind_post_proc;
 
-    p_write_ind_post_proc = NULL; // Write confirmation post process not used
+    p_write_ind_post_proc = NULL;    // Write confirmation post process not used
 
     // Save updated value
     if (length > _data_buf_len) {
@@ -483,7 +539,8 @@ T_APP_RESULT BLECharacteristic::charAttrWriteCallbackDefault(uint8_t conn_id, T_
     return cause;
 }
 
-void BLECharacteristic::charCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index, uint16_t ccc_bits) {
+void BLECharacteristic::charCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index, uint16_t ccc_bits)
+{
     if (attrib_index != (_handle_index + 1)) {    // +1 for Cccd attr index
         printf("\r\n[ERROR] Characteristic %s: Char ID mismatch in CCCD callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
     }
@@ -498,4 +555,3 @@ void BLECharacteristic::charCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_
         _pCccdCB(this, conn_id, ccc_bits);
     }
 }
-

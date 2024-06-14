@@ -1,15 +1,20 @@
-{
- "name": "JLink Attach",
- "request": "attach",
- "servertype": "jlink",
- "interface": "swd",
- "device": "Cortex-M33",
- "serverArgs": ["-timeout", "10000", "-confirm", "0", "-scriptfile", "{replace with your Arduino15 packages directory}/packages/realtek/tools/ameba_pro2_tools/{replace with tools version number}/debug/RTL8735B_Arduino_debug.JLinkScript"],
- "debuggerArgs": ["-init-eval-command", "maintenance set target-async on"],
- "postAttachCommands": [
-    "pwd",
-    "monitor clrbp",
-    "monitor reset",
-    "continue"
-  ]
-}
+[
+  {
+	"name": "JLink Attach",
+	"request": "attach",
+    "configId": "realtek:AmebaPro2:Ameba_AMB82-MINI",
+    "server": "jlink",
+    "servertype": "jlink",
+    "device": "Cortex-M33",
+    "serverArgs": ["-timeout", "10000", "-confirm", "0", "-scriptfile", "{replace with your Arduino15 packages directory}/packages/realtek/tools/ameba_pro2_tools/{replace with tools version number}/debug/RTL8735B_Arduino_debug.JLinkScript"],
+    "interface": "swd",
+    "serverPath": "{JLinkGDBServerCL or JLinkGDBServer path}",
+    "serverpath": "{JLinkGDBServerCL or JLinkGDBServer path}",
+    "postAttachCommands": [
+      "pwd",
+      "monitor clrbp",
+      "monitor reset",
+      "continue"
+    ]
+  }
+]

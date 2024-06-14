@@ -620,6 +620,7 @@ struct _halrf_tssi_data {
 	u8 tssi_finish_bit[PHYDM_MAX_RF_PATH];
 	u8 thermal_trigger;
 	s8 tssi_de;
+	u8 backup_txagc_offset[PHYDM_MAX_RF_PATH];
 #if (RTL8723F_SUPPORT == 1)
 	s8 txagc_offset_thermaltrack[MAX_PATH_NUM_8723F];
 	u8 thermal_cal;
@@ -921,6 +922,10 @@ void halrf_txgapk_reload_tx_gain(void *dm_void);
 void halrf_txgap_enable_disable(void *dm_void, u8 enable);
 
 void halrf_pwr_table_info(void *dm_void, u32 *_used, char *output, u32 *_out_len);
+
+void halrf_tssi_backup_txagc(void *dm_void);
+
+void halrf_tssi_reload_txagc(void *dm_void);
 
 void halrf_xtal_trk_info(void *dm_void, u32 *_used, char *output, u32 *_out_len);
 

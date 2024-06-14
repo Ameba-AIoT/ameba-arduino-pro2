@@ -13,32 +13,32 @@
 class BLEClient;
 
 class BLERemoteService {
-    public:
-        BLEUUID getUUID();
+public:
+    BLEUUID getUUID();
 
-        BLERemoteCharacteristic* getCharacteristic(const char* uuid);
-        BLERemoteCharacteristic* getCharacteristic(BLEUUID uuid);
+    BLERemoteCharacteristic* getCharacteristic(const char* uuid);
+    BLERemoteCharacteristic* getCharacteristic(BLEUUID uuid);
 
 
-    private:
-        BLERemoteService(BLEUUID uuid);
-        ~BLERemoteService();
+private:
+    BLERemoteService(BLEUUID uuid);
+    ~BLERemoteService();
 
-        bool addCharacteristic(BLERemoteCharacteristic* newChar);
+    bool addCharacteristic(BLERemoteCharacteristic* newChar);
 
-        void clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t *p_value);
-        void clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits);
-        T_APP_RESULT clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t *p_value);
+    void clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t* p_value);
+    void clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits);
+    T_APP_RESULT clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t* p_value);
 
-        friend class BLEClient;
+    friend class BLEClient;
 
-        BLEUUID _uuid;
-        uint16_t _handleStart = 0;
-        uint16_t _handleEnd = 0;
+    BLEUUID _uuid;
+    uint16_t _handleStart = 0;
+    uint16_t _handleEnd = 0;
 
-        BLEClient* _pClient = nullptr;
-        BLERemoteCharacteristic* _characteristicPtrList[MAX_NUM_CHARS] = {0};
-        uint8_t _characteristicCount = 0;
+    BLEClient* _pClient = nullptr;
+    BLERemoteCharacteristic* _characteristicPtrList[MAX_NUM_CHARS] = {0};
+    uint8_t _characteristicCount = 0;
 };
 
 #endif

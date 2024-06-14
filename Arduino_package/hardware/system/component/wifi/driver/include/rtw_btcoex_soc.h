@@ -189,6 +189,7 @@ struct coex_t {
 	u8 wifi_concurr_state;
 	u8 wifi_last_state;
 	u8 bt_state;
+	u8 tdma_port;
 	u16 state;
 	_mutex coex_run_lock;
 	struct wifi_tdma_scan_t wifi_tdma_scan;

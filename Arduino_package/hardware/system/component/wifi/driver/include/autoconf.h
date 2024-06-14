@@ -54,6 +54,8 @@
 /* For promiscuous mode */
 #define CONFIG_PROMISC
 
+#define CONFIG_EAP
+
 /* For STA+AP Concurrent MODE */
 #define CONFIG_CONCURRENT_MODE
 /****************** configurations for concurrent mode ************************/

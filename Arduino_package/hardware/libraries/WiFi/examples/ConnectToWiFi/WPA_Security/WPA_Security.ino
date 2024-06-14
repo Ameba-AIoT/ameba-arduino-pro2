@@ -18,9 +18,9 @@
 #include <WiFi.h>
 
 // Set if user wants to key in ssid/pwd manually during operation
-//#define MANUAL_INPUT
+// #define MANUAL_INPUT
 
-#ifdef MANUAL_INPUT  // Initialise ssid string, pwd string, and serial_in object
+#ifdef MANUAL_INPUT    // Initialise ssid string, pwd string, and serial_in object
 // Initialise strings
 String str_ssid, str_pass;
 #endif
@@ -33,35 +33,39 @@ String str_ssid, str_pass;
 // Emoji characters can be converted into UTF-8 at https://mothereff.in/utf-8
 // char ssid[] = "\xe2\x9c\x8c\xef\xb8\x8f Ameba \xe2\x9c\x8c\xef\xb8\x8f";
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
+        ;    // wait for serial port to connect. Needed for native USB port only
     }
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
 #ifdef MANUAL_INPUT
         Serial.println("Enter your ssid");
-        while (Serial.available() == 0) {}
+        while (Serial.available() == 0) {
+        }
         str_ssid = Serial.readString();
         str_ssid.trim();
         Serial.print("SSID entered: ");
         Serial.println(str_ssid);
 
         Serial.println("Enter your password");
-        while (Serial.available() == 0) {}
+        while (Serial.available() == 0) {
+        }
         str_pass = Serial.readString();
         str_pass.trim();
-        if (str_pass.length() != 0) { // user has entered data
-            while (str_pass.length() <8 ) { // to catch pwd<8 exception
+        if (str_pass.length() != 0) {          // user has entered data
+            while (str_pass.length() < 8) {    // to catch pwd<8 exception
                 Serial.println("Password cannot be less than 8 characters! Try again");
-                while (Serial.available() == 0) {}
+                while (Serial.available() == 0) {
+                }
                 str_pass = Serial.readString();
                 str_pass.trim();
             }
@@ -95,13 +99,15 @@ void setup() {
     printWifiData();
 }
 
-void loop() {
+void loop()
+{
     // check the network connection once every 10 seconds:
     delay(10000);
     printCurrentNet();
 }
 
-void printWifiData() {
+void printWifiData()
+{
     // print your WiFi IP address:
     IPAddress ip = WiFi.localIP();
     Serial.print("IP Address: ");
@@ -125,7 +131,8 @@ void printWifiData() {
     Serial.println(mac[5], HEX);
 }
 
-void printCurrentNet() {
+void printCurrentNet()
+{
     // print the SSID of the network you're attached to:
     Serial.print("SSID: ");
     Serial.println(WiFi.SSID());

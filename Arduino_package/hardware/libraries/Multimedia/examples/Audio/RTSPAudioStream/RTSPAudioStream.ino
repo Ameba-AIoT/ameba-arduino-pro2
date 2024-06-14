@@ -17,19 +17,20 @@
 
 // Choose between using AAC or G711 audio encoder
 AAC encoder;
-//G711E encoder;
+// G711E encoder;
 
 AudioSetting configA(1);
 Audio audio;
 RTSP rtsp;
-StreamIO audioStreamer1(1, 1);   // 1 Input Audio -> 1 Output encoder
-StreamIO audioStreamer2(1, 1);   // 1 Input encoder -> 1 Output RTSP
+StreamIO audioStreamer1(1, 1);    // 1 Input Audio -> 1 Output encoder
+StreamIO audioStreamer2(1, 1);    // 1 Input encoder -> 1 Output RTSP
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     while (status != WL_CONNECTED) {
@@ -44,14 +45,14 @@ void setup() {
     // Configure audio encoder
     // For G711 audio encoder, choose between u-law and a-law algorithm
     encoder.configAudio(configA);
-//    encoder.configCodec(CODEC_G711_PCMU);
-//    encoder.configCodec(CODEC_G711_PCMA);
+    // encoder.configCodec(CODEC_G711_PCMU);
+    // encoder.configCodec(CODEC_G711_PCMA);
     encoder.begin();
 
     // Configure RTSP with identical audio format information and codec
     rtsp.configAudio(configA, CODEC_AAC);
-//    rtsp.configAudio(configA, CODEC_G711_PCMU);
-//    rtsp.configAudio(configA, CODEC_G711_PCMA);
+    // rtsp.configAudio(configA, CODEC_G711_PCMU);
+    // rtsp.configAudio(configA, CODEC_G711_PCMA);
     rtsp.begin();
 
     audioStreamer1.registerInput(audio);
@@ -63,5 +64,6 @@ void setup() {
     audioStreamer2.begin();
 }
 
-void loop() {
+void loop()
+{
 }

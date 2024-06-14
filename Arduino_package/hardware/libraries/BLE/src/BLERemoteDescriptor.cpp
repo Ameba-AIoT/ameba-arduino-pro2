@@ -5,15 +5,17 @@
 
 //------------- Configure -------------//
 
-BLEUUID BLERemoteDescriptor::getUUID() {
+BLEUUID BLERemoteDescriptor::getUUID()
+{
     return _uuid;
 }
 
-void BLERemoteDescriptor::setBufferLen(uint16_t max_len) {
+void BLERemoteDescriptor::setBufferLen(uint16_t max_len)
+{
     if (max_len > DESC_VALUE_MAX_LEN) {
         printf("\r\n[ERROR] Descriptor %s: requested buffer size too large, maximum of %d \n", _uuid.str(), DESC_VALUE_MAX_LEN);
     } else {
-        _data_buf = (uint8_t*) realloc(_data_buf, max_len*sizeof(uint8_t));
+        _data_buf = (uint8_t*)realloc(_data_buf, max_len * sizeof(uint8_t));
         if (_data_buf == NULL) {
             printf("\r\n[ERROR] Descriptor %s: Not enough memory to set buffer length \n", _uuid.str());
             _data_buf_len = 0;
@@ -23,74 +25,86 @@ void BLERemoteDescriptor::setBufferLen(uint16_t max_len) {
     }
 }
 
-uint16_t BLERemoteDescriptor::getBufferLen() {
+uint16_t BLERemoteDescriptor::getBufferLen()
+{
     return _data_buf_len;
 }
 
 //--------- Read Char Value --------//
 
-String BLERemoteDescriptor::readString() {
+String BLERemoteDescriptor::readString()
+{
     char datastring[_data_buf_len + 1] = {0};
     getData((uint8_t*)datastring, sizeof(datastring));
     return String(datastring);
 }
 
-uint8_t BLERemoteDescriptor::readData8() {
+uint8_t BLERemoteDescriptor::readData8()
+{
     uint8_t num = 0;
     getData(&num, sizeof(num));
     return num;
 }
 
-uint16_t BLERemoteDescriptor::readData16() {
+uint16_t BLERemoteDescriptor::readData16()
+{
     uint16_t num = 0;
-    getData((uint8_t*) &num, sizeof(num));
+    getData((uint8_t*)&num, sizeof(num));
     return num;
 }
 
-uint32_t BLERemoteDescriptor::readData32() {
+uint32_t BLERemoteDescriptor::readData32()
+{
     uint32_t num = 0;
-    getData((uint8_t*) &num, sizeof(num));
+    getData((uint8_t*)&num, sizeof(num));
     return num;
 }
 
 //--------- Write Char Value --------//
 
-bool BLERemoteDescriptor::writeString(String str) {
+bool BLERemoteDescriptor::writeString(String str)
+{
     return writeString(str.c_str());
 }
 
-bool BLERemoteDescriptor::writeString(const char* str) {
-    return setData((uint8_t*) str, strlen(str));
+bool BLERemoteDescriptor::writeString(const char* str)
+{
+    return setData((uint8_t*)str, strlen(str));
 }
 
-bool BLERemoteDescriptor::writeData8(uint8_t num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLERemoteDescriptor::writeData8(uint8_t num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
-bool BLERemoteDescriptor::writeData16(uint16_t num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLERemoteDescriptor::writeData16(uint16_t num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
-bool BLERemoteDescriptor::writeData32(uint32_t num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLERemoteDescriptor::writeData32(uint32_t num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
-bool BLERemoteDescriptor::writeData32(int num) {
-    return setData((uint8_t*) &num, sizeof(num));
+bool BLERemoteDescriptor::writeData32(int num)
+{
+    return setData((uint8_t*)&num, sizeof(num));
 }
 
 //------------ Modify Char ------------//
 
-bool BLERemoteDescriptor::setData(uint8_t* data, uint16_t datalen) {
+bool BLERemoteDescriptor::setData(uint8_t* data, uint16_t datalen)
+{
     // Check if device is still connected
     if (!_pClient->connected()) {
         printf("\r\n[ERROR] Descriptor %s: client not connected \n", _uuid.str());
         return false;
     }
     // Attempt to write
-    if (client_attr_write(_pClient->getConnId(), _pClient->getClientId(),  GATT_WRITE_TYPE_REQ, _declarationHandle, datalen, data) == GAP_CAUSE_SUCCESS) {
+    if (client_attr_write(_pClient->getConnId(), _pClient->getClientId(), GATT_WRITE_TYPE_REQ, _declarationHandle, datalen, data) == GAP_CAUSE_SUCCESS) {
         // Check for write callback semaphore indicating data write successful
-        if (xSemaphoreTake(_writeSemaphore, CB_WAIT_TIMEOUT/portTICK_PERIOD_MS) != pdTRUE) {
+        if (xSemaphoreTake(_writeSemaphore, CB_WAIT_TIMEOUT / portTICK_PERIOD_MS) != pdTRUE) {
             printf("\r\n[ERROR] Descriptor %s: set data timeout \n", _uuid.str());
             return false;
         }
@@ -101,7 +115,8 @@ bool BLERemoteDescriptor::setData(uint8_t* data, uint16_t datalen) {
     return true;
 }
 
-uint16_t BLERemoteDescriptor::getData(uint8_t* data, uint16_t datalen) {
+uint16_t BLERemoteDescriptor::getData(uint8_t* data, uint16_t datalen)
+{
     // Check if device is still connected
     if (!_pClient->connected()) {
         printf("\r\n[ERROR] Descriptor %s: client not connected \n", _uuid.str());
@@ -110,7 +125,7 @@ uint16_t BLERemoteDescriptor::getData(uint8_t* data, uint16_t datalen) {
     // Attempt to read
     if (client_attr_read(_pClient->getConnId(), _pClient->getClientId(), _declarationHandle) == GAP_CAUSE_SUCCESS) {
         // Check for read callback semaphore indicating new data received
-        if (xSemaphoreTake(_readSemaphore, CB_WAIT_TIMEOUT/portTICK_PERIOD_MS) != pdTRUE) {
+        if (xSemaphoreTake(_readSemaphore, CB_WAIT_TIMEOUT / portTICK_PERIOD_MS) != pdTRUE) {
             printf("\r\n[ERROR] Descriptor %s: get data timeout \n", _uuid.str());
         } else {
             // Copy new data, up to the smaller data buffer size
@@ -130,20 +145,23 @@ uint16_t BLERemoteDescriptor::getData(uint8_t* data, uint16_t datalen) {
 
 //---------- Private Methods ----------//
 
-BLERemoteDescriptor::BLERemoteDescriptor(BLEUUID uuid) {
+BLERemoteDescriptor::BLERemoteDescriptor(BLEUUID uuid)
+{
     _uuid = uuid;
-    _data_buf = (uint8_t*)malloc(_data_buf_len*sizeof(uint8_t));
+    _data_buf = (uint8_t*)malloc(_data_buf_len * sizeof(uint8_t));
     _readSemaphore = xSemaphoreCreateBinary();
     _writeSemaphore = xSemaphoreCreateBinary();
 }
 
-BLERemoteDescriptor::~BLERemoteDescriptor() {
+BLERemoteDescriptor::~BLERemoteDescriptor()
+{
     free(_data_buf);
     vSemaphoreDelete(_readSemaphore);
     vSemaphoreDelete(_writeSemaphore);
 }
 
-void BLERemoteDescriptor::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
+void BLERemoteDescriptor::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t* p_value)
+{
     if (handle == _declarationHandle) {
         if (cause == GAP_SUCCESS) {
             if (value_size > _data_buf_len) {
@@ -161,7 +179,8 @@ void BLERemoteDescriptor::clientReadResultCallbackDefault(uint8_t conn_id, uint1
     (void)conn_id;
 }
 
-void BLERemoteDescriptor::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits) {
+void BLERemoteDescriptor::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits)
+{
     if (handle == _declarationHandle) {
         if (cause == GAP_SUCCESS) {
             xSemaphoreGive(_writeSemaphore);
@@ -173,4 +192,3 @@ void BLERemoteDescriptor::clientWriteResultCallbackDefault(uint8_t conn_id, T_GA
     (void)type;
     (void)credits;
 }
-

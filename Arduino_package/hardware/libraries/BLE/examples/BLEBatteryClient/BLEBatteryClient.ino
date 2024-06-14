@@ -6,8 +6,8 @@
 
 #include "BLEDevice.h"
 
-#define BATT_SERVICE_UUID   "180F"
-#define BATT_LEVEL_UUID     "2A19"
+#define BATT_SERVICE_UUID "180F"
+#define BATT_LEVEL_UUID   "2A19"
 
 BLEAdvertData foundDevice;
 BLEAdvertData targetDevice;
@@ -17,7 +17,8 @@ BLERemoteCharacteristic* battChar;
 bool notifyState = false;
 int8_t connID;
 
-void scanCB(T_LE_CB_DATA* p_data) {
+void scanCB(T_LE_CB_DATA* p_data)
+{
     foundDevice.parseScanInfo(p_data);
     if (foundDevice.hasName()) {
         if (foundDevice.getName() == String("AMEBA_BLE_DEV")) {
@@ -27,10 +28,10 @@ void scanCB(T_LE_CB_DATA* p_data) {
         }
     }
     uint8_t serviceCount = foundDevice.getServiceCount();
-        if (serviceCount > 0) {
+    if (serviceCount > 0) {
         BLEUUID* serviceList = foundDevice.getServiceList();
-            for (uint8_t i = 0; i < serviceCount; i++) {
-                if (serviceList[i] == BLEUUID("180F")) {
+        for (uint8_t i = 0; i < serviceCount; i++) {
+            if (serviceList[i] == BLEUUID("180F")) {
                 Serial.print("Found Battery Service at address ");
                 Serial.println(foundDevice.getAddr().str());
             }
@@ -38,7 +39,8 @@ void scanCB(T_LE_CB_DATA* p_data) {
     }
 }
 
-void notificationCB (BLERemoteCharacteristic* chr, uint8_t* data, uint16_t len) {
+void notificationCB(BLERemoteCharacteristic* chr, uint8_t* data, uint16_t len)
+{
     Serial.print("Notification received for chr UUID: ");
     Serial.print(chr->getUUID().str());
     if (len == 1) {
@@ -47,13 +49,14 @@ void notificationCB (BLERemoteCharacteristic* chr, uint8_t* data, uint16_t len) 
     }
 }
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     BLE.init();
     BLE.configScan()->setScanMode(GAP_SCAN_MODE_ACTIVE);
-    BLE.configScan()->setScanInterval(500);   // Start a scan every 500ms
-    BLE.configScan()->setScanWindow(250);     // Each scan lasts for 250ms
+    BLE.configScan()->setScanInterval(500);    // Start a scan every 500ms
+    BLE.configScan()->setScanWindow(250);      // Each scan lasts for 250ms
     BLE.setScanCallback(scanCB);
     BLE.beginCentral(1);
 
@@ -86,7 +89,8 @@ void setup() {
     }
 }
 
-void loop() {
+void loop()
+{
     if (BLE.connected(connID)) {
         delay(5000);
         Serial.print("Battery level read: ");

@@ -56,5 +56,11 @@ void halrf_pwr_table_info_8735b(void *dm_void, u32 *_used, char *output, u32 *_o
 
 void halrf_tssi_info_8735b(void *dm_void, u32 *_used, char *output, u32 *_out_len);
 
+void halrf_tssi_backup_txagc_8735b(void *dm_void);
+
+void halrf_tssi_reload_txagc_8735b(void *dm_void);
+
+void halrf_tssi_renew_txagc_by_rate_table_8735b(void *dm_void);
+
 #endif /* RTL8735B_SUPPORT */
 #endif /*#ifndef __HALRF_TSSI_8735B_H__*/

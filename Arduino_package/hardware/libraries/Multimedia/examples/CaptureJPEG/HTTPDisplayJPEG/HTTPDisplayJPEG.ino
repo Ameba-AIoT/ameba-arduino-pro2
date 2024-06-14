@@ -12,17 +12,18 @@
 
 // Use a pre-defined resolution, or choose to configure your own resolution
 VideoSetting config(VIDEO_FHD, CAM_FPS, VIDEO_JPEG, 1);
-//VideoSetting config(1072, 1072, CAM_FPS, VIDEO_JPEG, 1);
+// VideoSetting config(1072, 1072, CAM_FPS, VIDEO_JPEG, 1);
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
 uint32_t img_addr = 0;
 uint32_t img_len = 0;
 
-void sendImage(WiFiClient& client, uint8_t* buf, uint32_t len) {
+void sendImage(WiFiClient& client, uint8_t* buf, uint32_t len)
+{
     uint8_t header_buf[128] = {0};
     uint8_t header_len = snprintf((char*)header_buf, 128, "HTTP/1.1 200 OK\r\nContent-type: image/jpeg\r\nContent-Length: %lu\r\n\r\n", len);
     client.write(header_buf, header_len);
@@ -30,7 +31,8 @@ void sendImage(WiFiClient& client, uint8_t* buf, uint32_t len) {
     client.print("\r\n");
 }
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     while (status != WL_CONNECTED) {
         status = WiFi.begin(ssid, pass);
@@ -43,7 +45,8 @@ void setup() {
     server.begin();
 }
 
-void loop() {
+void loop()
+{
     WiFiClient client = server.available();
 
     if (client) {

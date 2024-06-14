@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "NNObjectDetection.h"
+#include "SD_Model.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +11,7 @@ extern "C" {
 #include "model_yolo.h"
 #include "nn_utils/class_name.h"
 #include "avcodec.h"
+#include "vfs.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -21,7 +23,11 @@ extern int vipnn_control(void *p, int cmd, int arg);
 #undef max
 #include <vector>
 
-#define LIMIT(x, lower, upper) if(x<lower) x=lower; else if(x>upper) x=upper;
+#define LIMIT(x, lower, upper) \
+    if (x < lower) \
+        x = lower; \
+    else if (x > upper) \
+        x = upper;
 
 std::vector<ObjectDetectionResult> NNObjectDetection::object_result_vector;
 float NNObjectDetection::xscale;
@@ -32,14 +38,17 @@ uint8_t NNObjectDetection::use_roi;
 
 void (*NNObjectDetection::OD_user_CB)(std::vector<ObjectDetectionResult>);
 
-NNObjectDetection::NNObjectDetection(void) {
+NNObjectDetection::NNObjectDetection(void)
+{
 }
 
-NNObjectDetection::~NNObjectDetection(void) {
+NNObjectDetection::~NNObjectDetection(void)
+{
     end();
 }
 
-void NNObjectDetection::configVideo(VideoSetting& config) {
+void NNObjectDetection::configVideo(VideoSetting &config)
+{
     roi_nn.img.width = config._w;
     roi_nn.img.height = config._h;
     roi_nn.img.rgb = 0;
@@ -47,22 +56,25 @@ void NNObjectDetection::configVideo(VideoSetting& config) {
     roi_nn.img.roi.xmax = config._w;
     roi_nn.img.roi.ymin = 0;
     roi_nn.img.roi.ymax = config._h;
-    roi_nn.codec_type =  AV_CODEC_ID_RGB888;
+    roi_nn.codec_type = AV_CODEC_ID_RGB888;
 }
 
-void NNObjectDetection::configRegionOfInterest(int xmin, int xmax, int ymin, int ymax) {
+void NNObjectDetection::configRegionOfInterest(int xmin, int xmax, int ymin, int ymax)
+{
     roi_nn.img.roi.xmin = xmin;
     roi_nn.img.roi.xmax = xmax;
     roi_nn.img.roi.ymin = ymin;
     roi_nn.img.roi.ymax = ymax;
 }
 
-void NNObjectDetection::configThreshold(float confidence_threshold, float nms_threshold) {
+void NNObjectDetection::configThreshold(float confidence_threshold, float nms_threshold)
+{
     od_confidence_thresh = confidence_threshold;
     od_nms_thresh = nms_threshold;
 }
 
-void NNObjectDetection::begin(void) {
+void NNObjectDetection::begin(void)
+{
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
@@ -70,7 +82,7 @@ void NNObjectDetection::begin(void) {
         printf("\r\n[ERROR] NNObjectDetection init failed\n");
         return;
     }
-    if((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
+    if ((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
         printf("\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
@@ -91,28 +103,56 @@ void NNObjectDetection::begin(void) {
     }
 
     if (_nntask != OBJECT_DETECTION) {
-        printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
-        while(1) {}
+        if (ARDUINO_LOAD_MODEL == 0x02) {
+            printf("\r\n[INFO] Models loaded using SD Card\n");
+        } else {
+            while (1) {
+                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                delay(5000);
+            }
+        }
     }
 
-    switch (_yolomodel) {
-        case DEFAULT_YOLOV3TINY: 
-        case CUSTOMIZED_YOLOV3TINY: {
-            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-            //printf("\r\n[INFO] YOLOV3 running...\n");
-            break;
+    if (ARDUINO_LOAD_MODEL == 0x02) {
+        vfs_init(NULL);    // init filesystem
+        vfs_user_register("sd", VFS_FATFS, VFS_INF_SD);
+        switch (_yolomodel) {
+            case SD_YOLOV3TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny_from_sd);
+                // printf("\r\n[INFO] YOLOV3 running...\n");
+                break;
+            }
+            case SD_YOLOV4TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny_from_sd);
+                // printf("\r\n[INFO] YOLOV4 running...\n");
+                break;
+            }
+            case SD_YOLOV7TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny_from_sd);
+                // printf("\r\n[INFO] YOLOV7 running...\n");
+                break;
+            }
         }
-        case DEFAULT_YOLOV4TINY:
-        case CUSTOMIZED_YOLOV4TINY: {
-            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-            //printf("\r\n[INFO] YOLOV4 running...\n");
-            break;
-        }
-        case DEFAULT_YOLOV7TINY :
-        case CUSTOMIZED_YOLOV7TINY: {
-            vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-            //printf("\r\n[INFO] YOLOV7 running...\n");
-            break;
+    } else {
+        switch (_yolomodel) {
+            case DEFAULT_YOLOV3TINY:
+            case CUSTOMIZED_YOLOV3TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
+                // printf("\r\n[INFO] YOLOV3 running...\n");
+                break;
+            }
+            case DEFAULT_YOLOV4TINY:
+            case CUSTOMIZED_YOLOV4TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
+                // printf("\r\n[INFO] YOLOV4 running...\n");
+                break;
+            }
+            case DEFAULT_YOLOV7TINY:
+            case CUSTOMIZED_YOLOV7TINY: {
+                vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
+                // printf("\r\n[INFO] YOLOV7 running...\n");
+                break;
+            }
         }
     }
 
@@ -120,12 +160,13 @@ void NNObjectDetection::begin(void) {
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_DISPPOST, (int)ODResultCallback);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_CONFIDENCE_THRES, (int)&od_confidence_thresh);
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_NMS_THRES, (int)&od_nms_thresh);
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_SIZE, sizeof(objdetect_res_t));	// result size
-    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);		// result max count
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_SIZE, sizeof(objdetect_res_t));    // result size
+    vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);      // result max count
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_APPLY, 0);
 }
 
-void NNObjectDetection::end(void) {
+void NNObjectDetection::end(void)
+{
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -137,11 +178,13 @@ void NNObjectDetection::end(void) {
     }
 }
 
-void NNObjectDetection::setResultCallback(void (*od_callback)(std::vector<ObjectDetectionResult>)) {
+void NNObjectDetection::setResultCallback(void (*od_callback)(std::vector<ObjectDetectionResult>))
+{
     OD_user_CB = od_callback;
 }
 
-uint16_t NNObjectDetection::getResultCount(void) {
+uint16_t NNObjectDetection::getResultCount(void)
+{
     uint16_t od_res_count = object_result_vector.size();
     if (od_res_count > MAX_OBJ_DET) {
         od_res_count = MAX_OBJ_DET;
@@ -149,24 +192,27 @@ uint16_t NNObjectDetection::getResultCount(void) {
     return od_res_count;
 }
 
-ObjectDetectionResult NNObjectDetection::getResult(uint16_t index) {
+ObjectDetectionResult NNObjectDetection::getResult(uint16_t index)
+{
     if (index >= object_result_vector.size()) {
         return ObjectDetectionResult();
     }
     return object_result_vector[index];
 }
 
-std::vector<ObjectDetectionResult> NNObjectDetection::getResult(void) {
+std::vector<ObjectDetectionResult> NNObjectDetection::getResult(void)
+{
     return object_result_vector;
 }
 
-void NNObjectDetection::ODResultCallback(void *p, void *img_param) {
+void NNObjectDetection::ODResultCallback(void *p, void *img_param)
+{
     (void)img_param;
     if (p == NULL) {
         return;
     }
     vipnn_out_buf_t *out = (vipnn_out_buf_t *)p;
-    objdetect_res_t* result = (objdetect_res_t*)&out->res[0];
+    objdetect_res_t *result = (objdetect_res_t *)&out->res[0];
 
     object_result_vector.clear();
     object_result_vector.resize((size_t)out->res_cnt);
@@ -194,30 +240,37 @@ void NNObjectDetection::ODResultCallback(void *p, void *img_param) {
     }
 }
 
-int ObjectDetectionResult::type(void) {
+int ObjectDetectionResult::type(void)
+{
     return ((int)(result.classes));
 }
 
-const char* ObjectDetectionResult::name(void) {
+const char *ObjectDetectionResult::name(void)
+{
     return coco_name_get_by_id((int)result.classes);
 }
 
-int ObjectDetectionResult::score(void) {
+int ObjectDetectionResult::score(void)
+{
     return ((int)(result.score * 100));
 }
 
-float ObjectDetectionResult::xMin(void) {
+float ObjectDetectionResult::xMin(void)
+{
     return result.top_x;
 }
 
-float ObjectDetectionResult::xMax(void) {
+float ObjectDetectionResult::xMax(void)
+{
     return result.bot_x;
 }
 
-float ObjectDetectionResult::yMin(void) {
+float ObjectDetectionResult::yMin(void)
+{
     return result.top_y;
 }
 
-float ObjectDetectionResult::yMax(void) {
+float ObjectDetectionResult::yMax(void)
+{
     return result.bot_y;
 }

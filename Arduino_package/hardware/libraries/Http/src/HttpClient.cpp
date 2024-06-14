@@ -1,6 +1,6 @@
 #include "HttpClient.h"
 #include "b64.h"
-#ifdef PROXY_ENABLED // currently disabled as introduces dependency on Dns.h in Ethernet
+#ifdef PROXY_ENABLED    // currently disabled as introduces dependency on Dns.h in Ethernet
 #include <Dns.h>
 #endif
 
@@ -8,9 +8,11 @@
 const char* HttpClient::kUserAgent = "Ameba";
 const char* HttpClient::kContentLengthPrefix = HTTP_HEADER_CONTENT_LENGTH ": ";
 
-#ifdef PROXY_ENABLED // currently disabled as introduces dependency on Dns.h in Ethernet
-HttpClient::HttpClient(Client& aClient, const char* aProxy, uint16_t aProxyPort)
- : iClient(&aClient), iProxyPort(aProxyPort) {
+#ifdef PROXY_ENABLED    // currently disabled as introduces dependency on Dns.h in Ethernet
+HttpClient::HttpClient(Client& aClient, const char* aProxy, uint16_t aProxyPort):
+    iClient(&aClient),
+    iProxyPort(aProxyPort)
+{
     resetState();
     if (aProxy) {
         // Resolve the IP address for the proxy
@@ -22,13 +24,16 @@ HttpClient::HttpClient(Client& aClient, const char* aProxy, uint16_t aProxyPort)
     }
 }
 #else
-HttpClient::HttpClient(Client& aClient)
- : iClient(&aClient), iProxyPort(0) {
+HttpClient::HttpClient(Client& aClient):
+    iClient(&aClient),
+    iProxyPort(0)
+{
     resetState();
 }
 #endif
 
-void HttpClient::resetState() {
+void HttpClient::resetState()
+{
     iState = eIdle;
     iStatusCode = 0;
     iContentLength = 0;
@@ -37,16 +42,19 @@ void HttpClient::resetState() {
     iHttpResponseTimeout = kHttpResponseTimeout;
 }
 
-void HttpClient::stop() {
+void HttpClient::stop()
+{
     iClient->stop();
     resetState();
 }
 
-void HttpClient::beginRequest() {
+void HttpClient::beginRequest()
+{
     iState = eRequestStarted;
 }
 
-int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent) {
+int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent)
+{
     tHttpState initialState = iState;
     if ((eIdle != iState) && (eRequestStarted != iState)) {
         return HTTP_ERROR_API;
@@ -57,8 +65,7 @@ int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, cons
         if ((!(iClient->connect(iProxyAddress, iProxyPort))) > 0) {
             return HTTP_ERROR_CONNECTION_FAILED;
         }
-    }
-    else
+    } else
 #endif
     {
         if ((!(iClient->connect(aServerName, aServerPort))) > 0) {
@@ -74,7 +81,8 @@ int HttpClient::startRequest(const char* aServerName, uint16_t aServerPort, cons
     return ret;
 }
 
-int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent) {
+int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServerName, uint16_t aServerPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent)
+{
     tHttpState initialState = iState;
     if ((eIdle != iState) && (eRequestStarted != iState)) {
         return HTTP_ERROR_API;
@@ -85,8 +93,7 @@ int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServe
         if ((!(iClient->connect(iProxyAddress, iProxyPort))) > 0) {
             return HTTP_ERROR_CONNECTION_FAILED;
         }
-    }
-    else
+    } else
 #endif
     {
         if ((!(iClient->connect(aServerAddress, aServerPort))) > 0) {
@@ -102,7 +109,8 @@ int HttpClient::startRequest(const IPAddress& aServerAddress, const char* aServe
     return ret;
 }
 
-int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP, uint16_t aPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent) {
+int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP, uint16_t aPort, const char* aURLPath, const char* aHttpMethod, const char* aUserAgent)
+{
     aServerIP = aServerIP;
     // Send the HTTP command, i.e. "GET /somepath/ HTTP/1.0"
     iClient->print(aHttpMethod);
@@ -146,27 +154,31 @@ int HttpClient::sendInitialHeaders(const char* aServerName, IPAddress aServerIP,
     return HTTP_SUCCESS;
 }
 
-void HttpClient::sendHeader(const char* aHeader) {
+void HttpClient::sendHeader(const char* aHeader)
+{
     iClient->println(aHeader);
 }
 
-void HttpClient::sendHeader(const char* aHeaderName, const char* aHeaderValue) {
+void HttpClient::sendHeader(const char* aHeaderName, const char* aHeaderValue)
+{
     iClient->print(aHeaderName);
     iClient->print(": ");
     iClient->println(aHeaderValue);
 }
 
-void HttpClient::sendHeader(const char* aHeaderName, const int aHeaderValue) {
+void HttpClient::sendHeader(const char* aHeaderName, const int aHeaderValue)
+{
     iClient->print(aHeaderName);
     iClient->print(": ");
     iClient->println(aHeaderValue);
 }
 
-void HttpClient::sendBasicAuth(const char* aUser, const char* aPassword) {
+void HttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
+{
     iClient->print("Authorization: Basic ");
 
     unsigned char input[3];
-    unsigned char output[5]; // Leave space for a '\0' terminator so we can easily print
+    unsigned char output[5];    // Leave space for a '\0' terminator so we can easily print
     int userLen = strlen(aUser);
     int passwordLen = strlen(aPassword);
     int inputOffset = 0;
@@ -189,18 +201,21 @@ void HttpClient::sendBasicAuth(const char* aUser, const char* aPassword) {
     iClient->println();
 }
 
-void HttpClient::finishHeaders() {
+void HttpClient::finishHeaders()
+{
     iClient->println();
     iState = eRequestSent;
 }
 
-void HttpClient::endRequest() {
+void HttpClient::endRequest()
+{
     if (iState < eRequestSent) {
         finishHeaders();
     }
 }
 
-int HttpClient::responseStatusCode() {
+int HttpClient::responseStatusCode()
+{
     if (iState < eRequestSent) {
         return HTTP_ERROR_API;
     }
@@ -213,34 +228,34 @@ int HttpClient::responseStatusCode() {
         unsigned long timeoutStart = millis();
         const char* statusPrefix = "HTTP/*.* ";
         const char* statusPtr = statusPrefix;
-        while ((c != '\n') && ((millis() - timeoutStart) < iHttpResponseTimeout )) {
+        while ((c != '\n') && ((millis() - timeoutStart) < iHttpResponseTimeout)) {
             if (available()) {
                 c = read();
-                //if (c != -1) {
-                    switch (iState) {
-                        case eRequestSent:
-                            if ((*statusPtr == '*') || (*statusPtr == c)) {
-                                statusPtr++;
-                                if (*statusPtr == '\0') {
-                                    iState = eReadingStatusCode;
-                                }
-                            } else {
-                                return HTTP_ERROR_INVALID_RESPONSE;
+                // if (c != -1) {
+                switch (iState) {
+                    case eRequestSent:
+                        if ((*statusPtr == '*') || (*statusPtr == c)) {
+                            statusPtr++;
+                            if (*statusPtr == '\0') {
+                                iState = eReadingStatusCode;
                             }
-                            break;
-                        case eReadingStatusCode:
-                            if (isdigit(c)) {
-                                iStatusCode = iStatusCode * 10 + (c - '0');
-                            } else {
-                                iState = eStatusCodeRead;
-                            }
-                            break;
-                        case eStatusCodeRead:
-                            break;
-                        default:
-                            break;
-                    };
-                    timeoutStart = millis();
+                        } else {
+                            return HTTP_ERROR_INVALID_RESPONSE;
+                        }
+                        break;
+                    case eReadingStatusCode:
+                        if (isdigit(c)) {
+                            iStatusCode = iStatusCode * 10 + (c - '0');
+                        } else {
+                            iState = eStatusCodeRead;
+                        }
+                        break;
+                    case eStatusCodeRead:
+                        break;
+                    default:
+                        break;
+                };
+                timeoutStart = millis();
                 //}
             } else {
                 delay(kHttpWaitForDataDelay);
@@ -248,7 +263,7 @@ int HttpClient::responseStatusCode() {
         }
 
         if ((c == '\n') && (iStatusCode < 200)) {
-            c = '\0'; // Clear c so we'll go back into the data reading loop
+            c = '\0';    // Clear c so we'll go back into the data reading loop
         }
     } while ((iState == eStatusCodeRead) && (iStatusCode < 200));
 
@@ -261,7 +276,8 @@ int HttpClient::responseStatusCode() {
     }
 }
 
-int HttpClient::skipResponseHeaders() {
+int HttpClient::skipResponseHeaders()
+{
     unsigned long timeoutStart = millis();
     while ((!endOfHeadersReached()) && ((millis() - timeoutStart) < iHttpResponseTimeout)) {
         if (available()) {
@@ -279,14 +295,16 @@ int HttpClient::skipResponseHeaders() {
     }
 }
 
-bool HttpClient::endOfBodyReached() {
+bool HttpClient::endOfBodyReached()
+{
     if (endOfHeadersReached() && (contentLength() != kNoContentLengthHeader)) {
         return (iBodyLengthConsumed >= contentLength());
     }
     return false;
 }
 
-int HttpClient::read() {
+int HttpClient::read()
+{
     int ret = iClient->read();
     if (ret >= 0) {
         if (endOfHeadersReached() && (iContentLength > 0)) {
@@ -296,7 +314,8 @@ int HttpClient::read() {
     return ret;
 }
 
-int HttpClient::read(uint8_t *buf, size_t size) {
+int HttpClient::read(uint8_t* buf, size_t size)
+{
     int ret = iClient->read(buf, size);
     if (endOfHeadersReached() && iContentLength > 0) {
         if (ret >= 0) {
@@ -306,7 +325,8 @@ int HttpClient::read(uint8_t *buf, size_t size) {
     return ret;
 }
 
-int HttpClient::readHeader() {
+int HttpClient::readHeader()
+{
     char c = read();
 
     if (endOfHeadersReached()) {

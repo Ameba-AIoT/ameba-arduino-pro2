@@ -45,6 +45,8 @@
 #define VIDEO_META_REV_BUF  0x1000
 #define VIDEO_START_CODE_DUMMY 0x03
 #define VIDEO_META_UUID_SIZE 0x10
+#define VIDEO_META_3A_TAG_SIZE 0x04
+#define NALU_PAYLOAD_MAX_SIZE 0X0A
 
 /*ENCODE TYPE*/
 //type : 0:HEVC 1:H264 2:JPEG 3:NV12 4:RGB 5:HEVC+JPEG 6:H264+JPEG
@@ -139,6 +141,14 @@ typedef struct video_sps_pps_info_s {
 	int enable;
 } video_sps_pps_info_t;
 
+typedef struct jpeg_crop_parm_s {
+	uint32_t enable;
+	uint32_t xmin;
+	uint32_t ymin;
+	uint32_t xmax;
+	uint32_t ymax;
+} jpeg_crop_parm_t;
+
 #define MASK_MAX_NUM 5
 #define MASK_GRID 0X00
 #define MASK_RECT_ID_0 0X01
@@ -177,7 +187,25 @@ typedef struct video_pre_init_params_s {
 	uint32_t video_meta_offset;//the meta offset size
 	uint32_t video_meta_total_size;//the meta total size
 	uint8_t video_meta_uuid[VIDEO_META_UUID_SIZE];//
+	uint32_t video_meta_extend_offset;//the extend meta offset size
+	uint32_t video_meta_extend_total_size;//the extend meta total size
+	uint32_t meta_enable_extend;//Add the 3A info at I frame
+	uint32_t meta_gop_duration;//Setup times to the I frame by gop duration.
 } video_pre_init_params_t;
+
+typedef struct private_mask_single_s {
+	uint32_t en;
+	uint32_t grid_mode;
+	uint32_t id;//0~3 only for rect-mode
+	uint32_t color;
+	uint32_t start_x;//2-align
+	uint32_t start_y;//2-align
+	uint32_t w;//16-align when grid-mode
+	uint32_t h;
+	uint32_t cols;//8-align
+	uint32_t rows;
+	uint32_t bitmap[40];
+} private_mask_single_t;
 
 typedef struct video_param_s {
 	uint32_t stream_id;
@@ -216,6 +244,7 @@ typedef struct video_param_s {
 	uint32_t scale_up_en;  //1.only support in ch0  2.width and height should both larger than sensor size  3.cannot be used with ROI crop  4.max scale up resolution is 2688x1944
 	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
 	uint32_t meta_enable;
+	jpeg_crop_parm_t jpeg_crop_parm;
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -242,7 +271,28 @@ typedef struct video_meta_s {
 	uint32_t user_buf_len;
 } video_meta_t;
 
+typedef struct video_meta_read_s {
+	unsigned char uuid[VIDEO_META_UUID_SIZE];
+	isp_statis_meta_t isp_statis_meta;
+	isp_meta_t isp_meta_data;
+	unsigned char magic_num[VIDEO_META_3A_TAG_SIZE];
+	af_statis_t af_result;
+	ae_statis_t ae_result;
+	awb_statis_t awb_result;
+	unsigned char *user_input;
+	int user_length;
+} video_meta_read_t;
 
+typedef struct nalu_payload_info_s {
+	int offset;
+	int size;
+	int type;
+} nalu_payload_info_t;
+
+typedef struct video_encoder_nalu_paylaod_info_s {
+	nalu_payload_info_t nalu_info[NALU_PAYLOAD_MAX_SIZE];
+	int nalu_count;
+} video_encoder_nalu_payload_info_t;
 
 int video_ctrl(int ch, int cmd, int arg);
 
@@ -326,6 +376,8 @@ int video_get_maxqp(int ch);
 
 void video_set_private_mask(int ch, struct private_mask_s *pmask);
 
+void video_set_private_mask_single(int ch, private_mask_single_t *pmask);
+
 int video_get_buffer_info(int ch, int *enc_size, int *out_buf_size, int *out_rsvd_size);
 
 int video_get_sps_pps(unsigned char *frame_buf, unsigned int frame_size, int ch, video_sps_pps_info_t *info);
@@ -349,18 +401,20 @@ void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
 
 void video_pre_init_load_params(enum isp_init_option save_option);
 
-void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data, enum isp_init_option save_option); //save_to_flash 0: only save to pre init structure, 1: save to flash, 2: save to sram retention
+void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data,
+									enum isp_init_option save_option); //save_to_flash 0: only save to pre init structure, 1: save to flash, 2: save to sram retention
 
 int video_pre_init_get_meta_enable(void);
 
 void video_sei_write(video_meta_t *m_parm);
 
-void video_sei_read(unsigned char *uuid, unsigned char *video_input, isp_statis_meta_t *isp_statis_meta, isp_meta_t *isp_meta_data, unsigned char *user_input,
-					int user_length);
+void video_sei_read(video_meta_read_t *meta_read, unsigned char *video_input, video_meta_t *m_parm);
 
-int video_get_meta_offset(void);
+int video_get_meta_offset(int meta_size);
 
 int video_open_status(void);//0:No video open 1:video open
+
+int video_get_encoder_nalu_payload_info(unsigned char *frame_buf, unsigned int frame_size, int codec_type, video_encoder_nalu_payload_info_t *info);
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

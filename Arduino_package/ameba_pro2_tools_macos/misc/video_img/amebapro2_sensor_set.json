@@ -6,7 +6,8 @@
         "multi_fcs_hdr": "MULTI_FCS_HDR",
         "multi_fcs_info": "MULTI_FCS_INFO",
         "sensor_sets":[
-			"SENSOR_SET0"
+			"SENSOR_SET0",
+			"SENSOR_SET1"
 		]
 	},
     "MULTI_FCS_HDR":{
@@ -20,11 +21,26 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_f37.bin"        
+            "file":"iq_f37.bin"
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_f37.bin"        
+            "file":"sensor_f37.bin"
+        }
+    },
+	"SENSOR_SET1":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_gc2053.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_gc5035.bin"
         }
     }
 }

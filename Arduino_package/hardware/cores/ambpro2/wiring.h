@@ -8,7 +8,7 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
@@ -51,7 +51,7 @@ extern uint32_t millis(void);
 extern uint32_t micros(void);
 
 /**
- * \brief Pauses the program for the amount of time (in miliseconds) specified as parameter.
+ * \brief Pauses the program for the amount of time (in milliseconds) specified as parameter.
  * (There are 1000 milliseconds in a second.)
  *
  * \param dwMs the number of milliseconds to pause (uint32_t)

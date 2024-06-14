@@ -22,11 +22,13 @@ AmebaServo myservo;
 // variable to store the servo position
 int pos = 0;
 
-void setup() {
+void setup()
+{
     myservo.attach(8);
 }
 
-void loop() {
+void loop()
+{
     // goes from 0 degrees to 180 degrees in steps of 1 degree
     for (pos = 0; pos <= 180; pos += 1) {
         // tell servo to go to position in variable 'pos'

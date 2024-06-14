@@ -18,13 +18,14 @@
 
 #include <WiFi.h>
 
-int status = WL_IDLE_STATUS;    // Indicater of Wifi status
+int status = WL_IDLE_STATUS;    // Indicator of Wifi status
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
+        ;    // wait for serial port to connect. Needed for native USB port only
     }
 
     // check for WiFi status:
@@ -33,14 +34,16 @@ void setup() {
     printMacAddress();
 }
 
-void loop() {
+void loop()
+{
     // scan for existing networks:
     Serial.println("Scanning available networks...");
     listNetworks();
     delay(10000);
 }
 
-void printMacAddress() {
+void printMacAddress()
+{
     // print your MAC address:
     byte mac[6];
     WiFi.macAddress(mac);
@@ -58,13 +61,15 @@ void printMacAddress() {
     Serial.println(mac[5], HEX);
 }
 
-void listNetworks() {
+void listNetworks()
+{
     // scan for nearby networks:
     Serial.println("** Scan Networks **");
     int numSsid = WiFi.scanNetworks();
     if (numSsid == -1) {
         Serial.println("Couldn't get a wifi connection");
-        while (true);
+        while (true)
+            ;
     }
 
     // print the list of networks seen:
@@ -86,10 +91,11 @@ void listNetworks() {
     }
 }
 
-void printEncryptionTypeEx(uint32_t thisType) {
+void printEncryptionTypeEx(uint32_t thisType)
+{
     /*  Arduino wifi api use encryption type to mapping to security type.
-    *  This function demonstrate how to get more richful information of security type.
-    */
+     *  This function demonstrate how to get more richful information of security type.
+     */
     switch (thisType) {
         case SECURITY_OPEN:
             Serial.print("Open");
@@ -123,7 +129,8 @@ void printEncryptionTypeEx(uint32_t thisType) {
     }
 }
 
-void printEncryptionType(int thisType) {
+void printEncryptionType(int thisType)
+{
     // read the encryption type and print out the name:
     switch (thisType) {
         case ENC_TYPE_WEP:

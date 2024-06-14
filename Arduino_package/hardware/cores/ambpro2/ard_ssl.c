@@ -1,5 +1,5 @@
 #include "ard_ssl.h"
-#include <sockets.h> 
+#include <sockets.h>
 #include <lwip/netif.h>
 #include <mbedtls/ssl.h>
 #include <mbedtls/net_sockets.h>
@@ -10,13 +10,14 @@
 #include <mbedtls/entropy.h>
 #include <FreeRTOS.h>
 
-#define ARDUINO_MBEDTLS_DEBUG_LEVEL     0   // Set to 0 to disable debug messsages, 5 to enable all debug messages
-#define MBEDTLS_EXPORT_KEY              0
+#define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messages, 5 to enable all debug messages
+#define MBEDTLS_EXPORT_KEY          0
 
-static mbedtls_ctr_drbg_context* drbg_ctx = NULL;
-static mbedtls_entropy_context* ent_ctx = NULL;
+static mbedtls_ctr_drbg_context *drbg_ctx = NULL;
+static mbedtls_entropy_context *ent_ctx = NULL;
 
-static int my_verify(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags) {
+static int my_verify(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *flags)
+{
     char buf[1024];
     ((void)data);
 
@@ -31,20 +32,21 @@ static int my_verify(void *data, mbedtls_x509_crt *crt, int depth, uint32_t *fla
         if ((*flags) == 0) {
             printf("\r\n[INFO] This certificate has no flags\n");
         } else {
-            mbedtls_x509_crt_verify_info(buf, sizeof( buf ), " ! ", *flags);
+            mbedtls_x509_crt_verify_info(buf, sizeof(buf), " ! ", *flags);
             printf("\r\n[INFO] %s\n", buf);
         }
     }
     return 0;
 }
 
-static void* my_calloc(size_t nelements, size_t elementSize) {
+static void *my_calloc(size_t nelements, size_t elementSize)
+{
     size_t size;
     void *ptr = NULL;
 
     size = nelements * elementSize;
     ptr = pvPortMalloc(size);
-//  ptr = malloc(size);
+    // ptr = malloc(size);
 
     if (ptr) {
         memset(ptr, 0, size);
@@ -53,13 +55,15 @@ static void* my_calloc(size_t nelements, size_t elementSize) {
     return ptr;
 }
 
-static void my_debug(void *ctx, int level, const char *file, int line, const char *str) {
+static void my_debug(void *ctx, int level, const char *file, int line, const char *str)
+{
     const char *p, *basename;
 
-    ctx = ctx;     // Remove unused parameter warning
+    // Remove unused parameter warning
+    ctx = ctx;
     // Extract basename from file
     for (p = basename = file; *p != '\0'; p++) {
-        if(*p == '/' || *p == '\\') {
+        if (*p == '/' || *p == '\\') {
             basename = p + 1;
         }
     }
@@ -73,7 +77,7 @@ static void my_debug(void *ctx, int level, const char *file, int line, const cha
         static uint8_t hexdump_lines_to_process = 0;
         static uint8_t key_done = 0;
         static char out_string[200] = {0};
-        if ((level == 3)&&(!key_done)) {
+        if ((level == 3) && (!key_done)) {
             if (strstr(str, "dumping 'client hello, random bytes'")) {
                 in_client_random = 1;
                 hexdump_lines_to_process = 2;
@@ -91,54 +95,55 @@ static void my_debug(void *ctx, int level, const char *file, int line, const cha
             // Parse "0000:  64 df 18 71 ca 4a 4b e4 63 87 2a ef 5f 29 ca ff  ..."
             str = strstr(str, ":  ");
             if (!str || strlen(str) < 3 + 3 * 16) {
-                goto reset;         // not the expected hex buffer
+                goto reset;    // not the expected hex buffer
             }
-            str += 3;               // skip over ":  "
+            str += 3;    // skip over ":  "
 
             // Process sequences of "hh "
             for (int i = 0; i < 3 * 16; i += 3) {
                 char c1 = str[i], c2 = str[i + 1], c3 = str[i + 2];
-                if ((('0' <= c1 && c1 <= '9') || ('a' <= c1 && c1 <= 'f')) &&
-                    (('0' <= c2 && c2 <= '9') || ('a' <= c2 && c2 <= 'f')) &&
-                    c3 == ' ') {
-                    char str1[2] = {c1,0};
-                    char str2[2] = {c2,0};
+                if ((('0' <= c1 && c1 <= '9') || ('a' <= c1 && c1 <= 'f')) && (('0' <= c2 && c2 <= '9') || ('a' <= c2 && c2 <= 'f')) && c3 == ' ') {
+                    char str1[2] = {c1, 0};
+                    char str2[2] = {c2, 0};
                     strcat(out_string, str1);
                     strcat(out_string, str2);
                 } else {
-                    goto reset;     // unexpected non-hex char
+                    goto reset;    // unexpected non-hex char
                 }
             }
 
             if (--hexdump_lines_to_process != 0 || !in_master_secret) {
-                return;             // line is not yet finished
+                return;    // line is not yet finished
             }
 
-            reset:
-                hexdump_lines_to_process = 0;
-                in_client_random = in_master_secret = 0;
-                key_done = 1;
-                strcat(out_string, "\n");   // finish key log line
-                printf("\r\n[INFO] ============== Wireshark TLS decryption key ==============\n");
-                printf("\r\n[INFO] %s\n", out_string);
-                printf("\r\n[INFO] ==========================================================\n");
+reset:
+            hexdump_lines_to_process = 0;
+            in_client_random = in_master_secret = 0;
+            key_done = 1;
+            strcat(out_string, "\n");    // finish key log line
+            printf("\r\n[INFO] ============== Wireshark TLS decryption key ==============\n");
+            printf("\r\n[INFO] %s\n", out_string);
+            printf("\r\n[INFO] ==========================================================\n");
         }
     }
 }
 
-//Adding definition here as complier was not able to find this function
+// Adding definition here as compiler was not able to find this function
 extern int mbedtls_ssl_conf_psk(mbedtls_ssl_config *conf,
-                        const unsigned char *psk, size_t psk_len,
-                        const unsigned char *psk_identity, size_t psk_identity_len);
+                                const unsigned char *psk,
+                                size_t psk_len,
+                                const unsigned char *psk_identity,
+                                size_t psk_identity_len);
 
-int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t port, unsigned char* rootCABuff, unsigned char* cli_cert, unsigned char* cli_key, unsigned char* pskIdent, unsigned char* psKey, char* SNI_hostname) {
+int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t port, unsigned char *rootCABuff, unsigned char *cli_cert, unsigned char *cli_key, unsigned char *pskIdent, unsigned char *psKey, char *SNI_hostname)
+{
     int ret = 0;
     int timeout;
     int enable = 1;
     int keep_idle = 30;
-    mbedtls_x509_crt* cacert = NULL;
-    mbedtls_x509_crt* _cli_crt = NULL;
-    mbedtls_pk_context* _clikey_rsa = NULL;
+    mbedtls_x509_crt *cacert = NULL;
+    mbedtls_x509_crt *_cli_crt = NULL;
+    mbedtls_pk_context *_clikey_rsa = NULL;
 
     do {
         ssl_client->socket = -1;
@@ -155,7 +160,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
         serv_addr.sin_addr.s_addr = ipAddress;
         serv_addr.sin_port = htons(port);
 
-        mbedtls_platform_set_calloc_free(my_calloc,vPortFree);
+        mbedtls_platform_set_calloc_free(my_calloc, vPortFree);
 
         if (lwip_connect(ssl_client->socket, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) < 0) {
             lwip_close(ssl_client->socket);
@@ -163,20 +168,20 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             ret = -1;
             break;
         } else {
-        /*
-        if (lwip_connect(ssl_client->socket, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
-            timeout = ssl_client->recvTimeout;
-            lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-            timeout = 30000;
-            lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
-            lwip_setsockopt(ssl_client->socket, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable));
-            lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
-        } else {
-            printf("\r\n[ERROR] Connect to Server failed! \n");
-            ret = -1;
-            break;
-        }
-        */
+            /*
+            if (lwip_connect(ssl_client->socket, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
+                timeout = ssl_client->recvTimeout;
+                lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+                timeout = 30000;
+                lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
+                lwip_setsockopt(ssl_client->socket, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable));
+                lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
+            } else {
+                printf("\r\n[ERROR] Connect to Server failed! \n");
+                ret = -1;
+                break;
+            }
+            */
             timeout = ssl_client->recvTimeout;
             lwip_setsockopt(ssl_client->socket, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
             lwip_setsockopt(ssl_client->socket, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle));
@@ -190,11 +195,11 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             ssl_client->ctr_drbg = drbg_ctx;
 
             if (ent_ctx == NULL) {
-                 ent_ctx = (mbedtls_entropy_context *)malloc(sizeof(mbedtls_entropy_context));
+                ent_ctx = (mbedtls_entropy_context *)malloc(sizeof(mbedtls_entropy_context));
             }
             ssl_client->entropy = ent_ctx;
 
-            if (( ssl_client->ssl == NULL )||( ssl_client->conf == NULL )||(ssl_client->ctr_drbg == NULL) || (ssl_client->entropy == NULL)) {
+            if ((ssl_client->ssl == NULL) || (ssl_client->conf == NULL) || (ssl_client->ctr_drbg == NULL) || (ssl_client->entropy == NULL)) {
                 printf("\r\n[ERROR] malloc ssl failed! \n");
                 ret = -1;
                 break;
@@ -221,9 +226,9 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
 
             if (rootCABuff != NULL) {
                 // Configure mbedTLS to use certificate authentication method
-                cacert = (mbedtls_x509_crt *) mbedtls_calloc( sizeof(mbedtls_x509_crt), 1);
+                cacert = (mbedtls_x509_crt *)mbedtls_calloc(sizeof(mbedtls_x509_crt), 1);
                 mbedtls_x509_crt_init(cacert);
-                if (mbedtls_x509_crt_parse(cacert, rootCABuff, (strlen((char*)rootCABuff)) + 1) != 0) {
+                if (mbedtls_x509_crt_parse(cacert, rootCABuff, (strlen((char *)rootCABuff)) + 1) != 0) {
                     printf("\r\n[ERROR] mbedtls x509 crt parse failed! \n");
                     ret = -1;
                     break;
@@ -233,12 +238,12 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             } else if (pskIdent != NULL && psKey != NULL) {
                 // Configure mbedTLS to use PSK authentication method
                 // Check for max length and even number of chars
-                uint16_t pskey_char_len = strlen((char*)psKey);
-                if (((pskey_char_len % 2) != 0) || (pskey_char_len > 2*MBEDTLS_PSK_MAX_LEN)) {
+                uint16_t pskey_char_len = strlen((char *)psKey);
+                if (((pskey_char_len % 2) != 0) || (pskey_char_len > 2 * MBEDTLS_PSK_MAX_LEN)) {
                     printf("\r\n[ERROR] TLS PSK not in valid hex format or too long \n");
                     return -1;
                 }
-                uint16_t psk_len = pskey_char_len/2;
+                uint16_t psk_len = pskey_char_len / 2;
                 unsigned char psk[MBEDTLS_PSK_MAX_LEN];
                 // Convert PSK from hexadecimal chars to binary
                 for (int i = 0; i < pskey_char_len; i = i + 2) {
@@ -254,8 +259,8 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                         printf("\r\n[ERROR] TLS PSK not in valid hex format \n");
                         return -1;
                     }
-                    psk[i/2] = c << 4;
-                    c = psKey[i+1];
+                    psk[i / 2] = c << 4;
+                    c = psKey[i + 1];
                     // Convert next 4 bits
                     if (c >= '0' && c <= '9') {
                         c = c - '0';
@@ -267,16 +272,16 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                         printf("\r\n[ERROR] TLS PSK not in valid hex format \n");
                         return -1;
                     }
-                    psk[i/2] |= c;
+                    psk[i / 2] |= c;
                 }
-                if (mbedtls_ssl_conf_psk(ssl_client->conf, psk, psk_len, pskIdent, strlen((char*)pskIdent)) != 0) {
+                if (mbedtls_ssl_conf_psk(ssl_client->conf, psk, psk_len, pskIdent, strlen((char *)pskIdent)) != 0) {
                     printf("\r\n[ERROR] mbedtls conf psk failed! \n");
                 }
             } else {
                 mbedtls_ssl_conf_authmode(ssl_client->conf, MBEDTLS_SSL_VERIFY_NONE);
             }
 
-            if ((ret = mbedtls_ctr_drbg_seed( ssl_client->ctr_drbg, mbedtls_entropy_func, ssl_client->entropy, NULL, 0)) != 0) {
+            if ((ret = mbedtls_ctr_drbg_seed(ssl_client->ctr_drbg, mbedtls_entropy_func, ssl_client->entropy, NULL, 0)) != 0) {
                 printf("\r\n[ERROR] mbedtls_ctr_drbg_seed returned %d\n", ret);
                 ret = -1;
                 break;
@@ -285,7 +290,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             mbedtls_ssl_conf_rng(ssl_client->conf, mbedtls_ctr_drbg_random, ssl_client->ctr_drbg);
 
             if ((cli_cert != NULL) && (cli_key != NULL)) {
-                _cli_crt = (mbedtls_x509_crt *) mbedtls_calloc( sizeof(mbedtls_x509_crt), 1);
+                _cli_crt = (mbedtls_x509_crt *)mbedtls_calloc(sizeof(mbedtls_x509_crt), 1);
                 if (_cli_crt == NULL) {
                     printf("\r\n[ERROR] malloc client_crt failed! \n");
                     ret = -1;
@@ -293,7 +298,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                 }
                 mbedtls_x509_crt_init(_cli_crt);
 
-                _clikey_rsa = (mbedtls_pk_context *) mbedtls_calloc( sizeof(mbedtls_pk_context), 1);
+                _clikey_rsa = (mbedtls_pk_context *)mbedtls_calloc(sizeof(mbedtls_pk_context), 1);
                 if (_clikey_rsa == NULL) {
                     printf("\r\n[ERROR] malloc client_rsa failed! \n");
                     ret = -1;
@@ -301,16 +306,16 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
                 }
                 mbedtls_pk_init(_clikey_rsa);
 
-                if (mbedtls_x509_crt_parse(_cli_crt, cli_cert, strlen((char*)cli_cert) + 1) != 0) {
+                if (mbedtls_x509_crt_parse(_cli_crt, cli_cert, strlen((char *)cli_cert) + 1) != 0) {
                     printf("\r\n[ERROR] mbedtls x509 parse client_crt failed! \n");
                     ret = -1;
                     break;
                 }
 
                 // for mbedtls 3.0.0
-                //if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0, mbedtls_ctr_drbg_random, ssl_client->ctr_drbg ) != 0) {
+                // if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, strlen((char*)cli_key)+1, NULL, 0, mbedtls_ctr_drbg_random, ssl_client->ctr_drbg ) != 0) {
                 // for mbedtls 2.28.1
-                if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, (strlen((char*)cli_key) + 1), NULL, 0) != 0) {
+                if (mbedtls_pk_parse_key(_clikey_rsa, cli_key, (strlen((char *)cli_key) + 1), NULL, 0) != 0) {
                     printf("\r\n[ERROR] mbedtls x509 parse client_rsa failed! \n");
                     ret = -1;
                     break;
@@ -332,7 +337,7 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
             if (ret < 0) {
                 printf("\r\n[ERROR] mbedtls ssl handshake failed: -0x%04X \n", -ret);
                 ret = -1;
-            } else { 
+            } else {
                 if (ARDUINO_MBEDTLS_DEBUG_LEVEL > 0) {
                     printf("\r\n[INFO] mbedTLS SSL handshake success \n");
                 }
@@ -378,7 +383,8 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
     return ssl_client->socket;
 }
 
-void stop_ssl_socket(sslclient_context *ssl_client) {
+void stop_ssl_socket(sslclient_context *ssl_client)
+{
     lwip_shutdown(ssl_client->socket, SHUT_RDWR);
     lwip_close(ssl_client->socket);
     ssl_client->socket = -1;
@@ -395,7 +401,8 @@ void stop_ssl_socket(sslclient_context *ssl_client) {
     }
 }
 
-int send_ssl_data(sslclient_context *ssl_client, const uint8_t *data, uint16_t len) {
+int send_ssl_data(sslclient_context *ssl_client, const uint8_t *data, uint16_t len)
+{
     int ret = -1;
 
     if (ssl_client->ssl != NULL) {
@@ -405,7 +412,8 @@ int send_ssl_data(sslclient_context *ssl_client, const uint8_t *data, uint16_t l
     return ret;
 }
 
-int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, int flag) {
+int get_ssl_receive(sslclient_context *ssl_client, uint8_t *data, int length, int flag)
+{
     int ret = 0;
     int recv_timeout;
 
@@ -433,7 +441,7 @@ int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, in
             case MBEDTLS_ERR_SSL_TIMEOUT:
                 break;
             default:
-                //printf("\r\n[ERROR] mbedtls_ssl_read returned: -0x%04X \n", -ret);
+                // printf("\r\n[ERROR] mbedtls_ssl_read returned: -0x%04X \n", -ret);
                 stop_ssl_socket(ssl_client);
                 break;
         }
@@ -447,19 +455,21 @@ int get_ssl_receive(sslclient_context *ssl_client, uint8_t* data, int length, in
     return ret;
 }
 
-int get_ssl_sock_errno(sslclient_context *ssl_client) {
-// https://www.nongnu.org/lwip/2_1_x/upgrading.html
-// socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
-// All other/normal/synchronous errors are (and always were) available via 'errno'.
-//    int so_error;
-//    socklen_t len = sizeof(so_error);
-//    lwip_getsockopt(ssl_client->socket, SOL_SOCKET, SO_ERROR, &so_error, &len);
-//    return so_error;
-    (void) ssl_client->socket;
+int get_ssl_sock_errno(sslclient_context *ssl_client)
+{
+    // https://www.nongnu.org/lwip/2_1_x/upgrading.html
+    // socket API: according to the standard, SO_ERROR now only returns asynchronous errors.
+    // All other/normal/synchronous errors are (and always were) available via 'errno'.
+    //    int so_error;
+    //    socklen_t len = sizeof(so_error);
+    //    lwip_getsockopt(ssl_client->socket, SOL_SOCKET, SO_ERROR, &so_error, &len);
+    //    return so_error;
+    (void)ssl_client->socket;
     return errno;
 }
 
-int get_ssl_bytes_avail(sslclient_context *ssl_client) {
+int get_ssl_bytes_avail(sslclient_context *ssl_client)
+{
     if (ssl_client->ssl != NULL) {
         return mbedtls_ssl_get_bytes_avail(ssl_client->ssl);
     } else {

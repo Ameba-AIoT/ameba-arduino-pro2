@@ -1,57 +1,86 @@
-Release Version 4.0.6
+Release Version 4.0.7
 
-Version 4.0.6 – 2024/02/02
+Version 4.0.7 – 2024/06/14
 
 Feature:
+- Add I2C OLED SSD1306 example and libs
+- Add load NN model using SD card feature
+- Add MPU6050 support
+- Add image classification
+- Add HTTP_Post_MP4_Whisper_Server example
+- Add integration example: Record MP4 + HTTP Post Request to Whisper Server
+- Add QR Code Scanning Example
+- Update original Camera2LCD example
+- Add HTTP Post Request Json to FASTAPI server for LLM/VLM
+- Add VL53l0x example
+- Update GTimer Oneshot Example
 
-Add example I2CScanner
-Add example Camera_2_Lcd
-Add example NTPClient
-Add example I2C_LCD_HelloWorld
-Update example RTSPFaceDetection
-Add example ISP Control
-Add Examples for Image Tuning, Mode, AWB. WDR and AE
-Update example RTPAudioStream
-Fix G711E typo to G711D
-Update example EchoCancellation stack size
-Fix issue for BLE name not noticed in scan list
-Update AEC_EN to be 0 by default.
-Update example MotionDetectGoogleLineNotify
-Add NTP examples to change lastmodifiedtime after saving images/ mp4 files
-NTPClient library with new APIs to get formatted date. 6 new examples to use NTPClient to change last modified date on SDcard after saving images or video to SD Card
-Update log for MQTT
 API Updates:
+- Update Wire.cpp
+    - Remove additional i2c_reset in endTransmission()
+- Update IPAddress.cpp
+- Update SPI.h
+- Update the pin_check related
+    - enhance the logic of checking
+    - speed up the proces
+- Update Arduino.h
+- Update NN APIs
+- Add SD_Model API
+- Add HTTP Post Request image and voice recorded prompt
+- Add support for camera sensor GC5035
+- Add yolov7 reparam scripts
+- Add Pololu VL53l0x library
+- Update video streaming API
+    - Update the "videoInit" API
+    - Update the "snapshot" API
+- Update debug_custom.json
+- Update WMath.cpp
+- Update CNN model file name
+- Update SDK code base
 
-Update code base and libs
-Update Wire APIs
-Fix I2C scan and Master Sender issues
-Update AudioEncoder, AudioDecoder, VideoStreamOverlay, NNFaceDetection, NNObjjectDetection API
-Update AudioEncoder.h
-Update MP4Recording.h
-Add ISP Control API
-Update keywords.txt
-Update VideoStream.cpp
-Update VideoStream.h
-Update ard_socket.c
-Update Motion Detection API (EIP)
-Update MD API
-Update libarduino.a
 Misc:
-
-Update platform.txt
-fix compile issue when username has space
-Add more includes for new code base
-Update new addresses for new partition table
-Update ameba_pro2_tools 1.2.16
-Update tools to compatible with Ubuntu
-Update all bins for new code base
-Add signature to elf2bin.win.exe
-Update all system bins sync with new partition table
-Update sensor_f37.bin
-Update AmebaEink.zip
-Add issue template
-Add PULL_REQUEST_TEMPLATE.md
-Add CODE_OF_CONDUCT.md
-Add CONTRIBUTING.md
-Add LICENSE
-Minor update for coding style and clear warnings
+- Add GitHub Action
+    - mbed coding style check coding_style_check.yml
+        - Actions run every 'push' and 'pull_request'
+    - label related Bug_report.yml
+    - spell_check.yml
+        - Enable "Check word spell"
+        - Actions run every 'push' and 'pull_request'
+- Update PULL_REQUEST_TEMPLATE.md
+- Update ameba_pro2_tools 1.2.17
+    - image classification
+- Update ameba_pro2_tools 1.2.18
+    - Avoid permission denied error of MacOS M1/M2 and Intel
+    - UPdate Makefile and cpp files
+    - Update .json files
+- Update workflows
+    - Add txt files for release commit and release log
+    - Add sdk_release.yml
+    - Add scripts folder 
+    - Add submodule for python scripts
+    - Add Create CI_compile_examples.yml
+- Update ameba_pro2_tools 1.2.19
+    - Update tools to determine SD card or flash for loading NN model
+- Update platform.txt and board.txt to introduce a flag for the automated tools
+- Update ameba_pro2_tools 1.3.0
+    - Update tool source code for CPP version
+    - Update prebuild and postbuild tools
+    - Update tools for multi-sensor support
+- Update ameba_pro2_tools 1.3.1
+    - Update prebuild for linux os and macos compile issue fix
+    - Update platform.txt
+- Update ameba_pro2_tools 1.3.2
+    - Update ino_validation tools
+    - Add tool cmodel_backup
+    - Rename nn_model_update tool as nn_json_modify
+    - Update platform.txt
+    - Update tools source code (.cpp)
+    - Update postbuild.cpp
+- Add ameba_pro2_nn_models tool
+    - Reduce the SDK package size
+- Remove nn models from package
+- Update ameba_pro2_tools 1.3.3
+    - Update platform.txt to clear uploading issue
+    - Support portable Arduino IDE
+- Update ameba_pro2_tools 1.3.4
+    - sync with CNN update

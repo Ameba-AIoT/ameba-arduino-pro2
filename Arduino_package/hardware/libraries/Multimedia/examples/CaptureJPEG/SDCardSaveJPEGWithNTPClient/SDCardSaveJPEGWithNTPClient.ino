@@ -22,7 +22,7 @@ char path[128];
 WiFiUDP ntpUDP;
 
 // You can specify the time server pool and the offset (in seconds, can be
-// changed later with setTimeOffset() ). Additionaly you can specify the
+// changed later with setTimeOffset() ). Additionally you can specify the
 // update interval (in milliseconds, can be changed using setUpdateInterval() ).
 NTPClient timeClient(ntpUDP, "sg.pool.ntp.org", 28800, 60000);
 
@@ -33,7 +33,8 @@ uint32_t img_len = 0;
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     WiFi.begin(ssid, pass);
@@ -56,7 +57,7 @@ void setup() {
     Camera.channelBegin(CHANNEL);
 
     fs.begin();
-    sprintf(path, "%s%s%s", fs.getRootPath(), filename, ".jpg"); 
+    sprintf(path, "%s%s%s", fs.getRootPath(), filename, ".jpg");
     File file = fs.open(path);
     delay(100);
     Camera.getImage(CHANNEL, &img_addr, &img_len);
@@ -68,6 +69,7 @@ void setup() {
     fs.end();
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

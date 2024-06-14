@@ -16,9 +16,10 @@
 
 VideoSetting config(CHANNEL);
 MP4Recording mp4;
-StreamIO videoStreamer(1, 1);  // 1 Input Video -> 1 Output RTSP
+StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output RTSP
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // Configure camera video channel with video format information
@@ -49,11 +50,13 @@ void setup() {
     printInfo();
 }
 
-void loop() {
+void loop()
+{
     // do nothing
 }
 
-void printInfo(void) {
+void printInfo(void)
+{
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

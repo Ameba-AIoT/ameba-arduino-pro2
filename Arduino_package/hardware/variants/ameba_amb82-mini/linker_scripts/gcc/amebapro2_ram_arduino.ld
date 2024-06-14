@@ -2,7 +2,7 @@ INCLUDE "romsym_is.so"
 
 /* unit - Mega byte */
 DDR_SIZE = 128;
-NN_SIZE = 16;
+NN_SIZE = 36;
 
 DDR_END = 0x70000000 + (DDR_SIZE - NN_SIZE)*1024*1024;
 NN_END  = 0x70000000 + (DDR_SIZE)*1024*1024;
@@ -22,7 +22,8 @@ MEMORY
   /* Jump cross 0x20105200 ~ 0x20106200 for Bootloader RAM BSS  used */
   RAM_FUN_TABLE (rwx)   : ORIGIN = 0x20106200, LENGTH = 0x201062F0 - 0x20106200  /* 240B */
   RAM_IMG_SIGN (rwx)    : ORIGIN = 0x201062F0, LENGTH = 0x20106300 - 0x201062F0  /*  16B */
-  RAM_1 (rwx)           : ORIGIN = 0x20106300, LENGTH = 0x20120000 - 0x20106300  /* 107KB */
+  RAM_1 (rwx)           : ORIGIN = 0x20106300, LENGTH = 0x2011FD00 - 0x20106300  /* 106.5KB */
+  RAM_REV (rwx)         : ORIGIN = 0x2011FD00, LENGTH = 0x20120000 - 0x2011FD00  /* 512B reserved for MPU_REGION */  
   RAM_RETENTION (rwx)   : ORIGIN = 0x20120000, LENGTH = 0x20140000 - 0x20120000  /* 128KB retention data */
   RAM_2 (rwx)           : ORIGIN = 0x20140000, LENGTH = 0x20177B00 - 0x20140000  /* 222KB */
   RAM_NC (rwx)          : ORIGIN = 0x20177B00, LENGTH = 0x20179800 - 0x20177B00  /*  7KB*/
@@ -79,7 +80,8 @@ ENTRY(Reset_Handler)
 
 _start_addr = 0x10000000;
 ENTRY(_start_addr)
-
+__sram_rev_start__  = ORIGIN(RAM_REV);
+__sram_rev_end__    = ORIGIN(RAM_REV)+ LENGTH(RAM_REV);
 __sram_end__		= ORIGIN(RAM_2) + LENGTH(RAM_2);
 __eram_end__		= ORIGIN(DDR) + LENGTH(DDR);		
 
@@ -277,8 +279,10 @@ SECTIONS
 
 	.ram.retention.data :
 	{
+		__retention_start__ = .;
 		*(.retention.table*)
 		*(.retention.data*)
+		__retention_end__ = .;
 	} > RAM_RETENTION
 
 	.ram.bss (NOLOAD):

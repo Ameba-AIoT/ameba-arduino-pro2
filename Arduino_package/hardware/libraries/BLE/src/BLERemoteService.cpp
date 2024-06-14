@@ -1,10 +1,12 @@
 #include "BLERemoteService.h"
 
-BLERemoteService::BLERemoteService(BLEUUID uuid) {
+BLERemoteService::BLERemoteService(BLEUUID uuid)
+{
     _uuid = uuid;
 }
 
-BLERemoteService::~BLERemoteService() {
+BLERemoteService::~BLERemoteService()
+{
     uint8_t i;
     for (i = 0; i < _characteristicCount; i++) {
         delete _characteristicPtrList[i];
@@ -12,15 +14,18 @@ BLERemoteService::~BLERemoteService() {
     }
 }
 
-BLEUUID BLERemoteService::getUUID() {
+BLEUUID BLERemoteService::getUUID()
+{
     return _uuid;
 }
 
-BLERemoteCharacteristic* BLERemoteService::getCharacteristic(const char* uuid) {
+BLERemoteCharacteristic* BLERemoteService::getCharacteristic(const char* uuid)
+{
     return getCharacteristic(BLEUUID(uuid));
 }
 
-BLERemoteCharacteristic* BLERemoteService::getCharacteristic(BLEUUID uuid) {
+BLERemoteCharacteristic* BLERemoteService::getCharacteristic(BLEUUID uuid)
+{
     if (_characteristicCount == 0) {
         printf("\r\n[ERROR] Service %s: No characteristics found \n", _uuid.str());
         return nullptr;
@@ -31,10 +36,11 @@ BLERemoteCharacteristic* BLERemoteService::getCharacteristic(BLEUUID uuid) {
             return _characteristicPtrList[i];
         }
     }
-    return nullptr; // Target service not found, return nullptr
+    return nullptr;    // Target service not found, return nullptr
 }
 
-bool BLERemoteService::addCharacteristic(BLERemoteCharacteristic* newChar) {
+bool BLERemoteService::addCharacteristic(BLERemoteCharacteristic* newChar)
+{
     if (_characteristicCount >= MAX_NUM_CHARS) {
         printf("\r\n[ERROR] Service %s: Maximum number of characteristics per service reached \n", _uuid.str());
         return false;
@@ -58,7 +64,8 @@ bool BLERemoteService::addCharacteristic(BLERemoteCharacteristic* newChar) {
     return true;
 }
 
-void BLERemoteService::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
+void BLERemoteService::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t* p_value)
+{
     if ((handle < _handleStart) || (handle > _handleEnd)) {
         printf("\r\n[ERROR] Service %s: Handle %d mismatch read result callback \n", _uuid.str(), handle);
         return;
@@ -68,9 +75,9 @@ void BLERemoteService::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t
         _characteristicPtrList[0]->clientReadResultCallbackDefault(conn_id, cause, handle, value_size, p_value);
     } else {
         // Check if result handle falls between any characteristic handles, otherwise assign to last characteristic with largest handle
-        BLERemoteCharacteristic* tempChar = _characteristicPtrList[_characteristicCount-1];
-        for (uint8_t i = 0; i < _characteristicCount-1; i++) {
-            if ((handle >= _characteristicPtrList[i]->_declarationHandle) && (handle < _characteristicPtrList[i+1]->_declarationHandle)) {
+        BLERemoteCharacteristic* tempChar = _characteristicPtrList[_characteristicCount - 1];
+        for (uint8_t i = 0; i < _characteristicCount - 1; i++) {
+            if ((handle >= _characteristicPtrList[i]->_declarationHandle) && (handle < _characteristicPtrList[i + 1]->_declarationHandle)) {
                 tempChar = _characteristicPtrList[i];
             }
         }
@@ -78,7 +85,8 @@ void BLERemoteService::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t
     }
 }
 
-void BLERemoteService::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits) {
+void BLERemoteService::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits)
+{
     if ((handle < _handleStart) || (handle > _handleEnd)) {
         printf("\r\n[ERROR] Service %s: Handle %d mismatch in write result callback \n", _uuid.str(), handle);
         return;
@@ -88,9 +96,9 @@ void BLERemoteService::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_
         _characteristicPtrList[0]->clientWriteResultCallbackDefault(conn_id, type, handle, cause, credits);
     } else {
         // Check if result handle falls between any characteristic handles, otherwise assign to last characteristic with largest handle
-        BLERemoteCharacteristic* tempChar = _characteristicPtrList[_characteristicCount-1];
-        for (uint8_t i = 0; i < _characteristicCount-1; i++) {
-            if ((handle >= _characteristicPtrList[i]->_declarationHandle) && (handle < _characteristicPtrList[i+1]->_declarationHandle)) {
+        BLERemoteCharacteristic* tempChar = _characteristicPtrList[_characteristicCount - 1];
+        for (uint8_t i = 0; i < _characteristicCount - 1; i++) {
+            if ((handle >= _characteristicPtrList[i]->_declarationHandle) && (handle < _characteristicPtrList[i + 1]->_declarationHandle)) {
                 tempChar = _characteristicPtrList[i];
             }
         }
@@ -98,7 +106,8 @@ void BLERemoteService::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_
     }
 }
 
-T_APP_RESULT BLERemoteService::clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
+T_APP_RESULT BLERemoteService::clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t* p_value)
+{
     T_APP_RESULT app_result = APP_RESULT_APP_ERR;
     if ((handle < _handleStart) || (handle > _handleEnd)) {
         printf("\r\n[ERROR] Service %s: Handle %d mismatch in notify/indicate callback \n", _uuid.str(), handle);
@@ -109,9 +118,9 @@ T_APP_RESULT BLERemoteService::clientNotifyIndicateCallbackDefault(uint8_t conn_
         app_result = _characteristicPtrList[0]->clientNotifyIndicateCallbackDefault(conn_id, notify, handle, value_size, p_value);
     } else {
         // Check if result handle falls between any characteristic handles, otherwise assign to last characteristic with largest handle
-        BLERemoteCharacteristic* tempChar = _characteristicPtrList[_characteristicCount-1];
-        for (uint8_t i = 0; i < _characteristicCount-1; i++) {
-            if ((handle >= _characteristicPtrList[i]->_declarationHandle) && (handle < _characteristicPtrList[i+1]->_declarationHandle)) {
+        BLERemoteCharacteristic* tempChar = _characteristicPtrList[_characteristicCount - 1];
+        for (uint8_t i = 0; i < _characteristicCount - 1; i++) {
+            if ((handle >= _characteristicPtrList[i]->_declarationHandle) && (handle < _characteristicPtrList[i + 1]->_declarationHandle)) {
                 tempChar = _characteristicPtrList[i];
             }
         }
@@ -119,4 +128,3 @@ T_APP_RESULT BLERemoteService::clientNotifyIndicateCallbackDefault(uint8_t conn_
     }
     return app_result;
 }
-

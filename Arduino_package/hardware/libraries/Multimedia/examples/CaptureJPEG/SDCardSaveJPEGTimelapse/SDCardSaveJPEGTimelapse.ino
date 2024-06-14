@@ -7,7 +7,7 @@
 #include "VideoStream.h"
 #include "AmebaFatFS.h"
 
-#define CHANNEL 0
+#define CHANNEL  0
 #define FILENAME "image"
 #define INTERVAL 1000
 
@@ -20,7 +20,8 @@ uint32_t count = 0;
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     Camera.configVideoChannel(CHANNEL, config);
@@ -30,12 +31,13 @@ void setup() {
     fs.begin();
 }
 
-void loop() {
+void loop()
+{
     delay(INTERVAL);
 
     File file = fs.open(String(fs.getRootPath()) + String(FILENAME) + String(count) + String(".jpg"));
     Camera.getImage(CHANNEL, &img_addr, &img_len);
-    file.write((uint8_t*)img_addr, img_len);
+    file.write((uint8_t *)img_addr, img_len);
     printf("Saved %s\r\n", file.name());
     file.close();
     count++;

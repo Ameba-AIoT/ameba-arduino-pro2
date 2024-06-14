@@ -17,23 +17,24 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                   // your network key Index number (needed only for WEP)
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;                // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-unsigned int localPort = 2390;      // local port to listen on
+unsigned int localPort = 2390;    // local port to listen on
 
-char packetBuffer[255]; //buffer to hold incoming packet
-char ReplyBuffer[] = "acknowledged";       // a string to send back
+char packetBuffer[255];                 // buffer to hold incoming packet
+char ReplyBuffer[] = "acknowledged";    // a string to send back
 
 WiFiUDP Udp;
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
+        ;    // wait for serial port to connect. Needed for native USB port only
     }
 
     // attempt to connect to Wifi network:
@@ -41,7 +42,7 @@ void setup() {
         Serial.print("Attempting to connect to SSID: ");
         Serial.println(ssid);
         // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-        status = WiFi.begin(ssid,pass);
+        status = WiFi.begin(ssid, pass);
 
         // wait 10 seconds for connection:
         delay(10000);
@@ -54,7 +55,8 @@ void setup() {
     Udp.begin(localPort);
 }
 
-void loop() {
+void loop()
+{
     // if there's data available, read a packet
     int packetSize = Udp.parsePacket();
     if (packetSize) {
@@ -82,7 +84,8 @@ void loop() {
     }
 }
 
-void printWifiStatus() {
+void printWifiStatus()
+{
     // print the SSID of the network you're attached to:
     Serial.print("SSID: ");
     Serial.println(WiFi.SSID());

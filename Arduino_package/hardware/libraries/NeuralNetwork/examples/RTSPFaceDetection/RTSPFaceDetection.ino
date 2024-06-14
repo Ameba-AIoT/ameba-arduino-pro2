@@ -28,12 +28,12 @@
 #include "NNFaceDetection.h"
 #include "VideoStreamOverlay.h"
 
-#define CHANNEL     0
-#define CHANNELNN   3
+#define CHANNEL   0
+#define CHANNELNN 3
 
 // Lower resolution for NN processing
-#define NNWIDTH     576
-#define NNHEIGHT    320
+#define NNWIDTH  576
+#define NNHEIGHT 320
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
@@ -42,14 +42,15 @@ RTSP rtsp;
 StreamIO videoStreamer(1, 1);
 StreamIO videoStreamerNN(1, 1);
 
-char ssid[] = "Network_SSID";   // your network SSID (name)
-char pass[] = "Password";       // your network password
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
 IPAddress ip;
-int rtsp_portnum; 
+int rtsp_portnum;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // attempt to connect to Wifi network:
@@ -65,7 +66,7 @@ void setup() {
 
     // Configure camera video channels with video format information
     // Adjust the bitrate based on your WiFi network quality
-    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);    // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNEL, config);
     Camera.configVideoChannel(CHANNELNN, configNN);
     Camera.videoInit();
@@ -109,12 +110,14 @@ void setup() {
     OSD.begin();
 }
 
-void loop() {
+void loop()
+{
     // Do nothing
 }
 
 // User callback function for post processing of face detection results
-void FDPostProcess(std::vector<FaceDetectionResult> results) {
+void FDPostProcess(std::vector<FaceDetectionResult> results)
+{
     int count = 0;
 
     uint16_t im_h = config.height();
@@ -156,12 +159,12 @@ void FDPostProcess(std::vector<FaceDetectionResult> results) {
                 OSD.drawPoint(CHANNEL, x, y, 8, OSD_COLOR_RED);
                 count++;
                 if (count == MAX_FACE_DET) {
-                  goto OSDUpdate;
+                    goto OSDUpdate;
                 }
             }
         }
     }
-    
+
 OSDUpdate:
     OSD.update(CHANNEL);
 }

@@ -5,32 +5,34 @@
  *
  * Example guide:
  * https://www.amebaiot.com/en/amebapro2-arduino-rtc/
-*/
+ */
 
 #include <stdio.h>
 #include <time.h>
 #include "rtc.h"
 
 /* Change these values to set the current initial date */
-#define YEAR 2020
+#define YEAR  2020
 #define MONTH 1
-#define DAY 1
+#define DAY   1
 /* Change these values to set the current initial time */
 #define HOUR 13
-#define MIN 14
-#define SEC 15
+#define MIN  14
+#define SEC  15
 
 long long seconds = 0;
 struct tm *timeinfo;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
-    rtc.Init(); 
-    long long epochTime =rtc.SetEpoch(YEAR, MONTH, DAY, HOUR, MIN, SEC);
+    rtc.Init();
+    long long epochTime = rtc.SetEpoch(YEAR, MONTH, DAY, HOUR, MIN, SEC);
     rtc.Write(epochTime);
 }
 
-void loop() {
+void loop()
+{
     seconds = rtc.Read();
     printEpochTime();
     printBasicString();
@@ -39,19 +41,22 @@ void loop() {
     rtc.Wait(1);
 }
 
-void printEpochTime(void) {
+void printEpochTime(void)
+{
     Serial.print("Epoch Time(in s) since January, 1, 1970:");
     Serial.print(seconds);
     Serial.print("s");
 }
 
-void printBasicString(void) {
+void printBasicString(void)
+{
     Serial.println();
     Serial.print("Time as a basic string:                  ");
     Serial.print(ctime(&seconds));
 }
 
-void printStringTime(void) {
+void printStringTime(void)
+{
     timeinfo = localtime(&seconds);
     Serial.print("Time as a custom formatted string:       ");
     Serial.print(timeinfo->tm_year + 1900);

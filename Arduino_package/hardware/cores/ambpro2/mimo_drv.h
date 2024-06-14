@@ -7,7 +7,7 @@
 
 uint32_t mimoCreate(void);
 void mimoDestroy(void *);
-int  mimoStart(void *);
+int mimoStart(void *);
 void mimoStop(void *);
 void mimoPause(void *);
 void mimoResume(void *);

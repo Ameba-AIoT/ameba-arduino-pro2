@@ -18,17 +18,18 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-char mqttServer[]     = "test.mosquitto.org";
-char clientId[]       = "amebaClient";
-char publishTopic[]   = "outTopic";
+char mqttServer[] = "test.mosquitto.org";
+char clientId[] = "amebaClient";
+char publishTopic[] = "outTopic";
 char publishPayload[] = "hello world";
 char subscribeTopic[] = "inTopic";
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char* topic, byte* payload, unsigned int length)
+{
     Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("] ");
@@ -41,35 +42,37 @@ void callback(char* topic, byte* payload, unsigned int length) {
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
 
-void reconnect() {
+void reconnect()
+{
     // Loop until we're reconnected
     while (!(client.connected())) {
         Serial.print("\r\nAttempting MQTT connection...");
         // Attempt to connect
         if (client.connect(clientId)) {
             Serial.println("connected");
-            //Once connected, publish an announcement and resubscribe
+            // Once connected, publish an announcement and resubscribe
             client.publish(publishTopic, publishPayload);
             client.subscribe(subscribeTopic);
         } else {
             Serial.println("failed, rc=");
             Serial.print(client.state());
             Serial.println(" try again in 5 seconds");
-            //Wait 5 seconds before retrying
+            // Wait 5 seconds before retrying
             delay(5000);
         }
     }
 }
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     // wait for serial port to connect.
     while (!Serial) {
         ;
     }
 
-    //Attempt to connect to WiFi network
+    // Attempt to connect to WiFi network
     while (status != WL_CONNECTED) {
         Serial.print("\r\nAttempting to connect to SSID: ");
         Serial.println(ssid);
@@ -83,11 +86,12 @@ void setup() {
     client.setServer(mqttServer, 1883);
     client.setCallback(callback);
 
-    //Allow Hardware to sort itself out
+    // Allow Hardware to sort itself out
     delay(1500);
 }
 
-void loop() {
+void loop()
+{
     if (!(client.connected())) {
         reconnect();
     }

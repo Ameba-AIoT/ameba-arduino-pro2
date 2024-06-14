@@ -25,37 +25,40 @@ extern "C" {
 #include "cmsis_os.h"
 
 #ifndef portNVIC_SYSTICK_CURRENT_VALUE_REG
-#define portNVIC_SYSTICK_CURRENT_VALUE_REG  ( * ( ( volatile uint32_t * ) 0xe000e018 ) )
+#define portNVIC_SYSTICK_CURRENT_VALUE_REG (*((volatile uint32_t *)0xe000e018))
 #endif
 
 extern uint32_t xTaskGetTickCount(void);
 extern uint32_t xTaskGetTickCountFromISR(void);
 
-static __inline uint32_t __get_ipsr__(void) {
-    //volatile uint32_t __regIPSR     __asm("ipsr");
-    static uint32_t __regIPSR     __asm("ipsr");
+static __inline uint32_t __get_ipsr__(void)
+{
+    // volatile uint32_t __regIPSR     __asm("ipsr");
+    static uint32_t __regIPSR __asm("ipsr");
     return (__regIPSR);
 }
 
-void delay(uint32_t ms) {
+void delay(uint32_t ms)
+{
     osStatus ret;
 
     ret = osDelay(ms);
     if ((ret != osEventTimeout) && (ret != osOK)) {
-        //printf("\r\n[ERROR] %s. 0x%x \n", __FUNCTION__, ret);
+        // printf("\r\n[ERROR] %s. 0x%x \n", __FUNCTION__, ret);
     }
 }
 
-void delayMicroseconds(uint32_t us) {
+void delayMicroseconds(uint32_t us)
+{
     int i;
     uint32_t t0, tn;
     int dfactor = 0;
 
 #if defined(ARDUINO_AMBPRO2)
-    // Best fit equation obtained experiementally from continuous asm("nop")
+    // Best fit equation obtained experimentally from continuous asm("nop")
     dfactor = 166 * us - 16;
 #else
-    #error "delayMicroseconds(): Unknown chip delay factor"
+#error "delayMicroseconds(): Unknown chip delay factor"
 #endif
 
     if (us > 100) {
@@ -70,11 +73,13 @@ void delayMicroseconds(uint32_t us) {
     }
 }
 
-uint32_t millis(void) {
+uint32_t millis(void)
+{
     return (__get_ipsr__() == 0) ? xTaskGetTickCount() : xTaskGetTickCountFromISR();
 }
 
-uint32_t micros(void) {
+uint32_t micros(void)
+{
     uint32_t tick1, tick2;
     uint32_t us;
     uint32_t tick_per_us;
@@ -96,9 +101,9 @@ uint32_t micros(void) {
     }
 
     if (tick1 == tick2) {
-        return tick1 * 1000 - us*1000 / tick_per_us;
-    } else if( (us*1000 / tick_per_us) < 500 ) {
-        return tick1 * 1000 - us*1000 / tick_per_us;
+        return tick1 * 1000 - us * 1000 / tick_per_us;
+    } else if ((us * 1000 / tick_per_us) < 500) {
+        return tick1 * 1000 - us * 1000 / tick_per_us;
     } else {
         return tick1 * 1000;
     }

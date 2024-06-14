@@ -1,0 +1,30 @@
+{
+    "msg_level":0,
+
+	"PROFILE":["ISP_SENSOR_SETS"],
+	"ISP_SENSOR_SETS":{
+        "multi_fcs_hdr": "MULTI_FCS_HDR",
+        "multi_fcs_info": "MULTI_FCS_INFO",
+        "sensor_sets":[
+			"SENSOR_SET0"
+		]
+	},
+    "MULTI_FCS_HDR":{
+        "km_init_timeout": 5000
+    },
+	"SENSOR_SET0":{
+        "merge_en": true,
+        "fcs_data": {
+            "source":"binary",
+            "file":"fcs_data_dummy.bin"
+        },
+        "iq_data": {
+            "source":"binary",
+            "file":"iq_f37.bin"
+        },
+        "sensor_data": {
+            "source":"binary",
+            "file":"sensor_f37.bin"
+        }
+    }
+}

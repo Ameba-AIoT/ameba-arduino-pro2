@@ -9,7 +9,8 @@
 
 BLEWifiConfigService configService;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     BLE.init();
@@ -28,6 +29,7 @@ void setup() {
     BLE.configAdvert()->startAdv();
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

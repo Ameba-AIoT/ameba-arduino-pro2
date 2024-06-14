@@ -9,21 +9,22 @@
 #include <WiFiUdp.h>
 #include <stdio.h>
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                   // your network key Index number (needed only for WEP)
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;                // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-unsigned int localPort = 5001;  // local port to listen for UDP packets
+unsigned int localPort = 5001;    // local port to listen for UDP packets
 
 // A UDP instance to let us send and receive packets over UDP
 WiFiUDP Udp;
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect.
+        ;    // wait for serial port to connect.
     }
 
     while (status != WL_CONNECTED) {
@@ -43,7 +44,8 @@ void setup() {
 }
 
 char buf[256];
-void loop() {
+void loop()
+{
     int n;
     while (1) {
         memset(buf, 0, 256);
@@ -62,7 +64,8 @@ long long sys_epoch = 0;
 long datacount = 0;
 long total_shift = 0;
 
-void handle_data(char *buf) {
+void handle_data(char *buf)
+{
     long data;
     long timediff;
     long current_epoch;

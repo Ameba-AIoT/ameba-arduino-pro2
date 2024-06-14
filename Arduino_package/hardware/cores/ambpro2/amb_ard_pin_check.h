@@ -2,7 +2,7 @@
 #define _AMB_ARD_PIN_CHECK_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 // ameba - arduino pin mapping name check

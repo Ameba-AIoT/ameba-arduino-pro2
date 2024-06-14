@@ -1,8 +1,8 @@
 /** @file wiring_os.h */
 
-/** 
+/**
  * @defgroup wiring_os wiring_os
- * OS realted function for thread, signal, software timer, semaphore
+ * OS related function for thread, signal, software timer, semaphore
  * @{
  */
 
@@ -21,34 +21,34 @@ extern "C" {
  * @{
  */
 /** function completed; no error or event occurred. */
-#define OS_OK                     0x00
+#define OS_OK 0x00
 /** function completed; signal event occurred. */
-#define OS_EVENT_SIGNAL           0x08
+#define OS_EVENT_SIGNAL 0x08
 /** function completed; message event occurred. */
-#define OS_EVENT_MESSAGE          0x10
+#define OS_EVENT_MESSAGE 0x10
 /** function completed; mail event occurred. */
-#define OS_EVENT_MAIL             0x20
+#define OS_EVENT_MAIL 0x20
 /** function completed; timeout occurred. */
-#define OS_EVENT_TIMEOUT          0x40
+#define OS_EVENT_TIMEOUT 0x40
 /** parameter error: a mandatory parameter was missing or specified an incorrect object. */
-#define OS_ERROR_PARAMETER        0x80
+#define OS_ERROR_PARAMETER 0x80
 /** resource not available: a specified resource was not available. */
-#define OS_ERROR_RESOURCE         0x81
+#define OS_ERROR_RESOURCE 0x81
 /** resource not available within given time: a specified resource was not available within the timeout period. */
 #define OS_ERROR_TIMEOUT_RESOURCE 0xC1
 /** not allowed in ISR context: the function cannot be called from interrupt service routines. */
-#define OS_ERROR_ISR              0x82
+#define OS_ERROR_ISR 0x82
 /** function called multiple times from ISR with same object. */
-#define OS_ERROR_ISR_RECURSIVE    0x83
+#define OS_ERROR_ISR_RECURSIVE 0x83
 /** system cannot determine priority or thread has illegal priority. */
-#define OS_ERROR_PRIORITY         0x84
+#define OS_ERROR_PRIORITY 0x84
 /** system is out of memory: it was impossible to allocate or reserve memory for the operation. */
-#define OS_ERROR_NO_MEMORY        0x85
+#define OS_ERROR_NO_MEMORY 0x85
 /** value of a parameter is out of range. */
-#define OS_ERROR_VALUE            0x86
+#define OS_ERROR_VALUE 0x86
 /** unspecified RTOS error: run-time error but no other error message fits. */
-#define OS_ERROR_OS               0xFF
-/** @} */ // end of group os_status
+#define OS_ERROR_OS 0xFF
+/** @} */    // end of group os_status
 
 /**
  * @defgroup os_priority os_priority
@@ -56,20 +56,20 @@ extern "C" {
  * @{
  */
 /** priority: idle (lowest) */
-#define OS_PRIORITY_IDLE           (-3)
+#define OS_PRIORITY_IDLE (-3)
 /** priority: low */
-#define OS_PRIORITY_LOW            (-2)
+#define OS_PRIORITY_LOW (-2)
 /** priority: below normal */
-#define OS_PRIORITY_BELOW_NORMAL   (-1)
+#define OS_PRIORITY_BELOW_NORMAL (-1)
 /** priority: normal (default) */
-#define OS_PRIORITY_NORMAL         ( 0)
+#define OS_PRIORITY_NORMAL (0)
 /** priority: above normal */
-#define OS_PRIORITY_ABOVENORMAL    (+1)
+#define OS_PRIORITY_ABOVENORMAL (+1)
 /** priority: high */
-#define OS_PRIORITY_HIGH           (+2)
+#define OS_PRIORITY_HIGH (+2)
 /** priority: realtime (highest) */
-#define OS_PRIORITY_REALTIME       (+3)
-/** @} */ // end of group os_priority
+#define OS_PRIORITY_REALTIME (+3)
+/** @} */    // end of group os_priority
 
 #ifndef DEFAULT_STACK_SIZE
 /**
@@ -87,16 +87,16 @@ extern "C" {
  * Redefine osEvent in cmsis_os.h
  */
 typedef struct {
-    uint32_t        status;         ///< status code: event or error information
+    uint32_t status;    ///< status code: event or error information
     union {
-        uint32_t    v;              ///< message as 32-bit value
-        void        *p;             ///< message or mail as void pointer
-        int32_t     signals;        ///< signal flags
-    } value;                        ///< event value
+        uint32_t v;         ///< message as 32-bit value
+        void *p;            ///< message or mail as void pointer
+        int32_t signals;    ///< signal flags
+    } value;                ///< event value
     union {
-        void        *mail_id;       ///< mail id obtained by osMailCreate
-        void        *message_id;    ///< message id obtained by osMessageCreate
-    } def;                          ///< event definition
+        void *mail_id;       ///< mail id obtained by osMailCreate
+        void *message_id;    ///< message id obtained by osMessageCreate
+    } def;                   ///< event definition
 } os_event_t;
 
 /**
@@ -141,8 +141,8 @@ extern uint32_t os_thread_terminate_arduino(uint32_t thread_id);
  * @ingroup thread_management
  * @brief Pass control to next thread that is in state \b READY.
  *
- * By default the minimal execution unit is 1 millisecond. In a scenario that if a thread with smaller want to handout execution right to a thread with 
- * higher priority immediately without waiting for the ending of current 1 millisecond, then invoke os_thread_yield_arduino can transfer exection right to 
+ * By default the minimal execution unit is 1 millisecond. In a scenario that if a thread with smaller want to handout execution right to a thread with
+ * higher priority immediately without waiting for the ending of current 1 millisecond, then invoke os_thread_yield_arduino can transfer execution right to
  * OS's idle task and check which is the next execution thread.
  *
  * @return os_status code
@@ -168,7 +168,7 @@ extern uint32_t os_thread_set_priority_arduino(uint32_t thread_id, int priority)
  */
 extern int os_thread_get_priority_arduino(uint32_t thread_id);
 
-/** 
+/**
  * @defgroup signal_management signal_management
  * Signaling between threads include set, clear, and wait
  */
@@ -196,7 +196,7 @@ extern int32_t os_signal_clear_arduino(uint32_t thread_id, int32_t signals);
 /**
  * @ingroup signal_management
  * @brief Wait for one or more Signal Flags to become signaled for the current \b RUNNING thread.
- * 
+ *
  * @param[in] signals the signals to be wait
  * @param[in] millisec the timeout value if no signal comes in. Fill in 0xFFFFFFFF for infinite wait.
  * @return os_status code
@@ -208,14 +208,14 @@ extern os_event_t os_signal_wait_arduino(int32_t signals, uint32_t millisec);
  * Software timer management include create, start, stop, delete.
  */
 
-/** 
- * @ingroup timer_management 
+/**
+ * @ingroup timer_management
  * @brief specify timer type that invoke only once
  */
-#define OS_TIMER_ONCE     (0)
+#define OS_TIMER_ONCE (0)
 
-/** 
- * @ingroup timer_management 
+/**
+ * @ingroup timer_management
  * @brief specify timer type that invoke periodically
  */
 #define OS_TIMER_PERIODIC (1)
@@ -229,7 +229,7 @@ extern os_event_t os_signal_wait_arduino(int32_t signals, uint32_t millisec);
  * @param[in] argument The argument that is bring into callback function
  * @return timer id
  */
-extern uint32_t os_timer_create_arduino(void (*callback)(void const *argument), uint8_t isPeriodic, void *argument);
+extern uint32_t os_timer_create_arduino(void (*callback)(const void *argument), uint8_t isPeriodic, void *argument);
 
 /**
  * @ingroup timer_management
@@ -320,4 +320,4 @@ extern size_t os_get_free_heap_size_arduino(void);
 
 #endif
 
-/** @} */ // end of group wiring_os
+/** @} */    // end of group wiring_os

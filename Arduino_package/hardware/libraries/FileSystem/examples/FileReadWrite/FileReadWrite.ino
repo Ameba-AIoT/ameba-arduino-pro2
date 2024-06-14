@@ -12,7 +12,8 @@ char write_content[] = "hello world!";
 
 AmebaFatFS fs;
 
-void setup() {
+void setup()
+{
     char buf[128];
     char path[128];
 
@@ -41,6 +42,7 @@ void setup() {
     fs.end();
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

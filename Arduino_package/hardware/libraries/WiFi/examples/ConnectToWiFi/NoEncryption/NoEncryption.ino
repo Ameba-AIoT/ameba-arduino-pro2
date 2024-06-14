@@ -25,14 +25,15 @@
 // Emoji characters can be converted into UTF-8 at https://mothereff.in/utf-8
 // char ssid[] = "\xe2\x9c\x8c\xef\xb8\x8f Ameba \xe2\x9c\x8c\xef\xb8\x8f";
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
+        ;    // wait for serial port to connect. Needed for native USB port only
     }
 
     // attempt to connect to Wifi network:
@@ -52,13 +53,15 @@ void setup() {
     printWifiData();
 }
 
-void loop() {
+void loop()
+{
     // check the network connection once every 10 seconds:
     delay(10000);
     printCurrentNet();
 }
 
-void printWifiData() {
+void printWifiData()
+{
     // print your WiFi IP address:
     IPAddress ip = WiFi.localIP();
     Serial.print("IP Address: ");
@@ -92,7 +95,8 @@ void printWifiData() {
     Serial.println(gateway);
 }
 
-void printCurrentNet() {
+void printCurrentNet()
+{
     // print the SSID of the network you're attached to:
     Serial.print("SSID: ");
     Serial.println(WiFi.SSID());

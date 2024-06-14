@@ -43,10 +43,11 @@ static inline int wpa_debug_reopen_file(void)
 #define wpa_hexdump_ascii(l,t,b,le) do { } while (0)
 #define wpa_msg(args...) do { } while (0)
 #else
+extern int wpa_debug_level;
 //void wpa_printf(int level, const char *fmt, ...);
 #define wpa_printf(level, fmt, arg...)     \
 	do {\
-		if (level >= MSG_INFO) {\
+		if (level >= wpa_debug_level) {\
 			{\
 				printf("\r\n%d:", rtw_get_current_time());\
 				printf(fmt, ##arg);\

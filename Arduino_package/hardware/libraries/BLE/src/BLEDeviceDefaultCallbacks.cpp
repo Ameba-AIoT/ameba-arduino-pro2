@@ -28,17 +28,22 @@
 
 //---------------------------- Default handlers for core BLE functionality ----------------------------//
 
-T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data) {
+T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data)
+{
     T_APP_RESULT result = APP_RESULT_SUCCESS;
     T_LE_CB_DATA *p_data = (T_LE_CB_DATA *)p_cb_data;
 
     switch (cb_type) {
         case GAP_MSG_LE_DATA_LEN_CHANGE_INFO: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_DATA_LEN_CHANGE_INFO: conn_id %d, tx octets 0x%x, max_tx_time 0x%x\n", p_data->p_le_data_len_change_info->conn_id, p_data->p_le_data_len_change_info->max_tx_octets, p_data->p_le_data_len_change_info->max_tx_time);
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_DATA_LEN_CHANGE_INFO: conn_id %d, tx octets 0x%x, max_tx_time 0x%x\n", p_data->p_le_data_len_change_info->conn_id, p_data->p_le_data_len_change_info->max_tx_octets, p_data->p_le_data_len_change_info->max_tx_time);
+            }
             break;
         }
         case GAP_MSG_LE_MODIFY_WHITE_LIST: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_MODIFY_WHITE_LIST: operation %d, cause 0x%x\n", p_data->p_le_modify_white_list_rsp->operation, p_data->p_le_modify_white_list_rsp->cause);
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_MODIFY_WHITE_LIST: operation %d, cause 0x%x\n", p_data->p_le_modify_white_list_rsp->operation, p_data->p_le_modify_white_list_rsp->cause);
+            }
             break;
         }
         case GAP_MSG_LE_CONN_UPDATE_IND: {
@@ -49,26 +54,32 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data) {
                 uint16_t conn_latency = p_data->p_le_conn_update_ind->conn_latency;
                 uint16_t supervision_timeout = p_data->p_le_conn_update_ind->supervision_timeout;
                 printf("\r\n[INFO] GAP_MSG_LE_CONN_UPDATE_IND: conn_id %d, conn_interval_max %d ms, conn_interval_min %d ms, conn_latency %d, supervision_timeout %d ms\n",
-                    conn_id, (uint16_t)(conn_int_max * 1.25), (uint16_t)(conn_int_min * 1.25), conn_latency, (uint16_t)(supervision_timeout * 10));
+                       conn_id, (uint16_t)(conn_int_max * 1.25), (uint16_t)(conn_int_min * 1.25), conn_latency, (uint16_t)(supervision_timeout * 10));
             }
             /* if reject the proposed connection parameter from peer device, use APP_RESULT_REJECT. */
             result = APP_RESULT_ACCEPT;
             break;
         }
         case GAP_MSG_LE_PHY_UPDATE_INFO: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_PHY_UPDATE_INFO:conn_id %d, cause 0x%x, rx_phy %d, tx_phy %d\n", p_data->p_le_phy_update_info->conn_id, p_data->p_le_phy_update_info->cause, p_data->p_le_phy_update_info->rx_phy, p_data->p_le_phy_update_info->tx_phy);
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_PHY_UPDATE_INFO:conn_id %d, cause 0x%x, rx_phy %d, tx_phy %d\n", p_data->p_le_phy_update_info->conn_id, p_data->p_le_phy_update_info->cause, p_data->p_le_phy_update_info->rx_phy, p_data->p_le_phy_update_info->tx_phy);
+            }
             break;
-        }        
+        }
         case GAP_MSG_LE_REMOTE_FEATS_INFO: {
-            uint8_t  remote_feats[8];
-            //if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: conn id %d, cause 0x%x, remote_feats %b\n", p_data->p_le_remote_feats_info->conn_id, p_data->p_le_remote_feats_info->cause, TRACE_BINARY(8, p_data->p_le_remote_feats_info->remote_feats));
+            uint8_t remote_feats[8];
+            // if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: conn id %d, cause 0x%x, remote_feats %b\n", p_data->p_le_remote_feats_info->conn_id, p_data->p_le_remote_feats_info->cause, TRACE_BINARY(8, p_data->p_le_remote_feats_info->remote_feats));
             if (p_data->p_le_remote_feats_info->cause == GAP_SUCCESS) {
                 memcpy(remote_feats, p_data->p_le_remote_feats_info->remote_feats, 8);
                 if (remote_feats[LE_SUPPORT_FEATURES_MASK_ARRAY_INDEX1] & LE_SUPPORT_FEATURES_LE_2M_MASK_BIT) {
-                    if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support 2M\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support 2M\n");
+                    }
                 }
                 if (remote_feats[LE_SUPPORT_FEATURES_MASK_ARRAY_INDEX1] & LE_SUPPORT_FEATURES_LE_CODED_PHY_MASK_BIT) {
-                    if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support CODED\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support CODED\n");
+                    }
                 }
             }
             break;
@@ -82,13 +93,16 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data) {
             break;
         }
         default:
-            if (BTDEBUG) printf("\r\n[ERROR] gapCallbackDefault: unhandled cb_type 0x%x\n", cb_type);
+            if (BTDEBUG) {
+                printf("\r\n[ERROR] gapCallbackDefault: unhandled cb_type 0x%x\n", cb_type);
+            }
             break;
     }
     return result;
 }
 
-void BLEDevice::ioMsgHandlerDefault(T_IO_MSG io_msg) {
+void BLEDevice::ioMsgHandlerDefault(T_IO_MSG io_msg)
+{
     uint16_t msg_type = io_msg.type;
 
     switch (msg_type) {
@@ -97,17 +111,22 @@ void BLEDevice::ioMsgHandlerDefault(T_IO_MSG io_msg) {
             break;
         }
         default:
-            if (BTDEBUG) printf("\r\n[ERROR] ioMsgHandlerDefault: unhandled\n");
+            if (BTDEBUG) {
+                printf("\r\n[ERROR] ioMsgHandlerDefault: unhandled\n");
+            }
             break;
     }
 }
 
-void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg) {
+void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
+{
     T_LE_GAP_MSG gap_msg;
     uint8_t conn_id;
     memcpy(&gap_msg, &p_gap_msg->u.param, sizeof(p_gap_msg->u.param));
 
-    if (BTDEBUG) printf("\r\n[INFO] gapMsgHandlerDefault: subtype %d\n", p_gap_msg->subtype);
+    if (BTDEBUG) {
+        printf("\r\n[INFO] gapMsgHandlerDefault: subtype %d\n", p_gap_msg->subtype);
+    }
     switch (p_gap_msg->subtype) {
         case GAP_MSG_LE_DEV_STATE_CHANGE: {
             if (_bleState == 1) {
@@ -137,31 +156,37 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg) {
             authenStateEvtHandlerDefault(gap_msg.msg_data.gap_authen_state.conn_id, gap_msg.msg_data.gap_authen_state.new_state, gap_msg.msg_data.gap_authen_state.status);
             break;
         }
-    // cases below relate to bonding requests from devices
-    // defaults are set up to accept all bonding requests from all methods
+            // cases below relate to bonding requests from devices
+            // defaults are set up to accept all bonding requests from all methods
         case GAP_MSG_LE_BOND_PASSKEY_DISPLAY: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_DISPLAY\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_DISPLAY\n");
+            }
             uint32_t display_value = 0;
             conn_id = gap_msg.msg_data.gap_bond_passkey_display.conn_id;
             le_bond_get_display_key(conn_id, &display_value);
-            if ((_pBLESecurity->_pKeyDisplayCB) != nullptr) {                   // Check if a passkey display callback function is set
-                (_pBLESecurity->_pKeyDisplayCB)(conn_id, display_value);        // Call function to display bonding key
+            if ((_pBLESecurity->_pKeyDisplayCB) != nullptr) {               // Check if a passkey display callback function is set
+                (_pBLESecurity->_pKeyDisplayCB)(conn_id, display_value);    // Call function to display bonding key
             }
-            le_bond_passkey_display_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);     // If no callback function is set, default to accept connection
+            le_bond_passkey_display_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);    // If no callback function is set, default to accept connection
             break;
         }
         case GAP_MSG_LE_BOND_PASSKEY_INPUT: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_INPUT\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_INPUT\n");
+            }
             uint32_t passkey = 0;
             conn_id = gap_msg.msg_data.gap_bond_passkey_input.conn_id;
-            if ((_pBLESecurity->_pKeyInputCB) != nullptr) {                     // Check if a passkey input callback function is set
-                passkey = (_pBLESecurity->_pKeyInputCB)(conn_id);               // Call function to get bonding passkey
+            if ((_pBLESecurity->_pKeyInputCB) != nullptr) {          // Check if a passkey input callback function is set
+                passkey = (_pBLESecurity->_pKeyInputCB)(conn_id);    // Call function to get bonding passkey
             }
             le_bond_passkey_input_confirm(conn_id, passkey, GAP_CFM_CAUSE_ACCEPT);
             break;
         }
         case GAP_MSG_LE_BOND_OOB_INPUT: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_BOND_OOB_INPUT\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_BOND_OOB_INPUT\n");
+            }
             uint8_t oob_data[GAP_OOB_LEN] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             conn_id = gap_msg.msg_data.gap_bond_oob_input.conn_id;
             le_bond_set_param(GAP_PARAM_BOND_OOB_DATA, GAP_OOB_LEN, oob_data);
@@ -169,38 +194,49 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg) {
             break;
         }
         case GAP_MSG_LE_BOND_USER_CONFIRMATION: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_BOND_USER_CONFIRMATION\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_BOND_USER_CONFIRMATION\n");
+            }
             uint32_t display_value = 0;
             conn_id = gap_msg.msg_data.gap_bond_user_conf.conn_id;
             le_bond_get_display_key(conn_id, &display_value);
-            if ((_pBLESecurity->_pNumCompareCB) != nullptr) {                   // Check if a numeric comparison callback function exists
-                if ((_pBLESecurity->_pNumCompareCB)(conn_id, display_value)) {  // Call function to determine bonding request acceptance
+            if ((_pBLESecurity->_pNumCompareCB) != nullptr) {                     // Check if a numeric comparison callback function exists
+                if ((_pBLESecurity->_pNumCompareCB)(conn_id, display_value)) {    // Call function to determine bonding request acceptance
                     le_bond_user_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
                 } else {
                     le_bond_user_confirm(conn_id, GAP_CFM_CAUSE_REJECT);
                 }
-            } else { // If no callback function is set, default to accept connection
+            } else {    // If no callback function is set, default to accept connection
                 le_bond_user_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
             }
             break;
         }
         case GAP_MSG_LE_BOND_JUST_WORK: {
-            if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_BOND_JUST_WORK\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP_MSG_LE_BOND_JUST_WORK\n");
+            }
             conn_id = gap_msg.msg_data.gap_bond_just_work_conf.conn_id;
             le_bond_just_work_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
             break;
         }
         default:
-            if (BTDEBUG) printf("\r\n[ERROR] gapMsgHandlerDefault: unknown subtype %d\n", p_gap_msg->subtype);
+            if (BTDEBUG) {
+                printf("\r\n[ERROR] gapMsgHandlerDefault: unknown subtype %d\n", p_gap_msg->subtype);
+            }
             break;
     }
 }
 
-void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint16_t cause) {
-    if (BTDEBUG) printf("\r\n[INFO] devStateEvtHandlerPeriphDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
+void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint16_t cause)
+{
+    if (BTDEBUG) {
+        printf("\r\n[INFO] devStateEvtHandlerPeriphDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
+    }
     if (_gapDevState.gap_init_state != new_state.gap_init_state) {
         if (new_state.gap_init_state == GAP_INIT_STATE_STACK_READY) {
-            if (BTDEBUG) printf("\r\n[INFO] GAP stack ready\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP stack ready\n");
+            }
             // BLE stack is ready
             uint8_t bt_addr[6];
             gap_get_param(GAP_PARAM_BD_ADDR, bt_addr);
@@ -214,7 +250,7 @@ void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint1
             if (new_state.gap_adv_sub_state == GAP_ADV_TO_IDLE_CAUSE_CONN) {
                 printf("\r\n[INFO] BLE Device. GAP adv stopped: because connection created\n");
             } else {
-                printf("\r\n[INFO] BLE Device. GAP adv stopped\n"); 
+                printf("\r\n[INFO] BLE Device. GAP adv stopped\n");
             }
         } else if (new_state.gap_adv_state == GAP_ADV_STATE_ADVERTISING) {
             printf("\r\n[INFO] BLE Device. GAP adv start\n");
@@ -223,11 +259,16 @@ void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint1
     _gapDevState = new_state;
 }
 
-void BLEDevice::devStateEvtHandlerCentralDefault(T_GAP_DEV_STATE new_state, uint16_t cause) {
-    if (BTDEBUG) printf("\r\n[INFO] devStateEvtHandlerCentralDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
+void BLEDevice::devStateEvtHandlerCentralDefault(T_GAP_DEV_STATE new_state, uint16_t cause)
+{
+    if (BTDEBUG) {
+        printf("\r\n[INFO] devStateEvtHandlerCentralDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
+    }
     if (_gapDevState.gap_init_state != new_state.gap_init_state) {
         if (new_state.gap_init_state == GAP_INIT_STATE_STACK_READY) {
-            if (BTDEBUG) printf("\r\n[INFO] GAP stack ready\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] GAP stack ready\n");
+            }
             // BLE stack is ready
             uint8_t bt_addr[6];
             gap_get_param(GAP_PARAM_BD_ADDR, bt_addr);
@@ -238,20 +279,24 @@ void BLEDevice::devStateEvtHandlerCentralDefault(T_GAP_DEV_STATE new_state, uint
     if (_gapDevState.gap_scan_state != new_state.gap_scan_state) {
         if (new_state.gap_scan_state == GAP_SCAN_STATE_IDLE) {
             printf("\r\n[INFO] BLE Device. GAP scan stop\n");
-        }
-        else if (new_state.gap_scan_state == GAP_SCAN_STATE_SCANNING) {
+        } else if (new_state.gap_scan_state == GAP_SCAN_STATE_SCANNING) {
             printf("\r\n[INFO] BLE Device. GAP scan start\n");
         }
     }
     _gapDevState = new_state;
 }
 
-void BLEDevice::connStateEvtHandlerPeriphDefault(uint8_t conn_id, T_GAP_CONN_STATE new_state, uint16_t disc_cause) {
-    if (BTDEBUG) printf("\r\n[INFO] connStateEvtHandlerPeriphDefault: conn_id %d old_state %d new_state %d, disc_cause 0x%x\n", conn_id, _gapConnState, new_state, disc_cause);
+void BLEDevice::connStateEvtHandlerPeriphDefault(uint8_t conn_id, T_GAP_CONN_STATE new_state, uint16_t disc_cause)
+{
+    if (BTDEBUG) {
+        printf("\r\n[INFO] connStateEvtHandlerPeriphDefault: conn_id %d old_state %d new_state %d, disc_cause 0x%x\n", conn_id, _gapConnState, new_state, disc_cause);
+    }
     switch (new_state) {
         case GAP_CONN_STATE_DISCONNECTED: {
             if ((disc_cause != (HCI_ERR | HCI_ERR_REMOTE_USER_TERMINATE)) && (disc_cause != (HCI_ERR | HCI_ERR_LOCAL_HOST_TERMINATE))) {
-                if (BTDEBUG) printf("\r\n[INFO] connStateEvtHandlerPeriphDefault: connection lost cause 0x%x\n", disc_cause);
+                if (BTDEBUG) {
+                    printf("\r\n[INFO] connStateEvtHandlerPeriphDefault: connection lost cause 0x%x\n", disc_cause);
+                }
             }
             printf("\r\n[INFO] BLE Device. BT Disconnected, start ADV\n");
             le_adv_start();
@@ -262,7 +307,7 @@ void BLEDevice::connStateEvtHandlerPeriphDefault(uint8_t conn_id, T_GAP_CONN_STA
                 uint16_t conn_interval;
                 uint16_t conn_latency;
                 uint16_t conn_supervision_timeout;
-                uint8_t  remote_bd[6];
+                uint8_t remote_bd[6];
                 T_GAP_REMOTE_ADDR_TYPE remote_bd_type;
                 le_get_conn_param(GAP_PARAM_CONN_INTERVAL, &conn_interval, conn_id);
                 le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_latency, conn_id);
@@ -285,30 +330,35 @@ void BLEDevice::connStateEvtHandlerPeriphDefault(uint8_t conn_id, T_GAP_CONN_STA
     _gapConnState = new_state;
 }
 
-void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_STATE new_state, uint16_t disc_cause) {
+void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_STATE new_state, uint16_t disc_cause)
+{
     if (conn_id >= BLE_CENTRAL_APP_MAX_LINKS) {
         return;
     }
-    if (BTDEBUG) printf("\r\n[INFO] connStateEvtHandlerCentralDefault: conn_id %d, conn_state(%d -> %d), disc_cause 0x%x\n", conn_id, _bleCentralAppLinkTable[conn_id].conn_state, new_state, disc_cause);
+    if (BTDEBUG) {
+        printf("\r\n[INFO] connStateEvtHandlerCentralDefault: conn_id %d, conn_state(%d -> %d), disc_cause 0x%x\n", conn_id, _bleCentralAppLinkTable[conn_id].conn_state, new_state, disc_cause);
+    }
 
     _bleCentralAppLinkTable[conn_id].conn_state = new_state;
     switch (new_state) {
         case GAP_CONN_STATE_DISCONNECTED: {
             if ((disc_cause != (HCI_ERR | HCI_ERR_REMOTE_USER_TERMINATE)) && (disc_cause != (HCI_ERR | HCI_ERR_LOCAL_HOST_TERMINATE))) {
-                if (BTDEBUG) printf("\r\n[INFO] connStateEvtHandlerCentralDefault: connection lost, conn_id %d, cause 0x%x\n", conn_id, disc_cause);
+                if (BTDEBUG) {
+                    printf("\r\n[INFO] connStateEvtHandlerCentralDefault: connection lost, conn_id %d, cause 0x%x\n", conn_id, disc_cause);
+                }
             }
             printf("\r\n[INFO] BLE Device. Disconnected conn_id %d\n", conn_id);
             memset(&_bleCentralAppLinkTable[conn_id], 0, sizeof(T_APP_LINK));
             break;
         }
-        case GAP_CONN_STATE_CONNECTED:{
+        case GAP_CONN_STATE_CONNECTED: {
             le_get_conn_addr(conn_id, _bleCentralAppLinkTable[conn_id].bd_addr, (uint8_t *)&_bleCentralAppLinkTable[conn_id].bd_type);
             printf("\r\n[INFO] BLE Device. Connected conn_id %d\n", conn_id);
             if (BTDEBUG) {
                 uint16_t conn_interval;
                 uint16_t conn_latency;
                 uint16_t conn_supervision_timeout;
-                uint8_t  remote_bd[6];
+                uint8_t remote_bd[6];
                 T_GAP_REMOTE_ADDR_TYPE remote_bd_type;
                 le_get_conn_param(GAP_PARAM_CONN_INTERVAL, &conn_interval, conn_id);
                 le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_latency, conn_id);
@@ -331,11 +381,15 @@ void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_ST
     _gapConnState = new_state;
 }
 
-void BLEDevice::connMtuInfoEvtHandlerDefault(uint8_t conn_id, uint16_t mtu_size) {
-    if (BTDEBUG) printf("\r\n[INFO] connMtuInfoEvtHandlerDefault: conn_id %d, mtu_size %d\n", conn_id, mtu_size);
+void BLEDevice::connMtuInfoEvtHandlerDefault(uint8_t conn_id, uint16_t mtu_size)
+{
+    if (BTDEBUG) {
+        printf("\r\n[INFO] connMtuInfoEvtHandlerDefault: conn_id %d, mtu_size %d\n", conn_id, mtu_size);
+    }
 }
 
-void BLEDevice::connParamUpdateEvtHandlerDefault(uint8_t conn_id, uint8_t status, uint16_t cause) {
+void BLEDevice::connParamUpdateEvtHandlerDefault(uint8_t conn_id, uint8_t status, uint16_t cause)
+{
     switch (status) {
         case GAP_CONN_PARAM_UPDATE_STATUS_SUCCESS: {
             uint16_t conn_interval;
@@ -345,15 +399,21 @@ void BLEDevice::connParamUpdateEvtHandlerDefault(uint8_t conn_id, uint8_t status
             le_get_conn_param(GAP_PARAM_CONN_INTERVAL, &conn_interval, conn_id);
             le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_slave_latency, conn_id);
             le_get_conn_param(GAP_PARAM_CONN_TIMEOUT, &conn_supervision_timeout, conn_id);
-            if (BTDEBUG) printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update success:conn_interval %d ms, conn_slave_latency %d, conn_supervision_timeout %d ms\n", (uint16_t)(conn_interval * 1.25), conn_slave_latency, (uint16_t)(conn_supervision_timeout * 10));
+            if (BTDEBUG) {
+                printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update success:conn_interval %d ms, conn_slave_latency %d, conn_supervision_timeout %d ms\n", (uint16_t)(conn_interval * 1.25), conn_slave_latency, (uint16_t)(conn_supervision_timeout * 10));
+            }
             break;
         }
         case GAP_CONN_PARAM_UPDATE_STATUS_FAIL: {
-            if (BTDEBUG) printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update failed: cause 0x%x\n", cause);
+            if (BTDEBUG) {
+                printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update failed: cause 0x%x\n", cause);
+            }
             break;
         }
         case GAP_CONN_PARAM_UPDATE_STATUS_PENDING: {
-            if (BTDEBUG) printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update pending: conn_id %d\n", conn_id);
+            if (BTDEBUG) {
+                printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update pending: conn_id %d\n", conn_id);
+            }
             break;
         }
         default:
@@ -361,49 +421,69 @@ void BLEDevice::connParamUpdateEvtHandlerDefault(uint8_t conn_id, uint8_t status
     }
 }
 
-void BLEDevice::authenStateEvtHandlerDefault(uint8_t conn_id, uint8_t new_state, uint16_t cause) {
-    if (BTDEBUG) printf("\r\n[INFO] authenStateEvtHandlerDefault:conn_id %d, cause 0x%x\n", conn_id, cause);
+void BLEDevice::authenStateEvtHandlerDefault(uint8_t conn_id, uint8_t new_state, uint16_t cause)
+{
+    if (BTDEBUG) {
+        printf("\r\n[INFO] authenStateEvtHandlerDefault:conn_id %d, cause 0x%x\n", conn_id, cause);
+    }
     switch (new_state) {
         case GAP_AUTHEN_STATE_STARTED: {
-            if (BTDEBUG) printf("\r\n[INFO] authenStateEvtHandlerDefault: GAP_AUTHEN_STATE_STARTED\n");
+            if (BTDEBUG) {
+                printf("\r\n[INFO] authenStateEvtHandlerDefault: GAP_AUTHEN_STATE_STARTED\n");
+            }
             break;
         }
         case GAP_AUTHEN_STATE_COMPLETE: {
             if (cause == GAP_SUCCESS) {
-                if (BTDEBUG) printf("\r\n[INFO] authenStateEvtHandlerDefault: Pair success conn id :%d\n", conn_id);
+                if (BTDEBUG) {
+                    printf("\r\n[INFO] authenStateEvtHandlerDefault: Pair success conn id :%d\n", conn_id);
+                }
             } else {
-                if (BTDEBUG) printf("\r\n[INFO] authenStateEvtHandlerDefault: Pair failed: cause 0x%x\n", cause);
+                if (BTDEBUG) {
+                    printf("\r\n[INFO] authenStateEvtHandlerDefault: Pair failed: cause 0x%x\n", cause);
+                }
             }
             break;
         }
         default:
-            if (BTDEBUG) printf("\r\n[INFO] authenStateEvtHandlerDefault: unknown newstate %d\n", new_state);
+            if (BTDEBUG) {
+                printf("\r\n[INFO] authenStateEvtHandlerDefault: unknown newstate %d\n", new_state);
+            }
             break;
     }
 }
 
 //--------------------------------------------------------- Default callbacks for services ---------------------------------------------------------//
 
-T_APP_RESULT BLEDevice::appServiceCallbackDefault(T_SERVER_ID service_id, void *p_data) {
+T_APP_RESULT BLEDevice::appServiceCallbackDefault(T_SERVER_ID service_id, void *p_data)
+{
     T_APP_RESULT result = APP_RESULT_SUCCESS;
     if (service_id == SERVICE_PROFILE_GENERAL_ID) {
         T_SERVER_APP_CB_DATA *p_param = (T_SERVER_APP_CB_DATA *)p_data;
         switch (p_param->eventId) {
-            case PROFILE_EVT_SRV_REG_COMPLETE:// srv register result event.
-                if (BTDEBUG) printf("\r\n[INFO] PROFILE_EVT_SRV_REG_COMPLETE: result %d\n", p_param->event_data.service_reg_result);
+            case PROFILE_EVT_SRV_REG_COMPLETE:    // srv register result event.
+                if (BTDEBUG) {
+                    printf("\r\n[INFO] PROFILE_EVT_SRV_REG_COMPLETE: result %d\n", p_param->event_data.service_reg_result);
+                }
                 break;
 
             case PROFILE_EVT_SEND_DATA_COMPLETE:
-                if (BTDEBUG) printf("\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE: conn_id %d, cause 0x%x, service_id %d, attrib_idx 0x%x, credits %d\n",
-                                p_param->event_data.send_data_result.conn_id,
-                                p_param->event_data.send_data_result.cause,
-                                p_param->event_data.send_data_result.service_id,
-                                p_param->event_data.send_data_result.attrib_idx,
-                                p_param->event_data.send_data_result.credits);
+                if (BTDEBUG) {
+                    printf("\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE: conn_id %d, cause 0x%x, service_id %d, attrib_idx 0x%x, credits %d\n",
+                           p_param->event_data.send_data_result.conn_id,
+                           p_param->event_data.send_data_result.cause,
+                           p_param->event_data.send_data_result.service_id,
+                           p_param->event_data.send_data_result.attrib_idx,
+                           p_param->event_data.send_data_result.credits);
+                }
                 if (p_param->event_data.send_data_result.cause == GAP_SUCCESS) {
-                    if (BTDEBUG) printf("\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE success\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE success\n");
+                    }
                 } else {
-                    if (BTDEBUG) printf("\r\n[ERROR] PROFILE_EVT_SEND_DATA_COMPLETE failed\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[ERROR] PROFILE_EVT_SEND_DATA_COMPLETE failed\n");
+                    }
                 }
                 break;
 
@@ -415,8 +495,9 @@ T_APP_RESULT BLEDevice::appServiceCallbackDefault(T_SERVER_ID service_id, void *
 }
 
 T_APP_RESULT BLEDevice::serviceAttrReadCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index,
-                                                                        uint16_t offset, uint16_t *p_length, uint8_t **pp_value) {
-    T_APP_RESULT cause  = APP_RESULT_ATTR_NOT_FOUND;
+                                                       uint16_t offset, uint16_t *p_length, uint8_t **pp_value)
+{
+    T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     uint8_t i;
     for (i = 0; i < _serviceCount; i++) {
         if ((_servicePtrList[i]->getServiceID()) == service_id) {
@@ -428,8 +509,9 @@ T_APP_RESULT BLEDevice::serviceAttrReadCallbackDefault(uint8_t conn_id, T_SERVER
 }
 
 T_APP_RESULT BLEDevice::serviceAttrWriteCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index,
-                                                                        T_WRITE_TYPE write_type, uint16_t length, uint8_t *p_value,
-                                                                        P_FUN_WRITE_IND_POST_PROC *p_write_ind_post_proc) {
+                                                        T_WRITE_TYPE write_type, uint16_t length, uint8_t *p_value,
+                                                        P_FUN_WRITE_IND_POST_PROC *p_write_ind_post_proc)
+{
     T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     uint8_t i;
     for (i = 0; i < _serviceCount; i++) {
@@ -441,7 +523,8 @@ T_APP_RESULT BLEDevice::serviceAttrWriteCallbackDefault(uint8_t conn_id, T_SERVE
     return cause;
 }
 
-void BLEDevice::serviceCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index, uint16_t ccc_bits) {
+void BLEDevice::serviceCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index, uint16_t ccc_bits)
+{
     uint8_t i;
     for (i = 0; i < _serviceCount; i++) {
         if ((_servicePtrList[i]->getServiceID()) == service_id) {
@@ -453,28 +536,39 @@ void BLEDevice::serviceCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID se
 
 //--------------------------------------------------------- Default callbacks for clients ---------------------------------------------------------//
 
-T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t conn_id, void *p_data) {
-    T_APP_RESULT  result = APP_RESULT_SUCCESS;
-    if (BTDEBUG) printf("\r\n[INFO] app_client_callback: client_id %d, conn_id %d\n", client_id, conn_id);
+T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t conn_id, void *p_data)
+{
+    T_APP_RESULT result = APP_RESULT_SUCCESS;
+    if (BTDEBUG) {
+        printf("\r\n[INFO] app_client_callback: client_id %d, conn_id %d\n", client_id, conn_id);
+    }
     if (client_id == CLIENT_PROFILE_GENERAL_ID) {
         T_CLIENT_APP_CB_DATA *p_client_app_cb_data = (T_CLIENT_APP_CB_DATA *)p_data;
         switch (p_client_app_cb_data->cb_type) {
             case CLIENT_APP_CB_TYPE_DISC_STATE:
                 if (p_client_app_cb_data->cb_content.disc_state_data.disc_state == DISC_STATE_SRV_DONE) {
-                    if (BTDEBUG) printf("\r\n[INFO] Discovery All Service Procedure Done.\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] Discovery All Service Procedure Done.\n");
+                    }
                 } else {
-                    if (BTDEBUG) printf("\r\n[INFO] Discovery state send to application directly.\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] Discovery state send to application directly.\n");
+                    }
                 }
                 break;
 
             case CLIENT_APP_CB_TYPE_DISC_RESULT:
                 if (p_client_app_cb_data->cb_content.disc_result_data.result_type == DISC_RESULT_ALL_SRV_UUID16) {
-                    if (BTDEBUG) printf("\r\n[INFO] Discovery All Primary Service: UUID16 0x%x, start handle 0x%x, end handle 0x%x.\n",
-                                    p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->uuid16,
-                                    p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->att_handle,
-                                    p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->end_group_handle);
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] Discovery All Primary Service: UUID16 0x%x, start handle 0x%x, end handle 0x%x.\n",
+                               p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->uuid16,
+                               p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->att_handle,
+                               p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->end_group_handle);
+                    }
                 } else {
-                    if (BTDEBUG) printf("\r\n[INFO] Discovery result send to application directly.\n");
+                    if (BTDEBUG) {
+                        printf("\r\n[INFO] Discovery result send to application directly.\n");
+                    }
                 }
                 break;
 
@@ -485,35 +579,40 @@ T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t 
     return result;
 }
 
-void BLEDevice::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_STATE discovery_state) {
+void BLEDevice::clientDiscoverStateCallbackDefault(uint8_t conn_id, T_DISCOVERY_STATE discovery_state)
+{
     if (_clientPtrList[conn_id] == nullptr) {
         return;
     }
     _clientPtrList[conn_id]->clientDiscoverStateCallbackDefault(conn_id, discovery_state);
 }
 
-void BLEDevice::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY_RESULT_TYPE result_type, T_DISCOVERY_RESULT_DATA result_data) {
+void BLEDevice::clientDiscoverResultCallbackDefault(uint8_t conn_id, T_DISCOVERY_RESULT_TYPE result_type, T_DISCOVERY_RESULT_DATA result_data)
+{
     if (_clientPtrList[conn_id] == nullptr) {
         return;
     }
     _clientPtrList[conn_id]->clientDiscoverResultCallbackDefault(conn_id, result_type, result_data);
 }
 
-void BLEDevice::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
+void BLEDevice::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t *p_value)
+{
     if (_clientPtrList[conn_id] == nullptr) {
         return;
     }
     _clientPtrList[conn_id]->clientReadResultCallbackDefault(conn_id, cause, handle, value_size, p_value);
 }
 
-void BLEDevice::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits) {
+void BLEDevice::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits)
+{
     if (_clientPtrList[conn_id] == nullptr) {
         return;
     }
     _clientPtrList[conn_id]->clientWriteResultCallbackDefault(conn_id, type, handle, cause, credits);
 }
 
-T_APP_RESULT BLEDevice::clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t *p_value) {
+T_APP_RESULT BLEDevice::clientNotifyIndicateCallbackDefault(uint8_t conn_id, bool notify, uint16_t handle, uint16_t value_size, uint8_t *p_value)
+{
     T_APP_RESULT app_result = APP_RESULT_APP_ERR;
     if (_clientPtrList[conn_id] == nullptr) {
         return app_result;
@@ -521,7 +620,8 @@ T_APP_RESULT BLEDevice::clientNotifyIndicateCallbackDefault(uint8_t conn_id, boo
     return (_clientPtrList[conn_id]->clientNotifyIndicateCallbackDefault(conn_id, notify, handle, value_size, p_value));
 }
 
-void BLEDevice::clientDisconnectCallbackDefault(uint8_t conn_id) {
+void BLEDevice::clientDisconnectCallbackDefault(uint8_t conn_id)
+{
     if (_clientPtrList[conn_id] == nullptr) {
         return;
     }
@@ -529,4 +629,3 @@ void BLEDevice::clientDisconnectCallbackDefault(uint8_t conn_id) {
     delete _clientPtrList[conn_id];
     _clientPtrList[conn_id] = nullptr;
 }
-

@@ -7,7 +7,7 @@
 
 uint32_t simoCreate(void);
 void simoDestroy(void *);
-int  simoStart(void *);
+int simoStart(void *);
 void simoStop(void *);
 void simoPause(void *);
 void simoResume(void *);

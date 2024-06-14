@@ -3,7 +3,7 @@
  receiving timeout value. If timeout happens, then add 1 to receiving timeout. Otherwise
  decrease receiving timeout.
 
- Please open Serial Plotter to check the change behavor of timeout value.
+ Please open Serial Plotter to check the change behavior of timeout value.
  The meaning of timeout value depends on the sending frequency from sender side.
  If the sender side send packets frequently, then the Arduino side can have smaller receiving timeout value.
 
@@ -15,22 +15,23 @@
 #include <WiFiUdp.h>
 #include <stdio.h>
 
-char ssid[] = "Network_SSID";       // your network SSID (name)
-char pass[] = "Password";           // your network password (use for WPA, or use as key for WEP)
-int keyIndex = 0;                   // your network key Index number (needed only for WEP)
-int status = WL_IDLE_STATUS;        // Indicater of Wifi status
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;                // your network key Index number (needed only for WEP)
+int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
-unsigned int localPort = 5001;  // local port to listen for UDP packets
+unsigned int localPort = 5001;    // local port to listen for UDP packets
 
 // A UDP instance to let us send and receive packets over UDP
 WiFiUDP Udp;
 IPAddress ip;
 
-void setup() {
-    //Initialize serial and wait for port to open:
+void setup()
+{
+    // Initialize serial and wait for port to open:
     Serial.begin(115200);
     while (!Serial) {
-        ; // wait for serial port to connect.
+        ;    // wait for serial port to connect.
     }
 
     while (status != WL_CONNECTED) {
@@ -53,7 +54,8 @@ void setup() {
 
 int timeout = 1000;
 char buf[256];
-void loop() {
+void loop()
+{
     int n;
     while (1) {
         memset(buf, 0, 256);

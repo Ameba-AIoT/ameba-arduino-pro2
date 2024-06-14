@@ -18,6 +18,8 @@
 
 /************************ For EAP auth configurations *************************/
 /* DO NOT change the below config of EAP */
+#define PRE_CONFIG_EAP 1
+
 #ifdef PRE_CONFIG_EAP
 #define CONFIG_TLS  1
 #define CONFIG_PEAP 1

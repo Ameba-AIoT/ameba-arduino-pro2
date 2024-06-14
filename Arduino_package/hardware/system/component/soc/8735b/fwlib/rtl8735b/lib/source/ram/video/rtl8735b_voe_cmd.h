@@ -151,6 +151,11 @@
 #define VOE_I2C_READ                     0x270
 #define VOE_I2C_WRITE                    0x271
 
+//SENSOR MODE
+#define VOE_SENSOR_SET_OPEN_MODE         0x275
+#define VOE_SENSOR_SET_CLOSE_MODE        0x276
+
+
 // VOE peripheral command
 #define VOE_SET_WDT_CMD                  0x280
 

@@ -137,6 +137,7 @@ struct rtsp_context {
 	u16 rtpseq[RTSP_MAX_STREAM_NUM];
 	uint8_t is_rtsp_start;
 	_sema start_rtsp_sema;
+	_sema start_rtp_service_sema;
 	uint8_t is_rtp_start;
 	_sema start_rtp_sema;
 	void (* rtp_service_handle)(struct rtsp_context *rtsp_ctx);

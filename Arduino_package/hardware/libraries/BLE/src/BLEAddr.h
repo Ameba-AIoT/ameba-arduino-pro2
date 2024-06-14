@@ -4,18 +4,18 @@
 #include <Arduino.h>
 
 class BLEAddr {
-    public:
-        BLEAddr();
-        BLEAddr(uint8_t (&addr)[6]);
-        BLEAddr(const char * str);      // Build a BLEAddr object from an address string. Use of colons (:) to seperate address bytes in the string is acceptable.
-        const char* str();
-        uint8_t* data();
-        bool operator ==(const BLEAddr &addr);
+public:
+    BLEAddr();
+    BLEAddr(uint8_t (&addr)[6]);
+    BLEAddr(const char* str);    // Build a BLEAddr object from an address string. Use of colons (:) to separate address bytes in the string is acceptable.
+    const char* str();
+    uint8_t* data();
+    bool operator==(const BLEAddr& addr);
 
-    private:
-        friend class BLEDevice;
-        uint8_t _btAddr[6] = {0};   // BT address is stored MSB at _btAddr[5]
-        char _str[20] = {0};
+private:
+    friend class BLEDevice;
+    uint8_t _btAddr[6] = {0};    // BT address is stored MSB at _btAddr[5]
+    char _str[20] = {0};
 };
 
 #endif
