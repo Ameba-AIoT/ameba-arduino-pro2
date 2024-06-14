@@ -98,7 +98,8 @@ jobs:
         with:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
           sketch-paths: |
-            - Arduino_package/hardware/libraries/
+            # - Arduino_package/hardware/libraries/
+            ${{ env['examples-to-use'] }}
           platforms: |
             - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek_amebapro2_index.json
               name: realtek:AmebaPro2
