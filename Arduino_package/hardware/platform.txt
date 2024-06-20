@@ -183,11 +183,11 @@ recipe.objcopy.hex.imagepath_appntzmap.windows="{build.path}\application.ntz.map
 recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
-recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}"
+recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}" "{build.ota_mode_val}"
 
-recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}"
+recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}" "{build.ota_mode_val}"
 
-recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}"
+recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}" "{build.ota_mode_val}"
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"

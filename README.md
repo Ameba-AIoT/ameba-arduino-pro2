@@ -51,3 +51,10 @@ For all `release` information, please visit this [link](https://github.com/ambio
     For more information, please refer to https://www.amebaiot.com/en/ameba-arduino-summary/
     
     </br>
+
+## 3. License and thirdparty licenses
+
+> The overall project is licensed under the MIT License. See the [LICENSE](https://github.com/ambiot/ambpro2_arduino?tab=MIT-1-ov-file) file for details.
+> This project uses executables for tools from [CMake v3.29.6](https://github.com/Kitware/CMake/releases/tag/v3.29.6) which is licensed under the BSD 3-clause License. See the [LICENSE](https://github.com/Kitware/CMake?tab=License-1-ov-file) or "/third_party_licenses/" file for details.
+
+</br>

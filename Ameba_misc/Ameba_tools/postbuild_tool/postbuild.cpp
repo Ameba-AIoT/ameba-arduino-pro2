@@ -5,7 +5,7 @@ Compile:
 windows:
 g++.exe -o postbuild_windows.exe postbuild.cpp -static
 strip postbuild_windows.exe
-### g++.exe -o postbuild_windows.exe postbuild.cpp -static ico-out.o -static
+### g++.exe -o postbuild_windows.exe postbuild.cpp -static ../../Ameba_icon/ico-out.o -static
 ### mingw32-g++.exe -o postbuild_windows.exe postbuild.cpp -static
 
 If you encounter any issue while generating exe with icon, you may refer to: https://www.rodneybeede.com/programming/compiling_a_c___windows_executable_with_a_custom_icon.html
@@ -35,11 +35,12 @@ string common_nn_models_path;
 string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
 string isp_file_name_buf[100];
 
-string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name;
+string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name, ota_mode_check_name;
 string ino_name_buf[100];
 
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
+int ota_mode_selection_check = 0;
 
 #if defined(__WIN32__) // MINGW64
 void replaceAll( string& source, const string& from, const string& to ) {
@@ -177,6 +178,12 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
         if ((nn_header_name1 != "NA") || (nn_header_name2 != "NA") || (nn_header_name3 != "NA") || (nn_header_name4 != "NA") || (nn_header_name5 != "NA")) {
             nn_model_selection_check = 1;
         }
+    }
+}
+
+void ota_mode_check(string ota_mode_check_name) {
+    if (ota_mode_check_name != "Enable") {
+        ota_mode_selection_check = 1;
     }
 }
 
@@ -455,22 +462,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-#if 0
-    // 4. grep sram, xip/flash and psram information
-
-    // 5. generate image 2, image xip and image psram
-
-    // 6. fulfill header
-    // 6.1 remove bss sections
-    // 6.2 add header
-    // 6.3 generate km4_image2_all
-
-    // 7. prepare image 1
-    // 7.1 power save mode bins
-#endif
-
-    // 8. generate .bin
-    // 8.1 firmware.bin firmware_isp_iq.bin nn_model.bin
+    // 4. generate .bin
+    // 4.1 firmware.bin firmware_isp_iq.bin nn_model.bin
 #if defined(__WIN32__) // MINGW64
     cmd = "copy application.ntz application.ntz.axf";
     cout << cmd << endl;
@@ -576,12 +569,93 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
     }
 
-#if 0
-    // 9. add checksum
-    // cmd = ".\\tools\\windows\\checksum.exe ota.bin";
-    // cout << cmd << endl;
-    // system(cmd.c_str());
+    // 5. OTA add checksum
+#if defined(__WIN32__) // MINGW64
+    string_temp_1 = ".\\misc\\cmake.win.exe ";
+    string_temp_2 = ".\\misc\\checksum.exe ";
+    string_temp_3 = ".\\";
+#elif defined(__linux__) // ubuntu 32 bits
+    string_temp_1 = "./misc/cmake.linux ";
+    string_temp_2 = "./misc/checksum.linux ";
+    string_temp_3 = "./";
+#elif defined(__APPLE__) // OS X 64bits
+    #if defined(__arm__) // apple silicon
+    string_temp_1 = "./misc/cmake.darwin ";
+    string_temp_2 = "./misc/checksum.arm.darwin ";
+    string_temp_3 = "./";
+    #else
+    string_temp_1 = "./misc/cmake.darwin ";
+    string_temp_2 = "./misc/checksum.darwin ";
+    string_temp_3 = "./";
+    #endif
+#else
+    #error compiler is not supported!
 #endif
+
+    ota_mode_check_name = argv[8];
+    ota_mode_check(ota_mode_check_name);
+
+    if (ota_mode_selection_check == 1) {
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "firmware.bin "<< string_temp_3 << "ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "firmware_isp_iq.bin "<< string_temp_3 << "isp_iq_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "isp_iq_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "boot.bin "<< string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "boot.bin "<< string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "certificate.bin "<< string_temp_3 << "certificate_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "certificate_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+    }
 
     return 0;
 }
