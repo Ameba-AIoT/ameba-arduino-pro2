@@ -75,9 +75,12 @@ void readtxt(int mode_isp_ino) {
     #error compiler is not supported!
 #endif
 
+    string str_temp = "misc/video_img//sensor_bin_name.txt";
+    str_temp.insert(15, isp_camera_option);
+
     if (mode_isp_ino == 0) {
 #if defined(__WIN32__) // MINGW64
-        ifstream file("misc/video_img/sensor_bin_name.txt");
+        ifstream file(str_temp);
         while (std::getline(file, str)) {
             isp_file_name_buf[str_count] = str;
             str_count++;
@@ -86,7 +89,7 @@ void readtxt(int mode_isp_ino) {
             //}
         }
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
-        myFile_Handler.open("misc/video_img/sensor_bin_name.txt");
+        myFile_Handler.open(str_temp);
 
         if(myFile_Handler.is_open()) {
             while (getline(myFile_Handler, myLine)) {
@@ -107,6 +110,16 @@ void readtxt(int mode_isp_ino) {
     #error compiler is not supported!
 #endif
 
+    fc_data_name = isp_file_name_buf[3];
+    voe_name = isp_file_name_buf[1];
+    iq_name = isp_file_name_buf[4];
+    sensor_name = isp_file_name_buf[5];
+    isp_fw_dummy_name = isp_file_name_buf[2];
+    isp_sensor_set_json_name = "amebapro2_sensor_set.json";
+    isp_sys_file_folder_name = isp_camera_option;
+//    isp_sys_file_folder_name = isp_file_name_buf[0];
+
+#if 0
         if (isp_camera_option == "JXF37") {
             fc_data_name = isp_file_name_buf[0];
             voe_name = isp_file_name_buf[1];
@@ -126,6 +139,7 @@ void readtxt(int mode_isp_ino) {
         } else {
             cout << "Unable to find correct camera option!" << endl;
         }
+#endif
 
     } else if (mode_isp_ino == 1) {
 #if defined(__WIN32__) // MINGW64
@@ -302,6 +316,7 @@ int main(int argc, char *argv[]) {
     string string_temp_5 = "";
     string string_temp_6 = "copy image_tool\\";
     string string_temp_7 = "misc\\video_img\\";
+    string string_temp_8 = "\\";
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     string string_temp_1 = "cp misc/video_img/";
     string string_temp_2 = " ./";
@@ -310,6 +325,7 @@ int main(int argc, char *argv[]) {
     string string_temp_5 = "/*";
     string string_temp_6 = "cp image_tool/";
     string string_temp_7 = "misc/video_img/";
+    string string_temp_8 = "/";
 #else
     #error compiler is not supported!
 #endif
@@ -340,11 +356,11 @@ int main(int argc, char *argv[]) {
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << string_temp_1 << isp_sensor_set_json_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+//        cmdss.clear();
+//        cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << isp_sensor_set_json_name << string_temp_2;
+//        getline(cmdss, cmd);
+//        cout << cmd << endl;
+//        system(cmd.c_str());
 
         cmdss.clear();
         cmdss << string_temp_1 << fc_data_name << string_temp_2;
