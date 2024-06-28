@@ -234,6 +234,9 @@ typedef struct {
 
 	usbh_ecm_state_t                    usbh_state;
 
+	u32									bulk_intr_recover_timer_1;
+	u32									bulk_intr_recover_timer_2;
+
 	u8                                  host_channel[CDC_ECM_HOST_CH_COUNT];
 	usbh_cdc_ecm_state_cb_t             *cb;
 	usb_host_t                          *host;

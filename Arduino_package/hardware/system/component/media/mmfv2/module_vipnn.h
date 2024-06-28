@@ -325,6 +325,7 @@ typedef struct yamnet_res_s {
 	float prob;
 } yamnet_res_t;
 
+// zzw arduino
 typedef struct classification_res_s {
 	float prob;
 	int class_id;

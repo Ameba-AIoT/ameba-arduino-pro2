@@ -1376,6 +1376,35 @@ int wifi_set_ra_1st_fallback_step(unsigned char step);
 int wifi_get_sta_avg_data_rate(OUT unsigned char *avg_rate);
 
 /**
+ * @brief  Get router wps information about manufacturer/model name/model number
+ * @param[in]  assoc_AP_manufacturer/assoc_AP_model_name/assoc_AP_model_number: can be get the router wps information
+ * @return  If the function succeeds, the return value is 0.
+ * 	Otherwise, return 1.
+ * @Example:
+ * u8 router_manufacturer[65] = {0};
+ * u8 router_model_name[33] = {0};
+ * u8 router_model_number[33] = {0};
+ * wifi_get_router_wps_info((u8 *)router_manufacturer, (u8 *)router_model_name, (u8 *)router_model_number);
+ */
+int wifi_get_router_wps_info(u8 *assoc_AP_manufacturer, u8 *assoc_AP_model_name, u8 *assoc_AP_model_number);
+
+/**
+ * @brief  set country_code
+ * @param[out]  country_code: A pointer to the variable where the
+ * 	country_code will be written.
+ * @return  RTW_SUCCESS or RTW ERROR.
+ */
+int wifi_set_country_code(const char *country_code);
+
+/**
+ * @brief  set channel_plan
+ * @param[out]  channel_plan: The variable where the
+ * 	channel_plan will be written.
+ * @return  RTW_SUCCESS or RTW ERROR.
+ */
+int wifi_set_channel_plan(u8 channel_plan);
+
+/**
  * @brief  issue nulldata frame
  * @param[in]  power_mode:
  *  set 1 to power_mode 0

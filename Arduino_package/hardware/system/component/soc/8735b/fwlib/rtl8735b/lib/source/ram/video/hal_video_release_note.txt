@@ -1,3 +1,28 @@
+<06/07/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.5.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release to improve manual hdr ratio setting
+	2. Set max exposure time base on 1st stream fps
+	3. Merge PC2's release for HDR exp setting ( GC4663 )
+
+--------------------------------------------------------------------------
+<05/09/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release to fix auto power frequency divide zero issue
+	2. Auto power frequency will consume direct i2c count when fast AE
+
+	Video/ENC related
+	1. RC setting dcache issue
+--------------------------------------------------------------------------
 <03/28/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.3.0
 Modified Files:

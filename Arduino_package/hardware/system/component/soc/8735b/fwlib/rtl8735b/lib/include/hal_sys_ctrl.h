@@ -3,7 +3,7 @@
 * @brief       The HAL API implementation for the System control
 *
 * @version     V1.00
-* @date        2022-11-15
+* @date        2024-05-23
 *
 * @note
 *
@@ -220,6 +220,7 @@ void hal_rtl_sys_peripheral_en_patch(uint8_t id, uint8_t en);
 void hal_rtl_sys_set_clk_patch(uint8_t id, uint8_t sel_val);
 uint32_t hal_rtl_sys_get_clk_patch(uint8_t id);
 void hal_sys_set_cpu_freq(uint8_t set_value);
+uint8_t hal_sys_user_boot_get_wowlan_wake_reason(void);
 
 /** @} */ /* End of group hs_hal_efuse */
 

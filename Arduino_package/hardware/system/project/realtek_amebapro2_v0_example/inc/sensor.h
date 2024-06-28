@@ -38,7 +38,7 @@ struct sensor_params_t {
 	unsigned int sensor_fps;
 };
 
-
+//ARDUINO_SDK, DO NOT CHANGE LINE 49 TO 62
 #ifdef ARDUINO_SDK
 #define ARDUINO_SDK_SENSOR 1
 //#define ARDUINO_SDK_SENSOR 2
@@ -49,7 +49,7 @@ struct sensor_params_t {
 #if ARDUINO_SDK_SENSOR == 1
 #define SENSOR_F37		0x00
 static const struct sensor_params_t sensor_params[] = {
-	{1920, 1080, 30}, //F37
+	{1920, 1080, 30},
 };
 #define SENSOR_MAX         1
 static const unsigned char sen_id[SENSOR_MAX] = {
@@ -90,63 +90,71 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #endif
 
 #else
-#define SENSOR_DUMMY        0x00 //For dummy sensor, no support fast camera start
-#define SENSOR_SC2336       0x01
-#define SENSOR_GC2053       0x02
-#define SENSOR_GC4653 		0x03
-#define SENSOR_F37			0x04
-#define SENSOR_IMX327		0x05
-#define SENSOR_F51			0x06
-#define SENSOR_PS5258       0x07 //It don't support the multi sensor for PS5258 now.If you want to use the sensor,please remove it.
-#define SENSOR_SC301		0x08
-#define SENSOR_IMX307		0x09
-#define SENSOR_SC2333		0x0A
-#define SENSOR_GC4023		0x0B
-#define SENSOR_PS5420		0x0C
-#define SENSOR_PS5270		0x0D
-#define SENSOR_GC5035		0x0E
-#define SENSOR_PS5268		0x0F
-#define SENSOR_SC2310		0x10
-#define SENSOR_PS5420_HDR	0x11
-#define SENSOR_PS5270_HDR	0x12
-#define SENSOR_F53			0x13
-#define SENSOR_F55			0x14
-#define SENSOR_GC4663		0x15
-#define SENSOR_GC4663_HDR	0x16
-#define SENSOR_K351			0x17
-#define SENSOR_K351_HDR		0x18
-#define SENSOR_OV50A40		0x19
-#define SENSOR_SC301_HDR	0x1A
+//                                    | Normal |  Fcs   |        |
+//                                    | Driver | Driver |   IQ   |
+//                                    ---------|--------|--------|
+#define SENSOR_DUMMY        0x00  //  |   v    |   v    |   -    |	For dummy sensor, no support fast camera start
+#define SENSOR_SC2336       0x01  //  |   v    |   v    |   v    |
+#define SENSOR_GC2053       0x02  //  |   v    |   v    |   v    |
+#define SENSOR_GC4653       0x03  //  |   v    |   v    |   v    |
+#define SENSOR_F37          0x04  //  |   v    |   v    |   v    |
+#define SENSOR_IMX327       0x05  //  |   v    |   -    |   -    |
+#define SENSOR_F51          0x06  //  |   v    |   v    |   v    |
+#define SENSOR_PS5258       0x07  //  |   v    |   -    |   -    |  It don't support the multi sensor for PS5258 now.If you want to use the sensor,please remove it.
+#define SENSOR_SC301        0x08  //  |   v    |   v    |   -    |
+#define SENSOR_IMX307       0x09  //  |   v    |   -    |   -    |
+#define SENSOR_SC2333       0x0A  //  |   v    |   v    |   v    |
+#define SENSOR_GC4023       0x0B  //  |   v    |   v    |   v    |
+#define SENSOR_PS5420       0x0C  //  |   v    |   v    |   v    |
+#define SENSOR_PS5270       0x0D  //  |   v    |   v    |   v    |
+#define SENSOR_GC5035       0x0E  //  |   v    |   v    |   -    |  Arduino use iq_gc2053.bin
+#define SENSOR_PS5268       0x0F  //  |   v    |   -    |   -    |
+#define SENSOR_SC2310       0x10  //  |   v    |   -    |   -    |
+#define SENSOR_PS5420_HDR   0x11  //  |   v    |   v    |   v    |
+#define SENSOR_PS5270_HDR   0x12  //  |   v    |   v    |   v    |
+#define SENSOR_F53          0x13  //  |   v    |   v    |   v    |
+#define SENSOR_F55          0x14  //  |   v    |   -    |   -    |
+#define SENSOR_GC4663       0x15  //  |   v    |   v    |   v    |
+#define SENSOR_GC4663_HDR   0x16  //  |   v    |   v    |   v    |
+#define SENSOR_K351         0x17  //  |   v    |   -    |   -    |
+#define SENSOR_K351_HDR     0x18  //  |   v    |   -    |   -    |
+#define SENSOR_OV50A40      0x19  //  |   v    |   -    |   -    |
+#define SENSOR_SC301_HDR    0x1A  //  |   v    |   v    |   -    |
+#define SENSOR_F51_HDR      0x1B  //  |   v    |   v    |   v    |
+#define SENSOR_OS04A10      0x1C  //  |   v    |   -    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
-	{1920, 1080, 30}, //DUMMY
-	{1920, 1080, 30}, //SC2336
-	{1920, 1080, 30}, //GC2053
-	{2560, 1440, 24}, //GC4653
-	{1920, 1080, 30}, //F37
-	{1920, 1080, 30}, //IMX327
-	{1536, 1536, 30}, //F51
-	{1920, 1080, 30}, //PS5258
-	{2048, 1536, 20}, //SC301
-	{1920, 1080, 30}, //IMX307
-	{1920, 1080, 30}, //SC2333
-	{2560, 1440, 24}, //GC4023
-	{1952, 1944, 24}, //PS5420
-	{1536, 1536, 30}, //PS5270
-	{2592, 1944, 15}, //GC5035
-	{1920, 1080, 30}, //PS5268
-	{1920, 1080, 30}, //SC2310
-	{1952, 1944, 24}, //PS5420_HDR
-	{1536, 1536, 30}, //PS5270_HDR
-	{1920, 1080, 30}, //SENSOR_F53
-	{1920, 1080, 30}, //SENSOR_F55
-	{2560, 1440, 24}, //SENSOR_GC4663
-	{2560, 1440, 20}, //SENSOR_GC4663_HDR
-	{2000, 2000, 24}, //SENSOR_K351
-	{2000, 2000, 20}, //SENSOR_K351_HDR
-	{2048, 1536, 30}, //SENSOR_OV50A40
-	{2048, 1536, 20}, //SENSOR_SC301_HDR
+	{1920, 1080, 30}, //SENSOR_DUMMY        0x00
+	{1920, 1080, 30}, //SENSOR_SC2336       0x01
+	{1920, 1080, 30}, //SENSOR_GC2053       0x02
+	{2560, 1440, 24}, //SENSOR_GC4653 		0x03
+	{1920, 1080, 30}, //SENSOR_F37			0x04
+	{1920, 1080, 30}, //SENSOR_IMX327		0x05
+	{1536, 1536, 30}, //SENSOR_F51			0x06
+	{1920, 1080, 30}, //SENSOR_PS5258       0x07
+	{2048, 1536, 20}, //SENSOR_SC301		0x08
+	{1920, 1080, 30}, //SENSOR_IMX307		0x09
+	{1920, 1080, 30}, //SENSOR_SC2333		0x0A
+	{2560, 1440, 24}, //SENSOR_GC4023		0x0B
+	{1952, 1944, 24}, //SENSOR_PS5420		0x0C
+	{1536, 1536, 30}, //SENSOR_PS5270		0x0D
+	{2592, 1944, 15}, //SENSOR_GC5035		0x0E
+	{1920, 1080, 30}, //SENSOR_PS5268		0x0F
+	{1920, 1080, 30}, //SENSOR_SC2310		0x10
+	{1952, 1944, 24}, //SENSOR_PS5420_HDR	0x11
+	{1536, 1536, 30}, //SENSOR_PS5270_HDR	0x12
+	{1920, 1080, 30}, //SENSOR_F53			0x13
+	{1920, 1080, 30}, //SENSOR_F55			0x14
+	{2560, 1440, 24}, //SENSOR_GC4663		0x15
+	{2560, 1440, 20}, //SENSOR_GC4663_HDR	0x16
+	{2000, 2000, 24}, //SENSOR_K351			0x17
+	{2000, 2000, 20}, //SENSOR_K351_HDR		0x18
+	{2048, 1536, 30}, //SENSOR_OV50A40		0x19
+	{2048, 1536, 20}, //SENSOR_SC301_HDR	0x1A
+	{1536, 1536, 30}, //SENSOR_F51_HDR		0x1B
+	{2560, 1440, 24}, //SENSOR_OS04A10		0x1C
 };
+
 
 #define SENSOR_MAX         5
 

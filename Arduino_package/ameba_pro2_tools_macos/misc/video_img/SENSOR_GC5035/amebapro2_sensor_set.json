@@ -16,7 +16,7 @@
         "merge_en": true,
         "fcs_data": {
             "source":"binary",
-            "file":"fcs_data_dummy.bin"
+            "file":"fcs_data_gc5035.bin"
         },
         "iq_data": {
             "source":"binary",

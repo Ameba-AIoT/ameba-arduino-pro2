@@ -229,6 +229,7 @@ void serial_rts_control(serial_t *obj, BOOLEAN rts_state);
 
 /*\@}*/
 
+// zzw arduino
 #ifdef ARDUINO_SDK
 void serial_init_arduino(serial_t *obj, PinName tx, PinName rx, uint8_t arduino_uart0_clk_sel);
 #endif

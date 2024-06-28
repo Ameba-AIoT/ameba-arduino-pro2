@@ -183,11 +183,14 @@ typedef enum {
 	RTW_SECURITY_WEP_SHARED     = (WEP_ENABLED | SHARED_ENABLED),                   /**< WEP Security with shared authentication */
 	RTW_SECURITY_WPA_TKIP_PSK   = (WPA_SECURITY  | TKIP_ENABLED),                   /**< WPA Security with TKIP                  */
 	RTW_SECURITY_WPA_AES_PSK    = (WPA_SECURITY  | AES_ENABLED),                    /**< WPA Security with AES                   */
+	RTW_SECURITY_WPA_MIXED_PSK  = (WPA_SECURITY | AES_ENABLED | TKIP_ENABLED),      /**< WPA Security with AES & TKIP            */
 	RTW_SECURITY_WPA2_AES_PSK   = (WPA2_SECURITY | AES_ENABLED),                    /**< WPA2 Security with AES                  */
 	RTW_SECURITY_WPA2_TKIP_PSK  = (WPA2_SECURITY | TKIP_ENABLED),                   /**< WPA2 Security with TKIP                 */
 	RTW_SECURITY_WPA2_MIXED_PSK = (WPA2_SECURITY | AES_ENABLED | TKIP_ENABLED),     /**< WPA2 Security with AES & TKIP           */
-	RTW_SECURITY_WPA_WPA2_MIXED = (WPA_SECURITY  | WPA2_SECURITY),                  /**< WPA/WPA2 Security                       */
-	RTW_SECURITY_WPA2_AES_CMAC = (WPA2_SECURITY | AES_CMAC_ENABLED),                /**< WPA2 Security with AES and Management Frame Protection*/
+	RTW_SECURITY_WPA_WPA2_TKIP_PSK = (WPA_SECURITY  | WPA2_SECURITY | TKIP_ENABLED),  /**< WPA/WPA2 Security with TKIP           */
+	RTW_SECURITY_WPA_WPA2_AES_PSK = (WPA_SECURITY  | WPA2_SECURITY | AES_ENABLED),    /**< WPA/WPA2 Security with AES            */
+	RTW_SECURITY_WPA_WPA2_MIXED_PSK = (WPA_SECURITY  | WPA2_SECURITY | TKIP_ENABLED | AES_ENABLED),  /**< WPA/WPA2 Security with AES & TKIP      */
+	RTW_SECURITY_WPA2_AES_CMAC = (WPA2_SECURITY | AES_CMAC_ENABLED),                 /**< WPA2 Security with AES and Management Frame Protection */
 	RTW_SECURITY_WPA2_ENTERPRISE = (WPA2_SECURITY | ENTERPRISE_ENABLED),            /**< WPA2 Security with 802.1X authentication>*/
 	RTW_SECURITY_WPA_WPA2_ENTERPRISE = (WPA_SECURITY | WPA2_SECURITY | ENTERPRISE_ENABLED), /** <WPA/WPA2 Security with 802.1X authentication>*/
 
@@ -716,6 +719,12 @@ typedef enum {
 	/* csi rx done event */
 	WIFI_EVENT_CSI_DONE = 160,
 
+	WIFI_EVENT_DHCP_RENEW_FAILED,
+	WIFI_EVENT_DHCP_RENEW_TIMEOUT,
+	WIFI_EVENT_DHCP_IP_BIND,
+	WIFI_EVENT_MISMATCH_CHANNEL,
+	WIFI_EVENT_DEAUTH_RECVD,
+	WIFI_EVENT_DISASSOC_RECVD,
 	WIFI_EVENT_MAX,
 } rtw_event_indicate_t;
 

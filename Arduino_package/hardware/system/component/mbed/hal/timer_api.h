@@ -112,6 +112,7 @@ void gtimer_start_periodical(gtimer_t *obj, uint32_t duration_us, void *handler,
   */
 void gtimer_stop(gtimer_t *obj);
 
+// zzw arduino
 #ifdef ARDUINO_SDK
 void gtimer_init_arduino(gtimer_t *obj, uint32_t tid, u8 arduino_pm_clk_sel);
 #endif

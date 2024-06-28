@@ -414,5 +414,7 @@ int hal_isp_config_iq_calibration(int config_flag);
 void hal_isp_set_hdr_mode(uint32_t hdr_mode);
 void hal_isp_set_mirrorflip_mode(uint32_t mirrorflip_mode);
 int hal_isp_set_stream_fps(uint32_t ch, uint32_t fps);
+void hal_isp_set_init_frame_rate(u32 val);
+u32 hal_isp_get_init_frame_rate(void);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

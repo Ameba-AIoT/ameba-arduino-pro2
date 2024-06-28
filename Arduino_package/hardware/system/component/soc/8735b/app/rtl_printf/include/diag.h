@@ -341,6 +341,7 @@ extern uint8_t ConfigBootLOG_EN;
         _DbgDump("\r" UART_ERR_PREFIX __VA_ARGS__);\
 }while(0)
 
+// arduino sdk
 #ifdef ARDUINO_SDK
 #define DBG_I2C_ERR(...)
 #else

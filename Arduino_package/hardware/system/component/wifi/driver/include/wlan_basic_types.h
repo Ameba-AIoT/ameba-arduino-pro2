@@ -386,8 +386,8 @@
 typedef unsigned char	BOOLEAN, *PBOOLEAN;
 
 #define TEST_FLAG(__Flag,__testFlag)		(((__Flag) & (__testFlag)) != 0)
-
-
+#define SET_FLAG(__Flag, __setFlag)			((__Flag) |= __setFlag)
+#define CLEAR_FLAG(__Flag, __clearFlag)		((__Flag) &= ~(__clearFlag))
 
 #endif//! defined(CONFIG_PLATFORM_8195A)
 

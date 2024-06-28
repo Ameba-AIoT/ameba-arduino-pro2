@@ -509,6 +509,9 @@ struct mlme_ext_info {
 	u8	bwmode_updated;
 	u8	hidden_ssid_mode;
 
+	u8	assoc_AP_manufacturer[65];
+	u8	assoc_AP_model_name[33];
+	u8	assoc_AP_model_number[33];
 
 	struct ADDBA_request		ADDBA_req;
 	struct WMM_para_element	WMM_param;
@@ -1006,7 +1009,7 @@ void ERP_IE_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
 void VCS_update(_adapter *padapter, struct sta_info *psta);
 
 void update_beacon_info(_adapter *padapter, u8 *pframe, uint len, struct sta_info *psta);
-int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len);
+int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len, u8 *reason);
 #ifdef CONFIG_DFS
 void process_csa_ie(_adapter *padapter, u8 *pframe, uint len);
 #endif //CONFIG_DFS

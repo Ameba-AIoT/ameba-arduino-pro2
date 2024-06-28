@@ -480,8 +480,9 @@ struct  wifi_user_conf {
 	bit 5: (0(default): disable issue encryption wpa3 deauth, 1: enable issue encryption wpa3 deauth)
 	bit 6: (0(default): disable gcmp128/gcmp256 wifi connection, 1: enable gcmp128/gcmp256 wifi connection)
 	bit 7: (0(default): disable wpa3 transition to force wpa2 security connection, 1: enable wpa3 transition to force wpa2 security connection)
+	bit 8: (0(default): disable to check the RSC of group key, 1: enable to check the RSC of group key)
 	*/
-	unsigned char ap_compatibilty_enabled;
+	unsigned int ap_compatibilty_enabled;
 
 	unsigned char max_roaming_times;
 

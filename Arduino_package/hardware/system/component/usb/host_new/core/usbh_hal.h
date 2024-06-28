@@ -86,6 +86,7 @@ typedef struct {
 
 	usbh_urb_state_t  urb_state;  /*!< URB state. */
 	usbh_hc_state_t   hc_state;      /*!< Host Channel state. */
+	u32 total_error_cnt;          /*!< Host channel total error count.*/
 } usbh_hc_t;
 
 /* Exported macros -----------------------------------------------------------*/

@@ -385,7 +385,8 @@ typedef struct  {
 	u32 init_saturation;
 	s32 init_brightness;
 	u32 init_contrast;
-	u32 init_hue;
+	//u32 init_hue;
+	u32 init_mipi_mode;	//0=continue mode, 1=non-continue mode
 	u32 init_wdr_mode;
 	u32 init_wdr_level;
 	u32 init_hdr_mode;
@@ -803,6 +804,7 @@ static __inline__ int hal_video_set_isp_init_items(int ch, video_isp_initial_ite
 	cml->init_brightness = (u32)init_items->init_brightness;
 	cml->init_contrast = init_items->init_contrast;
 	//cml->init_hue = init_items->init_hue;
+	cml->mipi_clk_noncontinous = init_items->init_mipi_mode;
 	cml->init_wdr_mode = init_items->init_wdr_mode;
 	cml->init_wdr_level = init_items->init_wdr_level;
 	cml->init_hdr_mode = init_items->init_hdr_mode;

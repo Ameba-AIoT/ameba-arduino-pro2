@@ -187,7 +187,7 @@ struct hw_port_reg {
 #define EEPROM_DEFAULT_BOARD_OPTION			0x00	// 0x131, 0: refer to Power by rate table, 1: refer to Power by rate table and Power limit table to take the smaller index value, 2: Don't refer to Power by rate table
 #define EEPROM_DEFAULT_FEATURE_OPTION		0x00	// 0x132
 #define EEPROM_DEFAULT_BT_OPTION			0x10	// 0x133, Antenna setting
-//#define EEPROM_DEFAULT_RFE_OPTION			0x04	// 0x13A
+#define EEPROM_DEFAULT_RFE_OPTION			0x00	// 0x13A
 
 #define EEPROM_DEFAULT_TX_CALIBRATE_RATE	0x40	// 0x138[7:4], 0x4h ~ 0x7h for power tracking by TSSI
 

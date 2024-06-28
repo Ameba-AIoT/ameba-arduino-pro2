@@ -137,7 +137,8 @@ typedef struct  {
 	uint32_t init_saturation;
 	int32_t init_brightness;
 	uint32_t init_contrast;
-	uint32_t init_hue;
+	//uint32_t init_hue;
+	uint32_t init_mipi_mode;	//0=continue mode, 1=non-continue mode
 	uint32_t init_wdr_mode;
 	uint32_t init_wdr_level;
 	uint32_t init_hdr_mode;

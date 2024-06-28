@@ -349,6 +349,7 @@ struct pkt_attrib {
 	u8	intel_proxim;
 	u8 	retry_ctrl;
 	u8 	retry_limit_by_user; //for user control retry limit
+	u8	ldpc;
 	struct sta_info *psta;
 
 #ifdef CONFIG_MCC_MODE
