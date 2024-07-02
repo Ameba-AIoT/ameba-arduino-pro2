@@ -395,7 +395,7 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_4 << common_nn_models_path << string_temp_5 << string_temp_2;
+        cmdss << string_temp_4 << "\"" << common_nn_models_path << "\"" << string_temp_5 << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
