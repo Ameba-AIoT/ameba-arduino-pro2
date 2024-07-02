@@ -196,7 +196,7 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
 }
 
 void ota_mode_check(string ota_mode_check_name) {
-    if (ota_mode_check_name != "Enable") {
+    if (ota_mode_check_name == "Enable") {
         ota_mode_selection_check = 1;
     }
 }
