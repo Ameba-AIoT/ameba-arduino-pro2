@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
     common_nn_libs_path = common_nn_libs_path + "\\variants";
 
     cmdss.clear();
-    cmdss << "if exist " << common_libs_path << "del " << common_libs_path;
+    cmdss << "if exist \"" << common_libs_path << "\" del \"" << common_libs_path << "\"";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -75,7 +75,8 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "if exist " << nn_tool_name_path <<" xcopy /y /s \"" << nn_tool_name_path << "\" \"" << common_nn_libs_path << "\"";
+//     cmdss << "if exist " << nn_tool_name_path <<" xcopy /y /s \"" << nn_tool_name_path << "\" \"" << common_nn_libs_path << "\"";
+    cmdss << "if exist " << nn_tool_name_path <<  " xcopy /y /s \"" << nn_tool_name_path << "\" \"" << common_nn_libs_path << "\"";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -141,7 +142,11 @@ int main(int argc, char *argv[]) {
 #endif
 
     cmdss.clear();
+#if _WIN32
+    cmdss << string_temp_1 << "\"" << common_sensor_sel_libs_path << isp_camera_option << string_temp_2 << "libarduino_sensor_sel.a\" \"" << common_libs_path << "\"";
+#else
     cmdss << string_temp_1 << common_sensor_sel_libs_path << isp_camera_option << string_temp_2 << "libarduino_sensor_sel.a " << common_libs_path;
+#endif
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());

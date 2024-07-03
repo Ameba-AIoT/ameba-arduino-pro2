@@ -196,7 +196,7 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
 }
 
 void ota_mode_check(string ota_mode_check_name) {
-    if (ota_mode_check_name != "Enable") {
+    if (ota_mode_check_name == "Enable") {
         ota_mode_selection_check = 1;
     }
 }
@@ -395,7 +395,7 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_4 << common_nn_models_path << string_temp_5 << string_temp_2;
+        cmdss << string_temp_4 << "\"" << common_nn_models_path << "\"" << string_temp_5 << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
