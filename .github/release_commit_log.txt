@@ -1,6 +1,21 @@
+Pre Release Version 4.0.8
+
+Version 4.0.8 – 2024/07/03
+
 Feature:
+- Update comment in WideDynamicRange.ino
 
 API Updates:
 - Update SDK code base
 
 Misc:
+- Update CI_compile_examples.yml
+    - CI test to fix process issue due to the V1.1.0 Arduino CLI update
+- Update All_NN_models
+- Update platform.txt
+- Update ameba_pro2_tools 1.3.5
+    - Update tools for OTA process
+    - Update tools for multi sensor build process
+    - Update tools to accept username with spaces
+    - Update tools for postbuild
+    - Add FCS files
