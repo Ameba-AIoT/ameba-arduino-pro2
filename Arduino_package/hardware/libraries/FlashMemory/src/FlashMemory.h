@@ -13,9 +13,7 @@ extern "C" {
 }
 #endif
 
-
 // @brief The default flash address for application usage
-//
 // This is reference flash address that user can use.
 // If user use flash address to overwrite image address, then it would corrupt image content.
 #define FLASH_MEMORY_APP_BASE       0xFD000
@@ -28,7 +26,7 @@ extern "C" {
 #define FLASH_SECTOR_SIZE 0x1000
 #endif
 
-// @class FlashMemoryClass FlashMemory.h 
+// @class FlashMemoryClass FlashMemory.h
 // @brief Flash memory api
 class FlashMemoryClass {
 public:

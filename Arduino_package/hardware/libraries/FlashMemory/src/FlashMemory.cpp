@@ -71,7 +71,7 @@ void FlashMemoryClass::write(unsigned int offset)
         return;
     }
 
-    for (int i = 0; i < (MAX_FLASH_MEMORY_APP_SIZE/FLASH_SECTOR_SIZE); i++) {
+    for (int i = 0; i < (MAX_FLASH_MEMORY_APP_SIZE / FLASH_SECTOR_SIZE); i++) {
         flash_erase_sector(_pFlash, (_flash_base_address + (i * FLASH_SECTOR_SIZE)));
     }
 
@@ -135,7 +135,8 @@ void FlashMemoryClass::eraseSector(unsigned int sector_offset)
     flash_erase_sector(_pFlash, (_flash_base_address + sector_offset));
 }
 
-void FlashMemoryClass::eraseWord(unsigned int offset) {
+void FlashMemoryClass::eraseWord(unsigned int offset)
+{
     if ((_flash_base_address + offset) < FLASH_MEMORY_APP_BASE) {
         printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;

@@ -6,8 +6,8 @@
 
 #include <FlashMemory.h>
 
-#define TEST_SIZE           0x1000
-#define RESET_THRESHOLD     5
+#define TEST_SIZE       0x1000
+#define RESET_THRESHOLD 5
 
 void setup()
 {
