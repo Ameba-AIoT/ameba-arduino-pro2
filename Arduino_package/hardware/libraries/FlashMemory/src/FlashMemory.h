@@ -13,14 +13,12 @@ extern "C" {
 }
 #endif
 
-// @brief The default flash address for application usage
-// This is reference flash address that user can use.
-// If user use flash address to overwrite image address, then it would corrupt image content.
-#define FLASH_MEMORY_APP_BASE       0xFD000
-#define NOR_FLASH_SIZE              0x100000
 // #define NAND_FLASH_SIZE             0x100000
-#define FLASH_MEMORY_SIZE           NOR_FLASH_SIZE
-#define MAX_FLASH_MEMORY_APP_SIZE   (FLASH_MEMORY_SIZE - FLASH_MEMORY_APP_BASE)
+
+#define NOR_FLASH_SIZE            0x100000
+#define FLASH_MEMORY_APP_BASE     0xFD000
+#define FLASH_MEMORY_SIZE         NOR_FLASH_SIZE
+#define MAX_FLASH_MEMORY_APP_SIZE (FLASH_MEMORY_SIZE - FLASH_MEMORY_APP_BASE)
 
 #ifndef FLASH_SECTOR_SIZE
 #define FLASH_SECTOR_SIZE 0x1000
