@@ -84,7 +84,7 @@ void NNAudioClassification::end(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("NNAudioClassification deinit failed\r\n");
+        printf("\r\n[ERROR] NNAudioClassification deinit failed\n");
     }
 }
 

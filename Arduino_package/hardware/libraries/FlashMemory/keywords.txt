@@ -1,28 +1,29 @@
 #######################################
-# Syntax Coloring Map For Wire
+# Syntax Coloring Map for FlashMemory
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-Wire	KEYWORD1
-Wire1	KEYWORD1
+FlashMemory	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
 begin	KEYWORD2
-setClock	KEYWORD2
-beginTransmission	KEYWORD2
-endTransmission	KEYWORD2
-requestFrom	KEYWORD2
-send	KEYWORD2
-receive	KEYWORD2
-onReceive	KEYWORD2
-onRequest	KEYWORD2
+end	KEYWORD2
+read	KEYWORD2
+write	KEYWORD2
+readWord	KEYWORD2
+writeWord	KEYWORD2
+eraseSector	KEYWORD2
+eraseWord	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+buf_size	LITERAL1
+buf	LITERAL1

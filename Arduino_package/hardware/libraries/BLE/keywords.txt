@@ -619,7 +619,3 @@ begin	KEYWORD2
 end	KEYWORD2
 addService	KEYWORD2
 advData	KEYWORD2
-
-#######################################
-# Constants (LITERAL1)
-#######################################
