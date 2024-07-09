@@ -1,16 +1,16 @@
 /*
- * This sketch shows how to request flash memory read/write stream word.
- *
- * Example guide:
- *
+ This sketch shows how to request flash memory read/write stream word.
+
+ Example guide: TBD
  */
 
 #include <FlashMemory.h>
 
-#define TEST_SIZE 0x1000
-#define RESET_THRESHOLD 5
+#define TEST_SIZE           0x1000
+#define RESET_THRESHOLD     5
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     FlashMemory.begin(FLASH_MEMORY_APP_BASE, TEST_SIZE);
@@ -42,6 +42,7 @@ void setup() {
     }
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }

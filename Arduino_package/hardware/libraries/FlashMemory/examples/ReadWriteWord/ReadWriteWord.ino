@@ -1,13 +1,13 @@
 /*
  This sketch shows how to request flash memory read/write one specific word.
 
- Example guide:
- 
+ Example guide: TBD
  */
 
 #include <FlashMemory.h>
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     unsigned int value;
@@ -41,6 +41,7 @@ void setup() {
     }
 }
 
-void loop() {
+void loop()
+{
     delay(1000);
 }
