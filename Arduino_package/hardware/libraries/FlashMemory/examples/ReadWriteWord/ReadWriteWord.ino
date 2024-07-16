@@ -1,10 +1,12 @@
 /*
  This sketch shows how to request flash memory read/write one specific word.
 
- Example guide: TBD
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-flash-writeword/
  */
 
 #include <FlashMemory.h>
+
+#define RESET_THRESHOLD 5
 
 void setup()
 {
@@ -22,7 +24,7 @@ void setup()
     Serial.print("Read value is ");
     Serial.println(value, HEX);
 
-    if (value == 0xFFFFFFFF) {
+    if (value == RESET_THRESHOLD) {
         value = 0;
     } else {
         value++;
@@ -35,9 +37,9 @@ void setup()
 
     check_value = FlashMemory.readWord(0x1E00);
     if (check_value == value) {
-        Serial.println("Success! Read and Write flash memory by word.");
+        Serial.println("Success!");
     } else {
-        Serial.println("Error! Read and Write flash memory by word.");
+        Serial.println("Error!");
     }
 }
 

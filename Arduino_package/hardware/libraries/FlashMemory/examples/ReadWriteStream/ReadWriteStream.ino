@@ -1,7 +1,7 @@
 /*
  This sketch shows how to request flash memory read/write stream word.
 
- Example guide: TBD
+ Example guide: https://www.amebaiot.com/en/amebapro2-arduino-flash-writestream/
  */
 
 #include <FlashMemory.h>
@@ -21,13 +21,11 @@ void setup()
         for (i = 0; i < TEST_SIZE; i++) {
             FlashMemory.buf[i] = 0x00;
         }
-        FlashMemory.write();
         Serial.print("Reset count to 0");
     } else {
         for (i = 0; i < TEST_SIZE; i++) {
             FlashMemory.buf[i]++;
         }
-        FlashMemory.write();
         Serial.print("Boot count: ");
 
         for (i = 0; i < (TEST_SIZE - 1); i++) {
@@ -40,6 +38,7 @@ void setup()
         }
         Serial.println(FlashMemory.buf[i]);
     }
+    FlashMemory.write();
 }
 
 void loop()
