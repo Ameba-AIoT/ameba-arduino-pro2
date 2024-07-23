@@ -159,6 +159,8 @@ extern PinDescription g_APinDescription[];
 // ameba - arduino pin mapping function check
 #include "amb_ard_pin_check.h"
 
+#include "sensor.h"
+
 #ifdef __cplusplus
 // WMath prototypes
 extern long random(long);
