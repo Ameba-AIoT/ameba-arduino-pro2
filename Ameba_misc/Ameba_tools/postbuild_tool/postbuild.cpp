@@ -232,7 +232,7 @@ int main(int argc, char *argv[]) {
     #error compiler is not supported!
 #endif
 
-    // 1. remove previous files
+    // 1. remove and copy files
 #if defined(__WIN32__) // MINGW64
     cmd = "if exist application.ntz del application.ntz";
     cout << cmd << endl;
@@ -342,7 +342,6 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-
     if (isp_selection_check == 1) {
         cmdss.clear();
         cmdss << string_temp_1 << voe_name << string_temp_2;
@@ -356,29 +355,53 @@ int main(int argc, char *argv[]) {
         cout << cmd << endl;
         system(cmd.c_str());
 
+        cmdss.clear();
+        cmdss << string_temp_1 << "fcs_data_dummy.bin" << string_temp_2;
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << "iq.bin" << string_temp_2;
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << "sensor.bin" << string_temp_2;
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
 //        cmdss.clear();
 //        cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << isp_sensor_set_json_name << string_temp_2;
 //        getline(cmdss, cmd);
 //        cout << cmd << endl;
 //        system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << string_temp_1 << fc_data_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+        if (fc_data_name != "fcs_data_dummy.bin") {
+            cmdss.clear();
+            cmdss << string_temp_1 << fc_data_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
 
-        cmdss.clear();
-        cmdss << string_temp_1 << iq_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+        if (iq_name != "iq.bin") {
+            cmdss.clear();
+            cmdss << string_temp_1 << iq_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
 
-        cmdss.clear();
-        cmdss << string_temp_1 << sensor_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+        if (sensor_name != "sensor.bin") {
+            cmdss.clear();
+            cmdss << string_temp_1 << sensor_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
     } else {
         cmdss.clear();
         cmdss << string_temp_1 << isp_fw_dummy_name << string_temp_2;
