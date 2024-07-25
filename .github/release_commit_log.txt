@@ -1,7 +1,3 @@
-Pre Release Version 4.0.8
-
-Version 4.0.8 – 2024/07/25
-
 Feature:
 - Add feature Flash Memory
 - Add feature FCS mode for all supported sensors
