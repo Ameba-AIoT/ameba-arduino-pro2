@@ -1,11 +1,18 @@
 Pre Release Version 4.0.8
 
 Version 4.0.8 – 2024/07/03
+Version 4.0.8 – 2024/07/25
 
 Feature:
 - Update comment in WideDynamicRange.ino
+- Add feature Flash Memory
+- Add feature FCS mode for all supported sensors
+- Add sensor F53 support
 
 API Updates:
+- Update SDK code base
+- Add flash memory related API
+- Update snapshot related API
 - Update SDK code base
 
 Misc:
@@ -18,4 +25,9 @@ Misc:
     - Update tools for multi sensor build process
     - Update tools to accept username with spaces
     - Update tools for postbuild
-    - Add FCS files
+    - Add FCS files- Update platform.txt avoid the path too long issue
+- Update keywords.txt files
+- Update library.properties files
+- Update ameba_pro2_tools 1.3.6
+    - Update multi sensor build process
+    - Update postbuild tool for FCS
