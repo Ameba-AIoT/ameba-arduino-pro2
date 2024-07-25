@@ -325,11 +325,12 @@ typedef struct yamnet_res_s {
 	float prob;
 } yamnet_res_t;
 
-// zzw arduino
+#ifdef ARDUINO_SDK
 typedef struct classification_res_s {
 	float prob;
 	int class_id;
 } classification_res_t;
+#endif
 
 #if !defined(PC_SIMULATION)
 extern mm_module_t vipnn_module;

@@ -104,7 +104,8 @@ typedef struct rate_control_param {
 
 typedef struct video_ctx_s {
 	void *parent;
-
+	int iq_addr;
+	int sensor_addr;
 	hal_video_adapter_t *v_adp;
 	void *mem_pool;
 

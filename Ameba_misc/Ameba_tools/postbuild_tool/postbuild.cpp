@@ -32,15 +32,16 @@ using namespace std;
 
 string common_nn_models_path;
 
-string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
+string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name, isp_iq_json_name;
 string isp_file_name_buf[100];
 
-string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name, ota_mode_check_name;
+string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name, ota_mode_check_name, fcs_mode_check_name;
 string ino_name_buf[100];
 
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
 int ota_mode_selection_check = 0;
+int fcs_mode_selection_check = 0;
 
 #if defined(__WIN32__) // MINGW64
 void replaceAll( string& source, const string& from, const string& to ) {
@@ -116,30 +117,9 @@ void readtxt(int mode_isp_ino) {
     sensor_name = isp_file_name_buf[5];
     isp_fw_dummy_name = isp_file_name_buf[2];
     isp_sensor_set_json_name = "amebapro2_sensor_set.json";
+    isp_iq_json_name = "amebapro2_isp_iq.json";
     isp_sys_file_folder_name = isp_camera_option;
 //    isp_sys_file_folder_name = isp_file_name_buf[0];
-
-#if 0
-        if (isp_camera_option == "JXF37") {
-            fc_data_name = isp_file_name_buf[0];
-            voe_name = isp_file_name_buf[1];
-            iq_name = isp_file_name_buf[2];
-            sensor_name = isp_file_name_buf[3];
-            isp_fw_dummy_name = isp_file_name_buf[4];
-            isp_sensor_set_json_name = "amebapro2_sensor_set0.json";
-            isp_sys_file_folder_name = "SENSOR_F37";
-        } else if (isp_camera_option == "GC5035") {
-            fc_data_name = isp_file_name_buf[0 + 6];
-            voe_name = isp_file_name_buf[1 + 6];
-            iq_name = isp_file_name_buf[2 + 6];
-            sensor_name = isp_file_name_buf[3 + 6];
-            isp_fw_dummy_name = isp_file_name_buf[4 + 6];
-            isp_sensor_set_json_name = "amebapro2_sensor_set1.json";
-            isp_sys_file_folder_name = "SENSOR_GC5035";
-        } else {
-            cout << "Unable to find correct camera option!" << endl;
-        }
-#endif
 
     } else if (mode_isp_ino == 1) {
 #if defined(__WIN32__) // MINGW64
@@ -198,6 +178,12 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
 void ota_mode_check(string ota_mode_check_name) {
     if (ota_mode_check_name == "Enable") {
         ota_mode_selection_check = 1;
+    }
+}
+
+void fcs_mode_check(string fcs_mode_check_name) {
+    if (fcs_mode_check_name == "Enable") {
+        fcs_mode_selection_check = 1;
     }
 }
 
@@ -343,14 +329,12 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     if (isp_selection_check == 1) {
-        cmdss.clear();
-        cmdss << string_temp_1 << voe_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+
+        fcs_mode_check_name = argv[9];
+        fcs_mode_check(fcs_mode_check_name);
 
         cmdss.clear();
-        cmdss << string_temp_1 << "amebapro2_isp_iq.json" << string_temp_2;
+        cmdss << string_temp_1 << voe_name << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
@@ -373,11 +357,19 @@ int main(int argc, char *argv[]) {
         cout << cmd << endl;
         system(cmd.c_str());
 
-//        cmdss.clear();
-//        cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << isp_sensor_set_json_name << string_temp_2;
-//        getline(cmdss, cmd);
-//        cout << cmd << endl;
-//        system(cmd.c_str());
+        if (fcs_mode_selection_check != 1) {
+            cmdss.clear();
+            cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << "non_fcs" << string_temp_8 << isp_iq_json_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        } else {
+            cmdss.clear();
+            cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << isp_iq_json_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
 
         if (fc_data_name != "fcs_data_dummy.bin") {
             cmdss.clear();

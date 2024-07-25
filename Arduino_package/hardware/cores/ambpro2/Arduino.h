@@ -160,6 +160,14 @@ extern PinDescription g_APinDescription[];
 #include "amb_ard_pin_check.h"
 
 #include "sensor.h"
+#ifdef ENABLE_FCS
+#undef ENABLE_FCS
+#ifdef Arduino_FCS_MODE
+#define ENABLE_FCS 1
+#else
+#define ENABLE_FCS 0
+#endif
+#endif
 
 #ifdef __cplusplus
 // WMath prototypes

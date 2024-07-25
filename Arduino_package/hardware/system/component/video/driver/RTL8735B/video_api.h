@@ -374,7 +374,7 @@ void video_get_fcs_queue_info(int *start_time, int *end_time);
 
 int video_get_maxqp(int ch);
 
-void video_set_private_mask(int ch, struct private_mask_s *pmask);
+int video_set_private_mask(int ch, struct private_mask_s *pmask);
 
 void video_set_private_mask_single(int ch, private_mask_single_t *pmask);
 

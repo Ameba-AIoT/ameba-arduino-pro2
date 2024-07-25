@@ -5,6 +5,7 @@ menu.UploadBaudrate=* Upload Speed
 menu.LoadNNModelSource=* NN Model Load From
 menu.CameraOption=* Camera Options
 menu.OTAMode=* OTA Mode
+menu.FCSMode=* Camera FCS Mode
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -70,6 +71,8 @@ Ameba_AMB82-MINI.menu.CameraOption.jxf37=JXF37
 Ameba_AMB82-MINI.menu.CameraOption.jxf37.build.camera_opt=SENSOR_F37
 Ameba_AMB82-MINI.menu.CameraOption.gc5035=GC5035
 Ameba_AMB82-MINI.menu.CameraOption.gc5035.build.camera_opt=SENSOR_GC5035
+Ameba_AMB82-MINI.menu.CameraOption.jxf53=JXF53
+Ameba_AMB82-MINI.menu.CameraOption.jxf53.build.camera_opt=SENSOR_F53
 
 Ameba_AMB82-MINI.menu.OTAMode.Disable=Disable
 Ameba_AMB82-MINI.menu.OTAMode.Disable.build.ota_mode_val=Disable
@@ -77,4 +80,11 @@ Ameba_AMB82-MINI.menu.OTAMode.Disable.build.ota_mode_flags=
 Ameba_AMB82-MINI.menu.OTAMode.Enable=Enable
 Ameba_AMB82-MINI.menu.OTAMode.Enable.build.ota_mode_val=Enable
 Ameba_AMB82-MINI.menu.OTAMode.Enable.build.ota_mode_flags=-DArduino_OTA_MODE
+
+Ameba_AMB82-MINI.menu.FCSMode.Disable=Disable
+Ameba_AMB82-MINI.menu.FCSMode.Disable.build.fcs_mode_val=Disable
+Ameba_AMB82-MINI.menu.FCSMode.Disable.build.fcs_mode_flags=
+Ameba_AMB82-MINI.menu.FCSMode.Enable=Enable
+Ameba_AMB82-MINI.menu.FCSMode.Enable.build.fcs_mode_val=Enable
+Ameba_AMB82-MINI.menu.FCSMode.Enable.build.fcs_mode_flags=-DArduino_FCS_MODE
 ##############################################################

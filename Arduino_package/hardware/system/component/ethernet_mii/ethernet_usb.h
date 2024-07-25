@@ -49,4 +49,6 @@ int ecm_lwip_dhcp_status(void);// -1 = idle, other is DHCP_State_TypeDef status
 int ecm_lwip_switch_connect_mode(void);//Change the connect mode. First : ecm_lwip_setup_connect_mode. Second : Use the API to change the connect mode.
 void ecm_lwip_init(void);
 void ecm_lwip_deinit(void);
-#endif // __MII_ETHERNETIF_H__
+int ecm_lwip_static_ip_status(void);//-1 = non-connect 1 connect
+int ecm_lwip_check_ip(char *ip);// -1: The ip is not be used. Other, the ip is be used.
+#endif // __USB_ETHERNETIF_H__

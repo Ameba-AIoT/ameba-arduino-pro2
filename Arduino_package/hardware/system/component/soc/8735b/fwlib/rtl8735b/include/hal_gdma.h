@@ -393,7 +393,6 @@ __STATIC_INLINE void hal_gdma_chnl_irq_free(phal_gdma_adaptor_t phal_gdma_adapto
  */
 __STATIC_INLINE void hal_gdma_handshake_init(void *adaptor, u8 handshake_num)
 {
-// zzw arduino cpp
 	hal_gdma_stubs.hal_gdma_handshake_init((phal_gdma_adaptor_t)adaptor, handshake_num);
 }
 

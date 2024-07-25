@@ -67,7 +67,6 @@ typedef enum snafcClkDivSel_e {
 /**
   \brief  Enumeration to define SNAFC speed level
 */
-// zzw arduino cpp
 enum snafc_clk_sel_e {
 	SNAFC_SPEED_SEL_0 = 0,  //!< slowest pre-defined value
 	SNAFC_SPEED_SEL_1 = 1,  //!< slower pre-defined value

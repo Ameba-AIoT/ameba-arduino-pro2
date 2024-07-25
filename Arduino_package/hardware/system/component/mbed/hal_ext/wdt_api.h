@@ -116,7 +116,6 @@ void watchdog_aon_clear(void);
 
 /*\@}*/
 
-// zzw arduino
 #ifdef ARDUINO_SDK
 void watchdog_init_arduino(uint32_t timeout_ms, uint32_t arduino_AON_sel);
 #endif

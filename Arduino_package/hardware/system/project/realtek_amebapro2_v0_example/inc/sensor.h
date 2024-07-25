@@ -38,55 +38,47 @@ struct sensor_params_t {
 	unsigned int sensor_fps;
 };
 
-//ARDUINO_SDK, DO NOT CHANGE LINE 49 TO 62
+//ARDUINO_SDK, DO NOT CHANGE LINE 46 TO 84
 #ifdef ARDUINO_SDK
 #define ARDUINO_SDK_SENSOR 1
-//#define ARDUINO_SDK_SENSOR 2
-#endif
-
-#ifdef ARDUINO_SDK
 
 #if ARDUINO_SDK_SENSOR == 1
-#define SENSOR_F37		0x00
+#define SENSOR_DUMMY        0x00
+#define SENSOR_F37          0x01
 static const struct sensor_params_t sensor_params[] = {
+	{1920, 1080, 30}, //SENSOR_DUMMY        0x00
 	{1920, 1080, 30},
 };
-#define SENSOR_MAX         1
+#define SENSOR_MAX         2
 static const unsigned char sen_id[SENSOR_MAX] = {
+	SENSOR_DUMMY,
 	SENSOR_F37,
 };
 #define USE_SENSOR      	SENSOR_F37
 static const      char manual_iq[SENSOR_MAX][64] = {
+	"iq",
 	"iq_f37",
 };
-
-#elif ARDUINO_SDK_SENSOR == 2
-#define SENSOR_GC5035		0x00
-static const struct sensor_params_t sensor_params[] = {
-	{2592, 1944, 15}, //GC5035
-};
-#define SENSOR_MAX         1
-static const unsigned char sen_id[SENSOR_MAX] = {
-	SENSOR_GC5035,
-};
-#define USE_SENSOR      	SENSOR_GC5035
-static const      char manual_iq[SENSOR_MAX][64] = {
-	"iq_gc2053",
-};
+#define ENABLE_FCS      	0
 
 #else
-#define SENSOR_F37		0x00
+
+#define SENSOR_DUMMY        0x00
+#define SENSOR_F37          0x01
 static const struct sensor_params_t sensor_params[] = {
 	{1920, 1080, 30}, //F37
 };
-#define SENSOR_MAX         5
+#define SENSOR_MAX         2
 static const unsigned char sen_id[SENSOR_MAX] = {
+	SENSOR_DUMMY,
 	SENSOR_F37,
 };
 #define USE_SENSOR      	SENSOR_F37
 static const      char manual_iq[SENSOR_MAX][64] = {
+	"iq",
 	"iq_f37",
 };
+#define ENABLE_FCS      	1
 #endif
 
 #else
@@ -122,6 +114,8 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_SC301_HDR    0x1A  //  |   v    |   v    |   -    |
 #define SENSOR_F51_HDR      0x1B  //  |   v    |   v    |   v    |
 #define SENSOR_OS04A10      0x1C  //  |   v    |   -    |   -    |
+#define SENSOR_F55_HDR      0x1D  //  |   v    |   -    |   v    |
+#define SENSOR_GC1084       0x1E  //  |   v    |   -    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	{1920, 1080, 30}, //SENSOR_DUMMY        0x00
@@ -151,8 +145,10 @@ static const struct sensor_params_t sensor_params[] = {
 	{2000, 2000, 20}, //SENSOR_K351_HDR		0x18
 	{2048, 1536, 30}, //SENSOR_OV50A40		0x19
 	{2048, 1536, 20}, //SENSOR_SC301_HDR	0x1A
-	{1536, 1536, 30}, //SENSOR_F51_HDR		0x1B
+	{1536, 1536, 20}, //SENSOR_F51_HDR		0x1B
 	{2560, 1440, 24}, //SENSOR_OS04A10		0x1C
+	{1920, 1080, 30}, //SENSOR_F55_HDR		0x1D
+	{1280, 720, 30}, //SENSOR_GC1084
 };
 
 
@@ -178,7 +174,7 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 
 #define MANUAL_SENSOR_IQ	0xFF
 
-#define ENABLE_FCS      	0
+//#define ENABLE_FCS      	1
 
 #define MULTI_DISABLE       0x00
 #define MULTI_ENABLE        0x01
