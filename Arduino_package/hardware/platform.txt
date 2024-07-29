@@ -136,9 +136,9 @@ recipe.hooks.prebuild.1.pattern.linux = chmod -R 777 "{ameba.tools_path}"
 recipe.hooks.prebuild.1.pattern.macosx= chmod -R 777 "{ameba.tools_path}"
 
 ## combine toolchain
-recipe.hooks.prebuild.2.pattern.windows = "{ameba.tools_path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p1_name_path}" "{toolchain_p2_name_path}" {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}" "{nn_tool_name_path}" "{nn_tool_name}"
-recipe.hooks.prebuild.2.pattern.linux = {ameba.tools_path}/prebuild_linux {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} {hardware.path} {build.camera_opt} {nn_tool_name_path} {nn_tool_name}
-recipe.hooks.prebuild.2.pattern.macosx = {ameba.tools_path}/prebuild_macos {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} {hardware.path} {build.camera_opt} {nn_tool_name_path} {nn_tool_name}
+recipe.hooks.prebuild.2.pattern.windows = "{ameba.tools_path}/prebuild_windows.exe" "{toolchain.path}" "{toolchain_p1_name_path}" "{toolchain_p2_name_path}" {toolchain_p1_name} {toolchain_p2_name} "{hardware.path}" "{build.camera_opt}" "{nn_tool_name_path}" "{nn_tool_name}" "{build.ota_mode_val}" "{build.model_src}"
+recipe.hooks.prebuild.2.pattern.linux = {ameba.tools_path}/prebuild_linux {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} {hardware.path} {build.camera_opt} {nn_tool_name_path} {nn_tool_name} {build.ota_mode_val} {build.model_src}
+recipe.hooks.prebuild.2.pattern.macosx = {ameba.tools_path}/prebuild_macos {toolchain.path} {toolchain_p1_name_path} {toolchain_p2_name_path} {toolchain_p1_name} {toolchain_p2_name} {hardware.path} {build.camera_opt} {nn_tool_name_path} {nn_tool_name} {build.ota_mode_val} {build.model_src}
 
 recipe.hooks.prebuild.3.pattern.windows = "{ameba.tools_path}/ino_validation_windows.exe" "{build.path}" "{ameba.tools_path}" "{build.model_src}"
 recipe.hooks.prebuild.3.pattern.linux = {ameba.tools_path}/ino_validation_linux {build.path} {ameba.tools_path} {build.model_src}
