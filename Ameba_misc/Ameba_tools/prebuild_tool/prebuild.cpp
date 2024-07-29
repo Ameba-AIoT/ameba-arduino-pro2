@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
 
     if (strcmp(argv[10], "Enable") == 0 && strcmp(argv[11], "LoadFromFlash") == 0) {
         cerr << "OTA is enabled, please select load model from SD card and not load model from flash." << endl;
+        exit(EXIT_FAILURE);
     }
 
     chdir("../..");

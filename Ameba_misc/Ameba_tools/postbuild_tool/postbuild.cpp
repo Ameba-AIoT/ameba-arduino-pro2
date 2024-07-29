@@ -38,6 +38,8 @@ string isp_file_name_buf[100];
 string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name, ota_mode_check_name, fcs_mode_check_name;
 string ino_name_buf[100];
 
+string partitiontable_json_name, partition_bin_name;
+
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
 int ota_mode_selection_check = 0;
@@ -307,7 +309,7 @@ int main(int argc, char *argv[]) {
     string string_temp_1 = "cp misc/video_img/";
     string string_temp_2 = " ./";
     string string_temp_3 = "cp misc/nn_img/";
-    string string_temp_4 = "cp ";
+    string string_temp_4 = "cp -r ";
     string string_temp_5 = "/*";
     string string_temp_6 = "cp image_tool/";
     string string_temp_7 = "misc/video_img/";
@@ -583,31 +585,29 @@ int main(int argc, char *argv[]) {
     ota_mode_check_name = argv[8];
     ota_mode_check(ota_mode_check_name);
 
-    cmdss.clear();
     if (ota_mode_selection_check == 1){
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition_ota.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
-    } 
-    else {
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+        partitiontable_json_name = "amebapro2_partitiontable_OTA.json";
+        partition_bin_name = "partition_ota.bin";
+    } else {
+        partitiontable_json_name = "amebapro2_partitiontable.json";
+        partition_bin_name = "partition.bin";
     }
+
+    cmdss.clear();
+    cmdss << string_temp_1 << "combine "<< partitiontable_json_name << " system_files.bin PT_PT=" << partition_bin_name << ",CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();
-        if (ota_mode_selection_check == 1){
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition_ota.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-        }
-        else {
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
-        }
+        cmdss << string_temp_1 << "combine "<< partitiontable_json_name << " flash_ntz.bin PT_PT=" << partition_bin_name << ",CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
         cmdss.clear();
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_1 << "combine "<< partitiontable_json_name << " flash_ntz.bin PT_PT=" << partition_bin_name << ",CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
