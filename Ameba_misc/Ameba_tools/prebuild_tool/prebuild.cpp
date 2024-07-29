@@ -39,6 +39,11 @@ int main(int argc, char *argv[]) {
 
     // runtime tool path
     chdir(argv[1]);
+
+    if (strcmp(argv[10], "Enable") == 0 && strcmp(argv[11], "LoadFromFlash") == 0) {
+        cerr << "OTA is enabled, please select load model from SD card and not load model from flash." << endl;
+    }
+
     chdir("../..");
 
     isp_camera_option = argv[7];

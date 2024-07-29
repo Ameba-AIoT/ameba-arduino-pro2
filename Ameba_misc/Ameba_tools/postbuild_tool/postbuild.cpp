@@ -580,15 +580,28 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
     }
 
+    ota_mode_check_name = argv[8];
+    ota_mode_check(ota_mode_check_name);
+
     cmdss.clear();
-    cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    if (ota_mode_selection_check == 1){
+        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition_ota.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    } 
+    else {
+        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    }
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();
+        if (ota_mode_selection_check == 1){
+        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition_ota.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        }
+        else {
         cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        }
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
@@ -622,9 +635,6 @@ int main(int argc, char *argv[]) {
 #else
     #error compiler is not supported!
 #endif
-
-    ota_mode_check_name = argv[8];
-    ota_mode_check(ota_mode_check_name);
 
     if (ota_mode_selection_check == 1) {
         cmdss.clear();
