@@ -5,44 +5,43 @@
 #include <ota_8735b.h>
 #include "ota_drv.h"
 
-const int PORT = 3000;   				 //MODIFY THIS FOR YOUR HTTP SERVER PORT
-const char *server = "192.168.3.4";      //MODIFY THIS FOR YOUR HTTP SERVER IP ADDRESS
-const char *resource = "api/uploadfile"; //DO NOT MODIFY
+const int PORT = 3000;                      // MODIFY THIS FOR YOUR HTTP SERVER PORT
+const char *server = "192.168.3.4";         // MODIFY THIS FOR YOUR HTTP SERVER IP ADDRESS
+const char *resource = "api/uploadfile";    // DO NOT MODIFY
 
 
-//DO NOT MODIFY 
-const char* OtaState[] = {  
+// DO NOT MODIFY
+const char *OtaState[] = {
     "OTA_STATE_IDLE",
     "OTA_STATE_RECEIVED_START_SIGNAL",
     "OTA_STATE_DOWNLOAD_FIRMWARE_IN_PROGRESS",
     "OTA_STATE_DOWNLOAD_FIRMWARE_COMPLETED",
-    "OTA_STATE_REBOOT"
-};
+    "OTA_STATE_REBOOT"};
 
 void http_update_ota_task(void *param)
 {
-	(void)param;
+    (void)param;
 
-	int ret = -1;
+    int ret = -1;
 
-	g_otaState = OtaState[2];
+    g_otaState = OtaState[2];
 
-	ret = http_update_ota((char *)server, PORT, (char *)resource);
+    ret = http_update_ota((char *)server, PORT, (char *)resource);
 
-	g_otaState = OtaState[3];
+    g_otaState = OtaState[3];
 
-	// printf("\n\r[%s] Update task exit", __FUNCTION__);
-	if (!ret) {
-		// printf("\n\r[%s] Ready to reboot", __FUNCTION__);
-		g_otaState = OtaState[4];
-		ota_platform_reset();
-	}
-	vTaskDelete(NULL);
+    // printf("\n\r[%s] Update task exit", __FUNCTION__);
+    if (!ret) {
+        // printf("\n\r[%s] Ready to reboot", __FUNCTION__);
+        g_otaState = OtaState[4];
+        ota_platform_reset();
+    }
+    vTaskDelete(NULL);
 }
 
 void ota_http(void)
 {
-	if (xTaskCreate(http_update_ota_task, (char const *)"http_update_ota_task", 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
-		printf("\n\r[%s] Create update task failed", __FUNCTION__);
-	}
+    if (xTaskCreate(http_update_ota_task, (const char *)"http_update_ota_task", 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
+        printf("\n\r[%s] Create update task failed", __FUNCTION__);
+    }
 }
