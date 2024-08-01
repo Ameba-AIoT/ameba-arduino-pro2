@@ -483,22 +483,22 @@
               "host": "i686-mingw32",
               "archiveFileName": "ameba_pro2_tools_windows-1.3.7.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.3.7.tar.gz",
-              "checksum": "SHA-256:220740c069c61fc94db9e086889d4a1b1aee2c2f5d82fb275daef11806c8eec5",
-              "size": "9426215"
+              "checksum": "SHA-256:f7dc18c7d954a317dc4b221364d4ed610f6a16eb49b6fac2e784df9152ce772f",
+              "size": "9489374"
             },
             {
               "host": "x86_64-pc-linux-gnu",
               "archiveFileName": "ameba_pro2_tools_linux-1.3.7.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.3.7.tar.gz",
-              "checksum": "SHA-256:985f00a1532d5be0a3250a183e92456565c8628a746962b74188d65c7b8e7def",
-              "size": "13271103"
+              "checksum": "SHA-256:54f9f11a2f4921a43c5136cf057dbe8ac037e63c99b8d2d8452282ce37fbefc7",
+              "size": "13275571"
             },
             {
               "host": "x86_64-apple-darwin",
               "archiveFileName": "ameba_pro2_tools_macos-1.3.7.tar.gz",
               "url": "https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.3.7.tar.gz",
-              "checksum": "SHA-256:75696955e08537908c0ad4637e4c5454cb5c6de23ac611fc4fc69a8b64829cfa",
-              "size": "11471387"
+              "checksum": "SHA-256:b093c79b8e529d864f8d7b28e686863dea6bcb00004997ec39e6ddc1ae702aaf",
+              "size": "11475572"
             }
           ]
         },
