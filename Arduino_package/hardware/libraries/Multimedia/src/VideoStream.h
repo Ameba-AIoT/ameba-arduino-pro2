@@ -11,7 +11,7 @@ extern "C" {
 }
 #endif
 
-#define DEFAULT_PRESET          -1
+#define DEFAULT_PRESET         -1
 #define USB_UVCD_STREAM_PRESET 10
 
 #define VIDEO_ENABLE  1
