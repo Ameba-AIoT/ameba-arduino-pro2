@@ -98,6 +98,7 @@ StreamIO::StreamIO(uint8_t numInput, uint8_t numOutput)
         }
     }
     _p_linker = (void*)_p_create();
+    linker = _p_linker;
 }
 
 StreamIO::~StreamIO(void)

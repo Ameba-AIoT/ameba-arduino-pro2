@@ -43,11 +43,13 @@ jobs:
           - Arduino_package/hardware/libraries/Multimedia
           - Arduino_package/hardware/libraries/NeuralNetwork
           - Arduino_package/hardware/libraries/NTPClient
+          - Arduino_package/hardware/libraries/OTA
           - Arduino_package/hardware/libraries/PowerMode
           - Arduino_package/hardware/libraries/QRCodeScanner
           - Arduino_package/hardware/libraries/RTC
           - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
           - Arduino_package/hardware/libraries/SPI/examples/LCD_Screen_ILI9341_TFT
+          - Arduino_package/hardware/libraries/USB
           - Arduino_package/hardware/libraries/Watchdog
           - Arduino_package/hardware/libraries/WiFi
           - Arduino_package/hardware/libraries/Wire

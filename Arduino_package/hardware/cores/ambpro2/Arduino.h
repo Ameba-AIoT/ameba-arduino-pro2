@@ -36,6 +36,7 @@ extern "C" {
 #endif    // __cplusplus
 
 void ameba_init(void);
+void set_initial_tick_count(void);
 
 #include "wiring_constants.h"
 // #include "diag.h"
