@@ -731,19 +731,19 @@ void Video::videoInit(int ch)
                 } else {
                     printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
                     cameraOpenUVCD(videoModule[ch]._p_mmf_context,
-                               channel[ch],
-                               encoder[ch],
-                               resolution[ch],
-                               w[ch],
-                               h[ch],
-                               bps[ch],
-                               fps[ch],
-                               gop[ch],
-                               rc_mode[ch],
-                               snapshot[ch][0],
-                               use_static_addr[ch],
-                               meta_enable[ch],
-                               _heap_size);
+                                   channel[ch],
+                                   encoder[ch],
+                                   resolution[ch],
+                                   w[ch],
+                                   h[ch],
+                                   bps[ch],
+                                   fps[ch],
+                                   gop[ch],
+                                   rc_mode[ch],
+                                   snapshot[ch][0],
+                                   use_static_addr[ch],
+                                   meta_enable[ch],
+                                   _heap_size);
                 }
             }
         }

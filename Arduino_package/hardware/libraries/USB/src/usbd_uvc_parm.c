@@ -36,10 +36,7 @@ struct uvc_format_uncompressed uvc_format_yuy2 = {
     .bDescriptorSubType = UVC_VS_FORMAT_UNCOMPRESSED,
     .bFormatIndex = 1,
     .bNumFrameDescriptors = 1,
-    .guidFormat =
-        {
-                     'N', 'V', '1', '6', 0x00, 0x00, 0x10, 0x00,
-                     0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
+    .guidFormat = {'N', 'V', '1', '6', 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
     .bBitsPerPixel = 16,
     .bDefaultFrameIndex = 1,
     .bAspectRatioX = 0,
@@ -54,10 +51,7 @@ struct uvc_format_uncompressed uvc_format_nv12 = {
     .bDescriptorSubType = UVC_VS_FORMAT_UNCOMPRESSED,
     .bFormatIndex = 2,
     .bNumFrameDescriptors = 1,
-    .guidFormat =
-        {
-                     'N', 'V', '1', '2', 0x00, 0x00, 0x10, 0x00,
-                     0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
+    .guidFormat = {'N', 'V', '1', '2', 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
     .bBitsPerPixel = 12,
     .bDefaultFrameIndex = 1,
     .bAspectRatioX = 0,
@@ -86,10 +80,7 @@ struct uvc_format_framebased uvc_format_h264 = {
     .bDescriptorSubType = UVC_VS_FORMAT_FRAME_BASED,
     .bFormatIndex = 4,
     .bNumFrameDescriptors = 1,
-    .guidFormat =
-        {
-                     'H', '2', '6', '4', 0x00, 0x00, 0x10, 0x00,
-                     0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
+    .guidFormat = {'H', '2', '6', '4', 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
     .bBitsPerPixel = 12,
     .bDefaultFrameIndex = 1,
     .bAspectRatioX = 0,
@@ -105,10 +96,7 @@ struct uvc_format_framebased uvc_format_h265 = {
     .bDescriptorSubType = UVC_VS_FORMAT_FRAME_BASED,
     .bFormatIndex = 5,
     .bNumFrameDescriptors = 1,
-    .guidFormat =
-        {
-                     'H', 'E', 'V', 'C', 0x00, 0x00, 0x10, 0x00,
-                     0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
+    .guidFormat = {'H', 'E', 'V', 'C', 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
     .bBitsPerPixel = 12,
     .bDefaultFrameIndex = 1,
     .bAspectRatioX = 0,
@@ -424,82 +412,32 @@ struct usb_descriptor_header *usbd_uvc_descriptors_HS[] = {
 };
 
 struct uvc_frame_info uvc_frames_mjpeg[] = {
-    {
-     MAX_W,
-     MAX_H,
-     {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0},
-     },
-    {
-     0,
-     0,
-     {
-            0,
-        },
-     },
+    {MAX_W, MAX_H, {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0}},
+    {0,     0,     {0}                                          }
 };
 
 struct uvc_frame_info uvc_frames_h264[] = {
   //  25,
-    {
-          MAX_W,
-          MAX_H,
-          {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0},
-          }, //  400000, 1000000, 5000000,
-    {
-          0,
-          0,
-          {
-            0,
-        },
-          },
+    {MAX_W, MAX_H, {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0}}, //  400000, 1000000, 5000000,
+    {0,     0,     {0}                                          }
 };
 
 struct uvc_frame_info uvc_frames_h265[] = {
   //  25,
-    {
-          MAX_W,
-          MAX_H,
-          {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0},
-          }, //  400000, 1000000, 5000000,
-    {
-          0,
-          0,
-          {
-            0,
-        },
-          },
+    {MAX_W, MAX_H, {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0}}, //  400000, 1000000, 5000000,
+    {0,     0,     {0}                                          }
 };
 
 struct uvc_frame_info uvc_frames_yuy2[] = {
-    {
-     MAX_W,
-     MAX_H,
-     {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0},
-     }, //  666666, 10000000, 50000000,
-    {
-     0,
-     0,
-     {
-            0,
-        },
-     },
+    {MAX_W, MAX_H, {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0}}, //  666666, 10000000, 50000000,
+    {0,     0,     {0}                                          }
 };
 
 struct uvc_frame_info uvc_frames_nv12[] = {
-    {
-     MAX_W,
-     MAX_H,
-     {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0},
-     }, //  666666, 10000000, 50000000,
+    {MAX_W, MAX_H, {FRAME_INTV_0, FRAME_INTV_1, FRAME_INTV_2, 0}}, //  666666, 10000000, 50000000,
   //{  1280, 720, { VALUE_FPS(15), VALUE_FPS(10), VALUE_FPS(2), 0 }, },//666666, 10000000, 50000000,
   //{  640, 480, { VALUE_FPS(15), VALUE_FPS(10), VALUE_FPS(2), 0 }, },//666666, 10000000, 50000000,
-    {
-     0,
-     0,
-     {
-            0,
-        },
-     },
+    {0,     0,     {0}                                          }
 };
 
 struct uvc_format_info uvc_formats[] = {
