@@ -85,10 +85,10 @@ void ISPControlReset(void)
 
 void cameraPreConfig_usb_uvcd(unsigned char *uuid)
 {
-    //video_pre_init_params_t init_params;
+    // video_pre_init_params_t init_params;
     memset(&init_params, 0x00, sizeof(video_pre_init_params_t));
     init_params.meta_enable = 1;
-    init_params.meta_size = VIDEO_META_USER_SIZE; // 0x40
+    init_params.meta_size = VIDEO_META_USER_SIZE;    // 0x40
     memcpy(init_params.video_meta_uuid, uuid, VIDEO_META_UUID_SIZE);
     video_pre_init_setup_parameters(&init_params);
 }
@@ -170,7 +170,7 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     // printf("\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, rc_mode);
 
     if (p) {
-        //mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
+        // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
         video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_params);
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, fps * 3);
         mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
