@@ -80,7 +80,7 @@ void UVCD::configVideo(VideoSetting &config)
  *
  *  @param   module_videocam: stream data from camera video
  *           module_videolinker: StreamIO object for uvcd
-             uvcd_channel: vidoe channel
+             uvcd_channel: video channel
  *  @return  None
  *
  */
