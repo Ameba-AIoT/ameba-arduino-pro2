@@ -3,8 +3,7 @@
  * In this example, the device is setup to function as a USB camera.
  * Connect to PC and use the device as a USB camera.
 
- * Example guide:
- * 
+ * Example guide: TBD
  */
 
 #include "StreamIO.h"
