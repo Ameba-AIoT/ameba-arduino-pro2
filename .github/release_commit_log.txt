@@ -1,17 +1,16 @@
 Feature:
-- Add feature Flash Memory
-- Add feature FCS mode for all supported sensors
-- Add sensor F53 support
+- Add OTA
+- Add USB UVCD
 
 API Updates:
-- Add flash memory related API
-- Update snapshot related API
-- Update SDK code base
+- Add OTA related API
+- Add USB UVCD related API
+- Update boot tick count process
 
 Misc:
-- Update platform.txt avoid the path too long issue
-- Update keywords.txt files
-- Update library.properties files
-- Update ameba_pro2_tools 1.3.6
-    - Update multi sensor build process
-    - Update postbuild tool for FCS
+- Update ameba_pro2_tools 1.3.7
+    - Update prebuild and postbuild tools
+    - Support Chinese username on win11
+- Update workflow
+- Update CI with ET mode
+- Update spell_check.yml
