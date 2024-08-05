@@ -30,7 +30,7 @@ UVCD::~UVCD(void)
     } else {
         printf("\r\n[ERROR] UVCD deinit failed\n");
     }
-};
+}
 
 /**
  *  @brief   Start config video
@@ -88,10 +88,10 @@ void UVCD::begin(const MMFModule &module_videocam, void *module_videolinker, int
 {
     _uvcd_channel = uvcd_channel;
     int wdr_mode = 2;
-    //printf("\r\n[INFO] %s. [uvcd]set wdr_mode:%d \n", __FUNCTION__, wdr_mode);
+    // printf("\r\n[INFO] %s. [uvcd]set wdr_mode:%d \n", __FUNCTION__, wdr_mode);
     isp_set_wdr_mode(wdr_mode);
-    //isp_get_wdr_mode(&wdr_mode);
-    //printf("\r\n[INFO] %s. [uvcd]get wdr_mode:%d \n", __FUNCTION__, wdr_mode);
+    // isp_get_wdr_mode(&wdr_mode);
+    // printf("\r\n[INFO] %s. [uvcd]get wdr_mode:%d \n", __FUNCTION__, wdr_mode);
 
     while (1) {
         rtw_down_sema(&uvc_format_ptr->uvcd_change_sema);
