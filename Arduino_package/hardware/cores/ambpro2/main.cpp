@@ -58,6 +58,7 @@ int main(void)
     if (xTaskCreate(main_task, ((const char *)"main task"), MAIN_THREAD_STACK_SIZE, NULL, 1, NULL) != pdPASS) {
         printf("\r\n[ERROR] %s xTaskCreate(main task) failed\n", __FUNCTION__);
     }
+    set_initial_tick_count();
     vTaskStartScheduler();
 
     while (1)

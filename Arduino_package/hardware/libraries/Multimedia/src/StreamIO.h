@@ -22,6 +22,7 @@ public:
     void registerOutput2(const MMFModule &module);
     void setStackSize(void);
     void setTaskPriority(void);
+    void *linker = NULL;
 
 private:
     void *_p_linker = NULL;
