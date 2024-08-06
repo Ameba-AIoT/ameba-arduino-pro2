@@ -7,7 +7,7 @@ on:
         description: "Type of release, E(arly)/R(egular)"
         required: true
         default: 'E'
-        choices: [E, R, ET]
+        choices: [E, R]
 
 env:
   REPO_NAME: "ameba_pro2"
@@ -52,13 +52,6 @@ jobs:
               echo "Error branch selection"
               exit 1
             fi
-          elif [[ "${{ github.event.inputs.release_type }}" == "ET" ]]; then
-            if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-              echo "Continue with $GITHUB_REF"
-            else
-              echo "Error branch selection"
-              exit 1
-            fi
           else
             echo "Invalid release type specified. Please choose E or R."
             exit 1
@@ -86,10 +79,6 @@ jobs:
             echo "Performing Regular release workflow..."
             python .github/Scripts/Python/python_script_public/ameba_arduino_release_package_maker.py ${{ env.REPO_NAME }} R ${{ env.LAST_TAG }} ${{ env.PACKAGE_SHA }} ${{ env.PACKAGE_SIZE }} ${{ env.JSON_LINK_MAIN }} ${{ env.RRLEASE_BRANCH_NAME }}
             python .github/Scripts/Python/python_script_public/ameba_arduino_release_notes_maker.py R ${{ env.RRLEASE_LOG }} ${{ env.RRLEASE_COMMIT_LOG }} ${{ env.LAST_TAG }}
-          elif [[ "${{ github.event.inputs.release_type }}" == "ET" ]]; then
-            echo "Performing Early release with tool workflow..."
-            python .github/Scripts/Python/python_script_public/ameba_arduino_release_package_maker.py ${{ env.REPO_NAME }} ET ${{ env.LAST_TAG }} ${{ env.PACKAGE_SHA }} ${{ env.PACKAGE_SIZE }} ${{ env.JSON_LINK_DEV }} ${{ env.RRLEASE_BRANCH_NAME }}
-            python .github/Scripts/Python/python_script_public/ameba_arduino_release_notes_maker.py ET ${{ env.RRLEASE_LOG }} ${{ env.RRLEASE_COMMIT_LOG }} ${{ env.LAST_TAG }}
           else
             echo "Invalid release type specified. Please choose E or R."
             exit 1

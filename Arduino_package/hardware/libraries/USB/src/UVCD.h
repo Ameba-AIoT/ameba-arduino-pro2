@@ -11,6 +11,7 @@
 class UVCD: public MMFModule {
 public:
     UVCD(void);
+    UVCD(const char *usb_uvcd_driver_name);
     ~UVCD(void);
     void configVideo(VideoSetting &config);
     void begin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel);

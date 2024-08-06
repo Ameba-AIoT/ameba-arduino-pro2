@@ -12,7 +12,7 @@ UVCD	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-Stream_config	KEYWORD2
+stream_config	KEYWORD2
 camera_uvcd	KEYWORD2
 usb_uvcd	KEYWORD2
 

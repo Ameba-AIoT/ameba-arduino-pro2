@@ -24,7 +24,7 @@ typedef struct {
 
 void ISPControlReset(void);
 
-void cameraPreConfig_usb_uvcd(unsigned char *uuid);
+void cameraPreConfig_usb_uvcd(unsigned char *uuid, const char *usb_uvcd_driver_name);
 
 int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
                  int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,

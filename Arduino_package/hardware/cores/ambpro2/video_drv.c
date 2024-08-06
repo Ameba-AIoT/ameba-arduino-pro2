@@ -83,7 +83,8 @@ void ISPControlReset(void)
     isp_set_day_night(ISPCtrl.DayNightMode);
 }
 
-void cameraPreConfig_usb_uvcd(unsigned char *uuid)
+extern int set_uvc_string(char *product_name, char *serial_name, unsigned short bcdDevice);
+void cameraPreConfig_usb_uvcd(unsigned char *uuid, const char *usb_uvcd_driver_name)
 {
     // video_pre_init_params_t init_params;
     memset(&init_params, 0x00, sizeof(video_pre_init_params_t));
@@ -91,6 +92,8 @@ void cameraPreConfig_usb_uvcd(unsigned char *uuid)
     init_params.meta_size = VIDEO_META_USER_SIZE;    // 0x40
     memcpy(init_params.video_meta_uuid, uuid, VIDEO_META_UUID_SIZE);
     video_pre_init_setup_parameters(&init_params);
+
+    set_uvc_string((char *)usb_uvcd_driver_name, "012345678", 0X0010);
 }
 
 int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
