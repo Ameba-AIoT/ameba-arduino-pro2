@@ -97,7 +97,12 @@ try_again:
         } else {
             err = clientdrv.getLastErrno(_sock);
             if (err == EAGAIN) {
-                goto try_again;
+                if (_is_blocked) {
+                    goto try_again;
+                } else {
+                    // since no process exists for the socket, stop it
+                    clientdrv.stopSocket(_sock);
+                }
             }
             if (err != 0) {
                 _is_connected = false;
