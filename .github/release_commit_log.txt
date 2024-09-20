@@ -1,16 +1,9 @@
 Feature:
-- Add OTA
-- Add USB UVCD
+- Add sensor IMX327 support
 
 API Updates:
-- Add OTA related API
-- Add USB UVCD related API
-- Update boot tick count process
+- Update USB UVCD related API
 
 Misc:
-- Update ameba_pro2_tools 1.3.7
-    - Update prebuild and postbuild tools
-    - Support Chinese username on win11
-- Update workflow
-- Update CI with ET mode
-- Update spell_check.yml
+- Update ameba_pro2_tools 1.3.8
+    - Add sensor IMX327 realted support

@@ -5,17 +5,17 @@
 
 |Branch|Usage|Remarks|
 |:-----|:-----|:-----|
-|`main` | stable release| https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek_amebapro2_index.json|
-|`dev`| merge `Pull Request` & early release| https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json|
+|`main` | stable release| https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/package_realtek_amebapro2_early_index.json|
+|`dev`| merge `Pull Request` & early release| https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json|
 
 
-For all `release` information, please visit this [link](https://github.com/ambiot/ambpro2_arduino/releases).
+For all `release` information, please visit this [link](https://github.com/Ameba-AIoT/ameba-arduino-pro2/releases).
 
 </br>
 
 ## 2. How to add Realtek Ameba Arduino package to `Arduino IDE`:
 
-> You can refer to this link to get started: https://www.amebaiot.com/en/amebapro2-amb82-mini-arduino-getting-started
+> You can refer to this link to get started: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/index.html
 > , or follow the steps below.
 
 1. **Add Ameba Arduino SDK link to *Arduino IDE Additional Boards Manager***
@@ -28,7 +28,7 @@ For all `release` information, please visit this [link](https://github.com/ambio
 
     Copy and paste the following link into the field and click "OK",
 
-    https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek_amebapro2_index.json
+    https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/package_realtek_amebapro2_early_index.json
 
     > We also suggest to enable "Show verbose output" options on "compilation" and "upload" in Preference for easier debugging.
     
@@ -54,7 +54,7 @@ For all `release` information, please visit this [link](https://github.com/ambio
 
 ## 3. License and thirdparty licenses
 
-> The overall project is licensed under the MIT License. See the [LICENSE](https://github.com/ambiot/ambpro2_arduino?tab=MIT-1-ov-file) file for details.
+> The overall project is licensed under the MIT License. See the [LICENSE](https://github.com/Ameba-AIoT/ameba-arduino-pro2?tab=MIT-1-ov-file) file for details.
 > This project uses executables for tools from [CMake v3.29.6](https://github.com/Kitware/CMake/releases/tag/v3.29.6) which is licensed under the BSD 3-clause License. See the [LICENSE](https://github.com/Kitware/CMake?tab=License-1-ov-file) or "/third_party_licenses/" file for details.
 
 </br>
