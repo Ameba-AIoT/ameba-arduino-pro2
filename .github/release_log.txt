@@ -3,6 +3,7 @@ Pre Release Version 4.0.8
 Version 4.0.8 – 2024/07/03
 Version 4.0.8 – 2024/07/25
 Version 4.0.8 - 2024/08/05
+Version 4.0.8 - 2024/09/20
 
 Feature:
 - Update comment in WideDynamicRange.ino
@@ -11,6 +12,7 @@ Feature:
 - Add sensor F53 support
 - Add OTA
 - Add USB UVCD
+- Add sensor IMX327 support
 
 API Updates:
 - Update SDK code base
@@ -20,6 +22,7 @@ API Updates:
 - Add OTA related API
 - Add USB UVCD related API
 - Update boot tick count process
+- Update USB UVCD related API
 
 Misc:
 - Update CI_compile_examples.yml
@@ -43,3 +46,5 @@ Misc:
 - Update workflow
 - Update CI with ET mode
 - Update spell_check.yml
+- Update ameba_pro2_tools 1.3.8
+    - Add sensor IMX327 realted support
