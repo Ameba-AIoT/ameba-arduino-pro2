@@ -44,9 +44,6 @@ void setup()
     // Reduce the noise suppression level to reduce the echo effect
     // Noise suppression level can be adjusted from 0 to 12
     audio.configMicNS(0);    // Change to 1 to enable NS on microphone input
-    audio.configSpkNS(0);    // Change to 1 to enable NS on speaker output
-                             //    audio.configMicNS(0, 5);    // Noise suppression level 5
-                             //    audio.configSpkNS(0, 5);    // Noise suppression level 5
 
     // Automatic Gain Control algorithm for microphone and speaker
     // AGC can dynamically adjust the gain to maintain the audio loudness at a reference level

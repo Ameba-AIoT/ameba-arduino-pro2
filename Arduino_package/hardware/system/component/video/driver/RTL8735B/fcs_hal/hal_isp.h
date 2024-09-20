@@ -40,6 +40,30 @@ enum ISP_3A_statis_mode {
 	AWB_STATIS
 };
 
+enum ISP_AE_statis_type {
+	AE_STATIS_HIST,
+	AE_STATIS_YMEAN
+};
+
+enum ISP_Buf_Cfg_Order {
+	ISP_Y0_BUF,
+	ISP_UV0_BUF,
+	ISP_Y1_BUF,
+	ISP_UV1_BUF,
+	ISP_Y2_BUF,
+	ISP_UV2_BUF,
+	ISP_Y3_BUF,
+	ISP_UV3_BUF,
+	TNR_BUF,
+	OSD_BUF,
+	STATIS_BUF,
+	MD0_BUF,
+	MD1_BUF,
+	RGB_R_BUF,
+	RGB_G_BUF,
+	RGB_B_BUF,
+	BUF_ITEM_NUM
+};
 
 typedef struct hal_isp_stream_stream {
 
@@ -248,9 +272,9 @@ typedef struct {
 	int colot_temperature;
 
 	int y_average;
-	uint32_t white_num;
-	uint32_t rg_sum;
-	uint32_t bg_sum;
+    uint32_t white_num;
+    uint32_t rg_sum;
+    uint32_t bg_sum;
 
 	int hdr_mode;
 	int sensor_fps;
@@ -259,9 +283,9 @@ typedef struct {
 
 	u32 time_stamp;
 
-	uint32_t wdr_hist_contrast;
-	uint32_t wdr_hist_contrast_origin;
-	uint32_t reserved;
+    uint32_t wdr_hist_contrast;
+    uint32_t wdr_hist_contrast_origin;
+    uint32_t reserved;
 
 } isp_statis_meta_t;
 
@@ -302,7 +326,7 @@ typedef struct {
 
 typedef struct {
 	isp_grid_t grid;
-	uint8_t bitmap[ISP_MASK_GRID_CELLS / 8];
+	uint8_t bitmap[ISP_MASK_GRID_CELLS/8];
 
 } isp_grid_mask_entry_t;
 
@@ -395,13 +419,14 @@ int hal_isp_set_sensor_mode(int mode, int fps); // mode 0: linear 1: hdr
 int hal_isp_get_sensor_mode(int *mode, int *fps); // mode 0: linear 1: hdr
 
 int hal_isp_get_af_statis(af_statis_t *p_af_statis);
-int hal_isp_get_ae_statis(ae_statis_t *p_ae_statis);
+int hal_isp_get_ae_statis(ae_statis_t *p_ae_statis, enum ISP_AE_statis_type type);
 int hal_isp_get_awb_statis(awb_statis_t *p_awb_statis);
 int hal_isp_get_ctrl(uint32_t id, int *value);
 int hal_isp_set_ctrl(uint32_t id, int *value);
 int hal_isp_set_init_ae(int init_exposure, int init_gain);
 int hal_isp_set_init_awb(int init_r_gain, int init_b_gain);
 void hal_isp_set_drop_frame_num(uint32_t num);
+void hal_isp_set_drop_frame_num_sw(uint32_t num);
 int hal_isp_set_init_dn_mode(int dn_mode);
 void hal_isp_set_direct_i2c_mode(uint32_t direct_i2c_mode);
 int hal_isp_set_init_gray_mode(int gray_mode);
@@ -413,5 +438,10 @@ int hal_isp_config_iq_calibration(int config_flag);
 void hal_isp_set_hdr_mode(uint32_t hdr_mode);
 void hal_isp_set_mirrorflip_mode(uint32_t mirrorflip_mode);
 int hal_isp_set_stream_fps(uint32_t ch, uint32_t fps);
+void hal_isp_set_init_frame_rate(u32 val);
+u32 hal_isp_get_init_frame_rate(void);
+void hal_isp_set_init_axi_buf(u32 *buf);
+u32 hal_isp_get_axi_buf_size(enum ISP_Buf_Cfg_Order sel);
+u32 hal_isp_get_axi_buf_addr(enum ISP_Buf_Cfg_Order sel);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

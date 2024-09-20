@@ -30,6 +30,7 @@ typedef int(*qsort_compar)(const void *, const void *);
 #define VFS_INF_SD      0x00
 #define VFS_INF_RAM     0x01
 #define VFS_INF_FLASH   0x02
+#define VFS_INF_EMMC    0x03
 
 
 #if !defined(S_IFDIR)

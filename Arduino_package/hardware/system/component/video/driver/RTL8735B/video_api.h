@@ -245,6 +245,7 @@ typedef struct video_param_s {
 	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
 	uint32_t meta_enable;
 	jpeg_crop_parm_t jpeg_crop_parm;
+	uint32_t middle_crop_en;//Middle crop functio only support in ch0
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -252,6 +253,7 @@ typedef struct voe_info_s {
 	uint32_t voe_heap_size;
 	video_params_t video_info[MAX_CHANNEL];
 	uint32_t stream_is_open[MAX_CHANNEL];
+	uint32_t voe_mcrop_enable;
 } voe_info_t;
 
 typedef struct mult_sensor_info_s {

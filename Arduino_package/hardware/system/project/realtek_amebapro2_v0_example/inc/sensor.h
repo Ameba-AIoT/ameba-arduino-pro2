@@ -59,7 +59,7 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 	"iq",
 	"iq_f37",
 };
-#define ENABLE_FCS      	0
+#define ENABLE_FCS      	1
 
 #else
 
@@ -116,6 +116,9 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_OS04A10      0x1C  //  |   v    |   -    |   -    |
 #define SENSOR_F55_HDR      0x1D  //  |   v    |   -    |   v    |
 #define SENSOR_GC1084       0x1E  //  |   v    |   -    |   -    |
+#define SENSOR_SC5336       0x1F  //  |   v    |   -    |   -    |
+#define SENSOR_F38          0x20  //  |   v    |   -    |   -    |
+#define SENSOR_PS5262       0x21  //  |   v    |   -    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	{1920, 1080, 30}, //SENSOR_DUMMY        0x00
@@ -148,7 +151,10 @@ static const struct sensor_params_t sensor_params[] = {
 	{1536, 1536, 20}, //SENSOR_F51_HDR		0x1B
 	{2560, 1440, 24}, //SENSOR_OS04A10		0x1C
 	{1920, 1080, 30}, //SENSOR_F55_HDR		0x1D
-	{1280, 720, 30}, //SENSOR_GC1084
+	{1280, 720,  30}, //SENSOR_GC1084       0x1E
+	{2592, 1944, 15}, //SENSOR_SC5336       0x1F
+	{1920, 1080, 30}, //SENSOR_F38          0x20
+	{1920, 1080, 30}, //SENSOR_PS5262       0x21
 };
 
 

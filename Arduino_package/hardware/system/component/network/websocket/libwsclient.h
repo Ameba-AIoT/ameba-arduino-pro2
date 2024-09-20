@@ -31,10 +31,10 @@
 
 /****************Define the structures used*************************/
 typedef enum {
-	CLOSING,
-	CLOSED,
-	CONNECTING,
-	OPEN
+	WSCLOSING,
+	WSCLOSED,
+	WSCONNECTING,
+	WSOPEN
 } readyStateValues;
 
 struct wsheader_type {
@@ -133,6 +133,7 @@ int wss_tls_handshake(void *tls_in);
 void wss_tls_close(void *tls_in, int *sock);
 int wss_tls_write(void *tls_in, char *request, int request_len);
 int wss_tls_read(void *tls_in, char *buffer, int buf_len);
+void wss_tls_set_wowlan_ciphersuites(uint8_t value);
 /*******************************************************************/
 
 #endif

@@ -390,6 +390,7 @@ enum  sdhost_cmd_idx_e {
 	SdHostCmdSetBusWidth         = 6,  // ACMD6
 	SdHostCmdSelDeselCard        = 7,
 	SdHostCmdSendIfCond          = 8,
+	EmmcCmdSendExtCsd            = 8,
 	SdHostCmdSendCsd             = 9,
 	SdHostCmdSendCid             = 10,
 	SdHostCmdVolSwitch           = 11,
