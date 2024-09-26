@@ -329,3 +329,13 @@ int AmebaFatFS::getAttribute(char *path, unsigned char *attr)
     } while (0);
     return (-res);
 }
+
+long long int AmebaFatFS::get_free_space(void)
+{
+    return fatfs_get_free_space_byte();
+}
+
+long long int AmebaFatFS::get_used_space(void)
+{
+	return fatfs_get_used_space_byte();
+}
