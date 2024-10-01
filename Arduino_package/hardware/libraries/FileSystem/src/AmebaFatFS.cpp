@@ -8,8 +8,7 @@ extern "C" {
 #endif
 
 extern phal_sdhost_adapter_t psdioh_adapter;
-static fatfs_sd_params_t fatfs_sd_param;
-static uint8_t fatfs_sd_init_done = 0;
+
 AmebaFatFS::AmebaFatFS(void)
 {
     // init to no card initialized
