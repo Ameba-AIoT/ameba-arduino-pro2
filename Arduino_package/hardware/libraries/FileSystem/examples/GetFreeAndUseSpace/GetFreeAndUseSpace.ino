@@ -8,7 +8,7 @@
 #include "AmebaFatFS.h"
 
 uint64_t device_used_bytes;
-uint64_t device_free_bytes; 
+uint64_t device_free_bytes;
 
 uint16_t device_used_Mbytes;
 uint16_t device_free_Mbytes;
@@ -18,10 +18,10 @@ void setup()
 {
     fs.begin();
     device_used_bytes = fs.get_used_space();
-    device_used_Mbytes = (uint16_t)(device_used_bytes / 1048576); // convert bytes to Mbytes /(1024*1024)
+    device_used_Mbytes = (uint16_t)(device_used_bytes / 1048576);    // convert bytes to Mbytes /(1024*1024)
 
     device_free_bytes = fs.get_free_space();
-    device_free_Mbytes = (uint16_t)(device_free_bytes / 1048576); // convert bytes to Mbytes /(1024*1024)
+    device_free_Mbytes = (uint16_t)(device_free_bytes / 1048576);    // convert bytes to Mbytes /(1024*1024)
 
     printf("Use space on SD card: %llu bytes\r\n", device_used_bytes);
     printf("Use space on SD card: %u Mbytes\r\n", device_used_Mbytes);
