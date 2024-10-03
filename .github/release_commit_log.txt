@@ -1,9 +1,11 @@
 Feature:
-- Add sensor IMX327 support
+- Add filesystem Example GetFreeAndUseSpace
+- Add sensor PS5268 support
 
 API Updates:
-- Update USB UVCD related API
+- Update AmebaFatFS.cpp
+- Update AmebaFatFS.h
 
 Misc:
-- Update ameba_pro2_tools 1.3.8
-    - Add sensor IMX327 realted support
+- Update ameba_pro2_tools 1.3.9
+    - Add sensor PS5268 realted support

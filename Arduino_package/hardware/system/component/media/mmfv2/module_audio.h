@@ -26,14 +26,10 @@ typedef enum {
 #define CMD_AUDIO_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
 #define CMD_AUDIO_GET_PARAMS            MM_MODULE_CMD(0x01)  // get parameter
 #define CMD_AUDIO_SET_SAMPLERATE        MM_MODULE_CMD(0x02)
-#define CMD_AUDIO_SET_WORDLENGTH        MM_MODULE_CMD(0x03)
-#define CMD_AUDIO_SET_MICGAIN           MM_MODULE_CMD(0x04)
 #define CMD_AUDIO_SET_ADC_GAIN          MM_MODULE_CMD(0x06)
 #define CMD_AUDIO_SET_DAC_GAIN          MM_MODULE_CMD(0x07)
 #define CMD_AUDIO_SET_RESET             MM_MODULE_CMD(0x08)
 
-#define CMD_AUDIO_SET_AUDIO_STOP        MM_MODULE_CMD(0x0A)
-#define CMD_AUDIO_SET_AUDIO_START       MM_MODULE_CMD(0x0B)
 #define CMD_AUDIO_SET_TRX               MM_MODULE_CMD(0x0C)
 #define CMD_AUDIO_SET_MIC_RECORD_FUN    MM_MODULE_CMD(0x0E)
 

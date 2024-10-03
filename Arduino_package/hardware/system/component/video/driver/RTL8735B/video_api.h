@@ -318,6 +318,8 @@ int video_buf_heap_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_en
 						int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_enctype, int v3_jpg_only_shapshot,
 						int v4_enable, int v4_w, int v4_h);
 
+int video_extra_buf_calc(int originl_heapsize, int vext_enable, int vext_w, int vext_h, int vext_bps, int vext_shapshot);
+
 void video_buf_release(void);
 
 //int video_set_voe_heap(int heap_addr, int heap_size, int use_malloc);
