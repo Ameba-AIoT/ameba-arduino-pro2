@@ -35,6 +35,7 @@
 #define V1_ENC_BUF_SIZE  8 //sec
 #define V2_ENC_BUF_SIZE  8 //sec
 #define V3_ENC_BUF_SIZE  8 //sec
+#define VEXT_ENC_BUF_SIZE  8 //sec
 #define VIDEO_RSVD_DIVISION 8
 
 #define STREAM_V1 0
@@ -180,6 +181,10 @@ typedef struct video_boot_stream_cfg {
 	uint8_t  fcs_user_buffer[FCS_USER_REV_SIZE];//User can use the buffer to transfer to application
 	uint32_t fcs_start_time;//bootloader to fcs user boot function
 	uint32_t fcs_voe_time;//bootloader to voe init function
+	video_boot_params_t extra_video_params;
+	uint8_t extra_video_enable;
+	uint8_t extra_video_snapshot;
+	uint8_t extra_video_drop_frame;
 	video_boot_private_mask_t private_mask;
 	uint32_t meta_enable;//
 	uint32_t meta_size;//enalbe the meta size for

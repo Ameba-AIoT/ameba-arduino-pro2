@@ -105,6 +105,7 @@ struct gtimer_s {
 #if defined(CONFIG_I2S_EN) && (CONFIG_I2S_EN == 1)
 struct i2s_s {
 	hal_i2s_adapter_t i2s_adapter;
+	BOOL i2s_initialized;
 };
 
 #endif
