@@ -8,6 +8,8 @@ uint32_t image_addr = 0;
 uint32_t image_len = 0;
 int voe_heap_size = 0;
 
+mm_context_t *global_p_priv;
+
 static video_pre_init_params_t init_params;
 
 static isp_control ISPCtrl = {
@@ -124,7 +126,6 @@ mm_context_t *cameraInit(void)
     }
 
     videoData->priv = video_module.create(videoData);
-
     if (!videoData->priv) {
         goto mm_open_fail;
     }
@@ -244,6 +245,7 @@ void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, in
     video_params.meta_enable = meta_enable;
 
     if (p) {
+        global_p_priv = p;
         mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
         mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 1);
@@ -352,4 +354,33 @@ mm_context_t *cameraDeinit(mm_context_t *p)
 void cameraStopVideoStream(void *p, int channel)
 {
     video_control(p, CMD_VIDEO_STREAM_STOP, channel);
+}
+
+int getctx(mm_context_t *p)
+{
+    int arduino_is_output_ready = 0;
+
+    // Cast p to mm_context_t
+
+    mm_context_t *context = (mm_context_t *)p;
+    video_ctx_t *ctx = (video_ctx_t *)context->priv;
+    mm_queue_item_t *output_item;
+
+    // Access the parent mm_context_t
+    mm_context_t *mctx = (mm_context_t *)ctx->parent;
+
+    // Peek an item from the queue
+    if (xQueuePeek(mctx->output_recycle, &output_item, 0) == pdTRUE) {
+        // Successfully peeked an item from the queue without removing it
+        arduino_is_output_ready = 1;
+    } else {
+        arduino_is_output_ready = 0;
+    }
+
+    return arduino_is_output_ready;
+}
+
+int get_output_ready()
+{
+    return getctx(global_p_priv);
 }
