@@ -31,7 +31,7 @@
 
 
 #define STREAM_CHANNEL 0
-#define CHANNELNN 3
+#define CHANNELNN      3
 
 int reconnect = 0;
 int disconnect = 0;
@@ -54,27 +54,27 @@ void setup()
     Serial.begin(115200);
     // Configure camera video channel with video format information
     camera_uvcd.configVideoChannel(STREAM_CHANNEL, stream_config);
-    
+
     camera_uvcd.configVideoChannel(CHANNELNN, configNN);
     // Configure usb_uvcd with identical video format information
     usb_uvcd.configVideo(stream_config);
     camera_uvcd.videoInit();
 
-// Configure object detection with corresponding video format information
+    // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
     ObjDet.configVideo(configNN);
     ObjDet.modelSelect(OBJECT_DETECTION, DEFAULT_YOLOV4TINY, NA_MODEL, NA_MODEL);
     ObjDet.begin();
 
- // Configure StreamIO object to stream data from camera video channel to usb_uvcd
+    // Configure StreamIO object to stream data from camera video channel to usb_uvcd
     videoStreamer.registerInput(camera_uvcd.getStream(STREAM_CHANNEL));
     videoStreamer.registerOutput(usb_uvcd);
     if (videoStreamer.begin() != 0) {
-      Serial.println("StreamIO link start failed");
+        Serial.println("StreamIO link start failed");
     }
     // Start data stream from video channel
     camera_uvcd.channelBegin(STREAM_CHANNEL);
-    
+
     // Configure StreamIO object to stream data from RGB video channel to object detection
     videoStreamerNN.registerInput(camera_uvcd.getStream(CHANNELNN));
     videoStreamerNN.setStackSize();
@@ -87,7 +87,7 @@ void setup()
     // Start video channel for NN
     camera_uvcd.channelBegin(CHANNELNN);
 
-    // Start usb uvcd for NN 
+    // Start usb uvcd for NN
     usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, CHANNELNN);
 }
 
@@ -98,13 +98,13 @@ void loop()
         Serial.println("USB UVC device disconnected");
         // Handle disconnection processes
         if (disconnect == 0) {
-          disconnectNN(); 
+            disconnectNN();
         }
         return;
     } else {
-      // Handle reconnection or restart processes
+        // Handle reconnection or restart processes
         if (reconnect == 1) {
-          reconnectNN();
+            reconnectNN();
         }
         std::vector<ObjectDetectionResult> results = ObjDet.getResult();
         uint16_t im_h = stream_config.height();
@@ -124,26 +124,26 @@ void loop()
                     int xmax = (int)(item.xMax() * im_w);
                     int ymin = (int)(item.yMin() * im_h);
                     int ymax = (int)(item.yMax() * im_h);
-                  // Draw boundary box
+                    // Draw boundary box
                     printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 }
             }
-        }      
-    }    
-} 
+        }
+    }
+}
 
-void disconnectNN() 
+void disconnectNN()
 {
-    camera_uvcd.channelEnd(CHANNELNN); // Stop video channel from NN
-    camera_uvcd.channelBegin(STREAM_CHANNEL); // Stop video channel from video channel
+    camera_uvcd.channelEnd(CHANNELNN);           // Stop video channel from NN
+    camera_uvcd.channelBegin(STREAM_CHANNEL);    // Stop video channel from video channel
     reconnect = 1;
     disconnect = 1;
 }
 
-void reconnectNN() 
+void reconnectNN()
 {
-    camera_uvcd.channelBegin(CHANNELNN); // Start video channel for NN
-    camera_uvcd.channelBegin(STREAM_CHANNEL); // Start video channel for video channel
+    camera_uvcd.channelBegin(CHANNELNN);         // Start video channel for NN
+    camera_uvcd.channelBegin(STREAM_CHANNEL);    // Start video channel for video channel
     reconnect = 0;
     disconnect = 0;
 }
