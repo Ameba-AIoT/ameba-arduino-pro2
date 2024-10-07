@@ -904,7 +904,7 @@ void Video::printInfo(void)
     }
 }
 
-int get_output_ready()
+int Usb_get_output_status()
 {
-    return getctx(global_p_priv);
+    return CameraGetCtx(global_p_priv);
 }

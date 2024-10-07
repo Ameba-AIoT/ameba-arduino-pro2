@@ -42,7 +42,7 @@ UVCD::~UVCD(void)
 
 int UVCD::get_usb_status()
 {
-    arduino_is_output_ready = get_output_ready();
+    arduino_is_output_ready = Usb_get_output_status();
     return arduino_is_output_ready;
 }
 // Implementation of `isUsbUvcConnected` function

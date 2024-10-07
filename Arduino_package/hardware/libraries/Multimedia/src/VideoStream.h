@@ -262,5 +262,5 @@ private:
 };
 
 extern Video Camera;
-int get_output_ready(void);
+int Usb_get_output_status(void);
 #endif
