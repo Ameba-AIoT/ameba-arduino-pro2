@@ -16,7 +16,7 @@ Video Camera;
 
 uint32_t Video::image_addr[4] = {0};
 uint32_t Video::image_len[4] = {0};
-
+mm_context_t* global_p_priv;
 // (Image Tuning)
 void CameraSetting::setBrightness(int value)
 {
@@ -416,7 +416,6 @@ VideoSetting::VideoSetting(uint8_t preset)
         }
     }
     _preset = preset;
-
     if (_resolution == VIDEO_FHD) {
         _w = VIDEO_FHD_WIDTH;
         _h = VIDEO_FHD_HEIGHT;
@@ -656,6 +655,7 @@ void Video::videoInit(void)
 
 void Video::videoInit(int ch)
 {
+
     if (!_heap_size) {
         int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0][0],
                                     channelEnable[1], w[1], h[1], bps[1], snapshot[1][0],
@@ -729,7 +729,7 @@ void Video::videoInit(int ch)
                                jpeg_qlevel[ch],
                                video_rotation[ch]);
                 } else {
-                    printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
+                    // printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
                     cameraOpenUVCD(videoModule[ch]._p_mmf_context,
                                    channel[ch],
                                    encoder[ch],
@@ -744,6 +744,7 @@ void Video::videoInit(int ch)
                                    use_static_addr[ch],
                                    meta_enable[ch],
                                    _heap_size);
+                    global_p_priv = videoModule[ch]._p_mmf_context;
                 }
             }
         }
@@ -901,4 +902,9 @@ void Video::printInfo(void)
             printf("\r\n[INFO] bps: %ld\n", bps[ch]);
         }
     }
+}
+
+int get_output_ready()
+{
+    return getctx(global_p_priv);
 }

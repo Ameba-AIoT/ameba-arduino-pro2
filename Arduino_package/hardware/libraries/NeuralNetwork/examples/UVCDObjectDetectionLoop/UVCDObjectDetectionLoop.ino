@@ -1,7 +1,11 @@
 /*
+ This example describes how to use USB UVCD api with OBJECT_DETECTION.
+ In this example, the device is setup to function as a USB camera.
+ Connect to PC and use the device as a USB camera.
+ Perform objects prediction when the device is connect to PC and PotPlayer.
 
- Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-object-detection/
+ Example guide: TBD
+
 
  NN Model Selection
  Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).

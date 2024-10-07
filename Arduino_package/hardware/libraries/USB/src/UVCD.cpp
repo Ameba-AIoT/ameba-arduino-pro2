@@ -1,22 +1,21 @@
 #include "UVCD.h"
-#include "VideoStream.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include "mmf2_link.h"
 #include "mmf2_siso.h"
 #include "isp_ctrl_api.h"
-#include "video_drv.h"
+
 #ifdef __cplusplus
 }
 #endif
 
-Video video;
 extern struct uvc_format *uvc_format_ptr;
 struct uvc_format *uvc_format_local = NULL;
 int arduino_is_output_ready = 0;
-// extern mm_module_t video_module;
+
 UVCD::UVCD(void)
 {
     cameraPreConfig_usb_uvcd(_uuid, "USB UVC CLASS");
@@ -74,7 +73,10 @@ void UVCD::configVideo(VideoSetting &config)
 {
     _p_mmf_context = mm_module_open(&uvcd_module);
     if (_p_mmf_context == NULL) {
-        printf("Failed to open module context\n");
+        _p_mmf_context = mm_module_open(&uvcd_module);
+    }
+    if (_p_mmf_context == NULL) {
+        printf("\r\n[ERROR] %s. module open fail\n", __FUNCTION__);
         return;
     }
 

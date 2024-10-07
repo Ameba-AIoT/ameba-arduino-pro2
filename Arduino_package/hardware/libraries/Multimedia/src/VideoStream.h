@@ -51,7 +51,6 @@ enum encode_type {
     VIDEO_HEVC_JPEG,
     VIDEO_H264_JPEG
 };
-
 // #define	VIDEO_QCIF  0   // Quarter Common Intermediate Format(QCIF) 176*144
 // #define	VIDEO_CIF   1   // Common Intermediate Format(CIF)          352*288
 #define VIDEO_WVGA 2    // 360p                                     640*360
@@ -120,7 +119,6 @@ class MMFModule {
     friend class UVCD;
 
 public:
-
 protected:
     mm_context_t* _p_mmf_context = NULL;
 };
@@ -170,7 +168,6 @@ private:
 
 class VideoSetting {
     friend class Video;
-
 public:
     VideoSetting(uint8_t preset = 0);
     VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot);
@@ -218,7 +215,6 @@ public:
     MMFModule getStream(int ch = 0);
 
     void getImage(int ch, uint32_t* addr, uint32_t* len);
-
     void setFPS(int fps);
     void printInfo(void);
 
@@ -266,5 +262,5 @@ private:
 };
 
 extern Video Camera;
-
+int get_output_ready(void);
 #endif

@@ -56,7 +56,6 @@ void cameraSnapshotRegCB(mm_context_t *p, int (*ssCB)(uint32_t, uint32_t));
 void cameraStopVideoStream(void *p, int channel);
 
 int getctx(mm_context_t *p);
-int get_output_ready(void);
 
 mm_context_t *cameraDeinit(mm_context_t *);
 
