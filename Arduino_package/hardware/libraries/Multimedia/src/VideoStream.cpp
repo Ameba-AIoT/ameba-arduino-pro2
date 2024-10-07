@@ -16,7 +16,7 @@ Video Camera;
 
 uint32_t Video::image_addr[4] = {0};
 uint32_t Video::image_len[4] = {0};
-mm_context_t* global_p_priv;
+
 // (Image Tuning)
 void CameraSetting::setBrightness(int value)
 {
@@ -665,7 +665,9 @@ void Video::videoInit(int ch)
         // printf("\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
     }
     if (channelEnable[ch]) {
+
         videoModule[ch]._p_mmf_context = cameraInit();
+        printf("\r\n[INFO]================== start videoModule[ch]._p_mmf_context==============: %x ch:%d\n", videoModule[ch]._p_mmf_context, ch);
 
         if (encoder[ch] == VIDEO_JPEG) {
             bps[ch] = 0;
@@ -744,7 +746,6 @@ void Video::videoInit(int ch)
                                    use_static_addr[ch],
                                    meta_enable[ch],
                                    _heap_size);
-                    global_p_priv = videoModule[ch]._p_mmf_context;
                 }
             }
         }
@@ -904,7 +905,7 @@ void Video::printInfo(void)
     }
 }
 
-int Usb_get_output_status()
+int Video::videostream_status(int ch)
 {
-    return CameraGetCtx(global_p_priv);
+    return cameraGetCtx(videoModule[ch]._p_mmf_context, ch);
 }

@@ -40,23 +40,18 @@ UVCD::~UVCD(void)
     }
 }
 
-int UVCD::get_usb_status()
-{
-    arduino_is_output_ready = Usb_get_output_status();
-    return arduino_is_output_ready;
-}
 // Implementation of `isUsbUvcConnected` function
-int UVCD::isUsbUvcConnected()
+int UVCD::isUsbUvcConnected(int uvcd_getctx_state)
 {
     if (_p_mmf_context == NULL) {
         return false;    // Device context not initialized
     }
 
-    if ((uvc_format_ptr->state == 0) || (get_usb_status() == 0)) {
+    if ((uvc_format_ptr->state == 0) || (uvcd_getctx_state == 0)) {
         return false;    // Video stream is not active
     }
 
-    if ((uvc_format_ptr->state == 1) && (get_usb_status() == 1)) {
+    if ((uvc_format_ptr->state == 1) && (uvcd_getctx_state == 1)) {
         return true;    // Device is connected
     }
     return false;
@@ -115,7 +110,7 @@ void UVCD::configVideo(VideoSetting &config)
  *  @return  none
  *
  */
-void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int nn_channel)
+void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int nn_channel, int uvcd_getctx_check)
 {
     _uvcd_channel = uvcd_channel;
     _nn_channel = nn_channel;
@@ -146,7 +141,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             vTaskDelay(100);
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_H264, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             siso_resume((mm_siso_t *)(module_videolinker));
-            isUsbUvcConnected();
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_MJPEG) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);

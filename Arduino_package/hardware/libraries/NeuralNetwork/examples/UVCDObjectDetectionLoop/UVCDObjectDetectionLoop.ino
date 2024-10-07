@@ -92,13 +92,13 @@ void setup()
     camera_uvcd.channelBegin(CHANNELNN);
 
     // Start usb uvcd for NN
-    usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, CHANNELNN);
+    usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, CHANNELNN, camera_uvcd.videostream_status(STREAM_CHANNEL));
 }
 
 void loop()
 {
     delay(5000);
-    if (!usb_uvcd.isUsbUvcConnected()) {
+    if (!usb_uvcd.isUsbUvcConnected(camera_uvcd.videostream_status(STREAM_CHANNEL))) {
         Serial.println("USB UVC device disconnected");
         // Handle disconnection processes
         if (disconnect == 0) {

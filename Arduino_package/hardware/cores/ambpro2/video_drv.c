@@ -1,8 +1,8 @@
 #include "video_drv.h"
 #include "hal_video.h"
-#include "isp_ctrl_api.h"
-#include "module_video.h"
 #include "video_api.h"
+#include "module_video.h"
+#include "isp_ctrl_api.h"
 
 uint32_t image_addr = 0;
 uint32_t image_len = 0;
@@ -38,14 +38,13 @@ static video_params_t video_params = {
     .jpeg_qlevel = 5,
     .use_static_addr = 1,
     .rotation = 0,
-    .jpeg_crop_parm =
-        {
-                         .enable = 0,
-                         .xmin = 0,
-                         .ymin = 0,
-                         .xmax = 0,
-                         .ymax = 0,
-                         },
+    .jpeg_crop_parm = {
+                       .enable = 0,
+                       .xmin = 0,
+                       .ymin = 0,
+                       .xmax = 0,
+                       .ymax = 0,
+                       },
     .meta_enable = 0,
 };
 
@@ -61,13 +60,12 @@ static video_params_t video_v4_params = {
     .direct_output = 0,
     .use_static_addr = 1,
     .use_roi = 1,
-    .roi =
-        {
-              .xmin = 0,
-              .ymin = 0,
-              .xmax = 0,
-              .ymax = 0,
-              },
+    .roi = {
+            .xmin = 0,
+            .ymin = 0,
+            .xmax = 0,
+            .ymax = 0,
+            },
 };
 
 void ISPControlReset(void)
@@ -85,10 +83,8 @@ void ISPControlReset(void)
     isp_set_day_night(ISPCtrl.DayNightMode);
 }
 
-extern int set_uvc_string(char *product_name, char *serial_name,
-                          unsigned short bcdDevice);
-void cameraPreConfig_usb_uvcd(unsigned char *uuid,
-                              const char *usb_uvcd_driver_name)
+extern int set_uvc_string(char *product_name, char *serial_name, unsigned short bcdDevice);
+void cameraPreConfig_usb_uvcd(unsigned char *uuid, const char *usb_uvcd_driver_name)
 {
     // video_pre_init_params_t init_params;
     memset(&init_params, 0x00, sizeof(video_pre_init_params_t));
@@ -105,10 +101,10 @@ int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
                  int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot,
                  int v4_enable, int v4_w, int v4_h)
 {
-    voe_heap_size = video_voe_presetting(
-        v1_enable, v1_w, v1_h, v1_bps, v1_snapshot, v2_enable, v2_w, v2_h, v2_bps,
-        v2_snapshot, v3_enable, v3_w, v3_h, v3_bps, v3_snapshot, v4_enable, v4_w,
-        v4_h);
+    voe_heap_size = video_voe_presetting(v1_enable, v1_w, v1_h, v1_bps, v1_snapshot,
+                                         v2_enable, v2_w, v2_h, v2_bps, v2_snapshot,
+                                         v3_enable, v3_w, v3_h, v3_bps, v3_snapshot,
+                                         v4_enable, v4_w, v4_h);
     // printf("\r\n[INFO] voe_heap_size assigned.\n");
     return voe_heap_size;
 }
@@ -120,8 +116,7 @@ mm_context_t *cameraInit(void)
         return NULL;
     }
     memset(videoData, 0, sizeof(mm_context_t));
-    videoData->queue_num = 1;    // default 1 queue, can set multiple queue by
-                                 // command MM_CMD_SET_QUEUE_NUM
+    videoData->queue_num = 1;    // default 1 queue, can set multiple queue by command MM_CMD_SET_QUEUE_NUM
 
     videoData->module = &video_module;
     if (!videoData->module) {
@@ -129,6 +124,7 @@ mm_context_t *cameraInit(void)
     }
 
     videoData->priv = video_module.create(videoData);
+
     if (!videoData->priv) {
         goto mm_open_fail;
     }
@@ -150,9 +146,7 @@ mm_open_fail:
     return NULL;
 }
 
-void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
-                int w, int h, int bps, int fps, int gop, int rc_mode,
-                int snapshot, int jpeg_qlevel, int video_rotation)
+void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation)
 {
     // assign value parsing from user level
     video_params.stream_id = stream_id;
@@ -176,8 +170,7 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     video_params.jpeg_qlevel = jpeg_qlevel;
     video_params.rotation = video_rotation;
 
-    // printf("\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n",
-    // stream_id, type, res, w, h, bps, fps, gop, rc_mode);
+    // printf("\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, rc_mode);
 
     if (p) {
         // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
@@ -193,9 +186,7 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     }
 }
 
-void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type,
-                  int res, int w, int h, int bps, int fps, int gop,
-                  int direct_output)
+void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int direct_output)
 {
     // assign value parsing from user level
     video_v4_params.stream_id = stream_id;
@@ -216,8 +207,7 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type,
     video_v4_params.roi.xmax = 1920;
     video_v4_params.roi.ymax = 1080;
 
-    // printf("\r\n[INFO] V4 %d    %d    %d    %d    %d    %d    %d    %d %d\n",
-    // stream_id, type, res, w, h, bps, fps, gop, direct_output);
+    // printf("\r\n[INFO] V4 %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, direct_output);
 
     if (p) {
         video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_v4_params);
@@ -229,9 +219,7 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type,
     }
 }
 
-void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w,
-                    int h, int bps, int fps, int gop, int rc_mode, int snapshot,
-                    int use_static_addr, int meta_enable, int voe_heap_size)
+void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int use_static_addr, int meta_enable, int voe_heap_size)
 {
     // assign value parsing from user level
     video_params.stream_id = stream_id;
@@ -263,8 +251,7 @@ void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w,
     }
 }
 
-void cameraReSetParams(mm_context_t *p, int type, int fps, int gop,
-                       int use_static_addr, int channel)
+void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel)
 {
     video_params.type = type;
     video_params.fps = fps;
@@ -322,20 +309,14 @@ mm_context_t *cameraDeinit(mm_context_t *p)
     video_data = p;
     for (int i = 0; i < video_data->queue_num; i++) {
         if (video_data->port[i].output_recycle && video_data->port[i].output_ready) {
-            while (xQueueReceive(video_data->port[i].output_ready, (void *)&tmp_item,
-                                 0)
-                   == pdTRUE) {
+            while (xQueueReceive(video_data->port[i].output_ready, (void *)&tmp_item, 0) == pdTRUE) {
                 xQueueSend(video_data->port[i].output_recycle, (void *)&tmp_item, 0);
             }
             // printf("\r\n[INFO] module close - move item to recycle\n");
-            while (xQueueReceive(video_data->port[i].output_recycle,
-                                 (void *)&tmp_item, 0)
-                   == pdTRUE) {
-                // printf("\r\n[INFO] module close - tmp_item %x\n",(unsigned
-                // int)tmp_item);
+            while (xQueueReceive(video_data->port[i].output_recycle, (void *)&tmp_item, 0) == pdTRUE) {
+                // printf("\r\n[INFO] module close - tmp_item %x\n",(unsigned int)tmp_item);
                 if (tmp_item) {
-                    // printf("\r\n[INFO] module close - data_addr %x\n", (unsigned
-                    // int)tmp_item->data_addr);
+                    // printf("\r\n[INFO] module close - data_addr %x\n", (unsigned int)tmp_item->data_addr);
                     if (i == 0) {
                         if (tmp_item->data_addr) {
                             video_del_item(video_data->priv, (void *)tmp_item->data_addr);
@@ -373,21 +354,17 @@ void cameraStopVideoStream(void *p, int channel)
     video_control(p, CMD_VIDEO_STREAM_STOP, channel);
 }
 
-int CameraGetCtx(mm_context_t *p)
+int cameraGetCtx(mm_context_t *p, int ch)
 {
     int arduino_is_output_ready = 0;
-
-    // Cast p to mm_context_t
-
-    mm_context_t *context = (mm_context_t *)p;
-    video_ctx_t *ctx = (video_ctx_t *)context->priv;
     mm_queue_item_t *output_item;
 
-    // Access the parent mm_context_t
-    mm_context_t *mctx = (mm_context_t *)ctx->parent;
+    mm_context_t *video_data = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
+
+    video_data = p;
 
     // Peek an item from the queue
-    if (xQueuePeek(mctx->output_recycle, &output_item, 0) == pdTRUE) {
+    if (xQueuePeek(video_data->port[ch].output_recycle, &output_item, 0) == pdTRUE) {
         // Successfully peeked an item from the queue without removing it
         arduino_is_output_ready = 1;
     } else {

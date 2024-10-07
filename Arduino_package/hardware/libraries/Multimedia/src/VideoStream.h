@@ -217,7 +217,7 @@ public:
     void getImage(int ch, uint32_t* addr, uint32_t* len);
     void setFPS(int fps);
     void printInfo(void);
-
+    int videostream_status(int ch);
 private:
     void setSnapshotCallback(int ch);
     static int snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len);
@@ -262,5 +262,4 @@ private:
 };
 
 extern Video Camera;
-int Usb_get_output_status(void);
 #endif
