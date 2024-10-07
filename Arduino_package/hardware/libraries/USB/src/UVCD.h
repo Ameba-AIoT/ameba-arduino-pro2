@@ -3,11 +3,8 @@
 
 #include <Arduino.h>
 #include "VideoStream.h"
-
 #include "module_uvcd.h"
-
 #include "UVCD_pram.h"
-
 #include "video_drv.h"
 
 class UVCD: public MMFModule {

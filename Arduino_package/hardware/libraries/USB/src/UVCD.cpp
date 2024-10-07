@@ -14,7 +14,6 @@ extern "C" {
 
 extern struct uvc_format *uvc_format_ptr;
 struct uvc_format *uvc_format_local = NULL;
-int arduino_is_output_ready = 0;
 
 UVCD::UVCD(void)
 {
@@ -26,16 +25,14 @@ UVCD::UVCD(const char *usb_uvcd_driver_name)
     cameraPreConfig_usb_uvcd(_uuid, usb_uvcd_driver_name);
 }
 
-
 UVCD::~UVCD(void)
 {
     if (_p_mmf_context == NULL) {
-
         return;
     }
     if (mm_module_close(_p_mmf_context) == NULL) {
-
         _p_mmf_context = NULL;
+    } else {
         printf("\r\n[ERROR] UVCD deinit failed\n");
     }
 }
