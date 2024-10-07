@@ -5,6 +5,7 @@
 #include "qrcode_drv.h"
 #include "module_video.h"
 #include "freertos_service.h"
+#include "sensor.h"
 
 
 #define QR_CODE_MAX_SCAN_COUNT 5
@@ -85,8 +86,23 @@ static video_params_t video_v1_params = {
 void yuv_snapshot_init(void *ctx)
 {
     struct yuv_snapshot_context *yuv_ctx = (struct yuv_snapshot_context *)ctx;
+    int iq_addr, sensor_addr;
 
-    yuv_ctx->v_adp = video_init(12800, 111168);
+    int voe_heap_size = video_buf_calc(1, V1_WIDTH, V1_HEIGHT, V1_BPS, 1,
+                                       0, 0, 0, 0, 0,
+                                       0, 0, 0, 0, 0,
+                                       0, 0, 0);
+
+    int sensor_id_value = 0;
+    for (int i = 0; i < SENSOR_MAX; i++) {
+        if (sen_id[i] == USE_SENSOR) {
+            sensor_id_value = i;
+            break;
+        }
+    }
+    voe_get_sensor_info(sensor_id_value, &iq_addr, &sensor_addr);
+
+    yuv_ctx->v_adp = video_init(iq_addr, sensor_addr);
 
     rtw_init_sema(&yuv_ctx->snapshot_sema, 0);
 }
