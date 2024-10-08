@@ -7,6 +7,7 @@ API Updates:
 - Add flash memory related API
 - Update snapshot related API
 - Update SDK code base
+- Update related API for client non-persistence and blocking client.available()
 
 Misc:
 - Update platform.txt avoid the path too long issue
