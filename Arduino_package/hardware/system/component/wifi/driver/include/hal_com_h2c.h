@@ -465,6 +465,7 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_PWR_BIT(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 4, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_DTIM1TO_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 5, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_LOC(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+5, 0, 8, __Value)
+#define SET_H2CCMD_REMOTE_WAKE_CTRL_UNICASTWK_FILTER_ACTION_FRAME_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+6, 0, 1, __Value)
 
 /* AOAC_GLOBAL_INFO_0x82 */
 #define SET_H2CCMD_AOAC_GLOBAL_INFO_PAIRWISE_ENC_ALG(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 8, __Value)

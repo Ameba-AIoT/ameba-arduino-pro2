@@ -64,7 +64,7 @@ enum BitOrder {
 #define FALLING 3
 #define RISING  4
 
-#define DEFAULT  1
+// #define DEFAULT  1
 #define EXTERNAL 0
 
 // undefine stdlib's abs if encountered

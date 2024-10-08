@@ -958,6 +958,20 @@ typedef enum {
 	CSI_ACCU_MAX
 } rtw_csi_accuracy;
 
+/** @addtogroup Enums
+   *@{
+   */
+
+/**
+ * @brief  The enumeration is wowlan fw version.
+ */
+typedef enum  {
+	WOWLAN_NORMAL_BCNV1 = 0, /*0: normal fw with bcn tracking v1*/
+	WOWLAN_TCPPTL_BCNV2, /*1: tcp protocol keep alive with bcn tracking v2*/
+	WOWLAN_MQTT_BCNV2, /*2: mqtt keep alive with bcn tracking v2*/
+	WOWLAN_FW_VERMAX
+} rtw_wowlan_fw_version;
+
 /**
   * @}
   */

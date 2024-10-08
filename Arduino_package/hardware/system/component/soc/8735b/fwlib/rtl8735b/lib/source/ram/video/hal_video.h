@@ -471,7 +471,7 @@ int hal_video_set_sensor_mode(int mode, int fps);
 int hal_video_get_sensor_mode(int *mode, int *fps);
 
 int hal_video_get_AF_statis(af_statis_t *p_af_result);
-int hal_video_get_AE_statis(ae_statis_t *p_ae_result);
+int hal_video_get_AE_statis(ae_statis_t *p_ae_result, enum ISP_AE_statis_type type);
 int hal_video_get_AWB_statis(awb_statis_t *p_awb_result);
 
 void hal_video_get_fcs_peri_info(fcs_peri_info_ram_t *pfcs_peri_info);
@@ -832,6 +832,17 @@ static __inline__ int hal_video_fcs_en(int ch, int en)
 
 	cml = v_adp->cmd[ch];
 	cml->fcs = en;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_isp_axi_buf_init(int ch, u32* buf)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->axi_buf_cfg = buf;
 	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
 	return OK;
 }

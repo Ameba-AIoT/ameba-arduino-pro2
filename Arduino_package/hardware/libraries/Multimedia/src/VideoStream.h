@@ -11,7 +11,8 @@ extern "C" {
 }
 #endif
 
-#define DEFAULT_PRESET -1
+#define DEFAULT_PRESET         -1
+#define USB_UVCD_STREAM_PRESET 10
 
 #define VIDEO_ENABLE  1
 #define VIDEO_DISABLE 0
@@ -116,6 +117,7 @@ enum encode_type {
 class MMFModule {
     friend class StreamIO;
     friend class Video;
+    friend class UVCD;
 
 public:
 
@@ -192,6 +194,10 @@ public:
     uint8_t _snapshot;
     uint8_t _jpeg_qlevel;
     int _rotation;
+    uint32_t _gop;
+    uint32_t _rc_mode;
+    uint32_t _use_static_addr;
+    uint32_t _meta_enable;
 
 private:
     int8_t _preset = -1;
@@ -212,9 +218,9 @@ public:
     MMFModule getStream(int ch = 0);
 
     void getImage(int ch, uint32_t* addr, uint32_t* len);
-
     void setFPS(int fps);
     void printInfo(void);
+    int videostream_status(int ch);
 
 private:
     void setSnapshotCallback(int ch);
@@ -239,6 +245,10 @@ private:
     };
     uint8_t jpeg_qlevel[4] = {0};
     int video_rotation[4] = {0};
+    uint32_t gop[4] = {0};
+    uint32_t rc_mode[4] = {0};
+    uint32_t use_static_addr[4] = {0};
+    uint32_t meta_enable[4] = {0};
     typedef struct roi_param_s {
         uint32_t xmin;
         uint32_t ymin;
@@ -252,8 +262,8 @@ private:
     static uint32_t image_len[4];
     int MD_En;
     int _heap_size = 0;
+    int8_t preset[4] = {0};
 };
 
 extern Video Camera;
-
 #endif

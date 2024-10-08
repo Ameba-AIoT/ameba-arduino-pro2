@@ -4,12 +4,11 @@
 #include "module_video.h"
 #include "isp_ctrl_api.h"
 
-extern int incb[5];
-extern int enc_queue_cnt[5];
-
 uint32_t image_addr = 0;
 uint32_t image_len = 0;
 int voe_heap_size = 0;
+
+static video_pre_init_params_t init_params;
 
 static isp_control ISPCtrl = {
     .Brightness = 0,
@@ -46,6 +45,7 @@ static video_params_t video_params = {
                        .xmax = 0,
                        .ymax = 0,
                        },
+    .meta_enable = 0,
 };
 
 static video_params_t video_v4_params = {
@@ -83,21 +83,24 @@ void ISPControlReset(void)
     isp_set_day_night(ISPCtrl.DayNightMode);
 }
 
+extern int set_uvc_string(char *product_name, char *serial_name, unsigned short bcdDevice);
+void cameraPreConfig_usb_uvcd(unsigned char *uuid, const char *usb_uvcd_driver_name)
+{
+    // video_pre_init_params_t init_params;
+    memset(&init_params, 0x00, sizeof(video_pre_init_params_t));
+    init_params.meta_enable = 1;
+    init_params.meta_size = VIDEO_META_USER_SIZE;    // 0x40
+    memcpy(init_params.video_meta_uuid, uuid, VIDEO_META_UUID_SIZE);
+    video_pre_init_setup_parameters(&init_params);
+
+    set_uvc_string((char *)usb_uvcd_driver_name, "012345678", 0X0010);
+}
+
 int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
                  int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,
                  int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot,
                  int v4_enable, int v4_w, int v4_h)
 {
-    isp_info_t info;
-    info.sensor_width = 1920;
-    info.sensor_height = 1080;
-    info.sensor_fps = 30;
-    info.osd_enable = 1;
-    info.md_enable = 1;
-    info.hdr_enable = 1;
-
-    video_set_isp_info(&info);
-
     voe_heap_size = video_voe_presetting(v1_enable, v1_w, v1_h, v1_bps, v1_snapshot,
                                          v2_enable, v2_w, v2_h, v2_bps, v2_snapshot,
                                          v3_enable, v3_w, v3_h, v3_bps, v3_snapshot,
@@ -114,21 +117,33 @@ mm_context_t *cameraInit(void)
     }
     memset(videoData, 0, sizeof(mm_context_t));
     videoData->queue_num = 1;    // default 1 queue, can set multiple queue by command MM_CMD_SET_QUEUE_NUM
+
     videoData->module = &video_module;
+    if (!videoData->module) {
+        goto mm_open_fail;
+    }
+
     videoData->priv = video_module.create(videoData);
+
     if (!videoData->priv) {
-        printf("\r\n[ERROR] cameraInit failed\n");
-        if (videoData->priv) {
-            video_module.destroy(videoData->priv);
-        }
-        if (videoData) {
-            free(videoData);
-        }
-        return NULL;
+        goto mm_open_fail;
     }
     // printf("\r\n[INFO] module open - free heap %d\n", xPortGetFreeHeapSize());
 
     return videoData;
+
+mm_open_fail:
+    printf("\r\n[ERROR] cameraInit failed\n");
+    if (videoData->module) {
+        free(videoData->module);
+    }
+    if (videoData->priv) {
+        video_module.destroy(videoData->priv);
+    }
+    if (videoData) {
+        free(videoData);
+    }
+    return NULL;
 }
 
 void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation)
@@ -158,7 +173,6 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     // printf("\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, rc_mode);
 
     if (p) {
-        // include CMD_VIDEO_SET_VOE_HEAP?
         // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
         video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_params);
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, fps * 3);
@@ -202,6 +216,51 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int re
         // printf("\r\n[INFO] cameraOpen done\n");
     } else {
         // printf("\r\n[ERROR] cameraOpen fail\n");
+    }
+}
+
+void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int use_static_addr, int meta_enable, int voe_heap_size)
+{
+    // assign value parsing from user level
+    video_params.stream_id = stream_id;
+    // check if there is video with snapshot
+    if (snapshot == 1) {
+        if (type == VIDEO_HEVC) {
+            type = VIDEO_HEVC_JPEG;
+        } else if (type == VIDEO_H264) {
+            type = VIDEO_H264_JPEG;
+        }
+    }
+
+    video_params.type = type;
+    video_params.resolution = res;
+    video_params.width = w;
+    video_params.height = h;
+    video_params.bps = bps;
+    video_params.fps = fps;
+    video_params.gop = gop;
+    video_params.rc_mode = rc_mode;
+    video_params.use_static_addr = use_static_addr;
+    video_params.meta_enable = meta_enable;
+
+    if (p) {
+        mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
+        mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+        mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 1);
+        mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+    }
+}
+
+void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel)
+{
+    video_params.type = type;
+    video_params.fps = fps;
+    video_params.gop = gop;
+    video_params.use_static_addr = use_static_addr;
+
+    if (p) {
+        mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+        mm_module_ctrl(p, CMD_VIDEO_APPLY, channel);
     }
 }
 
@@ -293,4 +352,24 @@ mm_context_t *cameraDeinit(mm_context_t *p)
 void cameraStopVideoStream(void *p, int channel)
 {
     video_control(p, CMD_VIDEO_STREAM_STOP, channel);
+}
+
+int cameraGetCtx(mm_context_t *p, int ch)
+{
+    int arduino_is_output_ready = 0;
+    mm_queue_item_t *output_item;
+
+    mm_context_t *video_data = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
+
+    video_data = p;
+
+    // Peek an item from the queue
+    if (xQueuePeek(video_data->port[ch].output_recycle, &output_item, 0) == pdTRUE) {
+        // Successfully peeked an item from the queue without removing it
+        arduino_is_output_ready = 1;
+    } else {
+        arduino_is_output_ready = 0;
+    }
+
+    return arduino_is_output_ready;
 }

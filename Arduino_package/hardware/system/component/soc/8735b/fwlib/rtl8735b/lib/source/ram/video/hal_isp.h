@@ -40,6 +40,30 @@ enum ISP_3A_statis_mode {
 	AWB_STATIS
 };
 
+enum ISP_AE_statis_type {
+	AE_STATIS_HIST,
+	AE_STATIS_YMEAN
+};
+
+enum ISP_Buf_Cfg_Order {
+	ISP_Y0_BUF,
+	ISP_UV0_BUF,
+	ISP_Y1_BUF,
+	ISP_UV1_BUF,
+	ISP_Y2_BUF,
+	ISP_UV2_BUF,
+	ISP_Y3_BUF,
+	ISP_UV3_BUF,
+	TNR_BUF,
+	OSD_BUF,
+	STATIS_BUF,
+	MD0_BUF,
+	MD1_BUF,
+	RGB_R_BUF,
+	RGB_G_BUF,
+	RGB_B_BUF,
+	BUF_ITEM_NUM
+};
 
 typedef struct hal_isp_stream_stream {
 
@@ -241,6 +265,8 @@ typedef struct {
 	int gain_h;
 	int exposure_l;
 	int gain_l;
+	uint32_t cur_y_target;
+	int cur_dyn_fps;
 
 	int wb_r_gain;
 	int wb_b_gain;
@@ -416,5 +442,8 @@ void hal_isp_set_mirrorflip_mode(uint32_t mirrorflip_mode);
 int hal_isp_set_stream_fps(uint32_t ch, uint32_t fps);
 void hal_isp_set_init_frame_rate(u32 val);
 u32 hal_isp_get_init_frame_rate(void);
+void hal_isp_set_init_axi_buf(u32 *buf);
+u32 hal_isp_get_axi_buf_size(enum ISP_Buf_Cfg_Order sel);
+u32 hal_isp_get_axi_buf_addr(enum ISP_Buf_Cfg_Order sel);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

@@ -1,3 +1,30 @@
+<08/30/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.7.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add cur_y_target and cur_dyn_fps to statis meta
+	2. Fix issue that RGB stream stops caused by JPG/ENC error
+	3. Auto TNR feature
+
+--------------------------------------------------------------------------
+<07/17/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.6.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add selector to get AE statis or Ymean
+	2. AE init printf typo
+	3. Add API to config AXI buffer size
+	4. Change max fps by sensor mode
+	5. Reinit GPIO in FCS mode
+	6. Add zoom in function (mcrop+zoom)
+
+--------------------------------------------------------------------------
 <06/07/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.5.0
 Modified Files:

@@ -1,18 +1,12 @@
 Feature:
-- Add feature Flash Memory
-- Add feature FCS mode for all supported sensors
-- Add sensor F53 support
+- Add sensor PS5268 support
+- Add Example UVC_ObjectDetectionLoop
 
 API Updates:
-- Add flash memory related API
-- Update snapshot related API
-- Update SDK code base
-- Update related API for client non-persistence and blocking client.available()
+- Update UVCD.cpp and UVCD.h
+- Update video_drv.c and video_drv.h
+- Update yuv_snapshot_init(void *ctx) in qrcode_drv.c
 
 Misc:
-- Update platform.txt avoid the path too long issue
-- Update keywords.txt files
-- Update library.properties files
-- Update ameba_pro2_tools 1.3.6
-    - Update multi sensor build process
-    - Update postbuild tool for FCS
+- Update ameba_pro2_tools 1.3.10
+    - Add sensor PS5268 iq files

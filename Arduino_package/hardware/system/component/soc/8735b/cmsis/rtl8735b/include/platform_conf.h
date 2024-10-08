@@ -38,6 +38,7 @@
 #define CHIP_B_CUT                          2
 #define CHIP_C_CUT                          3
 #define CHIP_D_CUT                          4
+#define CHIP_E_CUT                          5
 
 
 #define IS_CUT_TEST(chip)                   (CHIP_TEST_CUT == chip)
@@ -49,6 +50,7 @@
 #define IS_AFTER_CUT_B(chip)                (CHIP_B_CUT <= chip)
 #define IS_AFTER_CUT_C(chip)                (CHIP_C_CUT <= chip)
 #define IS_AFTER_CUT_D(chip)                (CHIP_D_CUT <= chip)
+#define IS_AFTER_CUT_E(chip)                (CHIP_E_CUT <= chip)
 
 
 #define CONFIG_CHIP_VER							CHIP_B_CUT

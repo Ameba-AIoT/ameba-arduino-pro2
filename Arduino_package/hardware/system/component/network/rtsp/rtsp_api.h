@@ -55,6 +55,15 @@
 /*RTSP KEEPALIVE TIMEOUT ENABLE*/
 #define KEEPALIVE_TIMEOUT_ENABLE
 
+#define RTSP_SERV_MASK          0x0FU
+#define RTSP_SERV_INIT          0x00U
+#define RTSP_SERV_EXIT          0x01U
+#define RTSP_SERV_RUN           0x02U
+#define RTSP_SERV_PAUSE         0x04U
+#define RTSP_SERV_SET_MASK      0xF0U
+#define RTSP_SERV_SET_EXIT      0x10U
+#define RTSP_SERV_SET_PAUSE     0x20U
+#define RTSP_SERV_SET_RUN       0x40U
 
 enum _rtsp_state {
 	RTSP_INIT = 0,
@@ -135,7 +144,7 @@ struct rtsp_context {
 	struct rtsp_transport transport[RTSP_MAX_STREAM_NUM];
 	struct rtsp_session session;
 	u16 rtpseq[RTSP_MAX_STREAM_NUM];
-	uint8_t is_rtsp_start;
+	uint8_t rtsp_server_state;
 	_sema start_rtsp_sema;
 	_sema start_rtp_service_sema;
 	uint8_t is_rtp_start;

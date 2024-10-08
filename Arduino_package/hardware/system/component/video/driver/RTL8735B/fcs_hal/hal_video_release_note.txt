@@ -1,3 +1,103 @@
+<07/17/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.6.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add selector to get AE statis or Ymean
+	2. AE init printf typo
+	3. Add API to config AXI buffer size
+	4. Change max fps by sensor mode
+	5. Reinit GPIO in FCS mode
+	6. Add zoom in function (mcrop+zoom)
+
+--------------------------------------------------------------------------
+<06/07/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.5.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release to improve manual hdr ratio setting
+	2. Set max exposure time base on 1st stream fps
+	3. Merge PC2's release for HDR exp setting ( GC4663 )
+
+--------------------------------------------------------------------------
+<05/09/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release to fix auto power frequency divide zero issue
+	2. Auto power frequency will consume direct i2c count when fast AE
+
+	Video/ENC related
+	1. RC setting dcache issue
+--------------------------------------------------------------------------
+<03/28/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Improve RGB stream SW drop frame flow
+	2. Add release slot error handling
+	3. Soften the limitation of AE initial exp value
+
+--------------------------------------------------------------------------
+<03/15/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.2.0
+Modified Files:
+All
+Change Notes:
+
+	Video/ENC related
+	1. Modify HEVC VPS max_num_reorder_pics, SPS max_num_reorder_pics
+	   Modify H264 VUI num_reorder_frames, max_dec_frame_buffering
+	2. Modify compressor from 0 to 3
+	3. Improve out_task & md_task close timing (TM)
+
+--------------------------------------------------------------------------
+<01/26/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Support FCS RGB stream drop frame
+
+--------------------------------------------------------------------------
+<12/29/2023 12:00 Juling>
+Version : RTL8735B_VOE_1.5.0.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. FCS NV12+RGB
+	2. VOE drop frame issue
+
+--------------------------------------------------------------------------
+<11/14/2023 12:00 Juling>
+Version : RTL8735B_VOE_1.4.9.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release to check AWB_INTP_DELAY_FRAME
+	2. Sensor suspend/resume flow
+
+	Video/ENC related
+	1. Modify SEI max size from 2048 to no limit
+
+--------------------------------------------------------------------------
 <10/20/2023 12:00 Raymond_chu>
 Version : RTL8735B_VOE_1.4.8.1
 Modified Files:

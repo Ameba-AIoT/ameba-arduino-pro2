@@ -28,6 +28,9 @@ strip nn_json_modify_macos
 #include <string>
 #if _WIN32
 #include <Windows.h>
+#include <locale>
+#include <codecvt>
+#include <Lmcons.h>
 #endif
 #include <dirent.h>  // Include necessary headers for Linux/macOS
 #include <sys/stat.h>
@@ -46,7 +49,7 @@ using namespace std;
 // Declare global variables
 std::string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_default_customized_yolotiny, nn_default_customized_srcfd, nn_default_customized_mobilefacenet, nn_default_customized_yamnet, nn_default_customized_imgclass, nn_flash_sdcard_option;
 std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, load_nn_model_src, ver_pro2, path_nn_json;
-string ino_name_buf[100];
+std::vector<std::string> ino_name_buf; // Vector to store lines from the file
 std::string key_portable = "portable";
 std::string filename_txt = "ino_validation.txt";
 
@@ -80,8 +83,94 @@ std::string backspace = "/";
 // -------------------------------
 //           Functions
 // -------------------------------
+#ifdef _WIN32
+std::wstring get_username() {
+    wchar_t username[MAX_PATH_LENGTH];
+    DWORD size = sizeof(username) / sizeof(username[0]);
+    if (GetUserNameW(username, &size)) {
+        return std::wstring(username);
+    } else {
+        std::wcerr << L"Failed to retrieve username. Error code: " << GetLastError() << std::endl;
+        return L"Unknown";
+    }
+}
+
+std::wstring utf8_to_utf16(const std::string& utf8str) {
+    int len = MultiByteToWideChar(CP_UTF8, 0, utf8str.c_str(), -1, nullptr, 0);
+    wchar_t* wstr = new wchar_t[len];
+    MultiByteToWideChar(CP_UTF8, 0, utf8str.c_str(), -1, wstr, len);
+    std::wstring result(wstr);
+    delete[] wstr;
+    return result;
+}
+
+std::string convert_to_utf8(const std::wstring& wide_str) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    return converter.to_bytes(wide_str);
+}
+
+// Check if username is correct or have weird symbols between Users and AppData
+// ** For chinese version laptop such as using 使用者, TBD
+std::string getUsernameChecked(const std::string& path) {
+	std::string newPath = path;
+	std::wstring username_wide = get_username();
+    std::string username_utf8 = convert_to_utf8(username_wide);
+
+    size_t usersPos = newPath.find("Users\\");
+    if (usersPos == std::string::npos) {
+        return newPath; // 'Users\\' not found, return original path
+    }
+    usersPos += 6; // Move past 'Users\\'
+
+    size_t appDataPos = newPath.find("\\AppData", usersPos);
+    if (appDataPos == std::string::npos) {
+        return newPath; // '\\AppData' not found after 'Users\\', return original path
+    }
+
+    std::string currentSegment = newPath.substr(usersPos, appDataPos - usersPos);
+    if (currentSegment != username_utf8) {
+        newPath.replace(usersPos, appDataPos - usersPos, username_utf8);
+    }
+
+    return newPath;
+}
+#endif
+
 std::string dirName(const std::string& directory_path) {
 	int sdk_counter = 0;
+
+#ifdef _WIN32
+	std::wstring sdk_name;
+	std::wstring directory_path_utf16 = utf8_to_utf16(directory_path);
+	// Use Windows API to open directory and list contents
+	WIN32_FIND_DATAW findData;
+	HANDLE hFind = FindFirstFileW((directory_path_utf16 + L"\\*").c_str(), &findData);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		DWORD error = GetLastError();
+		std::cerr << "Failed to open directory: " << error << std::endl;
+		return "Failed to open directory.";
+	}
+
+	do {
+		// Assuming SDK folders are identified by specific criteria, adjust as per your requirements
+		if (wcscmp(findData.cFileName, L".") != 0 && wcscmp(findData.cFileName, L"..") != 0) {
+			++sdk_counter;
+			if (PRINT_DEBUG) std::wcout << findData.cFileName << std::endl;
+			sdk_name = findData.cFileName; // Store the SDK folder name	
+		}
+	} while (FindNextFileW(hFind, &findData) != 0);
+
+	FindClose(hFind);
+
+	// Check number of SDK folders found
+	if (sdk_counter > 1) {
+		std::string errorMessage = "AmebaPro2 directory allows only 1 SDK folder. Please check again.";
+		std::cerr << "[Error] " << errorMessage << std::endl;
+		exit(EXIT_FAILURE);
+	} 
+	std::string sdk_name_utf8 = convert_to_utf8(sdk_name);
+	return sdk_name_utf8;
+#else
 	struct dirent* entry;
 	DIR* directory = opendir(directory_path.c_str());
 	const char* sdk_name = "";
@@ -117,7 +206,8 @@ std::string dirName(const std::string& directory_path) {
 		std::cerr << "[Error] " << errorMessage << std::endl;
         exit(EXIT_FAILURE);
 	}
-    closedir(directory);
+	closedir(directory);
+#endif
 }
 
 // Function to search for a keyword in a path and return the path up to that keyword
@@ -139,11 +229,35 @@ std::string findKeywordPath(const std::string& path, const std::string& keyword)
 
 // Return the path that contains amebapro2_fwfs_nn_models.json
 std::string JSONpath(const std::string& input) {
+#if _WIN32
+    WIN32_FIND_DATAW findData;
+    HANDLE hFind = FindFirstFileW((utf8_to_utf16(input) + L"\\*").c_str(), &findData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        DWORD error = GetLastError();
+        std::cerr << "Failed to open directory: " << error << std::endl;
+    }
+
+    do {
+        if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+            std::wstring fileName = findData.cFileName;
+            //std::wcout << fileName << std::endl; // Print filename
+            if (fileName.length() > 3 && fileName.substr(fileName.length() - 5) == L".json") {
+                std::string filepath = input + convert_to_utf8(fileName);
+                //std::wcout << "fileName with .json: " << fileName << std::endl; // Print filename
+                //std::cout << "filepath: " << filepath << std::endl; 
+                return filepath;
+            }
+        }
+    } while (FindNextFileW(hFind, &findData) != 0);
+    FindClose(hFind);
+	//return "";
+#else
     DIR* dir;
     struct dirent* entry;
     if ((dir = opendir(input.c_str())) == nullptr) {
         perror("Error opening directory");
-        return "";
+        //return "";
     }
     
     while ((entry = readdir(dir)) != nullptr) {
@@ -151,16 +265,115 @@ std::string JSONpath(const std::string& input) {
             std::string filepath = input + backspace + entry->d_name;
             if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "]filepath: " << filepath << std::endl;
             return filepath;
-
         }
-       
     }
-     closedir(dir);
+    closedir(dir);
+	//return "";
+#endif
 }
 
-// Reset files in amebapro2_fwfs_nn_models.json
+// Reset FWFS: "File" content in amebapro2_fwfs_nn_models.json
 void resetJSON(const std::string& input) {
-    DIR* dir;
+#if _WIN32
+	std::wstring directory_path_utf16 = utf8_to_utf16(input);
+	std::wstring json_file_path = directory_path_utf16 + L"\\amebapro2_fwfs_nn_models.json";
+
+	// Open the file
+	HANDLE hFile = CreateFileW(json_file_path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (hFile == INVALID_HANDLE_VALUE) {
+		DWORD error = GetLastError();
+		if (error == ERROR_FILE_NOT_FOUND) {
+			std::cout << "amebapro2_fwfs_nn_models.json not found in directory." << std::endl;
+			if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "][INFO] JSON reset done" << std::endl;
+		} else {
+			std::cerr << "Failed to open amebapro2_fwfs_nn_models.json: " << error << std::endl;
+		}
+		return;
+	}
+
+	// Get the file size
+	DWORD fileSize = GetFileSize(hFile, nullptr);
+	if (fileSize == INVALID_FILE_SIZE) {
+		std::cerr << "Failed to get file size: " << GetLastError() << std::endl;
+		CloseHandle(hFile);
+		return;
+	}
+
+	// Allocate buffer for file content
+	std::vector<char> fileContents(fileSize + 1); // +1 for null terminator
+
+	// Read file content
+	DWORD bytesRead;
+	if (!ReadFile(hFile, &fileContents[0], fileSize, &bytesRead, nullptr)) {
+		std::cerr << "Failed to read file: " << GetLastError() << std::endl;
+		CloseHandle(hFile);
+		return;
+	}
+
+	// Close the file handle
+	CloseHandle(hFile);
+
+	// Null-terminate the content
+	fileContents[fileSize] = '\0';
+
+	// Print or process the file content
+	if (PRINT_DEBUG) std::cout << "File content:" << std::endl;
+	if (PRINT_DEBUG) std::cout << &fileContents[0] << std::endl; // Assuming file contains text data
+
+	// Close the file handle after reading		
+	CloseHandle(hFile);
+
+	cJSON* root = cJSON_Parse(fileContents.data());
+
+	if (root == nullptr) {
+		//fprintf(stderr, "Error parsing JSON in file: %s\n", entry->d_name);
+		//continue;
+	}
+
+	cJSON* fwfs = cJSON_GetObjectItemCaseSensitive(root, "FWFS");
+	if (fwfs == nullptr || !cJSON_IsObject(fwfs)) {
+		cJSON_Delete(root);
+		//fprintf(stderr, "Invalid JSON format in file: %s\n", entry->d_name);
+		//continue;
+	}
+
+	cJSON* files = cJSON_GetObjectItemCaseSensitive(fwfs, "files");
+	if (files == nullptr || !cJSON_IsArray(files)) {
+		cJSON_Delete(root);
+		//fprintf(stderr, "Invalid JSON format in file: %s\n", entry->d_name);
+		//continue;
+	}
+
+	cJSON_DeleteItemFromObject(fwfs, "files");
+	cJSON* new_files = cJSON_CreateArray();
+	cJSON_AddItemToObject(fwfs, "files", new_files);
+
+	char* new_file_contents = cJSON_Print(root);
+	cJSON_Delete(root);
+
+	// Reopen the file for writing (truncate existing content)
+	hFile = CreateFileW(json_file_path.c_str(), GENERIC_WRITE, 0, nullptr, TRUNCATE_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (hFile == INVALID_HANDLE_VALUE) {
+		std::cerr << "Failed to reopen file for writing: " << GetLastError() << std::endl;
+		cJSON_free(new_file_contents); // Cleanup cJSON memory
+		return;
+	}
+
+	// Write the updated JSON content to file
+	DWORD bytesWritten;
+	if (!WriteFile(hFile, new_file_contents, strlen(new_file_contents), &bytesWritten, nullptr)) {
+		std::cerr << "Failed to write to file: " << GetLastError() << std::endl;
+	}
+
+	// Close the file handle
+	CloseHandle(hFile);
+
+	// Cleanup cJSON memory
+	cJSON_free(new_file_contents);
+
+	if (PRINT_DEBUG) std::cout << "Clear JSON!" << std::endl; // Assuming file contains text data
+#else
+	DIR* dir;
     struct dirent* entry;
     if ((dir = opendir(input.c_str())) == nullptr) {
         perror("Error opening directory");
@@ -235,11 +448,123 @@ void resetJSON(const std::string& input) {
         }
     }
     closedir(dir);
+#endif
 }
 
 // Update files with model names in amebapro2_fwfs_nn_models.json
 void updateJSON(const std::string& input, const std::string& destPath) {
-    DIR* dir;
+#if _WIN32
+    std::string jsonPath = JSONpath(destPath); 
+    std::wstring jsonPath_utf16 = utf8_to_utf16(jsonPath);
+    // Open the JSON file
+    HANDLE hFile = CreateFileW(jsonPath_utf16.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        DWORD error = GetLastError();
+        if (error == ERROR_FILE_NOT_FOUND) {
+            std::wcout << L"JSON file not found: " << jsonPath_utf16 << std::endl;
+        } else {
+            std::cerr << "Failed to open JSON file: " << error << std::endl;
+        }
+        return;
+    }
+
+    // Get the file size
+	DWORD fileSize = GetFileSize(hFile, nullptr);
+	if (fileSize == INVALID_FILE_SIZE) {
+		std::cerr << "Failed to get file size: " << GetLastError() << std::endl;
+		CloseHandle(hFile);
+		return;
+	}
+
+	// Allocate buffer for file content
+	std::vector<char> fileContents(fileSize + 1); // +1 for null terminator
+
+	// Read file content
+	DWORD bytesRead;
+	if (!ReadFile(hFile, &fileContents[0], fileSize, &bytesRead, nullptr)) {
+		std::cerr << "Failed to read file: " << GetLastError() << std::endl;
+		CloseHandle(hFile);
+		return;
+	}
+
+	// Close the file handle
+	CloseHandle(hFile);
+
+	// Null-terminate the content
+	fileContents[fileSize] = '\0';
+
+	// Print or process the file content
+	// if (PRINT_DEBUG) std::cout << "File content:" << std::endl;
+	// if (PRINT_DEBUG) std::cout << &fileContents[0] << std::endl; // Assuming file contains text data
+
+	// Close the file handle after reading		
+	CloseHandle(hFile);
+
+    // Parse the JSON data
+    cJSON* root = cJSON_Parse(fileContents.data());
+    if (root == nullptr) {
+        std::cerr << "Error parsing JSON data." << std::endl;
+        return;
+    }
+
+    // Access the "FWFS" object
+    cJSON* fwfs = cJSON_GetObjectItemCaseSensitive(root, "FWFS");
+    if (fwfs == nullptr || !cJSON_IsObject(fwfs)) {
+        cJSON_Delete(root);
+        std::cerr << "Invalid JSON format: missing \"FWFS\" object." << std::endl;
+        return;
+    }
+
+	// Access the "files" array
+	cJSON* files = cJSON_GetObjectItem(fwfs, "files");
+	if (files == NULL || !cJSON_IsArray(files)) {
+		std::cout << "Failed to access the \"files\" array." << std::endl;
+		cJSON_Delete(root);
+	}
+
+    // Create a cJSON item for the input (example)
+    cJSON* inputItem = cJSON_CreateString(input.c_str());
+    if (inputItem == nullptr) {
+        std::cerr << "Failed to create cJSON item for input." << std::endl;
+        cJSON_Delete(root);
+        return;
+    }
+
+    // Add the input item to the files array
+    cJSON_AddItemToArray(files, inputItem);
+
+    // Convert the JSON data to a formatted string
+    char* updatedJsonString = cJSON_Print(root);
+    if (updatedJsonString == nullptr) {
+        std::cerr << "Failed to convert JSON data to string." << std::endl;
+        cJSON_Delete(root);
+        return;
+    }
+
+    // Reopen the file for writing (truncate existing content)
+    hFile = CreateFileW(jsonPath_utf16.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        std::cerr << "Failed to reopen file for writing: " << GetLastError() << std::endl;
+        cJSON_free(updatedJsonString); // Cleanup cJSON memory
+        cJSON_Delete(root);
+        return;
+    }
+
+    // Write the updated JSON content to file
+    DWORD bytesWritten;
+    if (!WriteFile(hFile, updatedJsonString, strlen(updatedJsonString), &bytesWritten, nullptr)) {
+        std::cerr << "Failed to write to file: " << GetLastError() << std::endl;
+    }
+
+    // Close the file handle
+    CloseHandle(hFile);
+
+    // Cleanup cJSON memory
+    cJSON_free(updatedJsonString);
+    cJSON_Delete(root);
+
+#else
+      DIR* dir;
     struct dirent* ent;
     // Open the destination directory
     dir = opendir(destPath.c_str());
@@ -331,48 +656,139 @@ void updateJSON(const std::string& input, const std::string& destPath) {
  
     // Close the directory
     closedir(dir);
+#endif
 }
 
-// Read ino_validation.txt to get the model used names.  
 void readTXT(std::string& directory_path) {
-int str_count = 0;
+	int str_count = 0;
+#if _WIN32
+    std::wstring directory_path_utf16 = utf8_to_utf16(directory_path)  + L"\\" + utf8_to_utf16(filename_txt);
 
-#ifndef _WIN32
-    DIR* dir = opendir(directory_path.c_str());
-    struct stat st;
-    // create directory if not exists
-    if (stat(directory_path.c_str(), &st) == -1) {
-        mkdir(directory_path.c_str(), 0700);
-    }
-    directory_path += filename_txt;
-#else
-    struct stat st;
-    // create directory if not exists
-    if (stat(directory_path.c_str(), &st) == -1) {
-        mkdir(directory_path.c_str());
-    }
-    directory_path += filename_txt;
-#endif
+    // Open the file
+	HANDLE hFile = CreateFileW(directory_path_utf16.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (hFile == INVALID_HANDLE_VALUE) {
+		DWORD error = GetLastError();
+		if (error == ERROR_FILE_NOT_FOUND) {
+			std::cout << "ino_validation.txt not found in directory." << std::endl;
+			if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "][INFO] JSON reset done" << std::endl;
+		} else {
+			std::cerr << "Failed to open ino_validation.txt: " << error << std::endl;
+		}
+		return;
+	}
+
+    // Get the file size
+	DWORD fileSize = GetFileSize(hFile, nullptr);
+	if (fileSize == INVALID_FILE_SIZE) {
+		std::cerr << "Failed to get file size: " << GetLastError() << std::endl;
+		CloseHandle(hFile);
+		return;
+	}
+
+	// Allocate buffer for file content
+	std::vector<char> fileContents(fileSize + 1); // +1 for null terminator
+
+	// Read file content
+	DWORD bytesRead;
+	if (!ReadFile(hFile, &fileContents[0], fileSize, &bytesRead, nullptr)) {
+		std::cerr << "Failed to read file: " << GetLastError() << std::endl;
+		CloseHandle(hFile);
+		return;
+	}
+
+	// Close the file handle
+	CloseHandle(hFile);
+
+	// Null-terminate the content
+	fileContents[fileSize] = '\0';
+
+    // Convert char buffer to std::string
+    std::string content(fileContents.begin(), fileContents.end());
+
+	// Print or process the file content
+	// if (PRINT_DEBUG) std::cout << "TXT File content:" << std::endl;
+	// if (PRINT_DEBUG) std::cout << &fileContents[0] << std::endl; // Assuming file contains text data
     
-    std::ifstream ino_validation_txt(directory_path);
-    if (ino_validation_txt.is_open()) {
-        std::string line;
-		while (std::getline(ino_validation_txt, line)) {
-            ino_name_buf[str_count] = line;
-            str_count++;
-        }
-        nn_model_yolotiny_name = ino_name_buf[2];
-        nn_model_srcfd_name = ino_name_buf[3];
-        nn_model_mobilefacenet_name = ino_name_buf[4];
-        nn_model_yamnet_name = ino_name_buf[5];
-        nn_model_imgclass_name = ino_name_buf[6];
-
-        nn_default_customized_yolotiny = ino_name_buf[9];
-        nn_default_customized_srcfd = ino_name_buf[10];
-        nn_default_customized_mobilefacenet = ino_name_buf[11];
-        nn_default_customized_yamnet = ino_name_buf[12];
-        nn_default_customized_imgclass = ino_name_buf[13];
+	// std::vector<std::string> ino_name_buf; // Vector to store lines from the file
+    std::istringstream txtcontent(content);
+	std::string line;
+    while (std::getline(txtcontent, line)) {
+        ino_name_buf.push_back(line);
     }
+
+	// Close the file handle after reading		
+	CloseHandle(hFile);
+
+    // Assigning values to variables based on file content
+    nn_model_yolotiny_name = ino_name_buf[2];
+    nn_model_srcfd_name = ino_name_buf[3];
+    nn_model_mobilefacenet_name = ino_name_buf[4];
+    nn_model_yamnet_name = ino_name_buf[5];
+    nn_model_imgclass_name = ino_name_buf[6];
+
+    nn_default_customized_yolotiny = ino_name_buf[9];
+    nn_default_customized_srcfd = ino_name_buf[10];
+    nn_default_customized_mobilefacenet = ino_name_buf[11];
+    nn_default_customized_yamnet = ino_name_buf[12];
+    nn_default_customized_imgclass = ino_name_buf[13];
+
+#else
+    // Open directory and check for errors
+    DIR* dir = opendir(directory_path.c_str());
+    if (dir == nullptr) {
+        std::cerr << "Failed to open directory: " << strerror(errno) << std::endl;
+    }
+
+    struct stat st;
+    // Create directory if it doesn't exist
+    if (stat(directory_path.c_str(), &st) == -1) {
+        if (mkdir(directory_path.c_str(), 0700) == -1) {
+            std::cerr << "Failed to create directory: " << strerror(errno) << std::endl;
+            closedir(dir); // Ensure to close the directory if directory creation fails
+        }
+    }
+
+    // Form the complete file path
+    std::string file_path = directory_path + filename_txt;
+    //std::cout << "file_path: " << file_path << std::endl;
+
+    // Open file
+    std::ifstream ino_validation_txt(file_path);
+    if (!ino_validation_txt.is_open()) {
+        std::cerr << "Failed to open file: " << file_path << std::endl;
+        closedir(dir); // Close the directory if file opening fails
+    }
+
+    // Use a dynamic vector to store lines
+    // std::vector<std::string> ino_name_buf;
+    std::string line;
+
+    // Read lines from file
+    while (std::getline(ino_validation_txt, line)) {
+        ino_name_buf.push_back(line);
+    }
+
+    // Close the file
+    ino_validation_txt.close();
+
+    // Check if there are enough lines in the vector
+    
+    // Access vector elements safely
+    nn_model_yolotiny_name = ino_name_buf[2];
+    nn_model_srcfd_name = ino_name_buf[3];
+    nn_model_mobilefacenet_name = ino_name_buf[4];
+    nn_model_yamnet_name = ino_name_buf[5];
+    nn_model_imgclass_name = ino_name_buf[6];
+
+    nn_default_customized_yolotiny = ino_name_buf[9];
+    nn_default_customized_srcfd = ino_name_buf[10];
+    nn_default_customized_mobilefacenet = ino_name_buf[11];
+    nn_default_customized_yamnet = ino_name_buf[12];
+    nn_default_customized_imgclass = ino_name_buf[13];
+    
+    // Close the directory
+    closedir(dir);
+#endif
 }
 
 void writeJSON(const std::string &path) {
@@ -383,33 +799,33 @@ void writeJSON(const std::string &path) {
 	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name AC: " <<  nn_model_yamnet_name << std::endl;
 	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name IC: " <<  nn_model_imgclass_name << std::endl;
 	if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
-
+    
 	if (nn_model_yolotiny_name.find("NA") == std::string::npos) {    
-		if (load_nn_model_src =="LoadFromFlash") {        
+		if (load_nn_model_src =="LoadFromFlash") {    
 			updateJSON(nn_model_yolotiny_name, path_model);
 		} 
 	}
 
-	if (nn_model_srcfd_name.find("NA") == std::string::npos) {    
-		if (load_nn_model_src =="LoadFromFlash") {        
+	if (nn_model_srcfd_name.find("NA") == std::string::npos ) {    
+		if (load_nn_model_src =="LoadFromFlash") {         
 			updateJSON(nn_model_srcfd_name, path_model);
 		} 
 	}
 
-	if (nn_model_mobilefacenet_name.find("NA") == std::string::npos) {    
-		if (load_nn_model_src =="LoadFromFlash") {        
+	if (nn_model_mobilefacenet_name.find("NA") == std::string::npos ) {    
+		if (load_nn_model_src =="LoadFromFlash") {     
 			updateJSON(nn_model_mobilefacenet_name, path_model);
 		} 
 	}
 
-	if (nn_model_yamnet_name.find("NA") == std::string::npos) {    
-		if (load_nn_model_src =="LoadFromFlash") {        
+	if (nn_model_yamnet_name.find("NA") == std::string::npos ) {    
+		if (load_nn_model_src =="LoadFromFlash") {      
 			updateJSON(nn_model_yamnet_name, path_model);
 		} 
 	}
 
-	if (nn_model_imgclass_name.find("NA") == std::string::npos) {    
-		if (load_nn_model_src =="LoadFromFlash") {        
+	if (nn_model_imgclass_name.find("NA") == std::string::npos ) {    
+		if (load_nn_model_src =="LoadFromFlash") {     
 			updateJSON(nn_model_imgclass_name, path_model);
 		} 
 	}
@@ -419,10 +835,16 @@ void writeJSON(const std::string &path) {
 //           Main
 // -------------------------------
 int main(int argc, char* argv[]) {
-	setlocale(LC_ALL, "en_US.UTF-8");
+#ifdef _WIN32
+	SetConsoleOutputCP(CP_UTF8);
+
+    // Set locale to support UTF-8
+    std::locale::global(std::locale(""));
+#endif
+
 	// Check if the number of input arguments is correct 
 	if (argc != 4) {
-		if (PRINT_DEBUG) std::cout <<"[Error][" << __LINE__ << "] Incorrect number of input parameters. Expected 2 parameters." << std::endl;
+		if (PRINT_DEBUG) std::cout <<"[Error][" << __LINE__ << "] Incorrect number of input parameters. Expected 4 parameters." << std::endl;
 		exit(1);
 	}
 
@@ -430,15 +852,21 @@ int main(int argc, char* argv[]) {
 	std::string path_build = argv[1];
 	std::string path_tools = argv[2];
 	std::string model_src = argv[3];
+#ifdef _WIN32
+    path_build = getUsernameChecked(path_build);
+	path_tools = getUsernameChecked(path_tools);
+#endif
 
 	// Retrive root path
 #ifdef _WIN32
 	path_root = getenv("USERPROFILE");
 	path_arduino15 = getenv("USERPROFILE");
+	path_root = getUsernameChecked(path_root);
 #else
 	path_root = getenv("HOME");
 	path_arduino15 = getenv("HOME");
 #endif
+
 	size_t path_tool_find_keyword = path_tools.find(key_portable);
 	if (path_tool_find_keyword != std::string::npos) {
 		path_arduino15 = findKeywordPath(path_tools, key_portable);
@@ -447,6 +875,10 @@ int main(int argc, char* argv[]) {
 	}
 	path_pro2 = path_arduino15;
 	path_pro2 = path_pro2.append(path_ambpro2_add);
+#ifdef _WIN32	
+    path_pro2 = getUsernameChecked(path_pro2);
+	path_arduino15 = getUsernameChecked(path_arduino15);
+#endif
 	path_model = path_pro2;
 	path_model = path_model.append(dirName(path_pro2));
 	path_library = path_model;

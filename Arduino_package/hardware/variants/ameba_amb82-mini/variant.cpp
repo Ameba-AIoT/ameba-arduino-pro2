@@ -24,8 +24,13 @@
 extern "C" {
 #endif
 
-#include "us_ticker_api.h"
+//#include "us_ticker_api.h"
 #include "wiring_digital.h"
+#include "video_boot.h"
+#include "mmf2_mediatime_8735b.h"
+
+extern void video_get_fcs_info(void *isp_fcs_info);
+
 __weak void _init(void) { }
 void __libc_init_array(void);
 
@@ -87,13 +92,30 @@ void serialEventRun(void)
     if (Serial_available && serialEvent && Serial_available()) serialEvent();
 }
 
+void set_initial_tick_count(void)
+{
+    // Check DWT_CTRL(0xe0001000) CYCCNTENA(bit 0). If DWT cycle counter is enabled, set tick count initial value based on DWT cycle counter.
+    if ((*((volatile uint32_t *) 0xe0001000)) & 1) {
+        (*((volatile uint32_t *) 0xe0001000)) &= (~((uint32_t) 1)); // stop DWT cycle counter
+        uint32_t dwt_cyccnt = (*((volatile uint32_t *) 0xe0001004));
+        uint32_t systick_load = (configCPU_CLOCK_HZ / configTICK_RATE_HZ) - 1UL;
+        initial_tick_count = dwt_cyccnt / systick_load;
+    }
+
+    // Auto set the media time offset
+    video_boot_stream_t *isp_fcs_info;
+    video_get_fcs_info(&isp_fcs_info);  //Get the fcs info
+    uint32_t media_time_ms = initial_tick_count + isp_fcs_info->fcs_start_time;
+    mm_set_mediatime_in_ms(media_time_ms);
+}
+
 void ameba_init(void)
 {
     // Initialize C library
     __libc_init_array();
 
     // Initialize micro ticker
-    us_ticker_init();
+//    us_ticker_init();
 
     // Initialize onboard LED
     pinMode(LED_B, OUTPUT);

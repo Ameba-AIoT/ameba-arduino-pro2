@@ -13,6 +13,10 @@
 #define CONFIG_SD_SDIO	1
 #define CONFIG_SD_SPI	0
 
+#define SD_INIT_FAIL_ERROR 	0x00
+#define SD_READ_FAIL_ERROR 	0x01
+#define SD_WRITE_FAIL_ERROR 0x02
+
 typedef enum {
 	SD_OK = 0,
 	SD_NODISK,
@@ -42,6 +46,7 @@ SD_RESULT SD_ReadBlocks(u32 sector, u8 *data, u32 count); //read multi sector
 SD_RESULT SD_WriteBlocks(u32 sector, const u8 *data, u32 count); //write multi sector
 
 int check_sdcard_exist(void);//Check if the sd card is exist
+void emmc_set_enable(int value);//Enalbe the emmc interface
 
 #endif
 

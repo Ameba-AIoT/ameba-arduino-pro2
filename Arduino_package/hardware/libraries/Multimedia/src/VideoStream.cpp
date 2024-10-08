@@ -396,6 +396,20 @@ VideoSetting::VideoSetting(uint8_t preset)
             _jpeg_qlevel = 2;
             break;
         }
+        case 10: {
+            _resolution = VIDEO_FHD;
+            //_w = VIDEO_FHD_WIDTH;
+            //_h = VIDEO_FHD_HEIGHT;
+            _fps = 20;
+            _bps = 1 * 1024 * 1024;
+            _encoder = VIDEO_H264;
+            _gop = 80;
+            _rc_mode = 1;
+            _use_static_addr = 1;
+            _meta_enable = 1;
+            _snapshot = 0;
+            break;
+        }
         default: {
             printf("\r\n[ERROR] Invalid VideoSetting preset!\n");
             return;
@@ -409,6 +423,9 @@ VideoSetting::VideoSetting(uint8_t preset)
     } else if (_resolution == VIDEO_HD) {
         _w = VIDEO_HD_WIDTH;
         _h = VIDEO_HD_HEIGHT;
+    } else if (_resolution == VIDEO_VGA) {
+        _w = VIDEO_VGA_WIDTH;
+        _h = VIDEO_VGA_HEIGHT;
     }
 }
 
@@ -568,6 +585,7 @@ uint16_t VideoSetting::fps(void)
 void Video::configVideoChannel(int ch, VideoSetting& config)
 {
     // Copy in video stream settings for specified stream channel
+    preset[ch] = config._preset;
     channelEnable[ch] = 1;
     resolution[ch] = config._resolution;
     w[ch] = config._w;
@@ -576,8 +594,16 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
     bps[ch] = config._bps;
     encoder[ch] = config._encoder;
     snapshot[ch][0] = config._snapshot;
-    jpeg_qlevel[ch] = config._jpeg_qlevel;
-    video_rotation[ch] = config._rotation;
+
+    if (config._preset == USB_UVCD_STREAM_PRESET) {
+        gop[ch] = config._gop;
+        rc_mode[ch] = config._rc_mode;
+        use_static_addr[ch] = config._use_static_addr;
+        meta_enable[ch] = config._meta_enable;
+    } else {
+        jpeg_qlevel[ch] = config._jpeg_qlevel;
+        video_rotation[ch] = config._rotation;
+    }
 
     // Video stream using VIDEO_JPEG requires setting bps = 0
     // if (encoder[ch] == VIDEO_JPEG) {
@@ -614,16 +640,6 @@ void Video::configVideoChannel(int ch, VideoSetting& config, int snapshot_xmin, 
 }
 #endif
 
-void Video::camInit(CameraSetting& config)
-{
-    // To be done
-}
-
-void Video::camDeinit(void)
-{
-    // To be done
-}
-
 void Video::videoInit(void)
 {
     int heapSize = cameraConfig(channelEnable[0], w[0], h[0], bps[0], snapshot[0][0],
@@ -646,6 +662,7 @@ void Video::videoInit(int ch)
                                     channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
                                     channelEnable[3], w[3], h[3]);
         _heap_size = heapSize;
+        // printf("\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
     }
     if (channelEnable[ch]) {
         videoModule[ch]._p_mmf_context = cameraInit();
@@ -697,19 +714,37 @@ void Video::videoInit(int ch)
                              CAM_NN_GOP,
                              0);    // direct output flag
             } else {
-                cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
-                           channel[ch],
-                           encoder[ch],
-                           resolution[ch],
-                           w[ch],
-                           h[ch],
-                           bps[ch],
-                           fps[ch],
-                           CAM_GOP,
-                           CAM_RCMODE,
-                           snapshot[ch][0],
-                           jpeg_qlevel[ch],
-                           video_rotation[ch]);
+                if (preset[ch] != USB_UVCD_STREAM_PRESET) {
+                    cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                               channel[ch],
+                               encoder[ch],
+                               resolution[ch],
+                               w[ch],
+                               h[ch],
+                               bps[ch],
+                               fps[ch],
+                               CAM_GOP,
+                               CAM_RCMODE,
+                               snapshot[ch][0],
+                               jpeg_qlevel[ch],
+                               video_rotation[ch]);
+                } else {
+                    // printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
+                    cameraOpenUVCD(videoModule[ch]._p_mmf_context,
+                                   channel[ch],
+                                   encoder[ch],
+                                   resolution[ch],
+                                   w[ch],
+                                   h[ch],
+                                   bps[ch],
+                                   fps[ch],
+                                   gop[ch],
+                                   rc_mode[ch],
+                                   snapshot[ch][0],
+                                   use_static_addr[ch],
+                                   meta_enable[ch],
+                                   _heap_size);
+                }
             }
         }
     }
@@ -866,4 +901,9 @@ void Video::printInfo(void)
             printf("\r\n[INFO] bps: %ld\n", bps[ch]);
         }
     }
+}
+
+int Video::videostream_status(int ch)
+{
+    return cameraGetCtx(videoModule[ch]._p_mmf_context, ch);
 }

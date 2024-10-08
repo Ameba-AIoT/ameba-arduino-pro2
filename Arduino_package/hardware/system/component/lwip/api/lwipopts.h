@@ -511,8 +511,12 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #define LWIP_IPV6                       0
 #endif
 #if LWIP_IPV6
+#define LWIP_IPV6_MLD                   1
+#define LWIP_IPV6_AUTOCONFIG            1
+#define LWIP_ICMP6                      1
 #undef  MEMP_NUM_SYS_TIMEOUT
 #define MEMP_NUM_SYS_TIMEOUT            13
+#define LWIP_IPV6_DHCP6                 0
 #endif
 
 #ifndef CONFIG_EXAMPLE_COAP_SERVER

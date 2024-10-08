@@ -42,6 +42,19 @@ typedef enum {
 	DHCP_TIMEOUT
 } DHCP_State_TypeDef;
 
+#if LWIP_VERSION_MAJOR >= 2 && LWIP_VERSION_MINOR >= 1
+#if LWIP_IPV6
+typedef enum {
+	DHCP6_START = 0,
+	DHCP6_WAIT_ADDRESS,
+	DHCP6_ADDRESS_ASSIGNED,
+	DHCP6_RELEASE_IP,
+	DHCP6_STOP,
+	DHCP6_TIMEOUT
+} DHCP6_State_TypeDef;
+#endif
+#endif
+
 struct static_ip_config {
 	uint8_t  use_static_ip;
 	uint32_t addr;
@@ -93,6 +106,17 @@ void LwIP_AUTOIP_STOP(uint8_t idx);
 #if LWIP_IPV6
 void LwIP_AUTOIP_IPv6(struct netif *pnetif);
 #endif
+
+#if LWIP_VERSION_MAJOR >= 2 && LWIP_VERSION_MINOR >= 1
+#if LWIP_IPV6
+#if LWIP_IPV6_DHCP6
+uint8_t LwIP_DHCP6(uint8_t idx, uint8_t dhcp_state);
+#endif
+uint8_t *LwIP_GetIPv6_linklocal(struct netif *pnetif);
+uint8_t *LwIP_GetIPv6_global(struct netif *pnetif);
+#endif
+#endif
+
 uint32_t LWIP_Get_Dynamic_Sleep_Interval(void);
 int netif_get_idx(struct netif *pnetif);
 uint32_t LwIP_GetXID(uint8_t idx);

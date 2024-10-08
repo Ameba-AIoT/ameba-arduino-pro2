@@ -501,6 +501,7 @@ struct  wifi_user_conf {
 	bit 2: (0: show wifi connection state, 1:  show wifi connection state time)
 	bit 3: (0: disable wifi connection flow debug, 1:  enable wifi connection flow debug)
 	bit 4: (0: disable wifi auto reconnection flow debug, 1:  enable auto reconnection flow debug)
+	bit 5: (0: disable to mark wifi SSID/router top three MAC Address, 1:  enable to mark wifi SSID/router top three MAC Address)
 	*/
 	unsigned char wifi_debug_enabled;
 

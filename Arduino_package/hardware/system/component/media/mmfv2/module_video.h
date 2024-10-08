@@ -46,12 +46,12 @@
 #define CMD_VIDEO_APPLY				MM_MODULE_CMD(0x20)  // apply setting
 #define CMD_VIDEO_UPDATE			MM_MODULE_CMD(0x21)  // update new setting
 #define CMD_VIDEO_STREAM_STOP		MM_MODULE_CMD(0x23)  // stop stream
-
-#define CMD_VIDEO_SET_VOE_HEAP      MM_MODULE_CMD(0x24)
-#define CMD_VIDEO_SET_TIMESTAMP_OFFSET      MM_MODULE_CMD(0x25)
+#define CMD_VIDEO_SET_VOE_HEAP		MM_MODULE_CMD(0x24)
+#define CMD_VIDEO_SET_TIMESTAMP_OFFSET		MM_MODULE_CMD(0x25)
+#define CMD_VIDEO_EN_DBG_TS_INFO	MM_MODULE_CMD(0x26)
+#define CMD_VIDEO_SHOW_DBG_TS_INFO	MM_MODULE_CMD(0x27)
 
 #define CMD_SNAPSHOT_ENCODE_CB		MM_MODULE_CMD(0x30)
-
 
 #define CMD_VIDEO_MD_SET_ROI		MM_MODULE_CMD(0x31)
 #define CMD_VIDEO_MD_SET_SENSITIVITY	MM_MODULE_CMD(0x32)
@@ -80,7 +80,13 @@
 #define CMD_VIDEO_PRE_INIT_LOAD  	MM_MODULE_CMD(0x53)
 #define CMD_VIDEO_PRE_INIT_SAVE  	MM_MODULE_CMD(0x54)
 
-#define MMF_VIDEO_DEFAULT_META_CB	(0xFFFFFFFF)
+#define MMF_VIDEO_DBG_TS_MAX_CNT	5
+#define MMF_VIDEO_DEFAULT_META_CB			(0xFFFFFFFF)
+
+typedef struct dbg_ts_info {
+	int timestamp_cnt;
+	uint32_t timestamp[MMF_VIDEO_DBG_TS_MAX_CNT];
+} dbg_ts_info_t;
 
 typedef struct rate_control {
 	uint32_t sampling_time;
@@ -118,6 +124,8 @@ typedef struct video_ctx_s {
 	void (*meta_cb)(void *);
 	void (*sps_pps_cb)(void *);
 	rate_ctrl_param_t rate_ctrl_p;
+
+	dbg_ts_info_t *dbg_ts_info;
 } video_ctx_t;
 
 extern mm_module_t video_module;
@@ -130,6 +138,9 @@ int video_voe_presetting(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_s
 
 int video_voe_presetting_by_params(const void *v1_params, int v1_jpg_only_shapshot, const void *v2_params, int v2_jpg_only_shapshot, const void *v3_params,
 								   int v3_jpg_only_shapshot, const void *v4_params);
+								   
+int video_extra_voe_presetting(int originl_heapsize, int vext_enable, int vext_w, int vext_h, int vext_bps, int vext_shapshot);
+
 
 void video_voe_release(void);
 void video_set_sensor_id(int SensorName);
