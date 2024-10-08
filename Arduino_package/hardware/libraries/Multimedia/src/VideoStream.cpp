@@ -729,7 +729,7 @@ void Video::videoInit(int ch)
                                jpeg_qlevel[ch],
                                video_rotation[ch]);
                 } else {
-                    printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
+                    // printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
                     cameraOpenUVCD(videoModule[ch]._p_mmf_context,
                                    channel[ch],
                                    encoder[ch],
@@ -901,4 +901,9 @@ void Video::printInfo(void)
             printf("\r\n[INFO] bps: %ld\n", bps[ch]);
         }
     }
+}
+
+int Video::videostream_status(int ch)
+{
+    return cameraGetCtx(videoModule[ch]._p_mmf_context, ch);
 }

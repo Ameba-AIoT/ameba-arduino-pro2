@@ -353,3 +353,23 @@ void cameraStopVideoStream(void *p, int channel)
 {
     video_control(p, CMD_VIDEO_STREAM_STOP, channel);
 }
+
+int cameraGetCtx(mm_context_t *p, int ch)
+{
+    int arduino_is_output_ready = 0;
+    mm_queue_item_t *output_item;
+
+    mm_context_t *video_data = (mm_context_t *)rtw_malloc(sizeof(mm_context_t));
+
+    video_data = p;
+
+    // Peek an item from the queue
+    if (xQueuePeek(video_data->port[ch].output_recycle, &output_item, 0) == pdTRUE) {
+        // Successfully peeked an item from the queue without removing it
+        arduino_is_output_ready = 1;
+    } else {
+        arduino_is_output_ready = 0;
+    }
+
+    return arduino_is_output_ready;
+}

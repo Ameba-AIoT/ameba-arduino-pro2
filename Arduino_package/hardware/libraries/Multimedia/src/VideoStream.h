@@ -218,9 +218,9 @@ public:
     MMFModule getStream(int ch = 0);
 
     void getImage(int ch, uint32_t* addr, uint32_t* len);
-
     void setFPS(int fps);
     void printInfo(void);
+    int videostream_status(int ch);
 
 private:
     void setSnapshotCallback(int ch);
@@ -266,5 +266,4 @@ private:
 };
 
 extern Video Camera;
-
 #endif
