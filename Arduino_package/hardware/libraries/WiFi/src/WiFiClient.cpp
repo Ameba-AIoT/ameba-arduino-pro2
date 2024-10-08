@@ -66,6 +66,13 @@ WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode, tBlockingMode blockMode
     _is_blocked = blockMode;
 }
 
+WiFiClient::~WiFiClient()
+{
+    if (_is_blocked) {
+        stop();
+    }
+}
+
 uint8_t WiFiClient::connected()
 {
     if ((_sock < 0) || (_sock == 0xFF)) {
