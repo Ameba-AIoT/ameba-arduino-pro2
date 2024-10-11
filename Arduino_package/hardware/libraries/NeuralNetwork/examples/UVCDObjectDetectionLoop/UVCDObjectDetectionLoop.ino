@@ -52,7 +52,7 @@ StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output USB_CAM
 StreamIO videoStreamerNN(1, 1);
 VideoSetting stream_config(USB_UVCD_STREAM_PRESET);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
-
+VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 void setup()
 {
     Serial.begin(115200);
@@ -93,11 +93,13 @@ void setup()
 
     // Start usb uvcd for NN
     usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, CHANNELNN, camera_uvcd.videostream_status(STREAM_CHANNEL));
+
+    OSD.configVideo(STREAM_CHANNEL, config);
+    OSD.begin();
 }
 
 void loop()
 {
-    delay(5000);
     if (!usb_uvcd.isUsbUvcConnected(camera_uvcd.videostream_status(STREAM_CHANNEL))) {
         Serial.println("USB UVC device disconnected");
         // Handle disconnection processes
@@ -115,7 +117,7 @@ void loop()
         uint16_t im_w = stream_config.width();
 
         printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
-
+        OSD.createBitmap(STREAM_CHANNEL);
         if (ObjDet.getResultCount() > 0) {
             for (int i = 0; i < ObjDet.getResultCount(); i++) {
                 int obj_type = results[i].type();
@@ -130,10 +132,20 @@ void loop()
                     int ymax = (int)(item.yMax() * im_h);
                     // Draw boundary box
                     printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
+                    OSD.drawRect(STREAM_CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
+
+                    // Print identification text
+                    char text_str[20];
+                    snprintf(text_str, sizeof(text_str), "%s %d", itemList[obj_type].objectName, item.score());
+                    OSD.drawText(STREAM_CHANNEL, xmin, ymin - OSD.getTextHeight(STREAM_CHANNEL), text_str, OSD_COLOR_CYAN);
                 }
             }
         }
     }
+    OSD.update(STREAM_CHANNEL);
+
+    // delay to wait for new results
+    delay(100);
 }
 
 void disconnectNN()
