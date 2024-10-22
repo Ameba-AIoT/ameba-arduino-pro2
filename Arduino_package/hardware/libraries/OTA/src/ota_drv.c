@@ -5,8 +5,8 @@
 #include <ota_8735b.h>
 #include "ota_drv.h"
 
-int _port = 3000;                           // MODIFY THIS FOR YOUR HTTP SERVER PORT
-char *_server = "192.168.3.4";              // MODIFY THIS FOR YOUR HTTP SERVER IP ADDRESS
+int _port;
+char *_server;
 const char *resource = "api/uploadfile";    // DO NOT MODIFY
 
 
