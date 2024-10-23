@@ -5,7 +5,7 @@
 
 |Branch|Usage|Remarks|
 |:-----|:-----|:-----|
-|`main` | stable release| https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/package_realtek_amebapro2_early_index.json|
+|`main` | stable release| https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/package_realtek_amebapro2_index.json|
 |`dev`| merge `Pull Request` & early release| https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json|
 
 
