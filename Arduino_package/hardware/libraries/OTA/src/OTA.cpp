@@ -1,7 +1,7 @@
 #define ARDUINOJSON_STRING_LENGTH_SIZE_4
 
 #include <Arduino.h>
-#include "ota_thread.h"
+#include "OTA.h"
 #include <WiFi.h>
 #include <ArduinoJson.h>
 
@@ -16,17 +16,20 @@ char buffer[1024];
 uint32_t thread1_id, thread2_id, thread3_id, stack_size1, stack_size2;
 int priority1;
 
+OTA::OTA(){};
 
-void sendPostRequest()
+OTA::~OTA(){};
+
+void OTA::sendPostRequest()
 {
     doc["OTA_state"] = g_otaState;
     serializeJson(doc, jsonString);
     WiFiClient wifiClient;
 
-    if (wifiClient.connect(server, PORT)) {
+    if (wifiClient.connect(_server, _port)) {
         // Send POST request
         wifiClient.println("POST /api/connectedclients HTTP/1.1");
-        wifiClient.println("Host: " + String(server));
+        wifiClient.println("Host: " + String(_server));
         wifiClient.println("Content-Type: application/json");                    // Use appropriate content type
         wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
         wifiClient.println("Connection: keep-alive");
@@ -40,14 +43,14 @@ void sendPostRequest()
     delay(3000);
 }
 
-void thread1_task(const void *argument)
+void OTA::thread1_task(const void *argument)
 {
     while (1) {
         sendPostRequest();
     }
 }
 
-void thread2_task(const void *argument)
+void OTA::thread2_task(const void *argument)
 {
     WiFiServer server(5000);
     server.begin();
@@ -79,8 +82,10 @@ void thread2_task(const void *argument)
 }
 
 
-void start_OTA_threads()
+void OTA::start_OTA_threads(int port, char *server)
 {
+    _port = port;
+    _server = server;
     priority1 = osPriorityNormal;
     stack_size1 = 1024;
     thread1_id = os_thread_create_arduino(thread1_task, NULL, priority1, stack_size1);

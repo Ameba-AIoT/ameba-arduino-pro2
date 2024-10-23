@@ -1,7 +1,7 @@
 #pragma once
 
-extern const int PORT;
-extern const char *server;
+extern int _port;
+extern char *_server;
 extern const char *resource;
 
 extern const char *OtaState[];
