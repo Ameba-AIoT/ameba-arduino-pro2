@@ -5,8 +5,8 @@
 #include <ota_8735b.h>
 #include "ota_drv.h"
 
-const int PORT = 3000;                      // MODIFY THIS FOR YOUR HTTP SERVER PORT
-const char *server = "192.168.3.4";         // MODIFY THIS FOR YOUR HTTP SERVER IP ADDRESS
+int _port;
+char *_server;
 const char *resource = "api/uploadfile";    // DO NOT MODIFY
 
 
@@ -26,7 +26,7 @@ void http_update_ota_task(void *param)
 
     g_otaState = OtaState[2];
 
-    ret = http_update_ota((char *)server, PORT, (char *)resource);
+    ret = http_update_ota((char *)_server, _port, (char *)resource);
 
     g_otaState = OtaState[3];
 

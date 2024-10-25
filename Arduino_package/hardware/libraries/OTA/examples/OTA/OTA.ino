@@ -1,10 +1,15 @@
-#include "ota_thread.h"
+#include "OTA.h"
 #include "WiFi.h"
 
 
-char ssid[] = "Network_SSID";    // your network SSID (name)
-char pass[] = "Password";        // your network password
+char ssid[] = "Network_SSID5";    // your network SSID (name)
+char pass[] = "Password";         // your network password
 int status = WL_IDLE_STATUS;
+
+int port = 3000;                  // your server port number
+char* server = "192.168.3.14";    // your server ip address
+
+OTA ota;
 
 void setup()
 {
@@ -19,7 +24,7 @@ void setup()
     }
 
     // Set up the threads
-    start_OTA_threads();
+    ota.start_OTA_threads(port, server);
 }
 
 void loop()
