@@ -40,12 +40,12 @@
             {
               "packager": "realtek",
               "name": "ameba_pro2_tools",
-              "version": "1.3.10"
+              "version": "1.3.11"
             },
             {
               "packager": "realtek",
               "name": "ameba_pro2_nn_models",
-              "version": "1.0.0"
+              "version": "1.0.1"
             }
           ]
         },
@@ -694,6 +694,33 @@
               "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_toolchain_macos-1.0.1-p2.tar.bz2",
               "checksum":"SHA-256:892a0a6848863b0853a0b60a3fcfedb703d897961615274049f8fca036c9db32",
               "size":"77770301"
+            }
+          ]
+        },
+		{
+          "name": "ameba_pro2_tools",
+          "version": "1.3.11",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.3.11.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.3.11.tar.gz",
+              "checksum": "SHA-256:932180157d5dde46f5818f43ea7aa3d7cb65f80bdb961dc2e970f5f214183628",
+              "size": "9509250"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "archiveFileName": "ameba_pro2_tools_linux-1.3.11.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.3.11.tar.gz",
+              "checksum": "SHA-256:ec8a50957726250ac3546eef862f78c65df2e81f50a2c0d8ad05d2a1b6bafa06",
+              "size": "13296379"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.3.11.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.3.11.tar.gz",
+              "checksum": "SHA-256:2c4b289a5cdbfd500b337bb247abc6b50ce73794f6479abd610178079a8921d4",
+              "size": "11494678"
             }
           ]
         },
