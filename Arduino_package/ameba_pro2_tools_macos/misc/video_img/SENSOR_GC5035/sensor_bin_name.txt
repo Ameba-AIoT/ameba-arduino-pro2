@@ -2,6 +2,6 @@ SENSOR_GC5035
 voe.bin
 firmware_isp_iq.bin
 fcs_data_gc5035.bin
-iq_gc2053.bin
+iq_gc5035.bin
 sensor_gc5035.bin
 ------------------

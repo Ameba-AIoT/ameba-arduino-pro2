@@ -400,7 +400,7 @@ void i2s_init(i2s_t *obj, PinName sck, PinName ws, PinName sd_tx, PinName sd_rx,
 ///@{
 typedef enum {
 	FORMAT_I2S = I2S_FORMAT_I2S,
-	LEFT_JUST  = I2S_FORMAT_LEFT_JUST,
+	FORMAT_LEFT_JUST  = I2S_FORMAT_LEFT_JUST,
 	FORMAT_RIGHT_JUST = I2S_FORMAT_RIGHT_JUST
 } i2s_format;
 

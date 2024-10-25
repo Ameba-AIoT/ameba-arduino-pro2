@@ -1243,6 +1243,16 @@ int wifi_wowlan_set_pno_scan(u8  start_window,
 							 u8  active_cnt,
 							 u32 duration,
 							 u8  interval_time);
+
+/**
+ * @brief   set scan ssid in pno
+ *
+ * @param[in]   ssid : scan ssid in pno
+ * @param[in]   ssid_len : ssid length
+ * @return  RTW_SUCCESS
+ */
+int wifi_wowlan_set_pno_scan_ssid(u8 *ssid,
+								  u8   ssid_len);
 #endif
 
 

@@ -403,6 +403,8 @@ int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int
 
 void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
 
+video_pre_init_params_t* video_get_pre_init_setup_params(void);
+
 void video_pre_init_load_params(enum isp_init_option save_option);
 
 void video_pre_init_save_cur_params(int meta_enable, video_meta_t *meta_data,

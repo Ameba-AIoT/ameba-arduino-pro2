@@ -1,3 +1,14 @@
+<10/18/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.8.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix zoom crop issue
+	2. Do not send ENC full msg to TM if open_stream fail
+	3. Disable fusion stream when stop mipi transfer
+--------------------------------------------------------------------------
 <08/30/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.7.0
 Modified Files:

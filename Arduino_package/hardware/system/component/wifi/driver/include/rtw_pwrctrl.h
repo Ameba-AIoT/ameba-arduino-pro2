@@ -440,6 +440,11 @@ struct pwrctrl_priv {
 	u8 pno_interval_time;
 	u8 pno_passive_period;
 	u8 pno_active_period;
+	u8 pno_ssid_num;
+	u8 pno_ssid_len;
+	u8 *pno_ssid;
+	u8 pno_ssid_loc;
+	u8 pno_disconnect_en;
 #endif
 
 #ifdef CONFIG_WOWLAN_NTP_OFFLOAD

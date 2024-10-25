@@ -55,8 +55,9 @@ enum als_AeStatus {
 };
 
 int isp_get_AF_statis(af_statis_t *p_af_result);
-int isp_get_AE_statis(ae_statis_t *p_ae_result);
+int isp_get_AE_statis(ae_statis_t *p_ae_result, enum ISP_AE_statis_type type);
 int isp_get_AE_meter(uint8_t *weight_array, int *p_weight_num);
+int isp_set_AE_meter(uint8_t *weight_array, int p_weight_num);
 int isp_get_AWB_statis(awb_statis_t *p_awb_result);
 int isp_get_info(enum isp_reg_info info_type);
 int isp_set_func(enum isp_func_switch func_type, int value);

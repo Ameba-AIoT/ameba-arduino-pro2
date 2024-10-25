@@ -17,23 +17,19 @@ Feature:
 - Add sensor IMX327 support
 - Add filesystem Example GetFreeAndUseSpace
 - Add sensor PS5268 support
-- Add sensor PS5268 support
 - Add Example UVC_ObjectDetectionLoop
 
 API Updates:
 - Update SDK code base
 - Add flash memory related API
 - Update snapshot related API
-- Update SDK code base
 - Add OTA related API
 - Add USB UVCD related API
 - Update boot tick count process
-- Update USB UVCD related API
-- Update AmebaFatFS.cpp
-- Update AmebaFatFS.h
-- Update UVCD.cpp and UVCD.h
-- Update video_drv.c and video_drv.h
-- Update yuv_snapshot_init(void *ctx) in qrcode_drv.c
+- Update "AmebaFatFS.cpp" and "AmebaFatFS.h"
+- Update "UVCD.cpp" and "UVCD.h"
+- Update "video_drv.c" and "video_drv.h"
+- Update "qrcode_drv.c"
 
 Misc:
 - Update CI_compile_examples.yml
@@ -45,7 +41,7 @@ Misc:
     - Update tools for multi sensor build process
     - Update tools to accept username with spaces
     - Update tools for postbuild
-    - Add FCS files- Update platform.txt avoid the path too long issue
+    - Add FCS files
 - Update keywords.txt files
 - Update library.properties files
 - Update ameba_pro2_tools 1.3.6

@@ -13,8 +13,8 @@
 
 #define CONFIG_MMF_AUDIO_DEBUG 0
 #define CONFIG_MMF_AUDIO_ATAF 1
-#define AUDIO_TX_MASK   0x01
-#define AUDIO_RX_MASK   0x02
+#define AUDIO_TX_MASK   (0x01 << 0)
+#define AUDIO_RX_MASK   (0x01 << 1)
 
 typedef enum {
 	USE_AUDIO_AMIC = 0,
@@ -64,6 +64,8 @@ typedef enum {
 #define CMD_AUDIO_SET_MESSAGE_LEVEL     MM_MODULE_CMD(0x23)
 #define CMD_AUDIO_SET_RXASP_PARAM       MM_MODULE_CMD(0x24)
 #define CMD_AUDIO_SET_TXASP_PARAM       MM_MODULE_CMD(0x25)
+#define CMD_AUDIO_SET_RXASP_POST_MUTE   MM_MODULE_CMD(0x0A)
+#define CMD_AUDIO_SET_TXASP_POST_MUTE   MM_MODULE_CMD(0x0B)
 #define CMD_AUDIO_GET_RXASP_PARAM       MM_MODULE_CMD(0x26)
 #define CMD_AUDIO_GET_TXASP_PARAM       MM_MODULE_CMD(0x27)
 #define CMD_AUDIO_PRINT_ASP_INFO        MM_MODULE_CMD(0x28)
@@ -111,17 +113,20 @@ typedef struct audio_param_s {
 	uint8_t         avsync_en;
 	//...
 } audio_params_t;
+
 #if defined(CONFIG_NEWAEC) && CONFIG_NEWAEC //CT AEC library only support on 8735
 typedef struct RX_cfg_s {
 	CTAEC_cfg_t     aec_cfg;
 	CTAGC_cfg_t     agc_cfg;
 	CTNS_cfg_t      ns_cfg;
 	CTBF_cfg_t      bf_cfg;
+	uint8_t         post_mute;       // this mute is after all RX signal process
 } RX_cfg_t;
 
 typedef struct TX_cfg_s {
 	CTAGC_cfg_t     agc_cfg;
 	CTNS_cfg_t      ns_cfg;
+	uint8_t         post_mute;       // this mute is after all TX signal proce
 } TX_cfg_t;
 #else
 typedef struct RX_cfg_s {
@@ -129,11 +134,13 @@ typedef struct RX_cfg_s {
 	WebrtcAGC_cfg_t agc_cfg;
 	WebrtcNS_cfg_t  ns_cfg;
 	WebrtcVAD_cfg_t vad_cfg;
+	uint8_t         post_mute;       // this mute is after all RX signal proce
 } RX_cfg_t;
 
 typedef struct TX_cfg_s {
 	WebrtcAGC_cfg_t agc_cfg;
 	WebrtcNS_cfg_t  ns_cfg;
+	uint8_t         post_mute;       // this mute is after all TX signal proce
 } TX_cfg_t;
 #endif
 typedef struct audio_ctx_s {

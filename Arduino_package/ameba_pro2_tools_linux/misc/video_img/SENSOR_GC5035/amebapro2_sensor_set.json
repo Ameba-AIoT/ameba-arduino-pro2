@@ -36,7 +36,7 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq_gc2053.bin"
+            "file":"iq_gc5035.bin"
         },
         "sensor_data": {
             "source":"binary",
