@@ -480,8 +480,9 @@ struct  wifi_user_conf {
 	bit 5: (0(default): disable issue encryption wpa3 deauth, 1: enable issue encryption wpa3 deauth)
 	bit 6: (0(default): disable gcmp128/gcmp256 wifi connection, 1: enable gcmp128/gcmp256 wifi connection)
 	bit 7: (0(default): disable wpa3 transition to force wpa2 security connection, 1: enable wpa3 transition to force wpa2 security connection)
+	bit 8: (0(default): disable to check the RSC of group key, 1: enable to check the RSC of group key)
 	*/
-	unsigned char ap_compatibilty_enabled;
+	unsigned int ap_compatibilty_enabled;
 
 	unsigned char max_roaming_times;
 
@@ -500,6 +501,7 @@ struct  wifi_user_conf {
 	bit 2: (0: show wifi connection state, 1:  show wifi connection state time)
 	bit 3: (0: disable wifi connection flow debug, 1:  enable wifi connection flow debug)
 	bit 4: (0: disable wifi auto reconnection flow debug, 1:  enable auto reconnection flow debug)
+	bit 5: (0: disable to mark wifi SSID/router top three MAC Address, 1:  enable to mark wifi SSID/router top three MAC Address)
 	*/
 	unsigned char wifi_debug_enabled;
 

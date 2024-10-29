@@ -84,6 +84,7 @@ void rltk_psk_info_set(struct psk_info *psk_data);
 void rltk_psk_info_get(struct psk_info *psk_data);
 __u8 rltk_wlan_is_mp(void);
 
+int rltk_wlan_get_router_wps_info(__u8 *assoc_AP_manufacturer, __u8 *assoc_AP_model_name, __u8 *assoc_AP_model_number);
 int rltk_wlan_issue_nulldata(unsigned int power_mode);
 #ifdef CONFIG_WLAN_SWITCH_MODE
 int rltk_wlan_reinit_drv_sw(const char *ifname, rtw_mode_t mode);
@@ -122,6 +123,8 @@ int rltk_wlan_csi_report(__u32 buf_len, __u8 *csi_buf, __u32 *len, rtw_csi_heade
 void rltk_wlan_scan_time(unsigned short active_to, unsigned short passive_to, unsigned short home_to, unsigned char probe_cnt);
 void rltk_wlan_set_rts(unsigned char enable, unsigned int rts_threshold);
 int rltk_wlan_set_retry_limit(unsigned char short_retry, unsigned char long_retry);
+int rltk_wlan_set_country_code(const char *country_code);
+int rltk_wlan_set_channel_plan(__u8 channel_plan);
 
 //add temporarily
 extern int rtw_wx_get_essid(unsigned char wlan_idx, __u8 *ssid);

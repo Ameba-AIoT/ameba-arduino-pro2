@@ -5,7 +5,7 @@ Compile:
 windows:
 g++.exe -o postbuild_windows.exe postbuild.cpp -static
 strip postbuild_windows.exe
-### g++.exe -o postbuild_windows.exe postbuild.cpp -static ico-out.o -static
+### g++.exe -o postbuild_windows.exe postbuild.cpp -static ../../Ameba_icon/ico-out.o -static
 ### mingw32-g++.exe -o postbuild_windows.exe postbuild.cpp -static
 
 If you encounter any issue while generating exe with icon, you may refer to: https://www.rodneybeede.com/programming/compiling_a_c___windows_executable_with_a_custom_icon.html
@@ -32,14 +32,18 @@ using namespace std;
 
 string common_nn_models_path;
 
-string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name;
+string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name, isp_iq_json_name;
 string isp_file_name_buf[100];
 
-string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name;
+string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name, ota_mode_check_name, fcs_mode_check_name;
 string ino_name_buf[100];
+
+string partitiontable_json_name, partition_bin_name;
 
 int isp_selection_check = 0;
 int nn_model_selection_check = 0;
+int ota_mode_selection_check = 0;
+int fcs_mode_selection_check = 0;
 
 #if defined(__WIN32__) // MINGW64
 void replaceAll( string& source, const string& from, const string& to ) {
@@ -74,9 +78,12 @@ void readtxt(int mode_isp_ino) {
     #error compiler is not supported!
 #endif
 
+    string str_temp = "misc/video_img//sensor_bin_name.txt";
+    str_temp.insert(15, isp_camera_option);
+
     if (mode_isp_ino == 0) {
 #if defined(__WIN32__) // MINGW64
-        ifstream file("misc/video_img/sensor_bin_name.txt");
+        ifstream file(str_temp);
         while (std::getline(file, str)) {
             isp_file_name_buf[str_count] = str;
             str_count++;
@@ -85,7 +92,7 @@ void readtxt(int mode_isp_ino) {
             //}
         }
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
-        myFile_Handler.open("misc/video_img/sensor_bin_name.txt");
+        myFile_Handler.open(str_temp);
 
         if(myFile_Handler.is_open()) {
             while (getline(myFile_Handler, myLine)) {
@@ -106,25 +113,15 @@ void readtxt(int mode_isp_ino) {
     #error compiler is not supported!
 #endif
 
-        if (isp_camera_option == "JXF37") {
-            fc_data_name = isp_file_name_buf[0];
-            voe_name = isp_file_name_buf[1];
-            iq_name = isp_file_name_buf[2];
-            sensor_name = isp_file_name_buf[3];
-            isp_fw_dummy_name = isp_file_name_buf[4];
-            isp_sensor_set_json_name = "amebapro2_sensor_set0.json";
-            isp_sys_file_folder_name = "SENSOR_F37";
-        } else if (isp_camera_option == "GC5035") {
-            fc_data_name = isp_file_name_buf[0 + 6];
-            voe_name = isp_file_name_buf[1 + 6];
-            iq_name = isp_file_name_buf[2 + 6];
-            sensor_name = isp_file_name_buf[3 + 6];
-            isp_fw_dummy_name = isp_file_name_buf[4 + 6];
-            isp_sensor_set_json_name = "amebapro2_sensor_set1.json";
-            isp_sys_file_folder_name = "SENSOR_GC5035";
-        } else {
-            cout << "Unable to find correct camera option!" << endl;
-        }
+    fc_data_name = isp_file_name_buf[3];
+    voe_name = isp_file_name_buf[1];
+    iq_name = isp_file_name_buf[4];
+    sensor_name = isp_file_name_buf[5];
+    isp_fw_dummy_name = isp_file_name_buf[2];
+    isp_sensor_set_json_name = "amebapro2_sensor_set.json";
+    isp_iq_json_name = "amebapro2_isp_iq.json";
+    isp_sys_file_folder_name = isp_camera_option;
+//    isp_sys_file_folder_name = isp_file_name_buf[0];
 
     } else if (mode_isp_ino == 1) {
 #if defined(__WIN32__) // MINGW64
@@ -180,6 +177,18 @@ void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, str
     }
 }
 
+void ota_mode_check(string ota_mode_check_name) {
+    if (ota_mode_check_name == "Enable") {
+        ota_mode_selection_check = 1;
+    }
+}
+
+void fcs_mode_check(string fcs_mode_check_name) {
+    if (fcs_mode_check_name == "Enable") {
+        fcs_mode_selection_check = 1;
+    }
+}
+
 int main(int argc, char *argv[]) {
     int ret = 0;
     stringstream cmdss;
@@ -211,7 +220,7 @@ int main(int argc, char *argv[]) {
     #error compiler is not supported!
 #endif
 
-    // 1. remove previous files
+    // 1. remove and copy files
 #if defined(__WIN32__) // MINGW64
     cmd = "if exist application.ntz del application.ntz";
     cout << cmd << endl;
@@ -295,14 +304,16 @@ int main(int argc, char *argv[]) {
     string string_temp_5 = "";
     string string_temp_6 = "copy image_tool\\";
     string string_temp_7 = "misc\\video_img\\";
+    string string_temp_8 = "\\";
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     string string_temp_1 = "cp misc/video_img/";
     string string_temp_2 = " ./";
     string string_temp_3 = "cp misc/nn_img/";
-    string string_temp_4 = "cp ";
+    string string_temp_4 = "cp -r ";
     string string_temp_5 = "/*";
     string string_temp_6 = "cp image_tool/";
     string string_temp_7 = "misc/video_img/";
+    string string_temp_8 = "/";
 #else
     #error compiler is not supported!
 #endif
@@ -319,8 +330,11 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-
     if (isp_selection_check == 1) {
+
+        fcs_mode_check_name = argv[9];
+        fcs_mode_check(fcs_mode_check_name);
+
         cmdss.clear();
         cmdss << string_temp_1 << voe_name << string_temp_2;
         getline(cmdss, cmd);
@@ -328,34 +342,60 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_1 << "amebapro2_isp_iq.json" << string_temp_2;
+        cmdss << string_temp_1 << "fcs_data_dummy.bin" << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_1 << isp_sensor_set_json_name << string_temp_2;
+        cmdss << string_temp_1 << "iq.bin" << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_1 << fc_data_name << string_temp_2;
+        cmdss << string_temp_1 << "sensor.bin" << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
 
-        cmdss.clear();
-        cmdss << string_temp_1 << iq_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+        if (fcs_mode_selection_check != 1) {
+            cmdss.clear();
+            cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << "non_fcs" << string_temp_8 << isp_iq_json_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        } else {
+            cmdss.clear();
+            cmdss << string_temp_1 << isp_sys_file_folder_name << string_temp_8 << isp_iq_json_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
 
-        cmdss.clear();
-        cmdss << string_temp_1 << sensor_name << string_temp_2;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
+        if (fc_data_name != "fcs_data_dummy.bin") {
+            cmdss.clear();
+            cmdss << string_temp_1 << fc_data_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
+
+        if (iq_name != "iq.bin") {
+            cmdss.clear();
+            cmdss << string_temp_1 << iq_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
+
+        if (sensor_name != "sensor.bin") {
+            cmdss.clear();
+            cmdss << string_temp_1 << sensor_name << string_temp_2;
+            getline(cmdss, cmd);
+            cout << cmd << endl;
+            system(cmd.c_str());
+        }
     } else {
         cmdss.clear();
         cmdss << string_temp_1 << isp_fw_dummy_name << string_temp_2;
@@ -372,7 +412,7 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
 
         cmdss.clear();
-        cmdss << string_temp_4 << common_nn_models_path << string_temp_5 << string_temp_2;
+        cmdss << string_temp_4 << "\"" << common_nn_models_path << "\"" << string_temp_5 << string_temp_2;
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
@@ -455,22 +495,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-#if 0
-    // 4. grep sram, xip/flash and psram information
-
-    // 5. generate image 2, image xip and image psram
-
-    // 6. fulfill header
-    // 6.1 remove bss sections
-    // 6.2 add header
-    // 6.3 generate km4_image2_all
-
-    // 7. prepare image 1
-    // 7.1 power save mode bins
-#endif
-
-    // 8. generate .bin
-    // 8.1 firmware.bin firmware_isp_iq.bin nn_model.bin
+    // 4. generate .bin
+    // 4.1 firmware.bin firmware_isp_iq.bin nn_model.bin
 #if defined(__WIN32__) // MINGW64
     cmd = "copy application.ntz application.ntz.axf";
     cout << cmd << endl;
@@ -556,32 +582,121 @@ int main(int argc, char *argv[]) {
         system(cmd.c_str());
     }
 
+    ota_mode_check_name = argv[8];
+    ota_mode_check(ota_mode_check_name);
+
+    if (ota_mode_selection_check == 1){
+        partitiontable_json_name = "amebapro2_partitiontable_OTA.json";
+        partition_bin_name = "partition_ota.bin";
+    } else {
+        partitiontable_json_name = "amebapro2_partitiontable.json";
+        partition_bin_name = "partition.bin";
+    }
+
     cmdss.clear();
-    cmdss << string_temp_1 << "combine amebapro2_partitiontable.json system_files.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
+    cmdss << string_temp_1 << "combine "<< partitiontable_json_name << " system_files.bin PT_PT=" << partition_bin_name << ",CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FCSDATA=boot_fcs.bin";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
 
     if (nn_model_selection_check == 1) {
         cmdss.clear();
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_1 << "combine "<< partitiontable_json_name << " flash_ntz.bin PT_PT=" << partition_bin_name << ",CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_NN_MDL=nn_model.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     } else {
         cmdss.clear();
-        cmdss << string_temp_1 << "combine amebapro2_partitiontable.json flash_ntz.bin PT_PT=partition.bin,CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
+        cmdss << string_temp_1 << "combine "<< partitiontable_json_name << " flash_ntz.bin PT_PT=" << partition_bin_name << ",CER_TBL=certable.bin,KEY_CER1=certificate.bin,PT_BL_PRI=boot.bin,PT_FW1=firmware.bin,PT_ISP_IQ=firmware_isp_iq.bin,PT_FCSDATA=boot_fcs.bin";
         getline(cmdss, cmd);
         cout << cmd << endl;
         system(cmd.c_str());
     }
 
-#if 0
-    // 9. add checksum
-    // cmd = ".\\tools\\windows\\checksum.exe ota.bin";
-    // cout << cmd << endl;
-    // system(cmd.c_str());
+    // 5. OTA add checksum
+#if defined(__WIN32__) // MINGW64
+    string_temp_1 = ".\\misc\\cmake.win.exe ";
+    string_temp_2 = ".\\misc\\checksum.exe ";
+    string_temp_3 = ".\\";
+#elif defined(__linux__) // ubuntu 32 bits
+    string_temp_1 = "./misc/cmake.linux ";
+    string_temp_2 = "./misc/checksum.linux ";
+    string_temp_3 = "./";
+#elif defined(__APPLE__) // OS X 64bits
+    #if defined(__arm__) // apple silicon
+    string_temp_1 = "./misc/cmake.darwin ";
+    string_temp_2 = "./misc/checksum.arm.darwin ";
+    string_temp_3 = "./";
+    #else
+    string_temp_1 = "./misc/cmake.darwin ";
+    string_temp_2 = "./misc/checksum.darwin ";
+    string_temp_3 = "./";
+    #endif
+#else
+    #error compiler is not supported!
 #endif
+
+    if (ota_mode_selection_check == 1) {
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "firmware.bin "<< string_temp_3 << "ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "firmware_isp_iq.bin "<< string_temp_3 << "isp_iq_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "isp_iq_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "boot.bin "<< string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "boot.bin "<< string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "boot_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_1 << " -E copy "<< string_temp_3 << "certificate.bin "<< string_temp_3 << "certificate_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+
+        cmdss.clear();
+        cmdss << string_temp_2 << string_temp_3 << "certificate_ota.bin";
+        getline(cmdss, cmd);
+        cout << cmd << endl;
+        system(cmd.c_str());
+    }
 
     return 0;
 }

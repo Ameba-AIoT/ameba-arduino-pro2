@@ -43,12 +43,18 @@ struct ht_priv {
 	//u8	ADDBA_retry_count;
 	u8	candidate_tid_bitmap;
 
+	u8	ldpc_cap;
 	u8	stbc_cap;
 	u8	smps_cap; /*spatial multiplexing power save mode. 0:static SMPS, 1:dynamic SMPS, 3:SMPS disabled, 2:reserved*/
 
 	struct rtw_ieee80211_ht_cap ht_cap;
 
 };
+
+#define	LDPC_HT_ENABLE_RX			BIT0
+#define	LDPC_HT_ENABLE_TX			BIT1
+#define	LDPC_HT_TEST_TX_ENABLE		BIT2
+#define	LDPC_HT_CAP_TX				BIT3
 
 #define	STBC_HT_ENABLE_RX			BIT0
 #define	STBC_HT_ENABLE_TX			BIT1

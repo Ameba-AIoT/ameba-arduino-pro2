@@ -12,9 +12,10 @@ DHT	KEYWORD1
 # Methods and Functions (KEYWORD2)
 ###########################################
 
-###########################################
-# Constants (LITERAL1)
 begin	KEYWORD2
 readTemperature	KEYWORD2
 readHumidity	KEYWORD2
+
+###########################################
+# Constants (LITERAL1)
 ###########################################

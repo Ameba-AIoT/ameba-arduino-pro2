@@ -25,6 +25,7 @@ void sntp_set_lasttime(time_t sec, time_t usec, unsigned int tick);
 
 struct tm sntp_gen_system_time(int timezone);
 struct tm sntp_gen_system_time_s(int timezone_s);
+void sntp_set_max_tries(unsigned int tries);
 
 #ifdef __cplusplus
 }

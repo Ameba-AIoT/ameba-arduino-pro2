@@ -43,11 +43,13 @@ jobs:
           - Arduino_package/hardware/libraries/Multimedia
           - Arduino_package/hardware/libraries/NeuralNetwork
           - Arduino_package/hardware/libraries/NTPClient
+          - Arduino_package/hardware/libraries/OTA
           - Arduino_package/hardware/libraries/PowerMode
           - Arduino_package/hardware/libraries/QRCodeScanner
           - Arduino_package/hardware/libraries/RTC
           - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
           - Arduino_package/hardware/libraries/SPI/examples/LCD_Screen_ILI9341_TFT
+          - Arduino_package/hardware/libraries/USB
           - Arduino_package/hardware/libraries/Watchdog
           - Arduino_package/hardware/libraries/WiFi
           - Arduino_package/hardware/libraries/Wire
@@ -82,13 +84,13 @@ jobs:
             # - Arduino_package/hardware/libraries/
             ${{ env['examples-to-use'] }}
           platforms: |
-            - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json
+            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json
               name: realtek:AmebaPro2
             - source-path: Arduino_package/hardware/
               name: realtek:AmebaPro2
           libraries: |
-            - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/AmebaEink.zip
-            # - source-url: https://github.com/ambiot/ambpro2_arduino/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
+            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_zip_libraries/AmebaEink.zip
+            # - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
           verbose: false
           enable-deltas-report: false
         if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
@@ -101,13 +103,13 @@ jobs:
             # - Arduino_package/hardware/libraries/
             ${{ env['examples-to-use'] }}
           platforms: |
-            - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_package/package_realtek_amebapro2_index.json
+            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/package_realtek_amebapro2_index.json
               name: realtek:AmebaPro2
             - source-path: Arduino_package/hardware/
               name: realtek:AmebaPro2
           libraries: |
-            - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_zip_libraries/AmebaEink.zip
-            # - source-url: https://github.com/ambiot/ambpro2_arduino/raw/main/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
+            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_zip_libraries/AmebaEink.zip
+            # - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
           verbose: false
           enable-deltas-report: false
         if: ${{ github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main' }}

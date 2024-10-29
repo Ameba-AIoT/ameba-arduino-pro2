@@ -74,6 +74,7 @@ typedef struct {
 	struct task_struct intr_task;
 	struct task_struct bulk_task;
 	struct task_struct sof_task;
+	struct task_struct init_task;
 	struct task_struct hotplug_task;
 	_sema cdc_ecm_detach_sema;
 	_sema cdc_ecm_attach_sema;

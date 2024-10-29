@@ -14,6 +14,12 @@ typedef	int32_t 	INT32;
 #define VQE_RCV_STATE_MEM_SIZE         (2100)       //32-bit words
 
 #define VQE_SCRATCH_MEM_SIZE           (1800)       //32-bit words
+
+#define ADAPTATION_ENABLE         (1)
+#define MIC_MUTE_ENABLE           (4)
+#define SPK_MUTE_ENABLE           (8)
+#define SIREN_TONE_RECEIVED       (16)
+
 typedef struct {
 	INT16 DoA;                      //in degrees
 	INT16 ERLE;                     //in dB

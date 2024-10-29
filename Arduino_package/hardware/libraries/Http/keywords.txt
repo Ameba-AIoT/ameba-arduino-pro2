@@ -31,6 +31,7 @@ contentLength	KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
+
 HTTP_SUCCESS	LITERAL1
 HTTP_ERROR_CONNECTION_FAILED	LITERAL1
 HTTP_ERROR_API	LITERAL1

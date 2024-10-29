@@ -13,6 +13,8 @@
 
 #define CONFIG_MMF_AUDIO_DEBUG 0
 #define CONFIG_MMF_AUDIO_ATAF 1
+#define AUDIO_TX_MASK   (0x01 << 0)
+#define AUDIO_RX_MASK   (0x01 << 1)
 
 typedef enum {
 	USE_AUDIO_AMIC = 0,
@@ -24,21 +26,16 @@ typedef enum {
 #define CMD_AUDIO_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
 #define CMD_AUDIO_GET_PARAMS            MM_MODULE_CMD(0x01)  // get parameter
 #define CMD_AUDIO_SET_SAMPLERATE        MM_MODULE_CMD(0x02)
-#define CMD_AUDIO_SET_WORDLENGTH        MM_MODULE_CMD(0x03)
-#define CMD_AUDIO_SET_MICGAIN           MM_MODULE_CMD(0x04)
-#define CMD_AUDIO_SET_AES               MM_MODULE_CMD(0x05)
 #define CMD_AUDIO_SET_ADC_GAIN          MM_MODULE_CMD(0x06)
 #define CMD_AUDIO_SET_DAC_GAIN          MM_MODULE_CMD(0x07)
 #define CMD_AUDIO_SET_RESET             MM_MODULE_CMD(0x08)
 
-#define CMD_AUDIO_SET_AUDIO_STOP        MM_MODULE_CMD(0x0A)
-#define CMD_AUDIO_SET_AUDIO_START       MM_MODULE_CMD(0x0B)
 #define CMD_AUDIO_SET_TRX               MM_MODULE_CMD(0x0C)
-#define CMD_AUDIO_SET_VOL               MM_MODULE_CMD(0x0D)
 #define CMD_AUDIO_SET_MIC_RECORD_FUN    MM_MODULE_CMD(0x0E)
 
 #define CMD_AUDIO_SET_NS_ENABLE         MM_MODULE_CMD(0x10)
 #define CMD_AUDIO_SET_AEC_ENABLE        MM_MODULE_CMD(0x11)
+#define CMD_AUDIO_SET_AEC_MODE          MM_MODULE_CMD(0x05)
 #define CMD_AUDIO_SET_AGC_ENABLE        MM_MODULE_CMD(0x12)
 #define CMD_AUDIO_SET_VAD_ENABLE        MM_MODULE_CMD(0x13)
 
@@ -49,6 +46,7 @@ typedef enum {
 #define CMD_AUDIO_GET_NS_RUN            MM_MODULE_CMD(0x09)
 #define CMD_AUDIO_GET_AEC_RUN           MM_MODULE_CMD(0x0F)
 #define CMD_AUDIO_GET_AGC_RUN           MM_MODULE_CMD(0x2E)
+#define CMD_AUDIO_GET_AEC_MODE          MM_MODULE_CMD(0x0D)
 
 #define CMD_AUDIO_SET_AEC_LEVEL         MM_MODULE_CMD(0x18)
 #define CMD_AUDIO_SET_MIC_ENABLE        MM_MODULE_CMD(0x19)
@@ -66,6 +64,8 @@ typedef enum {
 #define CMD_AUDIO_SET_MESSAGE_LEVEL     MM_MODULE_CMD(0x23)
 #define CMD_AUDIO_SET_RXASP_PARAM       MM_MODULE_CMD(0x24)
 #define CMD_AUDIO_SET_TXASP_PARAM       MM_MODULE_CMD(0x25)
+#define CMD_AUDIO_SET_RXASP_POST_MUTE   MM_MODULE_CMD(0x0A)
+#define CMD_AUDIO_SET_TXASP_POST_MUTE   MM_MODULE_CMD(0x0B)
 #define CMD_AUDIO_GET_RXASP_PARAM       MM_MODULE_CMD(0x26)
 #define CMD_AUDIO_GET_TXASP_PARAM       MM_MODULE_CMD(0x27)
 #define CMD_AUDIO_PRINT_ASP_INFO        MM_MODULE_CMD(0x28)
@@ -113,16 +113,20 @@ typedef struct audio_param_s {
 	uint8_t         avsync_en;
 	//...
 } audio_params_t;
+
 #if defined(CONFIG_NEWAEC) && CONFIG_NEWAEC //CT AEC library only support on 8735
 typedef struct RX_cfg_s {
 	CTAEC_cfg_t     aec_cfg;
 	CTAGC_cfg_t     agc_cfg;
 	CTNS_cfg_t      ns_cfg;
+	CTBF_cfg_t      bf_cfg;
+	uint8_t         post_mute;       // this mute is after all RX signal process
 } RX_cfg_t;
 
 typedef struct TX_cfg_s {
 	CTAGC_cfg_t     agc_cfg;
 	CTNS_cfg_t      ns_cfg;
+	uint8_t         post_mute;       // this mute is after all TX signal proce
 } TX_cfg_t;
 #else
 typedef struct RX_cfg_s {
@@ -130,11 +134,13 @@ typedef struct RX_cfg_s {
 	WebrtcAGC_cfg_t agc_cfg;
 	WebrtcNS_cfg_t  ns_cfg;
 	WebrtcVAD_cfg_t vad_cfg;
+	uint8_t         post_mute;       // this mute is after all RX signal proce
 } RX_cfg_t;
 
 typedef struct TX_cfg_s {
 	WebrtcAGC_cfg_t agc_cfg;
 	WebrtcNS_cfg_t  ns_cfg;
+	uint8_t         post_mute;       // this mute is after all TX signal proce
 } TX_cfg_t;
 #endif
 typedef struct audio_ctx_s {
@@ -154,9 +160,11 @@ typedef struct audio_ctx_s {
 	uint8_t         run_vad;
 
 	uint8_t         inited_rxasp;
-	uint8_t         enable_rxasp;
 	uint8_t         run_rxasp;
+	uint8_t         inited_txasp;
+	uint8_t         run_txasp;
 
+	uint8_t         mic_type;       // the process mic type
 	uint8_t         dmic_pin_set;
 	uint8_t         audio_inited;
 

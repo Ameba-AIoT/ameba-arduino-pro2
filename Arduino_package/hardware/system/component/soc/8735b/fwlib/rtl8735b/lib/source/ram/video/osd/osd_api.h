@@ -87,5 +87,7 @@ enum rts_osd_err_code rts_osd_update_info(int osd_type, void *osd_info);
 void rts_osd_fast_start_enable(int ch, BOOL en);
 enum rts_osd_err_code rts_osd_pict_resize(void *pd, void *pixels, int widthSource, int heightSource, int width, int height, enum rts_osd2_blk_fmt osd_format);
 unsigned int rts_osd_pict_heapsize_cal(int width, int height, enum rts_osd2_blk_fmt osd_format);
+enum rts_osd_err_code rts_osd2_set_time(int hour, int minute, int seconds);
+enum rts_osd_err_code rts_osd2_set_date(int year, int month, int day);
 
 #endif	// OSD_API_H

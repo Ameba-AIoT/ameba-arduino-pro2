@@ -47,7 +47,8 @@ public:
     int setLastModTime(char *path, uint16_t year, uint16_t month, uint16_t date, uint16_t hour, uint16_t minute, uint16_t second);
 
     int status(void);
-
+    long long int get_free_space(void);
+    long long int get_used_space(void);
 private:
     int getAttribute(char *path, unsigned char *attr);
 

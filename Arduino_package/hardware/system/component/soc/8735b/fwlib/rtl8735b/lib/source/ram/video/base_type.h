@@ -82,17 +82,21 @@ typedef enum {
 
 #endif
 
-// zzw arduino cpp
-//enum {
-//	OK  = 0,
-//	NOK = -1
-//};
-#endif
-
+#ifndef ARDUINO_SDK
 enum {
 	OK  = 0,
 	NOK = -1
 };
+#endif
+
+#endif
+
+#ifdef ARDUINO_SDK
+enum {
+	OK  = 0,
+	NOK = -1
+};
+#endif
 
 #ifndef ASSERT
 #define ASSERT(x) assert(x)

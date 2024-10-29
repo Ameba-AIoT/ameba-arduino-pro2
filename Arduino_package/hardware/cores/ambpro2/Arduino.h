@@ -36,6 +36,7 @@ extern "C" {
 #endif    // __cplusplus
 
 void ameba_init(void);
+void set_initial_tick_count(void);
 
 #include "wiring_constants.h"
 // #include "diag.h"
@@ -158,6 +159,16 @@ extern PinDescription g_APinDescription[];
 #define AMEBA_ARDUINO_Pin_Mapping_Check
 // ameba - arduino pin mapping function check
 #include "amb_ard_pin_check.h"
+
+#include "sensor.h"
+#ifdef ENABLE_FCS
+#undef ENABLE_FCS
+#ifdef Arduino_FCS_MODE
+#define ENABLE_FCS 1
+#else
+#define ENABLE_FCS 0
+#endif
+#endif
 
 #ifdef __cplusplus
 // WMath prototypes

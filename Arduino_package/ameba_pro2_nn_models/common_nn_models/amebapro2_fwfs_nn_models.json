@@ -9,16 +9,6 @@
 		"source":	"binary",
 		"file":	"yolov4_tiny.nb"
 	},
-	"yolov4_tiny_320p":	{
-		"name":	"yolov4_tiny.nb",
-		"source":	"binary",
-		"file":	"yolov4_tiny_576x320.nb"
-	},
-	"yolov4_tiny_320p_nv12":	{
-		"name":	"yolov4_tiny.nb",
-		"source":	"binary",
-		"file":	"yolov4_tiny_576_320_nv12.nb"
-	},
 	"yamnet_fp16":	{
 		"name":	"yamnet_fp16.nb",
 		"source":	"binary",
@@ -54,24 +44,14 @@
 		"source":	"binary",
 		"file":	"scrfd_500m_bnkps_576x320_u8.nb"
 	},
-	"scrfd320p_nv12":	{
-		"name":	"scrfd.nb",
-		"source":	"binary",
-		"file":	"scrfd_500m_bnkps_576x320_u8_nv12.nb"
-	},
-	"nanodet_plus_m_416":	{
-		"name":	"nanodet_plus_m.nb",
-		"source":	"binary",
-		"file":	"nanodet_plus_m_416_uint8.nb"
-	},
-	"nanodet_plus_m_320p":	{
-		"name":	"nanodet_plus_m.nb",
-		"source":	"binary",
-		"file":	"nanodet_plus_m_576x320_uint8.nb"
-	},
 	"img_class":	{
 		"name":	"img_class.nb",
 		"source":	"binary",
 		"file":	"img_class_cnn.nb"
+	},
+	"yolov3_tiny":	{
+		"name":	"yolov3_tiny.nb",
+		"source":	"binary",
+		"file":	"yolov3_tiny.nb"
 	}
 }

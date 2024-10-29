@@ -35,12 +35,13 @@
 #define MM_TYPE_AVSINK          0x43    // RTSP or file
 
 
-#define MM_CMD_INIT_QUEUE_ITEMS     0x00  // init static queue item 
-#define MM_CMD_SET_QUEUE_LEN		0x01  // set one queue's length
-#define MM_CMD_SET_QUEUE_NUM		0x02  // set number of queue (multiple queue)
-#define MM_CMD_SELECT_QUEUE			0x03  // select queue from queue0 ~ queue3
-#define MM_CMD_CLEAR_QUEUE_ITEMS    0x04  // clear queue item 
-#define MM_CMD_SET_DATAGROUP		0x05  // set data group 
+#define MM_CMD_INIT_QUEUE_ITEMS             0x00  // init static queue item
+#define MM_CMD_SET_QUEUE_LEN                0x01  // set one queue's length
+#define MM_CMD_SET_QUEUE_NUM                0x02  // set number of queue (multiple queue)
+#define MM_CMD_SELECT_QUEUE                 0x03  // select queue from queue0 ~ queue3
+#define MM_CMD_CLEAR_QUEUE_ITEMS            0x04  // clear queue item of all used port
+#define MM_CMD_SET_DATAGROUP                0x05  // set data group
+#define MM_CMD_CLEAR_QUEUE_ITEMS_SEL_PORT   0x06  // clear queue item for selected port
 
 
 #define MM_CMD_MODULE_BASE			0x80

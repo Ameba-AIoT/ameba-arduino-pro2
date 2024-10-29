@@ -145,6 +145,8 @@ int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t
     mbedtls_x509_crt *_cli_crt = NULL;
     mbedtls_pk_context *_clikey_rsa = NULL;
 
+    errno = 0;
+
     do {
         ssl_client->socket = -1;
         ssl_client->socket = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);

@@ -354,6 +354,13 @@ void i2s_enable(i2s_t *obj);
   */
 void i2s_disable(i2s_t *obj);
 
+/**
+  * @brief  Get i2s direction status.
+  * @param  obj: i2s object define in application software.
+  * @retval iis direction register status
+  */
+uint32_t i2s_get_direction(i2s_t *obj);
+
 ///@}
 
 #if defined(CONFIG_PLATFORM_8195A) && (CONFIG_PLATFORM_8195A == 1)
@@ -393,7 +400,7 @@ void i2s_init(i2s_t *obj, PinName sck, PinName ws, PinName sd_tx, PinName sd_rx,
 ///@{
 typedef enum {
 	FORMAT_I2S = I2S_FORMAT_I2S,
-	LEFT_JUST  = I2S_FORMAT_LEFT_JUST,
+	FORMAT_LEFT_JUST  = I2S_FORMAT_LEFT_JUST,
 	FORMAT_RIGHT_JUST = I2S_FORMAT_RIGHT_JUST
 } i2s_format;
 
@@ -472,9 +479,8 @@ void i2s_set_format(i2s_t *obj, i2s_format format);
   * @brief  Set the master or slave mode.
   * @param  obj: i2s object define in application software.
   * @param  ms_mode: Master or slave mode.
-  *		@I2S_MASTER : Master mode.
-  *		@I2S_SLAVE : Left Justified
-  *		@FORMAT_RIGHT_JUST : Right Justified
+  *		@I2S_MASTER : Master mode. 0
+  *		@I2S_SLAVE : Slave Mode. 1
   * @retval none
   */
 void i2s_set_master(i2s_t *obj, i2s_ms_mode ms_mode);

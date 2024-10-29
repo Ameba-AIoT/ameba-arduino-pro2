@@ -24,6 +24,8 @@ typedef struct {
 
 void ISPControlReset(void);
 
+void cameraPreConfig_usb_uvcd(unsigned char *uuid, const char *usb_uvcd_driver_name);
+
 int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
                  int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_snapshot,
                  int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_snapshot,
@@ -34,6 +36,10 @@ mm_context_t *cameraInit(void);
 void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation);
 
 void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int direct_output);
+
+void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int use_static_addr, int meta_enable, int voe_heap_size);
+
+void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel);
 
 void cameraSetQLen(mm_context_t *p, int length);
 
@@ -48,6 +54,8 @@ void cameraSnapshot(void *p, int arg);
 void cameraSnapshotRegCB(mm_context_t *p, int (*ssCB)(uint32_t, uint32_t));
 
 void cameraStopVideoStream(void *p, int channel);
+
+int cameraGetCtx(mm_context_t *p, int ch);
 
 mm_context_t *cameraDeinit(mm_context_t *);
 

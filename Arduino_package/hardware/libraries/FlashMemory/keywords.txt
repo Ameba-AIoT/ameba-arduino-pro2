@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring Map for FlashMemory
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+FlashMemory	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+read	KEYWORD2
+write	KEYWORD2
+readWord	KEYWORD2
+writeWord	KEYWORD2
+eraseSector	KEYWORD2
+eraseWord	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+buf_size	LITERAL1
+buf	LITERAL1

@@ -27,6 +27,11 @@ typedef enum {
 	CT_ALC = 0,
 	CT_LIMITER,
 } CT_AGC_MODE;
+
+typedef enum {
+	ADAPTATION = 1,
+	SIREN_TONE = 16,
+} CT_AEC_MODE;
 //Setting for ASP
 typedef struct CTNS_cfg_s {
 	int16_t NS_EN;
@@ -106,31 +111,48 @@ typedef struct VQE_RCV_STATE_s {
 	uint8_t Reserve4;
 } VQE_RCV_STATE_t;
 
-
-void VQE_SND_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, CTBF_cfg_t *RX_BF,
-				  float snd_amplification);
+// VQE SND api is the new api for stereo and mono mic channel
+//*************************//
+void VQE_SND_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, CTBF_cfg_t *RX_BF, void *RX_reserve0,
+				  void *RX_reserve1, float snd_amplification, int16_t mic_num);
 int VQE_SND_process(const int16_t *farend, const int16_t *mic1, const int16_t *mic2, int16_t *out);
+void VQE_SND_destroy(void);
+//*************************//
+// AEC api is the old api for mono mic channel only
+//*************************//
 void AEC_init(int16_t frame_size, int32_t sample_freq, CTAEC_cfg_t *RX_AEC, CTAGC_cfg_t *RX_AGC, CTNS_cfg_t *RX_NS, float snd_amplification);
-int AEC_set_level(int level, CTAEC_cfg_t *RX_AEC);
-int NS_set_level_for_AEC(int level, CTNS_cfg_t *RX_NS);
-void AEC_set_runtime_en(uint8_t enable);
 int AEC_process(const int16_t *farend, const int16_t *nearend, int16_t *out);
 void AEC_destory(void);
-void VQE_SND_destory(void);
+//*************************//
+int VQE_SND_set_AEC_level(int level, CTAEC_cfg_t *RX_AEC);
+int VQE_SND_set_NS_level(int level, CTNS_cfg_t *RX_NS);
+void VQE_SND_set_AGC_runtime_en(uint8_t enable);
+void VQE_SND_set_AEC_runtime_en(uint8_t enable);
+void VQE_SND_set_AEC_cancelmode(uint8_t mode);
+void VQE_SND_set_AEC_convergencetime(int16_t convergencetime, CTAEC_cfg_t *RX_AEC);
+uint8_t VQE_SND_get_AEC_cancelmode(void);
 
-void NS_init(int32_t sample_freq, CTNS_cfg_t *TX_NS);
-int NS_set_level_for_TX(int level, CTNS_cfg_t *TX_NS);
-void NS_process(int16_t frame_size, int16_t *out);
-void NS_destory(void);
+void VQE_RCV_NS_init(int32_t sample_freq, CTNS_cfg_t *TX_NS);
+int VQE_RCV_set_NS_level(int level, CTNS_cfg_t *TX_NS);
+void VQE_RCV_NS_process(int16_t frame_size, int16_t *out);
+void VQE_RCV_NS_destroy(void);
 
-void AGC_init(int32_t sample_freq, CTAGC_cfg_t *TX_AGC);
-void AGC_process(int16_t frame_size, int16_t *out);
-void AGC_destory(void);
-void AEC_set_print(uint8_t flag);
-const char *ASP_get_version(void);
-void ASP_print_version(void);
+void VQE_RCV_AGC_init(int32_t sample_freq, CTAGC_cfg_t *TX_AGC);
+void VQE_RCV_set_AGC_runtime_en(uint8_t enable);
+void VQE_RCV_AGC_process(int16_t frame_size, int16_t *out);
+void VQE_RCV_AGC_destroy(void);
+
+void VQE_set_print(uint8_t flag);
+const char *VQE_get_ASP_version(void);
+void VQE_print_ASP_version(void);
 void VQE_SND_get_status(VQE_SND_STATE_t *snd_state);
 void VQE_RCV_get_status(VQE_RCV_STATE_t *rcv_state);
+
+#define ASP_get_version     VQE_get_ASP_version
+#define ASP_print_version   VQE_print_ASP_version
+#define SND_process         VQE_SND_process
+#define RCV_AGC_process     VQE_RCV_AGC_process
+#define RCV_NS_process      VQE_RCV_NS_process
 #else
 
 /**
@@ -207,49 +229,61 @@ typedef struct WebrtcVAD_cfg_s {
 	int16_t Reserve3;
 } WebrtcVAD_cfg_t;
 
-void AEC_init(int16_t frame_size, int32_t sample_freq, WebrtcAEC_cfg_t *RX_AEC, float snd_amplification);
-int AEC_set_level(int AECLevel, WebrtcAEC_cfg_t *RX_AEC);
-int AEC_process(const int16_t *farend, const int16_t *nearend, int16_t *out);
+void Webrtc_SND_init(int16_t frame_size, int32_t sample_freq, WebrtcAEC_cfg_t *RX_AEC, float snd_amplification);
+int Webrtc_SND_set_AEC_level(int AECLevel, WebrtcAEC_cfg_t *RX_AEC);
+int Webrtc_SND_process(const int16_t *farend, const int16_t *nearend, int16_t *out);
 
 //for howling suppression
-int AEC_process_h(const int16_t *farend, const int16_t *nearend, int16_t *out, int sDelay);
-void AEC_destory(void);
+int Webrtc_SND_process_h(const int16_t *farend, const int16_t *nearend, int16_t *out, int sDelay);
+void Webrtc_SND_destroy(void);
 
-void set_sndcard_delay_ms_for_AEC(int16_t ms, WebrtcAEC_cfg_t *RX_AEC);
+void Webrtc_SND_set_aec_sndcard_delay_ms(int16_t ms, WebrtcAEC_cfg_t *RX_AEC);
 
-void set_agc_config_for_AEC(int16_t TargetLevelDbfs, int16_t CompressionGaindB, uint8_t LimiterEnable, WebrtcAEC_cfg_t *RX_AEC);
-void set_agc_config_for_howling(int16_t TargetLevelDbfs, int16_t CompressionGaindB, uint8_t LimiterEnable, WebrtcAEC_cfg_t *RX_AEC);
+void Webrtc_SND_set_agc_config(int16_t TargetLevelDbfs, int16_t CompressionGaindB, uint8_t LimiterEnable, WebrtcAEC_cfg_t *RX_AEC);
+void Webrtc_SND_set_agc_config_for_howling(int16_t TargetLevelDbfs, int16_t CompressionGaindB, uint8_t LimiterEnable, WebrtcAEC_cfg_t *RX_AEC);
 
 
-void AGC_init(int32_t sample_freq, WebrtcAGC_cfg_t *TX_AGC);
-void AGC_destory(void);
-void AGC_process(int16_t frame_size, int16_t *out);
+void Webrtc_RCV_AGC_init(int32_t sample_freq, WebrtcAGC_cfg_t *TX_AGC);
+void Webrtc_RCV_AGC_destroy(void);
+void Webrtc_RCV_AGC_process(int16_t frame_size, int16_t *out);
 
-void AGC2_init(int32_t sample_freq, WebrtcAGC_cfg_t *RX_AGC);
-void AGC2_destory(void);
-void AGC2_process(int16_t frame_size, int16_t *out);
+void Webrtc_SND_AGC_init(int32_t sample_freq, WebrtcAGC_cfg_t *RX_AGC);
+void Webrtc_SND_AGC_destroy(void);
+void Webrtc_SND_AGC_process(int16_t frame_size, int16_t *out);
 
-void NS_init(int32_t sample_freq, WebrtcNS_cfg_t *TX_NS);
-void NS_destory(void);
-void NS_process(int16_t frame_size, int16_t *out);
+void Webrtc_RCV_NS_init(int32_t sample_freq, WebrtcNS_cfg_t *TX_NS);
+void Webrtc_RCV_NS_destroy(void);
+void Webrtc_RCV_NS_process(int16_t frame_size, int16_t *out);
 
-void NS2_init(int32_t sample_freq, WebrtcNS_cfg_t *RX_NS);
-void NS2_destory(void);
-void NS2_process(int16_t frame_size, int16_t *out);
+void Webrtc_SND_NS_init(int32_t sample_freq, WebrtcNS_cfg_t *RX_NS);
+void Webrtc_SND_NS_destroy(void);
+void Webrtc_SND_NS_process(int16_t frame_size, int16_t *out);
 
-void VAD_init(int32_t sample_freq, WebrtcVAD_cfg_t *RX_VAD);
-void VAD_destory(void);
-int VAD_process(int16_t frame_size, int16_t *out);
+void Webrtc_SND_VAD_init(int32_t sample_freq, WebrtcVAD_cfg_t *RX_VAD);
+void Webrtc_SND_VAD_destroy(void);
+int Webrtc_SND_VAD_process(int16_t frame_size, int16_t *out);
 
 //reset the farend buffer of AEC
-void AEC_Farend_Reset(void);
+void Webrtc_SND_reset_aec_farend(void);
 
 //enable use AEC to do howling (if user want to use, it must be set before AEC_init)
-void set_howling_enable(uint8_t Howling_process_on, WebrtcAEC_cfg_t *RX_AEC);
+void Webrtc_SND_set_howling_enable(uint8_t Howling_process_on, WebrtcAEC_cfg_t *RX_AEC);
 
 //enable AEC, AGC, NS
 //AGC and NS => on means it will process AGC and NS
 //AEC: 1 normal on, 2 aec will process but output will not use the result, 0 aec not process
-void set_module_enable(uint8_t AEC_on, uint8_t AGC_on, uint8_t NS_on, WebrtcAEC_cfg_t *RX_AEC);
+void Webrtc_SND_set_module_enable(uint8_t AEC_on, uint8_t AGC_on, uint8_t NS_on, WebrtcAEC_cfg_t *RX_AEC);
+
+const char *Webrtc_get_ASP_version(void);
+void Webrtc_print_ASP_version(void);
+
+#define ASP_get_version     Webrtc_get_ASP_version
+#define ASP_print_version   Webrtc_print_ASP_version
+#define SND_process         Webrtc_SND_process
+#define SND_VAD_process     Webrtc_SND_VAD_process
+#define SND_AGC_process     Webrtc_SND_AGC_process
+#define SND_NS_process      Webrtc_SND_NS_process
+#define RCV_AGC_process     Webrtc_RCV_AGC_process
+#define RCV_NS_process      Webrtc_RCV_NS_process
 #endif
 #endif // ASP_H

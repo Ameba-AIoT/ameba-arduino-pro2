@@ -341,6 +341,11 @@ typedef struct _WLAN_BSSID_EX {
 	WLAN_PHY_INFO				PhyInfo;
 	u32  				IELength;
 	u8  				IEs[MAX_IE_SZ];		//(timestamp, beacon interval, and capability information)
+
+	u8	assoc_AP_manufacturer[65];
+	u8	assoc_AP_model_name[33];
+	u8	assoc_AP_model_number[33];	
+		
 }
 WLAN_BSSID_EX, *PWLAN_BSSID_EX;
 

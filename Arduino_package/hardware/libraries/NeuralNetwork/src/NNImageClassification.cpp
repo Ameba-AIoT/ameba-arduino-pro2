@@ -156,7 +156,7 @@ void NNImageClassification::ICResultCallback(void *p, void *img_param)
 
     float *output = (float *)malloc(out->res_cnt * sizeof(float));
     if (output == NULL) {
-        printf("malloc fail\n\r");
+        printf("\r\n[ERROR] malloc fail\n");
         return;
     }
 

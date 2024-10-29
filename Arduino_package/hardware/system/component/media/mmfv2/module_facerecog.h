@@ -48,7 +48,7 @@ typedef enum {
 
 typedef struct face_data_s {
 	int reg_feature_num;
-	face_feature_res_t reg_feature[MAX_FRC_REG_NUM + 1];
+	face_feature_res_t reg_feature[MAX_FRC_REG_NUM];
 	char  reg_name[MAX_FRC_REG_NUM][32];
 	uint32_t crc32;
 } face_data_t;

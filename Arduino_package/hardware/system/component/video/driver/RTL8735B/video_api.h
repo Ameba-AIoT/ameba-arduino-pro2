@@ -245,6 +245,7 @@ typedef struct video_param_s {
 	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
 	uint32_t meta_enable;
 	jpeg_crop_parm_t jpeg_crop_parm;
+	uint32_t middle_crop_en;//Middle crop functio only support in ch0
 } video_params_t;
 
 typedef struct voe_info_s {
@@ -252,6 +253,7 @@ typedef struct voe_info_s {
 	uint32_t voe_heap_size;
 	video_params_t video_info[MAX_CHANNEL];
 	uint32_t stream_is_open[MAX_CHANNEL];
+	uint32_t voe_mcrop_enable;
 } voe_info_t;
 
 typedef struct mult_sensor_info_s {
@@ -316,6 +318,8 @@ int video_buf_heap_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_en
 						int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_enctype, int v3_jpg_only_shapshot,
 						int v4_enable, int v4_w, int v4_h);
 
+int video_extra_buf_calc(int originl_heapsize, int vext_enable, int vext_w, int vext_h, int vext_bps, int vext_shapshot);
+
 void video_buf_release(void);
 
 //int video_set_voe_heap(int heap_addr, int heap_size, int use_malloc);
@@ -374,7 +378,7 @@ void video_get_fcs_queue_info(int *start_time, int *end_time);
 
 int video_get_maxqp(int ch);
 
-void video_set_private_mask(int ch, struct private_mask_s *pmask);
+int video_set_private_mask(int ch, struct private_mask_s *pmask);
 
 void video_set_private_mask_single(int ch, private_mask_single_t *pmask);
 
@@ -398,6 +402,8 @@ int video_get_fcs_cost_time(void);//The unit is ms for fcs cost time from bootlo
 int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int ch, video_sps_pps_info_t *info);
 
 void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
+
+video_pre_init_params_t* video_get_pre_init_setup_params(void);
 
 void video_pre_init_load_params(enum isp_init_option save_option);
 

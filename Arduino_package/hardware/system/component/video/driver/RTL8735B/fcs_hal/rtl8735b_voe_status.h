@@ -309,7 +309,7 @@ typedef struct voe_header_s {
 } voe_header_t;
 #endif
 
-typedef struct fcs_result_s {
+typedef struct fcs_result_s{
 	uint32_t adc_final_value;
 	uint8_t adc_sample;
 	uint8_t adc_mode;
@@ -325,7 +325,7 @@ typedef struct fcs_result_s {
 
 	uint32_t reserv[4];
 
-} fcs_result_t;
+}fcs_result_t;
 
 
 

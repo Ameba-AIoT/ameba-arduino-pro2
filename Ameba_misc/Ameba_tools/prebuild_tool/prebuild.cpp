@@ -5,6 +5,7 @@ Compile:
 windows:
 g++.exe -o prebuild_windows.exe prebuild.cpp -static
 strip prebuild_windows.exe
+### g++.exe -o prebuild_windows.exe prebuild.cpp -static ../../Ameba_icon/ico-out.o -static
 ### mingw32-g++.exe -o prebuild_windows.exe prebuild.cpp -static
 
 linux:
@@ -38,6 +39,12 @@ int main(int argc, char *argv[]) {
 
     // runtime tool path
     chdir(argv[1]);
+
+    if (strcmp(argv[10], "Enable") == 0 && strcmp(argv[11], "LoadFromFlash") == 0) {
+        cerr << "OTA is enabled, please select load model from SD card and not load model from flash." << endl;
+        exit(EXIT_FAILURE);
+    }
+
     chdir("../..");
 
     isp_camera_option = argv[7];
@@ -56,7 +63,7 @@ int main(int argc, char *argv[]) {
     common_nn_libs_path = common_nn_libs_path + "\\variants";
 
     cmdss.clear();
-    cmdss << "if exist " << common_libs_path << "del " << common_libs_path;
+    cmdss << "if exist \"" << common_libs_path << "\" del \"" << common_libs_path << "\"";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -74,7 +81,8 @@ int main(int argc, char *argv[]) {
     system(cmd.c_str());
 
     cmdss.clear();
-    cmdss << "if exist " << nn_tool_name_path <<" xcopy /y /s \"" << nn_tool_name_path << "\" \"" << common_nn_libs_path << "\"";
+//     cmdss << "if exist " << nn_tool_name_path <<" xcopy /y /s \"" << nn_tool_name_path << "\" \"" << common_nn_libs_path << "\"";
+    cmdss << "if exist " << nn_tool_name_path <<  " xcopy /y /s \"" << nn_tool_name_path << "\" \"" << common_nn_libs_path << "\"";
     getline(cmdss, cmd);
     cout << cmd << endl;
     system(cmd.c_str());
@@ -139,21 +147,15 @@ int main(int argc, char *argv[]) {
     #error compiler is not supported!
 #endif
 
-    if (isp_camera_option == "JXF37") {
-        cmdss.clear();
-        cmdss << string_temp_1 << common_sensor_sel_libs_path << "SENSOR_F37" << string_temp_2 << "libarduino_sensor_sel.a " << common_libs_path;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-    } else if (isp_camera_option == "GC5035") {
-        cmdss.clear();
-        cmdss << string_temp_1 << common_sensor_sel_libs_path << "SENSOR_GC5035" << string_temp_2 << "libarduino_sensor_sel.a " << common_libs_path;
-        getline(cmdss, cmd);
-        cout << cmd << endl;
-        system(cmd.c_str());
-    } else {
-        cout << "Unable to find correct camera option!" << endl;
-    }
+    cmdss.clear();
+#if _WIN32
+    cmdss << string_temp_1 << "\"" << common_sensor_sel_libs_path << isp_camera_option << string_temp_2 << "libarduino_sensor_sel.a\" \"" << common_libs_path << "\"";
+#else
+    cmdss << string_temp_1 << common_sensor_sel_libs_path << isp_camera_option << string_temp_2 << "libarduino_sensor_sel.a " << common_libs_path;
+#endif
+    getline(cmdss, cmd);
+    cout << cmd << endl;
+    system(cmd.c_str());
 
     return 0;
 }

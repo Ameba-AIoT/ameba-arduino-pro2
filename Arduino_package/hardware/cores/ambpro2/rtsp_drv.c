@@ -2,8 +2,6 @@
 #include "mmf2_module.h"
 #include "module_rtsp2.h"
 
-extern void rtp_stream_statistics_sync(struct stream_context *stream_ctx);
-
 mm_context_t *RTSPInit(void)
 {
     return mm_module_open(&rtsp2_module);

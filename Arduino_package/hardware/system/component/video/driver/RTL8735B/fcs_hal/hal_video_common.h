@@ -556,7 +556,10 @@ typedef struct {
 	u32 IDRuserData;
 	u32 IDRuserDataDuration;		// Based on IDR frame 0: every
 	u32 JPGuserData;
-	u32 rsvd[40];   //When add new element, please reduce same rsvd size
+
+	u32 *axi_buf_cfg;
+
+	u32 rsvd[39];   //When add new element, please reduce same rsvd size
 
 } __attribute__((aligned(32))) commandLine_s;
 
