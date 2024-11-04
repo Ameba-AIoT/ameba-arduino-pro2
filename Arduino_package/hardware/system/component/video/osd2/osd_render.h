@@ -8,8 +8,8 @@
 #define OSD_OBJ_MAX_CH 3 //fix value
 #define OSD_OBJ_MAX_NUM RTS_OSD2_CH_BLK_MAX_NUMBER //fix value
 #define OSD_PT_MAX_NUM 5
-#define MAX_DRAW_MSG 30
-#define MAX_QUEUE_MSG 100
+#define MAX_DRAW_MSG 50
+#define MAX_QUEUE_MSG 500
 
 #define CANVAS_CREATE_BMP 		0x01
 #define CANVAS_MSG_DRAW			0x02
