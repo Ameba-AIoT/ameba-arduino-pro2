@@ -48,23 +48,23 @@
 		"file":"mobilefacenet_int16.nb"
 
     },
-	"yolov7_tiny":{
+    "yolov7_tiny":{
 		"name" : "yolov7_tiny.nb",
 		"source":"binary",
 		"file":"yolov7_tiny.nb"
 
     },
-	"scrfd640":{
+    "scrfd640":{
 		"name" : "scrfd.nb",
 		"source":"binary",
 		"file":"scrfd_500m_bnkps_640x640_u8.nb"
     },
-	"scrfd320p":{
+    "scrfd320p":{
 		"name" : "scrfd.nb",
 		"source":"binary",
 		"file":"scrfd_500m_bnkps_576x320_u8.nb"
     },
-	"scrfd320p_nv12":{
+    "scrfd320p_nv12":{
 		"name" : "scrfd.nb",
 		"source":"binary",
 		"file":"scrfd_500m_bnkps_576x320_u8_nv12.nb"
@@ -79,9 +79,19 @@
 		"source":"binary",
 		"file":"nanodet_plus_m_576x320_uint8.nb"
     },
-	"img_class": {
+    "palm_detection_lite_int16":{
+		"name" : "palm_detection.nb",
+		"source":"binary",
+		"file":"palm_detection_lite_int16.nb"
+    },
+    "hand_landmark_lite_int16":{
+		"name" : "hand_landmark.nb",
+		"source":"binary",
+		"file":"hand_landmark_lite_int16.nb"
+    },
+    "img_class": {
 		"name" : "img_class.nb",
 		"source":"binary",
 		"file":"img_class_cnn.nb"
-	}
+    }
 }

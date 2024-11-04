@@ -1,16 +1,7 @@
 Feature:
-- Update UVCDObjectDetectionLoop.ino
-    - Add OSD draw boundary box
 
 API Updates:
 - Update code base
-- Update SSL Client API
-    - Reset errno to 0 when starting a new SSL client connection
 
 Misc:
-- Update ameba_pro2_nn_models 1.0.1
-    - Remove "yolov4_tiny_320p", "yolov4_tiny_320p_nv12", "scrfd320p_nv12", "nanodet_plus_m_416", "nanodet_plus_m_320p"
-    - Add "yolov3_tiny"
-- Update README.md
-- Update ameba_pro2_tools 1.3.11
-    - Update sensor F55 iq files
+- Remove unused files

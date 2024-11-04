@@ -11,8 +11,8 @@ on:
 
 env:
   REPO_NAME: "ameba_pro2"
-  JSON_LINK_DEV: "https://github.com/ambiot/ambpro2_arduino/blob/dev/Arduino_package/package_realtek_amebapro2_early_index.json"
-  JSON_LINK_MAIN: "https://github.com/ambiot/ambpro2_arduino/blob/main/Arduino_package/package_realtek_amebapro2_index.json"
+  JSON_LINK_DEV: "https://github.com/Ameba-AIoT/ameba-arduino-pro2/blob/dev/Arduino_package/package_realtek_amebapro2_early_index.json"
+  JSON_LINK_MAIN: "https://github.com/Ameba-AIoT/ameba-arduino-pro2/blob/main/Arduino_package/package_realtek_amebapro2_index.json"
   RRLEASE_BRANCH_NAME: "main"
   RRLEASE_COMMIT_LOG: "./.github/release_commit_log.txt"
   RRLEASE_LOG: "./.github/release_log.txt"

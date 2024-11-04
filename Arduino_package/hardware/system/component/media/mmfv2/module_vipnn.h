@@ -47,14 +47,21 @@ printf("%d\r", (int)nn_used_##model==0)
 typedef struct landmark_s {
 	struct __post_s {
 		float x, y;
-	} pos[5];
+	} pos[10];
 } landmark_t;
 //----------------------------------------------------------------------------
 typedef struct landmarki_s {
 	struct __posi_s {
 		uint32_t x, y;
-	} pos[5];
+	} pos[10];
 } landmarki_t;
+//----------------------------------------------------------------------------
+#define HAND_LANDMARK_NUM (21)
+typedef struct landmark3d_s {
+	struct __post3d_s {
+		float x, y, z;
+	} pos[HAND_LANDMARK_NUM];
+} landmark3d_t;
 //----------------------------------------------------------------------------
 typedef struct detobj_s {
 	float classes;
@@ -266,6 +273,7 @@ typedef struct vipnn_ctx_s {
 #define MAX_DETECT_OBJ_NUM 1024
 #define MAX_FACE_DETECT_NUM 16
 #define MAX_FACE_FEATURE_DIM 128
+#define MAX_HAND_DETECT_NUM 128
 
 //-----------------------------------------------------------------------
 typedef struct vipnn_out_tensor_s {
@@ -324,6 +332,22 @@ typedef struct yamnet_res_s {
 	int clsid;
 	float prob;
 } yamnet_res_t;
+
+typedef struct palmdetect_res_s {
+	union {
+		float result[6];
+		detobj_t res;
+	};
+	landmarki_t landmark;
+} palmdetect_res_t;
+
+typedef struct handland_res_s {
+	landmark3d_t landmark3d;
+    unsigned char handedness;
+	float theta, ratio;
+	int w,h;
+	int offset_x, offset_y;
+} handland_res_t;
 
 #ifdef ARDUINO_SDK
 typedef struct classification_res_s {
