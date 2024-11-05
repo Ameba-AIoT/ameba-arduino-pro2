@@ -1,7 +1,7 @@
 /*  This example decodes an MP3 file from an SD card
     and plays audio through a TRRS 3.5mm audio jack module.
 
- Example guide: TBD
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/amebapro2/Example_Guides/File%20System/Play%20MP3%20with%20SD%20card.html
 
 */
 #include "AmebaFatFS.h"
