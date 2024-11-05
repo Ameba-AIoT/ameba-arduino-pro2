@@ -1,7 +1,5 @@
 Feature:
 
 API Updates:
-- Update code base
 
 Misc:
-- Remove unused files

@@ -54,4 +54,14 @@
 		"source":	"binary",
 		"file":	"yolov3_tiny.nb"
 	}
+	"palm_detection_lite_int16":{
+		"name" : "palm_detection.nb",
+		"source":"binary",
+		"file":"palm_detection_lite_int16.nb"
+	},
+	"hand_landmark_lite_int16":{
+		"name" : "hand_landmark.nb",
+		"source":"binary",
+		"file":"hand_landmark_lite_int16.nb"
+	}
 }
