@@ -53,7 +53,7 @@
 		"name":	"yolov3_tiny.nb",
 		"source":	"binary",
 		"file":	"yolov3_tiny.nb"
-	}
+	},
 	"palm_detection_lite_int16":{
 		"name" : "palm_detection.nb",
 		"source":"binary",
