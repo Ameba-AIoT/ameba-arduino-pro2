@@ -1,5 +1,8 @@
 Feature:
+- Add SDCardPlayMP3
+- Update AmebaFatFSFile
 
 API Updates:
+- helix_mp3_drv.c and helix_mp3_drv.h
 
 Misc:
