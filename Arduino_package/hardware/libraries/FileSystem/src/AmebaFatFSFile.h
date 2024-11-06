@@ -35,6 +35,8 @@ public:
     bool isOpen(void);
     const char *name(void);
 
+    void convertMp3ToArray(void);
+
     friend class AmebaFatFS;
 
 private:

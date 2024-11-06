@@ -4,7 +4,7 @@
  Connect to PC and use the device as a USB camera.
  Perform objects prediction when the device is connect to PC and PotPlayer.
 
- Example guide: TBD
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/amebapro2/Example_Guides/Neural%20Network/UVCD%20Object%20Detection.html
 
 
  NN Model Selection
