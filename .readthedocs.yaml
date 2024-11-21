@@ -5,6 +5,9 @@
 # Required
 version: 2
 
+subproject:
+  path: Ameba_misc/RTD_links/
+
 # Set the OS, Python version and other tools you might need
 build:
   os: ubuntu-22.04
