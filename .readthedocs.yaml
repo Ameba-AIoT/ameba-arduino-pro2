@@ -5,7 +5,7 @@
 # Required
 version: 2
 
-doc_path: &doc_path "Ameba_misc/RTD_links/"
+doc_path: &doc_path "Ameba_misc/RTD_links"
 
 # Set the OS, Python version and other tools you might need
 build:
@@ -18,14 +18,14 @@ build:
     # golang: "1.19"
   commands:
     - echo "Installing requirements..."
-    - pip install -r *doc_pathrequirements.txt
+    - pip install -r *doc_path/requirements.txt
     - echo "Checking Sphinx version..."
     - sphinx-build --version  # Check if sphinx-build is available
     - echo "Running custom Python script before build..."
     - python *doc_path/source/custom_script.py
     - echo "Custom script finished"
     - echo "Building Sphinx documentation..."
-    - sphinx-build -b html *doc_pathsource/ $READTHEDOCS_OUTPUT/html
+    - sphinx-build -b html *doc_path/source/ $READTHEDOCS_OUTPUT/html
 
 # Optional but recommended, declare the Python requirements required
 # to build your documentation
@@ -36,7 +36,7 @@ python:
 
 # Build documentation in the directory with Sphinx
 sphinx:
-  configuration: *doc_pathsource/conf.py
+  configuration: *doc_path"/source/conf.py"
 
 # Optionally build your docs in additional formats such as PDF and ePub
 formats:
