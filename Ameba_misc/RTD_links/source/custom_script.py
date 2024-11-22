@@ -27,29 +27,17 @@ def get_folder_paths(folder_path, mode):
                 folder_paths.append(item)
     return folder_paths
 
-def copy_folder_bak(src_folder, target_folder):
-    """
-    Copy a folder and its contents to a target location.
-
-    Args:
-        src_folder (str): Path to the source folder.
-        target_folder (str): Path to the target folder.
-
-    Returns:
-        None
-    """
-    # Check if source folder exists
-    if not os.path.exists(src_folder):
-        raise FileNotFoundError(f"Source folder '{src_folder}' not found.")
-
-    # Check if target folder exists, create it if not
-    if not os.path.exists(target_folder):
-        os.makedirs(target_folder)
-
-    # Copy folder and its contents
-    target_path = os.path.join(target_folder, os.path.basename(src_folder))
-    shutil.copytree(src_folder, target_path)
-    print(f"Copied folder: {src_folder} -> {target_path}")
+def copy_files(o_file, c_file, mode):
+    ### copytree
+    if mode == 1:
+        source_path = os.path.abspath(o_file)
+        target_path = os.path.abspath(c_file)
+        shutil.copytree(source_path, target_path)
+    ### copyfile
+    else:
+        source_path = os.path.abspath(o_file)
+        target_path = os.path.abspath(c_file)
+        shutil.copyfile(source_path, target_path)
 
 def copy_folder(src_folder, target_folder):
     """
@@ -182,21 +170,66 @@ if __name__ == "__main__":
     # Print the new current working directory
     print(os.getcwd())
 
-    ###for item in board_list:
-    ###    create_folder(item)
+    # copy json files
+    copy_files('../../../Arduino_package/package_realtek_amebapro2_early_index.json', '_static/package_realtek_amebapro2_early_index_rtd.json', 0);
+    ### copy_files('../../../Arduino_package/package_realtek_amebapro2_early_index.json', '_static/package_realtek_amebapro2_index_rtd.json', 0);
 
-    ###board_list = get_folder_paths('./', 1)
-    ###common_list = get_folder_paths('./_common', 0)
-
-    ###for i, item in enumerate(common_list):
-    ###    current_path = os.getcwd()
-    ###    new_path = os.path.join(current_path, item)
-    ###    common_list[i] = new_path
-
+    # copy release files
+    ### copy_folder('../../../Arduino_package/release', '_static/release');
 
     # Remove the folder '/path/to/folder' and all its contents
-    ###shutil.rmtree('_common')
+    ###shutil.rmtree('_static/release')
 
-    ######os.chdir(new_directory)
-    # Print the new current working directory
-    ###print(os.getcwd())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
