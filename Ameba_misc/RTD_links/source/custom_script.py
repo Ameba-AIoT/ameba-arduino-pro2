@@ -74,94 +74,34 @@ def copy_folder(src_folder, target_folder):
         else:
             shutil.copy2(src_item, target_item)
 
-def search_files(file_path, search_term):
+def replace_text_in_file(file_path, text_a, text_b):
     """
-    Searches for a specific term at the beginning of each line in a file.
+    Replace all occurrences of text A with text B in the specified file.
 
-    Args:
-        file_path (str): The path to the file to search.
-        search_term (str): The term to search for at the beginning of each line.
+    Parameters:
+    file_path (str): The path to the file.
+    text_a (str): The text to be replaced.
+    text_b (str): The text to replace with.
 
     Returns:
-        int: The line number where the search term is found, or None if not found.
+    str: A message indicating the success of the operation.
     """
-
     try:
+        # Read the content of the file
         with open(file_path, 'r', encoding='utf-8') as file:
-            for num, line in enumerate(file, 1):
-                if line.lstrip().startswith(search_term):
-                    return num
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-        return 0
-    except UnicodeDecodeError:
-        print(f"Error reading file: {file_path}")
-        return 0
+            content = file.read()
 
-    return 0
+        # Replace the text
+        new_content = content.replace(text_a, text_b)
 
-def remove_lines(file_path, search_string):
-    """
-    Removes lines containing the specified search string from a file.
+        # Write the modified content back to the file
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(new_content)
 
-    Args:
-        file_path (str): Path to the file to modify.
-        search_string (str): String to search for in each line.
+        return f"Text '{text_a}' has been replaced with '{text_b}' in the file '{file_path}'"
 
-    Returns:
-        None
-    """
-    with open(file_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-
-    with open(file_path, 'w', encoding='utf-8') as file:
-        for line in lines:
-            if search_string not in line:
-                file.write(line)
-
-def remove_lines_by_number(file_path, start_line, end_line):
-    """
-    Removes all lines between the specified start and end line numbers, inclusive.
-
-    Args:
-        file_path (str): Path to the file to modify.
-        start_line (int): Starting line number (1-indexed).
-        end_line (int): Ending line number (1-indexed).
-
-    Returns:
-        None
-    """
-    with open(file_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-
-    with open(file_path, 'w', encoding='utf-8') as file:
-        for i, line in enumerate(lines, start=1):
-            if i < start_line or i > end_line:
-                file.write(line)
-
-def remove_consecutive_empty_lines(file_path):
-    """
-    Removes consecutive empty lines from a file, replacing them with a single empty line.
-
-    Args:
-        file_path (str): Path to the file to modify.
-
-    Returns:
-        None
-    """
-    with open(file_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-
-    with open(file_path, 'w', encoding='utf-8') as file:
-        empty_lines = 0
-        for line in lines:
-            if line.strip() == '':
-                empty_lines += 1
-                if empty_lines >= 2:
-                    continue
-            else:
-                empty_lines = 0
-            file.write(line)
+    except Exception as e:
+        return f"An error occurred: {e}"
 
 if __name__ == "__main__":
     # Change the current working directory
@@ -176,6 +116,8 @@ if __name__ == "__main__":
 
     # copy release files
     ### copy_folder('../../../Arduino_package/release', '_static/release');
+
+    replace_text_in_file('_static/package_realtek_amebapro2_early_index_rtd.json', 'github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package',  'test');
 
     # Remove the folder '/path/to/folder' and all its contents
     ###shutil.rmtree('_static/release')
