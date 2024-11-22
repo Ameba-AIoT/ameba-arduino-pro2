@@ -1,0 +1,30 @@
+name: RTD_json_sync
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Arduino_package/release/**'
+
+jobs:
+  trigger-event:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code with submodules
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+#      - name: Steup python env
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.12.2'
+
+      - name: Trigger Event
+        run: |
+          # Your script or command to trigger the event
+          echo "Push to Arduino_package/release/ folder detected!"
+          # Example: Call a webhook URL
+          curl -X POST -H "Content-Type: application/json" -d '{"event": "workflow_run"}' https://readthedocs.com/api/v2/webhook/12628/
