@@ -5,8 +5,8 @@
 # Required
 version: 2
 
-subproject:
-  path: Ameba_misc/RTD_links/source
+docs_dir: Ameba_misc/RTD_links/source
+
 
 # Set the OS, Python version and other tools you might need
 build:
