@@ -36,7 +36,7 @@ html_context = {
     "github_user": "Ameba-AIoT",
     "github_repo": "ameba-arduino-pro2",
     "github_version": "main",
-    "conf_py_path": "Ameba_misc/RTD_links/source/",
+    "conf_py_path": "/Ameba_misc/RTD_links/source/",
 }
 
 html_logo = '_static/Realtek_logo.png'
