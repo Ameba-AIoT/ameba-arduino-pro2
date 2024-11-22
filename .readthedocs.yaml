@@ -36,7 +36,7 @@ python:
 
 # Build documentation in the directory with Sphinx
 sphinx:
-  configuration: *doc_path"/source/conf.py"
+  configuration: Ameba_misc/RTD_links/source/conf.py
 
 # Optionally build your docs in additional formats such as PDF and ePub
 formats:
