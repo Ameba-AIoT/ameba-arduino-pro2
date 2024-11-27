@@ -50,9 +50,8 @@ UVCD usb_uvcd;
 
 StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output USB_CAM
 StreamIO videoStreamerNN(1, 1);
-VideoSetting stream_config(USB_UVCD_STREAM_PRESET);
+VideoSetting stream_config(VIDEO_FHD, 24, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
-VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 void setup()
 {
     Serial.begin(115200);
@@ -92,9 +91,9 @@ void setup()
     camera_uvcd.channelBegin(CHANNELNN);
 
     // Start usb uvcd for NN
-    usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, CHANNELNN, camera_uvcd.videostream_status(STREAM_CHANNEL));
+    usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, camera_uvcd.videostream_status(STREAM_CHANNEL));
 
-    OSD.configVideo(STREAM_CHANNEL, config);
+    OSD.configVideo(STREAM_CHANNEL, stream_config);
     OSD.begin();
 }
 
