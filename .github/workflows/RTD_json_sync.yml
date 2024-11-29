@@ -36,4 +36,4 @@ jobs:
           signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$secret" | sed 's/^.* //')
 
           # Example: Call a webhook URL with the signature
-          curl -X POST -H "Content-Type: application/json" -H "X-Hub-Signature-256: sha256=$signature" -d "$payload" https://readthedocs.org/api/v2/webhook/ameba-doc-test-zzw/${{ secrets.RTD_WEBHOOK_TOKEN }}/
+          curl -X POST -H "Content-Type: application/json" -H "X-Hub-Signature-256: sha256=$signature" -d "$payload" https://readthedocs.org/api/v2/webhook/ameba-doc-test-zzw/
