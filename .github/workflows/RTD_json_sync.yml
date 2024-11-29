@@ -29,6 +29,7 @@ jobs:
             echo "Error: RTD_WEBHOOK_SECRET is not set."
             exit 1
           fi
+          echo "Using secret: $secret"  # For debugging purposes, remove in production
           signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$secret" | sed 's/^.* //')
           # Log the signature for debugging (remove this in production)
           echo "Generated Signature: $signature"
