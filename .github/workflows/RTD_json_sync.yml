@@ -27,4 +27,4 @@ jobs:
           # Your script or command to trigger the event
           echo "Push to Arduino_package/release/ folder detected!"
           # Example: Call a webhook URL
-          curl -X POST -H "Content-Type: application/json" -d '{"event": "workflow_run"}' https://readthedocs.com/api/v2/webhook/12628/
+          curl -X POST -H "Content-Type: application/json" -d '{"event": "workflow_run"}' https://readthedocs.com/api/v2/webhook/12628/${{ secrets.RTD_WEBHOOK_TOKEN }}/
