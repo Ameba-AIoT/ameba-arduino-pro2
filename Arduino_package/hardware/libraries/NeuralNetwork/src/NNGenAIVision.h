@@ -18,9 +18,9 @@ public:
     NNGenAIVision();
     ~NNGenAIVision();
 
-    String openaivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client);
-    String geminivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client);
-    String llamavision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client);
+    void openaivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client);
+    void geminivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client);
+    void llamavision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client);
 };
 
 #endif

@@ -11,7 +11,7 @@ https://ai.google.dev/gemini-api/docs/vision
 GroqCloud - Llama vision
 https://console.groq.com/docs/overview
 
-Example Guide: TBD
+Example Guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/Neural%20Network/Generative%20AI%20Vision.html
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 
@@ -34,7 +34,7 @@ VideoSetting config(768, 768, CAM_FPS, VIDEO_JPEG, 1);
 uint32_t img_addr = 0;
 uint32_t img_len = 0;
 
-String prompt = "Please describe the image, and if there is a text, please summarize the content";
+String prompt_msg = "Please describe the image, and if there is a text, please summarize the content";
 
 void initWiFi()
 {
@@ -83,13 +83,13 @@ void setup()
     Camera.getImage(0, &img_addr, &img_len);
 
     // openAI vision prompt
-    // Serial.println((llm.openaivision(openAI_key, prompt, &img_addr, img_len, client)));
+    llm.openaivision(openAI_key, prompt_msg, img_addr, img_len, client);
 
     // Gemini vision prompt
-    // Serial.println((llm.geminivision(Gemini_key, prompt, img_addr, img_len, client)));
+    // llm.geminivision(Gemini_key, prompt_msg, img_addr, img_len, client);
 
     // Llama vision prompt
-    Serial.println((llm.llamavision(Llama_key, prompt, img_addr, img_len, client)));
+    // llm.llamavision(Llama_key, prompt_msg, img_addr, img_len, client);
 }
 
 void loop()

@@ -11,7 +11,7 @@ NNGenAIVision::~NNGenAIVision()
 }
 
 // Model: gpt-4o-mini, Server: openAI Platform
-String NNGenAIVision::openaivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
+void NNGenAIVision::openaivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "api.openai.com";
     String getResponse = "", Feedback = "";
@@ -88,14 +88,13 @@ String NNGenAIVision::openaivision(String key, String message, uint32_t img_addr
         }
     } else {
         getResponse = "Connected to " + String(myDomain) + " failed.";
-        Serial.println("Connected to " + String(myDomain) + " failed.");
     }
-
-    return getResponse;
+    Serial.println("Response from GPT:");
+    Serial.println(getResponse);
 }
 
-// Model: gemini-1.5, Server: Google AI Studio
-String NNGenAIVision::geminivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
+// Model: gemini-1.5-flash, Server: Google AI Studio
+void NNGenAIVision::geminivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "generativelanguage.googleapis.com";
     String getResponse = "", Feedback = "";
@@ -171,14 +170,13 @@ String NNGenAIVision::geminivision(String key, String message, uint32_t img_addr
         }
     } else {
         getResponse = "Connected to " + String(myDomain) + " failed.";
-        Serial.println("Connected to " + String(myDomain) + " failed.");
     }
-
-    return getResponse;
+    Serial.println("Response from Gemini:");
+    Serial.println(getResponse);
 }
 
 // Model: llama-3.2-90b-vision-preview, Server: groq
-String NNGenAIVision::llamavision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
+void NNGenAIVision::llamavision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "api.groq.com";
     String getResponse = "", Feedback = "";
@@ -255,8 +253,7 @@ String NNGenAIVision::llamavision(String key, String message, uint32_t img_addr,
         }
     } else {
         getResponse = "Connected to " + String(myDomain) + " failed.";
-        Serial.println("Connected to " + String(myDomain) + " failed.");
     }
-
-    return getResponse;
+    Serial.println("Response from Llama:");
+    Serial.println(getResponse);
 }
