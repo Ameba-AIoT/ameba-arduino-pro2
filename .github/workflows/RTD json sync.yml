@@ -1,4 +1,4 @@
-name: RTD_json_sync
+name: RTD json sync
 
 on:
   workflow_dispatch:
@@ -31,5 +31,5 @@ jobs:
           echo "Push to Arduino_package/release/ folder detected!"
           curl -X POST \
           -H "Content-Type: application/json" \
+          -H "Authorization: Token ${{ secrets.RTD_WEBHOOK_TOKEN }}" \
           https://readthedocs.com/api/v2/webhook/ameba-doc-test-zzw/12628/
-          
