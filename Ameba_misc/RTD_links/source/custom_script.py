@@ -115,9 +115,9 @@ if __name__ == "__main__":
     ### copy_files('../../../Arduino_package/package_realtek_amebapro2_early_index.json', '_static/package_realtek_amebapro2_index_rtd.json', 0);
 
     # copy release files
-    ### copy_folder('../../../Arduino_package/release', '_static/release');
+    copy_folder('../../../Arduino_package/release', '_static/release');
 
-    replace_text_in_file('_static/package_realtek_amebapro2_early_index_rtd.json', 'github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package',  'test');
+    replace_text_in_file('_static/package_realtek_amebapro2_early_index_rtd.json', 'github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package', 'ameba-doc-test-zzw.readthedocs-hosted.com/en/latest/_static');
 
     # Remove the folder '/path/to/folder' and all its contents
     ###shutil.rmtree('_static/release')
