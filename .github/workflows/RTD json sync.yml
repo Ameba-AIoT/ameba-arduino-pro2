@@ -26,10 +26,17 @@ jobs:
       #   run: |
       #     sphinx-build -b html docs/ docs/_build/html
 
+     # - name: Trigger RTD Webhook
+     #   run: |
+     #     echo "Push to Arduino_package/release/ folder detected!"
+     #     curl -X POST \
+     #     -H "Content-Type: application/json" \
+     #     -H "Authorization: Token ${{ secrets.RTD_WEBHOOK_TOKEN }}" \
+     #     https://readthedocs.com/api/v2/webhook/ameba-doc-test-zzw/12628/
+
       - name: Trigger RTD Webhook
         run: |
           echo "Push to Arduino_package/release/ folder detected!"
           curl -X POST \
           -H "Content-Type: application/json" \
-          -H "Authorization: Token ${{ secrets.RTD_WEBHOOK_TOKEN }}" \
           https://readthedocs.com/api/v2/webhook/ameba-doc-test-zzw/12628/
