@@ -1,8 +1,5 @@
-AmebaPro2 Arduino
-=================
-
-SDK json link
--------------
+Ameba Pro2 Arduino SDK json link
+================================
 
 .. _Download File:
 

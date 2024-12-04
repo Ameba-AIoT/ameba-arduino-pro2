@@ -1,5 +1,5 @@
-Welcome to Ameba Arduino Documentation!
-=======================================
+Ameba Arduino Readtehdocs json files
+====================================
 
 .. tabs::
 
