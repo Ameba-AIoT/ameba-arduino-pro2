@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "realtek",
-      "maintainer": "Realtek",
+      "maintainer": "Realtek SG SD3",
       "websiteURL": "https://www.amebaiot.com/",
       "email": "realteksgsd3@gmail.com",
       "help": {
