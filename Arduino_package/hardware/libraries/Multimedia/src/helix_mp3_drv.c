@@ -75,6 +75,8 @@ void audio_play_binary_array(uint8_t *srcbuf, uint32_t len)
         }
     }
 
+    audio_deinit(&g_taudio);
+    printf("audio deinitialized\r\n");
     printf("decoding finished\r\n");
 }
 

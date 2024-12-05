@@ -35,6 +35,7 @@ void AmebaFatFS::end(void)
     fatfs_sd_close();
     memset(&fatfs_sd, 0, sizeof(fatfs_sd_params_t));
     fatfs_sd.drv_num = -1;
+    sd_gpio_deinit();
 }
 
 File AmebaFatFS::open(const String &path)

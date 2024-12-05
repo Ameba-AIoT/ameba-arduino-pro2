@@ -46,7 +46,7 @@ void initWiFi()
         Serial.print("Connecting to ");
         Serial.println(wifi_ssid);
 
-        long int StartTime = millis();
+        uint32_t StartTime = millis();
         while (WiFi.status() != WL_CONNECTED) {
             delay(500);
             if ((StartTime + 5000) < millis()) {
@@ -59,7 +59,6 @@ void initWiFi()
             Serial.println("STAIP address: ");
             Serial.println(WiFi.localIP());
             Serial.println("");
-
             break;
         }
     }
@@ -83,10 +82,10 @@ void setup()
     Camera.getImage(0, &img_addr, &img_len);
 
     // openAI vision prompt
-    llm.openaivision(openAI_key, prompt_msg, img_addr, img_len, client);
+    // llm.openaivision(openAI_key, prompt_msg, img_addr, img_len, client);
 
     // Gemini vision prompt
-    // llm.geminivision(Gemini_key, prompt_msg, img_addr, img_len, client);
+    llm.geminivision(Gemini_key, prompt_msg, img_addr, img_len, client);
 
     // Llama vision prompt
     // llm.llamavision(Llama_key, prompt_msg, img_addr, img_len, client);
