@@ -91,7 +91,7 @@ void setup()
     camera_uvcd.channelBegin(CHANNELNN);
 
     // Start usb uvcd for NN
-    usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, camera_uvcd.videostream_status(STREAM_CHANNEL));
+    usb_uvcd.nnbegin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL, CHANNELNN, camera_uvcd.videostream_status(STREAM_CHANNEL));
 
     OSD.configVideo(STREAM_CHANNEL, stream_config);
     OSD.begin();
