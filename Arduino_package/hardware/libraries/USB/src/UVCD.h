@@ -14,7 +14,7 @@ public:
     ~UVCD(void);
     void configVideo(VideoSetting &config);
     void begin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel);
-    void nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int nn_channel, int uvcd_getctx_check);
+    void nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int uvcd_getctx_check);
     int isUsbUvcConnected(int uvcd_getctx_state);
 
 private:
