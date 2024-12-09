@@ -18,9 +18,9 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-char ssid[] = "Network_SSID";    // your network SSID (name)
-char pass[] = "Password";        // your network password
-int status = WL_IDLE_STATUS;     // Indicator of Wifi status
+char ssid[] = "Network_SSID5";    // your network SSID (name)
+char pass[] = "Password";         // your network password
+int status = WL_IDLE_STATUS;      // Indicator of Wifi status
 
 char mqttServer[] = "test.mosquitto.org";
 char clientId[] = "amebaClient";
@@ -82,7 +82,7 @@ void setup()
         // wait 10 seconds for connection:
         delay(10000);
     }
-
+    wifiClient.setNonBlockingMode();
     client.setServer(mqttServer, 1883);
     client.setCallback(callback);
 
