@@ -83,6 +83,7 @@ void setup()
         delay(10000);
     }
 
+    wifiClient.setNonBlockingMode();
     client.setServer(mqttServer, 1883);
     client.setCallback(callback);
 
