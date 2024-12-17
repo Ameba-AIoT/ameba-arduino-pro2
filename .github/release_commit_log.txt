@@ -1,8 +1,12 @@
 Feature:
+- Add GenAIVision Example
+- Update UVCDObjectDetectionLoop.ino
+- Update MQTT Example
+- Add MQTT_Image Example
 
 API Updates:
+- Add audio deinit and sd gpio deinit function
+- Update MP4Recording.cpp
 
 Misc:
-- Update ameba_pro2_tools 1.3.12
-    - Add sensor GC2053 realted support
-- Update Bug_report.yml
+- Add Readthedocs json web page
