@@ -11,7 +11,7 @@ NNGenAIVision::~NNGenAIVision()
 }
 
 // Model: gpt-4o-mini, Server: openAI Platform
-void NNGenAIVision::openaivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
+String NNGenAIVision::openaivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "api.openai.com";
     String getResponse = "", Feedback = "";
@@ -91,10 +91,11 @@ void NNGenAIVision::openaivision(String key, String message, uint32_t img_addr, 
     }
     Serial.println("Response from GPT:");
     Serial.println(getResponse);
+    return getResponse;
 }
 
 // Model: gemini-1.5-flash, Server: Google AI Studio
-void NNGenAIVision::geminivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
+String NNGenAIVision::geminivision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "generativelanguage.googleapis.com";
     String getResponse = "", Feedback = "";
@@ -173,10 +174,11 @@ void NNGenAIVision::geminivision(String key, String message, uint32_t img_addr, 
     }
     Serial.println("Response from Gemini:");
     Serial.println(getResponse);
+    return getResponse;
 }
 
 // Model: llama-3.2-90b-vision-preview, Server: groq
-void NNGenAIVision::llamavision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
+String NNGenAIVision::llamavision(String key, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "api.groq.com";
     String getResponse = "", Feedback = "";
@@ -256,4 +258,5 @@ void NNGenAIVision::llamavision(String key, String message, uint32_t img_addr, u
     }
     Serial.println("Response from Llama:");
     Serial.println(getResponse);
+    return getResponse;
 }
