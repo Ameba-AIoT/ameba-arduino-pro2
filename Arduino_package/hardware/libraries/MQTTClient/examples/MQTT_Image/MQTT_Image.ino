@@ -4,7 +4,7 @@
 
  This sketch demonstrates the image sending capabilities of the library.
   - connects to an MQTT server
-  - publishes "hello world" to the topic "outTopic/Msg"
+  - publishes "hello world" on initialization and "hello from AMB82 mini" to the topic "outTopic/Msg"
   - subscribes to the topic "inTopic/Msg", printing out any messages it receives. It assumes the received payloads are strings not binary
   - captures image and publish to "outTopic/Img"
 
@@ -12,7 +12,7 @@
  reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
  achieve the same result without blocking the main loop.
 
- Example guide: TBD
+ Example guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/MQTT/Set%20up%20MQTT%20Client%20to%20Communicate%20with%20Broker.html
 
  */
 
@@ -31,9 +31,10 @@ char ssid[] = "Network_SSID5";    // your network SSID (name)
 char pass[] = "Password";         // your network password
 int status = WL_IDLE_STATUS;      // Indicator of Wifi status
 
-char mqttServer[] = "mqttgo.io";
+char mqttServer[] = "mqttgo.io";    // broker.mqttgo.io
 char clientId[] = "amebaClient";
-char publishTopic[] = "outTopic/Msg";
+char publishTopicMsg[] = "outTopic/Msg";
+char publishTopicImg[] = "outTopic/Img";
 char publishPayload[] = "hello world";
 char subscribeTopic[] = "inTopic/Msg";
 
@@ -60,7 +61,7 @@ void reconnect()
         if (client.connect(clientId)) {
             Serial.println("connected");
             // Once connected, publish an announcement and resubscribe
-            client.publish(publishTopic, publishPayload);
+            client.publish(publishTopicMsg, publishPayload);
             client.subscribe(subscribeTopic);
         } else {
             Serial.println("failed, rc=");
@@ -112,12 +113,14 @@ void setup()
 
 void loop()
 {
-    client.publish("outTopic/Msg", "hello from AMB82 mini");
+    client.publish(publishTopicMsg, "hello from AMB82 mini");
+    delay(2000);
+
     Camera.getImage(0, &img_addr, &img_len);
 
     int max_packet_size = MQTT_MAX_PACKET_SIZE;
 
-    client.beginPublish("outTopic/Img", img_len, false);
+    client.beginPublish(publishTopicImg, img_len, false);
 
     for (int i = 0; i < (int)img_len; i += max_packet_size) {
         int chunk_size = min(max_packet_size, (int)img_len - i);
@@ -133,4 +136,5 @@ void loop()
     }
 
     client.loop();
+    delay(5000);
 }
