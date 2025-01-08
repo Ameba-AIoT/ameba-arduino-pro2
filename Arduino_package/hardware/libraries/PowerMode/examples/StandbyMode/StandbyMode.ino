@@ -2,7 +2,7 @@
  This sketch shows how to use power mode standby
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-standby/
+ https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/PowerMode/Standby%20Mode.html
  */
 
 #include "PowerMode.h"
@@ -14,6 +14,7 @@
 // wake up by UART/Serial1  :   4 //Only support 4MHz clock source
 // wake up by Gtimer0       :   5 //Only support 4MHz clock source
 #define WAKEUP_SOURCE 0
+#define RETENTION 0
 
 #if (WAKEUP_SOURCE == 0)
 // set AON timer Clock, 1: 4MHz, 0: 100kHz
@@ -48,7 +49,7 @@ void setup()
 {
     Serial.begin(115200);
     Serial.println("Standby Mode Demo!");
-    PowerMode.begin(STANDBY_MODE, WAKEUP_SOURCE, WAKUPE_SETTING);
+    PowerMode.begin(STANDBY_MODE, WAKEUP_SOURCE, RETENTION, WAKUPE_SETTING);
 
     for (int i = 5; i > 0; i--) {
         Serial.print("Enter Standby Mode by ");
