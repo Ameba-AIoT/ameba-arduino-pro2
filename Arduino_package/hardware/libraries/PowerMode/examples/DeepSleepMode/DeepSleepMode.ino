@@ -2,7 +2,7 @@
  This sketch shows how to use power mode deepsleep
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-deepsleep/
+ https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/PowerMode/Deep%20Sleep%20Mode.html
  */
 
 #include "PowerMode.h"
@@ -11,6 +11,7 @@
 // wake up by AON GPIO  :   1
 // wake up by RTC       :   2
 #define WAKEUP_SOURCE 0
+#define RETENTION     0
 
 #if (WAKEUP_SOURCE == 0)
 // set AON timer Clock, 1: 4MHz, 0: 100kHz
@@ -38,7 +39,7 @@ void setup()
 {
     Serial.begin(115200);
     Serial.println("DeepSleep Mode Demo!");
-    PowerMode.begin(DEEPSLEEP_MODE, WAKEUP_SOURCE, WAKUPE_SETTING);
+    PowerMode.begin(DEEPSLEEP_MODE, WAKEUP_SOURCE, RETENTION, WAKUPE_SETTING);
 
     for (int i = 5; i > 0; i--) {
         Serial.print("Enter DeepSleep Mode by ");
