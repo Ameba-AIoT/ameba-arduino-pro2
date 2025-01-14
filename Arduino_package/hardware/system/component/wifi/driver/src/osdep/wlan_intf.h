@@ -86,6 +86,7 @@ __u8 rltk_wlan_is_mp(void);
 
 int rltk_wlan_get_router_wps_info(__u8 *assoc_AP_manufacturer, __u8 *assoc_AP_model_name, __u8 *assoc_AP_model_number);
 int rltk_wlan_issue_nulldata(unsigned int power_mode);
+int rltk_wlan_get_rx_queue_count(unsigned int *recvframe_cnt);
 #ifdef CONFIG_WLAN_SWITCH_MODE
 int rltk_wlan_reinit_drv_sw(const char *ifname, rtw_mode_t mode);
 int rltk_set_mode_prehandle(rtw_mode_t curr_mode, rtw_mode_t next_mode, const char *ifname);

@@ -82,8 +82,8 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_MIS2008        0x23  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_NT99236        0x24  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_VD550G         0x25  //  |   v    |   -    |   v    |   -    |
-#define SENSOR_GC3003         0x26  //  |   v    |   -    |   v    |   -    |
-#define SENSOR_IMX662         0x27  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_GC3003         0x26  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_IMX662         0x27  //  |   v    |   v    |   v    |   v    |
 #define SENSOR_GC2083         0x28  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_OV2735         0x29  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_SC400AI        0x2A  //  |   v    |   -    |   v    |   -    |

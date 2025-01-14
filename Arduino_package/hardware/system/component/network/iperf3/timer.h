@@ -92,4 +92,8 @@ extern void tmr_cleanup(void);
 /* Cancel all timers and free storage, usually in preparation for exiting. */
 extern void tmr_destroy(void);
 
+#if defined(CONFIG_PLATFORM_8735B)
+int gettimeofday_iperf3(struct timeval *tv, void *tz);
+#endif
+
 #endif /* __TIMER_H */

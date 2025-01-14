@@ -105,8 +105,8 @@ typedef struct i2s_ctx_s {
 	i2s_channel_type        rx_channel;
 	i2s_channel_type        tx_channel;
 	i2s_direction_type      i2s_direction;
-	uint8_t                 rx_byte_swap;
-	uint8_t                 tx_byte_swap;
+	uint32_t (*rxbyteProc32)(uint32_t);
+	uint16_t (*rxbyteProc16)(uint16_t);
 	uint8_t                 pin_group_num;
 	uint32_t                i2s_timestamp_offset;
 	i2s_tx_cache_t          i2s_tx_cache;

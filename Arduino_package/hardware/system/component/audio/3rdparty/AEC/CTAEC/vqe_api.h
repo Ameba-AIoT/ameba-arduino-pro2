@@ -34,7 +34,7 @@ typedef struct {
 	INT16 RinLvldB;
 	INT16 RoutLvldB;
 	INT16 HCDetectState;            //1 = detected, 0 = not detected
-	INT16 HCDetCurrFrameState;      //1 = detected, 0 = not detected
+	INT16 HCDetCurrFrameState;      //Current Frame Detection State: 1 = detected, 0 = not detected
 } VQE_RCV_STATE;
 
 
@@ -82,7 +82,7 @@ typedef struct {
 	INT32   SamplingRate;           // 8000->8000Hz, 16000->16000Hz
 	INT16   HPFEnable;              // 0 -disable, 1- enable
 	INT16   NSEnable;
-	INT16   NSGainSlowConvergenceEnable;
+	INT16   NSSlowConvergence;      //0-1000 (ms)
 } VQE_NS_CTRL_PARAMS;
 
 /* NS Control parameter structure at runtime control*/
@@ -110,8 +110,6 @@ typedef struct {
 	INT16 MaxGainLimit;     // 30/24/18/12/6 => 30dB/24dB/18dB/12dB/6dB, Default value = 30 (30dB)
 	// Calculating the noisefloor level and used it as the NoiseGateLvl along with the API configured value.
 	INT16 NoiseFloorAdapt;  //'=1(enable)', '=0(disable)' no effect, used API configured NoiseDateLvl value
-	//INT16 FrameSize;        // in samples
-	//INT16 RefThreshold;     //Max reference level threshold (in dBFS) in DRC/Limiter.
 	INT16 Ratio1;           //Compression ratio for Reference/RefThreshold level  in Q10 format
 	INT16 Threshold1;       //The max dBFS of the AGC output (if the input dBFS will be compressed to the threshold)
 	INT16 Ratio2;           //Compression ratio for Threshold1  in Q0 format
@@ -126,7 +124,6 @@ typedef struct {
 	INT16 AGCEnable;        //Enable/Disbale at run time
 	INT16 NoiseGateLvl;     //40..70dBFS in steps 1(dB): 40->-40dBFS...70->-70dBFS Minimum noise level, AGC is inactive below this level
 	INT16 ReferenceLvl;     //in dB 0,3,6,7... 24dBFS :0->0dBFS, 3->-3dBFS, 6->-6dBFS, 7->-7dBFS...24->-24dBFS,..30->-30dBFS
-	//INT16 RefThreshold;     //Max reference level threshold (in -dBFS).
 } VQE_AGC_RTCTRL_PARAMS;
 
 /* EQ Control parameter structure at Initialisation time*/
@@ -152,7 +149,7 @@ typedef struct VQE_BF_CTRL_PARAMS {
 	INT32 SamplingRate;         //16000/32000/44100/48000
 } VQE_BF_CTRL_PARAMS;
 
-typedef struct {
+typedef struct VQE_BF_RTCTRL_PARAMS {
 	INT16 BFEnable;             //1=enable, 0=disable
 	INT16 DOAEnable;            //for future use
 	INT16 BFPFIntensity;
@@ -179,7 +176,7 @@ INT16 VQE_RCV_Process(INT32 *VQERcvMem, INT16 *Inp, INT16 *Out, VQE_NS_RTCTRL_PA
 					  void *VQERCVState);
 
 
-//INT16 AEC_SET_PPLevel(INT32 *VQESNDMem, INT16 PPLevel);
+INT16 AEC_SET_PPLevel(INT32 *VQESNDMem, INT16 PPLevel);
 INT16 AEC_SET_Enable(INT32 *VQESNDMem, INT16 AECEnable);
 
 INT16 AEC_SET_ConvergenceTime(INT32 *VQESNDMem, INT16 ConvergeceTime);

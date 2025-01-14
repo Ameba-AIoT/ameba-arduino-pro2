@@ -106,7 +106,7 @@ private:
                     .NS_EN = 0,
                     .NSLevel = 5,
                     .HPFEnable = 0,
-                    .QuickConvergenceEnable = 0,
+                    .NSSlowConvergence = 0,
                     },
     };
     TX_cfg_t _txASPParams = {
@@ -128,7 +128,7 @@ private:
                     .NS_EN = 0,
                     .NSLevel = 5,
                     .HPFEnable = 0,
-                    .QuickConvergenceEnable = 0,
+                    .NSSlowConvergence = 0,
                     },
     };
 

@@ -453,6 +453,11 @@ struct pwrctrl_priv {
 	u32 ntp_pkt_size;
 	u16 ntp_time;
 #endif
+
+#ifdef CONFIG_WOWLAN_ICMP_REQUEST_OFFLOAD
+	u32 icmp_request_interval_s;
+	u32 icmp_request_timeout_s;
+#endif
 };
 
 #define RTW_PWR_STATE_CHK_INTERVAL 2000

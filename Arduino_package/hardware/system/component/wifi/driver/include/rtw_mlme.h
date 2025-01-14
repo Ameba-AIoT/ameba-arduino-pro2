@@ -421,6 +421,7 @@ struct mlme_priv {
 
 	//conenction_bssid information
 	u8	connecting_bssid[6];
+	u8 	scan_user_setting;  	/* used for wifi scan pecific setting */
 };
 
 #define RTW_AUTO_SCAN_REASON_UNSPECIFIED		0

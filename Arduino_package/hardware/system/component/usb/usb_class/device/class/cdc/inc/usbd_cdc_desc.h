@@ -500,4 +500,5 @@ struct usb_cdc_dev_t {
 	usbd_cdc_acm_usr_cb_t *cb;
 	u16 serial_state;
 	volatile int pending;
+	_sema cdc_trans_sema;
 };

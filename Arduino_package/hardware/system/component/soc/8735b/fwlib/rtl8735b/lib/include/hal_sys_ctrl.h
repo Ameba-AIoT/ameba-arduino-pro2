@@ -197,6 +197,7 @@ void hal_sys_set_sw_boot_rom_pg_trap_op(void);
 void hal_sys_save_dev_adtr(void *p_adatr);
 hal_spic_adaptor_t *hal_sys_get_spic_adtr(void);
 void hal_sys_get_pre_boot_fail_sts(const uint8_t img_obj, void *pboot_fail_sts);
+void hal_sys_clear_prefw_boot_fail_sts(void);
 hal_snafc_adaptor_t *hal_sys_get_snafc_adtr(void);
 uint8_t hal_sys_check_kc_bind_img(uint8_t img_obj);
 void hal_sys_clear_kc_bind_img(void);

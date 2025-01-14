@@ -1,3 +1,14 @@
+<11/19/2024 12:00 Juling>
+Version : RTL8735B_VOE_1.5.9.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Merge PC2's release (Auto close fusion stream when high light)
+	2. If rc_isp_fps > real_isp_fps, return error
+
+--------------------------------------------------------------------------
 <10/18/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.8.0
 Modified Files:

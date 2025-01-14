@@ -637,6 +637,12 @@ struct mlme_ext_priv {
 
 	u8	scan_abort;
 	u8	tx_rate; // TXRATE when USERATE is set.
+	/**
+	The disable_deauth_option is used to configure the disable deauth settings, each bit controls one aspect.
+	bit 0: (0(default): issue deauth, 1: disable to issue deauth for wifi_off function)
+	bit 1: (0(default): issue deauth, 1: disable to issue deauth for issue_deauth function)
+	*/
+	u8	disable_deauth_option;
 
 	u8	retry; //retry for issue probereq
 
@@ -677,6 +683,7 @@ struct mlme_ext_priv {
 	u8 auto_reconnect;
 #endif
 	u8 partial_scan;
+	u8 specific_ssid_scan;
 	p_rtw_custom_ie_t cus_ven_ie;
 	u8 ie_num;
 

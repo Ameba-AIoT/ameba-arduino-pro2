@@ -142,6 +142,9 @@ typedef struct {
 #ifdef CONFIG_P2P_NEW
 	unsigned char			p2p_role;
 #endif
+#ifdef CONFIG_IEEE80211K
+	unsigned int			free_cnt;		/** 11k need this information to generate ie**/
+#endif
 } rtw_scan_result_t;
 
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
@@ -156,6 +159,7 @@ typedef struct {
 	unsigned short passive_scan_time;     /*!< passive scan time per channel, units: millisecond, default is 110ms */
 	unsigned short home_scan_time;     /*!< home channel scan time, units: millisecond, default is 100ms */
 	unsigned char  probe_cnt;
+	unsigned char  probe_cnt_interval;
 } rtw_channel_scan_time_t;
 
 typedef rtw_result_t (*scan_user_callback_t)(\
@@ -179,6 +183,10 @@ typedef struct {
 	void									*scan_user_data;
 	scan_user_callback_t					scan_user_callback;   /**< used for normal asynchronized mode */
 	scan_report_each_mode_user_callback_t	scan_report_each_mode_user_callback; /*used for RTW_SCAN_REPORT_EACH mode */
+	unsigned char							scan_user_setting;	/* used for wifi scan pecific setting */
+	char									band;				/** 0: => dual band, band: 1 => 2.4G, 2 => 5G**/
+	char									mutiple_ssid[2][33];
+	unsigned char							mutiple_ssid_num;
 } rtw_scan_param_t;
 
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
@@ -578,6 +586,13 @@ typedef struct {
 	unsigned char csi_valid;  /**< ch_rpt_hdr_info */
 } rtw_csi_header_t;
 /** @} */
+
+typedef struct {
+	int channel;
+	int clm_ratio;
+	int nhm_idle_ratio;
+	int nhm_tx_ratio;
+} rtw_clm_t;
 
 #define WIFI_CONNECT_SCAN_NUM 10
 typedef struct {

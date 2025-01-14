@@ -1338,6 +1338,20 @@ int wifi_csi_report(u32 buf_len, u8 *csi_buf, u32 *len, rtw_csi_header_t *csi_he
 void wifi_set_scan_time(unsigned short active_to, unsigned short passive_to, unsigned short home_to, unsigned char probe_cnt);
 
 /**
+ * @brief   set ping connectivity ip for wifi retention for wowlan mode
+ *
+ */
+void wifi_set_connectivity_ip(void);
+
+/**
+ * @brief   set ping connectivity request function for wowlan mode
+ *
+ * @param[in]   interval_s : ping request interval(unit: second)
+ * @param[in]   timeout_s : ping request timeout(unit: second)
+ * @return  RTW_SUCCESS
+ */
+int wifi_set_connectivity_offload(uint32_t interval_s, uint32_t timeout_s);
+/**
  * @brief  set RTS/CTS capability
  * @param[in]  enable:
  *  set 1 to enable RTS/CTS capability
@@ -1423,6 +1437,22 @@ int wifi_set_channel_plan(u8 channel_plan);
  * 	Otherwise, return 1.
  */
 int wifi_issue_nulldata(unsigned int power_mode);
+
+/**
+ * @brief  there is function for wifi_get_rx_queue_count to get wifi rx queue cnt
+ * @param[in]  recvframe_cnt: can be get wifi rx queue cnt
+ * @return  If the function succeeds, the return value is 0.
+ * 	Otherwise, return 1.
+ */
+
+int wifi_get_rx_queue_count(unsigned int *recvframe_cnt);
+
+/**
+ * @brief  deinit wifi power by register method
+ * @return  None
+ */
+void wifi_power_hci_axi_deinit(void);
+
 /**
 * @}
 */

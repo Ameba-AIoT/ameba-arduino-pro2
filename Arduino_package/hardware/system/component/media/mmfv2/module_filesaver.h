@@ -6,8 +6,6 @@
 #include <task.h>
 #include <stdint.h>
 
-#include "module_vipnn.h"
-
 #define CMD_FILESAVER_SET_PARAMS            MM_MODULE_CMD(0x00)  // set parameter
 #define CMD_FILESAVER_GET_PARAMS            MM_MODULE_CMD(0x01)  // get parameter
 #define CMD_FILESAVER_SET_SAVE_FILE_PATH    MM_MODULE_CMD(0x02)  // set save file path

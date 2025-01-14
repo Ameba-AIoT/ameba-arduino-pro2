@@ -2,7 +2,10 @@
 #define _VIDEO_BOOT_H_
 
 #include <stdint.h>
+#include <stddef.h>
 #include "fw_img_export.h"
+
+#define BOOTLOADER_VOE_LOG_EN   0
 
 // USE_NEW_HEAP_ALLOCATE
 #define ENABLE_HDR_MD_BUF   600*1024
@@ -64,6 +67,13 @@
 
 #define VIDEO_BOOT_META_REV_BUF  0x1000
 
+typedef struct video_boot_roi_s {
+	uint32_t xmin;
+	uint32_t ymin;
+	uint32_t xmax;
+	uint32_t ymax;
+} video_boot_roi_t;
+
 typedef struct video_boot_param_s {
 	uint32_t stream_id;
 	uint32_t type;
@@ -82,12 +92,7 @@ typedef struct video_boot_param_s {
 	uint32_t use_static_addr;
 	uint32_t fcs;
 	uint32_t use_roi;
-	struct video_boot_roi_s {
-		uint32_t xmin;
-		uint32_t ymin;
-		uint32_t xmax;
-		uint32_t ymax;
-	} roi;
+	video_boot_roi_t roi;
 	uint32_t level;
 	uint32_t profile;
 	uint32_t cavlc;
@@ -181,10 +186,6 @@ typedef struct video_boot_stream_cfg {
 	uint8_t  fcs_user_buffer[FCS_USER_REV_SIZE];//User can use the buffer to transfer to application
 	uint32_t fcs_start_time;//bootloader to fcs user boot function
 	uint32_t fcs_voe_time;//bootloader to voe init function
-	video_boot_params_t extra_video_params;
-	uint8_t extra_video_enable;
-	uint8_t extra_video_snapshot;
-	uint8_t extra_video_drop_frame;
 	video_boot_private_mask_t private_mask;
 	uint32_t meta_enable;//
 	uint32_t meta_size;//enalbe the meta size for
@@ -194,7 +195,21 @@ typedef struct video_boot_stream_cfg {
 	uint32_t extra_fcs_meta_enable_extend;
 	uint32_t extra_fcs_meta_extend_offset;
 	uint32_t extra_fcs_meta_extend_total_size;
+	uint32_t voe_scale_up_en;
+	video_boot_roi_t voe_scale_up_roi;
+	video_boot_params_t extra_video_params;
+	uint8_t extra_video_enable;
+	uint8_t extra_video_snapshot;
+	uint8_t extra_video_drop_frame;
 } video_boot_stream_t;
+
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+    _Static_assert(offsetof(video_boot_stream_t, voe_scale_up_roi) == 1688, "error: wrong offset of voe_scale_up_roi");
+    _Static_assert(offsetof(video_boot_stream_t, extra_video_drop_frame) == 1814, "error: wrong offset of extra_video_drop_frame");
+#else
+    typedef char static_assertion_failed[(offsetof(video_boot_stream_t, voe_scale_up_roi) == 1688) ? 1 : -1];
+    typedef char static_assertion_failed[(offsetof(video_boot_stream_t, extra_video_drop_frame) == 1814) ? 1 : -1];
+#endif
 
 void video_boot_setup_slot_num(int stream_id, int slot_number);
 #endif

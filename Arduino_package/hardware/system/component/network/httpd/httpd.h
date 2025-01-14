@@ -323,6 +323,12 @@ void httpd_response_too_many_requests(struct httpd_conn *conn, char *msg);
  */
 void httpd_response_internal_server_error(struct httpd_conn *conn, char *msg);
 
+/**
+ * @brief      This function is used to get how many connection is active in HTTP Daemon.
+ * @return     the number of the active connections
+ */
+int httpd_get_active_connection_num(void);
+
 /*\@}*/
 
 #endif /* _HTTPD_H_ */

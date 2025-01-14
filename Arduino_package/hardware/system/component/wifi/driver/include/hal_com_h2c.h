@@ -519,7 +519,13 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 /* ICMP_offload 0x9a */
 #define SET_H2CCMD_ICMP_OFFLOAD_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
 #define SET_H2CCMD_ICMP_OFFLOAD_DISABLE_UNICAST_WAKE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)
+#define SET_H2CCMD_ICMP_OFFLOAD_PING_REQUEST_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 2, 1, __Value)
 #define SET_H2CCMD_ICMP_OFFLOAD_ECHO_REPLY_LOC(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
+
+/* ICMP_request_offload 0x9a */
+#define SET_H2CCMD_ICMP_OFFLOAD_ECHO_REQUEST_LOC(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)
+#define SET_H2CCMD_ICMP_OFFLOAD_ECHO_REQUEST_INTERVAL(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
+#define SET_H2CCMD_ICMP_OFFLOAD_ECHO_REQUEST_SENDTIMES(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 
 #ifdef CONFIG_LPS_PG
 #define SET_H2CCMD_LPSPG_SEC_CAM_EN(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)/*SecurityCAM_En*/
@@ -580,6 +586,9 @@ typedef struct _RSVDPAGE_LOC {
 #endif
 #ifdef CONFIG_WOWLAN_ICMP_REPLY_OFFLOAD
 	u8 LocIcmpReply;
+#endif
+#ifdef CONFIG_WOWLAN_ICMP_REQUEST_OFFLOAD
+	u8 LocIcmpRequest;
 #endif
 #ifdef CONFIG_PNO_SUPPORT
 	u8 LocPNOInfo;

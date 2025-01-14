@@ -61,11 +61,11 @@
 #endif
 
 #define XMIT_STACKSIZE		256
-#define CMD_STACKSIZE_FOR_SAE	1024
+#define CMD_STACKSIZE_FOR_SAE	(1024 + 1024)
 #ifdef CONFIG_IEEE80211K
-#define CMD_STACKSIZE		768
+#define CMD_STACKSIZE		(768 + 1024)
 #else
-#define CMD_STACKSIZE		512 //1024
+#define CMD_STACKSIZE		(512 + 1024)//1024
 #endif
 
 
