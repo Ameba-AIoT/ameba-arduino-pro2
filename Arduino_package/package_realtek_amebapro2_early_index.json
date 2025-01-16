@@ -627,8 +627,8 @@
               "host": "i686-mingw32",
               "archiveFileName": "ameba_pro2_tools_windows-1.4.0.tar.gz",
               "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.4.0.tar.gz",
-              "checksum": "SHA-256:51724cd2ac6858c40be08f4a866c2008b22ba62cc2712286f4ec5359f7fe14b0",
-              "size": "9957639"
+              "checksum": "SHA-256:9b4aa3da19a04453c26c05562f2b028f52d335e22ec9f6ce25071ef46ed04959",
+              "size": "9988721"
             },
             {
               "host": "x86_64-pc-linux-gnu",
