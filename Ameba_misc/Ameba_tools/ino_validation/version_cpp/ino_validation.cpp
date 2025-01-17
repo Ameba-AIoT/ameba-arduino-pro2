@@ -15,7 +15,7 @@ g++ -o ino_validation_linux ino_validation.cpp -static
 strip ino_validation_linux
 
 macos:
-g++ -arch x86_64 -arch arm64 -o ino_validation_macos ino_validation.cpp
+g++ -std=c++11 -arch x86_64 -arch arm64 -o ino_validation_macos ino_validation.cpp
 strip ino_validation_macos
 
 */
@@ -43,31 +43,31 @@ strip ino_validation_macos
 #include <unordered_map>
 #include <cstring> // For strcat
 #include <ctime>
-
+#undef isnan
+#undef isinf
+#include "json.hpp"
 
 #if __APPLE__
 #include <cctype> // For std::isspace
 #endif
 
-#define PRINT_DEBUG         0
-#define MAX_PATH_LENGTH     1024
+#define PRINT_DEBUG         			0
+#define MAX_PATH_LENGTH    				1024
 
-#define NUMBER_OF_MODELS 5
-#define NUMBER_OF_MODELSELECT_PARAMS 6
-#define NUMBER_OF_NN_TASKS 5
 using namespace std;
 
 // Declare global variables
-std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, load_nn_model_src, ver_pro2, folder_example;
-std::string model_customized_default[NUMBER_OF_MODELS];
+std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, path_jsonfile, load_nn_model_src, ver_pro2, folder_example;
 std::string path_build_options_json;
 std::string path_example, path_example_ino;
+std::string tool_folder_json_path;
 std::string rootDir;
 std::string key_portable = "portable";
 std::string filename_txt = "ino_validation.txt";
+std::string nnmodels_json = "nn_models.json";
 std::string key_json = "build";
 std::string ext_json = ".json";
-std::string header_od = "NA", header_fd = "NA", header_fr = "NA", header_ac = "NA", header_ic = "NA";
+std::string header_od = "NA", header_fd = "NA", header_fr = "NA", header_ac = "NA", header_ic = "NA", header_gesture = "NA", header_line = "NA";
 
 // Declare common file paths
 #ifdef _WIN32
@@ -111,6 +111,7 @@ std::string key_amb_bypassVOE2 = " configVideoChannel";
 // -------------------------------
 //           Functions
 // -------------------------------
+
 #ifdef _WIN32
 std::wstring get_username() {
     wchar_t username[MAX_PATH_LENGTH];
@@ -162,7 +163,159 @@ std::string getUsernameChecked(const std::string& path) {
 
     return newPath;
 }
+
+std::string readUtf16File(const std::wstring& utf16Path) {
+    HANDLE hFile = CreateFileW(utf16Path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        DWORD error = GetLastError();
+        std::cerr << "Failed to open file: " << error << std::endl;
+        return "";
+    }
+
+    DWORD fileSize = GetFileSize(hFile, nullptr);
+    if (fileSize == INVALID_FILE_SIZE) {
+        std::cerr << "Failed to get file size: " << GetLastError() << std::endl;
+        CloseHandle(hFile);
+        return "";
+    }
+
+    std::vector<char> fileContents(fileSize + 1);  // +1 for null terminator
+
+    DWORD bytesRead;
+    if (!ReadFile(hFile, &fileContents[0], fileSize, &bytesRead, nullptr)) {
+        std::cerr << "Failed to read file: " << GetLastError() << std::endl;
+        CloseHandle(hFile);
+        return "";
+    }
+
+    fileContents[fileSize] = '\0';  // Null-terminate the content
+
+    CloseHandle(hFile);
+
+    return std::string(fileContents.begin(), fileContents.end() - 1);  // Remove null terminator
+}
 #endif
+
+// Read contents from JSON
+using json = nlohmann::json;
+int modelCount(const std::string& jsonFilePath) {
+	int count = 0; 
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+	 // Access "modelCount" -> "COUNT"
+	if (!fileContent.empty()) {
+        try {
+            // Parse JSON
+            json j = json::parse(fileContent);
+
+            // Access "modelCount" -> "COUNT"
+            if (j.contains("modelCount") && j["modelCount"].contains("COUNT")) {
+                std::string count_str = j["modelCount"]["COUNT"];
+
+                // Ensure the string is valid for conversion to integer
+                if (!count_str.empty()) {
+                    try {
+                        // Convert to integer
+                        count = std::stoi(count_str);
+                    } catch (const std::invalid_argument& e) {
+                        std::cerr << "Invalid argument: could not convert to integer: " << count_str << std::endl;
+                    } catch (const std::out_of_range& e) {
+                        std::cerr << "Out of range: could not convert to integer: " << count_str << std::endl;
+                    }
+                }
+            }
+
+            // Debug output
+            if (PRINT_DEBUG) {
+                std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count: " << count << std::endl;
+            }
+        } catch (const json::exception& e) {
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+#else
+	// Read the JSON file
+    std::ifstream inFile(jsonFilePath);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Unable to open JSON file: " + jsonFilePath);
+    }
+
+    // Parse the JSON file
+    json j;
+    inFile >> j;
+
+	// Access the "modelCount" key and extract the "COUNT" value as a string
+    std::string count_str = j["modelCount"]["COUNT"].get<std::string>();
+
+    // Convert the string to an integer
+	count = std::stoi(count_str);  // Converts the string to an integer
+
+	if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count :" << count << std::endl;
+#endif
+    return count;
+}
+
+int modelSelectParamsCount(const std::string& jsonFilePath) {
+	int count = 0;
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+	 // Access "modelCount" -> "COUNT"
+	if (!fileContent.empty()) {
+        try {
+            // Parse JSON
+            json j = json::parse(fileContent);
+
+            // Access "modelCount" -> "COUNT"
+            if (j.contains("ModelSelectParamsCount") && j["ModelSelectParamsCount"].contains("COUNT")) {
+                std::string count_str = j["ModelSelectParamsCount"]["COUNT"];
+
+                // Ensure the string is valid for conversion to integer
+                if (!count_str.empty()) {
+                    try {
+                        // Convert to integer
+                        count = std::stoi(count_str);
+                    } catch (const std::invalid_argument& e) {
+                        std::cerr << "Invalid argument: could not convert to integer: " << count_str << std::endl;
+                    } catch (const std::out_of_range& e) {
+                        std::cerr << "Out of range: could not convert to integer: " << count_str << std::endl;
+                    }
+                }
+            }
+
+            // Debug output
+            if (PRINT_DEBUG) {
+                std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count: " << count << std::endl;
+            }
+        } catch (const json::exception& e) {
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+#else
+	// Read the JSON file
+    std::ifstream inFile(jsonFilePath);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Unable to open JSON file: " + jsonFilePath);
+    }
+
+    // Parse the JSON file
+    json j;
+    inFile >> j;
+
+	// Access the "modelCount" key and extract the "COUNT" value as a string
+    std::string count_str = j["ModelSelectParamsCount"]["COUNT"].get<std::string>();
+
+    // Convert the string to an integer
+	count = std::stoi(count_str);  // Converts the string to an integer
+
+	if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "] ModelSelectParamsCount :" << count << std::endl;
+#endif
+
+    return count;
+}
 
 std::string dirName(const std::string& directory_path) {
 #ifdef _WIN32
@@ -296,7 +449,6 @@ void resetTXT(std::string& directory_path) {
     // Close the file handle
     CloseHandle(hFile);
 
-    //std::wcout << L"Successfully cleared ino_validation.txt." << std::endl;
 #endif
 }
 
@@ -716,7 +868,7 @@ std::string listExampleDir(const std::string& basePath, const std::string& examp
 			std::wstring currentPath = basePathUtf16  + L"\\" + currentFileName;
 
 			// Check if exampleName is part of the currentFileName
-			if (currentFileName.find(exampleNameUtf16) != std::wstring::npos) {
+			if (currentFileName == exampleNameUtf16) {
 				folder_example = convert_to_utf8(currentPath);
 			}
 
@@ -890,50 +1042,45 @@ void extractParam(std::string& line, std::string& param) {
         
     }
 }
-    
+
 std::string input2model(const std::string& input) {
 std::string input_new, input_lower;
-    
 #if __APPLE__
+	// Read the JSON file
+    std::ifstream inFile(tool_folder_json_path);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("3 Unable to open JSON file: " + tool_folder_json_path);
+    }
+
+    // Parse the JSON file
+    json j;
+    inFile >> j;
     std::unordered_map<std::string, std::string> model_mapping;
     std::string input_no_spaces = input;
     input_no_spaces.erase(std::remove_if(input_no_spaces.begin(), input_no_spaces.end(), ::isspace), input_no_spaces.end());
     input_new = input_no_spaces;
-    
-    // Insert each key-value pair manually
-    model_mapping.insert(std::make_pair("CUSTOMIZED_YOLOV3TINY", "yolov3_tiny"));
-    model_mapping.insert(std::make_pair("CUSTOMIZED_YOLOV4TINY", "yolov4_tiny"));
-    model_mapping.insert(std::make_pair("CUSTOMIZED_YOLOV7TINY", "yolov7_tiny"));
-    model_mapping.insert(std::make_pair("CUSTOMIZED_MOBILEFACENET", "mobilefacenet_i16"));
-    model_mapping.insert(std::make_pair("CUSTOMIZED_SCRFD", "scrfd640"));
-    model_mapping.insert(std::make_pair("CUSTOMIZED_YAMNET", "yamnet_fp16"));
-    model_mapping.insert(std::make_pair("CUSTOMIZED_IMGCLASS", "img_class"));
-    model_mapping.insert(std::make_pair("DEFAULT_YOLOV3TINY", "yolov3_tiny"));
-    model_mapping.insert(std::make_pair("DEFAULT_YOLOV4TINY", "yolov4_tiny"));
-    model_mapping.insert(std::make_pair("DEFAULT_YOLOV7TINY", "yolov7_tiny"));
-    model_mapping.insert(std::make_pair("DEFAULT_MOBILEFACENET", "mobilefacenet_i8"));
-    model_mapping.insert(std::make_pair("DEFAULT_SCRFD", "scrfd320p"));
-    model_mapping.insert(std::make_pair("DEFAULT_YAMNET", "yamnet_fp16"));
-    model_mapping.insert(std::make_pair("DEFAULT_IMGCLASS", "img_class"));
+    for (const auto& pair : j["model_mappings"].items()) {
+        model_mapping.insert(std::make_pair(pair.key(), pair.value()));
+    }
+#elif _WIN32
+    std::wstring jsonFilePath_utf16 = utf8_to_utf16(tool_folder_json_path);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+	// Parse the JSON content from the UTF-8 string
+    json j = json::parse(fileContent);
+	std::unordered_map<std::string, std::string> model_mapping = j["model_mappings"].get<std::unordered_map<std::string, std::string>>();
 #else
-    std::unordered_map<std::string, std::string> model_mapping = {
-        {"CUSTOMIZED_YOLOV3TINY",    "yolov3_tiny"},
-        {"CUSTOMIZED_YOLOV4TINY",    "yolov4_tiny"},
-        {"CUSTOMIZED_YOLOV7TINY",    "yolov7_tiny"},
-        {"CUSTOMIZED_MOBILEFACENET", "mobilefacenet_i16"},
-        {"CUSTOMIZED_SCRFD",         "scrfd640"},
-        {"CUSTOMIZED_YAMNET",        "yamnet_fp16"},
-        {"CUSTOMIZED_IMGCLASS",      "img_class"},
-        {"DEFAULT_YOLOV3TINY",      "yolov3_tiny"},
-        {"DEFAULT_YOLOV4TINY",      "yolov4_tiny"},
-        {"DEFAULT_YOLOV7TINY",      "yolov7_tiny"},
-        {"DEFAULT_MOBILEFACENET",   "mobilefacenet_i8"},
-        {"DEFAULT_SCRFD",           "scrfd320p"},
-        {"DEFAULT_YAMNET",          "yamnet_fp16"},
-        {"DEFAULT_IMGCLASS",        "img_class"}
-    };
+	// Read the JSON file
+    std::ifstream inFile(tool_folder_json_path);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("3 Unable to open JSON file: " + tool_folder_json_path);
+    }
+
+    // Parse the JSON file
+    json j;
+    inFile >> j;
+    std::unordered_map<std::string, std::string> model_mapping = j["model_mappings"].get<std::unordered_map<std::string, std::string>>();
 #endif
-    
+
 // Convert input string to lowercase for case-insensitive comparison
 #if __APPLE__
     input_lower = input_new;
@@ -1048,12 +1195,18 @@ std::string extractString2(const std::string& source) {
 }
 
 void writeTXT(const std::string &path) {
+	const int model_count = modelCount(tool_folder_json_path);
+	const int modelselectparams_count = modelSelectParamsCount(tool_folder_json_path);
+
+	std::vector<std::string> model_customized_default(model_count);
+	std::vector<std::string> model_names(model_count);
+	std::vector<std::string> header_names(modelselectparams_count);
+	std::vector<std::string> modelSelectParams(modelselectparams_count);
+	std::vector<std::string> models(model_count);
+	std::vector<std::string> headers(model_count);
+
 	std::string example_file_path;
-	std::string model_name_od, model_name_fd, model_name_fr, model_name_ac, model_name_ic;
-	std::string models[] = {"OBJECT_DETECTION", "FACE_DETECTION", "FACE_RECOGNITION", "AUDIO_CLASSIFICATION", "IMAGE_CLASSIFICATION"};
-	std::string modelSelectParams[NUMBER_OF_MODELSELECT_PARAMS];
-	std::string model_names[NUMBER_OF_MODELS];
-    std::string header_names[NUMBER_OF_MODELSELECT_PARAMS];
+	std::string model_name_od, model_name_fd, model_name_fr, model_name_ac, model_name_ic, model_name_pd, model_name_hlm;
 	std::string nn_task;
     std::string voe_status = "NA";
     std::string header_all = "";
@@ -1067,6 +1220,31 @@ void writeTXT(const std::string &path) {
 	std::vector<std::string> tokens;
 	std::vector<std::string> params;
 	std::string param;
+
+	// Read the JSON file
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(tool_folder_json_path);
+
+    // Read the content of the file as a UTF-8 string
+    std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+    // Parse the JSON content from the UTF-8 string
+    json j = json::parse(fileContent);
+
+#else
+	std::ifstream inFile(tool_folder_json_path);
+	if (!inFile.is_open()) {
+		throw std::runtime_error("Unable to open JSON file: " + tool_folder_json_path);
+	}
+
+	// Parse the JSON file
+	json j;
+	inFile >> j;
+#endif
+	// Initialize a vector to store tasks
+	std::vector<std::string> nnTasks;
+	std::vector<std::string> headerName;
+	std::vector<std::string> header;
 
 	// All texts save to bufferContent
 	std::string bufferContent;
@@ -1153,65 +1331,74 @@ void writeTXT(const std::string &path) {
 			}
 
 			// Copy tokens to the model_names array
-			std::copy(tokens.begin(), tokens.end(), modelSelectParams);
+			if (tokens.size() <= modelselectparams_count) {
+				std::copy(tokens.begin(), tokens.end(), modelSelectParams.begin());
+			}
 
 			// Assign model name to each model variable
-			for (int i = 0; i <= NUMBER_OF_MODELS; i++) {
+			for (int i = 0; i < model_count; i++) {
 				model_names[i] = modelSelectParams[i + 1];
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_names[i] " << model_names[i] << std::endl;
 			}
 
-			// Update model names based on extracted tokens
-            if (model_names[0] != "NA_MODEL") model_name_od = model_names[0];
-            if (model_names[1] != "NA_MODEL") model_name_fd = model_names[1];
-            if (model_names[2] != "NA_MODEL") model_name_fr = model_names[2];
-            if (model_names[3] != "NA_MODEL") model_name_ac = model_names[3];
-            if (model_names[4] != "NA_MODEL") model_name_ic = model_names[4];
-		
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name_od " << model_name_od << std::endl;
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name_fd " << model_name_fd << std::endl;
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name_fr " << model_name_fr << std::endl;
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name_ac " << model_name_ac << std::endl;
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name_ic " << model_name_ic << std::endl;
-		} 
-
-		// check for invalid combination for modelSelect (Error Handler)
-		if (load_nn_model_src != "LoadFromFlash" && (model_name_od.find(key_amb_default) != std::string::npos  || model_name_fd.find(key_amb_default) != std::string::npos || model_name_fr.find(key_amb_default) != std::string::npos || model_name_ac.find(key_amb_default) != std::string::npos || model_name_ic.find(key_amb_default) != std::string::npos)) { // If Load from SD Card and modelSelect is Default
-			std::cerr << "Model selection mismatched. Please ensure that you have select customized model in modelSelect() when selecting SD card." << std::endl;
-			exit(EXIT_FAILURE);
-		}
-
-		if (nn_task == "OBJECT_DETECTION") {
-			if (model_name_od == "NA_MODEL" || model_name_od.find("YOLO") == std::string::npos) {
-				std::cerr << "Model combination mismatch. Please check modelSelect() again." << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		} else if (nn_task == "FACE_DETECTION") {
-			if (model_name_fd  == "NA_MODEL" || model_name_fd.find("SCRFD") == std::string::npos) {
-				std::cerr << "Model combination mismatch. Please check modelSelect() again." << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		} else if (nn_task == "FACE_RECOGNITION") {
-			if (model_name_fd  == "NA_MODEL" || model_name_fd.find("SCRFD") == std::string::npos || model_name_fd == "NA_MODEL" || model_name_fr.find("MOBILEFACENET") == std::string::npos) {
-				std::cerr << "Model combination mismatch. Please check modelSelect() again." << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		} else if (nn_task == "AUDIO_CLASSIFICATION") {
-			if (model_name_ac  == "NA_MODEL" || model_name_ac.find("YAMNET") == std::string::npos) {
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name_ac: " << model_name_ac << std::endl;
-				std::cerr << "Model combination mismatch. Please check modelSelect() again." << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		} else if (nn_task == "IMAGE_CLASSIFICATION") {
-			if (model_name_ic == "NA_MODEL" || model_name_ic.find("IMGCLASS") == std::string::npos) {
-				std::cerr << "Model combination mismatch. Please check modelSelect() again." << std::endl;
-				exit(EXIT_FAILURE);
+			if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
+			for (int m = 0; m < model_count; m++) { 
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_name: " << model_names[m] << std::endl;
 			}
 		}
 	}
 
+	// Error handler
+	if (j.contains("nn_task") && j["nn_task"].contains("NNTASK")) {
+		nnTasks = j["nn_task"]["NNTASK"].get<std::vector<std::string>>();
+	} else {
+		std::cerr << "Error: 'nn_task' or 'NNTASK' key not found in the JSON file." << std::endl;
+	}
+
+	if (j.contains("error_handler") && j["error_handler"].contains("tasks")) {
+		auto tasks = j["error_handler"]["tasks"];
+        if (tasks.contains(nn_task)) {
+            std::vector<std::string> required_models = tasks[nn_task].get<std::vector<std::string>>();
+   
+			bool all_keywords_present = true;
+            for (const auto& required_model : required_models) {
+                bool model_found = false;
+                for (const auto& model_name : model_names) {
+                    if (model_name.find(required_model) != std::string::npos) {
+                        model_found = true;
+                        break;
+                    }
+                }
+
+                if (!model_found) {
+                    std::cerr << "Model combination mismatch for task '" << nn_task << "'. Missing model: " << required_model << std::endl;
+                    all_keywords_present = false;
+                }
+            }
+
+			// Exit if any required model is missing
+            if (!all_keywords_present) {
+                exit(EXIT_FAILURE);
+            }
+		} 
+		// else {
+        //     std::cerr << "Task '" << nn_task << "' not found in error_handler." << std::endl;
+        //     exit(EXIT_FAILURE);
+        // }
+	} else {
+        std::cerr << "Error handler configuration is invalid or missing." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+	
+	for (int i = 0; i < model_count; i++) {
+		if (load_nn_model_src != "LoadFromFlash" && model_names[i].find(key_amb_default) != std::string::npos) {
+			std::cerr << "Model selection mismatched. Please ensure that you select a customized model when loading from SD card." << std::endl;
+			exit(EXIT_FAILURE);
+    	}
+	}
 
 	// Check if customized model is used
-	for (int i = 0; i < NUMBER_OF_MODELS; i++) {
+	for (int i = 0; i < model_count; i++) {
 		if (model_names[i].find(key_amb_customized) != std::string::npos) {
 			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_names[i]: " << model_names[i] << std::endl;
 			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] key_amb_customized" << std::endl;
@@ -1233,7 +1420,9 @@ void writeTXT(const std::string &path) {
 					std::string example_name = path.substr(path.find_last_of("/") + 1);
 					removeChar(example_name, '/');
 #endif
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] example_name: " << example_name << std::endl;
 					std::string folder_example = listExampleDir(path_library, example_name); // return example directory path
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] folder_example: " << folder_example << std::endl;
 					dir_example = folder_example;
 					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] dir_example: " << dir_example << std::endl;
 				}
@@ -1271,10 +1460,12 @@ void writeTXT(const std::string &path) {
 						std::string filename = entry->d_name;
 						if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
 						if (filename.find(".nb") != std::string::npos) {
-							if (filename.find(input2model(model_names[i])) != std::string::npos) {
-
+							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
+							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_names[i]: " << model_names[i] << std::endl;
+							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] input2model(model_names[i]): " << input2model(model_names[i]) << std::endl;
+							//if (filename.find(input2model(model_names[i])) != std::string::npos) {
 								count_match++;
-							}
+							//}
 						}
 					}
 				}
@@ -1292,14 +1483,11 @@ void writeTXT(const std::string &path) {
 			}
 		} 
 	}
-
+	
 	if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name OD: " <<  input2model(model_name_od) << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name FD: " <<  input2model(model_name_fd) << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name FR: " <<  input2model(model_name_fr) << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name AC: " <<  input2model(model_name_ac) << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name IC: " <<  input2model(model_name_ic) << std::endl;
-	if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
+	for (int i = 0; i < model_count; i++) {
+		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name : " <<  input2model(model_names[i]) << std::endl;
+	}
 
 	if (load_nn_model_src == "LoadFromFlash") {
 		if (input2model(model_name_ac) != "NA") {
@@ -1313,141 +1501,74 @@ void writeTXT(const std::string &path) {
 	// ------------------------- update TXT -------------------------
 	updateTXT("----------------------------------");
 	updateTXT("Current ino contains model(s):");
-	if (model_name_od.length() == 0 && model_name_fd.length() == 0 && model_name_fr.length() == 0 && model_name_ac.length() == 0 && model_name_ic.length() == 0) {
-		for (int i = 0; i < NUMBER_OF_MODELS; i++) {
+	for (int i = 0; i < model_count; i++) {
+		if (model_names[i].length() == 0) {
 			updateTXT("NA");
 		}
-	}
-	else {
-		updateTXT(input2model(model_name_od));
-		updateTXT(input2model(model_name_fd));
-		updateTXT(input2model(model_name_fr));
-		updateTXT(input2model(model_name_ac));
-		updateTXT(input2model(model_name_ic));
+		else {
+			updateTXT(input2model(model_names[i]));
+		}
 	}
 
 	updateTXT("----------------------------------");
 	updateTXT("Current model(s)(Default/Customized)");
+	for (int i = 0; i < model_count; i++) {
+		if (model_names[i].length() != 0 && model_names[i] != "NA_MODEL") {
+			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_names[i]: " << model_names[i] << std::endl;
 
-	if (model_name_od.length() != 0 && model_name_od != "NA_MODEL") {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name OD: " << model_name_od << std::endl;
+			if (model_names[i].find(key_amb_default) != std::string::npos) {
+				model_customized_default[i] = "DEFAULT";
+			} else if (model_names[i].find(key_amb_customized) != std::string::npos) {
+				model_customized_default[i] = "CUSTOMIZED";
+			} else {
+				model_customized_default[i] = "NA";
+			}
+			updateTXT(model_customized_default[i]);
 
-		if (model_name_od.find(key_amb_default) != std::string::npos) {
-			model_customized_default[0] = "DEFAULT";
-		} else if (model_name_od.find(key_amb_customized) != std::string::npos) {
-			model_customized_default[0] = "CUSTOMIZED";
+			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_customized_default[i]: " << model_customized_default[i] << std::endl;
 		} else {
-			model_customized_default[0] = "NA";
+			updateTXT("NA");
 		}
-		updateTXT(model_customized_default[0]);
-
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_customized_default[0]: " << model_customized_default[0] << std::endl;
-	} else {
-		updateTXT("NA");
 	}
 	
-	if (model_name_fd.length() != 0 && model_name_fd != "NA_MODEL") {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name FD: " << model_name_fd << std::endl;
-		if (model_name_fd.find(key_amb_default) != std::string::npos) {
-			model_customized_default[1] = "DEFAULT";
-		} else if (model_name_fd.find(key_amb_customized) != std::string::npos) {
-			model_customized_default[1] = "CUSTOMIZED";
-		} else {
-			model_customized_default[1] = "NA";
-		}
-		updateTXT(model_customized_default[1]);
-
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_customized_default[1]: " << model_customized_default[1] << std::endl;
-	} else {
-		updateTXT("NA");
-	}
-
-
-	if (model_name_fr.length() != 0 && model_name_fd != "NA_MODEL") {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name FR: " << model_name_fr << std::endl;
-		if (model_name_fr.find(key_amb_default) != std::string::npos) {
-			model_customized_default[2] = "DEFAULT";
-		} else if (model_name_fr.find(key_amb_customized) != std::string::npos) {
-			model_customized_default[2] = "CUSTOMIZED";
-		} else {
-			model_customized_default[2] = "NA";
-		}
-		updateTXT(model_customized_default[2]);
-
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_customized_default[2]: " << model_customized_default[2] << std::endl;
-	} else {
-		updateTXT("NA");
-	}
-
-	
-	if (model_name_ac.length() != 0 && model_name_ac != "NA_MODEL") {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name AC: " << model_name_ac << std::endl;
-		if (model_name_ac.find(key_amb_default) != std::string::npos) {
-			model_customized_default[3] = "DEFAULT";
-		} else if (model_name_ac.find(key_amb_customized) != std::string::npos) {
-			model_customized_default[3] = "CUSTOMIZED";
-		} else {
-			model_customized_default[3] = "NA";
-		}
-		updateTXT(model_customized_default[3]);
-
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_customized_default[3]: " << model_customized_default[3] << std::endl;
-	} else {
-		updateTXT("NA");
-	}
-
-	
-	if (model_name_ic.length() != 0 && model_name_ic != "NA_MODEL") {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name IC: " << model_name_ic << std::endl;
-		if (model_name_ic.find(key_amb_default) != std::string::npos) {
-			model_customized_default[4] = "DEFAULT";
-		} else if (model_name_ic.find(key_amb_customized) != std::string::npos) {
-			model_customized_default[4] = "CUSTOMIZED";
-		} else {
-			model_customized_default[4] = "NA";
-		}
-		updateTXT(model_customized_default[4]);
-
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] model_customized_default[4]: " << model_customized_default[4] << std::endl;
-	} else {
-		updateTXT("NA");
-	}
-
 	updateTXT("-----------------------------------");
 	updateTXT("Current NN header file(s): ");
 
 	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] example_file_path: " << example_file_path << std::endl;
 	// if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] bufferContent: " << bufferContent << std::endl;
-	// Search for keywords and process lines containing them
+
+	if (j.contains("header") && j["header"].contains("HEADERNAME")) {
+        headerName = j["header"]["HEADERNAME"].get<std::vector<std::string>>();
+    } else {
+        std::cerr << "Error: 'HEADERNAME' not found in JSON." << std::endl;
+		exit(EXIT_FAILURE);
+    }
+
+	for (int i = 0; i < model_count; i++) {
+		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "]  headerName[i]: " << headerName[i] << std::endl;
+	}
+
 	std::istringstream iss_nnheader(bufferContent);
+	header.resize(model_count, "NA");
 	while (std::getline(iss_nnheader, line)) {
 		if (line.find(key_amb_header) != std::string::npos && line.find(key_nn) != std::string::npos) {
-			if (line.find("Object") != std::string::npos) {
-				header_od = extractString(line);
-			} else if (line.find("FaceDetection") != std::string::npos && line.find("Recognition") == std::string::npos) {
-				header_fd = extractString(line);
-			} else if (line.find("FaceDetectionRecognition") != std::string::npos) {
-				header_fr = extractString(line);
-			} else if (line.find("Audio") != std::string::npos) {
-				header_ac = extractString(line);
-			} else if (line.find("Image") != std::string::npos) {
-				header_ic = extractString(line);
+			for (int i = 0; i < model_count; i++) {
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] headerName[i]: " << headerName[i] << std::endl;
+				if (line.find(headerName[i]) != std::string::npos) {
+					header[i] = extractString(line); // Save header_line to the vector.
+					header_line = extractString(line); // Assign to array or vector.
+					 if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] header[" << i << "]: " << header[i] << std::endl;
+                	break; // No need to check further for this line.
+				} 
 			}
 		} 
 	}
 
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Extracted OD header: " << header_od << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Extracted FD header: " << header_fd << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Extracted FR header: " << header_fr << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Extracted AC header: " << header_ac << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Extracted IC header: " << header_ic << std::endl;
 	if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
-
-	updateTXT(header_od);
-	updateTXT(header_fd);
-	updateTXT(header_fr);
-	updateTXT(header_ac);
-	updateTXT(header_ic);
+	for (int i = 0; i < model_count; i++) {
+		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Final header[" << i << "]: " << header[i] << std::endl;
+		updateTXT(header[i]);
+	}
 
 	updateTXT("----------------------------------");
 	updateTXT("Current ino video status:");
@@ -1557,6 +1678,7 @@ int main(int argc, char* argv[]) {
 	path_model = path_model.append(path_model_add);
 	path_txtfile = path_tools;
 	path_txtfile = path_txtfile.append(path_txtfile_add);
+	path_jsonfile = path_txtfile; // they are in the same folder (misc)
 	load_nn_model_src = model_src;
 
 #if PRINT_DEBUG
@@ -1578,6 +1700,7 @@ int main(int argc, char* argv[]) {
 	resetTXT(path_txtfile);
 	resetJSON(path_model);
 	path_build_options_json = pathTempJSON(path_build, ext_json, key_json);
+	tool_folder_json_path = path_jsonfile + nnmodels_json;
 	path_example_ino = validateINO(path_build);
 	writeTXT(path_example_ino);
 	if (PRINT_DEBUG) printf("[%s]----END----\n", __func__);
