@@ -81,6 +81,8 @@ Ameba_AMB82-MINI.menu.CameraOption.imx307=IMX307
 Ameba_AMB82-MINI.menu.CameraOption.imx307.build.camera_opt=SENSOR_IMX307
 Ameba_AMB82-MINI.menu.CameraOption.imx327=IMX327
 Ameba_AMB82-MINI.menu.CameraOption.imx327.build.camera_opt=SENSOR_IMX327
+Ameba_AMB82-MINI.menu.CameraOption.imx662=IMX662
+Ameba_AMB82-MINI.menu.CameraOption.imx662.build.camera_opt=SENSOR_IMX662
 Ameba_AMB82-MINI.menu.CameraOption.ps5268=PS5268
 Ameba_AMB82-MINI.menu.CameraOption.ps5268.build.camera_opt=SENSOR_PS5268
 
