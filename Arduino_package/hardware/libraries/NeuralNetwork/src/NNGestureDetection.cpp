@@ -324,8 +324,8 @@ void NNGestureDetection::drawHandObject(void *p, void *img_param)
         }
     }
 
-    OSD.update(RTSP_CHANNEL, 0, HAND_JOINT_LAYER);
-    OSD.update(RTSP_CHANNEL, 1, HAND_LINK_LAYER);
+    OSD.update(RTSP_CHANNEL, HAND_JOINT_LAYER, 0);
+    OSD.update(RTSP_CHANNEL, HAND_LINK_LAYER, 1);
 }
 
 /*
@@ -379,8 +379,8 @@ void NNGestureDetection::handCleanupCallback(TimerHandle_t xTimer)
     (void)xTimer;
     OSD.createBitmap(RTSP_CHANNEL, HAND_JOINT_LAYER);
     OSD.createBitmap(RTSP_CHANNEL, HAND_LINK_LAYER);
-    OSD.update(RTSP_CHANNEL, 0, HAND_JOINT_LAYER);
-    OSD.update(RTSP_CHANNEL, 1, HAND_LINK_LAYER);
+    OSD.update(RTSP_CHANNEL, HAND_JOINT_LAYER, 0);
+    OSD.update(RTSP_CHANNEL, HAND_LINK_LAYER, 1);
 }
 
 void NNGestureDetection::drawHandRegion(void)
@@ -389,6 +389,6 @@ void NNGestureDetection::drawHandRegion(void)
     OSD.createBitmap(RTSP_CHANNEL, HAND_DETECT_REGION_LAYER);
     OSD.drawRect(RTSP_CHANNEL, (RTSP_WIDTH - RTSP_HEIGHT) / 2, 5, RTSP_WIDTH - (RTSP_WIDTH - RTSP_HEIGHT) / 2, RTSP_HEIGHT - 5, 3,
                  COLOR_BLUE, HAND_DETECT_REGION_LAYER);
-    OSD.update(RTSP_CHANNEL, 1, HAND_DETECT_REGION_LAYER);
+    OSD.update(RTSP_CHANNEL, HAND_DETECT_REGION_LAYER, 1);
     osd_cleanup_timer = xTimerCreate("OSD clean timer", 1000 / portTICK_PERIOD_MS, pdTRUE, NULL, handCleanupCallback);
 }
