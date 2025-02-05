@@ -6,6 +6,7 @@ Version 4.0.9 - 2024/11/11
 Version 4.0.9 - 2024/12/17
 Version 4.0.9 - 2025/01/17
 Version 4.0.9 - 2025/01/17
+Version 4.0.9 - 2025/02/05
 
 Feature:
 - Update MQTT examples
@@ -17,12 +18,17 @@ Feature:
 - Update UVCDObjectDetectionLoop.ino
 - Update MQTT Example
 - Add MQTT_Image Example
+- Add sensor IMX662
+- Add Hand Gesture Detection Example
 
 API Updates:
 - Update GenAIVision API
 - 
 - Add audio deinit and sd gpio deinit function
 - Update MP4Recording.cpp
+- Update NNGestureDetection.cpp and NNModelSelection.h
+- Update OSD API
+- Update lib for ftp support
 
 Misc:
 - Update ameba_pro2_tools 1.3.13
@@ -33,3 +39,6 @@ Misc:
     - ino_validation
     - postbuild
 - Add Readthedocs json web page
+- Update ameba_pro2_tools 1.4.1
+    - Add sensor IMX662 related support
+- Update spell_check.yml
