@@ -47,6 +47,7 @@ public:
     void drawRect(int ch, int xmin, int ymin, int xmax, int ymax, int line_width, uint32_t color, int idx = 0);
     void drawText(int ch, int xmin, int ymin, const char *text_string, uint32_t color, int idx = 0);
     void update(int ch, int idx = 0);
+    void update(int ch, int idx, int ready_to_update);
 
 private:
     int ch_enable[3] = {0};
