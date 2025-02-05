@@ -1,12 +1,13 @@
 Feature:
-- Add GenAIVision Example
-- Update UVCDObjectDetectionLoop.ino
-- Update MQTT Example
-- Add MQTT_Image Example
+- Add sensor IMX662
+- Add Hand Gesture Detection Example
 
 API Updates:
-- Add audio deinit and sd gpio deinit function
-- Update MP4Recording.cpp
+- Update NNGestureDetection.cpp and NNModelSelection.h
+- Update OSD API
+- Update lib for ftp support
 
 Misc:
-- Add Readthedocs json web page
+- Update ameba_pro2_tools 1.4.1
+    - Add sensor IMX662 related support
+- Update spell_check.yml
