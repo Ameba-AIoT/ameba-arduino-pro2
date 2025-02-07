@@ -56,6 +56,11 @@ void sisoSetStackSize(void *ctx)
     siso_ctrl((mm_siso_t *)ctx, MMIC_CMD_SET_STACKSIZE, (uint32_t)1024 * 64, 0);
 }
 
+void sisoSetStackSizeDefined(void *ctx, int size)
+{
+    siso_ctrl((mm_siso_t *)ctx, MMIC_CMD_SET_STACKSIZE, (uint32_t)1024 * size, 0);
+}
+
 void sisoSetTaskPriority(void *ctx)
 {
     siso_ctrl((mm_siso_t *)ctx, MMIC_CMD_SET_TASKPRIORITY, 3, 0);

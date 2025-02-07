@@ -113,7 +113,6 @@ void NNGestureDetection::begin(void)
         vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&palm_detection_fwfs);
     }
     vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_IN_PARAMS, (int)&palm_nn_roi);
-    mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_OUTPUT, 1);
     mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_RES_SIZE, sizeof(palmdetect_res_t));    // result size
     mm_module_ctrl(_p_mmf_context, CMD_VIPNN_SET_RES_MAX_CNT, MAX_HAND_DETECT_NUM);      // result max count
     mm_module_ctrl(_p_mmf_context, MM_CMD_SET_DATAGROUP, MM_GROUP_START);
@@ -149,9 +148,9 @@ void NNGestureDetection::begin(void)
         vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_MODEL, (int)&hand_landmark_fwfs);
     }
 
+    mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_IN_PARAMS, (int)&handlandmark_nn_roi);
     vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_CASCADE, 2);    // this module is cascade mode
     vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_OUTPUT, 1);     // output
-    mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_IN_PARAMS, (int)&handlandmark_nn_roi);
     mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_RES_SIZE, sizeof(handland_res_t));    // result size
     mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_HAND_DETECT_NUM);    // result max count
 

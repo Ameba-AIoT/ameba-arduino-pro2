@@ -14,6 +14,7 @@ void sisoResume(void *);
 void sisoRegIn(void *, mm_context_t *);
 void sisoRegOut(void *, mm_context_t *);
 void sisoSetStackSize(void *);
+void sisoSetStackSizeDefined(void *, int size);
 void sisoSetTaskPriority(void *);
 
 #endif
