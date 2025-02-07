@@ -149,8 +149,8 @@ void NNGestureDetection::begin(void)
     }
 
     mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_IN_PARAMS, (int)&handlandmark_nn_roi);
-    vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_CASCADE, 2);    // this module is cascade mode
-    vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_OUTPUT, 1);     // output
+    vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_CASCADE, 2);                     // this module is cascade mode
+    vipnn_control(handlandmark_ctx->priv, CMD_VIPNN_SET_OUTPUT, 1);                      // output
     mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_RES_SIZE, sizeof(handland_res_t));    // result size
     mm_module_ctrl(handlandmark_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_HAND_DETECT_NUM);    // result max count
 
