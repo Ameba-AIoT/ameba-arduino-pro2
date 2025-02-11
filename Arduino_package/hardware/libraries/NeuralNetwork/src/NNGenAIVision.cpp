@@ -117,7 +117,7 @@ String NNGenAIVision::geminivision(String key, String message, uint32_t img_addr
         String Data = "{\"contents\": [{\"parts\": [{\"text\": \"" + message + "\"}, {\"inline_data\": {\"mime_type\":\"image/jpeg\",\"data\":\"" + imageFile + "\"}}]}]}";
         // String Data = "{\"contents\": [{\"parts\": [{\"text\": \""+message+"\"}]}]}";
 
-        client.println("POST /v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + key + " HTTP/1.1");
+        client.println("POST /v1beta/models/gemini-2.0-flash-001:generateContent?key=" + key + " HTTP/1.1");
         client.println("Host: " + String(myDomain));
         client.println("Content-Type: application/json; charset=utf-8");
         client.println("Content-Length: " + String(Data.length()));
