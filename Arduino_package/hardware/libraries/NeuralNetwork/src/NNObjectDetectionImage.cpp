@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "NNObjectDetectionImage.h"
-#include "stb_image.h"
+#include "3rdparty/stb_image.h"
 
 #ifdef __cplusplus
 extern "C" {
