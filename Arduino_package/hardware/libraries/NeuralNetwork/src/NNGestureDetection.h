@@ -3,13 +3,12 @@
 
 #include "VideoStream.h"
 #include "NNModelSelection.h"
-#include "osd_api.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include "module_vipnn.h"
-#include "mmf2_siso.h"
+
 #ifdef __cplusplus
 }
 #endif

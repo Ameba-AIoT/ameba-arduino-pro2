@@ -17,11 +17,11 @@ Credit : ChungYi Fu (Kaohsiung, Taiwan)
 
 */
 
-String openAI_key = "";                // paste your generated openAI API key here
-String Gemini_key = "";                // paste your generated Gemini API key here
-String Llama_key = "";                 // paste your generated Llama API key here
-char wifi_ssid[] = "Network_SSID5";    // change to your network SSID
-char wifi_pass[] = "Password";         // change to your network password
+String openAI_key = "";               // paste your generated openAI API key here
+String Gemini_key = "";               // paste your generated Gemini API key here
+String Llama_key = "";                // paste your generated Llama API key here
+char wifi_ssid[] = "Network_SSID";    // change to your network SSID
+char wifi_pass[] = "Password";        // change to your network password
 
 #include <WiFi.h>
 #include "NNGenAIVision.h"
