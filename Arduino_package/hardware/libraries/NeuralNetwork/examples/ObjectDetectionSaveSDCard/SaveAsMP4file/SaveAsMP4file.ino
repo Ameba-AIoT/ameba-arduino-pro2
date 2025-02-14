@@ -61,8 +61,8 @@ StreamIO avMixStreamer(2, 2);      // 2 Input Video + Audio -> 2 Output MP4 + RT
 
 int recordingCount = 0;
 
-char ssid[] = "Network_SSID5";    // your network SSID (name)
-char pass[] = "Password";         // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "Network_SSID";    // your network SSID (name)
+char pass[] = "Password";        // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;
 
 void setup()
