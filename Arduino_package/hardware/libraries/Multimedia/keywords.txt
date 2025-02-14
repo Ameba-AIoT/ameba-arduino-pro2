@@ -244,8 +244,17 @@ color	KEYWORD2
 drawPoint	KEYWORD2
 drawRect	KEYWORD2
 drawText	KEYWORD2
+drawPlus	KEYWORD2
 createBitmap	KEYWORD2
 update	KEYWORD2
+initOSDBitmapPos	KEYWORD2
+initOSDBitmapBlk	KEYWORD2
+initOSDBitmapBuf	KEYWORD2
+resizeWidth	KEYWORD2
+resizeHeight	KEYWORD2
+heapsizeCal	KEYWORD2
+drawImage	KEYWORD2
+displayImage	KEYWORD2
 
 OSD_COLOR_RED	LITERAL1
 OSD_COLOR_BLUE	LITERAL1

@@ -1,14 +1,13 @@
 #include <Arduino.h>
 #include "NNGestureDetection.h"
 #include "SD_Model.h"
+#include "VideoStreamOverlay.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "mmf2_module.h"
-#include "mmf2_link.h"
-#include "mmf2_siso.h"
 #include "timers.h"
 #include "module_vipnn.h"
 #include "model_palm_detection.h"
@@ -18,7 +17,6 @@ extern "C" {
 #include "vfs.h"
 #include "osd_render.h"
 #include "roi_delta_qp/roi_delta_qp.h"
-#include "VideoStreamOverlay.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
