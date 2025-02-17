@@ -98,6 +98,7 @@ void setup()
 
     // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
+    config.setBitrate(2 * 1024 * 1024);    // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     ObjDet.configVideo(configNN);
     ObjDet.modelSelect(OBJECT_DETECTION, DEFAULT_YOLOV4TINY, NA_MODEL, NA_MODEL);
     ObjDet.begin();
