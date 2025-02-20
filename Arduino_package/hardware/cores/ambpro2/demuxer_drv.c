@@ -45,7 +45,6 @@ void demuxerOpen(mm_context_t *p, const char *file_name, uint8_t stream_type, ui
 
 void demuxerStart(mm_context_t *p)
 {
-    printf("CMD_DEMUXER_STREAM_START\r\n");
     mm_module_ctrl(p, CMD_DEMUXER_STREAM_START, 0);
 }
 
