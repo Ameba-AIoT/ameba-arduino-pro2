@@ -5,10 +5,10 @@
 #include <osdep_service.h>
 #include "mmf2_module.h"
 
-#define FORMAT_TYPE_YUY2        0
-#define FORMAT_TYPE_NV12        1
-#define FORMAT_TYPE_MJPEG       2
-#define FORMAT_TYPE_H264        3
+#define FORMAT_TYPE_MJPEG       0
+#define FORMAT_TYPE_H264        1
+#define FORMAT_TYPE_YUY2        2
+#define FORMAT_TYPE_NV12        3
 #define FORMAT_TYPE_BAYER       4
 
 #define BAYER_TYPE_BEFORE_BLC   1
