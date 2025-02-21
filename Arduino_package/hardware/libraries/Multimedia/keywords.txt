@@ -23,6 +23,7 @@ OSD	KEYWORD1
 MotionDetection	KEYWORD1
 MotionDetectionPostProcess	KEYWORD1
 MotionDetectionRegion	KEYWORD1
+Demuxer	KEYWORD1
 
 #######################################
 # AudioDecoder.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -291,3 +292,12 @@ xMin	KEYWORD2
 xMax	KEYWORD2
 yMin	KEYWORD2
 yMax	KEYWORD2
+
+#######################################
+# Demuxer.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+pause	KEYWORD2
+resume	KEYWORD2
+end	KEYWORD2
