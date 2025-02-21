@@ -1,12 +1,16 @@
 #include <Arduino.h>
 #include "NNObjectDetectionImage.h"
+#include "SD_Model.h"
 #include "3rdparty/stb_image.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "model_yolo.h"
 #include "siso_drv.h"
+
+extern int vipnn_control(void *p, int cmd, int arg);
 
 #ifdef __cplusplus
 }
@@ -81,7 +85,57 @@ void NNObjectDetectionImage::begin(char *filelist_name)
     // VIPNN
     vipnn_ctx = mm_module_open(&vipnn_module);
     if (vipnn_ctx) {
-        mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&NN_MODEL_OBJ);
+        if (_nntask != OBJECT_DETECTION) {
+            if (ARDUINO_LOAD_MODEL == 0x02) {
+                printf("\r\n[INFO] Models loaded using SD Card\n");
+            } else {
+                while (1) {
+                    printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                    delay(5000);
+                }
+            }
+        }
+        if (ARDUINO_LOAD_MODEL == 0x02) {
+            switch (_yolomodel) {
+                case SD_YOLOV3TINY: {
+                    mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny_from_sd);
+                    // printf("\r\n[INFO] YOLOV3 running...\n");
+                    break;
+                }
+                case SD_YOLOV4TINY: {
+                    mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny_from_sd);
+                    // printf("\r\n[INFO] YOLOV4 running...\n");
+                    break;
+                }
+                case SD_YOLOV7TINY: {
+                    mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny_from_sd);
+                    // printf("\r\n[INFO] YOLOV7 running...\n");
+                    break;
+                }
+            }
+        } else {
+            switch (_yolomodel) {
+                case DEFAULT_YOLOV3TINY:
+                case CUSTOMIZED_YOLOV3TINY: {
+                    mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
+                    // printf("\r\n[INFO] YOLOV3 running...\n");
+                    break;
+                }
+                case DEFAULT_YOLOV4TINY:
+                case CUSTOMIZED_YOLOV4TINY: {
+                    mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
+                    // printf("\r\n[INFO] YOLOV4 running...\n");
+                    break;
+                }
+                case DEFAULT_YOLOV7TINY:
+                case CUSTOMIZED_YOLOV7TINY: {
+                    mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
+                    // printf("\r\n[INFO] YOLOV7 running...\n");
+                    break;
+                }
+            }
+        }
+
         mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_IN_PARAMS, (int)&roi_tester);
         mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_RES_SIZE, sizeof(objdetect_res_t));    // result size
         mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_RES_MAX_CNT, MAX_DETECT_OBJ_NUM);      // result max count
