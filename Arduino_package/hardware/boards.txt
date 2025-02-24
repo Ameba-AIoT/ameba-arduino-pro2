@@ -6,6 +6,7 @@ menu.LoadNNModelSource=* NN Model Load From
 menu.CameraOption=* Camera Options
 menu.OTAMode=* OTA Mode
 menu.FCSMode=* Camera FCS Mode
+menu.SHOWNNLOGS=* Show NN Logs
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -24,7 +25,7 @@ Ameba_AMB82-MINI.build.core=ambpro2
 Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.menu_flags}
 Ameba_AMB82-MINI.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
 Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
-Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags}
+Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_nn_logs_flags} 
 
 Ameba_AMB82-MINI.upload.tool=ameba_pro2_tools
 Ameba_AMB82-MINI.upload.protocol=usb_serial
@@ -99,4 +100,9 @@ Ameba_AMB82-MINI.menu.FCSMode.Disable.build.fcs_mode_flags=
 Ameba_AMB82-MINI.menu.FCSMode.Enable=Enable
 Ameba_AMB82-MINI.menu.FCSMode.Enable.build.fcs_mode_val=Enable
 Ameba_AMB82-MINI.menu.FCSMode.Enable.build.fcs_mode_flags=-DArduino_FCS_MODE
+
+Ameba_AMB82-MINI.menu.SHOWNNLOGS.Enable=Enable
+Ameba_AMB82-MINI.menu.SHOWNNLOGS.Enable.build.show_nn_logs_flags=-DArduino_SHOW_NN_LOGS
+Ameba_AMB82-MINI.menu.SHOWNNLOGS.Disable=Disable
+Ameba_AMB82-MINI.menu.SHOWNNLOGS.Disable.build.show_nn_logs_flags=
 ##############################################################
