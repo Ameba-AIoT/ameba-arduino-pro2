@@ -1,3 +1,16 @@
+<01/08/2025 12:00 Juling>
+Version : RTL8735B_VOE_1.6.0.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix Ch0(scale up) reopen issue - 2560*1440 --> 2688*1520
+	2. Add get zoom roi cmd
+
+	Video/ENC related
+	1. Fix Delta QP cache issue
+--------------------------------------------------------------------------
 <11/19/2024 12:00 Juling>
 Version : RTL8735B_VOE_1.5.9.0
 Modified Files:

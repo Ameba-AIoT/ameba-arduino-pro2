@@ -116,6 +116,7 @@ typedef struct {
 	unsigned char				channel;        /**< set to 0 means full channel scan, set to other value means only scan on the specified channel */
 	unsigned char				pscan_option;   /**< used when the specified channel is set, set to 0 for normal partial scan, set to PSCAN_FAST_SURVEY for fast survey*/
 	unsigned char				roam_en;
+	unsigned char				band;			//used for wifi connection to fixed band: 0: 2.4G/5G, 1: 2.4G only, 2: 5G only
 	rtw_joinstatus_callback_t	joinstatus_user_callback;   /**< user callback for processing joinstatus, please set to NULL if not use it */
 } rtw_network_info_t;
 

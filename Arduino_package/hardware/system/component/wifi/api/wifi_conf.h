@@ -1454,6 +1454,20 @@ int wifi_get_rx_queue_count(unsigned int *recvframe_cnt);
 void wifi_power_hci_axi_deinit(void);
 
 /**
+* @brief Get router pmk information
+* @param[in] key: can be get the router PMK information
+* @Example:
+* unsigned char key[32];
+* wifi_get_wpa_global_PMK(key);
+*/
+void wifi_get_wpa_global_PMK(unsigned char *key);
+
+/**
+ * @brief  wifi set active keepalive enable
+ * @return  None
+ */
+void wifi_set_active_keepalive_enabled(u8 active_keepalive_enabled);
+/**
 * @}
 */
 
