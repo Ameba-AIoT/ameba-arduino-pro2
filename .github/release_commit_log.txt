@@ -1,13 +1,15 @@
 Feature:
-- Add sensor IMX662
-- Add Hand Gesture Detection Example
+- Add '+' and image OSD features
+- Add Image to Array tool for OSD Example
+- Add ObjectDetection result saving as MP4 file or JPEG example
+- Add demuxer RTSP example
 
 API Updates:
-- Update NNGestureDetection.cpp and NNModelSelection.h
-- Update OSD API
-- Update lib for ftp support
+- Update NNGenAIVision.cpp, gemini-2.0 model
+- Add demuxer_drv.c and demuxer_drv.h
+- Update UVCD encoder's format order
+- Update libs, MP3 API related
 
 Misc:
-- Update ameba_pro2_tools 1.4.1
-    - Add sensor IMX662 related support
-- Update spell_check.yml
+- Update ameba_pro2_tools 1.4.2
+- Update board.txt for options to enable and disable NN logs

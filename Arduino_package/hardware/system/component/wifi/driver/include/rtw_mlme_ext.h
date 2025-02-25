@@ -939,7 +939,7 @@ void rtw_chset_sync_chbw(RT_CHANNEL_INFO *ch_set, u8 *req_ch, u8 *req_bw, u8 *re
 						 , u8 *g_ch, u8 *g_bw, u8 *g_offset);
 
 bool rtw_mlme_band_check(_adapter *adapter, const u32 ch);
-u8 init_channel_set(_adapter *padapter, u8 ChannelPlan, RT_CHANNEL_INFO *channel_set);
+u8 init_channel_set(_adapter *padapter, u8 ChannelPlan, RT_CHANNEL_INFO *channel_set, u8 fixed_band);
 int init_mlme_ext_priv(_adapter *padapter);
 int init_hw_mlme_ext(_adapter *padapter);
 void free_mlme_ext_priv(struct mlme_ext_priv *pmlmeext);

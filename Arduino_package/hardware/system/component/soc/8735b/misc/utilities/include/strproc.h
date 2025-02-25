@@ -129,6 +129,9 @@ extern const strproc_func_stubs_t strproc_stubs;
 */
 __STATIC_INLINE char *strcat(char *dest,  char const *src)
 {
+	if ((dest == NULL) || (src == NULL)) {
+		return NULL;
+	}
 	return strproc_stubs.strcat(dest, src);
 }
 
@@ -142,6 +145,9 @@ __STATIC_INLINE char *strcat(char *dest,  char const *src)
 */
 __STATIC_INLINE char *strchr(const char *s, int c)
 {
+	if (s == NULL) {
+		return NULL;
+	}
 	return strproc_stubs.strchr(s, c);
 }
 
@@ -158,7 +164,13 @@ __STATIC_INLINE char *strchr(const char *s, int c)
 */
 __STATIC_INLINE int strcmp(char const *cs, char const *ct)
 {
-	return strproc_stubs.strcmp(cs, ct);
+	if ((cs != NULL) && (ct != NULL)) {
+		return strproc_stubs.strcmp(cs, ct);
+	} else if ((cs == NULL) && (ct == NULL)) {
+		return 0;
+	} else {
+		return (cs == NULL) ? -1 : 1;
+	}
 }
 
 /**
@@ -174,7 +186,13 @@ __STATIC_INLINE int strcmp(char const *cs, char const *ct)
 */
 __STATIC_INLINE int strncmp(char const *cs, char const *ct, size_t count)
 {
-	return strproc_stubs.strncmp(cs, ct, count);
+	if ((cs != NULL) && (ct != NULL)) {
+		return strproc_stubs.strncmp(cs, ct, count);
+	} else if ((cs == NULL) && (ct == NULL)) {
+		return 0;
+	} else {
+		return (cs == NULL) ? -1 : 1;
+	}
 }
 
 /**
@@ -195,7 +213,13 @@ __STATIC_INLINE int strncmp(char const *cs, char const *ct, size_t count)
 */
 __STATIC_INLINE int strnicmp(char const *s1, char const *s2, size_t len)
 {
-	return strproc_stubs.strnicmp(s1, s2, len);
+	if ((s1 != NULL) && (s2 != NULL)) {
+		return strproc_stubs.strnicmp(s1, s2, len);
+	} else if ((s1 == NULL) && (s2 == NULL)) {
+		return 0;
+	} else {
+		return (s1 == NULL) ? -1 : 1;
+	}
 }
 
 /**
@@ -209,6 +233,9 @@ __STATIC_INLINE int strnicmp(char const *s1, char const *s2, size_t len)
 */
 __STATIC_INLINE char *strcpy(char *dest, char const *src)
 {
+	if ((dest == NULL) || (src == NULL)) {
+		return NULL;
+	}
 	return strproc_stubs.strcpy(dest, src);
 }
 
@@ -225,6 +252,9 @@ __STATIC_INLINE char *strcpy(char *dest, char const *src)
 */
 __STATIC_INLINE char *strncpy(char *dest, char const *src, size_t count)
 {
+	if ((dest == NULL) || (src == NULL)) {
+		return NULL;
+	}
 	return strproc_stubs.strncpy(dest, src, count);
 }
 
@@ -237,6 +267,9 @@ __STATIC_INLINE char *strncpy(char *dest, char const *src, size_t count)
 */
 __STATIC_INLINE size_t strlcpy(char *dst, char const *src, size_t s)
 {
+	if ((dst == NULL) || (src == NULL)) {
+		return 0;
+	}
 	return strproc_stubs.strlcpy(dst, src, s);
 }
 
@@ -247,6 +280,9 @@ __STATIC_INLINE size_t strlcpy(char *dst, char const *src, size_t s)
 */
 __STATIC_INLINE size_t strlen(char const *s)
 {
+	if (s == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strlen(s);
 }
 
@@ -263,6 +299,9 @@ __STATIC_INLINE size_t strlen(char const *s)
 */
 __STATIC_INLINE size_t strnlen(char const *s, size_t count)
 {
+	if (s == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strnlen(s, count);
 }
 
@@ -280,6 +319,9 @@ __STATIC_INLINE size_t strnlen(char const *s, size_t count)
 */
 __STATIC_INLINE char *strncat(char *dest, char const *src, size_t count)
 {
+	if ((dest == NULL) || (src == NULL)) {
+		return NULL;
+	}
 	return strproc_stubs.strncat(dest, src, count);
 }
 
@@ -294,6 +336,9 @@ __STATIC_INLINE char *strncat(char *dest, char const *src, size_t count)
 */
 __STATIC_INLINE char *strpbrk(char const *cs, char const *ct)
 {
+	if ((cs == NULL) || (ct == NULL)) {
+		return NULL;
+	}
 	return strproc_stubs.strpbrk(cs, ct);
 }
 
@@ -307,6 +352,9 @@ __STATIC_INLINE char *strpbrk(char const *cs, char const *ct)
 */
 __STATIC_INLINE size_t strspn(char const *s, char const *accept)
 {
+	if ((s == NULL) || (accept == NULL)) {
+		return 0;
+	}
 	return strproc_stubs.strspn(s, accept);
 }
 
@@ -320,6 +368,9 @@ __STATIC_INLINE size_t strspn(char const *s, char const *accept)
 */
 __STATIC_INLINE char *strstr(char const *s1, char const *s2)
 {
+	if ((s1 == NULL) || (s2 == NULL)) {
+		return NULL;
+	}
 	return strproc_stubs.strstr(s1, s2);
 }
 
@@ -337,6 +388,9 @@ __STATIC_INLINE char *strstr(char const *s1, char const *s2)
 */
 __STATIC_INLINE char *strtok(char *s, char const *ct)
 {
+	if (ct == NULL) {
+		return NULL;
+	}
 	return strproc_stubs.strtok(s, ct);
 }
 
@@ -354,6 +408,9 @@ __STATIC_INLINE char *strtok(char *s, char const *ct)
 */
 __STATIC_INLINE size_t strxfrm(char *dest, const char *src, size_t n)
 {
+	if ((dest == NULL) || (src == NULL)) {
+		return 0;
+	}
 	return strproc_stubs.strxfrm(dest, src, n);
 }
 
@@ -372,6 +429,9 @@ __STATIC_INLINE size_t strxfrm(char *dest, const char *src, size_t n)
 */
 __STATIC_INLINE char *strsep(char **s, const char *ct)
 {
+	if (s == NULL || *s == NULL || ct == NULL) {
+		return NULL;
+	}
 	return strproc_stubs.strsep(s, ct);
 }
 
@@ -387,6 +447,9 @@ __STATIC_INLINE char *strsep(char **s, const char *ct)
 */
 __STATIC_INLINE double strtod(const char *str, char **endptr)
 {
+	if (str == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtod(str, endptr);
 }
 
@@ -402,6 +465,9 @@ __STATIC_INLINE double strtod(const char *str, char **endptr)
 */
 __STATIC_INLINE float strtof(const char *str, char **endptr)
 {
+	if (str == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtof(str, endptr);
 }
 
@@ -417,6 +483,9 @@ __STATIC_INLINE float strtof(const char *str, char **endptr)
 */
 __STATIC_INLINE long double strtold(const char *str, char **endptr)
 {
+	if (str == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtold(str, endptr);
 }
 
@@ -428,6 +497,9 @@ __STATIC_INLINE long double strtold(const char *str, char **endptr)
 */
 __STATIC_INLINE double atof(const char *str)
 {
+	if (str == NULL) {
+		return 0;
+	}
 	return strproc_stubs.atof(str);
 }
 
@@ -443,6 +515,9 @@ __STATIC_INLINE double atof(const char *str)
 */
 __STATIC_INLINE long strtol(const char *nptr, char **endptr, int base)
 {
+	if (nptr == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtol(nptr, endptr, base);
 }
 
@@ -458,6 +533,9 @@ __STATIC_INLINE long strtol(const char *nptr, char **endptr, int base)
 */
 __STATIC_INLINE long long strtoll(const char *nptr, char **endptr, int base)
 {
+	if (nptr == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtoll(nptr, endptr, base);
 }
 
@@ -473,6 +551,9 @@ __STATIC_INLINE long long strtoll(const char *nptr, char **endptr, int base)
 */
 __STATIC_INLINE unsigned long strtoul(const char *nptr, char **endptr, int base)
 {
+	if (nptr == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtoul(nptr, endptr, base);
 }
 
@@ -488,6 +569,9 @@ __STATIC_INLINE unsigned long strtoul(const char *nptr, char **endptr, int base)
 */
 __STATIC_INLINE unsigned long long strtoull(const char *nptr, char **endptr, int base)
 {
+	if (nptr == NULL) {
+		return 0;
+	}
 	return strproc_stubs.strtoull(nptr, endptr, base);
 }
 
@@ -499,6 +583,9 @@ __STATIC_INLINE unsigned long long strtoull(const char *nptr, char **endptr, int
 */
 __STATIC_INLINE int atoi(const char *num)
 {
+	if (num == NULL) {
+		return 0;
+	}
 	return strproc_stubs.atoi(num);
 }
 
@@ -510,6 +597,9 @@ __STATIC_INLINE int atoi(const char *num)
 */
 __STATIC_INLINE unsigned int atoui(const char *num)
 {
+	if (num == NULL) {
+		return 0;
+	}
 	return strproc_stubs.atoui(num);
 }
 
@@ -521,6 +611,9 @@ __STATIC_INLINE unsigned int atoui(const char *num)
 */
 __STATIC_INLINE long atol(const char *num)
 {
+	if (num == NULL) {
+		return 0;
+	}
 	return strproc_stubs.atol(num);
 }
 
@@ -532,6 +625,9 @@ __STATIC_INLINE long atol(const char *num)
 */
 __STATIC_INLINE unsigned long atoul(const char *num)
 {
+	if (num == NULL) {
+		return 0;
+	}
 	return strproc_stubs.atoul(num);
 }
 
@@ -543,6 +639,9 @@ __STATIC_INLINE unsigned long atoul(const char *num)
 */
 __STATIC_INLINE unsigned long long atoull(const char *num)
 {
+	if (num == NULL) {
+		return 0;
+	}
 	return strproc_stubs.atoull(num);
 }
 #endif  // defined(ROM_REGION)
