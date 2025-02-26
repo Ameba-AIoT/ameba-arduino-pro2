@@ -1,4 +1,4 @@
-# Ameba Arduino SDK (ambpro2_arduino)
+# Ameba Arduino SDK - ameba-arduino-pro2 
 
 
 ## 1. About `dev` & `main` branch
