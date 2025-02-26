@@ -19,6 +19,8 @@ void setup()
 
     File file = fs.open(String(fs.getRootPath()) + String(FILENAME) + String(".mp3"));
 
+    file.playMp3();
+
     file.close();
 }
 

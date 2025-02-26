@@ -2448,7 +2448,7 @@ int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void 
 
     for (int i = 0; i < class_cnt; i++) {
         class_ret[i].prob = (float)tensor_out_ptr[i];
-        class_ret[i].class_id = i;
+        class_ret[i].clsid = i;
     }
 
     qsort(class_ret, class_cnt, sizeof(classification_res_t), prob_comparator);
@@ -2460,7 +2460,7 @@ int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void 
     }
 
     for (int i = 0; i < class_cnt; i++) {
-        // printf("class %d, prob %0.2f\n\r", class_ret[i].class_id, class_ret[i].prob);
+        // printf("class %d, prob %0.2f\n\r", class_ret[i].clsid, class_ret[i].prob);
         class_res[i] = class_ret[i];    // copy data to class_res for nn_set_object()
     }
 
