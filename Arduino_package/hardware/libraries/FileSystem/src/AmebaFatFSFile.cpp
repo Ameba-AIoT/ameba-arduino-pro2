@@ -30,7 +30,6 @@ bool File::open(const char *filename)
 
     if (strcmp(extension, ".mp3") == 0) {
         res = f_open(_file, filename, FA_OPEN_EXISTING | FA_READ);
-        convertMp3ToArray();
     } else {
         res = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
     }
@@ -244,10 +243,32 @@ void File::convertMp3ToArray(void)
             free(mp3_data);
             return;
         }
-        audio_play_binary_array(mp3_data, mp3_size);
+        audio_play_binary_array(mp3_data, mp3_size, _audio_vol);
         free(mp3_data);
         mp3_data = NULL;
     } else {
         printf("\r\n[ERROR] No file opened to convert.\n");
     }
+}
+
+/**
+  * @brief  Control the digital gain of DAC.
+
+  * @param  digitalVol: The digital volume. Every Step is 0.375dB.
+  *            @arg 0xAF: 0dB.
+  *            @arg 0xAE: -0.375dB.
+  *            @arg ...
+  *            @arg 0x00: -65.625dB.
+  * @retval none
+*/
+void File::setMp3DigitalVol(uint8_t digitalVol)
+{
+    _audio_vol = digitalVol;
+    return;
+}
+
+void File::playMp3(void)
+{
+    convertMp3ToArray();
+    return;
 }
