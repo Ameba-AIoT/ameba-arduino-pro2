@@ -205,13 +205,13 @@ void thread2_task(void *param)
 
             // AI vision prompt
             // openAI vision prompt
-            // String response = llm.openaivision(openAI_key, "gpt-4o-mini", prompt_msg, img_addr, img_len, client);
+            // String response = llm.openaivision(openAI_key, "gpt-4o-mini", prompt_msg, img_addr, img_len, sslClient);
 
             // Gemini vision prompt
-            String response = llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, client);
+            String response = llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, sslClient);
 
             // Llama vision prompt
-            // String response = llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, client);
+            // String response = llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, sslClient);
 
             const char *c_resp = response.c_str();
 
