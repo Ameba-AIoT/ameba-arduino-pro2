@@ -22,14 +22,14 @@
 #include <PubSubClient.h>
 #include "Base64.h"
 #include "VideoStream.h"
-#include "NNGenAIVision.h"
+#include "GenAI.h"
 
 WiFiClient wifiClient;
 WiFiClient wifiClientR;
 WiFiSSLClient sslClient;
 PubSubClient client(wifiClient);
 PubSubClient rclient(wifiClientR);
-NNGenAIVision llm;
+GenAI llm;
 
 VideoSetting config(768, 768, CAM_FPS, VIDEO_JPEG, 1);
 #define CHANNEL 0
@@ -205,13 +205,13 @@ void thread2_task(void *param)
 
             // AI vision prompt
             // openAI vision prompt
-            // String response = llm.openaivision(openAI_key, prompt_msg, img_addr, img_len, client);
+            // String response = llm.openaivision(openAI_key, "gpt-4o-mini", prompt_msg, img_addr, img_len, client);
 
             // Gemini vision prompt
-            String response = llm.geminivision(Gemini_key, prompt_msg, img_addr, img_len, sslClient);
+            String response = llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, client);
 
             // Llama vision prompt
-            // llm.llamavision(Llama_key, prompt_msg, img_addr, img_len, client);
+            // String response = llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, client);
 
             const char *c_resp = response.c_str();
 

@@ -1,5 +1,5 @@
-#ifndef __NN_GENAIVISION_H__
-#define __NN_GENAIVISION_H__
+#ifndef __NN_GENAI_H__
+#define __NN_GENAI_H__
 
 #include "WiFi.h"
 #include <ArduinoJson.h>
