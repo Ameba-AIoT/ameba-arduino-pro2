@@ -3,6 +3,7 @@
 
 void NNModelSelection::modelSelect(unsigned char nntask)
 {
+    INIT_LOGGING();
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -75,6 +76,7 @@ void NNModelSelection::modelSelect(unsigned char nntask)
 
 void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel, unsigned char imgclassmodel, unsigned char palmdetmodel, unsigned char handlandmarkmodel)
 {
+    INIT_LOGGING();
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -247,6 +249,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
 
 void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel, unsigned char imgclassmodel)
 {
+    INIT_LOGGING();
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -377,9 +380,9 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
     }
 }
 
-
 void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel)
 {
+    INIT_LOGGING();
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
@@ -490,6 +493,7 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
 
 void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel)
 {
+    INIT_LOGGING();
     switch (nntask) {
         case OBJECT_DETECTION: {
             _nntask = OBJECT_DETECTION;
