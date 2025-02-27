@@ -5,13 +5,15 @@
 #include "ff.h"
 
 #define MAX_FILENAME_LEN 255
-
+#define MP3              1
 class File: public Stream {
 public:
     File(void);
     File(const char *filename);
+    File(const char *filename, int fileType);
 
     bool open(const char *filename);
+    bool open(const char *filename, int fileType);
     void close(void);
 
     virtual size_t write(uint8_t c);

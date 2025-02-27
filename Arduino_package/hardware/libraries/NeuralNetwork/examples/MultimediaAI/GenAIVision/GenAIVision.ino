@@ -24,10 +24,10 @@ char wifi_ssid[] = "Network_SSID";    // change to your network SSID
 char wifi_pass[] = "Password";        // change to your network password
 
 #include <WiFi.h>
-#include "NNGenAIVision.h"
+#include "GenAI.h"
 #include "VideoStream.h"
 WiFiSSLClient client;
-NNGenAIVision llm;
+GenAI llm;
 VideoSetting config(768, 768, CAM_FPS, VIDEO_JPEG, 1);
 #define CHANNEL 0
 
@@ -82,13 +82,13 @@ void setup()
     Camera.getImage(0, &img_addr, &img_len);
 
     // openAI vision prompt
-    // llm.openaivision(openAI_key, prompt_msg, img_addr, img_len, client);
+    // llm.openaivision(openAI_key, "gpt-4o-mini", prompt_msg, img_addr, img_len, client);
 
     // Gemini vision prompt
-    llm.geminivision(Gemini_key, prompt_msg, img_addr, img_len, client);
+    llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, client);
 
     // Llama vision prompt
-    // llm.llamavision(Llama_key, prompt_msg, img_addr, img_len, client);
+    // llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, client);
 }
 
 void loop()

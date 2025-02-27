@@ -43,6 +43,11 @@ File AmebaFatFS::open(const String &path)
     return open(path.c_str());
 }
 
+File AmebaFatFS::open(const String &path, int fileType)
+{
+    return open(path.c_str(), fileType);
+}
+
 File AmebaFatFS::open(const char *path)
 {
     if (fatfs_sd.drv_num < 0) {
@@ -50,6 +55,15 @@ File AmebaFatFS::open(const char *path)
     }
 
     return File(path);
+}
+
+File AmebaFatFS::open(const char *path, int fileType)
+{
+    if (fatfs_sd.drv_num < 0) {
+        return File();
+    }
+
+    return File(path, fileType);
 }
 
 bool AmebaFatFS::exists(const String &path)

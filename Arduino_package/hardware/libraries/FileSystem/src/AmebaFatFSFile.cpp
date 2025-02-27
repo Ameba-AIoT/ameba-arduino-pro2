@@ -17,6 +17,12 @@ File::File(const char *filename)
     open(filename);
 }
 
+File::File(const char *filename, int fileType)
+{
+    _file = NULL;
+    open(filename, fileType);
+}
+
 bool File::open(const char *filename)
 {
     FRESULT res = FR_OK;
@@ -28,10 +34,42 @@ bool File::open(const char *filename)
         return false;
     }
 
-    if (strcmp(extension, ".mp3") == 0) {
+    res = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+
+    if (res != FR_OK) {
+        printf("\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
+        if (_file != NULL) {
+            free(_file);
+            _file = NULL;
+        }
+        return false;
+    }
+    // Copy file name
+    const char *name = strrchr(filename, '/');
+    strncpy(_name, (name + 1), MAX_FILENAME_LEN);
+    return true;
+}
+
+bool File::open(const char *filename, int fileType)
+{
+    FRESULT res = FR_OK;
+    const char *extension = strrchr(filename, '.');
+    _file = (FIL *)malloc(sizeof(FIL));
+    if (_file == NULL) {
+        res = FR_INT_ERR;
+        printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
+        return false;
+    }
+
+    if (fileType == MP3) {
+        printf("\r\n[INFO] Play MP3 file (%s)...\n", filename);
         res = f_open(_file, filename, FA_OPEN_EXISTING | FA_READ);
     } else {
-        res = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+        if (_file != NULL) {
+            free(_file);
+            _file = NULL;
+        }
+        return false;
     }
 
     if (res != FR_OK) {

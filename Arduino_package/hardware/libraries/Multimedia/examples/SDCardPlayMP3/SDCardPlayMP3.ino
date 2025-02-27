@@ -6,10 +6,11 @@
 */
 #include "AmebaFatFS.h"
 
-#define FILENAME "Audio_test"
 #define INTERVAL 1000
 
 AmebaFatFS fs;
+
+String filename = "Audio_test.mp3";
 
 void setup()
 {
@@ -17,7 +18,7 @@ void setup()
 
     fs.begin();
 
-    File file = fs.open(String(fs.getRootPath()) + String(FILENAME) + String(".mp3"));
+    File file = fs.open(String(fs.getRootPath()) + filename, MP3);
 
     file.playMp3();
 
