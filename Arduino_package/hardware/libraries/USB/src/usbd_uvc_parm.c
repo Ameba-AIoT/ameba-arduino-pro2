@@ -441,9 +441,9 @@ struct uvc_frame_info uvc_frames_nv12[] = {
 };
 
 struct uvc_format_info uvc_formats[] = {
-	{ FORMAT_TYPE_YUY2, uvc_frames_yuy2 },
-	{ FORMAT_TYPE_NV12, uvc_frames_nv12 },
-	{ FORMAT_TYPE_MJPEG, uvc_frames_mjpeg },
-	{ FORMAT_TYPE_H264, uvc_frames_h264 },
-	{ FORMAT_TYPE_H265, uvc_frames_h265 },
+    {FORMAT_TYPE_YUY2,  uvc_frames_yuy2 },
+    {FORMAT_TYPE_NV12,  uvc_frames_nv12 },
+    {FORMAT_TYPE_MJPEG, uvc_frames_mjpeg},
+    {FORMAT_TYPE_H264,  uvc_frames_h264 },
+    {FORMAT_TYPE_H265,  uvc_frames_h265 },
 };
