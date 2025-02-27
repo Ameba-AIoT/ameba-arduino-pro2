@@ -10,7 +10,7 @@ GenAI::~GenAI()
 {
 }
 
-// Model: gpt-4o-mini, Server: openAI Platform
+// Server: openAI Platform
 String GenAI::openaivision(String key, String model, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "api.openai.com";
@@ -94,7 +94,7 @@ String GenAI::openaivision(String key, String model, String message, uint32_t im
     return getResponse;
 }
 
-// Model: gemini-1.5-flash, Server: Google AI Studio
+// Server: Google AI Studio
 String GenAI::geminivision(String key, String model, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "generativelanguage.googleapis.com";
@@ -177,7 +177,7 @@ String GenAI::geminivision(String key, String model, String message, uint32_t im
     return getResponse;
 }
 
-// Model: llama-3.2-90b-vision-preview, Server: groq
+// Server: groq
 String GenAI::llamavision(String key, String model, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
     const char *myDomain = "api.groq.com";
