@@ -62,7 +62,7 @@ bool File::open(const char *filename, int fileType)
     }
 
     if (fileType == MP3) {
-        printf("\r\nPlay MP3 file (%s)...\n", filename);
+        printf("\r\n[INFO] Play MP3 file (%s)...\n", filename);
         res = f_open(_file, filename, FA_OPEN_EXISTING | FA_READ);
     } else {
         if (_file != NULL) {
