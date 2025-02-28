@@ -6,6 +6,7 @@
 #include "module_uvcd.h"
 #include "UVCD_pram.h"
 #include "video_drv.h"
+#include "uvc/inc/usbd_uvc_desc.h"
 
 class UVCD: public MMFModule {
 public:

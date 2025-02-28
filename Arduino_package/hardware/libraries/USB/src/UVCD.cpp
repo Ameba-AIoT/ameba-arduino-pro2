@@ -206,7 +206,6 @@ void UVCD::begin(const MMFModule &module_videocam, void *module_videolinker, int
                 vTaskDelay(1000);
                 siso_pause((mm_siso_t *)(module_videolinker));
                 vTaskDelay(100);
-                printf("====================================================UVCD fps: %d", uvc_format_ptr->fps);
                 cameraReSetParams(module_videocam._p_mmf_context, VIDEO_H264, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
                 siso_resume((mm_siso_t *)(module_videolinker));
             } else if (uvc_format_ptr->format == FORMAT_TYPE_MJPEG) {
