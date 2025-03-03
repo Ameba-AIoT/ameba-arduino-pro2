@@ -26,7 +26,6 @@ File::File(const char *filename, int fileType)
 bool File::open(const char *filename)
 {
     FRESULT res = FR_OK;
-    const char *extension = strrchr(filename, '.');
     _file = (FIL *)malloc(sizeof(FIL));
     if (_file == NULL) {
         res = FR_INT_ERR;
@@ -53,7 +52,6 @@ bool File::open(const char *filename)
 bool File::open(const char *filename, int fileType)
 {
     FRESULT res = FR_OK;
-    const char *extension = strrchr(filename, '.');
     _file = (FIL *)malloc(sizeof(FIL));
     if (_file == NULL) {
         res = FR_INT_ERR;
