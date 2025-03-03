@@ -1,10 +1,17 @@
+/*
+This example demonstrates the feature of HTTP file server in AMB82 Mini and its usage in accessing MP4 recordings over HTTP.
+
+Example Guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/HTTP/HTTP%20File%20Server%20and%20MP4.html
+
+*/
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "AudioStream.h"
 #include "AudioEncoder.h"
 #include "MP4Recording.h"
-#include "Httpfs.h"
+#include "Http_fs.h"
 
 #define CHANNEL 0
 
@@ -25,7 +32,7 @@ AAC aac;
 MP4Recording mp4;
 StreamIO audioStreamer(1, 1);    // 1 Input Audio -> 1 Output AAC
 StreamIO avMixStreamer(2, 1);    // 2 Input Video + Audio -> 1 Output MP4
-Httpfs httpfs;
+Http_fs http_fs;
 
 char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
@@ -62,7 +69,7 @@ void setup()
     mp4.configAudio(configA, CODEC_AAC);
     mp4.setRecordingDuration(30);
     mp4.setRecordingFileCount(10);
-    mp4.setRecordingFileName("HTTPFS_VIDEO/AmebaPro2_Recording");
+    mp4.setRecordingFileName("HTTP_FS_VIDEO/AmebaPro2_Recording");
     mp4.setLoopRecording(1);
 
     // Configure StreamIO object to stream data from audio channel to AAC encoder
@@ -84,9 +91,9 @@ void setup()
     Camera.channelBegin(CHANNEL);
 
     // Start recording MP4 data to SD card
-    httpfs.mp4DirectoryInit();
+    http_fs.mp4DirectoryInit();
     mp4.begin();
-    httpfs.begin();
+    http_fs.begin();
 }
 
 void loop()

@@ -1,50 +1,50 @@
 #include <Arduino.h>
-#include "Httpfs.h"
+#include "Http_fs.h"
 
-Httpfs::Httpfs(void)
+Http_fs::Http_fs(void)
 {
-    memset(httpfsParams.fileext, 0, sizeof(httpfsParams.fileext));
-    strncpy(httpfsParams.fileext, "mp4", sizeof(httpfsParams.fileext));
+    memset(http_fsParams.fileext, 0, sizeof(http_fsParams.fileext));
+    strncpy(http_fsParams.fileext, "mp4", sizeof(http_fsParams.fileext));
 
-    memset(httpfsParams.filedir, 0, sizeof(httpfsParams.filedir));
-    strncpy(httpfsParams.filedir, "HTTPFS_VIDEO", sizeof(httpfsParams.filedir));
+    memset(http_fsParams.filedir, 0, sizeof(http_fsParams.filedir));
+    strncpy(http_fsParams.filedir, "HTTP_FS_VIDEO", sizeof(http_fsParams.filedir));
 
-    memset(httpfsParams.request_string, 0, sizeof(httpfsParams.request_string));
-    strncpy(httpfsParams.request_string, "/video_get.mp4", sizeof(httpfsParams.request_string));
+    memset(http_fsParams.request_string, 0, sizeof(http_fsParams.request_string));
+    strncpy(http_fsParams.request_string, "/video_get.mp4", sizeof(http_fsParams.request_string));
 
-    httpfsParams.fatfs_buf_size = 1024;
+    http_fsParams.fatfs_buf_size = 1024;
 }
 
-Httpfs::~Httpfs(void)
+Http_fs::~Http_fs(void)
 {
     if (_p_mmf_context == NULL) {
         return;
     }
     end();
-    if (httpfsDeinit(_p_mmf_context) == NULL) {
+    if (http_fs_Deinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] Httpfs deinit failed\n");
+        printf("\r\n[ERROR] Http_fs deinit failed\n");
     }
 }
 
-void Httpfs::begin(void)
+void Http_fs::begin(void)
 {
-    _p_mmf_context = httpfsInit();
+    _p_mmf_context = http_fs_Init();
 
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need Httpfs init first\n");
+        printf("\r\n[ERROR] Need Http_fs init first\n");
         return;
     }
-    httpfsSetParams(_p_mmf_context, &httpfsParams);
-    httpfsSetRespCB(_p_mmf_context);
-    httpfsApply(_p_mmf_context);
+    http_fs_SetParams(_p_mmf_context, &http_fsParams);
+    http_fs_SetRespCB(_p_mmf_context);
+    http_fs_Apply(_p_mmf_context);
 }
 
-void Httpfs::mp4DirectoryInit(void)
+void Http_fs::mp4DirectoryInit(void)
 {
     fatfs_sd_get_param(&fatfs_sd);
-    sprintf(sd_dirname, "%s", "HTTPFS_VIDEO");
+    sprintf(sd_dirname, "%s", "HTTP_FS_VIDEO");
     sprintf(sd_filename, "%s/%s", sd_dirname, "AmebaPro2_Recording");
     if (f_opendir(&m_dir, sd_dirname) == 0) {
         f_closedir(&m_dir);
@@ -57,19 +57,19 @@ void Httpfs::mp4DirectoryInit(void)
     }
 
     if (fatfs_get_free_space() < 50) {
-        rt_printf("ERROR: free space < 50MB\n\r");
+        rt_printf("[ERROR] free space < 50MB\n\r");
     }
 }
 
-void Httpfs::end(void)
+void Http_fs::end(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need Httpfs init first\n");
+        printf("\r\n[ERROR] Need Http_fs init first\n");
     }
-    httpfsDeinit(_p_mmf_context);
+    http_fs_Deinit(_p_mmf_context);
 }
 
-void Httpfs::del_old_file(void)
+void Http_fs::del_old_file(void)
 {
     DIR m_dir;
     FILINFO m_fileinfo;
@@ -115,7 +115,7 @@ void Httpfs::del_old_file(void)
 
         if (strlen(old_filename)) {
             sprintf(old_filepath, "%s/%s", sd_dirname, old_filename);
-            printf("del %s\n\r", old_filepath);
+            printf("[INFO] del %s\n\r", old_filepath);
             f_unlink(old_filepath);
         }
     }

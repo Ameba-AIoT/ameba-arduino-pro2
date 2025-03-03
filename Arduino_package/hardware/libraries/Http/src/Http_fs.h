@@ -1,5 +1,5 @@
-#ifndef __HTTPFS_H__
-#define __HTTPFS_H__
+#ifndef __HTTP_FS_H__
+#define __HTTP_FS_H__
 
 #include "VideoStream.h"
 #include "AmebaFatFS.h"
@@ -8,16 +8,16 @@
 extern "C" {
 #endif
 
-#include "httpfs_drv.h"
+#include "http_fs_drv.h"
 
 #ifdef __cplusplus
 }
 #endif
 
-class Httpfs: public MMFModule {
+class Http_fs: public MMFModule {
 public:
-    Httpfs(void);
-    ~Httpfs(void);
+    Http_fs(void);
+    ~Http_fs(void);
 
     void begin(void);
     void mp4DirectoryInit(void);
@@ -26,7 +26,7 @@ public:
 private:
     void del_old_file(void);
     DIR m_dir;
-    httpfs_params_t httpfsParams;
+    httpfs_params_t http_fsParams;
     char sd_filename[64];
     char sd_dirname[32];
     fatfs_sd_params_t fatfs_sd;
