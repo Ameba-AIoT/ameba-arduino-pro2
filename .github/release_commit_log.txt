@@ -1,15 +1,18 @@
 Feature:
-- Add '+' and image OSD features
-- Add Image to Array tool for OSD Example
-- Add ObjectDetection result saving as MP4 file or JPEG example
-- Add demuxer RTSP example
+- Add Gen AI Speech Examples
+    - GenAISpeech (STT) example
+    - TextToSpeech example
+    - TextToSpeechNTP example
+- Add HTTP File Server Example
+    - mp4 recording with httpfs
 
 API Updates:
-- Update NNGenAIVision.cpp, gemini-2.0 model
-- Add demuxer_drv.c and demuxer_drv.h
-- Update UVCD encoder's format order
-- Update libs, MP3 API related
+- Update MP3 API
+    - added support for 24kHz sample rate
+    - added API for digital output volume control
+    - modified play mp3 API flow
+- Update lib and UVC API
+    - support single UVCD format configuration
+    - adjust bFormatIndex parameter
 
 Misc:
-- Update ameba_pro2_tools 1.4.2
-- Update board.txt for options to enable and disable NN logs
