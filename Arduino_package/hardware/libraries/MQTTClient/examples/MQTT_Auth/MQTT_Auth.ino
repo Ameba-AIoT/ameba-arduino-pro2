@@ -62,6 +62,7 @@ void setup()
     // you will need to increase the value of MQTT_MAX_PACKET_SIZE in
     // PubSubClient.h
 
+    wifiClient.setNonBlockingMode();
     if (client.connect(clientId, clientUser, clientPass)) {
         client.publish(publishTopic, publishPayload);
         client.subscribe(subscribeTopic);
