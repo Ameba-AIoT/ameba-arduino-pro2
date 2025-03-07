@@ -1,18 +1,11 @@
 Feature:
-- Add Gen AI Speech Examples
-    - GenAISpeech (STT) example
-    - TextToSpeech example
-    - TextToSpeechNTP example
-- Add HTTP File Server Example
-    - mp4 recording with httpfs
+- Add sensor OV9734 support
 
 API Updates:
-- Update MP3 API
-    - added support for 24kHz sample rate
-    - added API for digital output volume control
-    - modified play mp3 API flow
-- Update lib and UVC API
-    - support single UVCD format configuration
-    - adjust bFormatIndex parameter
+- Update lib for sensor OV9734 support
+- Add set and get min FPS API
+- Add set non-blocking mode for MQTT_Auth example
 
 Misc:
+- Update ameba_pro2_tools 1.4.3
+    - Support sensor OV9734
