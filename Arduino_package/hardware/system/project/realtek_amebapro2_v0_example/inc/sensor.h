@@ -88,6 +88,13 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_OV2735         0x29  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_SC400AI        0x2A  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_OV50A40_CROP   0x2B  //  |   v    |   -    |   v    |   -    | /* Crop FOV with 1/16 window size */
+#define SENSOR_OV9734         0x2C  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_CV2003         0x2D  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_GC2093         0x2E  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_F35            0x2F  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV5693         0x30  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_SC3336         0x31  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_K06A           0x32  //  |   v    |   -    |   -    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_DUMMY]        = {1920, 1080, 30},
@@ -134,6 +141,13 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_OV2735]       = {1920, 1080, 30},
 	[SENSOR_SC400AI]      = {2560, 1440, 24},
 	[SENSOR_OV50A40_CROP] = {2048, 1536, 30},
+	[SENSOR_OV9734]       = {1280,  720, 30},
+	[SENSOR_CV2003]       = {1920, 1080, 30},
+	[SENSOR_GC2093]       = {1920, 1080, 30},
+	[SENSOR_F35]          = {1920, 1080, 30},
+	[SENSOR_OV5693]       = {2592, 1944, 15},
+	[SENSOR_SC3336]       = {2304, 1296, 30},
+	[SENSOR_K06A]         = {2560, 1440, 24},
 };
 
 #define SENSOR_MAX         5

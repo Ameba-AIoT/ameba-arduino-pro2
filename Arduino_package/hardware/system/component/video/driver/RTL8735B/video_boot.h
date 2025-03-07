@@ -154,7 +154,7 @@ typedef struct  {
 //Please don't change the structure sequence because the data structure is shared by lib boot.
 typedef struct video_boot_stream_cfg {
 	video_boot_params_t video_params[VIDEO_MAX_NUM];
-	fcs_rate_ctrl_t auto_rate_control[2];
+	fcs_rate_ctrl_t bps_stbl_ctrl_params[2];
 	isp_boot_info_t isp_info;
 	uint32_t voe_heap_addr;
 	uint32_t voe_heap_size;

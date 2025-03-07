@@ -5,6 +5,21 @@
 #include <osdep_service.h>
 #include "hal_video.h"
 
+#ifdef ARDUINO_SDK
+
+#ifndef __cplusplus
+#include <stdatomic.h>
+#else
+#include <atomic>
+#define atomic_bool std::atomic_bool
+#endif
+
+#else
+
+#include <stdatomic.h>
+
+#endif
+
 #define APP_VOE_LOG_EN          0
 #define APP_VOE_FCS_INFO_EN     1
 
@@ -19,6 +34,7 @@
 #define VIDEO_PRINT_INFO        0x18
 #define VIDEO_DEBUG             0x19
 #define VIDEO_RC_CTRL			0x1a
+#define VIDEO_GET_RC_CTRL		0x1b
 
 
 #define VIDEO_HEVC_OUTPUT       0x20
@@ -251,13 +267,53 @@ typedef struct video_param_s {
 	jpeg_crop_parm_t jpeg_crop_parm;
 } video_params_t;
 
+typedef struct bps_stbl_ctrl_param_s {
+	uint32_t sampling_time;
+	uint32_t maximun_bitrate;
+	uint32_t minimum_bitrate;
+	uint32_t target_bitrate;
+} bps_stbl_ctrl_param_t;
+
+typedef struct bps_stbl_ctrl_s {
+	int en;
+	uint32_t sample_bitrate;
+	uint32_t current_framerate;
+	bps_stbl_ctrl_param_t params;
+	uint32_t fps_stage[3];
+	uint32_t gop_stage[3];
+	int fps_stage_idx;
+	struct {
+		uint32_t cnt_sr;
+		uint32_t sum_sr;
+	} stats_info;
+	int switch_fps_down;
+	int switch_fps_up;
+} bps_stbl_ctrl_t;
+
+typedef struct video_rc_info_s {
+	rate_ctrl_s rc_ctrl;
+	rate_ctrl_s temp_rc_ctrl;
+	uint64_t update_time;
+	atomic_bool update_flag;
+	int update_status;
+} video_rc_info_t;
+
+typedef struct video_ch_info_s {
+	video_params_t *param;
+	uint32_t isp_fps;
+	uint32_t stream_is_open;
+	video_rc_info_t *rc_info;
+	bps_stbl_ctrl_t *bps_stbl_ctrl;
+	void (*video_output_cb)(void *param1, void  *param2, uint32_t arg);
+	volatile int incb;
+} video_ch_info_t;
+
 typedef struct voe_info_s {
 	uint32_t voe_heap_addr;
 	uint32_t voe_heap_size;
-	video_params_t video_info[MAX_CHANNEL];
-	uint32_t stream_is_open[MAX_CHANNEL];
 	uint32_t voe_scale_up_en;
 	video_roi_t voe_scale_up_roi;
+	video_ch_info_t ch_info[MAX_CHANNEL];
 } voe_info_t;
 
 typedef struct mult_sensor_info_s {
@@ -425,6 +481,14 @@ int video_get_meta_offset(int meta_size);
 int video_open_status(void);//0:No video open 1:video open
 
 int video_get_encoder_nalu_payload_info(unsigned char *frame_buf, unsigned int frame_size, int codec_type, video_encoder_nalu_payload_info_t *info);
+
+int video_set_rc(int ch, rate_ctrl_s *rc_ctrl);
+
+int video_get_rc(int ch, rate_ctrl_s *rc_ctrl);
+
+int video_bps_stbl_ctrl_en(int ch, int enable);
+
+int video_set_bps_stbl_ctrl_params(int ch, bps_stbl_ctrl_param_t *bps_stbl_ctrl_param, uint32_t* fps_stage, uint32_t* gop_stage);
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000
