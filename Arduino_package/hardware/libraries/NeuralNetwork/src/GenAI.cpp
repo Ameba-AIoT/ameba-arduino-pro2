@@ -453,3 +453,94 @@ String GenAI::urlencode(String str)
     }
     return encodedMsg;
 }
+
+String GenAI::geminiaudio(String apikey, String filename, String model, MP4Recording &mp4, String message, WiFiSSLClient client)
+{
+    AmebaFatFS fs;
+    String file_path;
+    fs.begin();
+    file_path = String(fs.getRootPath()) + "/" + filename + ".mp4";
+
+    // begin mp4 recording
+    mp4.begin();
+    mp4.printInfo();
+    int duration = mp4.getRecordingDuration();
+    delay(duration * 1000 + 2000);
+
+    Serial.println("File: " + file_path);
+    uint8_t *fileinput;
+    File file = fs.open(file_path);
+    unsigned int fileSize = file.size();
+    fileinput = (uint8_t *)malloc(fileSize + 1);
+    file.read(fileinput, fileSize);
+    fileinput[fileSize] = '\0';
+    file.close();
+    int encodedLen = base64_enc_len(fileSize);
+    char *encodedData = (char *)malloc(encodedLen);
+    base64_encode(encodedData, (char *)fileinput, fileSize);
+    Serial.println("Connect to generativelanguage.googleapis.com");
+    if (client.connect("generativelanguage.googleapis.com", 443)) {
+        Serial.println("Connection successful");
+        String filePart = "{\"inline_data\": {\"data\": \"" + String(encodedData) + "\", \"mime_type\": \"audio/mp4\",},}";
+        String textPart = "{\"text\": \"" + message + "\",}";
+        String request = "{\"contents\": [{\"role\": \"user\", \"parts\": [" + filePart + ", " + textPart + "]}],}";
+        client.println("POST /v1beta/models/" + model + ":generateContent?key=" + apikey + " HTTP/1.1");
+        client.println("Connection: close");
+        client.println("Host: generativelanguage.googleapis.com");
+        client.println("Content-Type: application/json; charset=utf-8");
+        client.println("Content-Length: " + String(request.length()));
+        client.println();
+        for (uint32_t i = 0; i < request.length(); i += 1024) {
+            client.print(request.substring(i, i + 1024));
+        }
+        String getResponse = "", Feedback = "";
+        uint32_t waitTime = 20000;
+        uint32_t startTime = millis();
+        boolean state = false;
+        boolean headState = false;
+        while ((startTime + waitTime) > millis()) {
+            Serial.print(".");
+            delay(100);
+            while (client.available()) {
+                char c = client.read();
+                if (state == true) {
+                    Feedback += String(c);
+                }
+                if (c == '\n') {
+                    if (getResponse.length() == 0) {
+                        if (!headState) {
+                            client.readStringUntil('\n');
+                            headState = true;
+                        }
+                        state = true;
+                    }
+                    getResponse = "";
+                } else if (c != '\r') {
+                    getResponse += String(c);
+                }
+                startTime = millis();
+            }
+            if (Feedback.length() > 0) {
+                break;
+            }
+        }
+        client.stop();
+        JsonObject obj;
+        JsonDocument doc;
+        deserializeJson(doc, Feedback);
+        obj = doc.as<JsonObject>();
+        String getText = obj["candidates"][0]["content"]["parts"][0]["text"].as<String>();
+        if (getText == "null") {
+            getText = obj["error"]["message"].as<String>();
+        }
+        getText.replace("\n", "");
+        if (fs.exists(file_path)) {
+            fs.remove(file_path);
+        }
+        fs.end();
+        return getText;
+    } else {
+        fs.end();
+        return "Connected to generativelanguage.googleapis.com failed.";
+    }
+}
