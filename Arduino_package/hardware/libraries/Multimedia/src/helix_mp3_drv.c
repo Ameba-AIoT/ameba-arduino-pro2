@@ -69,10 +69,12 @@ void audio_play_binary_array(uint8_t *srcbuf, uint32_t len, uint8_t _audio_vol)
             }
             audio_play_pcm((int16_t *)decodebuf, frameInfo.outputSamps);
         } else {
-            if (ret != ERR_MP3_INDATA_UNDERFLOW) {
-                printf("[ERROR] %d\r\n", ret);
+            if (ret == ERR_MP3_INDATA_UNDERFLOW) {
+                break;
             }
-            break;
+            // printf("[ERROR] %d\r\n", ret);    // user may uncomment to view decoding error
+            inbuf++;
+            bytesLeft--;
         }
     }
     osDelay(1000);
