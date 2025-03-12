@@ -41,6 +41,7 @@ char pass[] = "Password";        // your network password
 
 String apiKey = "";
 String fileName = "gemini_speech";
+int recordSeconds = 5;    // 5s
 
 void initWiFi()
 {
@@ -82,7 +83,7 @@ void setup()
     aac.configAudio(configA);
     aac.begin();
     mp4.configAudio(configA, CODEC_AAC);
-    mp4.setRecordingDuration(5);
+    mp4.setRecordingDuration(recordSeconds);
     mp4.setRecordingFileCount(1);
     mp4.setRecordingFileName(fileName);
     mp4.setRecordingDataType(STORAGE_AUDIO);
