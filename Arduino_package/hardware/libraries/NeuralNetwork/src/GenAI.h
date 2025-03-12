@@ -5,6 +5,7 @@
 #include <ArduinoJson.h>
 #include "Base64.h"
 #include "AmebaFatFS.h"
+#include "MP4Recording.h"
 
 #ifdef __cplusplus
 extern "C" {
