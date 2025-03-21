@@ -34,14 +34,14 @@ void USBMassStorage::SDIOInit(void)
 int USBMassStorage::USBStatus(void)
 {
     int status = wait_usb_ready();
+    printf("USB init status %d\r\n", status);
+
     if (status != USBD_INIT_OK) {
         if (status == USBD_NOT_ATTACHED) {
             printf("\r\n NO USB device attached\n");
         } else {
             printf("\r\n USB init fail\n");
         }
-    } else {
-        printf("\r\n USB device attached\n");
     }
     return status;
 }
