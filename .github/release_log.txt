@@ -9,6 +9,7 @@ Version 4.0.9 - 2025/02/05
 Version 4.0.9 - 2025/02/25
 Version 4.0.9 - 2025/03/03
 Version 4.0.9 - 2025/03/07
+Version 4.0.9 - 2025/03/25
 
 Feature:
 - Update MQTT examples
@@ -33,6 +34,9 @@ Feature:
 - Add HTTP File Server Example
     - mp4 recording with httpfs
 - Add sensor OV9734 support
+- Add Generative AI Speech Gemini Examples
+- Add USB Mass Storage Examples
+- Add sensor SC2336 support
 
 API Updates:
 - Update GenAIVision API
@@ -55,6 +59,9 @@ API Updates:
 - Update lib for sensor OV9734 support
 - Add set and get min FPS API
 - Add set non-blocking mode for MQTT_Auth example
+- Add USB Mass Storage realted API
+- Update helix_mp3_drv.c
+- Update lib for sensor SC2336 support
 
 Misc:
 - Update ameba_pro2_tools 1.3.13
@@ -72,3 +79,6 @@ Misc:
 - Update board.txt for options to enable and disable NN logs
 - Update ameba_pro2_tools 1.4.3
     - Support sensor OV9734
+- Update "board.txt"
+- Update ameba_pro2_tools 1.4.4
+    - Support sensor SC2336
