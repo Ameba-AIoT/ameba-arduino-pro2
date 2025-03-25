@@ -1,11 +1,14 @@
 Feature:
-- Add sensor OV9734 support
+- Add Generative AI Speech Gemini Examples
+- Add USB Mass Storage Examples
+- Add sensor SC2336 support
 
 API Updates:
-- Update lib for sensor OV9734 support
-- Add set and get min FPS API
-- Add set non-blocking mode for MQTT_Auth example
+- Add USB Mass Storage realted API
+- Update helix_mp3_drv.c
+- Update lib for sensor SC2336 support
 
 Misc:
-- Update ameba_pro2_tools 1.4.3
-    - Support sensor OV9734
+- Update "board.txt"
+- Update ameba_pro2_tools 1.4.4
+    - Support sensor SC2336
