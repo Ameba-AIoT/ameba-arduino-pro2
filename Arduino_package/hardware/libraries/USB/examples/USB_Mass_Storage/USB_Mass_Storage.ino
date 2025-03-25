@@ -15,20 +15,12 @@ void setup()
     Serial.begin(115200);
     USBMS.USBInit();
     USBMS.SDIOInit();
-
-    int status = USBMS.USBStatus();
-    Serial.print("Status ");
-    Serial.println(status);
-
+    USBMS.USBStatus();
     USBMS.initializeDisk();
     USBMS.loadUSBMassStorageDriver();
-
-    while (1) {
-        delay(1000);
-    };
 }
 
 void loop()
 {
-    // do nothing
+    delay(1000);
 }
