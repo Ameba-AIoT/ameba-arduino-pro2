@@ -12,6 +12,7 @@ public:
     void initializeDisk(void);
     void loadUSBMassStorageDriver(void);
     void USBDeinit(void);
+    int isConnected(void);
 
 private:
     struct msc_opts *disk_operations = NULL;
