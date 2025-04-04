@@ -98,7 +98,9 @@ void MP4Recording::end(void)
         printf("\r\n[ERROR] Need MP4 init first\n");
         return;
     }
-    mp4RecordingStop(_p_mmf_context->priv);
+    if (getRecordingState()) {
+        mp4RecordingStop(_p_mmf_context->priv);
+    }
 }
 
 void MP4Recording::setRecordingFileName(const char* filename)
