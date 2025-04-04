@@ -16,6 +16,9 @@ extern int usb_sd_getcapacity(uint32_t *sector_count);
 extern int usb_sd_readblocks(uint32_t sector, uint8_t *data, uint32_t count);
 extern int usb_sd_writeblocks(uint32_t sector, const uint8_t *data, uint32_t count);
 
+// from dwc_otg_driver
+extern int usb_insert(void);    // 1: connect 0: disconnect
+
 #ifdef __cplusplus
 }
 #endif
@@ -80,4 +83,11 @@ void USBMassStorage::USBDeinit(void)
         free(disk_operations);
         disk_operations = NULL;
     }
+}
+
+int USBMassStorage::isConnected(void)
+{
+    int connect_status = usb_insert();
+
+    return connect_status;
 }

@@ -10,6 +10,10 @@
 
 USBMassStorage USBMS;
 
+#define PRINT_USB_OTG_CONNECTION_STATUS 0
+
+int connection_status = 0;
+
 void setup()
 {
     Serial.begin(115200);
@@ -23,4 +27,10 @@ void setup()
 void loop()
 {
     delay(1000);
+
+    if (PRINT_USB_OTG_CONNECTION_STATUS) {
+        connection_status = USBMS.isConnected();
+        Serial.print("USB OTG connection status: ");
+        Serial.println(connection_status);
+    }
 }
