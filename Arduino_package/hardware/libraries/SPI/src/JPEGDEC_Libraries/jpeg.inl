@@ -1107,7 +1107,7 @@ static int JPEGMakeHuffTables(JPEGIMAGE *pJPEG, int bThumbnail)
             pBits = &pHuffVals[(iTable + 4) * HUFF_TABLEN];
             p = pBits;
             p += 16;    // point to bit data
-            if (iTable * HUFF11SIZE >= (int) sizeof(pJPEG->usHuffAC) / 2) {
+            if (iTable * HUFF11SIZE >= (int)sizeof(pJPEG->usHuffAC) / 2) {
                 return 0;
             }
             pShort = &pJPEG->usHuffAC[iTable * HUFF11SIZE];
