@@ -643,7 +643,7 @@ void JPEG_setPixelType(JPEGIMAGE *pJPEG, int iType)
     pJPEG->ucPixelType = (uint8_t)iType;
 } /* JPEG_setPixelType() */
 
-void JPEG_setFramebuffer(JPEGIMAGE *pJPEG, void *pFramebuffer)
+static void JPEG_setFramebuffer(JPEGIMAGE *pJPEG, void *pFramebuffer)
 {
     pJPEG->pFramebuffer = pFramebuffer;
 } /* JPEG_setFramebuffer() */
@@ -724,6 +724,11 @@ static int32_t seekMem(JPEGFILE *pFile, int32_t iPosition)
     pFile->iPos = iPosition;
     return iPosition;
 } /* seekMem() */
+
+static void JPEG_setFramebuffer(JPEGIMAGE *pJPEG, void *pFramebuffer)
+{
+    pJPEG->pFramebuffer = pFramebuffer;
+} /* JPEG_setFramebuffer() */
 
 #if defined(__MACH__) || defined(__LINUX__) || defined(__MCUXPRESSO)
 
@@ -1102,7 +1107,7 @@ static int JPEGMakeHuffTables(JPEGIMAGE *pJPEG, int bThumbnail)
             pBits = &pHuffVals[(iTable + 4) * HUFF_TABLEN];
             p = pBits;
             p += 16;    // point to bit data
-            if (iTable * HUFF11SIZE >= sizeof(pJPEG->usHuffAC) / 2) {
+            if (iTable * HUFF11SIZE >= (int)sizeof(pJPEG->usHuffAC) / 2) {
                 return 0;
             }
             pShort = &pJPEG->usHuffAC[iTable * HUFF11SIZE];
@@ -1896,7 +1901,7 @@ mcu_done:
 static void JPEGIDCT(JPEGIMAGE *pJPEG, int iMCUOffset, int iQuantTable)
 {
     int iRow;
-    unsigned char ucColMask;
+    // unsigned char ucColMask;
     int iCol;
     signed int tmp6, tmp7, tmp10, tmp11, tmp12, tmp13;
     signed int z5, z10, z11, z12, z13;
