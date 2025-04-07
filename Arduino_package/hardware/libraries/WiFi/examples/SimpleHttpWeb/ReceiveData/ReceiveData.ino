@@ -45,7 +45,7 @@ void loop()
         // an http request ends with a blank line
         Serial.println("new client");
         String currentLine = "";
-        Serial.println("--- Start of Client Request ---"); // Added marker
+        Serial.println("--- Start of Client Request ---");    // Added marker
         while (client.connected()) {
             if (client.available()) {
                 char c = client.read();
@@ -54,35 +54,35 @@ void loop()
                 // character) and the line is blank, the http request has ended,
                 // so you can send a reply
                 if (c == '\n') {
-                  // Serial.print("Line received: "); // Indicate a new line
-                  // Serial.println(currentLine);
-                  if (currentLine.length() == 0) {
-                    Serial.println("Blank line detected - Sending HTML response.");
-                    String htmlContent = "";
-                    for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-                        int sensorReading = analogRead(analogPins[analogChannel]);
-                        htmlContent += "analog input " + String(analogChannel) + " is " + String(sensorReading) + "<br />";
-                    }
-                    htmlContent += "</body></html>";
-                    String response = "HTTP/1.1 200 OK\r\n";
-                    response += "Content-Type: text/html\r\n";
-                    response += "Connection: close\r\n";
-                    response += "Content-Length: " + String(htmlContent.length()) + "\r\n"; // Calculate and set Content-Length
-                    response += "\r\n";
-                    response += htmlContent;
+                    // Serial.print("Line received: "); // Indicate a new line
+                    // Serial.println(currentLine);
+                    if (currentLine.length() == 0) {
+                        Serial.println("Blank line detected - Sending HTML response.");
+                        String htmlContent = "";
+                        for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
+                            int sensorReading = analogRead(analogPins[analogChannel]);
+                            htmlContent += "analog input " + String(analogChannel) + " is " + String(sensorReading) + "<br />";
+                        }
+                        htmlContent += "</body></html>";
+                        String response = "HTTP/1.1 200 OK\r\n";
+                        response += "Content-Type: text/html\r\n";
+                        response += "Connection: close\r\n";
+                        response += "Content-Length: " + String(htmlContent.length()) + "\r\n";    // Calculate and set Content-Length
+                        response += "\r\n";
+                        response += htmlContent;
 
-                    client.print(response);
-                    Serial.println("--- HTML Response Sent ---");
-                    break;
-                  } else {
-                    currentLine = "";
-                  }
+                        client.print(response);
+                        Serial.println("--- HTML Response Sent ---");
+                        break;
+                    } else {
+                        currentLine = "";
+                    }
                 } else if (c != '\r') {
-                  currentLine += c;
+                    currentLine += c;
                 }
             }
         }
-        Serial.println("--- End of Client Request (Connection Closed) ---"); // Added marker
+        Serial.println("--- End of Client Request (Connection Closed) ---");    // Added marker
         // give the web browser time to receive the data
         delay(1);
 
