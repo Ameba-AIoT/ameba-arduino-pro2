@@ -2,7 +2,7 @@
 
 This sketch performs object detection for single image saved on SD card.
 
-Example guide: TBD
+Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Object%20Detection%20Image.html
 
 */
 #include "NNObjectDetectionImage.h"
