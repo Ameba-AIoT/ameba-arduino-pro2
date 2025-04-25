@@ -14,7 +14,7 @@ endpoint: /openai/v1/audio/transcriptions or /openai/v1/audio/translations
 model: whisper-large-v3 or whisper-large-v3-turbo
 https://console.groq.com/docs/speech-text
 
-Example Guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/Neural%20Network/Generative%20AI%20Speech.html
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Generative%20AI%20Speech.html#genaispeech-whisper
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 
