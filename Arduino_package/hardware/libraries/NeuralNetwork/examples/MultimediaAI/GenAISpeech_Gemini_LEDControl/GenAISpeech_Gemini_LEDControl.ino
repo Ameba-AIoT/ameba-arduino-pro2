@@ -8,7 +8,7 @@ endpoint: /v1beta/models
 model: gemini
 https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/audio-understanding
 
-Example Guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/Neural%20Network/Generative%20AI%20Speech.html
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Generative%20AI%20Speech.html#genaispeech-gemini-ledcontrol
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 
@@ -115,7 +115,7 @@ void loop()
         }
         String text = llm.geminiaudio(apiKey, fileName, "gemini-2.0-flash", mp4, "If the audio content means switch on, please return 1, else 0", client);
         Serial.println(text);
-        if (text == "1" || text == "1.") {
+        if (text.indexOf("1") != -1) {
             digitalWrite(LED_G, HIGH);
         } else {
             digitalWrite(LED_G, LOW);
