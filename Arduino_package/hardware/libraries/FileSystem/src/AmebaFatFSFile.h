@@ -43,6 +43,8 @@ public:
 
     void playMp3(void);
 
+    bool readFile(unsigned char *&jpg_data, uint32_t &jpg_size);
+
     friend class AmebaFatFS;
 
 private:
