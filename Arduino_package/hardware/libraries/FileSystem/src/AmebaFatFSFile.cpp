@@ -308,3 +308,35 @@ void File::playMp3(void)
     convertMp3ToArray();
     return;
 }
+
+bool File::readFile(unsigned char *&file_data, uint32_t &file_size)
+{
+    file_data = NULL;
+    file_size = 0;
+    UINT bytesRead;
+    FRESULT res;
+
+    if (_file != NULL) {
+        file_size = f_size(_file);
+
+        file_data = (unsigned char *)malloc(file_size);
+        if (file_data == NULL) {
+            printf("\r\n[ERROR] Memory allocation failed for file data.\n");
+            return false;
+        }
+
+        res = f_read(_file, file_data, file_size, &bytesRead);
+
+        if (res != FR_OK || bytesRead != file_size) {
+            printf("\r\n[ERROR] Failed to read file data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
+            free(file_data);
+            file_data = NULL;
+            file_size = 0;
+            return false;
+        }
+        return true;
+    } else {
+        printf("\r\n[ERROR] No file opened to convert.\n");
+        return false;
+    }
+}
