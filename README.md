@@ -15,7 +15,7 @@ For all `release` information, please visit this [link](https://github.com/Ameba
 
 ## 2. How to add Realtek Ameba Arduino package to `Arduino IDE`:
 
-> You can refer to this link to get started: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/index.html
+> You can refer to this link to get started: [https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/index.html](https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/index.html)
 > , or follow the steps below.
 
 1. **Add Ameba Arduino SDK link to *Arduino IDE Additional Boards Manager***
