@@ -18,7 +18,7 @@
  included in any redistribution.
 
  Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/OLED%20Display.html
- 
+
  Modified by Realtek SG SD3 13/02/2024
  **************************************************************************/
 
