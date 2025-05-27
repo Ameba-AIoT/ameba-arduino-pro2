@@ -66,11 +66,16 @@ void setup()
 
     wifiClient.setNonBlockingMode();
     if (client.connect(clientId, clientUser, clientPass)) {
+        Serial.print("Client ID: ");
+        Serial.println(clientId);
         client.publish(publishTopic, publishPayload, false);
         client.subscribe(subscribeTopic);
     } else {
         sprintf(clientIdBackup, "amebaClient-%lu", random(000, 999));
         if (client.connect(clientIdBackup, clientUser, clientPass)) {
+            Serial.println("Static ID unable to use. Generate unique ID...");
+            Serial.print("Client ID: ");
+            Serial.println(clientIdBackup);
             client.publish(publishTopic, publishPayload, false);
             client.subscribe(subscribeTopic);
         }
