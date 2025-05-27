@@ -2,7 +2,7 @@
 
 This example shows the combination of NTP with text-to-speech application using Google Translate API
 
-Example Guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/Neural%20Network/Text-to-Speech%20NTP.html
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Text-to-Speech%20NTP.html
 
 */
 

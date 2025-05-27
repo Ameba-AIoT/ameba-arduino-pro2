@@ -2,7 +2,7 @@
  This sketch shows how to use power mode deepsleep
 
  Example guide:
- https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/PowerMode/Deep%20Sleep%20Mode.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/PowerMode/Deep%20Sleep%20Mode.html
  */
 
 #include "PowerMode.h"

@@ -15,6 +15,8 @@ char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
+char clientIdBackup[32];
+
 char mqttServer[] = "cloud.amebaiot.com";
 char clientId[] = "amebaClient";
 char clientUser[] = "testuser";
@@ -64,8 +66,19 @@ void setup()
 
     wifiClient.setNonBlockingMode();
     if (client.connect(clientId, clientUser, clientPass)) {
-        client.publish(publishTopic, publishPayload);
+        Serial.print("Client ID: ");
+        Serial.println(clientId);
+        client.publish(publishTopic, publishPayload, false);
         client.subscribe(subscribeTopic);
+    } else {
+        sprintf(clientIdBackup, "amebaClient-%lu", millis());
+        if (client.connect(clientIdBackup, clientUser, clientPass)) {
+            Serial.println("Static ID unable to use. Generate unique ID...");
+            Serial.print("Client ID: ");
+            Serial.println(clientIdBackup);
+            client.publish(publishTopic, publishPayload, false);
+            client.subscribe(subscribeTopic);
+        }
     }
 }
 

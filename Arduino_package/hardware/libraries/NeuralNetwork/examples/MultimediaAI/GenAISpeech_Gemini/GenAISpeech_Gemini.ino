@@ -8,7 +8,7 @@ endpoint: /v1beta/models
 model: gemini
 https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/audio-understanding
 
-Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Generative%20AI%20Speech.html#genaispeech-gemini
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Generative%20AI%20Speech.html
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 
