@@ -22,6 +22,8 @@ char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
+char clientIdBackup[32];
+
 char mqttServer[] = "cloud.amebaiot.com";
 char clientId[] = "amebaClient";
 char clientUser[] = "testuser";
@@ -76,9 +78,16 @@ void setup()
         delay(10000);
     }
 
+    wifiClient.setNonBlockingMode();
     if (client.connect(clientId, clientUser, clientPass)) {
-        client.publish(publishTopic, publishPayload);
+        client.publish(publishTopic, publishPayload, false);
         client.subscribe(subscribeTopic);
+    } else {
+        sprintf(clientIdBackup, "amebaClient-%lu", random(000, 999));
+        if (client.connect(clientIdBackup, clientUser, clientPass)) {
+            client.publish(publishTopic, publishPayload, false);
+            client.subscribe(subscribeTopic);
+        }
     }
 }
 
