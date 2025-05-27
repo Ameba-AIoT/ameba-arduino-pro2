@@ -71,7 +71,7 @@ void setup()
         client.publish(publishTopic, publishPayload, false);
         client.subscribe(subscribeTopic);
     } else {
-        sprintf(clientIdBackup, "amebaClient-%lu", random(000, 999));
+        sprintf(clientIdBackup, "amebaClient-%lu", millis());
         if (client.connect(clientIdBackup, clientUser, clientPass)) {
             Serial.println("Static ID unable to use. Generate unique ID...");
             Serial.print("Client ID: ");
