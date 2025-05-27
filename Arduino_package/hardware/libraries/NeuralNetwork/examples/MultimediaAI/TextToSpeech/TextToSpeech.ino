@@ -2,7 +2,7 @@
 
 This example shows the application of text-to-speech using Google Translate API
 
-Example Guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/Neural%20Network/Text-to-Speech.html
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Text-to-Speech.html
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 

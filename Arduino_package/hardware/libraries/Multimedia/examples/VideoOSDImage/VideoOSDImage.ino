@@ -3,7 +3,7 @@
      VideoSetting config(VIDEO_D1, CAM_FPS, VIDEO_H264, 0);
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/amebapro2/Example_Guides/Multimedia/RTSP%20Streaming%20with%20OSD%20Image.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/RTSP%20Streaming%20with%20OSD%20Image.html
 */
 
 #include "WiFi.h"
