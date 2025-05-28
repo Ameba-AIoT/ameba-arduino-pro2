@@ -36,6 +36,8 @@
 #define CMD_MP4_SET_OPEN_CB             MM_MODULE_CMD(0x1a)
 #define CMD_MP4_SET_SEEK_CB             MM_MODULE_CMD(0x1b)
 #define CMD_MP4_SET_CLOSE_CB            MM_MODULE_CMD(0x1c)
+#define CMD_MP4_SET_UDAT_CALLBACK       MM_MODULE_CMD(0x1d)
+#define CMD_MP4_SET_TIMELAPSE_PARAMS    MM_MODULE_CMD(0x1e)
 typedef struct mp4_ctx_s {
 	void *parent;
 

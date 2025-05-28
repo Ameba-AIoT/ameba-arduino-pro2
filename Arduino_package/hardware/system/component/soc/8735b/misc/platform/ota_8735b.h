@@ -9,6 +9,7 @@
 
 /************************Related setting****************************/
 #define HTTP_OTA_UPDATE
+#define EXT_STORAGE_OTA_UPDATE
 
 #define NOR_BLOCK_SIZE		4096
 #define NAND_BLOCK_SIZE		(64 * 2048)
@@ -81,6 +82,16 @@ int update_ota_http_connect_server(int server_socket, char *host, int port);
 ** Return         : NULL
 **************************************************************************************************/
 int http_update_ota(char *host, int port, char *resource);
+#endif
+
+#ifdef EXT_STORAGE_OTA_UPDATE
+/*************************************************************************************************
+** Function Name  : ext_storage_update_ota
+** Description    : The process of OTA updating through selection between SDCard or EMMC
+** Input          : filename: target OTA file name. e.g. ota_is_realtek.bin
+** Return         : 0: OTA success
+**************************************************************************************************/
+int ext_storage_update_ota(char *filename);
 #endif
 
 #endif

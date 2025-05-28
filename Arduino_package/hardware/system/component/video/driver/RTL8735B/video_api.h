@@ -268,19 +268,20 @@ typedef struct video_param_s {
 } video_params_t;
 
 typedef struct bps_stbl_ctrl_param_s {
-	uint32_t sampling_time;
+	uint32_t sampling_time; //unit in ms
 	uint32_t maximun_bitrate;
 	uint32_t minimum_bitrate;
 	uint32_t target_bitrate;
 } bps_stbl_ctrl_param_t;
 
+#define BPS_STBL_CTRL_STG_CNT 3
 typedef struct bps_stbl_ctrl_s {
 	int en;
 	uint32_t sample_bitrate;
 	uint32_t current_framerate;
 	bps_stbl_ctrl_param_t params;
-	uint32_t fps_stage[3];
-	uint32_t gop_stage[3];
+	uint32_t fps_stage[BPS_STBL_CTRL_STG_CNT];
+	uint32_t gop_stage[BPS_STBL_CTRL_STG_CNT];
 	int fps_stage_idx;
 	struct {
 		uint32_t cnt_sr;
@@ -489,6 +490,10 @@ int video_get_rc(int ch, rate_ctrl_s *rc_ctrl);
 int video_bps_stbl_ctrl_en(int ch, int enable);
 
 int video_set_bps_stbl_ctrl_params(int ch, bps_stbl_ctrl_param_t *bps_stbl_ctrl_param, uint32_t* fps_stage, uint32_t* gop_stage);
+
+int video_get_realfps(int ch, int* isp_fps, int* enc_fps);
+
+int video_wait_target_fps(int ch, int target_fps, int timeout);
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

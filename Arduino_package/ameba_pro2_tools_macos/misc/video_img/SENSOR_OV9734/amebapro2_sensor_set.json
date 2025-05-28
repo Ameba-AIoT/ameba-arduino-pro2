@@ -36,7 +36,7 @@
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"
+            "file":"iq_ov9734.bin"
         },
         "sensor_data": {
             "source":"binary",

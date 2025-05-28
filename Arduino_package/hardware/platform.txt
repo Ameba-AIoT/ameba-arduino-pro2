@@ -17,7 +17,7 @@ lwip_version=lwip_v2.1.2
 mbedtls_version=mbedtls-2.28.1
 fatfs_version=r0.14
 littlefs_version=r2.41
-VIPLiteDrv_version=VIPLiteDrv_1.12.0
+VIPLiteDrv_version=VIPLiteDrv_2.0.0
 
 toolchain_p1_version={toolchain_version}-p1
 toolchain_p2_version={toolchain_version}-p2

@@ -78,7 +78,7 @@ int ir_ctrl_set_brightness_d(int dbrightness);
  * @param enable 1 for enable, 0 for disable
  * @return 0 for success
  */
-int sensor_external_set_gray_mode(int enable, int led_level);
+int day_night_mode_switch(int enable, int led_level);
 
 /**
  * loop routine
@@ -105,26 +105,29 @@ enum ss_cmd_type {
 };
 
 enum ss_dbg_level {
-	SS_DBG_NONE = 0,
-	SS_DBG_ENABLE,
+	SS_LOG_OFF = 0,
+	SS_LOG_SWITCH,
+	SS_LOG_ALL,
 };
 
 enum ss_cmd_index {
-	SS_IDX_DBG_LEVEL = 0,
-	SS_IDX_EN_AUTO_IR,
-	SS_IDX_IR_STRENGTH,
-	SS_IDX_SW_LUX,
+	SS_CMD_DEBUG_LEVEL = 0,
+	SS_CMD_AUTO_PWM,
+	SS_CMD_IR_STRENGTH,
+	SS_CMD_HW_LUX,
+	SS_CMD_SW_LUX,
+	SS_CMD_VERSION,
 };
 
-#define COUNT_IR_LED_STEP 3
-#define IR_MAX_STRENGTH	100
-#define IR_MIN_STRENGTH	50
+#define COUNT_LED_STEP 3
+#define LED_MAX_STRENGTH	100
+#define LED_MIN_STRENGTH	50
 
-typedef struct auto_ir_config_s {
-	int ir_led_step[COUNT_IR_LED_STEP];
-	short def_irled_idx;
-	short thr_ir_darkder;
-	short thr_ir_brighter;
-} auto_ir_config_t;
+typedef struct auto_pwm_config_s {
+	int led_step[COUNT_LED_STEP];
+	short led_idx;
+	short thr_darker;
+	short thr_brighter;
+} auto_pwm_config_t;
 
 #endif

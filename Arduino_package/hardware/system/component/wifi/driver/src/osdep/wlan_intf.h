@@ -126,7 +126,8 @@ void rltk_wlan_set_rts(unsigned char enable, unsigned int rts_threshold);
 int rltk_wlan_set_retry_limit(unsigned char short_retry, unsigned char long_retry);
 int rltk_wlan_set_country_code(const char *country_code);
 int rltk_wlan_set_channel_plan(__u8 channel_plan);
-
+int rltk_wlan_set_customized_channel_plan(customized_chl_cfg_t *chnlplan2_4, __u8 chnlnum2_4, customized_chl_cfg_t *chnlplan5, __u8 chnlnum5,
+		__u8 regulation2_4, __u8 regulation5, __u8 fixed_band);
 //add temporarily
 extern int rtw_wx_get_essid(unsigned char wlan_idx, __u8 *ssid);
 extern int rtw_wx_set_essid(unsigned char wlan_idx, __u8 *ssid, __u16 ssid_len);

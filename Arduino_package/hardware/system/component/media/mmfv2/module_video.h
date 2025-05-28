@@ -33,6 +33,7 @@
 #define CMD_VIDEO_PRINT_INFO        MM_MODULE_CMD(0x17)
 #define CMD_VIDEO_SET_MULTI_RCCTRL	MM_MODULE_CMD(0x18)
 #define CMD_VIDEO_GET_MULTI_RCCTRL	MM_MODULE_CMD(0x19)
+#define CMD_VIDEO_SET_CAP_INTVL		MM_MODULE_CMD(0x1a)  //capture every n seconds
 
 #define CMD_VIDEO_APPLY				MM_MODULE_CMD(0x20)  // apply setting
 #define CMD_VIDEO_UPDATE			MM_MODULE_CMD(0x21)  // update new setting
@@ -41,6 +42,7 @@
 #define CMD_VIDEO_SET_TIMESTAMP_OFFSET		MM_MODULE_CMD(0x25)
 #define CMD_VIDEO_EN_DBG_TS_INFO	MM_MODULE_CMD(0x26)
 #define CMD_VIDEO_SHOW_DBG_TS_INFO	MM_MODULE_CMD(0x27)
+#define CMD_VIDEO_SET_SENSOR_ID     MM_MODULE_CMD(0x28)
 
 #define CMD_SNAPSHOT_ENCODE_CB		MM_MODULE_CMD(0x30)
 
@@ -106,6 +108,8 @@ typedef struct video_ctx_s {
 	void (*meta_cb)(void *);
 	void (*sps_pps_cb)(void *);
 	video_bps_stats_t bps_stats;
+	uint64_t frame_cnt;
+	int frame_drop_interval;
 
 	dbg_ts_info_t *dbg_ts_info;
 } video_ctx_t;

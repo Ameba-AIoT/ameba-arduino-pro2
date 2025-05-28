@@ -12,7 +12,8 @@
 #define CMD_VIPNN_GET_STATUS            MM_MODULE_CMD(0x04)  // get vipnn module status
 
 #define CMD_VIPNN_SET_CONFIDENCE_THRES  MM_MODULE_CMD(0x06)  // set confidence threshold for object detection 
-#define CMD_VIPNN_SET_NMS_THRES         MM_MODULE_CMD(0x07)  // set NMS threshold for object detection 
+#define CMD_VIPNN_SET_NMS_THRES         MM_MODULE_CMD(0x07)  // set NMS threshold for object detection
+#define CMD_VIPNN_SET_DESIRED_CLASS     MM_MODULE_CMD(0x08)  // set desired class for object detection
 
 #define CMD_VIPNN_SET_OUTPUT     	    MM_MODULE_CMD(0x15)  // enable module output
 #define CMD_VIPNN_SET_OUTPUT_TYPE       MM_MODULE_CMD(0x16)  // set module output type
@@ -124,6 +125,11 @@ typedef struct nn_data_param_s {
 	int size_in_byte;
 } nn_data_param_t;
 
+typedef struct nn_desired_class_s {
+	int *class_info;
+	int len;
+} nn_desired_class_t;
+
 //preprocess return type
 #define PP_ERROR        (-1)
 #define PP_USE_RESULT   0
@@ -142,6 +148,7 @@ typedef void (*nn_set_confidence_thresh_t)(void *confidence_thresh);
 typedef void (*nn_set_nms_thresh_t)(void *nms_thresh);
 typedef void (*nn_set_init_info_t)(void *model);
 typedef void (*nn_release_t)(void);
+typedef void (*nn_set_desired_class_t)(nn_desired_class_t *desired_class_list);
 
 #define MODEL_SRC_MEM	0
 #define MODEL_SRC_FILE	1
@@ -165,6 +172,7 @@ typedef struct nnmodel_s {
 	// setup thresh in post-processing
 	nn_set_confidence_thresh_t set_confidence_thresh;
 	nn_set_nms_thresh_t set_nms_thresh;
+	nn_set_desired_class_t set_desired_class;
 
 	// release resorce
 	nn_release_t release;
@@ -343,9 +351,9 @@ typedef struct palmdetect_res_s {
 
 typedef struct handland_res_s {
 	landmark3d_t landmark3d;
-    unsigned char handedness;
+	unsigned char handedness;
 	float theta, ratio;
-	int w,h;
+	int w, h;
 	int offset_x, offset_y;
 } handland_res_t;
 

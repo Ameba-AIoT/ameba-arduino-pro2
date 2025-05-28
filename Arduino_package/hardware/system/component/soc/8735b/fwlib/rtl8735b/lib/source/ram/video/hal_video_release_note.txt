@@ -1,3 +1,28 @@
+<05/23/2025 12:00 Juling>
+Version : RTL8735B_VOE_1.6.2.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add 12M feature
+	2. Fix AE stuck issue
+
+--------------------------------------------------------------------------
+<03/28/2025 12:00 Juling>
+Version : RTL8735B_VOE_1.6.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Soften max fps from 32 to 122
+
+	Video/ENC related
+	1. Fix RC memory leakage issue
+	2. Fix 15fps to 24fps, rc setting fail issue
+	3. Fix set rc printf typo issue
+--------------------------------------------------------------------------
 <01/08/2025 12:00 Juling>
 Version : RTL8735B_VOE_1.6.0.0
 Modified Files:

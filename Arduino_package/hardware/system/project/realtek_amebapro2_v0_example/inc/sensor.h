@@ -95,6 +95,10 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_OV5693         0x30  //  |   v    |   -    |   -    |   -    |
 #define SENSOR_SC3336         0x31  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_K06A           0x32  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_K306P          0x33  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV9734_SD      0x34  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_IMX471         0x35  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_IMX681         0x36  //  |   v    |   v    |   v    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_DUMMY]        = {1920, 1080, 30},
@@ -115,7 +119,7 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_PS5268]       = {1920, 1080, 30},
 	[SENSOR_SC2310]       = {1920, 1080, 30},
 	[SENSOR_PS5420_HDR]   = {1952, 1944, 24},
-	[SENSOR_PS5270_HDR]   = {1536, 1536, 30},
+	[SENSOR_PS5270_HDR]   = {1536, 1536, 25},
 	[SENSOR_F53]          = {1920, 1080, 30},
 	[SENSOR_F55]          = {1920, 1080, 30},
 	[SENSOR_GC4663]       = {2560, 1440, 24},
@@ -148,6 +152,10 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_OV5693]       = {2592, 1944, 15},
 	[SENSOR_SC3336]       = {2304, 1296, 30},
 	[SENSOR_K06A]         = {2560, 1440, 24},
+	[SENSOR_K306P]        = {2560, 1440, 24},
+	[SENSOR_OV9734_SD]    = { 640,  360, 60},
+	[SENSOR_IMX471]       = {2304, 1728, 24},
+	[SENSOR_IMX681]       = {2000, 1500, 30},
 };
 
 #define SENSOR_MAX         5

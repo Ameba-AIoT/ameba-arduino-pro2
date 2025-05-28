@@ -179,11 +179,10 @@ will need to increase long long */
                            length)
 
 /* Set socket options argument */
-#undef IFNAMSIZ
-#define IFNAMSIZ NETIF_NAMESIZE
+#define _IFNAMSIZ NETIF_NAMESIZE
 
 struct ifreq {
-  char ifr_name[IFNAMSIZ]; /* Interface name */
+  char ifr_name[_IFNAMSIZ]; /* Interface name */
 };
 
 /* Socket protocol types (TCP/UDP/RAW) */

@@ -491,6 +491,7 @@ int hal_video_get_no_video_time(void);
 u32 hal_video_get_video_timer_cur_time(void);
 int hal_video_config_isp_calibration(int iq_cali_flag);
 int hal_video_set_isp_stream_fps(int ch, uint32_t fps);
+int hal_video_isp_zoom_filter_coef_init(int ch, u8* buf);
 
 extern hal_video_adapter_t vv_adapter;
 
@@ -657,7 +658,6 @@ static __inline__ int hal_video_isp_set_i2c_id(u32 ch, u32 i2c_id)
 
 static __inline__ int hal_video_isp_clk_set(int ch, u32 isp_clk_level, u32 mipi_clk_level)
 {
-
 	hal_video_adapter_t *v_adp = &vv_adapter;
 	commandLine_s *cml;
 
@@ -671,7 +671,6 @@ static __inline__ int hal_video_isp_clk_set(int ch, u32 isp_clk_level, u32 mipi_
 }
 static __inline__ int hal_video_isp_drop_frame_num_set(int ch, u32 drop_frame_num)
 {
-
 	hal_video_adapter_t *v_adp = &vv_adapter;
 	commandLine_s *cml;
 
@@ -843,6 +842,49 @@ static __inline__ int hal_video_isp_axi_buf_init(int ch, u32* buf)
 
 	cml = v_adp->cmd[ch];
 	cml->axi_buf_cfg = buf;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_isp_init_raw(int ch, int val)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->init_raw = val;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_isp_verify_info(int ch, struct verify_ctrl_config v_cfg)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->verify_addr0 = v_cfg.verify_addr0;
+	cml->verify_addr1 = v_cfg.verify_addr1;
+	cml->verify_ylen = v_cfg.verify_ylen;
+	cml->verify_uvlen = v_cfg.verify_uvlen;
+	cml->verify_nlsc_rcenter_x = v_cfg.verify_r_center.x;
+	cml->verify_nlsc_rcenter_y = v_cfg.verify_r_center.y;
+	cml->verify_nlsc_gcenter_x = v_cfg.verify_g_center.x;
+	cml->verify_nlsc_gcenter_y = v_cfg.verify_g_center.y;
+	cml->verify_nlsc_bcenter_x = v_cfg.verify_b_center.x;
+	cml->verify_nlsc_bcenter_y = v_cfg.verify_b_center.y;
+
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
+static __inline__ int hal_video_isp_raw_mode_tnr_dis(int ch, int dis)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->isp_raw_mode_tnr_dis = dis;
 	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
 	return OK;
 }

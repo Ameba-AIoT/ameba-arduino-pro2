@@ -90,6 +90,12 @@ typedef struct {
 	unsigned char		channel;
 } rtw_softap_info_t;
 
+typedef struct customized_chl_cfg {
+	unsigned char
+	chnl_index;//for 2.4G:{1,2,3,4,5,6,7,8,9,10,11,12,13,14}. for 5G:{36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,144,149,153,157,161,165}
+	unsigned char scan_type; //1:SCAN_PASSIVE. 2:SCAN_ACTIVE. 3:SCAN_MIX
+} customized_chl_cfg_t;
+
 typedef void (*ap_channel_switch_callback_t)(unsigned char channel, rtw_channel_switch_res_t ret);
 
 typedef void (*rtw_joinstatus_callback_t)(\
@@ -511,6 +517,7 @@ struct  wifi_user_conf {
 	bit 3: (0: disable wifi connection flow debug, 1:  enable wifi connection flow debug)
 	bit 4: (0: disable wifi auto reconnection flow debug, 1:  enable auto reconnection flow debug)
 	bit 5: (0: disable to mark wifi SSID/router top three MAC Address, 1:  enable to mark wifi SSID/router top three MAC Address)
+	bit 6: (0: don't show wifi monitor environment information, 1:  show wifi monitor environment information)
 	*/
 	unsigned char wifi_debug_enabled;
 
@@ -527,6 +534,13 @@ struct  wifi_user_conf {
 
 	//provide fast scan retry times for upper layer to revise
 	unsigned char fast_pscan_retry_times_max;
+
+	customized_chl_cfg_t chn2_4G[13];
+	unsigned char chn2_4G_num;
+	customized_chl_cfg_t chn5G[25];
+	unsigned char chn5G_num;
+	unsigned char regulation2_4G;
+	unsigned char regulation5G;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 
