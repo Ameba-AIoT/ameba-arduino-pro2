@@ -56,7 +56,7 @@ void initWiFi()
         long int StartTime = millis();
         while (WiFi.status() != WL_CONNECTED) {
             delay(500);
-            if ((StartTime + 5000) < millis()) {
+            if ((StartTime + 5000) < (long int)(millis())) {
                 break;
             }
         }

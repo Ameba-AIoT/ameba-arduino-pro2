@@ -144,7 +144,7 @@ void FDPostProcess(std::vector<FaceDetectionResult> results)
             int ymax = (int)(item.yMax() * im_h);
 
             // Draw boundary box
-            printf("Face %ld confidence %d:\t%d %d %d %d\n\r", i, item.score(), xmin, xmax, ymin, ymax);
+            printf("Face %ld confidence %d:\t%d %d %d %d\n\r", (long int)i, item.score(), xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
             // Print identification text above boundary box

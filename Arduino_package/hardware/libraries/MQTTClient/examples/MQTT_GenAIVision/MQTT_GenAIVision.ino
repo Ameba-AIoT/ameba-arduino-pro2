@@ -213,7 +213,7 @@ void thread2_task(void *param)
             // Llama vision prompt
             // String response = llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, sslClient);
 
-            const char *c_resp = response.c_str();
+            __attribute__((unused)) const char *c_resp = response.c_str();
 
             // publish image
             Serial.println("publishing pic...");

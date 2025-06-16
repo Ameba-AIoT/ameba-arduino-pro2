@@ -58,7 +58,7 @@ void executeCommand()
             long int StartTime = millis();
             while (WiFi.status() != WL_CONNECTED) {
                 delay(500);
-                if ((StartTime + 5000) < millis()) {
+                if ((StartTime + 5000) < (long int)millis()) {
                     break;
                 }
             }
@@ -102,7 +102,7 @@ void initWiFi()
         long int StartTime = millis();
         while (WiFi.status() != WL_CONNECTED) {
             delay(500);
-            if ((StartTime + 5000) < millis()) {
+            if ((StartTime + 5000) < (long int)millis()) {
                 break;
             }
         }
@@ -171,7 +171,7 @@ void getRequest(void *param)
                             if (Feedback == "") {
                                 Feedback = "<!DOCTYPE html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><script src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js'></script><script src='https://fustyles.github.io/webduino/holistic_20201012/holistic.js'></script><script src='https://fustyles.github.io/webduino/holistic_20201012/holistic_esp32cam_stream.js'></script><script src='https://fustyles.github.io/webduino/GameElements_20190131/gameelements.js'></script><script src='https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.4/holistic.js' crossorigin='anonymous'></script></head><body><script>const delay=(seconds)=>{return new Promise((resolve)=>{setTimeout(resolve,seconds*1000);});};const main=async()=>{holistic_video('block','1','1','1','1','1','1');  holistic_video('block','1','1','1','1','1','1');  console.log('Raise your left hand and tilt it 45 degree while putting your right hand in front of your chest and look for the surprise message showed in the serial monitor connected to your board');  var _E5_B7_A6_E6_89_8B_E8_85_95x;  var _E5_B7_A6_E6_89_8B_E8_85_95y;  var _E5_8F_B3_E6_89_8B_E8_85_95x;  var _E5_8F_B3_E6_89_8B_E8_85_95y;  var _E9_BC_BB_E5_AD_90x;  var _E9_BC_BB_E5_AD_90y;  var _E5_8F_B3_E8_82_A9_E8_86_80x;  var _E5_8F_B3_E8_82_A9_E8_86_80y;  var _E5_B7_A6_E8_82_A9_E8_86_80x;  var _E5_B7_A6_E8_82_A9_E8_86_80y;  var _E5_85_A9_E6_89_8B_E8_85_95_E9_80_A3_E7_B7_9A_E8_A7_92_E5_BA_A6; recognitionFinish = async function() {holistic_state(0);  _E5_B7_A6_E6_89_8B_E8_85_95x = holistic_pose_position('15','x');  _E5_B7_A6_E6_89_8B_E8_85_95y = holistic_pose_position('15','y');  _E5_8F_B3_E6_89_8B_E8_85_95x = holistic_pose_position('16','x');  _E5_8F_B3_E6_89_8B_E8_85_95y = holistic_pose_position('16','y');  _E9_BC_BB_E5_AD_90x = holistic_pose_position('0','x');  _E9_BC_BB_E5_AD_90y = holistic_pose_position('0','y');  _E5_8F_B3_E8_82_A9_E8_86_80x = holistic_pose_position('12','x');  _E5_8F_B3_E8_82_A9_E8_86_80y = holistic_pose_position('12','y');  _E5_B7_A6_E8_82_A9_E8_86_80x = holistic_pose_position('11','x');  _E5_B7_A6_E8_82_A9_E8_86_80y = holistic_pose_position('11','y');  _E5_85_A9_E6_89_8B_E8_85_95_E9_80_A3_E7_B7_9A_E8_A7_92_E5_BA_A6 = holistic_angle(_E5_B7_A6_E6_89_8B_E8_85_95x,_E5_B7_A6_E6_89_8B_E8_85_95y,_E5_8F_B3_E6_89_8B_E8_85_95y,_E5_8F_B3_E6_89_8B_E8_85_95x);  if (_E5_85_A9_E6_89_8B_E8_85_95_E9_80_A3_E7_B7_9A_E8_A7_92_E5_BA_A6) {    if (_E5_85_A9_E6_89_8B_E8_85_95_E9_80_A3_E7_B7_9A_E8_A7_92_E5_BA_A6 <= 60 && _E5_85_A9_E6_89_8B_E8_85_95_E9_80_A3_E7_B7_9A_E8_A7_92_E5_BA_A6 >= 20 && _E5_B7_A6_E6_89_8B_E8_85_95x > _E9_BC_BB_E5_AD_90x && _E5_B7_A6_E6_89_8B_E8_85_95y > _E9_BC_BB_E5_AD_90y && _E5_8F_B3_E6_89_8B_E8_85_95x < _E9_BC_BB_E5_AD_90x && _E5_8F_B3_E6_89_8B_E8_85_95y < _E9_BC_BB_E5_AD_90y && (_E5_B7_A6_E6_89_8B_E8_85_95y - _E5_B7_A6_E8_82_A9_E8_86_80y) / (_E5_B7_A6_E8_82_A9_E8_86_80y - _E9_BC_BB_E5_AD_90y) >= -0.5 && (_E5_B7_A6_E6_89_8B_E8_85_95y - _E5_B7_A6_E8_82_A9_E8_86_80y) / (_E5_B7_A6_E8_82_A9_E8_86_80y - _E9_BC_BB_E5_AD_90y) <= 1) {      var fetchData_;      fetch(('?'+String('message')))      .then(function (response) {          return response.text();      })      .then(function (data) {          fetchData_=data;              })      .catch(      (error) => {          console.log(`Error: ${error}`);      }      );}  }holistic_state(1);}};main();</script></body></html>";
                             }
-                            for (int index = 0; index < Feedback.length(); index = index + 1024) {
+                            for (unsigned int index = 0; index < Feedback.length(); index = index + 1024) {
                                 client.print(Feedback.substring(index, index + 1024));
                             }
                             Feedback = "";
