@@ -19,8 +19,11 @@ jobs:
         with:
           sparse-checkout: |
             Arduino_package/hardware/libraries
-            --skip-checks Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
-            --skip-checks Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
+
+      - name: Remove excluded .ino files
+        run: |
+          rm -f Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd/Camera_2_Lcd.ino
+          rm -f Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC/Camera_2_Lcd_JPEGDEC.ino
 
       - name: Locate .ino files in libraries folder
         run: |
