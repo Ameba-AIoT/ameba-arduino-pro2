@@ -17,11 +17,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          sparse-checkout-cone: false  
           sparse-checkout: |
             Arduino_package/hardware/libraries
-            !Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
-            !Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
+            --skip-checks Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
+            --skip-checks Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
 
       - name: Locate .ino files in libraries folder
         run: |
