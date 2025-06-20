@@ -24,6 +24,7 @@ jobs:
         run: |
           rm -f Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd/Camera_2_Lcd.ino
           rm -f Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC/Camera_2_Lcd_JPEGDEC.ino
+          rm -f Arduino_package/hardware/libraries/Debugging/examples/ExampleDebug/ExampleDebug.ino
 
       - name: Locate .ino files in libraries folder
         run: |
