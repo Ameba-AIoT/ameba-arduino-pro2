@@ -1,0 +1,60 @@
+# .github/workflows/check-example-links.yml
+name: Validate "Example guide:" Links in .ino Files
+
+on:
+  push:
+    paths:
+      - 'Arduino_package/hardware/libraries/**/*.ino'
+  pull_request:
+    paths:
+      - 'Arduino_package/hardware/libraries/**/*.ino'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Locate .ino files in libraries folder
+        run: |
+          set -euo pipefail
+          ino_dir="Arduino_package/hardware/libraries"
+          echo "📂 Searching in: $ino_dir"
+          find "$ino_dir" -type f -name '*.ino' > ino_files.txt
+          if [ ! -s ino_files.txt ]; then
+            echo "No .ino files found in libraries folder, skipping."
+            exit 0
+          fi
+
+      - name: Check Example guide links
+        run: |
+          set -euo pipefail
+          failed=0
+          while IFS= read -r file; do
+            echo "➡️ Checking $file"
+            # Get line after "Example guide:", trim whitespace including leading spaces
+            url=$(grep -A1 -m1 '^Example guide:' "$file" \
+                  | tail -n1 \
+                  | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' )
+            if [ -z "$url" ]; then
+              echo "::warning file=$file::'Example guide:' found but no URL on next line"
+              failed=1
+              continue
+            fi
+            echo "Found URL → '$url'"
+            status=$(curl -s -o /dev/null -w '%{http_code}' "$url" || echo "000")
+            if [ "$status" -ne 200 ]; then
+              echo "::error file=$file::URL '$url' returned HTTP $status"
+              failed=1
+            else
+              echo "✅ URL OK ($status)"
+            fi
+          done < ino_files.txt
+          if [ "$failed" -ne 0 ]; then
+            echo "❌ One or more link checks failed."
+            exit 1
+          fi
