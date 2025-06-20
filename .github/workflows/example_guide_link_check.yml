@@ -1,5 +1,5 @@
 # .github/workflows/check-example-links.yml
-name: Validate "Example guide:" Links in .ino Files
+name: Example guide Links check
 
 on:
   push:
@@ -17,7 +17,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          sparse-checkout: |
+            Arduino_package
 
       - name: Locate .ino files in libraries folder
         run: |
