@@ -2,8 +2,8 @@
  This sketch shows how to open/close file and perform read/write to it.
 
  Example guide:
- https://www.amebaiot.com/en/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/File%20System/Display%20Free%20and%20Use%20space%20of%20SD%20card.html
+*/
 
 #include "AmebaFatFS.h"
 

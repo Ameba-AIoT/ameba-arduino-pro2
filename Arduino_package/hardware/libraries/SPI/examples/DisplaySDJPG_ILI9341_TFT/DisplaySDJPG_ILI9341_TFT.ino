@@ -1,8 +1,9 @@
 /*
 
-This sketch shows the example of displaying jpg image from micro SD card on ILI9341 TFT display module.
+ This sketch shows the example of displaying jpg image from micro SD card on ILI9341 TFT display module.
 
-Example Guide: TBD
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/SPI/Display%20SD%20JPG%20ILI9341%20TFT.html
 
 */
 

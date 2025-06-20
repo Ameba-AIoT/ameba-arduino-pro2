@@ -4,7 +4,7 @@
  *  or use the APP V7RC.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-video-jpeg-http/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Capture%20JPEG%20display%20over%20HTTP.html
 */
 
 #include <WiFi.h>

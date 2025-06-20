@@ -1,6 +1,10 @@
+/*
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/OTA/Ameba%20Over-the-Air%20Firmware%20Update.html
+*/
+
 #include "OTA.h"
 #include "WiFi.h"
-
 
 char ssid[] = "Network_SSID5";    // your network SSID (name)
 char pass[] = "Password";         // your network password

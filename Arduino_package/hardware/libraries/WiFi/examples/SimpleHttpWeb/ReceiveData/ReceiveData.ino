@@ -1,8 +1,7 @@
 /*
-
  Example guide:
  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/WiFi/Simple%20Http%20Server%20to%20Receive%20Data.html
- */
+*/
 
 #include <WiFi.h>
 int analogPins[] = {A0, A1, A2, A4, A5, A6};

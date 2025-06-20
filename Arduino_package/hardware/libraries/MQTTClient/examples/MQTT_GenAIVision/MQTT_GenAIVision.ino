@@ -14,9 +14,10 @@
  reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
  achieve the same result without blocking the main loop.
 
- Example guide: https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/MQTT/Generative%20AI%20Vision%20with%20MQTT.html
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/MQTT/Generative%20AI%20Vision%20with%20MQTT.html
 
- */
+*/
 
 #include <WiFi.h>
 #include <PubSubClient.h>

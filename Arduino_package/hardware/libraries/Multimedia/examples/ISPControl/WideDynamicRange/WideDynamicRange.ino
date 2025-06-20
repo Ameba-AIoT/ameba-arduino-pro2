@@ -1,5 +1,6 @@
 /*
-  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/ISP%20Control.html
 
   // "WDR="       Set Wide Dynamic Range, 0: Disabled, 1: Manual, 2: Auto
   // "WDR"        Get value of WDR

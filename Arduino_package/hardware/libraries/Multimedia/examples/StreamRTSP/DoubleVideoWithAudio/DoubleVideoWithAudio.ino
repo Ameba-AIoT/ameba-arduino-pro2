@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-video-rtsp/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/RTSP%20Streaming.html
+*/
 
 #include "WiFi.h"
 #include "StreamIO.h"

@@ -1,23 +1,10 @@
 Feature:
-- Update Simple HTTP Server ReceiveData example
-- Update ObjectDetectionImage guide link
-- Add MediaPipe Holistic Landmarker example
-- Update GenAISpeech_Gemini_LEDControl example
-- Add DisplaySDJPG_ILI9341_TFT Example
+- Update example ReadWriteWord.ino
 
 API Updates:
-- Update USB Mass Storage
-    - Add isConnected API to check if USB OTG is connected
-- Update MP4 stop API
-- Update JPEG Decoder AP
-- Update Ameba E ink example link and QR code link
-- Update AmebaFatFSFile API
-- Update MQTT Auth and Callback
-- Update code base for VIPLiteDrv_2.0.0
+- Update all example guide links to ReadTheDocs
 
 Misc:
 - Update "platform.txt"
-- Update AmebaEink zip library
-- Update README.md
-- Update ameba_pro2_tools 1.4.5
-    - Support VIPLiteDrv_2.0.0 and iq_ov9734
+    - Update NN API inc path
+- Clear warnings

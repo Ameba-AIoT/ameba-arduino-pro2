@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-ap-mode/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/WiFi/Create%20WiFi%20AP.html
+*/
 
 #include <WiFi.h>
 // Set if user wants to key in ssid/pwd manually during operation

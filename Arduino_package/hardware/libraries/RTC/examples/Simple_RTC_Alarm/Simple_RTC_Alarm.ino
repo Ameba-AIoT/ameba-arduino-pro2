@@ -1,13 +1,13 @@
-/**
- * This example demonstrate how to use the RTC library methods
- * in order to do something when an alarm is matched.
- * In particular in this example, the RTC time is set at 16:00:00 and an alarm at 16:00:10.
- * When the time match using the match type MATCH_HHMMSS is reached,
- * the attached interrupt function will print on the serial monitor Alarm Match!
- *
- * Example guide:
- * https://www.amebaiot.com/en/amebapro2-arduino-rtc-alarm/
- */
+/*
+ This example demonstrate how to use the RTC library methods
+ in order to do something when an alarm is matched.
+ In particular in this example, the RTC time is set at 16:00:00 and an alarm at 16:00:10.
+ When the time match using the match type MATCH_HHMMSS is reached,
+ the attached interrupt function will print on the serial monitor Alarm Match!
+
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/RTC/Simple%20RTC%20Alarm.html
+*/
 
 #include <stdio.h>
 #include <time.h>

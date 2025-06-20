@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-ble-unlock/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/BLE/Door%20Unlock%20Over%20BLE%20Uart.html
+*/
 
 #include "WiFi.h"
 #include "StreamIO.h"

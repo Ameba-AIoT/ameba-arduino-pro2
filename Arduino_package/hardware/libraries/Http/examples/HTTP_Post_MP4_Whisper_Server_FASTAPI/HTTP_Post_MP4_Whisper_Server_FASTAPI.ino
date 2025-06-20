@@ -1,6 +1,6 @@
 /*
-Example guide:
-TBD
+ Example guide:
+ TBD
 */
 
 #include <Arduino.h>

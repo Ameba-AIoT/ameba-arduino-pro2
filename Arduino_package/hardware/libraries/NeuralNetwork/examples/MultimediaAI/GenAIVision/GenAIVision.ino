@@ -11,7 +11,8 @@ https://ai.google.dev/gemini-api/docs/vision
 GroqCloud - Llama vision
 https://console.groq.com/docs/overview
 
-Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Generative%20AI%20Vision.html
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/Generative%20AI%20Vision.html
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 

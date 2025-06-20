@@ -1,6 +1,6 @@
 /*
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-i2c-mpu6050-dmp6-ros/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/MPU6050%20DMP6%20ImuData%20for%20ROS.html
 */
 
 #include "I2Cdev.h"

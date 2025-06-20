@@ -5,7 +5,8 @@
    Line Notify to the user's mobile phone, ensuring swift response and
    heightened security.
 
-    Example guide: https://www.amebaiot.com/en/amebapro2-arduino-motion-notify/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection%20Google%20Line%20Notify.html
 */
 
 #include <Arduino.h>

@@ -1,8 +1,9 @@
 /*
  This sketch shows how to request flash memory read/write stream word.
 
- Example guide: https://www.amebaiot.com/en/amebapro2-arduino-flash-writestream/
- */
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Flash%20Memory/Read%20Write%20Stream.html
+*/
 
 #include <FlashMemory.h>
 

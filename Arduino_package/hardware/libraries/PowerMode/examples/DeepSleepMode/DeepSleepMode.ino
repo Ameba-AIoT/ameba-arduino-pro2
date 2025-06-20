@@ -3,7 +3,7 @@
 
  Example guide:
  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/PowerMode/Deep%20Sleep%20Mode.html
- */
+*/
 
 #include "PowerMode.h"
 

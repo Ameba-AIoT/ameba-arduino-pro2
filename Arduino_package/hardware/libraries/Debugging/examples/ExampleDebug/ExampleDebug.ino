@@ -13,10 +13,9 @@
 // If you wish to debug your own sketches, copy the debug_custom.json file into your sketch folder
 
 /*
-
  Example guide:
  https://www.amebaiot.com/en/amebapro2-arduino-debug/
- */
+*/
 
 
 #define LED_PIN LED_BUILTIN

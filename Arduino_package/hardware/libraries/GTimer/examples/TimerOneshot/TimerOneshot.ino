@@ -2,8 +2,8 @@
  This sketch shows how to use several hardware timers in invoke handler only once for each timer.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-singleuse-timer/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GTimer/Timer%20Oneshot.html
+*/
 
 #include <GTimer.h>
 

@@ -6,8 +6,8 @@
  by Realtek SG
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-gpio-dht/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GPIO/Measure%20Temperature%20and%20Humidity%20DHT%20Tester.html
+*/
 
 #include "DHT.h"
 

@@ -2,7 +2,8 @@
 
 This example shows the application of MediaPipe Holistic Landmarker on HTTP JPEG stream
 
-Example Guide: TBD
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Multimedia%20AI/MediaPipe%20Holistic%20Landmarker.html
 
 Credit : ChungYi Fu (Kaohsiung, Taiwan)
 

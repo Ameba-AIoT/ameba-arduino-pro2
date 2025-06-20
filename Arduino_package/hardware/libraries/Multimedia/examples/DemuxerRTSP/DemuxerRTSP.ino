@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBC
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/RTSP%20Demuxer.html
 
  Default preset configurations for each video channel:
  Channel 0 : 1920 x 1080 30FPS H264

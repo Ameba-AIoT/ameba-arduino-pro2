@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-web-client/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/WiFi/Simple%20Http%20Request%20to%20Retrieve%20Webs.html
+*/
 
 #include <WiFi.h>
 

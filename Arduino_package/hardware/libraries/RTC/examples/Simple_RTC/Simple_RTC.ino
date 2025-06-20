@@ -1,10 +1,10 @@
-/**
- * This function describes how to use the RTC API.
- * The RTC function is implemented by an independent BCD timer/counter.
- * This example will print out the time information every second.
- *
- * Example guide:
- * https://www.amebaiot.com/en/amebapro2-arduino-rtc/
+/*
+ This function describes how to use the RTC API.
+ The RTC function is implemented by an independent BCD timer/counter.
+ This example will print out the time information every second.
+ 
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/RTC/Simple%20RTC.html
  */
 
 #include <stdio.h>

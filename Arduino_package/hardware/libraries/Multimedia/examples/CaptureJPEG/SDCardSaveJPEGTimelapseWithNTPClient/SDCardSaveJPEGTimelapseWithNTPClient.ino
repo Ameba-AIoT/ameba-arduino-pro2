@@ -2,8 +2,9 @@
     and saves the images to SD Card.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-video-jpeg-sdcard/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Capture%20JPEG%20save%20to%20SD%20Card.html
 */
+
 #include "VideoStream.h"
 #include "AmebaFatFS.h"
 #include <NTPClient.h>

@@ -2,8 +2,8 @@
  This sketch shows how to use power mode standby with retention
 
  Example guide:
- tbd
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/PowerMode/Retention%20Standby%20Mode.html
+*/
 
 #include "PowerMode.h"
 

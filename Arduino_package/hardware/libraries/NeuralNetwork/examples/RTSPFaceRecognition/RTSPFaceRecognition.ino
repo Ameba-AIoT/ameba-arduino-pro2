@@ -1,7 +1,6 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-recognition/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Face%20Recognition.html
 
  Face registration commands
  --------------------------

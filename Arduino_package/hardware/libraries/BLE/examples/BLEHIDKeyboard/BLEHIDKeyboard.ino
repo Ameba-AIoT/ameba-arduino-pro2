@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-ble-keyboard/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/BLE/HID%20Keyboard.html
+*/
 
 #include "BLEHIDDevice.h"
 #include "BLEHIDKeyboard.h"

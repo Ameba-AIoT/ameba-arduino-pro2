@@ -2,8 +2,8 @@
  This sketch shows how to list files under root directory.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-filesystem-simple-application/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/File%20System/Simple%20applications%20with%20SD%20card.html
+*/
 
 #include "AmebaFatFS.h"
 

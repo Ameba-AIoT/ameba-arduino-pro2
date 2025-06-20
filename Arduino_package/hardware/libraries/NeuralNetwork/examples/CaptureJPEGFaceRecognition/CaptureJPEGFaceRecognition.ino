@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-recognition-jpeg/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Capture%20JPEG%20Face%20Recognition.html
 
  Face registration commands
  --------------------------
