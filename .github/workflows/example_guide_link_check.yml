@@ -40,7 +40,7 @@ jobs:
             # Get line after "Example guide:", trim whitespace including leading spaces
             url=$(grep -A1 -m1 '^Example guide:' "$file" \
                   | tail -n1 \
-                  | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' )
+                  | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
             if [ -z "$url" ]; then
               echo "::warning file=$file::'Example guide:' found but no URL on next line"
               failed=1
