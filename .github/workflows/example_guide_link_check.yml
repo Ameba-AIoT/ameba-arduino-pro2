@@ -19,6 +19,8 @@ jobs:
         with:
           sparse-checkout: |
             Arduino_package/hardware/libraries
+            !Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd/Camera_2_Lcd.ino
+            !Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC/Camera_2_Lcd_JPEGDEC.ino
 
       - name: Locate .ino files in libraries folder
         run: |
