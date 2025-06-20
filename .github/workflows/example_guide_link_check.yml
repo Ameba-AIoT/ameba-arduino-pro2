@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            Arduino_package
+            Arduino_package/hardware/libraries
 
       - name: Locate .ino files in libraries folder
         run: |
