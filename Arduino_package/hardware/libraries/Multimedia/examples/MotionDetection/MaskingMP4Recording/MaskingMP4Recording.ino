@@ -3,7 +3,7 @@ This example acts as a Security System based on Motion Detection, which would st
  30 seconds long MP4 video every time motion is detected. (Alarm function could be initiated as well, but on default disabled)
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection%20Masking%20with%20MP4%20Recording.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection/Motion%20Detection%20Masking%20with%20MP4%20Recording.html
 */
 
 #include "WiFi.h"

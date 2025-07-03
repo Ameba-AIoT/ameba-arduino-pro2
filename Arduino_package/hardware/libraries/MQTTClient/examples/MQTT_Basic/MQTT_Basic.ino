@@ -12,7 +12,7 @@
  achieve the same result without blocking the main loop.
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/MQTT/Set%20up%20MQTT%20Client%20to%20Communicate%20with%20Broker.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/MQTT/Set%20up%20MQTT%20Client-Broker%20Basic%20Connection.html
 */
 
 #include <WiFi.h>

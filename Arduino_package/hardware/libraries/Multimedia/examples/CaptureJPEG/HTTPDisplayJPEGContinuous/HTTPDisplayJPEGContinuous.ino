@@ -4,7 +4,7 @@
  *  or use the APP V7RC.
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Capture%20JPEG%20display%20over%20HTTP.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/CaptureJPEG/Capture%20JPEG%20display%20over%20HTTP%20Continuous.html
 */
 
 #include <WiFi.h>

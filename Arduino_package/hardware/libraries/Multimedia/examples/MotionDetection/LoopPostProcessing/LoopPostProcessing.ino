@@ -1,6 +1,6 @@
 /*
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection%20with%20On-Screen%20Display.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection/Motion%20Detection%20with%20On-Screen%20Display%20in%20Loop.html
 */
 
 #include "WiFi.h"

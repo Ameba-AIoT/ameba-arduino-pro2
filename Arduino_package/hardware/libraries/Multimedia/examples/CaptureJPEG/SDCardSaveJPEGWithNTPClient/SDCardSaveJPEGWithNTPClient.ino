@@ -2,7 +2,7 @@
     and saves the image to SD Card.
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Capture%20JPEG%20save%20to%20SD%20Card.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/CaptureJPEG/Capture%20JPEG%20save%20to%20SD%20Card.html
 */
 
 #include "VideoStream.h"
