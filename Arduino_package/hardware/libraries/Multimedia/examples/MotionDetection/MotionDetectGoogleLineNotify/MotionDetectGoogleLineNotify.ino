@@ -6,7 +6,7 @@
    heightened security.
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection%20Google%20Line%20Notify.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Motion%20Detection/Motion%20Detection%20Google%20Line%20Notify.html
 */
 
 #include <Arduino.h>

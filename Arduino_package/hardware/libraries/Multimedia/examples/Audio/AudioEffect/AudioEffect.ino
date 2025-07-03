@@ -1,6 +1,6 @@
 /*
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Audio%20Effects.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Audio/Audio%20Effects.html
 */
 
 #include "WiFi.h"

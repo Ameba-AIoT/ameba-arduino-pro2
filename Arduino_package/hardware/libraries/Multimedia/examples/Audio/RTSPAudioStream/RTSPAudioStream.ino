@@ -1,6 +1,6 @@
 /*
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/RTSP%20Audio%20Stream.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Audio/RTSP%20Audio%20Stream.html
 */
 
 #include "WiFi.h"
