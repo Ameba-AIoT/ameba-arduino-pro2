@@ -4,7 +4,7 @@
  Connect to PC and use the device as a USB camera.
 
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/amebapro2/Example_Guides/USB/UVC%20Device.html/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/USB/UVC%20Device.html
 */
 
 #include "StreamIO.h"
