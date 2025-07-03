@@ -2,7 +2,7 @@
  This example demonstrates the feature of HTTP file server in AMB82 Mini and its usage in accessing MP4 recordings over HTTP.
 
  Example guide:
- https://ameba-arduino-doc.readthedocs.io/en/latest/amebapro2/Example_Guides/HTTP/HTTP%20File%20Server%20and%20MP4.html
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20File%20Server%20and%20MP4.html
 */
 
 #include "WiFi.h"
