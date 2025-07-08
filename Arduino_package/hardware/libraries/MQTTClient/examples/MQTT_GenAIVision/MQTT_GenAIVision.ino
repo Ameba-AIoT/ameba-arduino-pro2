@@ -146,7 +146,7 @@ void setup()
     if (xTaskCreate(thread1_task, (const char *)"thread1_task", 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
         printf("\n\r[%s] Create task 1 failed", __FUNCTION__);
     };
-    if (xTaskCreate(thread2_task, (const char *)"thread2_task", 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
+    if (xTaskCreate(thread2_task, (const char *)"thread2_task", 2048, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
         printf("\n\r[%s] Create task 2 failed", __FUNCTION__);
     };
 }
@@ -211,7 +211,7 @@ void thread2_task(void *param)
             String response = llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, sslClient);
 
             // Llama vision prompt
-            // String response = llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, sslClient);
+            // String response = llm.llamavision(Llama_key, "meta-llama/llama-4-scout-17b-16e-instruct", prompt_msg, img_addr, img_len, sslClient);
 
             __attribute__((unused)) const char *c_resp = response.c_str();
 
