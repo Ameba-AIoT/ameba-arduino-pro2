@@ -1,11 +1,13 @@
 #include "WS2812B.h"
 
-WS2812B::WS2812B(uint8_t input_pin, uint16_t num_leds) {
+WS2812B::WS2812B(uint8_t input_pin, uint16_t num_leds)
+{
     _input_pin = input_pin;
     setLEDCount(num_leds);
 }
 
-void WS2812B::begin(void) {
+void WS2812B::begin(void)
+{
 #if defined(BOARD_AMB82_MINI)
     if (_input_pin == SPI_MOSI) {
         _SPI = &SPI;
@@ -32,7 +34,8 @@ void WS2812B::begin(void) {
     _SPI->begin();
 }
 
-void WS2812B::sendPixel(uint8_t red ,uint8_t green ,uint8_t blue) {
+void WS2812B::sendPixel(uint8_t red, uint8_t green, uint8_t blue)
+{
     uint8_t grb_in_array[3] = {green, red, blue};
     // Set a bit pattern corresponding to RGB = 0, 0, 0 for WS2812B LED timings
     uint16_t grb_out_array[6] = {0x0924, 0x0924, 0x0924, 0x0924, 0x0924, 0x924};
@@ -40,22 +43,23 @@ void WS2812B::sendPixel(uint8_t red ,uint8_t green ,uint8_t blue) {
     for (int i = 0; i < 6; i++) {
         // check the first four bits of each colours
         if ((i % 2) == 0) {
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x80) ? (0x0400) : (0);
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x40) ? (0x0080) : (0);
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x20) ? (0x0010) : (0);
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x10) ? (0x0002) : (0);
-        // check the last four bits of each colours
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x80) ? (0x0400) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x40) ? (0x0080) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x20) ? (0x0010) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x10) ? (0x0002) : (0);
+            // check the last four bits of each colours
         } else {
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x08) ? (0x0400) : (0);
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x04) ? (0x0080) : (0);
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x02) ? (0x0010) : (0);
-            grb_out_array[i] |= (grb_in_array[i/2] & 0x01) ? (0x0002) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x08) ? (0x0400) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x04) ? (0x0080) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x02) ? (0x0010) : (0);
+            grb_out_array[i] |= (grb_in_array[i / 2] & 0x01) ? (0x0002) : (0);
         }
         _SPI->slaveWrite(_SPI->pSpiMaster, grb_out_array[i]);
     }
 }
 
-void WS2812B::show(void) {
+void WS2812B::show(void)
+{
     // end Reset pulse of at least 50us duration
     for (uint8_t i = 0; i < _reset_count; i++) {
         _SPI->slaveWrite(_SPI->pSpiMaster, 0);
@@ -68,14 +72,16 @@ void WS2812B::show(void) {
     _SPI->slaveWrite(_SPI->pSpiMaster, 0);
 }
 
-void WS2812B::clear(void) {
+void WS2812B::clear(void)
+{
     memset(_led_array, 0, _num_leds * sizeof(pixel));
 }
 
-void WS2812B::setLEDCount(uint16_t num_leds) {
-    // Allocate memory for the total numbers of LEDs 
+void WS2812B::setLEDCount(uint16_t num_leds)
+{
+    // Allocate memory for the total numbers of LEDs
     free(_led_array);
-    _led_array = (pixel*)realloc(_led_array, num_leds * sizeof(pixel));
+    _led_array = (pixel *)realloc(_led_array, num_leds * sizeof(pixel));
     // Check if memory allocation is successful
     if (_led_array == NULL) {
         printf("\r\n[ERROR] Insufficient memory available \r\n");
@@ -86,7 +92,8 @@ void WS2812B::setLEDCount(uint16_t num_leds) {
     }
 }
 
-void WS2812B::setPixelColor(uint16_t led_Number, uint8_t rColor, uint8_t gColor, uint8_t bColor) {
+void WS2812B::setPixelColor(uint16_t led_Number, uint8_t rColor, uint8_t gColor, uint8_t bColor)
+{
     // Verify that memory was successfully allocated
     if (_led_array == NULL) {
         printf("\r\n[ERROR] set LED count first \r\n");
@@ -101,7 +108,8 @@ void WS2812B::setPixelColor(uint16_t led_Number, uint8_t rColor, uint8_t gColor,
     }
 }
 
-void WS2812B::fill(uint8_t rColor, uint8_t gColor, uint8_t bColor, uint16_t first, uint16_t count) {
+void WS2812B::fill(uint8_t rColor, uint8_t gColor, uint8_t bColor, uint16_t first, uint16_t count)
+{
     uint16_t i, end;
     // If first led is past end of strip, do nothing
     if (first >= _num_leds) {
@@ -112,17 +120,18 @@ void WS2812B::fill(uint8_t rColor, uint8_t gColor, uint8_t bColor, uint16_t firs
         end = _num_leds;
     } else {
         // Ensure that the last Pixels would not light up more than the LED that are present
-        end = first + count ;
+        end = first + count;
         if (end > _num_leds) {
             end = _num_leds;
         }
     }
-    for (i = first; i < end ; i++) {
+    for (i = first; i < end; i++) {
         setPixelColor(i, rColor, gColor, bColor);
     }
 }
 
-uint32_t WS2812B::colorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
+uint32_t WS2812B::colorHSV(uint16_t hue, uint8_t sat, uint8_t val)
+{
     uint8_t r, g, b;
 
     hue = (hue * 1530L + 32768) / 65536;
@@ -135,13 +144,13 @@ uint32_t WS2812B::colorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
             r = 255;
             // g = 0 to 254
             g = hue;
-        // Yellow to Green-1
+            // Yellow to Green-1
         } else {
             // r = 255 to 1
             r = 510 - hue;
             g = 255;
         }
-    // Green to Blue-1
+        // Green to Blue-1
     } else if (hue < 1020) {
         r = 0;
         // Green to Cyan-1
@@ -149,13 +158,13 @@ uint32_t WS2812B::colorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
             g = 255;
             // b = 0 to 254
             b = hue - 510;
-        // Cyan to Blue-1
+            // Cyan to Blue-1
         } else {
             // g = 255 to 1
             g = 1020 - hue;
             b = 255;
         }
-    // Blue to Red-1
+        // Blue to Red-1
     } else if (hue < 1530) {
         g = 0;
         // Blue to Magenta-1
@@ -163,13 +172,13 @@ uint32_t WS2812B::colorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
             // r = 0 to 254
             r = hue - 1020;
             b = 255;
-        // Magenta to Red-1
+            // Magenta to Red-1
         } else {
             r = 255;
             // b = 255 to 1
             b = 1530 - hue;
         }
-    // Last 0.5 Red (quicker than % operator)
+        // Last 0.5 Red (quicker than % operator)
     } else {
         r = 255;
         g = b = 0;
@@ -182,8 +191,9 @@ uint32_t WS2812B::colorHSV(uint16_t hue, uint8_t sat, uint8_t val) {
     return ((((((r * s1) >> 8) + s2) * v1) & 0xff00) << 8) | (((((g * s1) >> 8) + s2) * v1) & 0xff00) | (((((b * s1) >> 8) + s2) * v1) >> 8);
 }
 
-void WS2812B::rainbow(uint16_t first_hue, int8_t reps, uint8_t saturation, uint8_t brightness) {
-    for (uint16_t i=0; i<_num_leds; i++) {
+void WS2812B::rainbow(uint16_t first_hue, int8_t reps, uint8_t saturation, uint8_t brightness)
+{
+    for (uint16_t i = 0; i < _num_leds; i++) {
         uint16_t hue = first_hue + (i * reps * 65536) / _num_leds;
         uint32_t color = colorHSV(hue, saturation, brightness);
         uint8_t r = (color & 0x00FF0000) >> 16;
