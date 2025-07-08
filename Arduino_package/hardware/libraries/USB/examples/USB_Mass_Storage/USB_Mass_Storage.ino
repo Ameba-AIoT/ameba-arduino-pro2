@@ -4,7 +4,7 @@
  Connect to PC and use the device.
 
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/USB/USB%20Mass%20Storage.html
 */
 
 #include "USBMassStorage.h"

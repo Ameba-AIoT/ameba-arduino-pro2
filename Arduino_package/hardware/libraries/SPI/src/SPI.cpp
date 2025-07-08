@@ -26,7 +26,7 @@ SPIClass::SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int 
     _pinCLK = clk_pin;
     _pinSS = ss_pin;
 
-    initStatus = false;
+    _initStatus = false;
     _dataBits = 8;                 // default databits is 8 bits
     _dataMode = SPI_DATA_MODE0;    // default datamode is mode 0
     _defaultFrequency = SPI_DEFAULT_FREQ;
@@ -57,7 +57,7 @@ void SPIClass::begin(void)
     spi_frequency(pSpiMaster, _defaultFrequency);
 
     // Mark SPI init status
-    initStatus = true;
+    _initStatus = true;
 }
 
 void SPIClass::begin(int ss_pin)
@@ -84,7 +84,7 @@ void SPIClass::begin(int ss_pin)
     spi_frequency(pSpiMaster, _defaultFrequency);
 
     // Mark SPI init status
-    initStatus = true;
+    _initStatus = true;
 }
 
 void SPIClass::begin(char SPI_mode)
@@ -112,7 +112,7 @@ void SPIClass::begin(char SPI_mode)
         spi_format(pSpiSlave, _dataBits, _dataMode, 1);
 
         // Mark SPI init status
-        initStatus = true;
+        _initStatus = true;
     } else {
         printf("\r\n[ERROR] SPI begin: SPI mode \n");
         return;
@@ -146,7 +146,7 @@ void SPIClass::begin(int ss_pin, char SPI_mode)
         spi_format(pSpiSlave, _dataBits, _dataMode, 1);
 
         // Mark SPI init status
-        initStatus = true;
+        _initStatus = true;
     } else {
         printf("\r\n[ERROR] SPI begin: SPI mode \n");
         return;
@@ -257,9 +257,24 @@ uint16_t SPIClass::transfer16(uint16_t data, SPITransferMode mode)
     return transfer16(_pinSS, data, mode);
 }
 
+int SPIClass::masterWrite(int value)
+{
+    return (spi_master_write(pSpiMaster, value));
+}
+
 int SPIClass::slaveRead(void)
 {
     return spi_slave_read(pSpiSlave);
+}
+
+void SPIClass::slaveWrite(int value)
+{
+    spi_slave_write(pSpiSlave, value);
+}
+
+void SPIClass::slaveWrite(spi_t *pSpiObj, int value)
+{
+    spi_slave_write(pSpiObj, value);
 }
 
 void SPIClass::setBitOrder(uint8_t pin, BitOrder order)
@@ -280,7 +295,7 @@ void SPIClass::setDataMode(uint8_t bits, uint8_t dataMode, char SPI_mode)
     _dataMode = dataMode;
     _SPI_Mode = SPI_mode;
 
-    if (initStatus) {
+    if (_initStatus) {
         if (_SPI_Mode == SPI_MODE_MASTER) {
             spi_format(pSpiMaster, _dataBits, _dataMode, 0);
         } else if (_SPI_Mode == SPI_MODE_SLAVE) {
