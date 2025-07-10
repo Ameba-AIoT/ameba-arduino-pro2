@@ -122,6 +122,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV16, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             cameraYUV(module_videocam._p_mmf_context);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_NV12) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);
@@ -130,6 +131,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV12, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             cameraYUV(module_videocam._p_mmf_context);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_H264) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);
@@ -146,6 +148,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_JPEG, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             cameraSnapshot(module_videocam._p_mmf_context, 2);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_H265) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);
@@ -153,6 +156,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             vTaskDelay(100);
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_HEVC, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         }
         uvc_format_local->format = uvc_format_ptr->format;
         uvc_format_local->width = uvc_format_ptr->width;
