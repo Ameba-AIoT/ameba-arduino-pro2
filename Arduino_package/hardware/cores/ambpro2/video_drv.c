@@ -351,7 +351,13 @@ mm_context_t *cameraDeinit(mm_context_t *p)
 
 void cameraStopVideoStream(void *p, int channel)
 {
-    video_control(p, CMD_VIDEO_STREAM_STOP, channel);
+    video_ctx_t *ctx = (video_ctx_t *)p;
+    memset(&(ctx->meta_data), 0, sizeof(video_meta_t));
+    video_close(channel);
+
+    if (video_open_status() == 0) {
+        video_deinit();
+    }
 }
 
 int cameraGetCtx(mm_context_t *p, int ch)
