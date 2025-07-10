@@ -1,10 +1,21 @@
 Feature:
-- Update example ReadWriteWord.ino
+- Update MQTT_GenAIVision Example
+    - Resolve stack overflow issue
+    - Update groq supported llama model
+- Add WS2812B Basics and Patterns Examples
 
 API Updates:
 - Update all example guide links to ReadTheDocs
+- Add WS2812 related API
+- Update SPI API
+- Update UVCD API
+    - Fix hardfault when stop uvcd streaming
+    - Update check usb uvc connection status for others encode type
 
 Misc:
-- Update "platform.txt"
-    - Update NN API inc path
-- Clear warnings
+- Add github action example_guide_link_check
+- Update ino file links
+- Update UDP related API and tools
+    - Remove unused info looping
+    - Update MacOS tool and source code
+- Add img shields

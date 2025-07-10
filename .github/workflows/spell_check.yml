@@ -3,6 +3,9 @@
 name: Check word spell
 on: [push, pull_request]
 #  workflow_dispatch:
+  # weekly, Monday, 12 00 AM
+  schedule:
+    - cron: '0 12 * * 1'
 jobs:
   spell-check:
     name: Run spell-check check

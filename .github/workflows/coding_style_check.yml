@@ -3,6 +3,10 @@
 name: Check mbed coding style
 on: [push, pull_request]
 #  workflow_dispatch:
+  # weekly, Monday, 12 00 AM
+  schedule:
+    - cron: '0 12 * * 1'
+
 jobs:
   formatting-check:
     name: Run clang-format check
