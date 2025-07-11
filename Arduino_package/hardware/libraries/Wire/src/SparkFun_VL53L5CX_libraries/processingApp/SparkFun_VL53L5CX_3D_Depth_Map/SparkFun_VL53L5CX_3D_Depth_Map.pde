@@ -115,7 +115,7 @@ void serialEvent(Serial p){
   }
 }
 
-// Wehn the mouse is pressed, remember where the cursor was
+// When the mouse is pressed, remember where the cursor was
 // so we can calculate how "far" it gets dragged
 void mousePressed() {
   xPress = mouseX; 

@@ -51,7 +51,7 @@ private:
 
 public:
     SparkFun_VL53L5CX_IO *VL53L5CX_i2c;    // I2C driver object
-    VL53L5CX_Configuration *Dev;           // Sensor condfiguration struct
+    VL53L5CX_Configuration *Dev;           // Sensor configuration struct
 
     // This struct holds the last error which happened (if any).
     SparkFun_VL53L5CX_Error lastError;

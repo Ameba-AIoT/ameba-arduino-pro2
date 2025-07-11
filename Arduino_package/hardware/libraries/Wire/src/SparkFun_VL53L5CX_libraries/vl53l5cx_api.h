@@ -577,7 +577,7 @@ uint8_t vl53l5cx_get_integration_time_ms(
 /**
  * @brief This function sets a new integration time in ms. Integration time must
  * be computed to be lower than the ranging period, for a selected resolution.
- * Please note that this function has no impact on ranging mode continous.
+ * Please note that this function has no impact on ranging mode continuous.
  * @param (VL53L5CX_Configuration) *p_dev : VL53L5CX configuration structure.
  * @param (uint32_t) time_ms : Contains the integration time in ms. For all
  * resolutions and frequency, the minimum value is 2ms, and the maximum is

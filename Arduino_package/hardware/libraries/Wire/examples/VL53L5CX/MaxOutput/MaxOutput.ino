@@ -9,7 +9,7 @@
   Modified 02 Jul 2025
   by Realtek SG
 
-  This example shows how to get all 64 pixels, at 15Hz, comma seperated output.
+  This example shows how to get all 64 pixels, at 15Hz, comma separated output.
   This is handy for transmission to visualization programs such as Processing.
 
   Example Guide: TBD
