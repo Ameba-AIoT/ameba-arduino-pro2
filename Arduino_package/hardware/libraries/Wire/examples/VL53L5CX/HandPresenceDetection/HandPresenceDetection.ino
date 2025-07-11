@@ -97,7 +97,7 @@ void loop()
                 // printDistance();
             }
 
-            // delay(67);
+            delay(67);
         }
     }
 }
