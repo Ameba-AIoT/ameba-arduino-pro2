@@ -1,21 +1,8 @@
 Feature:
-- Update MQTT_GenAIVision Example
-    - Resolve stack overflow issue
-    - Update groq supported llama model
-- Add WS2812B Basics and Patterns Examples
+- Add SparkFun VL53L5CX examples
 
 API Updates:
-- Update all example guide links to ReadTheDocs
-- Add WS2812 related API
-- Update SPI API
-- Update UVCD API
-    - Fix hardfault when stop uvcd streaming
-    - Update check usb uvc connection status for others encode type
+- Add SparkFun VL53L5CX ibraries
+- Minor modification for Wire.cpp
 
 Misc:
-- Add github action example_guide_link_check
-- Update ino file links
-- Update UDP related API and tools
-    - Remove unused info looping
-    - Update MacOS tool and source code
-- Add img shields

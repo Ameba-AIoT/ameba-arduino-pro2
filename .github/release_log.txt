@@ -22,7 +22,6 @@ Feature:
 - Add sensor IMX307 and GC4653
 - Add GenAIVision Example
 - Update UVCDObjectDetectionLoop.ino
-- Update MQTT Example
 - Add MQTT_Image Example
 - Add sensor IMX662
 - Add Hand Gesture Detection Example
@@ -83,7 +82,6 @@ API Updates:
 - Update AmebaFatFSFile API
 - Update MQTT Auth and Callback
 - Update code base for VIPLiteDrv_2.0.0
-- Update all example guide links to ReadTheDocs
 - Update all example guide links to ReadTheDocs
 - Add WS2812 related API
 - Update SPI API
