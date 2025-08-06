@@ -31,12 +31,10 @@ strip postbuild_macos
 using namespace std;
 
 string common_nn_models_path;
+string ota_mode_check_name, fcs_mode_check_name;
 
 string isp_camera_option, isp_sensor_set_json_name, isp_sys_file_folder_name, fc_data_name, voe_name, iq_name, sensor_name, isp_fw_dummy_name, isp_iq_json_name;
 string isp_file_name_buf[100];
-
-string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5, isp_bin_check_name, ota_mode_check_name, fcs_mode_check_name;
-string ino_name_buf[100];
 
 string partitiontable_json_name, partition_bin_name;
 
@@ -44,6 +42,13 @@ int isp_selection_check = 0;
 int nn_model_selection_check = 0;
 int ota_mode_selection_check = 0;
 int fcs_mode_selection_check = 0;
+
+std::vector<std::string> model_names;
+std::vector<std::string> model_header;
+std::vector<std::string> isp_status;
+bool is_model_section = false;
+bool is_header_section = false;
+bool is_isp_section = false;
 
 #if defined(__WIN32__) // MINGW64
 void replaceAll( string& source, const string& from, const string& to ) {
@@ -125,22 +130,94 @@ void readtxt(int mode_isp_ino) {
 
     } else if (mode_isp_ino == 1) {
 #if defined(__WIN32__) // MINGW64
-        ifstream file("misc/ino_validation.txt");
-        while (std::getline(file, str)) {
-            ino_name_buf[str_count] = str;
-            str_count++;
-            //if (str_count == line_number) {
-            //    break;
-            //}
+    
+    ifstream file("misc/ino_validation.txt");
+    while (std::getline(file, str)) {
+        // Skip empty lines or separators
+        if (str.empty() || str == "----------------------------------") {
+            continue;
         }
+
+        if (str.find("Current ino contains model(s):") != std::string::npos) {
+            is_model_section = true;
+            is_header_section = false; // Reset type section flag
+            is_isp_section = false;
+            continue;
+        }
+        if (str.find("Current NN header file(s):") != std::string::npos) {
+            is_model_section = false;
+            is_header_section = true;
+            is_isp_section = false;
+            continue;
+        }
+        if (str.find("Current ino video status:") != std::string::npos) {
+            is_model_section = false;
+            is_header_section = false;
+            is_isp_section = true;
+            continue;
+        }
+
+        // Extract model names
+        if (is_model_section) {
+            model_names.push_back(str); // Add model name to the vector
+        }
+
+        // Extract model types (Default/Customized)
+        if (is_header_section) {
+            model_header.push_back(str); // Add model type to the vector
+        }
+
+        if (is_isp_section) {
+            isp_status.push_back(str); // Add model type to the vector
+        }
+    }
+
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
         myFile_Handler.open("misc/ino_validation.txt");
 
         if(myFile_Handler.is_open()) {
             while (getline(myFile_Handler, myLine)) {
-                ino_name_buf[str_count] = myLine;
-                str_count++;
-                ino_name_buf[str_count-1].erase(ino_name_buf[str_count-1].size() - 1);
+                // ino_name_buf[str_count] = myLine;
+                // str_count++;
+                // ino_name_buf[str_count-1].erase(ino_name_buf[str_count-1].size() - 1);
+
+                // Skip empty lines or separators
+                if (myLine.empty() || myLine == "----------------------------------") {
+                    continue;
+                }
+
+                if (myLine.find("Current ino contains model(s):") != std::string::npos) {
+                    is_model_section = true;
+                    is_header_section = false; // Reset type section flag
+                    is_isp_section = false;
+                    continue;
+                }
+                if (myLine.find("Current NN header file(s):") != std::string::npos) {
+                    is_model_section = false;
+                    is_header_section = true;
+                    is_isp_section = false;
+                    continue;
+                }
+                if (myLine.find("Current ino video status:") != std::string::npos) {
+                    is_model_section = false;
+                    is_header_section = false;
+                    is_isp_section = true;
+                    continue;
+                }
+
+                // Extract model names
+                if (is_model_section) {
+                    model_names.push_back(myLine); // Add model name to the vector
+                }
+
+                // Extract model types (Default/Customized)
+                if (is_header_section) {
+                    model_header.push_back(myLine); // Add model type to the vector
+                }
+
+                if (is_isp_section) {
+                    isp_status.push_back(myLine); // Add model type to the vector
+                }
             }
             myFile_Handler.close();
         } else {
@@ -149,31 +226,37 @@ void readtxt(int mode_isp_ino) {
 #else
     #error compiler is not supported!
 #endif
-        nn_model_yolotiny_name = ino_name_buf[2];
-        nn_model_srcfd_name = ino_name_buf[3];
-        nn_model_mobilefacenet_name = ino_name_buf[4];
-        nn_model_yamnet_name = ino_name_buf[5];
-        nn_model_imgclass_name = ino_name_buf[6];
-        nn_header_name1 = ino_name_buf[16];
-        nn_header_name2 = ino_name_buf[17];
-        nn_header_name3 = ino_name_buf[18];
-        nn_header_name4 = ino_name_buf[19];
-        nn_header_name5 = ino_name_buf[20];
-        isp_bin_check_name = ino_name_buf[23];
     }
 }
 
-void isp_bin_check(string isp_bin_check_name) {
-    if (isp_bin_check_name != "NA") {
+bool isp_notNA = false;
+void isp_bin_check(void) {
+    for (const auto& status : isp_status) {
+        if (status != "NA") {
+            isp_notNA = true;
+        }
+    }
+    if (isp_notNA) {
         isp_selection_check = 1;
     }
 }
 
-void nn_bin_check(string nn_model_yolotiny_name, string nn_model_srcfd_name, string nn_model_mobilefacenet_name, string nn_model_yamnet_name, string nn_model_imgclass_name, string nn_header_name1, string nn_header_name2, string nn_header_name3, string nn_header_name4, string nn_header_name5) {
-    if ((nn_model_yolotiny_name != "NA") || (nn_model_srcfd_name != "NA") || (nn_model_mobilefacenet_name != "NA") || (nn_model_yamnet_name != "NA") || (nn_model_imgclass_name != "NA")) {
-        if ((nn_header_name1 != "NA") || (nn_header_name2 != "NA") || (nn_header_name3 != "NA") || (nn_header_name4 != "NA") || (nn_header_name5 != "NA")) {
-            nn_model_selection_check = 1;
+bool headerfile_notNA = false;
+bool model_notNA = false;
+void nn_bin_check(void) {
+    for (const auto& header : model_header) {
+        if (header != "NA") {
+            headerfile_notNA = true;
         }
+    }
+    for (const auto& model : model_names) {
+        if (model != "NA") {
+            model_notNA = true;
+        }
+    }
+
+    if (headerfile_notNA && model_notNA) {
+        nn_model_selection_check = 1;
     }
 }
 
@@ -293,8 +376,8 @@ int main(int argc, char *argv[]) {
     isp_camera_option = argv[7];
     readtxt(0);
     readtxt(1);
-    isp_bin_check(isp_bin_check_name);
-    nn_bin_check(nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_header_name1, nn_header_name2, nn_header_name3, nn_header_name4, nn_header_name5);
+    isp_bin_check();
+    nn_bin_check();
 
 #if defined(__WIN32__) // MINGW64
     string string_temp_1 = "copy misc\\video_img\\";

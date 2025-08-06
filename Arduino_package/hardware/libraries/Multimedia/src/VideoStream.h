@@ -163,6 +163,8 @@ public:
     void getGrayMode(void);
     void setDayNightMode(int enable);
     void getDayNightMode(void);
+    void setMinFPS(int value);
+    void getMinFPS(void);
 
 private:
     int ret = 0;

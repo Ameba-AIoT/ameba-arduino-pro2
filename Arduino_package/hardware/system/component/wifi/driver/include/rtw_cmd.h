@@ -287,7 +287,7 @@ Command-Event Mode
 
 */
 
-#define RTW_SSID_SCAN_AMOUNT 1 //Reduce ssid scan amount due to memory limitation - Alex Fang
+#define RTW_SSID_SCAN_AMOUNT 2 //Reduce ssid scan amount due to memory limitation - Alex Fang
 #define RTW_CHANNEL_SCAN_AMOUNT (14+37)
 
 struct sitesurvey_parm {

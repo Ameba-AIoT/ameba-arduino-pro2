@@ -9,8 +9,8 @@ typedef struct box_s {
 		float score;
 	};
 	union {
-		float landmarks[10];
-		float dummy[10];
+		float landmarks[20];
+		float dummy[20];
 	};
 	int class_idx;
 	int invalid;

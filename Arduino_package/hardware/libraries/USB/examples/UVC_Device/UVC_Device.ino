@@ -1,10 +1,11 @@
 /*
- * This example describes how to use USB UVCD api.
- * In this example, the device is setup to function as a USB camera.
- * Connect to PC and use the device as a USB camera.
+ This example describes how to use USB UVCD api.
+ In this example, the device is setup to function as a USB camera.
+ Connect to PC and use the device as a USB camera.
 
- * Example guide: https://www.amebaiot.com/en/amebapro2-arduino-usb-uvc/
- */
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/USB/UVC%20Device.html
+*/
 
 #include "StreamIO.h"
 #include "VideoStream.h"

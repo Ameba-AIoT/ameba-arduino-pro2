@@ -78,7 +78,7 @@ and so on.
 
 /*
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-i2c-mpu6050-imu-zero/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/MPU6050%20IMU%20Zero.html
 */
 
 // I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files

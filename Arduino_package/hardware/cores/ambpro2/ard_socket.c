@@ -29,7 +29,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode)
         printf("\r\n[ERROR] %s Create socket failed\n", __FUNCTION__);
         return -1;
     }
-    printf("\r\n[INFO] Create socket successfully\n");
+    // printf("\r\n[INFO] Create socket successfully\n");
 
     // initialize structure dest
     struct sockaddr_in serv_addr;

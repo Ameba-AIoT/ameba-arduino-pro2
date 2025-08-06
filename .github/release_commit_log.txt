@@ -1,5 +1,8 @@
 Feature:
+- Add SparkFun VL53L5CX examples
 
 API Updates:
+- Add SparkFun VL53L5CX ibraries
+- Minor modification for Wire.cpp
 
 Misc:

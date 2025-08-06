@@ -2,8 +2,8 @@
  This sketch shows how to use tone api to play melody.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-pwm-music/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/PWM/Buzzer%20Play%20Melody.html
+*/
 
 #define NOTE_    0
 #define NOTE_B0  31

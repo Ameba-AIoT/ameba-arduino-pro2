@@ -60,6 +60,23 @@ struct BlockInfo {
 #define AUDIO_ALAW 0X02
 #define AUDIO_OPUS 0X03
 
+// Forward-declare mp4_context
+struct _mp4_context;
+typedef struct _mp4_context mp4_context, *pmp4_context;
+
+// Callback types
+typedef int (*udta_box_callback_t)(unsigned char *udta_buf, pmp4_context mp4_ctx);
+
+// Structure to hold the callback
+typedef struct {
+	udta_box_callback_t udta_box_cb;  // Callback function
+} udta_callback_t;
+
+typedef struct mp4_timelapse_params_s {
+	uint32_t capture_interval;
+	uint32_t record_fps;
+} mp4_timelapse_params_t;
+
 typedef struct mp4_param_s {
 	uint32_t width;
 	uint32_t height;
@@ -78,6 +95,8 @@ typedef struct mp4_param_s {
 	uint32_t vfs_format_enable;
 	uint32_t use_self_file_name;
 	uint32_t append_header;
+	unsigned char *udta_buf;
+	int udta_buf_size;
 } mp4_params_t;
 
 typedef struct _mp4_context {
@@ -166,10 +185,15 @@ typedef struct _mp4_context {
 	FILE     *vfs_file;
 	int         status;
 	int	append_header;//0:Don't add the sps/pps 1:Add the info
+	unsigned    char *udta_box;
+	int udta_size;
+	udta_callback_t callback;
+	mp4_timelapse_params_t timelapse_params;
 } mp4_context, *pmp4_context;
 
 void mp4_muxer_init(pmp4_context mp4_ctx);
 void set_mp4_fatfs_param(pmp4_context mp4_ctx, fatfs_sd_params_t *fatfs_param);
+int mp4_set_timelapse_param(pmp4_context mp4_ctx, mp4_timelapse_params_t *timelapse_params);
 
 u8 mp4_is_recording(pmp4_context mp4_ctx);
 int mp4_start_record(pmp4_context mp4_ctx, int file_num);
@@ -187,4 +211,8 @@ int mp4_muxer_open(pmp4_context mp4_ctx, mp4_params_t params);
 int mp4_muxer_write_video(pmp4_context mp4_ctx, unsigned char *buf, unsigned int size, int type, unsigned int timestamp);
 int mp4_muxer_write_audio(pmp4_context mp4_ctx, unsigned char *buf, unsigned int size, int type, unsigned int timestamp);
 void mp4_muxer_close(pmp4_context mp4_ctx);
+
+int create_box(unsigned char *buf, char *str, int size);
+void update_udtabox_size(pmp4_context mp4_ctx, unsigned char *buf, int size);
+void Save32BigEndian(unsigned int src, void *DES);
 #endif //_MP4_MUXER_H_

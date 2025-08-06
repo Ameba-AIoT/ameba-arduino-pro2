@@ -19,7 +19,9 @@ public:
     void end(void);
 
     File open(const String &path);
+    File open(const String &path, int fileType);
     File open(const char *path);
+    File open(const char *path, int fileType);
 
     bool exists(const String &path);
     bool exists(const char *path);

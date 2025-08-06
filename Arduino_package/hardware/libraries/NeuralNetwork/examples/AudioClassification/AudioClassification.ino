@@ -1,7 +1,6 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-audio-classification/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Audio%20Classification.html
 */
 
 #include "WiFi.h"

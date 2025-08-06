@@ -12,8 +12,8 @@
  achieve the same result without blocking the main loop.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-mqtt-upload-listen/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/MQTT/Set%20up%20MQTT%20Client-Broker%20Basic%20Connection.html
+*/
 
 #include <WiFi.h>
 #include <PubSubClient.h>
@@ -83,6 +83,7 @@ void setup()
         delay(10000);
     }
 
+    wifiClient.setNonBlockingMode();
     client.setServer(mqttServer, 1883);
     client.setCallback(callback);
 

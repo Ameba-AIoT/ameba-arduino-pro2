@@ -1,5 +1,6 @@
 /*
-  Example guide: https://www.amebaiot.com/en/amebapro2-arduino-multimedia-isp-control/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/ISP%20Control.html
 
   // "BRIGHTNESS="  Set Brightness: Range from -64 to 64
   // "BRIGHTNESS"   Get Brightness level

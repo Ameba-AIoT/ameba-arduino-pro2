@@ -421,6 +421,9 @@ struct mlme_priv {
 
 	//conenction_bssid information
 	u8	connecting_bssid[6];
+	u8 	scan_user_setting;  	/* used for wifi scan pecific setting */
+	//used for wifi connection to fixed band: 0: 2.4G/5G, 1: 2.4G only, 2: 5G only
+	u8	fixed_connecting_band;
 };
 
 #define RTW_AUTO_SCAN_REASON_UNSPECIFIED		0

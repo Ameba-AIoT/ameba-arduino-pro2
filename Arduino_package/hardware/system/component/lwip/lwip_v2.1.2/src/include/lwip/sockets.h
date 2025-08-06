@@ -179,11 +179,10 @@ will need to increase long long */
                            length)
 
 /* Set socket options argument */
-#undef IFNAMSIZ
-#define IFNAMSIZ NETIF_NAMESIZE
+#define _IFNAMSIZ NETIF_NAMESIZE
 
 struct ifreq {
-  char ifr_name[IFNAMSIZ]; /* Interface name */
+  char ifr_name[_IFNAMSIZ]; /* Interface name */
 };
 
 /* Socket protocol types (TCP/UDP/RAW) */
@@ -283,6 +282,7 @@ struct linger {
 #define TCP_KEEPIDLE   0x03    /* set pcb->keep_idle  - Same as TCP_KEEPALIVE, but use seconds for get/setsockopt */
 #define TCP_KEEPINTVL  0x04    /* set pcb->keep_intvl - Use seconds for get/setsockopt */
 #define TCP_KEEPCNT    0x05    /* set pcb->keep_cnt   - Use number of probes sent for get/setsockopt */
+#define TCP_MAXSEG     0x06
 #endif /* LWIP_TCP */
 
 #if LWIP_IPV6

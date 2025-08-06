@@ -1,0 +1,5 @@
+sphinx
+sphinx-markdown-tables==0.0.17
+sphinx-rtd-theme==2.0.0rc2
+recommonmark
+sphinx-tabs

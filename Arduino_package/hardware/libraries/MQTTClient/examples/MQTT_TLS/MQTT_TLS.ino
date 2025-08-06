@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-mqtt-tls/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/MQTT/Set%20up%20MQTT%20Client%20over%20TLS.html
+*/
 
 #include <WiFi.h>
 #include <PubSubClient.h>

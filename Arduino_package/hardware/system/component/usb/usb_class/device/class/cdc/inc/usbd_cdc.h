@@ -9,6 +9,8 @@
 
 #define CONFIG_USDB_CDC_ACM_APP              (ACM_APP_ECHO_SYNC)
 
+#define ACM_TRANS_NON_BLOCK_MODE 0x00
+#define ACM_TRANS_BLOCK_MODE	0x01
 typedef struct {
 	int(* init)(void);
 	int(* deinit)(void);
@@ -23,4 +25,5 @@ int cdc_port_status(void);
 int usb_insert_status(void);
 int usbd_cdc_acm_sync_transmit_data(void *buf, u16 length);
 void usbd_cdc_stop(void);
+int cdc_setup_trans_mode(int config);
 #endif

@@ -1,7 +1,7 @@
 /*
-
- Example guide: https://www.amebaiot.com/en/amebapro2-arduino-ntpclient/
- */
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/NTP/Retrieve%20Universal%20Time%20%28UTC%29%20by%20NTPClient%20library.html
+*/
 
 #include <NTPClient.h>
 #include <WiFi.h>

@@ -445,6 +445,17 @@ struct pwrctrl_priv {
 	u8 *pno_ssid;
 	u8 pno_ssid_loc;
 	u8 pno_disconnect_en;
+	u8 pno_cur_ch;
+	u8 *pno_ch_list;
+	u8 pno_ch_list_len;
+	u8 pno_dual_band_en;
+	u8 pno_another_band_ssid_len;
+	u8 *pno_another_band_ssid;
+	u8 *pno_another_band_ch_list;
+	u8 pno_another_band_ch_list_len;
+	u8 pno_another_band_active_period;
+	u8 pno_probe_en;
+	u8 pno_probe_cnt;
 #endif
 
 #ifdef CONFIG_WOWLAN_NTP_OFFLOAD
@@ -452,6 +463,11 @@ struct pwrctrl_priv {
 	u8 *ntp_pkt;
 	u32 ntp_pkt_size;
 	u16 ntp_time;
+#endif
+
+#ifdef CONFIG_WOWLAN_ICMP_REQUEST_OFFLOAD
+	u32 icmp_request_interval_s;
+	u32 icmp_request_timeout_s;
 #endif
 };
 

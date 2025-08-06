@@ -213,8 +213,11 @@
 
 #define CONFIG_FTL_EN 1
 
-/* For RTK EVB IR GPIO CONTROL
-*  GPIO: F12(IR_CUT) F13(IR_LED)
+/* For RTK EVB IR, HW ALS GPIO CONTROL
+* CONFIG_RTK_EVB_IR_CTRL = 0: don't init IR related GPIO
+* CONFIG_RTK_EVB_IR_CTRL = 1: init IR-CUT (on sensor board, GPIO-F12)
+* CONFIG_RTK_EVB_IR_CTRL = 2: init IR-CUT (on sensor board, GPIO-F12)
+                            : init IR-LED (on sensor board, GPIO-F13) & HW-ALS (on LED board, GPIO-E3/E4)
 */
 #define CONFIG_RTK_EVB_IR_CTRL 0
 

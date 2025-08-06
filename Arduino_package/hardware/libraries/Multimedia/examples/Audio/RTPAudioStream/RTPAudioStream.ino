@@ -1,7 +1,7 @@
 /*
-
- Example guide: https://www.amebaiot.com/en/amebapro2-arduino-audio-rtp/
- */
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Audio/RTP%20Audio%20Stream.html
+*/
 
 #include "WiFi.h"
 #include "StreamIO.h"

@@ -23,6 +23,7 @@ OSD	KEYWORD1
 MotionDetection	KEYWORD1
 MotionDetectionPostProcess	KEYWORD1
 MotionDetectionRegion	KEYWORD1
+Demuxer	KEYWORD1
 
 #######################################
 # AudioDecoder.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -244,8 +245,17 @@ color	KEYWORD2
 drawPoint	KEYWORD2
 drawRect	KEYWORD2
 drawText	KEYWORD2
+drawPlus	KEYWORD2
 createBitmap	KEYWORD2
 update	KEYWORD2
+initOSDBitmapPos	KEYWORD2
+initOSDBitmapBlk	KEYWORD2
+initOSDBitmapBuf	KEYWORD2
+resizeWidth	KEYWORD2
+resizeHeight	KEYWORD2
+heapsizeCal	KEYWORD2
+drawImage	KEYWORD2
+displayImage	KEYWORD2
 
 OSD_COLOR_RED	LITERAL1
 OSD_COLOR_BLUE	LITERAL1
@@ -282,3 +292,12 @@ xMin	KEYWORD2
 xMax	KEYWORD2
 yMin	KEYWORD2
 yMax	KEYWORD2
+
+#######################################
+# Demuxer.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+
+begin	KEYWORD2
+pause	KEYWORD2
+resume	KEYWORD2
+end	KEYWORD2

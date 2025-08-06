@@ -90,6 +90,12 @@ typedef struct {
 	unsigned char		channel;
 } rtw_softap_info_t;
 
+typedef struct customized_chl_cfg {
+	unsigned char
+	chnl_index;//for 2.4G:{1,2,3,4,5,6,7,8,9,10,11,12,13,14}. for 5G:{36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,144,149,153,157,161,165}
+	unsigned char scan_type; //1:SCAN_PASSIVE. 2:SCAN_ACTIVE. 3:SCAN_MIX
+} customized_chl_cfg_t;
+
 typedef void (*ap_channel_switch_callback_t)(unsigned char channel, rtw_channel_switch_res_t ret);
 
 typedef void (*rtw_joinstatus_callback_t)(\
@@ -116,6 +122,7 @@ typedef struct {
 	unsigned char				channel;        /**< set to 0 means full channel scan, set to other value means only scan on the specified channel */
 	unsigned char				pscan_option;   /**< used when the specified channel is set, set to 0 for normal partial scan, set to PSCAN_FAST_SURVEY for fast survey*/
 	unsigned char				roam_en;
+	unsigned char				band;			//used for wifi connection to fixed band: 0: 2.4G/5G, 1: 2.4G only, 2: 5G only
 	rtw_joinstatus_callback_t	joinstatus_user_callback;   /**< user callback for processing joinstatus, please set to NULL if not use it */
 } rtw_network_info_t;
 
@@ -142,6 +149,9 @@ typedef struct {
 #ifdef CONFIG_P2P_NEW
 	unsigned char			p2p_role;
 #endif
+#ifdef CONFIG_IEEE80211K
+	unsigned int			free_cnt;		/** 11k need this information to generate ie**/
+#endif
 } rtw_scan_result_t;
 
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
@@ -156,6 +166,7 @@ typedef struct {
 	unsigned short passive_scan_time;     /*!< passive scan time per channel, units: millisecond, default is 110ms */
 	unsigned short home_scan_time;     /*!< home channel scan time, units: millisecond, default is 100ms */
 	unsigned char  probe_cnt;
+	unsigned char  probe_cnt_interval;
 } rtw_channel_scan_time_t;
 
 typedef rtw_result_t (*scan_user_callback_t)(\
@@ -179,6 +190,10 @@ typedef struct {
 	void									*scan_user_data;
 	scan_user_callback_t					scan_user_callback;   /**< used for normal asynchronized mode */
 	scan_report_each_mode_user_callback_t	scan_report_each_mode_user_callback; /*used for RTW_SCAN_REPORT_EACH mode */
+	unsigned char							scan_user_setting;	/* used for wifi scan pecific setting */
+	char									band;				/** 0: => dual band, band: 1 => 2.4G, 2 => 5G**/
+	char									mutiple_ssid[2][33];
+	unsigned char							mutiple_ssid_num;
 } rtw_scan_param_t;
 
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
@@ -502,6 +517,7 @@ struct  wifi_user_conf {
 	bit 3: (0: disable wifi connection flow debug, 1:  enable wifi connection flow debug)
 	bit 4: (0: disable wifi auto reconnection flow debug, 1:  enable auto reconnection flow debug)
 	bit 5: (0: disable to mark wifi SSID/router top three MAC Address, 1:  enable to mark wifi SSID/router top three MAC Address)
+	bit 6: (0: don't show wifi monitor environment information, 1:  show wifi monitor environment information)
 	*/
 	unsigned char wifi_debug_enabled;
 
@@ -518,6 +534,13 @@ struct  wifi_user_conf {
 
 	//provide fast scan retry times for upper layer to revise
 	unsigned char fast_pscan_retry_times_max;
+
+	customized_chl_cfg_t chn2_4G[13];
+	unsigned char chn2_4G_num;
+	customized_chl_cfg_t chn5G[25];
+	unsigned char chn5G_num;
+	unsigned char regulation2_4G;
+	unsigned char regulation5G;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 
@@ -578,6 +601,13 @@ typedef struct {
 	unsigned char csi_valid;  /**< ch_rpt_hdr_info */
 } rtw_csi_header_t;
 /** @} */
+
+typedef struct {
+	int channel;
+	int clm_ratio;
+	int nhm_idle_ratio;
+	int nhm_tx_ratio;
+} rtw_clm_t;
 
 #define WIFI_CONNECT_SCAN_NUM 10
 typedef struct {

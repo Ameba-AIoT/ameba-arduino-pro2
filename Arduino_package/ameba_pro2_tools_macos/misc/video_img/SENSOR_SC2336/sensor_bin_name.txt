@@ -1,0 +1,7 @@
+SENSOR_SC2336
+voe.bin
+firmware_isp_iq.bin
+fcs_data_sc2336.bin
+iq_sc2336.bin
+sensor_sc2336.bin
+------------------

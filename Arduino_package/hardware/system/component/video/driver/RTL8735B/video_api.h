@@ -5,6 +5,24 @@
 #include <osdep_service.h>
 #include "hal_video.h"
 
+#ifdef ARDUINO_SDK
+
+#ifndef __cplusplus
+#include <stdatomic.h>
+#else
+#include <atomic>
+#define atomic_bool std::atomic_bool
+#endif
+
+#else
+
+#include <stdatomic.h>
+
+#endif
+
+#define APP_VOE_LOG_EN          0
+#define APP_VOE_FCS_INFO_EN     1
+
 #define VIDEO_SET_RCPARAM		0x10
 #define VIDEO_FORCE_IFRAME		0x11
 #define VIDEO_BPS               0x12
@@ -16,6 +34,7 @@
 #define VIDEO_PRINT_INFO        0x18
 #define VIDEO_DEBUG             0x19
 #define VIDEO_RC_CTRL			0x1a
+#define VIDEO_GET_RC_CTRL		0x1b
 
 
 #define VIDEO_HEVC_OUTPUT       0x20
@@ -207,6 +226,13 @@ typedef struct private_mask_single_s {
 	uint32_t bitmap[40];
 } private_mask_single_t;
 
+typedef struct video_roi_s {
+	uint32_t xmin;
+	uint32_t ymin;
+	uint32_t xmax;
+	uint32_t ymax;
+} video_roi_t;
+
 typedef struct video_param_s {
 	uint32_t stream_id;
 	uint32_t type;
@@ -225,12 +251,7 @@ typedef struct video_param_s {
 	uint32_t use_static_addr;
 	uint32_t fcs;
 	uint32_t use_roi;
-	struct video_roi_s {
-		uint32_t xmin;
-		uint32_t ymin;
-		uint32_t xmax;
-		uint32_t ymax;
-	} roi;
+	video_roi_t roi;
 	uint32_t level;
 	uint32_t profile;
 	uint32_t cavlc;
@@ -241,19 +262,59 @@ typedef struct video_param_s {
 	uint32_t minQp;
 	uint32_t maxQp;
 	uint32_t fast_osd_en;
-	uint32_t scale_up_en;  //1.only support in ch0  2.width and height should both larger than sensor size  3.cannot be used with ROI crop  4.max scale up resolution is 2688x1944
 	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
 	uint32_t meta_enable;
 	jpeg_crop_parm_t jpeg_crop_parm;
-	uint32_t middle_crop_en;//Middle crop functio only support in ch0
 } video_params_t;
+
+typedef struct bps_stbl_ctrl_param_s {
+	uint32_t sampling_time; //unit in ms
+	uint32_t maximun_bitrate;
+	uint32_t minimum_bitrate;
+	uint32_t target_bitrate;
+} bps_stbl_ctrl_param_t;
+
+#define BPS_STBL_CTRL_STG_CNT 3
+typedef struct bps_stbl_ctrl_s {
+	int en;
+	uint32_t sample_bitrate;
+	uint32_t current_framerate;
+	bps_stbl_ctrl_param_t params;
+	uint32_t fps_stage[BPS_STBL_CTRL_STG_CNT];
+	uint32_t gop_stage[BPS_STBL_CTRL_STG_CNT];
+	int fps_stage_idx;
+	struct {
+		uint32_t cnt_sr;
+		uint32_t sum_sr;
+	} stats_info;
+	int switch_fps_down;
+	int switch_fps_up;
+} bps_stbl_ctrl_t;
+
+typedef struct video_rc_info_s {
+	rate_ctrl_s rc_ctrl;
+	rate_ctrl_s temp_rc_ctrl;
+	uint64_t update_time;
+	atomic_bool update_flag;
+	int update_status;
+} video_rc_info_t;
+
+typedef struct video_ch_info_s {
+	video_params_t *param;
+	uint32_t isp_fps;
+	uint32_t stream_is_open;
+	video_rc_info_t *rc_info;
+	bps_stbl_ctrl_t *bps_stbl_ctrl;
+	void (*video_output_cb)(void *param1, void  *param2, uint32_t arg);
+	volatile int incb;
+} video_ch_info_t;
 
 typedef struct voe_info_s {
 	uint32_t voe_heap_addr;
 	uint32_t voe_heap_size;
-	video_params_t video_info[MAX_CHANNEL];
-	uint32_t stream_is_open[MAX_CHANNEL];
-	uint32_t voe_mcrop_enable;
+	uint32_t voe_scale_up_en;
+	video_roi_t voe_scale_up_roi;
+	video_ch_info_t ch_info[MAX_CHANNEL];
 } voe_info_t;
 
 typedef struct mult_sensor_info_s {
@@ -403,7 +464,7 @@ int video_get_sps_pps_vps(unsigned char *frame_buf, unsigned int frame_size, int
 
 void video_pre_init_setup_parameters(video_pre_init_params_t *parm);
 
-video_pre_init_params_t* video_get_pre_init_setup_params(void);
+video_pre_init_params_t *video_get_pre_init_setup_params(void);
 
 void video_pre_init_load_params(enum isp_init_option save_option);
 
@@ -421,6 +482,18 @@ int video_get_meta_offset(int meta_size);
 int video_open_status(void);//0:No video open 1:video open
 
 int video_get_encoder_nalu_payload_info(unsigned char *frame_buf, unsigned int frame_size, int codec_type, video_encoder_nalu_payload_info_t *info);
+
+int video_set_rc(int ch, rate_ctrl_s *rc_ctrl);
+
+int video_get_rc(int ch, rate_ctrl_s *rc_ctrl);
+
+int video_bps_stbl_ctrl_en(int ch, int enable);
+
+int video_set_bps_stbl_ctrl_params(int ch, bps_stbl_ctrl_param_t *bps_stbl_ctrl_param, uint32_t* fps_stage, uint32_t* gop_stage);
+
+int video_get_realfps(int ch, int* isp_fps, int* enc_fps);
+
+int video_wait_target_fps(int ch, int target_fps, int timeout);
 
 //////////////////////
 #define VOE_NAND_FLASH_OFFSET 0x8000000

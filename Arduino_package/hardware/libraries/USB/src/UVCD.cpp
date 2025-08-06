@@ -98,19 +98,18 @@ void UVCD::configVideo(VideoSetting &config)
 }
 
 /**
-*  @brief   Begin video streaming and NN
+ *  @brief   Begin video streaming and NN
  *
  *  @param   module_videocam: stream data from camera video
  *           module_videolinker: StreamIO object for uvcd
-             uvcd_channel: video channel
-             nn_channel: nn channel
+ *           uvcd_channel: video channel
+ *           uvcd_getctx_check: get USB connected status
  *  @return  none
  *
  */
-void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int nn_channel, int uvcd_getctx_check)
+void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int uvcd_getctx_check)
 {
     _uvcd_channel = uvcd_channel;
-    _nn_channel = nn_channel;
     int wdr_mode = 2;
     isp_set_wdr_mode(wdr_mode);
     rtw_down_sema(&uvc_format_ptr->uvcd_change_sema);
@@ -123,6 +122,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV16, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             cameraYUV(module_videocam._p_mmf_context);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_NV12) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);
@@ -131,12 +131,13 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV12, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             cameraYUV(module_videocam._p_mmf_context);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_H264) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);
             siso_pause((mm_siso_t *)(module_videolinker));
             vTaskDelay(100);
-            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_H264, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
+            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_H264, uvc_format_ptr->fps, (uvc_format_ptr->fps * 3), 1, _uvcd_channel);
             siso_resume((mm_siso_t *)(module_videolinker));
             isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_MJPEG) {
@@ -147,6 +148,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_JPEG, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             cameraSnapshot(module_videocam._p_mmf_context, 2);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         } else if (uvc_format_ptr->format == FORMAT_TYPE_H265) {
             cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
             vTaskDelay(1000);
@@ -154,6 +156,7 @@ void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, i
             vTaskDelay(100);
             cameraReSetParams(module_videocam._p_mmf_context, VIDEO_HEVC, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
             siso_resume((mm_siso_t *)(module_videolinker));
+            isUsbUvcConnected(uvcd_getctx_check);
         }
         uvc_format_local->format = uvc_format_ptr->format;
         uvc_format_local->width = uvc_format_ptr->width;

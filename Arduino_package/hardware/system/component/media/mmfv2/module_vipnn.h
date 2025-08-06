@@ -12,7 +12,8 @@
 #define CMD_VIPNN_GET_STATUS            MM_MODULE_CMD(0x04)  // get vipnn module status
 
 #define CMD_VIPNN_SET_CONFIDENCE_THRES  MM_MODULE_CMD(0x06)  // set confidence threshold for object detection 
-#define CMD_VIPNN_SET_NMS_THRES         MM_MODULE_CMD(0x07)  // set NMS threshold for object detection 
+#define CMD_VIPNN_SET_NMS_THRES         MM_MODULE_CMD(0x07)  // set NMS threshold for object detection
+#define CMD_VIPNN_SET_DESIRED_CLASS     MM_MODULE_CMD(0x08)  // set desired class for object detection
 
 #define CMD_VIPNN_SET_OUTPUT     	    MM_MODULE_CMD(0x15)  // enable module output
 #define CMD_VIPNN_SET_OUTPUT_TYPE       MM_MODULE_CMD(0x16)  // set module output type
@@ -47,14 +48,21 @@ printf("%d\r", (int)nn_used_##model==0)
 typedef struct landmark_s {
 	struct __post_s {
 		float x, y;
-	} pos[5];
+	} pos[10];
 } landmark_t;
 //----------------------------------------------------------------------------
 typedef struct landmarki_s {
 	struct __posi_s {
 		uint32_t x, y;
-	} pos[5];
+	} pos[10];
 } landmarki_t;
+//----------------------------------------------------------------------------
+#define HAND_LANDMARK_NUM (21)
+typedef struct landmark3d_s {
+	struct __post3d_s {
+		float x, y, z;
+	} pos[HAND_LANDMARK_NUM];
+} landmark3d_t;
 //----------------------------------------------------------------------------
 typedef struct detobj_s {
 	float classes;
@@ -117,6 +125,11 @@ typedef struct nn_data_param_s {
 	int size_in_byte;
 } nn_data_param_t;
 
+typedef struct nn_desired_class_s {
+	int *class_info;
+	int len;
+} nn_desired_class_t;
+
 //preprocess return type
 #define PP_ERROR        (-1)
 #define PP_USE_RESULT   0
@@ -135,6 +148,7 @@ typedef void (*nn_set_confidence_thresh_t)(void *confidence_thresh);
 typedef void (*nn_set_nms_thresh_t)(void *nms_thresh);
 typedef void (*nn_set_init_info_t)(void *model);
 typedef void (*nn_release_t)(void);
+typedef void (*nn_set_desired_class_t)(nn_desired_class_t *desired_class_list);
 
 #define MODEL_SRC_MEM	0
 #define MODEL_SRC_FILE	1
@@ -158,6 +172,7 @@ typedef struct nnmodel_s {
 	// setup thresh in post-processing
 	nn_set_confidence_thresh_t set_confidence_thresh;
 	nn_set_nms_thresh_t set_nms_thresh;
+	nn_set_desired_class_t set_desired_class;
 
 	// release resorce
 	nn_release_t release;
@@ -266,6 +281,7 @@ typedef struct vipnn_ctx_s {
 #define MAX_DETECT_OBJ_NUM 1024
 #define MAX_FACE_DETECT_NUM 16
 #define MAX_FACE_FEATURE_DIM 128
+#define MAX_HAND_DETECT_NUM 128
 
 //-----------------------------------------------------------------------
 typedef struct vipnn_out_tensor_s {
@@ -323,14 +339,23 @@ typedef struct face_feature_res_s {
 typedef struct yamnet_res_s {
 	int clsid;
 	float prob;
-} yamnet_res_t;
+} yamnet_res_t, classification_res_t;
 
-#ifdef ARDUINO_SDK
-typedef struct classification_res_s {
-	float prob;
-	int class_id;
-} classification_res_t;
-#endif
+typedef struct palmdetect_res_s {
+	union {
+		float result[6];
+		detobj_t res;
+	};
+	landmarki_t landmark;
+} palmdetect_res_t;
+
+typedef struct handland_res_s {
+	landmark3d_t landmark3d;
+	unsigned char handedness;
+	float theta, ratio;
+	int w, h;
+	int offset_x, offset_y;
+} handland_res_t;
 
 #if !defined(PC_SIMULATION)
 extern mm_module_t vipnn_module;

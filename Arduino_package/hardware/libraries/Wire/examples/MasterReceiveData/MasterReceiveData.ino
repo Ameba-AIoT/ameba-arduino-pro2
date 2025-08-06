@@ -11,7 +11,7 @@
  This example code is in the public domain.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-i2c-2/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/Master%20Receive%20Data%20from%20Arduino%20UNO.html
  */
 
 #include <Wire.h>

@@ -2,8 +2,8 @@
  This sketch shows how to read and open HTML file saved in SD card.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-filesystem-read-html/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/File%20System/Read%20and%20display%20HTML%20file%20from%20SD%20card.html
+*/
 
 #include <WiFi.h>
 #include "AmebaFatFS.h"

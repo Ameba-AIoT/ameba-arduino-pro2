@@ -1,0 +1,87 @@
+# .github/workflows/check-example-links.yml
+name: Example guide Links check
+
+on:
+  push:
+    paths:
+      - 'Arduino_package/hardware/libraries/**/*.ino'
+  pull_request:
+    paths:
+      - 'Arduino_package/hardware/libraries/**/*.ino'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            Arduino_package/hardware/libraries
+
+      - name: Remove excluded .ino files
+        run: |
+          rm -f Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd/Camera_2_Lcd.ino
+          rm -f Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC/Camera_2_Lcd_JPEGDEC.ino
+          rm -f Arduino_package/hardware/libraries/Debugging/examples/ExampleDebug/ExampleDebug.ino
+          rm -f Arduino_package/hardware/libraries/Http/examples/HTTP_Post_MP4_Whisper_Server_FASTAPI/HTTP_Post_MP4_Whisper_Server_FASTAPI.ino
+          rm -f Arduino_package/hardware/libraries/Http/examples/RecordMP4_HTTP_Post_Whisper_Server_FASTAPI/RecordMP4_HTTP_Post_Whisper_Server_FASTAPI.ino
+          rm -f Arduino_package/hardware/libraries/Http/examples/Capture_Image_HTTP_Post_Image_Llava_Server_FASTAPI/Capture_Image_HTTP_Post_Image_Llava_Server_FASTAPI.ino
+
+      - name: Locate .ino files in libraries folder
+        run: |
+          set -euo pipefail
+          ino_dir="Arduino_package/hardware/libraries"
+          echo "📂 Searching in: $ino_dir"
+          find "$ino_dir" -type f -name '*.ino' > ino_files.txt
+          if [ ! -s ino_files.txt ]; then
+            echo "No .ino files found in libraries folder, skipping."
+            exit 0
+          fi
+
+      - name: Check Example guide links
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          failed=0
+          has_error=false
+      
+          while IFS= read -r file; do
+            echo "➡️ Checking $file"
+            grep -n '^ Example guide:' "$file" | while IFS=: read -r line_num _; do
+              url=$(sed -n "$((line_num + 1))p" "$file" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+      
+              if [ -z "$url" ]; then
+                echo "::error file=$file,line=$line_num::❌ Missing URL after 'Example guide:'"
+                failed=1
+                has_error=true
+                continue
+              fi
+      
+              if [[ "$url" == *"TBD"* ]]; then
+                echo "::warning file=$file,line=$line_num::⚠️ TBD placeholder URL"
+                failed=1
+                continue
+              fi
+      
+              echo "Found URL → '$url'"
+              # Use -I to only send HEAD; -fail and -L to follow redirects and treat non-200 as error :contentReference[oaicite:1]{index=1}
+              if curl -o /dev/null --silent --head --fail -L "$url"; then
+                echo "✅ URL OK"
+              else
+                echo "::error file=$file,line=$line_num::❌ URL '$url' is invalid or returned non-200"
+                failed=1
+                has_error=true
+              fi
+            done
+          done < ino_files.txt
+      
+          if [ "$failed" -ne 0 ]; then
+            if [ "$has_error" = true ]; then
+              echo "❌ One or more link checks returned errors — review required."
+            else
+              echo "⚠️ Only TBD placeholder URLs were found — please add proper links before finalizing."
+            fi
+          fi
+

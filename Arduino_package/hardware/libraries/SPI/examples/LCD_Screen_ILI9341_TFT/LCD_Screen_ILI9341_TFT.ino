@@ -8,8 +8,8 @@
  * send command and data. We can draw text, line, circle, and
  * other picture on it.
  *
- * Example guide:
- * https://www.amebaiot.com/en/amebapro2-arduino-spi-lcd/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/SPI/LCD%20Screen%20ILI9341%20TFT.html
  */
 
 #include "SPI.h"

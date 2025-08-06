@@ -50,6 +50,7 @@
 #define DHCP_OPTION_LENGTH_TWO				(2)
 #define DHCP_OPTION_LENGTH_THREE			(3)
 #define DHCP_OPTION_LENGTH_FOUR				(4)
+#define DHCP_OPTION_LENGTH_THIRTY_SIX		(36)
 #ifndef DHCP_MSG_LEN
 #define DHCP_MSG_LEN							236
 #endif
@@ -66,6 +67,7 @@
 #define DHCP_OPTION_CODE_MSG_TYPE     			(53)
 #define DHCP_OPTION_CODE_SERVER_ID    			(54)
 #define DHCP_OPTION_CODE_REQ_LIST     			(55)
+#define DHCP_OPTION_CODE_CAPTIVE_PORTAL  		(114)
 #define DHCP_OPTION_CODE_END         			(255)
 
 #define IP_FREE_TO_USE		                	(1)

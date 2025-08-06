@@ -15,7 +15,7 @@ g++ -o cmodel_backup_linux cmodel_backup.cpp -static
 strip cmodel_backup_linux
 
 macos:
-g++ -arch x86_64 -arch arm64 -o cmodel_backup_macos cmodel_backup.cpp
+g++ -std=c++11 -arch x86_64 -arch arm64 -o cmodel_backup_macos cmodel_backup.cpp
 strip cmodel_backup_macos
 
 */
@@ -44,23 +44,26 @@ strip cmodel_backup_macos
 #include <cstring> // For strcat
 #include <ctime>
 #include <cstdio>
+#undef isnan
+#undef isinf
+#include "json.hpp"
 
 #define PRINT_DEBUG         0
 #define MAX_PATH_LENGTH     1024
 #define BUFFER_SIZE 		4096
 
-#define NUMBER_OF_MODELS 5
 using namespace std;
 
 // Declare global variables
 std::vector<std::string> ino_name_buf; // Vector to store lines from the file
 std::string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_default_customized_yolotiny, nn_default_customized_srcfd, nn_default_customized_mobilefacenet, nn_default_customized_yamnet, nn_default_customized_imgclass;
-std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, load_nn_model_src, ver_pro2, folder_example,  pathModel;
-std::string path_build_options_json;
+std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, path_jsonfile, load_nn_model_src, ver_pro2, folder_example,  pathModel;
+std::string path_build_options_json, tool_folder_json_path;
 std::string path_example, path_example_ino;
 std::string rootDir;
 std::string key_portable = "portable";
 std::string filename_txt = "ino_validation.txt";
+std::string nnmodels_json = "nn_models.json";
 std::string key_json = "build";
 std::string ext_json = ".json";
 std::string filenameModified;
@@ -133,6 +136,37 @@ std::string convert_to_utf8(const std::wstring& wide_str) {
     return converter.to_bytes(wide_str);
 }
 
+std::string readUtf16File(const std::wstring& utf16Path) {
+    HANDLE hFile = CreateFileW(utf16Path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        DWORD error = GetLastError();
+        std::cerr << "Failed to open file: " << error << std::endl;
+        return "";
+    }
+
+    DWORD fileSize = GetFileSize(hFile, nullptr);
+    if (fileSize == INVALID_FILE_SIZE) {
+        std::cerr << "Failed to get file size: " << GetLastError() << std::endl;
+        CloseHandle(hFile);
+        return "";
+    }
+
+    std::vector<char> fileContents(fileSize + 1);  // +1 for null terminator
+
+    DWORD bytesRead;
+    if (!ReadFile(hFile, &fileContents[0], fileSize, &bytesRead, nullptr)) {
+        std::cerr << "Failed to read file: " << GetLastError() << std::endl;
+        CloseHandle(hFile);
+        return "";
+    }
+
+    fileContents[fileSize] = '\0';  // Null-terminate the content
+
+    CloseHandle(hFile);
+
+    return std::string(fileContents.begin(), fileContents.end() - 1);  // Remove null terminator
+}
+
 // Check if username is correct or have weird symbols between Users and AppData
 // ** For chinese version laptop such as using 使用者, TBD
 std::string getUsernameChecked(const std::string& path) {
@@ -159,6 +193,8 @@ std::string getUsernameChecked(const std::string& path) {
     return newPath;
 }
 #endif
+
+
 std::string dirName(const std::string& directory_path) {
 int sdk_counter = 0;
 
@@ -231,6 +267,102 @@ int sdk_counter = 0;
 	}
 	closedir(directory);
 #endif
+}
+
+using json = nlohmann::json;
+
+int NNTaskCount (const std::string& jsonFilePath) {
+	int count = 0; 
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+	if (!fileContent.empty()) {
+        try {
+            json j = json::parse(fileContent);
+            if (j.contains("NNTasks") && j["NNTasks"].contains("COUNT")) {
+                std::string count_str = j["NNTasks"]["COUNT"];
+
+                if (!count_str.empty()) {
+                    try {
+                        // Convert to integer
+                        count = std::stoi(count_str);
+                    } catch (const std::invalid_argument& e) {
+                        std::cerr << "Invalid argument: could not convert to integer: " << count_str << std::endl;
+                    } catch (const std::out_of_range& e) {
+                        std::cerr << "Out of range: could not convert to integer: " << count_str << std::endl;
+                    }
+                }
+            }
+
+            if (PRINT_DEBUG) {
+                std::cout << "[" << __func__ << "][" << __LINE__ << "] NNTasks count: " << count << std::endl;
+            }
+        } catch (const json::exception& e) {
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+#else
+    std::ifstream inFile(jsonFilePath);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("1 Unable to open JSON file: " + jsonFilePath);
+    }
+
+    json j;
+    inFile >> j;
+
+    std::string count_str = j["NNTasks"]["COUNT"].get<std::string>();
+	count = std::stoi(count_str);
+	if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "] NNTasks count :" << count << std::endl;
+#endif
+    return count;
+}
+
+int modelCount(const std::string& jsonFilePath) {
+	int count = 0; 
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+	if (!fileContent.empty()) {
+        try {
+            json j = json::parse(fileContent);
+            if (j.contains("modelCount") && j["modelCount"].contains("COUNT")) {
+                std::string count_str = j["modelCount"]["COUNT"];
+
+                if (!count_str.empty()) {
+                    try {
+                        count = std::stoi(count_str);
+                    } catch (const std::invalid_argument& e) {
+                        std::cerr << "Invalid argument: could not convert to integer: " << count_str << std::endl;
+                    } catch (const std::out_of_range& e) {
+                        std::cerr << "Out of range: could not convert to integer: " << count_str << std::endl;
+                    }
+                }
+            }
+
+            if (PRINT_DEBUG) {
+                std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count: " << count << std::endl;
+            }
+        } catch (const json::exception& e) {
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+#else
+    std::ifstream inFile(jsonFilePath);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Unable to open JSON file: " + jsonFilePath);
+    }
+
+    json j;
+    inFile >> j;
+
+    std::string count_str = j["modelCount"]["COUNT"].get<std::string>();
+	count = std::stoi(count_str);
+
+	if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count :" << count << std::endl;
+#endif
+    return count;
 }
 
 // Function to search for a keyword in a path and return the path up to that keyword
@@ -488,7 +620,7 @@ std::string listExampleDir(const std::string& basePath, const std::string& examp
 			std::wstring currentPath = basePathUtf16  + L"\\" + currentFileName;
 
 			// Check if exampleName is part of the currentFileName
-			if (currentFileName.find(exampleNameUtf16) != std::wstring::npos) {
+			if (currentFileName == exampleNameUtf16) {
 				folder_example = convert_to_utf8(currentPath);
 			}
 
@@ -636,37 +768,42 @@ std::string getIDEFilePath (const std::string &path) {
 }
 
 std::string input2nbfile(const std::string& input) {
-std::string input_new, input_lower;
-    
+	std::string input_new, input_lower;
+
 #if __APPLE__
+	std::ifstream inFile(tool_folder_json_path);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("3 Unable to open JSON file: " + tool_folder_json_path);
+    }
+
+    json j;
+    inFile >> j;
+
+    std::unordered_map<std::string, std::string> model_mapping;
     std::string input_no_spaces = input;
     input_no_spaces.erase(std::remove_if(input_no_spaces.begin(), input_no_spaces.end(), ::isspace), input_no_spaces.end());
     input_new = input_no_spaces;
-    
-    std::unordered_map<std::string, std::string> model_mapping;
-    model_mapping.insert(std::make_pair("yolov3_tiny", "yolov3_tiny.nb"));
-    model_mapping.insert(std::make_pair("yolov4_tiny", "yolov4_tiny.nb"));
-    model_mapping.insert(std::make_pair("yolov7_tiny", "yolov7_tiny.nb"));
-    model_mapping.insert(std::make_pair("mobilefacenet_i8", "mobilefacenet_int8.nb"));
-    model_mapping.insert(std::make_pair("mobilefacenet_i16", "mobilefacenet_int16.nb"));
-    model_mapping.insert(std::make_pair("scrfd320p", "scrfd_500m_bnkps_576x320_u8.nb"));
-    model_mapping.insert(std::make_pair("scrfd640", "scrfd_500m_bnkps_640x640_u8.nb"));
-    model_mapping.insert(std::make_pair("yamnet_fp16", "yamnet_fp16.nb"));
-    model_mapping.insert(std::make_pair("img_class", "img_class_cnn.nb"));
+
+	for (const auto& pair : j["nb_file_mapping"].items()) {
+        model_mapping.insert(std::make_pair(pair.key(), pair.value()));
+    }
+#elif _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(tool_folder_json_path);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+    json j = json::parse(fileContent);
+	std::unordered_map<std::string, std::string> model_mapping = j["nb_file_mapping"].get<std::unordered_map<std::string, std::string>>();
 #else
-    std::unordered_map<std::string, std::string> model_mapping = {
-        {"yolov3_tiny", "yolov3_tiny.nb"},
-        {"yolov4_tiny", "yolov4_tiny.nb"},
-        {"yolov7_tiny", "yolov7_tiny.nb"},
-        {"mobilefacenet_i8", "mobilefacenet_int8.nb"},
-        {"mobilefacenet_i16", "mobilefacenet_int16.nb"},
-        {"scrfd320p", "scrfd_500m_bnkps_576x320_u8.nb"},
-        {"scrfd640", "scrfd_500m_bnkps_640x640_u8.nb"},
-        {"yamnet_fp16", "yamnet_fp16.nb"},
-        {"img_class", "img_class_cnn.nb"},
-    };
+// Read the JSON file
+    std::ifstream inFile(tool_folder_json_path);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("3 Unable to open JSON file: " + tool_folder_json_path);
+    }
+
+    json j;
+    inFile >> j;
+	std::unordered_map<std::string, std::string> model_mapping = j["nb_file_mapping"].get<std::unordered_map<std::string, std::string>>();
 #endif
-    
+
     // Convert input string to lowercase for case-insensitive comparison
 #if __APPLE__
     input_lower = input_new;
@@ -841,7 +978,11 @@ void revertModel(const std::string& dmodel_name, const std::string& dmodel_name_
     if (PRINT_DEBUG) std::cout << "[" << __func__ << "][INFO] Dmodel Revert done." << std::endl;
 }
 
+std::vector<std::string> model_names;
+std::vector<std::string> model_types;
 void readTXT(std::string& directory_path) {
+	bool is_model_section = false;
+    bool is_type_section = false;
 	int str_count = 0;
 #if _WIN32
     std::wstring directory_path_utf16 = utf8_to_utf16(directory_path)  + L"\\" + utf8_to_utf16(filename_txt);
@@ -895,27 +1036,43 @@ void readTXT(std::string& directory_path) {
     std::istringstream txtcontent(content);
 	std::string line;
     while (std::getline(txtcontent, line)) {
-        ino_name_buf.push_back(line);
+        if (line.empty() || line == "----------------------------------") {
+            continue;
+        }
+
+        //ino_name_buf.push_back(line);
+        if (line.find("Current ino contains model(s):") != std::string::npos) {
+            is_model_section = true;
+            is_type_section = false; // Reset type section flag
+            continue;
+        }
+        if (line.find("Current model(s)(Default/Customized)") != std::string::npos) {
+            is_model_section = false;
+            is_type_section = true;
+            continue;
+        }
+
+        // Extract model names
+        if (is_model_section) {
+            model_names.push_back(line); // Add model name to the vector
+        }
+
+        // Extract model types (Default/Customized)
+        if (is_type_section) {
+            model_types.push_back(line); // Add model type to the vector
+        }
     }
 
 	// Close the file handle after reading		
 	CloseHandle(hFile);
 
-    // Assigning values to variables based on file content
-    nn_model_yolotiny_name = ino_name_buf[2];
-    nn_model_srcfd_name = ino_name_buf[3];
-    nn_model_mobilefacenet_name = ino_name_buf[4];
-    nn_model_yamnet_name = ino_name_buf[5];
-    nn_model_imgclass_name = ino_name_buf[6];
+	// Check if the model names and types are extracted correctly
+#if (PRINT_DEBUG)
+    for (size_t i = 0; i < model_names.size(); i++) {
+        std::cout << "Model " << i << ": " << model_names[i] << " | Type: " << model_types[i]  << std::endl;
+    }
+#endif
 
-    nn_default_customized_yolotiny = ino_name_buf[9];
-    nn_default_customized_srcfd = ino_name_buf[10];
-    nn_default_customized_mobilefacenet = ino_name_buf[11];
-    nn_default_customized_yamnet = ino_name_buf[12];
-    nn_default_customized_imgclass = ino_name_buf[13];
-
-	if (PRINT_DEBUG) std::cout << "nn_model_yolotiny_name: " << nn_model_yolotiny_name << std::endl; 
-	if (PRINT_DEBUG) std::cout << "nn_default_customized_yolotiny: " << nn_default_customized_yolotiny << std::endl;  
 #else
     // Open directory and check for errors
     DIR* dir = opendir(directory_path.c_str());
@@ -944,32 +1101,44 @@ void readTXT(std::string& directory_path) {
     }
 
     // Use a dynamic vector to store lines
-    // std::vector<std::string> ino_name_buf;
     std::string line;
 
     // Read lines from file
     while (std::getline(ino_validation_txt, line)) {
-        ino_name_buf.push_back(line);
+        if (line.empty() || line == "----------------------------------") {
+            continue;
+        }
+
+        if (line.find("Current ino contains model(s):") != std::string::npos) {
+            is_model_section = true;
+            is_type_section = false; // Reset type section flag
+            continue;
+        }
+        if (line.find("Current model(s)(Default/Customized)") != std::string::npos) {
+            is_model_section = false;
+            is_type_section = true;
+            continue;
+        }
+
+        // Extract model names
+        if (is_model_section) {
+            model_names.push_back(line); // Add model name to the vector
+        }
+
+        // Extract model types (Default/Customized)
+        if (is_type_section) {
+            model_types.push_back(line); // Add model type to the vector
+        }
     }
 
     // Close the file
     ino_validation_txt.close();
 
-    // Check if there are enough lines in the vector
-    
-    // Access vector elements safely
-    nn_model_yolotiny_name = ino_name_buf[2];
-    nn_model_srcfd_name = ino_name_buf[3];
-    nn_model_mobilefacenet_name = ino_name_buf[4];
-    nn_model_yamnet_name = ino_name_buf[5];
-    nn_model_imgclass_name = ino_name_buf[6];
-
-    nn_default_customized_yolotiny = ino_name_buf[9];
-    nn_default_customized_srcfd = ino_name_buf[10];
-    nn_default_customized_mobilefacenet = ino_name_buf[11];
-    nn_default_customized_yamnet = ino_name_buf[12];
-    nn_default_customized_imgclass = ino_name_buf[13];
-    
+#if (PRINT_DEBUG)
+    for (size_t i = 0; i < model_names.size(); i++) {
+        std::cout << "Model " << i << ": " << model_names[i] << " | Type: " << model_types[i]  << std::endl;
+    }
+#endif
     // Close the directory
     closedir(dir);
 #endif
@@ -1033,8 +1202,6 @@ std::string file_path;
 }
 
 void modelRenameBackup(const std::string& nbfilename, const std::string& sketchPath) {
-	std::string fname_models_txt[5] = {nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name};
-	std::string filename_keyword[7] = {yolov3_model, yolov4_model, yolov7_model, scrfd_model, mobilefacenet_model, yamnet_model, cnn_model};
 	int file_count = 0;
 
 #ifdef _WIN32
@@ -1126,349 +1293,8 @@ void modelRenameBackup(const std::string& nbfilename, const std::string& sketchP
 #endif
 }
 
-// void backupModel(const std::string &path) {
-// 	std::string model_name_od, model_name_fd, model_name_fr, model_name_ac, model_name_ic;
-// 	std::string fname_models_txt[5] = {nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name};
-// 	std::string models[] = {"OBJECT_DETECTION", "FACE_DETECTION", "FACE_RECOGNITION", "AUDIO_CLASSIFICATION", "IMAGE_CLASSIFICATION"};
-// 	std::string model_names[NUMBER_OF_MODELS];
-// 	std::string nn_task;
-//     std::string voe_status = "NA";
-//     std::string header_all = "";
-// 	std::string line_strip_header = "NA";
-// 	std::string line_strip_headerNN = "NA";
-// 	std::string dir_example = "NA";
-// 	std::string example_file_path;
-// 	std::string ino_extension = ".ino";
-// 	std::string fname_dmodel;
-// 	std::string fname_dmodel_backup;
-// 	std::string input, output;
-	
-// 	// All texts save to bufferContent
-// 	std::string bufferContent;
-
-// 	int count = 0;
-// 	int count_match = 0;
-
-// 	std::string example_name;
-
-// 	example_file_path = getIDEFilePath(path);
-// 	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "][INFO] path_example: \"" << example_file_path << "\"" << std::endl;
-
-// #ifdef _WIN32
-// 	std::wstring example_file_path_utf16 = utf8_to_utf16(example_file_path);
-
-// 	// Open the file
-//     HANDLE hFile = CreateFileW(example_file_path_utf16.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-//     if (hFile == INVALID_HANDLE_VALUE) {
-//         DWORD error = GetLastError();
-//         if (error == ERROR_FILE_NOT_FOUND) {
-//             std::cout << "File not found: " << convert_to_utf8(example_file_path_utf16) << std::endl;
-//         } else {
-//             std::cerr << "Failed to open file: " << convert_to_utf8(example_file_path_utf16) << ". Error code: " << error << std::endl;
-//         }
-//         return;
-//     }
-
-// 	// Read file contents
-//     const int BUFFER_SIZE_INO = 4096; // Example buffer size
-//     std::vector<char> buffer(BUFFER_SIZE_INO);
-//     DWORD bytesRead = 0;
-//     BOOL success = FALSE;
-
-// 	do {
-//         success = ReadFile(hFile, buffer.data(), BUFFER_SIZE_INO, &bytesRead, nullptr);
-//        if (success) {
-//             // Process the read buffer
-//             bufferContent.append(buffer.data(), bytesRead);
-//         } else {
-//             DWORD error = GetLastError();
-//             std::cerr << "Error reading file: " << convert_to_utf8(example_file_path_utf16) << ". Error code: " << error << std::endl;
-//         }
-//     } while (success && bytesRead > 0);
-
-//     // Close the file handle
-//     CloseHandle(hFile);
-// #else
-// 	std::ifstream fmodel(example_file_path);
-// 	if (fmodel.is_open()) {
-//         std::string line;
-		
-// 		while (std::getline(fmodel, line)) {
-// 			bufferContent += line + "\n"; // Append each line to bufferContent
-// 		}
-// 		fmodel.close();
-// 	}  else {
-//         std::cerr << "Unable to open file." << std::endl;
-//     }
-// #endif
-// 	// Search for keywords and process lines containing them
-// 	std::istringstream iss(bufferContent);
-// 	std::string line;
-	
-// 	if (nn_default_customized_yolotiny == "CUSTOMIZED" || nn_default_customized_srcfd == "CUSTOMIZED" || nn_default_customized_mobilefacenet == "CUSTOMIZED" || nn_default_customized_yamnet == "CUSTOMIZED" || nn_default_customized_imgclass == "CUSTOMIZED") {
-// 		if (load_nn_model_src == "LoadFromFlash") {
-// 			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Path: " << path << std::endl;
-// 			if (path == "Temp" || path.find("modified") != std::string::npos) {//path == "Temp" && path == "modified") {
-// 				// IDE 1
-// 				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE1" << std::endl;
-// 				dir_example = extractRootDirectory(path);
-// 			} else {
-// 				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE2" << std::endl;
-// 				// IDE 2
-// 				example_name = path.substr(path.find_last_of("\\") + 1);
-// 				removeChar(example_name, '\\');
-// 			}
-// 			std::string folder_example = listExampleDir(path_library, example_name); // return example directory path
-// 			dir_example = folder_example;
-// 			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] dir_example: " << dir_example << std::endl;
-		
-// #ifdef _WIN32
-// 			// Open dir_example path
-// 			WIN32_FIND_DATAW findData;
-// 			HANDLE hFind = FindFirstFileW((utf8_to_utf16(dir_example) + L"\\*").c_str(), &findData);
-
-// 			if (hFind == INVALID_HANDLE_VALUE) {
-// 				DWORD error = GetLastError();
-// 				std::cerr << "3 Failed to open directory: " << error << std::endl;
-// 			}
-
-// 			do {
-// 				if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-// 					std::wstring fileName = findData.cFileName;
-// 					if (fileName.length() > 3 && fileName.substr(fileName.length() - 3) == L".nb") {
-// 						std::string fileName_utf8 = convert_to_utf8(fileName);
-
-// 						if (fileName_utf8 != input2nbfile(nn_model_yolotiny_name) && fileName_utf8 != input2nbfile(nn_model_srcfd_name) && fileName_utf8 !=  input2nbfile(nn_model_mobilefacenet_name) && fileName_utf8 !=  input2nbfile(nn_model_yamnet_name) && fileName_utf8 !=  input2nbfile(nn_model_imgclass_name)) {
-// 							std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-// 							exit(EXIT_FAILURE);
-// 						} else {
-// 							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << fileName_utf8 << " in " << dir_example << std::endl;
-// 							modelRenameBackup(fileName_utf8, dir_example);
-// 						}
-// 						count_match++;
-// 					}	
-// 				}
-// 			} while (FindNextFileW(hFind, &findData) != 0);
-// 			FindClose(hFind);
-// #else
-// 			DIR* dir = opendir(dir_example.c_str());
-// 			struct dirent* entry;
-// 			if (dir != nullptr) {
-// 				while ((entry = readdir(dir)) != nullptr) {
-// 					std::string filename = entry->d_name;
-// 					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
-					
-// 					if (filename.find(".nb") != std::string::npos) {
-// 						if (filename != input2nbfile(nn_model_yolotiny_name) && filename != input2nbfile(nn_model_srcfd_name) && filename !=  input2nbfile(nn_model_mobilefacenet_name) && filename !=  input2nbfile(nn_model_yamnet_name) && filename !=  input2nbfile(nn_model_imgclass_name)) {
-// 							std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-// 							exit(EXIT_FAILURE);
-// 						} else {
-// 							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << entry->d_name << " in " << dir_example << std::endl;
-// 							modelRenameBackup(entry->d_name, dir_example); // filename, example directory
-// 						}
-// 						count_match++;
-// 					}
-// 				}
-// 			}
-// 			closedir(dir);
-// #endif
-// 			if (PRINT_DEBUG) std::cout << "count: " << count << std::endl;
-// 			if (PRINT_DEBUG) std::cout << "count_match: " << count_match << std::endl;
-// 			if (count_match == 0) {
-// 				if (load_nn_model_src == "LoadFromFlash") { 
-// 					std::cerr << "Model (.nb file) missing or customized model name mismatch. Please include your customized model in sketch folder or rename your model if it is already in sketch folder." << std::endl;
-// 					exit(EXIT_FAILURE);
-// 				}
-// 			}
-// 		}
-// 	} else {
-// 		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] path_model: " << path_model << std::endl;
-// 		flag_Dbackup = false;
-// #ifdef _WIN32
-// 	std::wstring path_model_utf16 = utf8_to_utf16(path_model);
-
-// 	// Open dir_example path
-// 	WIN32_FIND_DATAW findData;
-// 	HANDLE hFind = FindFirstFileW((path_model_utf16 + L"\\*").c_str(), &findData);
-
-// 	if (hFind == INVALID_HANDLE_VALUE) {
-// 		DWORD error = GetLastError();
-// 		std::cerr << "4 Failed to open directory: " << error << std::endl;
-// 	}
-
-// 	do {
-// 		if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-// 			std::wstring fileName = findData.cFileName;
-// 			if (PRINT_DEBUG) std::wcout << "1487 fileName: " << fileName << std::endl;
-
-// 			if (fileName.find(L"Dbackup_") != std::string::npos) {
-// 				if (PRINT_DEBUG) std::wcout << "[" << __LINE__ << "] filename: " << fileName << std::endl;
-// 				flag_Dbackup = true;
-// 				fname_dmodel_backup = convert_to_utf8(fileName);
-
-// 				std::string fileName_utf8 = convert_to_utf8(fileName);
-
-// 				if (fileName_utf8.find(yolov3_model) != std::string::npos || fileName_utf8.find(yolov4_model) != std::string::npos || fileName_utf8.find(yolov7_model) != std::string::npos ) {
-// 					input = nn_model_yolotiny_name;
-// 				} else if (fileName_utf8.find(scrfd_model) != std::string::npos) {
-// 					input = nn_model_srcfd_name;
-// 				} else if (fileName_utf8.find(mobilefacenet_model) != std::string::npos) {
-// 					input = nn_model_mobilefacenet_name;
-// 				} else if (fileName_utf8.find(yamnet_model) != std::string::npos) {
-// 					input = nn_model_yamnet_name;
-// 				}  else if (fileName_utf8.find(cnn_model) != std::string::npos) {
-// 					input = nn_model_imgclass_name;
-// 				} else {
-// 					std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-// 					exit(EXIT_FAILURE);
-// 				}
-
-// 				auto underscore = input.find('_'); // Find the first occurrence of "_"
-// 				if (underscore != std::string::npos) {
-// 					output = input.substr(0, underscore); // Copy the substring before "_"
-// 					if (output == cnn_key) { // because the name in json does not contain cnn
-// 						output = cnn_model; 
-// 					}
-// 				} else {
-// 					output = input;
-// 				}
-
-// 				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-
-// 				// To prevent wrong file used to replace default model.
-// 				if (output != "NA") {						
-// 					if (output.find(yolov3_model) != std::string::npos) {
-// 						output = yolov3_model;
-// 					} if (output.find(yolov4_model) != std::string::npos) {
-// 						output = yolov4_model;
-// 					} if (output.find(yolov7_model) != std::string::npos) {
-// 						output = yolov7_model;
-// 					} else if (output.find(scrfd_model) != std::string::npos) {
-// 						output = scrfd_model;
-// 					} else if (output.find(mobilefacenet_model) != std::string::npos) {
-// 						output = mobilefacenet_model;
-// 					} else if (output.find(yamnet_model) != std::string::npos) {
-// 						output = yamnet_model;
-// 					}  else if (output.find(cnn_model) != std::string::npos) {
-// 						output = cnn_model;
-// 					}
-
-// 					std::string key = "_";
-// 					key = key + output;
-// 					auto start = fname_dmodel_backup.find(key); // Find the starting position of the substring
-
-// 					if (start != std::string::npos) {
-// 						key = key + "_";
-// 						start += key.length(); // Move the pointer past the substring
-// 						if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-// 						output = output + "_";
-// 						if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-// 						fname_dmodel = output;
-// 						fname_dmodel = fname_dmodel + fname_dmodel_backup.substr(start);
-// 					}
-
-// 					if (flag_Dbackup) {
-// 						//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] fname_dmodel: " << fname_dmodel << std::endl;
-// 						revertModel(fname_dmodel, fname_dmodel_backup, path_model);
-// 					}
-// 				}
-// 			}
-// 		}
-// 	} while (FindNextFileW(hFind, &findData) != 0);
-// 	FindClose(hFind);
-
-// #else
-// 	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] path_model: " << path_model << std::endl;
-// 	DIR* dir = opendir(path_model.c_str());
-// 	flag_Dbackup = false;
-// 	if (dir) {
-// 		struct dirent* ent;
-// 		while ((ent = readdir(dir)) != NULL) {
-// 			std::string filename = ent->d_name;
-// 			if ((filename.find("Dbackup") != std::string::npos) ) {
-// 				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
-// 				flag_Dbackup = true;
-// 				fname_dmodel_backup = ent->d_name;
-
-// 				if (filename.find(yolov3_model) != std::string::npos || filename.find(yolov4_model) != std::string::npos || filename.find(yolov7_model) != std::string::npos ) {
-// 					input = nn_model_yolotiny_name;
-// 				} else if (filename.find(scrfd_model) != std::string::npos) {
-// 					input = nn_model_srcfd_name;
-// 				} else if (filename.find(mobilefacenet_model) != std::string::npos) {
-// 					input = nn_model_mobilefacenet_name;
-// 				} else if (filename.find(yamnet_model) != std::string::npos) {
-// 					input = nn_model_yamnet_name;
-// 				}  else if (filename.find(cnn_model) != std::string::npos) {
-// 					input = nn_model_imgclass_name;
-// 				} else {
-// 					std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-// 					exit(EXIT_FAILURE);
-// 				}
-				
-// 				auto underscore = input.find('_'); // Find the first occurrence of "_"
-// 				if (underscore != std::string::npos) {
-// 					output = input.substr(0, underscore); // Copy the substring before "_"
-// 					if (output == cnn_key) { // because the name in json does not contain cnn
-// 						output = cnn_model; 
-// 					}
-// 				} else {
-// 					output = input;
-// 				}
-
-// 				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-
-// 				// To prevent wrong file used to replace default model.
-// 				if (output != "NA") {						
-// 					if (output.find(yolov3_model) != std::string::npos) {
-// 						output = yolov3_model;
-// 					} if (output.find(yolov4_model) != std::string::npos) {
-// 						output = yolov4_model;
-// 					} if (output.find(yolov7_model) != std::string::npos) {
-// 						output = yolov7_model;
-// 					} else if (output.find(scrfd_model) != std::string::npos) {
-// 						output = scrfd_model;
-// 					} else if (output.find(mobilefacenet_model) != std::string::npos) {
-// 						output = mobilefacenet_model;
-// 					} else if (output.find(yamnet_model) != std::string::npos) {
-// 						output = yamnet_model;
-// 					}  else if (output.find(cnn_model) != std::string::npos) {
-// 						output = cnn_model;
-// 					}
-
-// 					std::string key = "_";
-// 					key = key + output;
-// 					auto start = fname_dmodel_backup.find(key); // Find the starting position of the substring
-
-// 					if (start != std::string::npos) {
-// 						key = key + "_";
-// 						start += key.length(); // Move the pointer past the substring
-// 						if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-// 						output = output + "_";
-// 						if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-// 						fname_dmodel = output;
-// 						fname_dmodel = fname_dmodel + fname_dmodel_backup.substr(start);
-// 					}
-
-// 					if (flag_Dbackup) {
-// 						//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] fname_dmodel: " << fname_dmodel << std::endl;
-// 						revertModel(fname_dmodel, fname_dmodel_backup, path_model);
-// 					}
-// 				}
-// 			}
-// 		}
-// 		closedir(dir);
-// 	}
-// #endif
-// 	}
-// }
-
-
 void backupModel(const std::string &path) {
-
-	std::string model_name_od, model_name_fd, model_name_fr, model_name_ac, model_name_ic;
-	std::string fname_models_txt[5] = {nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name};
-	std::string models[] = {"OBJECT_DETECTION", "FACE_DETECTION", "FACE_RECOGNITION", "AUDIO_CLASSIFICATION", "IMAGE_CLASSIFICATION"};
-	std::string model_names[NUMBER_OF_MODELS];
+	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "][INFO] tool_folder_json_path: \"" << tool_folder_json_path << "\"" << std::endl;
 	std::string nn_task;
     std::string voe_status = "NA";
     std::string header_all = "";
@@ -1479,8 +1305,15 @@ void backupModel(const std::string &path) {
 	std::string ino_extension = ".ino";
 	std::string fname_dmodel;
  	std::string fname_dmodel_backup;
- 	std::string input, output;
+ 	std::string input = "NA", output = "NA";
 	std::string example_name;
+
+	const int model_count = modelCount(tool_folder_json_path);
+	std::vector<std::string> filetonb(model_count);
+
+	for (int i = 0; i < model_count; i++) {
+	 	filetonb[i] = input2nbfile(model_names[i]);
+	}
 	
 	// All texts save to bufferContent
 	std::string bufferContent;
@@ -1492,8 +1325,37 @@ void backupModel(const std::string &path) {
 	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "][INFO] path_example: \"" << example_file_path << "\"" << std::endl;
 
 #ifdef _WIN32
-	std::wstring example_file_path_utf16 = utf8_to_utf16(example_file_path);
+    std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+    std::string fileContent = readUtf16File(jsonFilePath_utf16);
+    json j = json::parse(fileContent);
 
+	if (!j.contains("modelkeyword") || !j["modelkeyword"].contains("KEYWORD")) {
+        std::cerr << "Invalid JSON structure." << std::endl;
+       	return exit(EXIT_FAILURE);
+    }
+
+    std::vector<std::string> keywords = j["modelkeyword"]["KEYWORD"].get<std::vector<std::string>>();
+#else
+	std::ifstream file(tool_folder_json_path);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open JSON file." << std::endl;
+        return exit(EXIT_FAILURE);
+    }
+
+    json j;
+    file >> j;
+
+	if (!j.contains("modelkeyword") || !j["modelkeyword"].contains("KEYWORD")) {
+        std::cerr << "Invalid JSON structure." << std::endl;
+       	return exit(EXIT_FAILURE);
+    }
+
+    std::vector<std::string> keywords = j["modelkeyword"]["KEYWORD"].get<std::vector<std::string>>();
+#endif
+
+#ifdef _WIN32
+	std::wstring example_file_path_utf16 = utf8_to_utf16(example_file_path);
+	
 	// Open the file
     HANDLE hFile = CreateFileW(example_file_path_utf16.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (hFile == INVALID_HANDLE_VALUE) {
@@ -1526,157 +1388,156 @@ void backupModel(const std::string &path) {
     // Close the file handle
     CloseHandle(hFile);
 
+	
 	// Search for keywords and process lines containing them
 	std::istringstream iss(bufferContent);
 	std::string line;
 	
-	if (nn_default_customized_yolotiny == "CUSTOMIZED" || nn_default_customized_srcfd == "CUSTOMIZED" || nn_default_customized_mobilefacenet == "CUSTOMIZED" || nn_default_customized_yamnet == "CUSTOMIZED" || nn_default_customized_imgclass == "CUSTOMIZED") {
-		if (load_nn_model_src == "LoadFromFlash") {
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Path: " << path << std::endl;
-			if (path == "Temp" || path.find("modified") != std::string::npos) {//path == "Temp" && path == "modified") {
-				// IDE 1
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE1" << std::endl;
-				dir_example = extractRootDirectory(path);
-			} else {
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE2" << std::endl;
-				// IDE 2
-				example_name = path.substr(path.find_last_of("\\") + 1);
-				removeChar(example_name, '\\');
+	for (int i = 0; i < model_count; i++) {
+		if (model_types[i] == "CUSTOMIZED" && model_types[i] != "NA") {
+			if (load_nn_model_src == "LoadFromFlash") {
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "][INFO] model_types[i]: " << model_types[i] << " model_names: "<< model_names[i] << std::endl;
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Path: " << path << std::endl;
+				if (path == "Temp" || path.find("modified") != std::string::npos) { //path == "Temp" && path == "modified") {
+					// IDE 1
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE1" << std::endl;
+					dir_example = extractRootDirectory(path);
+				} else {
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE2" << std::endl;
+					// IDE 2
+					example_name = path.substr(path.find_last_of("\\") + 1);
+					removeChar(example_name, '\\');
+				}
+				std::string folder_example = listExampleDir(path_library, example_name); // return example directory path
+				dir_example = folder_example;
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] dir_example: " << dir_example << std::endl;
+
+				// Open dir_example path
+				WIN32_FIND_DATAW findData;
+				HANDLE hFind = FindFirstFileW((utf8_to_utf16(dir_example) + L"\\*").c_str(), &findData);
+
+				if (hFind == INVALID_HANDLE_VALUE) {
+					DWORD error = GetLastError();
+					std::cerr << "3 Failed to open directory: " << error << std::endl;
+				}
+
+				do {
+					if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+						std::wstring fileName = findData.cFileName;
+						if (fileName.length() > 3 && fileName.substr(fileName.length() - 3) == L".nb") {
+							std::string fileName_utf8 = convert_to_utf8(fileName);
+							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << fileName_utf8 << " in " << dir_example << std::endl;
+							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] filetonb[i]:  " << filetonb[i] << std::endl;
+							bool found = false;
+							if (filetonb[i] != "NA") {
+								for (const auto& file : filetonb) {
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] file:  " << file << " in " << dir_example << std::endl;
+									if (file == filetonb[i]) {
+										found = true;
+										break;
+									}
+								}
+							}
+							if (PRINT_DEBUG) std::cout << "----" << std::endl;
+							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] found:  " << found << std::endl;
+							if (PRINT_DEBUG) std::cout << "----" << std::endl;	
+							if (found) {
+								if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << fileName_utf8 << " in " << dir_example << std::endl;
+								modelRenameBackup(fileName_utf8, dir_example);
+							} else {
+								std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
+								exit(EXIT_FAILURE);
+							}
+							
+							//std::cout << "Output: " << output << std::endl;
+							count_match++;
+						}	
+					}
+				} while (FindNextFileW(hFind, &findData) != 0);
+				FindClose(hFind);
+				if (PRINT_DEBUG) std::cout << "count: " << count << std::endl;
+				if (PRINT_DEBUG) std::cout << "count_match: " << count_match << std::endl;
+				if (count_match == 0) {
+					if (load_nn_model_src == "LoadFromFlash") { 
+						std::cerr << "Model (.nb file) missing or customized model name mismatch. Please include your customized model in sketch folder or rename your model if it is already in sketch folder." << std::endl;
+						exit(EXIT_FAILURE);
+					}
+				}
 			}
-			std::string folder_example = listExampleDir(path_library, example_name); // return example directory path
-			dir_example = folder_example;
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] dir_example: " << dir_example << std::endl;
+		} 
+
+		if (model_types[i] == "DEFAULT" && model_types[i] != "NA") {
+			
+			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "][INFO] model_types[i]: " << model_types[i] << " ----------- model_names: "<< model_names[i] << std::endl;
+			//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] path_model: " << path_model << std::endl;
+			flag_Dbackup = false;
+
+			std::wstring path_model_utf16 = utf8_to_utf16(path_model);
 
 			// Open dir_example path
 			WIN32_FIND_DATAW findData;
-			HANDLE hFind = FindFirstFileW((utf8_to_utf16(dir_example) + L"\\*").c_str(), &findData);
+			HANDLE hFind = FindFirstFileW((path_model_utf16 + L"\\*").c_str(), &findData);
 
 			if (hFind == INVALID_HANDLE_VALUE) {
 				DWORD error = GetLastError();
-				std::cerr << "3 Failed to open directory: " << error << std::endl;
+				std::cerr << "4 Failed to open directory: " << error << std::endl;
 			}
 
 			do {
 				if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 					std::wstring fileName = findData.cFileName;
-					if (fileName.length() > 3 && fileName.substr(fileName.length() - 3) == L".nb") {
-						std::string fileName_utf8 = convert_to_utf8(fileName);
+					
+					for (const auto& keyword : keywords) {
+						if (fileName.find(L"Dbackup_") != std::string::npos) {
+							flag_Dbackup = true;
+							fname_dmodel_backup = convert_to_utf8(fileName);
+							std::string fileName_utf8 = convert_to_utf8(fileName);
 
-						if (fileName_utf8 != input2nbfile(nn_model_yolotiny_name) && fileName_utf8 != input2nbfile(nn_model_srcfd_name) && fileName_utf8 !=  input2nbfile(nn_model_mobilefacenet_name) && fileName_utf8 !=  input2nbfile(nn_model_yamnet_name) && fileName_utf8 !=  input2nbfile(nn_model_imgclass_name)) {
-							std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-							exit(EXIT_FAILURE);
-						} else {
-							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << fileName_utf8 << " in " << dir_example << std::endl;
-							modelRenameBackup(fileName_utf8, dir_example);
-						}
-						count_match++;
-					}	
+							if (fileName_utf8.find(keyword) != std::string::npos && model_names[i].find(keyword) != std::string::npos) {
+								if (PRINT_DEBUG) std::wcout << "[" << __LINE__ << "] filename: " << fileName << std::endl;
+								input = model_names[i];
+								if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] input: " << input << std::endl;
+								output = input;
+
+								if (output != "NA") {
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+									for (const auto& outputs : output) {
+										for (const auto& keyword : keywords) {
+											if (output.find(keyword) != std::string::npos) {
+												output = keyword;
+											}
+											//std::cout << "Output: " << output << std::endl;
+										}
+									}	
+								}
+
+								std::string key = "_";
+								key = key + output;
+								auto start = fname_dmodel_backup.find(key); // Find the starting position of the substring
+
+								if (start != std::string::npos) {
+									key = key + "_";
+									start += key.length(); // Move the pointer past the substring
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+									output = output + "_";
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+									fname_dmodel = output;
+									fname_dmodel = fname_dmodel + fname_dmodel_backup.substr(start);
+								}
+
+								if (flag_Dbackup) {
+									//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] fname_dmodel: " << fname_dmodel << std::endl;
+									revertModel(fname_dmodel, fname_dmodel_backup, path_model);
+								}
+							
+								break;
+							} 
+						} 
+					}
 				}
 			} while (FindNextFileW(hFind, &findData) != 0);
 			FindClose(hFind);
-			if (PRINT_DEBUG) std::cout << "count: " << count << std::endl;
-			if (PRINT_DEBUG) std::cout << "count_match: " << count_match << std::endl;
-			if (count_match == 0) {
-				if (load_nn_model_src == "LoadFromFlash") { 
-					std::cerr << "Model (.nb file) missing or customized model name mismatch. Please include your customized model in sketch folder or rename your model if it is already in sketch folder." << std::endl;
-					exit(EXIT_FAILURE);
-				}
-			}
 		}
-	} else {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] path_model: " << path_model << std::endl;
-		flag_Dbackup = false;
-
-		std::wstring path_model_utf16 = utf8_to_utf16(path_model);
-
-		// Open dir_example path
-		WIN32_FIND_DATAW findData;
-		HANDLE hFind = FindFirstFileW((path_model_utf16 + L"\\*").c_str(), &findData);
-
-		if (hFind == INVALID_HANDLE_VALUE) {
-			DWORD error = GetLastError();
-			std::cerr << "4 Failed to open directory: " << error << std::endl;
-		}
-
-		do {
-			if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-				std::wstring fileName = findData.cFileName;
-
-				if (fileName.find(L"Dbackup_") != std::string::npos) {
-					if (PRINT_DEBUG) std::wcout << "[" << __LINE__ << "] filename: " << fileName << std::endl;
-					flag_Dbackup = true;
-					fname_dmodel_backup = convert_to_utf8(fileName);
-
-					std::string fileName_utf8 = convert_to_utf8(fileName);
-
-					if (fileName_utf8.find(yolov3_model) != std::string::npos || fileName_utf8.find(yolov4_model) != std::string::npos || fileName_utf8.find(yolov7_model) != std::string::npos ) {
-						input = nn_model_yolotiny_name;
-					} else if (fileName_utf8.find(scrfd_model) != std::string::npos) {
-						input = nn_model_srcfd_name;
-					} else if (fileName_utf8.find(mobilefacenet_model) != std::string::npos) {
-						input = nn_model_mobilefacenet_name;
-					} else if (fileName_utf8.find(yamnet_model) != std::string::npos) {
-						input = nn_model_yamnet_name;
-					}  else if (fileName_utf8.find(cnn_model) != std::string::npos) {
-						input = nn_model_imgclass_name;
-					} else {
-						std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-						exit(EXIT_FAILURE);
-					}
-
-					auto underscore = input.find('_'); // Find the first occurrence of "_"
-					if (underscore != std::string::npos) {
-						output = input.substr(0, underscore); // Copy the substring before "_"
-						if (output == cnn_key) { // because the name in json does not contain cnn
-							output = cnn_model; 
-						}
-					} else {
-						output = input;
-					}
-
-					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-
-					// To prevent wrong file used to replace default model.
-					if (output != "NA") {						
-						if (output.find(yolov3_model) != std::string::npos) {
-							output = yolov3_model;
-						} if (output.find(yolov4_model) != std::string::npos) {
-							output = yolov4_model;
-						} if (output.find(yolov7_model) != std::string::npos) {
-							output = yolov7_model;
-						} else if (output.find(scrfd_model) != std::string::npos) {
-							output = scrfd_model;
-						} else if (output.find(mobilefacenet_model) != std::string::npos) {
-							output = mobilefacenet_model;
-						} else if (output.find(yamnet_model) != std::string::npos) {
-							output = yamnet_model;
-						}  else if (output.find(cnn_model) != std::string::npos) {
-							output = cnn_model;
-						}
-
-						std::string key = "_";
-						key = key + output;
-						auto start = fname_dmodel_backup.find(key); // Find the starting position of the substring
-
-						if (start != std::string::npos) {
-							key = key + "_";
-							start += key.length(); // Move the pointer past the substring
-							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-							output = output + "_";
-							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-							fname_dmodel = output;
-							fname_dmodel = fname_dmodel + fname_dmodel_backup.substr(start);
-						}
-
-						if (flag_Dbackup) {
-							//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] fname_dmodel: " << fname_dmodel << std::endl;
-							revertModel(fname_dmodel, fname_dmodel_backup, path_model);
-						}
-					}
-				}
-			}
-		} while (FindNextFileW(hFind, &findData) != 0);
-		FindClose(hFind);
 	}
 #else
 	std::ifstream fmodel(example_file_path);
@@ -1684,137 +1545,127 @@ void backupModel(const std::string &path) {
 	std::vector<std::string> params;
 	std::vector<std::string> tokens;
 	
-	// Check if customized model is used	
-	if (nn_default_customized_yolotiny == "CUSTOMIZED" || nn_default_customized_srcfd == "CUSTOMIZED" || nn_default_customized_mobilefacenet == "CUSTOMIZED" || nn_default_customized_yamnet == "CUSTOMIZED" || nn_default_customized_imgclass == "CUSTOMIZED") {
-		if (load_nn_model_src == "LoadFromFlash") {
-			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Path: " << path << std::endl;
-			if (path == "Temp" || path.find("modified") != std::string::npos) {//path == "Temp" && path == "modified") {
-			// IDE 1
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE1" << std::endl;
-				dir_example = extractRootDirectory(path);
-			} else {
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE2" << std::endl;
-				// IDE 2
-				std::string example_name = path.substr(path.find_last_of("/") + 1);
-				removeChar(example_name, '/');
-				std::string file_path = listExampleDir(path_library, example_name); // return example directory path
-				dir_example = folder_example;
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] dir_example: " << dir_example << std::endl;
-			}
-
-			DIR* dir = opendir(dir_example.c_str());
-			struct dirent* entry;
-			if (dir != nullptr) {
-				while ((entry = readdir(dir)) != nullptr) {
-					std::string filename = entry->d_name;
-					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
-					
-					if (filename.find(".nb") != std::string::npos) {
-						if (filename != input2nbfile(nn_model_yolotiny_name) && filename != input2nbfile(nn_model_srcfd_name) && filename !=  input2nbfile(nn_model_mobilefacenet_name) && filename !=  input2nbfile(nn_model_yamnet_name) && filename !=  input2nbfile(nn_model_imgclass_name)) {
-							std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
-							exit(EXIT_FAILURE);
-						} else {
-							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << entry->d_name << " in " << dir_example << std::endl;
-							modelRenameBackup(entry->d_name, dir_example); // filename, example directory
-						}
-						count_match++;
-					}
+	// Check if customized model is used
+	for (int i = 0; i < model_count; i++) {
+		if (model_types[i] == "CUSTOMIZED" && model_types[i] != "NA") {	
+			if (load_nn_model_src == "LoadFromFlash") {
+				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Path: " << path << std::endl;
+				if (path == "Temp" || path.find("modified") != std::string::npos) {//path == "Temp" && path == "modified") {
+				// IDE 1
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE1" << std::endl;
+					dir_example = extractRootDirectory(path);
+				} else {
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] IDE2" << std::endl;
+					// IDE 2
+					std::string example_name = path.substr(path.find_last_of("/") + 1);
+					removeChar(example_name, '/');
+					std::string file_path = listExampleDir(path_library, example_name); // return example directory path
+					dir_example = folder_example;
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] dir_example: " << dir_example << std::endl;
 				}
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] count: " << count << std::endl;
-				if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] countmatch: " << count_match << std::endl;
 
-				if (count_match == 0) {
-					std::cerr << "Model (.nb file) missing or customized model name mismatch. Please include your customized model in sketch folder or rename your model if it is already in sketch folder." << std::endl;
-					exit(EXIT_FAILURE);
-				} 
-			}
-			closedir(dir);
-		}
-	} 
-	else {
-		if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] path_model: " << path_model << std::endl;
+				DIR* dir = opendir(dir_example.c_str());
+				struct dirent* entry;
+				if (dir != nullptr) {
+					while ((entry = readdir(dir)) != nullptr) {
+						std::string filename = entry->d_name;
+						if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
+						
+						if (filename.find(".nb") != std::string::npos) {
+							bool found = false;
+							if (filetonb[i] != "NA") {
+								for (const auto& file : filetonb) {
+									if (file == filename) {
+										found = true;
+										break;
+									}
+								}
+							}
 
-		DIR* dir = opendir(path_model.c_str());
-		bool flag_Dbackup = false;
-		std::string fname_dmodel;
-		std::string fname_dmodel_backup;
-		std::string input, output;
-		if (dir) {
-			struct dirent* ent;
-			while ((ent = readdir(dir)) != NULL) {
-				std::string filename = ent->d_name;
-				if ((filename.find("Dbackup") != std::string::npos) ) {
-					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
-					flag_Dbackup = true;
-					fname_dmodel_backup = ent->d_name;
+							if (found) {
+								if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] [Info] Found customized model:  " << filename << " in " << dir_example << std::endl;
+								modelRenameBackup(filename, dir_example);
+							} else {
+								std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
+								exit(EXIT_FAILURE);
+							}
+							count_match++;
+						}
+					}
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] count: " << count << std::endl;
+					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] countmatch: " << count_match << std::endl;
 
-					if (filename.find(yolov3_model) != std::string::npos || filename.find(yolov4_model) != std::string::npos || filename.find(yolov7_model) != std::string::npos ) {
-						input = nn_model_yolotiny_name;
-					} else if (filename.find(scrfd_model) != std::string::npos) {
-						input = nn_model_srcfd_name;
-					} else if (filename.find(mobilefacenet_model) != std::string::npos) {
-						input = nn_model_mobilefacenet_name;
-					} else if (filename.find(yamnet_model) != std::string::npos) {
-						input = nn_model_yamnet_name;
-					}  else if (filename.find(cnn_model) != std::string::npos) {
-						input = nn_model_imgclass_name;
-					} else {
-						std::cerr << "Customized model mismatch. Please rename your model." << std::endl;
+					if (count_match == 0) {
+						std::cerr << "Model (.nb file) missing or customized model name mismatch. Please include your customized model in sketch folder or rename your model if it is already in sketch folder." << std::endl;
 						exit(EXIT_FAILURE);
-					}
-					
-					auto underscore = input.find('_'); // Find the first occurrence of "_"
-					if (underscore != std::string::npos) {
-						output = input.substr(0, underscore); // Copy the substring before "_"
-						if (output == cnn_key) { // because the name in json does not contain cnn
-							output = cnn_model; 
-						}
-					} else {
-						output = input;
-					}
+					} 
+				}
+				closedir(dir);
+			}
+		} 
+		if (model_types[i] == "DEFAULT" && model_types[i] != "NA") {	 
+			if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] path_model: " << path_model << std::endl;
 
-					if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+			DIR* dir = opendir(path_model.c_str());
+			bool flag_Dbackup = false;
+			std::string fname_dmodel;
+			std::string fname_dmodel_backup;
+			std::string input, output;
 
-					// To prevent wrong file used to replace default model.
-					if (output != "NA") {						
-						if (output.find(yolov3_model) != std::string::npos) {
-							output = yolov3_model;
-						} if (output.find(yolov4_model) != std::string::npos) {
-							output = yolov4_model;
-						} if (output.find(yolov7_model) != std::string::npos) {
-							output = yolov7_model;
-						} else if (output.find(scrfd_model) != std::string::npos) {
-							output = scrfd_model;
-						} else if (output.find(mobilefacenet_model) != std::string::npos) {
-							output = mobilefacenet_model;
-						} else if (output.find(yamnet_model) != std::string::npos) {
-							output = yamnet_model;
-						}  else if (output.find(cnn_model) != std::string::npos) {
-							output = cnn_model;
-						}
+			if (dir) {
+				struct dirent* ent;
+				while ((ent = readdir(dir)) != NULL) {
+					std::string filename = ent->d_name;
 
-						std::string key = "_";
-						key = key + output;
-						auto start = fname_dmodel_backup.find(key); // Find the starting position of the substring
+					for (const auto& keyword : keywords) {
+						if (filename.find("Dbackup_") != std::string::npos) {
+							flag_Dbackup = true;
+							fname_dmodel_backup = filename;
 
-						if (start != std::string::npos) {
-							key = key + "_";
-							start += key.length(); // Move the pointer past the substring
-							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-							output = output + "_";
-							if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
-							fname_dmodel = output;
-							fname_dmodel = fname_dmodel + fname_dmodel_backup.substr(start);
-						}
+							if (filename.find(keyword) != std::string::npos && model_names[i].find(keyword) != std::string::npos) {
+								if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] filename: " << filename << std::endl;
+								input = model_names[i];
+								if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] input: " << input << std::endl;
+								output = input;
 
-						if (flag_Dbackup) {
-							//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] fname_dmodel: " << fname_dmodel << std::endl;
-							revertModel(fname_dmodel, fname_dmodel_backup, path_model);
-						}
+								if (output != "NA") {
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+									for (const auto& outputs : output) {
+										for (const auto& keyword : keywords) {
+											if (output.find(keyword) != std::string::npos) {
+												output = keyword;
+											}
+											//std::cout << "Output: " << output << std::endl;
+										}
+									}	
+								}
+
+								std::string key = "_";
+								key = key + output;
+								auto start = fname_dmodel_backup.find(key); // Find the starting position of the substring
+
+								if (start != std::string::npos) {
+									key = key + "_";
+									start += key.length(); // Move the pointer past the substring
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+									output = output + "_";
+									if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] output: " << output << std::endl;
+									fname_dmodel = output;
+									fname_dmodel = fname_dmodel + fname_dmodel_backup.substr(start);
+								}
+
+								if (flag_Dbackup) {
+									//if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] fname_dmodel: " << fname_dmodel << std::endl;
+									revertModel(fname_dmodel, fname_dmodel_backup, path_model);
+								}
+							
+								break;
+							} 
+						} 
 					}
 				}
+				closedir(dir);
 			}
-			closedir(dir);
 		}
 	}
 #endif
@@ -1872,6 +1723,7 @@ int main(int argc, char* argv[]) {
 	path_model = path_model.append(path_model_add);
 	path_txtfile = path_tools;
 	path_txtfile = path_txtfile.append(path_txtfile_add);
+	path_jsonfile = path_txtfile;
 	load_nn_model_src = model_src;
 
 #if PRINT_DEBUG
@@ -1889,8 +1741,9 @@ int main(int argc, char* argv[]) {
 	std::cout <<"path_model       = " << path_model << std::endl;
 	std::cout <<"path_library     = " << path_library << std::endl;
 	std::cout <<"path_txtfile     = " << path_txtfile << std::endl;
+	std::cout <<"path_jsonfile     = " << path_jsonfile << std::endl;
 #endif
-
+	tool_folder_json_path = path_jsonfile + nnmodels_json;
 	path_build_options_json = pathTempJSON(path_build, ext_json, key_json);
 	path_example_ino = validateINO(path_build);
 	readTXT(path_txtfile);

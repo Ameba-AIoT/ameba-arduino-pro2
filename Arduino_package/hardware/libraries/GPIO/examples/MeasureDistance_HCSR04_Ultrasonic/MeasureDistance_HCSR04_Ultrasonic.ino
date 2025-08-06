@@ -10,9 +10,9 @@
  * It means the echo pin needs level shift from 5V to 3.3V.
  * We can either use a level converter or use resister to divide the level.
  *
- * Example guide:
- * https://www.amebaiot.com/en/amebapro2-arduino-gpio-ultrasonic/
- */
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GPIO/Measure%20Distance%20HCSR04%20Ultrasonic.html
+*/
 
 const int trigger_pin = 12;
 const int echo_pin = 11;

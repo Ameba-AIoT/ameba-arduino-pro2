@@ -1,6 +1,6 @@
 /*
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-http-post-image/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Post%20Image%20and%20MP4.html
 */
 
 #include "StreamIO.h"

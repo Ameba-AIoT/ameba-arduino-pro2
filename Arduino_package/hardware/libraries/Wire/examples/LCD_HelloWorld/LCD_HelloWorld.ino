@@ -15,7 +15,8 @@
  and the other half byte as data signal.
  So different LCD may correspond different bit mapping of these pins.
 
- Example guide: https://www.amebaiot.com/en/amebapro2-arduino-i2c-lcd/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/Display%20Data%20on%20LCD%20Screen.html
  */
 
 #include <Wire.h>

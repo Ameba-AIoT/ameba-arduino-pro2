@@ -21,8 +21,8 @@
  *
  * For more information about our company, please visit: www.makdev.net
  *
- * Example guide:
- * https://www.amebaiot.com/en/amebapro2-arduino-ble-v7rc/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/BLE/V7RC%20Car%20With%20Video%20Streaming.html
  *******************************************************/
 
 #include "BLEDevice.h"

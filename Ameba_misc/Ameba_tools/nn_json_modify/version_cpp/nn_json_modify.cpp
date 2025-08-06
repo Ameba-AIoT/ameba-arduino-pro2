@@ -13,7 +13,7 @@ g++ -o nn_json_modify_linux nn_json_modify.cpp -static
 strip nn_json_modify_linux
 
 macos:
-g++ -arch x86_64 -arch arm64 -o nn_json_modify_macos nn_json_modify.cpp
+g++ -std=c++11 -arch x86_64 -arch arm64 -o nn_json_modify_macos nn_json_modify.cpp
 strip nn_json_modify_macos
 
 */
@@ -39,6 +39,9 @@ strip nn_json_modify_macos
 #include "cJSON.c" // Assuming cJSON library is used
 #include <algorithm>
 #include <unordered_map>
+#undef isnan
+#undef isinf
+#include "json.hpp"
 
 #define PRINT_DEBUG         0
 #define MAX_PATH_LENGTH     1024
@@ -48,10 +51,11 @@ using namespace std;
 
 // Declare global variables
 std::string nn_model_yolotiny_name, nn_model_srcfd_name, nn_model_mobilefacenet_name, nn_model_yamnet_name, nn_model_imgclass_name, nn_default_customized_yolotiny, nn_default_customized_srcfd, nn_default_customized_mobilefacenet, nn_default_customized_yamnet, nn_default_customized_imgclass, nn_flash_sdcard_option;
-std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, load_nn_model_src, ver_pro2, path_nn_json;
+std::string path_root, path_arduino15, path_pro2, path_model, path_library, path_txtfile, load_nn_model_src, ver_pro2, path_nn_json, tool_folder_json_path, path_jsonfile;
 std::vector<std::string> ino_name_buf; // Vector to store lines from the file
 std::string key_portable = "portable";
 std::string filename_txt = "ino_validation.txt";
+std::string nnmodels_json = "nn_models.json";
 
 // Declare common file paths
 #ifdef _WIN32
@@ -83,6 +87,7 @@ std::string backspace = "/";
 // -------------------------------
 //           Functions
 // -------------------------------
+// Read contents from JSON
 #ifdef _WIN32
 std::wstring get_username() {
     wchar_t username[MAX_PATH_LENGTH];
@@ -107,6 +112,38 @@ std::wstring utf8_to_utf16(const std::string& utf8str) {
 std::string convert_to_utf8(const std::wstring& wide_str) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
     return converter.to_bytes(wide_str);
+}
+
+// Function to read the content of a UTF-16 encoded file and return it as a string
+std::string readUtf16File(const std::wstring& utf16Path) {
+    HANDLE hFile = CreateFileW(utf16Path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        DWORD error = GetLastError();
+        std::cerr << "Failed to open file: " << error << std::endl;
+        return "";
+    }
+
+    DWORD fileSize = GetFileSize(hFile, nullptr);
+    if (fileSize == INVALID_FILE_SIZE) {
+        std::cerr << "Failed to get file size: " << GetLastError() << std::endl;
+        CloseHandle(hFile);
+        return "";
+    }
+
+    std::vector<char> fileContents(fileSize + 1);  // +1 for null terminator
+
+    DWORD bytesRead;
+    if (!ReadFile(hFile, &fileContents[0], fileSize, &bytesRead, nullptr)) {
+        std::cerr << "Failed to read file: " << GetLastError() << std::endl;
+        CloseHandle(hFile);
+        return "";
+    }
+
+    fileContents[fileSize] = '\0';  // Null-terminate the content
+
+    CloseHandle(hFile);
+
+    return std::string(fileContents.begin(), fileContents.end() - 1);  // Remove null terminator
 }
 
 // Check if username is correct or have weird symbols between Users and AppData
@@ -135,6 +172,121 @@ std::string getUsernameChecked(const std::string& path) {
     return newPath;
 }
 #endif
+using json = nlohmann::json;
+int modelCount(const std::string& jsonFilePath) {
+	int count = 0; 
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+	if (!fileContent.empty()) {
+        try {
+            // Parse JSON
+            json j = json::parse(fileContent);
+
+            if (j.contains("modelCount") && j["modelCount"].contains("COUNT")) {
+                std::string count_str = j["modelCount"]["COUNT"];
+
+                // Ensure the string is valid for conversion to integer
+                if (!count_str.empty()) {
+                    try {
+                        // Convert to integer
+                        count = std::stoi(count_str);
+                    } catch (const std::invalid_argument& e) {
+                        std::cerr << "Invalid argument: could not convert to integer: " << count_str << std::endl;
+                    } catch (const std::out_of_range& e) {
+                        std::cerr << "Out of range: could not convert to integer: " << count_str << std::endl;
+                    }
+                }
+            }
+
+            // Debug output
+            if (PRINT_DEBUG) {
+                std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count: " << count << std::endl;
+            }
+        } catch (const json::exception& e) {
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+#else
+	// Read the JSON file
+    std::ifstream inFile(jsonFilePath);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Unable to open JSON file: " + jsonFilePath);
+    }
+
+    // Parse the JSON file
+    json j;
+    inFile >> j;
+
+	// Access the "modelCount" key and extract the "COUNT" value as a string
+    std::string count_str = j["modelCount"]["COUNT"].get<std::string>();
+
+    // Convert the string to an integer
+	count = std::stoi(count_str);  // Converts the string to an integer
+
+	if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count :" << count << std::endl;
+#endif
+    return count;
+}
+
+int modelSelectParamsCount(const std::string& jsonFilePath) {
+	int count = 0;
+#if _WIN32
+	std::wstring jsonFilePath_utf16 = utf8_to_utf16(jsonFilePath);
+	std::string fileContent = readUtf16File(jsonFilePath_utf16);
+
+	if (!fileContent.empty()) {
+        try {
+            // Parse JSON
+            json j = json::parse(fileContent);
+
+            if (j.contains("ModelSelectParamsCount") && j["ModelSelectParamsCount"].contains("COUNT")) {
+                std::string count_str = j["ModelSelectParamsCount"]["COUNT"];
+
+                // Ensure the string is valid for conversion to integer
+                if (!count_str.empty()) {
+                    try {
+                        // Convert to integer
+                        count = std::stoi(count_str);
+                    } catch (const std::invalid_argument& e) {
+                        std::cerr << "Invalid argument: could not convert to integer: " << count_str << std::endl;
+                    } catch (const std::out_of_range& e) {
+                        std::cerr << "Out of range: could not convert to integer: " << count_str << std::endl;
+                    }
+                }
+            }
+
+            // Debug output
+            if (PRINT_DEBUG) {
+                std::cout << "[" << __func__ << "][" << __LINE__ << "] Model count: " << count << std::endl;
+            }
+        } catch (const json::exception& e) {
+            std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        }
+    }
+#else
+	// Read the JSON file
+    std::ifstream inFile(jsonFilePath);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Unable to open JSON file: " + jsonFilePath);
+    }
+
+    // Parse the JSON file
+    json j;
+    inFile >> j;
+
+	// Access the "modelCount" key and extract the "COUNT" value as a string
+    std::string count_str = j["ModelSelectParamsCount"]["COUNT"].get<std::string>();
+
+    // Convert the string to an integer
+	count = std::stoi(count_str);  // Converts the string to an integer
+
+	if (PRINT_DEBUG) std::cout << "[" << __func__ << "][" << __LINE__ << "] ModelSelectParamsCount :" << count << std::endl;
+#endif
+
+    return count;
+}
 
 std::string dirName(const std::string& directory_path) {
 	int sdk_counter = 0;
@@ -659,8 +811,15 @@ void updateJSON(const std::string& input, const std::string& destPath) {
 #endif
 }
 
+std::vector<std::string> model_names;
+std::vector<std::string> model_types;
 void readTXT(std::string& directory_path) {
+    const int model_count = modelCount(tool_folder_json_path);
+    const int modelselectparams_count = modelSelectParamsCount(tool_folder_json_path);
+    bool is_model_section = false;
+    bool is_type_section = false;
 	int str_count = 0;
+
 #if _WIN32
     std::wstring directory_path_utf16 = utf8_to_utf16(directory_path)  + L"\\" + utf8_to_utf16(filename_txt);
 
@@ -713,24 +872,43 @@ void readTXT(std::string& directory_path) {
     std::istringstream txtcontent(content);
 	std::string line;
     while (std::getline(txtcontent, line)) {
-        ino_name_buf.push_back(line);
+        // Skip empty lines or separators
+        if (line.empty() || line == "----------------------------------") {
+            continue;
+        }
+
+        //ino_name_buf.push_back(line);
+        if (line.find("Current ino contains model(s):") != std::string::npos) {
+            is_model_section = true;
+            is_type_section = false; // Reset type section flag
+            continue;
+        }
+        if (line.find("Current model(s)(Default/Customized)") != std::string::npos) {
+            is_model_section = false;
+            is_type_section = true;
+            continue;
+        }
+
+        // Extract model names
+        if (is_model_section) {
+            model_names.push_back(line); // Add model name to the vector
+        }
+
+        // Extract model types (Default/Customized)
+        if (is_type_section) {
+            model_types.push_back(line); // Add model type to the vector
+        }
     }
 
 	// Close the file handle after reading		
 	CloseHandle(hFile);
 
-    // Assigning values to variables based on file content
-    nn_model_yolotiny_name = ino_name_buf[2];
-    nn_model_srcfd_name = ino_name_buf[3];
-    nn_model_mobilefacenet_name = ino_name_buf[4];
-    nn_model_yamnet_name = ino_name_buf[5];
-    nn_model_imgclass_name = ino_name_buf[6];
-
-    nn_default_customized_yolotiny = ino_name_buf[9];
-    nn_default_customized_srcfd = ino_name_buf[10];
-    nn_default_customized_mobilefacenet = ino_name_buf[11];
-    nn_default_customized_yamnet = ino_name_buf[12];
-    nn_default_customized_imgclass = ino_name_buf[13];
+    // Check if the model names and types are extracted correctly
+#if (PRINT_DEBUG)
+    for (size_t i = 0; i < model_names.size(); i++) {
+        std::cout << "Model " << i << ": " << model_names[i] << " | Type: " << model_types[i]  << std::endl;
+    }
+#endif
 
 #else
     // Open directory and check for errors
@@ -754,38 +932,52 @@ void readTXT(std::string& directory_path) {
 
     // Open file
     std::ifstream ino_validation_txt(file_path);
+    
     if (!ino_validation_txt.is_open()) {
         std::cerr << "Failed to open file: " << file_path << std::endl;
         closedir(dir); // Close the directory if file opening fails
     }
 
     // Use a dynamic vector to store lines
-    // std::vector<std::string> ino_name_buf;
     std::string line;
-
-    // Read lines from file
     while (std::getline(ino_validation_txt, line)) {
-        ino_name_buf.push_back(line);
+        // Skip empty lines or separators
+        if (line.empty() || line == "----------------------------------") {
+            continue;
+        }
+
+        if (line.find("Current ino contains model(s):") != std::string::npos) {
+            is_model_section = true;
+            is_type_section = false; // Reset type section flag
+            continue;
+        }
+        if (line.find("Current model(s)(Default/Customized)") != std::string::npos) {
+            is_model_section = false;
+            is_type_section = true;
+            continue;
+        }
+
+        // Extract model names
+        if (is_model_section) {
+            model_names.push_back(line); // Add model name to the vector
+        }
+
+        // Extract model types (Default/Customized)
+        if (is_type_section) {
+            model_types.push_back(line); // Add model type to the vector
+        }
     }
 
     // Close the file
     ino_validation_txt.close();
 
-    // Check if there are enough lines in the vector
-    
-    // Access vector elements safely
-    nn_model_yolotiny_name = ino_name_buf[2];
-    nn_model_srcfd_name = ino_name_buf[3];
-    nn_model_mobilefacenet_name = ino_name_buf[4];
-    nn_model_yamnet_name = ino_name_buf[5];
-    nn_model_imgclass_name = ino_name_buf[6];
+    // Check if the model names and types are extracted correctly
+#if (PRINT_DEBUG)
+    for (size_t i = 0; i < model_names.size(); i++) {
+        std::cout << "Model " << i << ": " << model_names[i] << " | Type: " << model_types[i]  << std::endl;
+    }
+#endif
 
-    nn_default_customized_yolotiny = ino_name_buf[9];
-    nn_default_customized_srcfd = ino_name_buf[10];
-    nn_default_customized_mobilefacenet = ino_name_buf[11];
-    nn_default_customized_yamnet = ino_name_buf[12];
-    nn_default_customized_imgclass = ino_name_buf[13];
-    
     // Close the directory
     closedir(dir);
 #endif
@@ -793,42 +985,16 @@ void readTXT(std::string& directory_path) {
 
 void writeJSON(const std::string &path) {
 	if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name OD: " <<  nn_model_yolotiny_name << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name FD: " <<  nn_model_srcfd_name << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name FR: " <<  nn_model_mobilefacenet_name << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name AC: " <<  nn_model_yamnet_name << std::endl;
-	if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name IC: " <<  nn_model_imgclass_name << std::endl;
+    for (size_t i = 0; i < model_names.size(); i++) {
+        if (PRINT_DEBUG) std::cout << "[" << __LINE__ << "] Model Name: " << model_names[i] << std::endl;
+        if (model_names[i].find("NA") == std::string::npos) {
+            if (load_nn_model_src =="LoadFromFlash") {     
+                updateJSON(model_names[i], path_model);
+            }
+        }
+    }
+	
 	if (PRINT_DEBUG) std::cout << "-------------------------------------" << std::endl;
-    
-	if (nn_model_yolotiny_name.find("NA") == std::string::npos) {    
-		if (load_nn_model_src =="LoadFromFlash") {    
-			updateJSON(nn_model_yolotiny_name, path_model);
-		} 
-	}
-
-	if (nn_model_srcfd_name.find("NA") == std::string::npos ) {    
-		if (load_nn_model_src =="LoadFromFlash") {         
-			updateJSON(nn_model_srcfd_name, path_model);
-		} 
-	}
-
-	if (nn_model_mobilefacenet_name.find("NA") == std::string::npos ) {    
-		if (load_nn_model_src =="LoadFromFlash") {     
-			updateJSON(nn_model_mobilefacenet_name, path_model);
-		} 
-	}
-
-	if (nn_model_yamnet_name.find("NA") == std::string::npos ) {    
-		if (load_nn_model_src =="LoadFromFlash") {      
-			updateJSON(nn_model_yamnet_name, path_model);
-		} 
-	}
-
-	if (nn_model_imgclass_name.find("NA") == std::string::npos ) {    
-		if (load_nn_model_src =="LoadFromFlash") {     
-			updateJSON(nn_model_imgclass_name, path_model);
-		} 
-	}
 }
 
 // -------------------------------
@@ -886,6 +1052,7 @@ int main(int argc, char* argv[]) {
 	path_model = path_model.append(path_model_add);
 	path_txtfile = path_tools;
 	path_txtfile = path_txtfile.append(path_txtfile_add);
+    path_jsonfile = path_txtfile;
 	load_nn_model_src = model_src;
 
 #if PRINT_DEBUG
@@ -904,6 +1071,7 @@ int main(int argc, char* argv[]) {
 	std::cout <<"path_library     = " << path_library << std::endl;
 	std::cout <<"path_txtfile     = " << path_txtfile << std::endl;
 #endif
+    tool_folder_json_path = path_jsonfile + nnmodels_json;
 	resetJSON(path_model);
     path_nn_json = JSONpath(path_model);
     readTXT(path_txtfile);

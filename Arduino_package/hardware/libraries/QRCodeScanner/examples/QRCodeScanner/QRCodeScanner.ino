@@ -2,8 +2,8 @@
  This sketch shows how to use the camera JXF37 on the AMB82-Mini to scan for QR Code and get the result string and length.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-video-qrcode/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/QR%20Code%20Scanner/Scan%20QR%20Code%20And%20Read%20Result%20String.html
+*/
 
 #undef DEFAULT
 

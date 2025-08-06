@@ -37,7 +37,7 @@ typedef struct CTNS_cfg_s {
 	int16_t NS_EN;
 	int16_t NSLevel;
 	int16_t HPFEnable;
-	int16_t QuickConvergenceEnable; //QuickConvergenceEnable = 1 => NSGainSlowConvergenceEnable = 0
+	int16_t NSSlowConvergence; //0-1000 (ms)
 
 	int16_t Reserve1;
 } CTNS_cfg_t;

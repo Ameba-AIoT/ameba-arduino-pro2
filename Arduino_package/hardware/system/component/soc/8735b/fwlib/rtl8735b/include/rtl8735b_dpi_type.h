@@ -2138,8 +2138,8 @@
  * @brief  DPI_CTRL_1                                (@ 0X23C)
  * @{
  *****************************************************************************/
-#define DPI_SHIFT_WRITE_EN_4                         31
-#define DPI_BIT_WRITE_EN_4                           ((u32)0x00000001 << 31)                             /*!<W 0  RSVD */
+#define DPI_SHIFT_WRITE_EN_MSB                         31
+#define DPI_BIT_WRITE_EN_MSB                           ((u32)0x00000001 << 31)                             /*!<W 0  RSVD */
 #define DPI_SHIFT_SET_REG_VALID                      30
 #define DPI_BIT_SET_REG_VALID                        ((u32)0x00000001 << 30)                             /*!<R/W 0  RSVD */
 #define DPI_SHIFT_WRITE_EN_3                         7

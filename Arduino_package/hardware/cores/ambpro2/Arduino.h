@@ -74,6 +74,13 @@ extern int dbg_sprintf(char *str, const char *fmt, ...);
 #endif
 #endif
 
+extern void set_logging(int enable);
+#ifdef Arduino_SHOW_NN_LOGS
+#define INIT_LOGGING() set_logging(1);
+#else
+#define INIT_LOGGING() set_logging(0);
+#endif
+
 extern void *pvPortMalloc(size_t xWantedSize);
 extern void vPortFree(void *pv);
 extern void *pvPortReAlloc(void *pv, size_t xWantedSize);

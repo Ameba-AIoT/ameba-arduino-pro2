@@ -12,8 +12,8 @@
   is valid.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-mqtt-upload-listen/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/MQTT/Set%20up%20MQTT%20Client-Broker%20Authenticated%20Connection%20with%20Publish%20in%20Callback.html
+*/
 
 #include <WiFi.h>
 #include <PubSubClient.h>
@@ -21,6 +21,8 @@
 char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;     // Indicator of Wifi status
+
+char clientIdBackup[32];
 
 char mqttServer[] = "cloud.amebaiot.com";
 char clientId[] = "amebaClient";
@@ -76,9 +78,21 @@ void setup()
         delay(10000);
     }
 
+    wifiClient.setNonBlockingMode();
     if (client.connect(clientId, clientUser, clientPass)) {
-        client.publish(publishTopic, publishPayload);
+        Serial.print("Client ID: ");
+        Serial.println(clientId);
+        client.publish(publishTopic, publishPayload, false);
         client.subscribe(subscribeTopic);
+    } else {
+        sprintf(clientIdBackup, "amebaClient-%lu", millis());
+        if (client.connect(clientIdBackup, clientUser, clientPass)) {
+            Serial.println("Static ID unable to use. Generate unique ID...");
+            Serial.print("Client ID: ");
+            Serial.println(clientIdBackup);
+            client.publish(publishTopic, publishPayload, false);
+            client.subscribe(subscribeTopic);
+        }
     }
 }
 

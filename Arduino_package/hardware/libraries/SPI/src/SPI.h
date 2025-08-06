@@ -119,8 +119,13 @@ public:
     uint16_t transfer16(uint16_t data, SPITransferMode mode = SPI_LAST);
     uint16_t transfer16(byte pin, uint16_t data, SPITransferMode mode = SPI_LAST);
 
-    // Retrieve data from receive buffer as slave
+    // Retrieve data from receive buffer as slave, Slave receive one frame use SPI.
     int slaveRead(void);
+    // Slave send one frame use SPI.
+    void slaveWrite(int value);
+    void slaveWrite(spi_t *pSpiObj, int value);
+    // Master send one frame use SPI.
+    int masterWrite(int value);
 
     // Set bit order to either MSB first or LSB first
     void setBitOrder(uint8_t pin, BitOrder order);
@@ -141,10 +146,10 @@ public:
     // Set default SPI frequency
     void setDefaultFrequency(int frequency);
 
-private:
     spi_t *pSpiMaster;
     spi_t *pSpiSlave;
 
+private:
     int _pinMOSI;
     int _pinMISO;
     int _pinCLK;
@@ -155,8 +160,7 @@ private:
     u8 _dataBits;
     u8 _dataMode;
     char _SPI_Mode;
-
-    bool initStatus;    // flag to mark SPI init status
+    bool _initStatus;    // flag to mark SPI init status
 };
 
 extern SPIClass SPI;

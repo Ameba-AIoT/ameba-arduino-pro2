@@ -22,26 +22,18 @@
 #define CMD_VIDEO_INIT_MEM_POOL		MM_MODULE_CMD(0x0d)
 #define CMD_VIDEO_FORCE_IFRAME		MM_MODULE_CMD(0x0e)
 #define CMD_VIDEO_ISPFPS			MM_MODULE_CMD(0x0f)
-#define CMD_VIDEO_SET_RCADVPARAM	MM_MODULE_CMD(0x10)
-#define CMD_VIDEO_GET_RCADVPARAM	MM_MODULE_CMD(0x11)
-#define CMD_VIDEO_SET_ROIPARM		MM_MODULE_CMD(0x12)
-#define CMD_VIDEO_SET_ROI			MM_MODULE_CMD(0x13)
-#define CMD_VIDEO_SET_QPCHROMA_OFFSET    MM_MODULE_CMD(0x14)
-#define CMD_VIDEO_SET_FORCE_DROP_FRAME   MM_MODULE_CMD(0x15)
 
-
-#define CMD_VIDEO_STREAMID		    MM_MODULE_CMD(0x16)
-#define CMD_VIDEO_FORMAT			MM_MODULE_CMD(0x17)
-#define CMD_VIDEO_DUMP_STATE		MM_MODULE_CMD(0x18)
-#define CMD_VIDEO_BPS               MM_MODULE_CMD(0x19)
-#define CMD_VIDEO_SNAPSHOT          MM_MODULE_CMD(0x1a)
-#define CMD_VIDEO_SNAPSHOT_CB       MM_MODULE_CMD(0x1b)
-#define CMD_VIDEO_YUV               MM_MODULE_CMD(0x1c)
-#define CMD_ISP_SET_RAWFMT          MM_MODULE_CMD(0x1d)
-#define CMD_VIDEO_PRINT_INFO        MM_MODULE_CMD(0x1e)
-#define CMD_VIDEO_SET_MULTI_RCCTRL	MM_MODULE_CMD(0x1f)
-
-
+#define CMD_VIDEO_STREAMID		    MM_MODULE_CMD(0x10)
+#define CMD_VIDEO_FORMAT			MM_MODULE_CMD(0x11)
+#define CMD_VIDEO_BPS               MM_MODULE_CMD(0x12)
+#define CMD_VIDEO_SNAPSHOT          MM_MODULE_CMD(0x13)
+#define CMD_VIDEO_SNAPSHOT_CB       MM_MODULE_CMD(0x14)
+#define CMD_VIDEO_YUV               MM_MODULE_CMD(0x15)
+#define CMD_ISP_SET_RAWFMT          MM_MODULE_CMD(0x16)
+#define CMD_VIDEO_PRINT_INFO        MM_MODULE_CMD(0x17)
+#define CMD_VIDEO_SET_MULTI_RCCTRL	MM_MODULE_CMD(0x18)
+#define CMD_VIDEO_GET_MULTI_RCCTRL	MM_MODULE_CMD(0x19)
+#define CMD_VIDEO_SET_CAP_INTVL		MM_MODULE_CMD(0x1a)  //capture every n seconds
 
 #define CMD_VIDEO_APPLY				MM_MODULE_CMD(0x20)  // apply setting
 #define CMD_VIDEO_UPDATE			MM_MODULE_CMD(0x21)  // update new setting
@@ -50,6 +42,7 @@
 #define CMD_VIDEO_SET_TIMESTAMP_OFFSET		MM_MODULE_CMD(0x25)
 #define CMD_VIDEO_EN_DBG_TS_INFO	MM_MODULE_CMD(0x26)
 #define CMD_VIDEO_SHOW_DBG_TS_INFO	MM_MODULE_CMD(0x27)
+#define CMD_VIDEO_SET_SENSOR_ID     MM_MODULE_CMD(0x28)
 
 #define CMD_SNAPSHOT_ENCODE_CB		MM_MODULE_CMD(0x30)
 
@@ -62,16 +55,19 @@
 #define CMD_VIDEO_GET_META_DATA	    MM_MODULE_CMD(0x36)
 #define CMD_VIDEO_SET_PRIVATE_MASK  MM_MODULE_CMD(0x37)
 
-#define CMD_VIDEO_SET_RATE_CONTROL		MM_MODULE_CMD(0x40)
-#define CMD_VIDEO_GET_CURRENT_BITRATE	MM_MODULE_CMD(0x41)
-#define CMD_VIDEO_GET_REMAIN_QUEUE_LENGTH	MM_MODULE_CMD(0x42)
-#define CMD_VIDEO_GET_MAX_QP		MM_MODULE_CMD(0x43)
-#define CMD_VIDEO_SET_MAX_QP		MM_MODULE_CMD(0x44)
+#define CMD_VIDEO_BPS_STBL_CTRL_EN				MM_MODULE_CMD(0x40)
+#define CMD_VIDEO_SET_BPS_STBL_CTRL_PARAMS		MM_MODULE_CMD(0x41)
+#define CMD_VIDEO_SET_BPS_STBL_CTRL_FPS_STG		MM_MODULE_CMD(0x42)
+#define CMD_VIDEO_SET_BPS_STBL_CTRL_GOP_STG		MM_MODULE_CMD(0x43)
+#define CMD_VIDEO_GET_CURRENT_BITRATE			MM_MODULE_CMD(0x44)
 
-#define CMD_VIDEO_SET_SPS_PPS_INFO  MM_MODULE_CMD(0x45)
-#define CMD_VIDEO_GET_SPS_PPS_INFO  MM_MODULE_CMD(0x46)
+#define CMD_VIDEO_GET_REMAIN_QUEUE_LENGTH		MM_MODULE_CMD(0x45)
+#define CMD_VIDEO_GET_MAX_QP					MM_MODULE_CMD(0x46)
+#define CMD_VIDEO_SET_MAX_QP					MM_MODULE_CMD(0x47)
 
-#define CMD_VIDEO_SET_RATE_CONTROL_FPS_STAGE		MM_MODULE_CMD(0x47)
+#define CMD_VIDEO_SET_SPS_PPS_INFO  MM_MODULE_CMD(0x48)
+#define CMD_VIDEO_GET_SPS_PPS_INFO  MM_MODULE_CMD(0x49)
+
 
 #define CMD_VIDEO_SET_EXT_INPUT     MM_MODULE_CMD(0x50)
 
@@ -90,25 +86,11 @@ typedef struct dbg_ts_info {
 	uint32_t timestamp[MMF_VIDEO_DBG_TS_MAX_CNT];
 } dbg_ts_info_t;
 
-typedef struct rate_control {
-	uint32_t sampling_time;
-	uint32_t maximun_bitrate;
-	uint32_t minimum_bitrate;
-	uint32_t target_bitrate;
-} rate_ctrl_t;
-
-typedef struct rate_control_param {
-	int rate_ctrl_en;
-	uint32_t sample_bitrate;
-	uint32_t current_bitrate;
-	uint32_t current_framerate;
-	uint32_t current_maxqp;
-	rate_ctrl_t rate_ctrl;
-	uint32_t minimum_framerate;
-	uint32_t ori_framerate;
-	uint32_t fps_stage[3];
-	uint32_t fps_stage_idx;
-} rate_ctrl_param_t;
+typedef struct video_bps_stats_s {
+	uint32_t cnt_br;
+	uint32_t sum_br;
+	int cur_bps;
+} video_bps_stats_t;
 
 typedef struct video_ctx_s {
 	void *parent;
@@ -125,7 +107,9 @@ typedef struct video_ctx_s {
 	video_meta_t meta_data;
 	void (*meta_cb)(void *);
 	void (*sps_pps_cb)(void *);
-	rate_ctrl_param_t rate_ctrl_p;
+	video_bps_stats_t bps_stats;
+	uint64_t frame_cnt;
+	int frame_drop_interval;
 
 	dbg_ts_info_t *dbg_ts_info;
 } video_ctx_t;

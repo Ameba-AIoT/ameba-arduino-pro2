@@ -1,6 +1,11 @@
 #include "Arduino.h"
 #include "AmebaFatFSFile.h"
 
+#ifdef __cplusplus
+extern "C" {
+#include "helix_mp3_drv.h"
+}
+#endif
 File::File(void)
 {
     _file = NULL;
@@ -12,10 +17,15 @@ File::File(const char *filename)
     open(filename);
 }
 
+File::File(const char *filename, int fileType)
+{
+    _file = NULL;
+    open(filename, fileType);
+}
+
 bool File::open(const char *filename)
 {
     FRESULT res = FR_OK;
-
     _file = (FIL *)malloc(sizeof(FIL));
     if (_file == NULL) {
         res = FR_INT_ERR;
@@ -24,6 +34,41 @@ bool File::open(const char *filename)
     }
 
     res = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
+
+    if (res != FR_OK) {
+        printf("\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
+        if (_file != NULL) {
+            free(_file);
+            _file = NULL;
+        }
+        return false;
+    }
+    // Copy file name
+    const char *name = strrchr(filename, '/');
+    strncpy(_name, (name + 1), MAX_FILENAME_LEN);
+    return true;
+}
+
+bool File::open(const char *filename, int fileType)
+{
+    FRESULT res = FR_OK;
+    _file = (FIL *)malloc(sizeof(FIL));
+    if (_file == NULL) {
+        res = FR_INT_ERR;
+        printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
+        return false;
+    }
+
+    if (fileType == MP3) {
+        printf("\r\n[INFO] Play MP3 file (%s)...\n", filename);
+        res = f_open(_file, filename, FA_OPEN_EXISTING | FA_READ);
+    } else {
+        if (_file != NULL) {
+            free(_file);
+            _file = NULL;
+        }
+        return false;
+    }
 
     if (res != FR_OK) {
         printf("\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
@@ -188,4 +233,110 @@ const char *File::name(void)
         return _name;
     }
     return NULL;
+}
+
+void File::convertMp3ToArray(void)
+{
+    uint32_t mp3_size = 0;
+    unsigned char *mp3_data = NULL;
+
+    if (_file != NULL) {
+        // Read ID3 header
+        unsigned char id3_header[10];
+        f_lseek(_file, 0);    // Move to the beginning
+        UINT bytesRead;
+        FRESULT res = f_read(_file, id3_header, 10, &bytesRead);
+
+        if (res != FR_OK || bytesRead != 10) {
+            printf("\r\n[ERROR] Failed to read ID3v2 header. (res=%d)\n", res);
+            return;
+        }
+
+        // Check for ID3v2
+        if (id3_header[0] == 'I' && id3_header[1] == 'D' && id3_header[2] == '3') {
+            uint32_t id3v2_size = ((id3_header[6] & 0x7F) << 21) | ((id3_header[7] & 0x7F) << 14) | ((id3_header[8] & 0x7F) << 7) | (id3_header[9] & 0x7F);
+            f_lseek(_file, id3v2_size + 10);    // Move past ID3v2
+        } else {
+            f_lseek(_file, 0);
+        }
+
+        // Calculate MP3 size
+        mp3_size = f_size(_file) - f_tell(_file);
+
+
+        // Allocate memory for MP3 data
+        mp3_data = (unsigned char *)malloc(mp3_size);
+        if (mp3_data == NULL) {
+            printf("\r\n[ERROR] Memory allocation failed for MP3 data.\n");
+            return;
+        }
+
+        // Read MP3 data
+        res = f_read(_file, mp3_data, mp3_size, &bytesRead);
+
+        if (res != FR_OK || bytesRead != mp3_size) {
+            printf("\r\n[ERROR] Failed to read MP3 data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
+            free(mp3_data);
+            return;
+        }
+        audio_play_binary_array(mp3_data, mp3_size, _audio_vol);
+        free(mp3_data);
+        mp3_data = NULL;
+    } else {
+        printf("\r\n[ERROR] No file opened to convert.\n");
+    }
+}
+
+/**
+  * @brief  Control the digital gain of DAC.
+
+  * @param  digitalVol: The digital volume. Every Step is 0.375dB.
+  *            @arg 0xAF: 0dB.
+  *            @arg 0xAE: -0.375dB.
+  *            @arg ...
+  *            @arg 0x00: -65.625dB.
+  * @retval none
+*/
+void File::setMp3DigitalVol(uint8_t digitalVol)
+{
+    _audio_vol = digitalVol;
+    return;
+}
+
+void File::playMp3(void)
+{
+    convertMp3ToArray();
+    return;
+}
+
+bool File::readFile(unsigned char *&file_data, uint32_t &file_size)
+{
+    file_data = NULL;
+    file_size = 0;
+    UINT bytesRead;
+    FRESULT res;
+
+    if (_file != NULL) {
+        file_size = f_size(_file);
+
+        file_data = (unsigned char *)malloc(file_size);
+        if (file_data == NULL) {
+            printf("\r\n[ERROR] Memory allocation failed for file data.\n");
+            return false;
+        }
+
+        res = f_read(_file, file_data, file_size, &bytesRead);
+
+        if (res != FR_OK || bytesRead != file_size) {
+            printf("\r\n[ERROR] Failed to read file data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
+            free(file_data);
+            file_data = NULL;
+            file_size = 0;
+            return false;
+        }
+        return true;
+    } else {
+        printf("\r\n[ERROR] No file opened to convert.\n");
+        return false;
+    }
 }

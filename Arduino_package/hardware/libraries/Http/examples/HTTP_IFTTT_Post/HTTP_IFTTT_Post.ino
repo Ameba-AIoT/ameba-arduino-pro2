@@ -1,8 +1,7 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-ifttt/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/Use%20IFTTT%20for%20Web%20Service.html
+*/
 
 #include <HttpClient.h>
 #include <WiFi.h>

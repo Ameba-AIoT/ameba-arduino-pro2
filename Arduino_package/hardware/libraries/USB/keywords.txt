@@ -7,6 +7,7 @@
 #######################################
 
 UVCD	KEYWORD1
+USBMassStorage	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -15,6 +16,12 @@ UVCD	KEYWORD1
 stream_config	KEYWORD2
 camera_uvcd	KEYWORD2
 usb_uvcd	KEYWORD2
+USBInit	KEYWORD2
+SDIOInit	KEYWORD2
+USBStatus	KEYWORD2
+initializeDisk	KEYWORD2
+loadUSBMassStorageDriver	KEYWORD2
+USBDeinit	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

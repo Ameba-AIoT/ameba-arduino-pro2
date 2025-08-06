@@ -24,6 +24,8 @@ MP4Recording::MP4Recording(void)
     memset(mp4Params.record_file_name, 0, sizeof(mp4Params.record_file_name));
     strncpy(mp4Params.record_file_name, "AmebaPro_recording", sizeof(mp4Params.record_file_name));
     mp4Params.fatfs_buf_size = 256 * 1024;    // 32kb multiple
+    mp4Params.mp4_user_callback = 0;
+    mp4Params.use_self_file_name = 0;    // corresponds to remove_append_name in mp4_context [0: default, 1: without adding.mp4]
 }
 
 MP4Recording::~MP4Recording(void)
@@ -96,7 +98,9 @@ void MP4Recording::end(void)
         printf("\r\n[ERROR] Need MP4 init first\n");
         return;
     }
-    mp4RecordingStop(_p_mmf_context->priv);
+    if (getRecordingState()) {
+        mp4RecordingStop(_p_mmf_context->priv);
+    }
 }
 
 void MP4Recording::setRecordingFileName(const char* filename)

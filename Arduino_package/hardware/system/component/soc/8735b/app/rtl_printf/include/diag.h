@@ -914,16 +914,16 @@ extern uint8_t ConfigBootLOG_EN;
         _DbgDump( __VA_ARGS__);\
 }while(0)
 
-#undef DBG_ASSERT
+#undef DIAG_ASSERT
 #ifdef __GNUC__
-#define DBG_ASSERT(x)     do {\
+#define DIAG_ASSERT(x)     do {\
         if (unlikely(!(x))) \
             _DbgDump("Assertion: %s:%s, %d\n", __FILE__, __func__, __LINE__);\
     }while(0)
 #endif
 
 #ifdef __ICCARM__
-#define DBG_ASSERT(x)     do {\
+#define DIAG_ASSERT(x)     do {\
         if (unlikely(!(x))) \
             _DbgDump("Assertion: %s:%s, %d\n", __FILE__, __func__, __LINE__);\
     }while(0)
@@ -932,8 +932,8 @@ extern uint8_t ConfigBootLOG_EN;
 #else   // else of "#if CONFIG_DEBUG_LOG"
 #define DBG_8735B(...)
 #define MONITOR_LOG(...)
-#undef DBG_ASSERT
-#define DBG_ASSERT(x)
+#undef DIAG_ASSERT
+#define DIAG_ASSERT(x)
 
 #define DBG_BOOT_ERR(...)
 #define DBG_GDMA_ERR(...)

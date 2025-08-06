@@ -1,7 +1,6 @@
 /*
-
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-neuralnework-face-detection/
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Neural%20Network/Face%20Detection.html
 
  NN Model Selection
  Select Neural Network(NN) task and models using modelSelect(nntask, objdetmodel, facedetmodel, facerecogmodel).
@@ -144,7 +143,7 @@ void FDPostProcess(std::vector<FaceDetectionResult> results)
             int ymax = (int)(item.yMax() * im_h);
 
             // Draw boundary box
-            printf("Face %ld confidence %d:\t%d %d %d %d\n\r", i, item.score(), xmin, xmax, ymin, ymax);
+            printf("Face %ld confidence %d:\t%d %d %d %d\n\r", (long int)i, item.score(), xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
 
             // Print identification text above boundary box

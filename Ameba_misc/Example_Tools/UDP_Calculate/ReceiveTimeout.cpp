@@ -5,10 +5,16 @@
 //#include <winsock.h>
 #include <winsock2.h>
 #include <windows.h>
-#elif defined(__linux__) || defined(__APPLE__)// ubuntu 32 bits  and OS X 64bits
+#elif defined(__linux__) // ubuntu
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#elif defined(__APPLE__) // macOS
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <errno.h>
 #endif
 #include <unistd.h>
 
@@ -21,10 +27,18 @@ int portno = 5001;
 int main(int argc, char **argv) {
     int n;
     struct sockaddr_in serveraddr;
+#if defined(__APPLE__)
+    socklen_t serverlen = sizeof(serveraddr);
+#else
     int serverlen = sizeof(serveraddr);
+#endif
     char buf[BUFSIZE];
     int counter = 0;
 
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <server_ip>\n", argv[0]);
+        return -1;
+    }
     hostname = argv[1];
 
     /* socket: create the socket */
@@ -50,7 +64,7 @@ int main(int argc, char **argv) {
     int sockfd;
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
-        printf("ERROR %d opening socket\r\n", sockfd);
+        perror("ERROR opening socket");
         return -1;
     }
 #endif
@@ -69,7 +83,7 @@ int main(int argc, char **argv) {
         /* send the message to the server */
         n = sendto(sockfd, buf, strlen(buf), 0, (struct sockaddr *)&serveraddr, serverlen);
         if (n < 0) {
-            printf("ERROR in sendto\r\n");
+            perror("ERROR in sendto");
             return -1;
         }
 #if defined(__WIN32__) // MINGW64

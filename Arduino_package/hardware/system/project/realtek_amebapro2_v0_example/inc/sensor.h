@@ -82,12 +82,23 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_MIS2008        0x23  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_NT99236        0x24  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_VD550G         0x25  //  |   v    |   -    |   v    |   -    |
-#define SENSOR_GC3003         0x26  //  |   v    |   -    |   v    |   -    |
-#define SENSOR_IMX662         0x27  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_GC3003         0x26  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_IMX662         0x27  //  |   v    |   v    |   v    |   v    |
 #define SENSOR_GC2083         0x28  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_OV2735         0x29  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_SC400AI        0x2A  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_OV50A40_CROP   0x2B  //  |   v    |   -    |   v    |   -    | /* Crop FOV with 1/16 window size */
+#define SENSOR_OV9734         0x2C  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_CV2003         0x2D  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_GC2093         0x2E  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_F35            0x2F  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV5693         0x30  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_SC3336         0x31  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_K06A           0x32  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_K306P          0x33  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV9734_SD      0x34  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_IMX471         0x35  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_IMX681         0x36  //  |   v    |   v    |   v    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_DUMMY]        = {1920, 1080, 30},
@@ -108,7 +119,7 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_PS5268]       = {1920, 1080, 30},
 	[SENSOR_SC2310]       = {1920, 1080, 30},
 	[SENSOR_PS5420_HDR]   = {1952, 1944, 24},
-	[SENSOR_PS5270_HDR]   = {1536, 1536, 30},
+	[SENSOR_PS5270_HDR]   = {1536, 1536, 25},
 	[SENSOR_F53]          = {1920, 1080, 30},
 	[SENSOR_F55]          = {1920, 1080, 30},
 	[SENSOR_GC4663]       = {2560, 1440, 24},
@@ -134,6 +145,17 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_OV2735]       = {1920, 1080, 30},
 	[SENSOR_SC400AI]      = {2560, 1440, 24},
 	[SENSOR_OV50A40_CROP] = {2048, 1536, 30},
+	[SENSOR_OV9734]       = {1280,  720, 30},
+	[SENSOR_CV2003]       = {1920, 1080, 30},
+	[SENSOR_GC2093]       = {1920, 1080, 30},
+	[SENSOR_F35]          = {1920, 1080, 30},
+	[SENSOR_OV5693]       = {2592, 1944, 15},
+	[SENSOR_SC3336]       = {2304, 1296, 30},
+	[SENSOR_K06A]         = {2560, 1440, 24},
+	[SENSOR_K306P]        = {2560, 1440, 24},
+	[SENSOR_OV9734_SD]    = { 640,  360, 60},
+	[SENSOR_IMX471]       = {2304, 1728, 24},
+	[SENSOR_IMX681]       = {2000, 1500, 30},
 };
 
 #define SENSOR_MAX         5

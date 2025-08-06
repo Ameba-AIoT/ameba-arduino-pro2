@@ -1217,7 +1217,7 @@ int wifi_wowlan_set_wdt(u8  gpio,
  * @return  RTW_SUCCESS
  */
 int wifi_wowlan_set_bcn_track(u8  start_window,
-							  u8  max_window,
+							  u16  max_window,
 							  u8  increment_steps,
 							  u8  duration);
 #endif
@@ -1249,10 +1249,31 @@ int wifi_wowlan_set_pno_scan(u8  start_window,
  *
  * @param[in]   ssid : scan ssid in pno
  * @param[in]   ssid_len : ssid length
+ * @param[in]	cur_ch : current channel
+ * @param[in]	ch_list : channel list
+ * @param[in]	ch_list_len : channel list length
  * @return  RTW_SUCCESS
  */
 int wifi_wowlan_set_pno_scan_ssid(u8 *ssid,
-								  u8   ssid_len);
+								  u8  ssid_len,
+								  u8  cur_ch,
+								  u8  *ch_list,
+								  u8  ch_list_len);
+
+/**
+ * @brief   set scan ssid in pno another band
+ *
+ * @param[in]   ssid : scan ssid in pno
+ * @param[in]   ssid_len : ssid length
+ * @param[in]	ch_list : channel list
+ * @param[in]	ch_list_len : channel list length
+ * @return  RTW_SUCCESS
+ */
+int wifi_wowlan_set_pno_another_band_scan_ssid(u8 *ssid,
+		u8  ssid_len,
+		u8  *ch_list,
+		u8  ch_list_len);
+
 #endif
 
 
@@ -1337,6 +1358,34 @@ int wifi_csi_report(u32 buf_len, u8 *csi_buf, u32 *len, rtw_csi_header_t *csi_he
  */
 void wifi_set_scan_time(unsigned short active_to, unsigned short passive_to, unsigned short home_to, unsigned char probe_cnt);
 
+/**
+ * @brief  there is function for wifi_set_customized_channel_plan to set customer channel plan
+ * @param[in]  chnlplan2_4: Set 2.4g channel and scan type passive or active(refer to customized_chl_cfg)
+ * @param[in]  chnlnum2_4: The number of chanlplan2_4
+ * @param[in]  chnlplan5: Set 5g channel and scan type passive or active(refer to customized_chl_cfg)
+ * @param[in]  chnlnum5: The number of chanlplan5
+ * @param[in]  regulation2_4: The 2.4G regulation setting refers to REGULATION_TXPWR_LMT
+ * @param[in]  regulation5: The 5G regulation setting refers to REGULATION_TXPWR_LMT
+ * @return  If the function succeeds, the return value is 0.
+ * 	Otherwise, return 1.
+ */
+int wifi_set_customized_channel_plan(customized_chl_cfg_t *chnlplan2_4, u8 chnlnum2_4, customized_chl_cfg_t *chnlplan5, u8 chnlnum5, u8 regulation2_4,
+									 u8 regulation5);
+
+/**
+ * @brief   set ping connectivity ip for wifi retention for wowlan mode
+ *
+ */
+void wifi_set_connectivity_ip(void);
+
+/**
+ * @brief   set ping connectivity request function for wowlan mode
+ *
+ * @param[in]   interval_s : ping request interval(unit: second)
+ * @param[in]   timeout_s : ping request timeout(unit: second)
+ * @return  RTW_SUCCESS
+ */
+int wifi_set_connectivity_offload(uint32_t interval_s, uint32_t timeout_s);
 /**
  * @brief  set RTS/CTS capability
  * @param[in]  enable:
@@ -1423,6 +1472,42 @@ int wifi_set_channel_plan(u8 channel_plan);
  * 	Otherwise, return 1.
  */
 int wifi_issue_nulldata(unsigned int power_mode);
+
+/**
+ * @brief  there is function for wifi_get_rx_queue_count to get wifi rx queue cnt
+ * @param[in]  recvframe_cnt: can be get wifi rx queue cnt
+ * @return  If the function succeeds, the return value is 0.
+ * 	Otherwise, return 1.
+ */
+
+int wifi_get_rx_queue_count(unsigned int *recvframe_cnt);
+
+/**
+ * @brief  deinit wifi power by register method
+ * @return  None
+ */
+void wifi_power_hci_axi_deinit(void);
+
+/**
+* @brief Get router pmk information
+* @param[in] key: can be get the router PMK information
+* @Example:
+* unsigned char key[32];
+* wifi_get_wpa_global_PMK(key);
+*/
+void wifi_get_wpa_global_PMK(unsigned char *key);
+
+/**
+ * @brief  wifi set active keepalive enable
+ * @return  None
+ */
+void wifi_set_active_keepalive_enabled(u8 active_keepalive_enabled);
+
+/**
+* @brief wifi set ap_compatibilty_enabled
+* @return None
+*/
+void wifi_set_ap_compatibilty_enabled(unsigned int ap_compatibilty_enabled);
 /**
 * @}
 */

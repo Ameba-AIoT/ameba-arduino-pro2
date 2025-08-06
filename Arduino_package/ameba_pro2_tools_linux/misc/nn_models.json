@@ -1,0 +1,71 @@
+{
+    "NNTasks": {
+		"COUNT": "6"
+	},
+	
+	"modelCount": {
+		"COUNT": "7"
+	},
+	
+	"ModelSelectParamsCount": {
+		"COUNT": "8"
+	},
+	
+	"nn_task": {
+		"NNTASK": ["OBJECT_DETECTION", "FACE_DETECTION", "FACE_RECOGNITION", "AUDIO_CLASSIFICATION", "IMAGE_CLASSIFICATION", "GESTURE_DETECTION"]
+	},
+
+	"error_handler": {
+		"tasks": {
+			"OBJECT_DETECTION": ["YOLO"],
+			"FACE_DETECTION": ["SCRFD"],
+			"FACE_RECOGNITION": ["SCRFD", "MOBILEFACENET"],
+			"AUDIO_CLASSIFICATION": ["YAMNET"],
+			"IMAGE_CLASSIFICATION": ["IMGCLASS"],
+			"GESTURE_DETECTION": ["PALMDETECT", "HANDLANDMARK"]
+		},
+		"default_restriction": true
+	},
+	
+	"header": {
+		"HEADERNAME": ["Object", "FaceDetection", "Recognition", "FaceDetectionRecognition", "Audio", "Image", "Gesture"]
+	},
+	
+	"modelkeyword": {
+		"KEYWORD": ["yolov3", "yolov4", "yolov7", "scrfd", "mobilefacenet", "yamnet", "img_class", "img", "palm_detection", "hand_landmark"]
+	},
+	"model_mappings": {
+		"CUSTOMIZED_YOLOV3TINY": "yolov3_tiny",
+		"CUSTOMIZED_YOLOV4TINY": "yolov4_tiny",
+		"CUSTOMIZED_YOLOV7TINY": "yolov7_tiny",
+		"CUSTOMIZED_MOBILEFACENET": "mobilefacenet_i16",
+		"CUSTOMIZED_SCRFD": "scrfd640",
+		"CUSTOMIZED_YAMNET": "yamnet_fp16",
+		"CUSTOMIZED_IMGCLASS": "img_class",
+		"CUSTOMIZED_PALMDETECT": "palm_detection_lite_int16",
+		"CUSTOMIZED_HANDLANDMARK": "hand_landmark_lite_int16",
+		"DEFAULT_YOLOV3TINY": "yolov3_tiny",
+		"DEFAULT_YOLOV4TINY": "yolov4_tiny",
+		"DEFAULT_YOLOV7TINY": "yolov7_tiny",
+		"DEFAULT_MOBILEFACENET": "mobilefacenet_i8",
+		"DEFAULT_SCRFD": "scrfd320p",
+		"DEFAULT_YAMNET": "yamnet_fp16",
+		"DEFAULT_IMGCLASS": "img_class",
+		"DEFAULT_PALMDETECT": "palm_detection_lite_int16",
+		"DEFAULT_HANDLANDMARK": "hand_landmark_lite_int16"
+	},
+	
+	"nb_file_mapping": {
+		"yolov3_tiny": "yolov3_tiny.nb",
+		"yolov4_tiny": "yolov4_tiny.nb",
+		"yolov7_tiny": "yolov7_tiny.nb",
+		"mobilefacenet_i8": "mobilefacenet_int8.nb",
+		"mobilefacenet_i16": "mobilefacenet_int16.nb",
+		"scrfd320p": "scrfd_500m_bnkps_576x320_u8.nb",
+        "scrfd640": "scrfd_500m_bnkps_640x640_u8.nb",
+        "yamnet_fp16": "yamnet_fp16.nb",
+        "img_class": "img_class_cnn.nb",
+		"palm_detection_lite_int16": "palm_detection_lite_int16.nb",
+        "hand_landmark_lite_int16": "hand_landmark_lite_int16.nb"
+	}
+}

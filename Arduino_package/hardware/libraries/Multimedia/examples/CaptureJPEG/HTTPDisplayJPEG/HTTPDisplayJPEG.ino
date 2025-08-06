@@ -2,8 +2,8 @@
  *  and sends the image to a browser using HTTP.
  *  Use any browser and connect to the board's IP address after it has connected to WiFi
 
- Example guide：
- https://www.amebaiot.com/en/amebapro2-arduino-video-jpeg-http/
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/CaptureJPEG/Capture%20JPEG%20display%20over%20HTTP.html
 */
 #include <WiFi.h>
 #include "VideoStream.h"

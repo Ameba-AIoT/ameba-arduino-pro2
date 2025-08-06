@@ -1,11 +1,12 @@
-menu.EraseFlash=* Erase All Flash Memory (16MB)
-menu.AutoUploadMode=* Auto Flash Mode
-menu.StdLibInit=* Standard Lib
-menu.UploadBaudrate=* Upload Speed
-menu.LoadNNModelSource=* NN Model Load From
-menu.CameraOption=* Camera Options
-menu.OTAMode=* OTA Mode
-menu.FCSMode=* Camera FCS Mode
+menu.01_AutoUploadMode=* Auto Flash Mode
+menu.02_UploadBaudrate=* Upload Speed
+menu.03_EraseFlash=* Erase All Flash Memory (16MB)
+menu.04_CameraOption=* Camera Options
+menu.05_FCSMode=* Camera FCS Mode
+menu.06_LoadNNModelSource=* NN Model Load From
+menu.07_SHOWNNLOGS=* Show NN Logs
+menu.08_OTAMode=* OTA Mode
+menu.09_StdLibInit=* Standard Lib
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -24,7 +25,7 @@ Ameba_AMB82-MINI.build.core=ambpro2
 Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.menu_flags}
 Ameba_AMB82-MINI.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
 Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
-Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags}
+Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_nn_logs_flags} {build.sensor_flags}
 
 Ameba_AMB82-MINI.upload.tool=ameba_pro2_tools
 Ameba_AMB82-MINI.upload.protocol=usb_serial
@@ -36,59 +37,88 @@ Ameba_AMB82-MINI.upload.auto_mode=Disable
 Ameba_AMB82-MINI.upload.erase_flash=Disable
 Ameba_AMB82-MINI.upload.speed=2000000
 
-Ameba_AMB82-MINI.menu.EraseFlash.Disable=Disable
-Ameba_AMB82-MINI.menu.EraseFlash.Disable.upload.erase_flash=Disable
-Ameba_AMB82-MINI.menu.EraseFlash.Enable=Erase only
-Ameba_AMB82-MINI.menu.EraseFlash.Enable.upload.erase_flash=Enable
-Ameba_AMB82-MINI.menu.EraseFlash.EnableUpload=Erase then Upload
-Ameba_AMB82-MINI.menu.EraseFlash.EnableUpload.upload.erase_flash=Enable_Upload
+Ameba_AMB82-MINI.menu.01_AutoUploadMode.Disable=Disable
+Ameba_AMB82-MINI.menu.01_AutoUploadMode.Disable.upload.auto_mode=Disable
+Ameba_AMB82-MINI.menu.01_AutoUploadMode.Enable=Enable
+Ameba_AMB82-MINI.menu.01_AutoUploadMode.Enable.upload.auto_mode=Enable
 
-Ameba_AMB82-MINI.menu.AutoUploadMode.Disable=Disable
-Ameba_AMB82-MINI.menu.AutoUploadMode.Disable.upload.auto_mode=Disable
-Ameba_AMB82-MINI.menu.AutoUploadMode.Enable=Enable
-Ameba_AMB82-MINI.menu.AutoUploadMode.Enable.upload.auto_mode=Enable
+Ameba_AMB82-MINI.menu.02_UploadBaudrate.2M=2000000
+Ameba_AMB82-MINI.menu.02_UploadBaudrate.2M.upload.speed=2000000
+Ameba_AMB82-MINI.menu.02_UploadBaudrate.1M=1000000
+Ameba_AMB82-MINI.menu.02_UploadBaudrate.1M.upload.speed=1000000
+Ameba_AMB82-MINI.menu.02_UploadBaudrate.230400=230400
+Ameba_AMB82-MINI.menu.02_UploadBaudrate.230400.upload.speed=230400
 
-Ameba_AMB82-MINI.menu.StdLibInit.Enable=Arduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.StdLibInit.Enable.build.Arduino_STD_PRINTF_flags=-DArduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.StdLibInit.Disable=Disable
-Ameba_AMB82-MINI.menu.StdLibInit.Disable.build.Arduino_STD_PRINTF_flags=
+Ameba_AMB82-MINI.menu.03_EraseFlash.Disable=Disable
+Ameba_AMB82-MINI.menu.03_EraseFlash.Disable.upload.erase_flash=Disable
+Ameba_AMB82-MINI.menu.03_EraseFlash.Enable=Erase only
+Ameba_AMB82-MINI.menu.03_EraseFlash.Enable.upload.erase_flash=Enable
+Ameba_AMB82-MINI.menu.03_EraseFlash.EnableUpload=Erase then Upload
+Ameba_AMB82-MINI.menu.03_EraseFlash.EnableUpload.upload.erase_flash=Enable_Upload
 
-Ameba_AMB82-MINI.menu.UploadBaudrate.2M=2000000
-Ameba_AMB82-MINI.menu.UploadBaudrate.2M.upload.speed=2000000
-Ameba_AMB82-MINI.menu.UploadBaudrate.1M=1000000
-Ameba_AMB82-MINI.menu.UploadBaudrate.1M.upload.speed=1000000
-Ameba_AMB82-MINI.menu.UploadBaudrate.230400=230400
-Ameba_AMB82-MINI.menu.UploadBaudrate.230400.upload.speed=230400
+Ameba_AMB82-MINI.menu.04_CameraOption.f37=JXF37
+Ameba_AMB82-MINI.menu.04_CameraOption.f37.build.camera_opt=SENSOR_F37
+Ameba_AMB82-MINI.menu.04_CameraOption.f37.build.sensor_flags=-DARDUINO_SENSOR_F37
+Ameba_AMB82-MINI.menu.04_CameraOption.f53=JXF53
+Ameba_AMB82-MINI.menu.04_CameraOption.f53.build.camera_opt=SENSOR_F53
+Ameba_AMB82-MINI.menu.04_CameraOption.f53.build.sensor_flags=-DARDUINO_SENSOR_F53
+Ameba_AMB82-MINI.menu.04_CameraOption.gc2053=GC2053
+Ameba_AMB82-MINI.menu.04_CameraOption.gc2053.build.camera_opt=SENSOR_GC2053
+Ameba_AMB82-MINI.menu.04_CameraOption.gc2053.build.sensor_flags=-DARDUINO_SENSOR_GC2053
+Ameba_AMB82-MINI.menu.04_CameraOption.gc4653=GC4653
+Ameba_AMB82-MINI.menu.04_CameraOption.gc4653.build.camera_opt=SENSOR_GC4653
+Ameba_AMB82-MINI.menu.04_CameraOption.gc4653.build.sensor_flags=-DARDUINO_SENSOR_GC4653
+Ameba_AMB82-MINI.menu.04_CameraOption.gc5035=GC5035
+Ameba_AMB82-MINI.menu.04_CameraOption.gc5035.build.camera_opt=SENSOR_GC5035
+Ameba_AMB82-MINI.menu.04_CameraOption.gc5035.build.sensor_flags=-DARDUINO_SENSOR_GC5035
+Ameba_AMB82-MINI.menu.04_CameraOption.imx307=IMX307
+Ameba_AMB82-MINI.menu.04_CameraOption.imx307.build.camera_opt=SENSOR_IMX307
+Ameba_AMB82-MINI.menu.04_CameraOption.imx307.build.sensor_flags=-DARDUINO_SENSOR_IMX307
+Ameba_AMB82-MINI.menu.04_CameraOption.imx327=IMX327
+Ameba_AMB82-MINI.menu.04_CameraOption.imx327.build.camera_opt=SENSOR_IMX327
+Ameba_AMB82-MINI.menu.04_CameraOption.imx327.build.sensor_flags=-DARDUINO_SENSOR_IMX327
+Ameba_AMB82-MINI.menu.04_CameraOption.imx662=IMX662
+Ameba_AMB82-MINI.menu.04_CameraOption.imx662.build.camera_opt=SENSOR_IMX662
+Ameba_AMB82-MINI.menu.04_CameraOption.imx662.build.sensor_flags=-DARDUINO_SENSOR_IMX662
+Ameba_AMB82-MINI.menu.04_CameraOption.ps5268=PS5268
+Ameba_AMB82-MINI.menu.04_CameraOption.ps5268.build.camera_opt=SENSOR_PS5268
+Ameba_AMB82-MINI.menu.04_CameraOption.ps5268.build.sensor_flags=-DARDUINO_SENSOR_PS5268
+Ameba_AMB82-MINI.menu.04_CameraOption.ov9734=OV9734
+Ameba_AMB82-MINI.menu.04_CameraOption.ov9734.build.camera_opt=SENSOR_OV9734
+Ameba_AMB82-MINI.menu.04_CameraOption.ov9734.build.sensor_flags=-DARDUINO_SENSOR_OV9734
+Ameba_AMB82-MINI.menu.04_CameraOption.sc2336=SC2336
+Ameba_AMB82-MINI.menu.04_CameraOption.sc2336.build.camera_opt=SENSOR_SC2336
+Ameba_AMB82-MINI.menu.04_CameraOption.sc2336.build.sensor_flags=-DARDUINO_SENSOR_SC2336
 
-Ameba_AMB82-MINI.menu.LoadNNModelSource.flash=Flash
-Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_FLASH
-Ameba_AMB82-MINI.menu.LoadNNModelSource.flash.build.model_src=LoadFromFlash
-Ameba_AMB82-MINI.menu.LoadNNModelSource.sd=SD Card
-Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
-Ameba_AMB82-MINI.menu.LoadNNModelSource.sd.build.model_src=LoadFromSD
+Ameba_AMB82-MINI.menu.05_FCSMode.Disable=Disable
+Ameba_AMB82-MINI.menu.05_FCSMode.Disable.build.fcs_mode_val=Disable
+Ameba_AMB82-MINI.menu.05_FCSMode.Disable.build.fcs_mode_flags=
+Ameba_AMB82-MINI.menu.05_FCSMode.Enable=Enable
+Ameba_AMB82-MINI.menu.05_FCSMode.Enable.build.fcs_mode_val=Enable
+Ameba_AMB82-MINI.menu.05_FCSMode.Enable.build.fcs_mode_flags=-DArduino_FCS_MODE
 
-Ameba_AMB82-MINI.menu.CameraOption.f37=JXF37
-Ameba_AMB82-MINI.menu.CameraOption.f37.build.camera_opt=SENSOR_F37
-Ameba_AMB82-MINI.menu.CameraOption.gc5035=GC5035
-Ameba_AMB82-MINI.menu.CameraOption.gc5035.build.camera_opt=SENSOR_GC5035
-Ameba_AMB82-MINI.menu.CameraOption.f53=JXF53
-Ameba_AMB82-MINI.menu.CameraOption.f53.build.camera_opt=SENSOR_F53
-Ameba_AMB82-MINI.menu.CameraOption.imx327=IMX327
-Ameba_AMB82-MINI.menu.CameraOption.imx327.build.camera_opt=SENSOR_IMX327
-Ameba_AMB82-MINI.menu.CameraOption.ps5268=PS5268
-Ameba_AMB82-MINI.menu.CameraOption.ps5268.build.camera_opt=SENSOR_PS5268
+Ameba_AMB82-MINI.menu.06_LoadNNModelSource.flash=Flash
+Ameba_AMB82-MINI.menu.06_LoadNNModelSource.flash.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_FLASH
+Ameba_AMB82-MINI.menu.06_LoadNNModelSource.flash.build.model_src=LoadFromFlash
+Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd=SD Card
+Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
+Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd.build.model_src=LoadFromSD
 
-Ameba_AMB82-MINI.menu.OTAMode.Disable=Disable
-Ameba_AMB82-MINI.menu.OTAMode.Disable.build.ota_mode_val=Disable
-Ameba_AMB82-MINI.menu.OTAMode.Disable.build.ota_mode_flags=
-Ameba_AMB82-MINI.menu.OTAMode.Enable=Enable
-Ameba_AMB82-MINI.menu.OTAMode.Enable.build.ota_mode_val=Enable
-Ameba_AMB82-MINI.menu.OTAMode.Enable.build.ota_mode_flags=-DArduino_OTA_MODE
+Ameba_AMB82-MINI.menu.07_SHOWNNLOGS.Enable=Enable
+Ameba_AMB82-MINI.menu.07_SHOWNNLOGS.Enable.build.show_nn_logs_flags=-DArduino_SHOW_NN_LOGS
+Ameba_AMB82-MINI.menu.07_SHOWNNLOGS.Disable=Disable
+Ameba_AMB82-MINI.menu.07_SHOWNNLOGS.Disable.build.show_nn_logs_flags=
 
-Ameba_AMB82-MINI.menu.FCSMode.Disable=Disable
-Ameba_AMB82-MINI.menu.FCSMode.Disable.build.fcs_mode_val=Disable
-Ameba_AMB82-MINI.menu.FCSMode.Disable.build.fcs_mode_flags=
-Ameba_AMB82-MINI.menu.FCSMode.Enable=Enable
-Ameba_AMB82-MINI.menu.FCSMode.Enable.build.fcs_mode_val=Enable
-Ameba_AMB82-MINI.menu.FCSMode.Enable.build.fcs_mode_flags=-DArduino_FCS_MODE
+Ameba_AMB82-MINI.menu.08_OTAMode.Disable=Disable
+Ameba_AMB82-MINI.menu.08_OTAMode.Disable.build.ota_mode_val=Disable
+Ameba_AMB82-MINI.menu.08_OTAMode.Disable.build.ota_mode_flags=
+Ameba_AMB82-MINI.menu.08_OTAMode.Enable=Enable
+Ameba_AMB82-MINI.menu.08_OTAMode.Enable.build.ota_mode_val=Enable
+Ameba_AMB82-MINI.menu.08_OTAMode.Enable.build.ota_mode_flags=-DArduino_OTA_MODE
+
+Ameba_AMB82-MINI.menu.09_StdLibInit.Enable=Arduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.09_StdLibInit.Enable.build.Arduino_STD_PRINTF_flags=-DArduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.09_StdLibInit.Disable=Disable
+Ameba_AMB82-MINI.menu.09_StdLibInit.Disable.build.Arduino_STD_PRINTF_flags=
+
 ##############################################################

@@ -2,8 +2,8 @@
  This sketch provide a simple way to roughly calculate the delay of Ameba send delay.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-udp-send-delay/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/WiFi/Calculate%20UDP%20Sending%20Delay.html
+*/
 
 #include <WiFi.h>
 #include <WiFiUdp.h>

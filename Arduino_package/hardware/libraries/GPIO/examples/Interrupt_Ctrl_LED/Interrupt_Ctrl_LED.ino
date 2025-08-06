@@ -8,8 +8,8 @@
     If LED was light off, then turn it on.
 
  Example guide:
- https://www.amebaiot.com/en/amebapro2-arduino-gpio-interrupt/
- */
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GPIO/Interrupt%20Control%20LED.html
+*/
 
 int button = PUSH_BTN;
 int led = LED_BUILTIN;

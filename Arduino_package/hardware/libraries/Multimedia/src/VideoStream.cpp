@@ -362,6 +362,22 @@ void CameraSetting::getDayNightMode(void)
     }
 }
 
+void CameraSetting::setMinFPS(int value)
+{
+    if (value >= 1 && value <= 30) {
+        isp_set_min_fps(value);
+        printf("\r\n[INFO] Min FPS is set to %d.\n", value);
+    } else {
+        printf("\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::getMinFPS(void)
+{
+    isp_get_min_fps(&ret);
+    printf("\r\n[INFO] Min FPS = %d \n", ret);
+}
+
 void CameraSetting::reset(void)
 {
     ISPControlReset();
