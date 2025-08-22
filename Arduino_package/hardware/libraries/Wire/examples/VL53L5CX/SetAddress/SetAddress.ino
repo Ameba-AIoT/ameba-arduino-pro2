@@ -14,7 +14,8 @@
   Note: The I2C address for the device is stored in NVM so it will have to be set
   at each power on.
 
-  Example Guide: TBD
+  Example Guide:
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20Set%20Address.html
 
 */
 

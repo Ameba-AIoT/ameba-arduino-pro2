@@ -2,7 +2,8 @@
   This example shows how to use the SparkFun VL53L5CX Time-of-Flight sensor in 8x8 mode
   to detect thumbs-up or thumbs-down gestures.
 
-  Example Guide: TBD
+  Example Guide: 
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20sensor%20Hand%20Presence%20Detection.html
 */
 
 #include <Wire.h>

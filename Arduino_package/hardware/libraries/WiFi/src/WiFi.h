@@ -29,7 +29,7 @@ extern "C" {
 }
 
 #include "IPAddress.h"
-// #include "IPv6Address.h"
+#include "IPv6Address.h"
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 #include "WiFiSSLClient.h"
@@ -252,16 +252,14 @@ public:
      */
     int hostByName(const char* aHostname, IPAddress& aResult);
 
-#if 0
-        /*
-         * Resolve the given hostname to an IPv6 address.
-         * param aHostname: Name to be resolved
-         * param aResult: IPAddress structure to store the returned IPv6 address
-         * result: 1 if aIPAddrString was successfully converted to an IPv6 address,
-         *          else return the error code
-         */
-        int hostByNamev6(const char* aHostname, IPv6Address& aResult);
-#endif
+    /*
+     * Resolve the given hostname to an IPv6 address.
+     * param aHostname: Name to be resolved
+     * param aResult: IPAddress structure to store the returned IPv6 address
+     * result: 1 if aIPAddrString was successfully converted to an IPv6 address,
+     *          else return the error code
+     */
+    int hostByNamev6(const char* aHostname, IPv6Address& aResult);
 
     int apbegin(char* ssid, char* channel, uint8_t hidden_ssid = 0);
 

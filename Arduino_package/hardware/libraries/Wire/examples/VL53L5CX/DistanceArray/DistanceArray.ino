@@ -11,7 +11,8 @@
 
   This example shows how to read all 64 distance readings at once.
 
-  Example Guide: TBD
+  Example Guide: 
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20Distance%20Array.html
 */
 
 #include <Wire.h>
