@@ -57,8 +57,14 @@ IPv6Address &IPv6Address::operator=(const uint32_t address)
 {
     // memcpy(_address.dword, &address, sizeof(_address.dword));
 
-    memset(_address.byte, 0, 16);          // clear IPv6 storage
-    _address.dword[3] = htonl(address);    // put IPv4 in last 4 bytes
+    // Clear full 16-byte IPv6 storage
+    memset(_address.bytes, 0, 16);
+
+    _address.bytes[12] = (uint8_t)((address >> 24) & 0xFF);
+    _address.bytes[13] = (uint8_t)((address >> 16) & 0xFF);
+    _address.bytes[14] = (uint8_t)((address >> 8) & 0xFF);
+    _address.bytes[15] = (uint8_t)(address & 0xFF);
+
     return *this;
 }
 
