@@ -524,7 +524,7 @@ int get_receive_v6(int sock, void *recv_data, int len, int flags, uint32_t *peer
     return ret;
 }
 
-void ipv6_udp_server(const char *data_recv, const char *data_send)
+void ipv6_udp_server(char *data_recv, const char *data_send)
 {
     int server_fd;
     struct sockaddr_in6 client_addr;

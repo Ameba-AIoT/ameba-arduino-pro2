@@ -43,7 +43,7 @@ public:
     int setSockRecvTimeout(int sock, int timeout);
     static int enableIPv6();
     static int getIPv6Status();
-    void setIPv6UDPServer(const char *data_recv, const char *data_send);
+    void setIPv6UDPServer(char *data_recv, char *data_send);
 
 private:
     bool _available;
