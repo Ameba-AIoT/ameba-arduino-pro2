@@ -1,7 +1,7 @@
 /*
 
  Example guide:
- TBC
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/WiFi/IPv6%20-%20Ameba%20as%20IPv6%20Server%20Client%20over%20UDP.html
  */
 
 #include <WiFi.h>
