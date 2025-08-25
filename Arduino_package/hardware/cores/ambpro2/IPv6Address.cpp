@@ -25,6 +25,9 @@
 #include <WString.h>
 
 extern "C" {
+#ifdef _LONG_CALL_
+#undef _LONG_CALL_
+#endif
 #define _LONG_CALL_ __attribute__((long_call))
 extern _LONG_CALL_ uint32_t DiagPrintf(const char *fmt, ...);
 }
@@ -52,10 +55,12 @@ IPv6Address &IPv6Address::operator=(const uint8_t *address)
 
 IPv6Address &IPv6Address::operator=(const uint32_t address)
 {
-    memcpy(_address.dword, &address, sizeof(_address.dword));
+    // memcpy(_address.dword, &address, sizeof(_address.dword));
+
+    memset(_address.byte, 0, 16);          // clear IPv6 storage
+    _address.dword[3] = htonl(address);    // put IPv4 in last 4 bytes
     return *this;
 }
-
 
 bool IPv6Address::operator==(const uint8_t *addr) const
 {
