@@ -62,21 +62,21 @@ uint8_t WiFiUDP::begin(uint16_t port)
     return 0;
 }
 
-#if 0
-int WiFiUDP::connect(const char *host, uint16_t port) {
+int WiFiUDP::connect(const char *host, uint16_t port)
+{
     IPAddress remote_addr;
     IPv6Address remote_addr_v6;
 
     if (getIPv6Status() == 0) {
         if (WiFi.hostByName(host, remote_addr)) {
-            //return connect(remote_addr, port);
+            // return connect(remote_addr, port);
         }
     } else {
-        //printf("\r\n[INFO] WiFiUDP.cpp: connect|hostByNameV6 \n");
+        // printf("\r\n[INFO] WiFiUDP.cpp: connect|hostByNameV6 \n");
         if (WiFi.hostByNamev6(host, remote_addr_v6)) {
-            //printf("\r\n[INFO] WiFiUDP.cpp: connect v6 \n");
-            //printf("\r\n[INFO] WiFiUDP.cpp: connect ipv6 %s\n", host);
-            _sock = clientDrv.startClientV6(host, port, UDP_MODE, BLOCKING_MODE);
+            // printf("\r\n[INFO] WiFiUDP.cpp: connect v6 \n");
+            // printf("\r\n[INFO] WiFiUDP.cpp: connect ipv6 %s\n", host);
+            _sock = clientDrv.startClientV6(host, port, UDP_MODE);
         } else {
         }
 
@@ -93,7 +93,6 @@ int WiFiUDP::connect(const char *host, uint16_t port) {
     }
     return 0;
 }
-#endif
 
 /* return number of bytes available in the current packet,
    will return zero if parsePacket hasn't been called yet */
@@ -258,14 +257,17 @@ void WiFiUDP::setRecvTimeout(int timeout)
 }
 
 // IPv6 related
-// int WiFiUDP::enableIPv6() {
-//    return serverDrv.enableIPv6();
-//}
-//
-// int WiFiUDP::getIPv6Status() {
-//    return serverDrv.getIPv6Status();
-//}
-//
-// void WiFiUDP::UDPServerv6(void) {
-//    serverDrv.setIPv6UDPServer();
-//}
+int WiFiUDP::enableIPv6()
+{
+    return serverDrv.enableIPv6();
+}
+
+int WiFiUDP::getIPv6Status()
+{
+    return serverDrv.getIPv6Status();
+}
+
+void WiFiUDP::UDPServerv6(char *data_recv, char *data_send)
+{
+    serverDrv.setIPv6UDPServer(data_recv, data_send);
+}

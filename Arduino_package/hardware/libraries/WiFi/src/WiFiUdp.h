@@ -21,7 +21,7 @@
 #define WiFiUdp_h
 
 #include "IPAddress.h"
-// #include "IPv6Address.h"
+#include "IPv6Address.h"
 #include "server_drv.h"
 #include "wifi_Udp.h"
 
@@ -38,7 +38,7 @@ public:
     // initialize, start listening on specified port. Returns 1 if successful, 0 if there are no sockets available to use
     virtual uint8_t begin(uint16_t);
 
-    //    virtual int connect(const char* host, uint16_t port);
+    virtual int connect(const char* host, uint16_t port);
 
     // Finish with the UDP socket
     virtual void stop();
@@ -103,9 +103,9 @@ public:
     void setRecvTimeout(int timeout);
 
     // IPv6 related
-    ////    virtual int enableIPv6();
-    ////    virtual int getIPv6Status();
-    ////    virtual void UDPServerv6(void);
+    virtual int enableIPv6();
+    virtual int getIPv6Status();
+    virtual void UDPServerv6(char* data_recv, char* data_send);
 
     friend class WiFiDrv;
     using Print::write;
@@ -113,16 +113,16 @@ public:
 private:
     int _sock;    // socket ID
     int _client_sock;
-    //    int recvTimeout;
-    //    bool _is_connected;
+    int recvTimeout;
+    bool _is_connected;
     uint16_t _port;         // local port to listen on
     ServerDrv serverDrv;    // socket driver
-                            //    ServerDrv clientDrv;  // socket driver
-                            //    uint8_t data[DATA_LENTH];
+    ServerDrv clientDrv;    // socket driver
+    uint8_t data[DATA_LENTH];
     IPAddress _peer_ip;
     uint16_t _peer_port;
-    //    uint32_t _peer_ip_v6;
-    //    uint32_t _peer_port_v6;
+    uint32_t _peer_ip_v6;
+    uint32_t _peer_port_v6;
 };
 
 #endif

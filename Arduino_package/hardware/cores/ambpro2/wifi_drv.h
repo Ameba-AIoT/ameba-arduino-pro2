@@ -22,7 +22,7 @@
 
 #include <inttypes.h>
 #include "IPAddress.h"
-// #include "IPv6Address.h"
+#include "IPv6Address.h"
 #include "wl_definitions.h"
 
 #ifdef __cplusplus
@@ -161,14 +161,12 @@ public:
      */
     static void getIpAddress(IPAddress& ip, uint8_t interface = 0);
 
-#if 0
-        /*
-         * Get the interface IPv6 address.
-         *
-         * return: copy the ip address value in IPAddress object
-         */
-//        static void getIpv6Address();
-#endif
+    /*
+     * Get the interface IPv6 address.
+     *
+     * return: copy the ip address value in IPAddress object
+     */
+    static void getIpv6Address();
 
     /*
      * Get the interface subnet mask address.
@@ -272,7 +270,7 @@ public:
      *          else error code
      */
     static int getHostByName(const char* aHostname, IPAddress& aResult);
-    // static int getHostByNamev6(const char* aHostname, IPv6Address& aResult);
+    static int getHostByNamev6(const char* aHostname, IPv6Address& aResult);
 
     /*
      * Get the firmware version
@@ -290,7 +288,7 @@ public:
 
     static int disablePowerSave();
 
-    // static int getIPv6Status();
+    static int getIPv6Status();
 
     static void setHostname(const char* hostname);
 

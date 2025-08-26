@@ -28,8 +28,8 @@ class ServerDrv {
 public:
     int startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode = TCP_MODE, tBlockingMode blockMode = NON_BLOCKING_MODE);
     int startServer(uint16_t port, uint8_t portMode = TCP_MODE, tBlockingMode blockMode = NON_BLOCKING_MODE);
-    // int startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode = TCP_MODE);
-    // int startClientV6(const char *ipv6Address, uint16_t port, uint8_t protMode);
+    int startClientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode = TCP_MODE);
+    int startClientV6(const char *ipv6Address, uint16_t port, uint8_t protMode);
     int getAvailable(int sock);
     int availData(int sock);
     bool recvData(int sock, uint8_t *_data, uint32_t _dataLen);
@@ -41,9 +41,9 @@ public:
     bool sendtoData(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port);
     void getRemoteData(int sock, uint32_t *ip, uint16_t *port);
     int setSockRecvTimeout(int sock, int timeout);
-    // static int enableIPv6();
-    // static int getIPv6Status();
-    // void setIPv6UDPServer(void);
+    static int enableIPv6();
+    static int getIPv6Status();
+    void setIPv6UDPServer(char *data_recv, char *data_send);
 
 private:
     bool _available;

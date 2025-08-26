@@ -15,7 +15,8 @@
   Using 4x4, min frequency is 1Hz and max is 60Hz
   Using 8x8, min frequency is 1Hz and max is 15Hz
 
-  Example Guide: TBD
+  Example Guide:
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20Set%20Frequency.html
 */
 
 #include <Wire.h>

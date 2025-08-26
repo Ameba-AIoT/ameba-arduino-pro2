@@ -26,7 +26,8 @@
     1MHz, 32 byte transfer: 1.65s
     1MHz, 128 byte transfer: 1.4s
 
-  Example Guide: TBD
+  Example Guide:
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20Fast%20Startup.html
 */
 
 #include <Wire.h>
