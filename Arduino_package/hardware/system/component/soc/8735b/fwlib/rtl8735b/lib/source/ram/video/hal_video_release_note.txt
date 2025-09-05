@@ -1,3 +1,38 @@
+<08/29/2025 12:00 Juling>
+Version : RTL8735B_VOE_1.6.5.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add configuration for input/output of N images to verify path
+	2. Improve verify path close stream time
+	3. Add configuration to set i2c clock
+
+--------------------------------------------------------------------------
+<08/01/2025 12:00 Juling>
+Version : RTL8735B_VOE_1.6.4.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. support one shot mode for dynamic iq
+
+--------------------------------------------------------------------------
+<07/18/2025 12:00 Juling>
+Version : RTL8735B_VOE_1.6.3.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. CCM sum != 256 issue
+
+	VOE related
+	1. Define VOE error id
+
+--------------------------------------------------------------------------
 <05/23/2025 12:00 Juling>
 Version : RTL8735B_VOE_1.6.2.0
 Modified Files:

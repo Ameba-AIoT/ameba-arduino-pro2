@@ -101,6 +101,8 @@ typedef void (*ap_channel_switch_callback_t)(unsigned char channel, rtw_channel_
 typedef void (*rtw_joinstatus_callback_t)(\
 		rtw_join_status_t join_status);
 
+typedef void (*rtw_detail_joinstatus_callback_t)(\
+		rtw_detail_join_status_t detail_join_status);
 /**
   * @brief  The structure is used to describe the connection setting about SSID,
   *			security type and password,etc., used when connecting to an AP.
@@ -124,6 +126,7 @@ typedef struct {
 	unsigned char				roam_en;
 	unsigned char				band;			//used for wifi connection to fixed band: 0: 2.4G/5G, 1: 2.4G only, 2: 5G only
 	rtw_joinstatus_callback_t	joinstatus_user_callback;   /**< user callback for processing joinstatus, please set to NULL if not use it */
+	rtw_detail_joinstatus_callback_t	detail_joinstatus_user_callback;   /**< user detail callback for processing joinstatus, please set to NULL if not use it */
 } rtw_network_info_t;
 
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))

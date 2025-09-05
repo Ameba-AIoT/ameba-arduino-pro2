@@ -69,7 +69,15 @@ extern __u32 GlobalDebugEnable;
 			printf(__VA_ARGS__);\
 	}while(0)
 #else
-#define RTW_API_INFO printf
+extern int msg_uart_port(const char *fmt, ...);
+extern u8 OtherDebugPortEnable;
+#define RTW_API_INFO(...)     do {\
+       if(OtherDebugPortEnable){\
+         msg_uart_port(__VA_ARGS__);\
+       } else {\
+         printf(__VA_ARGS__);\
+       }\
+  }while(0)
 #endif
 #else
 #define RTW_API_INFO(args)
@@ -424,6 +432,15 @@ int wifi_scan_abort(void);
  * @note  This is an asynchronized function and will return immediately, return value
  */
 int wifi_connection_abort(void);
+
+/**
+ * @brief  Abort onoging wifi connection
+ * @param[in]  mode: 0 (abort ongoing wifi connection and this mode is same as wifi_connection_abort())
+ * @param[in]  mode: 1 (abort ongoing wifi connection and then trigger auto reconnect thread)
+ * @return  RTW_SUCCESS or RTW_ERROR.
+ * @note  This is an asynchronized function and will return immediately, return value
+ */
+int wifi_cancel_connection(int mode);
 
 /**
  * @brief  Set IPS/LPS mode.
@@ -1219,7 +1236,9 @@ int wifi_wowlan_set_wdt(u8  gpio,
 int wifi_wowlan_set_bcn_track(u8  start_window,
 							  u16  max_window,
 							  u8  increment_steps,
-							  u8  duration);
+							  u8  duration,
+							  u8  null_num,
+							  u8  loop_num);
 #endif
 
 

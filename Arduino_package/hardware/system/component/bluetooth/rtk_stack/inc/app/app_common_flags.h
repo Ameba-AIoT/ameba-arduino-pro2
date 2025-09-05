@@ -35,5 +35,7 @@
 /** @brief  Configure the authentication requirement of simple_ble_service.c */
 #define SIMP_SRV_AUTHEN_EN 1
 #endif
-
+#if (defined(F_BT_LE_5_0_AE_ADV_SUPPORT) && F_BT_LE_5_0_AE_ADV_SUPPORT) || (defined(F_BT_LE_5_0_AE_SCAN_SUPPORT) && F_BT_LE_5_0_AE_SCAN_SUPPORT)
+#define APP_LE_EXT_ADV_SCAN_SUPPORT         0
+#endif
 #endif

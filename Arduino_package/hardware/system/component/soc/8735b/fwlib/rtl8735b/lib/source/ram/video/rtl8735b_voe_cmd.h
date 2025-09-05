@@ -134,6 +134,7 @@
 #define VOE_ISP_SET_MASK				 0x251
 
 #define VOE_ISP_SET_ZOOM_CROP			 0x252
+#define VOE_ISP_GET_ZOOM_CROP			 0x255
 
 #define VOE_SET_IQ_CALI_ENABLE			 0x253
 

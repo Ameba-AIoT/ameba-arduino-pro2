@@ -22,7 +22,16 @@
 #define OTA_NN_MDL 	5
 #define OTA_CER 	6
 
+#define UPDATE_UPGRADE_PROGRESS_TO_8773   0
+
 /*******************************************************************/
+
+#if UPDATE_UPGRADE_PROGRESS_TO_8773
+
+#include <uart_service.h>
+#include <uart_cmd.h>
+
+#endif
 
 
 /****************Define the structures used*************************/
@@ -92,6 +101,7 @@ int http_update_ota(char *host, int port, char *resource);
 ** Return         : 0: OTA success
 **************************************************************************************************/
 int ext_storage_update_ota(char *filename);
+int ext_storage_update_boot_ota(char *filename);
 #endif
 
 #endif
