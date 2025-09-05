@@ -139,7 +139,7 @@ void ICPostProcess_MobileNetV2(std::vector<ImageClassificationResult> results)
             char text_str[40];
             prob = imgclass_item.score();
             if (USE_MODEL_META_DATA_EN) {
-                snprintf(text_str, sizeof(text_str), "class:%s prob:%d", imgclass.getClassNameFromMeta(imgclass.model_meta_data, class_id, (int)(prob)), (int)(prob));
+                snprintf(text_str, sizeof(text_str), "class:%s %d", imgclass.getClassNameFromMeta(imgclass.model_meta_data, class_id, (int)(prob)), (int)(prob));
             } else {
                 snprintf(text_str, sizeof(text_str), "class:%s %d", imgclassMobileNetV2ItemList[class_id].imgclassName, imgclass_item.score());
                 printf("class:%s %d\r\n", imgclassMobileNetV2ItemList[class_id].imgclassName, imgclass_item.score());
@@ -176,3 +176,4 @@ void ICPostProcess(std::vector<ImageClassificationResult> results)
         OSD.update(CHANNEL);
     }
 }
+
