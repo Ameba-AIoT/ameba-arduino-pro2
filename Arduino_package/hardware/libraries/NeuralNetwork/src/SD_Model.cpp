@@ -48,6 +48,9 @@ extern void hand_landmark_set_confidence_thresh(void *confidence_thresh);
 extern void hand_landmark_set_nms_thresh(void *nms_thresh);
 extern void hand_landmark_input_setup(void *last_res, int i, nn_data_param_t *input_param);
 
+extern int mbnv2_preprocess(void *data_in, nn_data_param_t *data_param, void *tensor_in, nn_tensor_param_t *tensor_param);
+extern int mbnv2_postprocess(void *tensor_out, nn_tensor_param_t *param, void *res);
+
 #ifdef __cplusplus
 }
 #endif
@@ -104,6 +107,12 @@ static void *handlandmark_get_SD_filename(void)
 {
     /* set filename of customized model */
     return (void *)"sd:/NN_MDL/hand_landmark.nb";
+}
+
+static void *classification_mobilenetv2_get_SD_filename(void)
+{
+    /* set filename of customized model */
+    return (void *)"sd:/NN_MDL/mobilenetv2_int16.nb";
 }
 
 nnmodel_t yolov3_tiny_from_sd = {
@@ -197,3 +206,12 @@ nnmodel_t handlandmark_from_sd = {
     .cas_in_setup = hand_landmark_input_setup,
 
     .name = "HAND_LANDMARK_SD"};
+
+nnmodel_t img_classification_mobilenetv2_from_sd = {
+    .nb = classification_mobilenetv2_get_SD_filename,
+    .preprocess = mbnv2_preprocess,
+    .postprocess = mbnv2_postprocess,
+    .model_src = MODEL_SRC_FILE,
+
+    .name = "IMGCLASSIFICATION_SD"};
+

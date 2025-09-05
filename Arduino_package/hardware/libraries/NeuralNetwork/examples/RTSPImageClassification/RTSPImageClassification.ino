@@ -12,14 +12,15 @@
 
  Models
  =======
- YOLOv3 model         DEFAULT_YOLOV3TINY   / CUSTOMIZED_YOLOV3TINY
- YOLOv4 model         DEFAULT_YOLOV4TINY   / CUSTOMIZED_YOLOV4TINY
- YOLOv7 model         DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
- SCRFD model          DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
- MobileFaceNet model  DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
- YAMNET model         DEFAULT_YAMNET       / CUSTOMIZED_YAMNET
- CNN model            DEFAULT_IMGCLASS     / CUSTOMIZED_IMGCLASS
- No model             NA_MODEL
+ YOLOv3 model               DEFAULT_YOLOV3TINY   / CUSTOMIZED_YOLOV3TINY
+ YOLOv4 model               DEFAULT_YOLOV4TINY   / CUSTOMIZED_YOLOV4TINY
+ YOLOv7 model               DEFAULT_YOLOV7TINY   / CUSTOMIZED_YOLOV7TINY
+ SCRFD model                DEFAULT_SCRFD        / CUSTOMIZED_SCRFD
+ MobileFaceNet model        DEFAULT_MOBILEFACENET/ CUSTOMIZED_MOBILEFACENET
+ YAMNET model               DEFAULT_YAMNET       / CUSTOMIZED_YAMNET
+ Custom CNN model           DEFAULT_IMGCLASS     / CUSTOMIZED_IMGCLASS
+ MobileNetV2 model          DEFAULT_IMGCLASS_MOBILENETV2     / CUSTOMIZED_IMGCLASS_MOBILENETV2
+ No model                   NA_MODEL
  */
 
 #include "WiFi.h"
@@ -30,8 +31,11 @@
 #include "VideoStreamOverlay.h"
 #include "ClassificationClassList.h"
 
+// Enable only the model comes with metadata embedded, else ClassList need to be updated
+#define USE_MODEL_META_DATA_EN 1
+
 // Color of images used to train the cnn model (RGB or Grayscale)
-#define IMAGERGB 1
+#define IMAGERGB 0
 
 #define CHANNEL   0
 #define CHANNELNN 3
@@ -85,9 +89,10 @@ void setup()
     // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
     imgclass.configVideo(configNN);
-    imgclass.configInputImageColor(IMAGERGB);
-    imgclass.setResultCallback(ICPostProcess);
-    imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS);
+    imgclass.configInputImageColor(IMAGERGB);    // only valid use for custom CNN model (e.g sequential)
+    imgclass.useModelMetaData(USE_MODEL_META_DATA_EN);
+    imgclass.setResultCallback(ICPostProcess_MobileNetV2);                                                               // MobileNetV2 model callback function: ICPostProcess_MobileNetV2, custom CNN model (e.g sequential) callback function: ICPostProcess
+    imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS_MOBILENETV2);    // if using MobileNetV2 model: DEFAULT_IMGCLASS_MOBILENETV2/CUSTOMIZED_IMGCLASS_MOBILENETV2, custom CNN model (e.g sequential): DEFAULT_IMGCLASS/CUSTOMIZED_IMGCLASS
     imgclass.begin();
 
     // Configure StreamIO object to stream data from video channel to RTSP
@@ -111,6 +116,10 @@ void setup()
 
     // Start data stream from video channel
     Camera.channelBegin(CHANNELNN);
+
+    // Start OSD drawing on RTSP video channel
+    OSD.configVideo(CHANNEL, config);
+    OSD.begin();
 }
 
 void loop()
@@ -118,12 +127,52 @@ void loop()
     // Do nothing
 }
 
-// User callback function
-void ICPostProcess(void)
+// User callback function for MobileNetV2 model
+void ICPostProcess_MobileNetV2(std::vector<ImageClassificationResult> results)
 {
-    int class_id = imgclass.classID();
-    if (imgclassItemList[class_id].filter) {    // header file
-        float prob = imgclass.score();
-        printf("class %d, score: %f, name: %s\r\n", class_id, prob, imgclassItemList[class_id].imgclassName);
+    OSD.createBitmap(CHANNEL);
+    for (int i = 0; i < imgclass.getResultCount(); i++) {
+        ImageClassificationResult imgclass_item = results[i];
+        int class_id = (int)imgclass_item.classID();
+        int prob = 0;
+        if (imgclassMobileNetV2ItemList[class_id].filter) {
+            char text_str[40];
+            prob = imgclass_item.score();
+            if (USE_MODEL_META_DATA_EN) {
+                snprintf(text_str, sizeof(text_str), "class:%s prob:%d", imgclass.getClassNameFromMeta(imgclass.model_meta_data, class_id, (int)(prob)), (int)(prob));
+            } else {
+                snprintf(text_str, sizeof(text_str), "class:%s %d", imgclassMobileNetV2ItemList[class_id].imgclassName, imgclass_item.score());
+                printf("class:%s %d\r\n", imgclassMobileNetV2ItemList[class_id].imgclassName, imgclass_item.score());
+            }
+            OSD.drawText(CHANNEL, 20, 20, text_str, OSD_COLOR_CYAN);
+        }
+    }
+    OSD.update(CHANNEL);
+}
+
+// User callback function for custom CNN (e.g sequential)
+void ICPostProcess(std::vector<ImageClassificationResult> results)
+{
+    if (imgclass.getResultCount() > 0) {
+        // uncomment if you would like to see all the probabilities for all classes
+        // printf("---- probabilities for all classes ----\r\n");
+        // for (int i = 0; i < imgclass.getResultCount(); i++) {
+        //     ImageClassificationResult imgclass_item = results[i];
+        //     int class_id = (int)imgclass_item.classID();
+        //     if (imgclassItemList[class_id].filter) {
+        //         printf("class:%s %d\r\n", imgclassItemList[class_id].imgclassName, imgclass_item.score());
+        //     }
+        // }
+
+        OSD.createBitmap(CHANNEL);
+        char text_str[40];
+        ImageClassificationResult top_imgclass_item = results[0];
+        int top_class_id = (int)top_imgclass_item.classID();
+        if (imgclassItemList[top_class_id].filter) {
+            snprintf(text_str, sizeof(text_str), "class:%s %d", imgclassItemList[top_class_id].imgclassName, top_imgclass_item.score());
+            printf("top class detected: %s %d\r\n", imgclassItemList[top_class_id].imgclassName, top_imgclass_item.score());
+        }
+        OSD.drawText(CHANNEL, 20, 20, text_str, OSD_COLOR_CYAN);
+        OSD.update(CHANNEL);
     }
 }
