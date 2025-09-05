@@ -176,4 +176,3 @@ void ICPostProcess(std::vector<ImageClassificationResult> results)
         OSD.update(CHANNEL);
     }
 }
-
