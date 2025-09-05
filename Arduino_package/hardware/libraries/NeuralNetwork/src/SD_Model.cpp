@@ -214,4 +214,3 @@ nnmodel_t img_classification_mobilenetv2_from_sd = {
     .model_src = MODEL_SRC_FILE,
 
     .name = "IMGCLASSIFICATION_SD"};
-

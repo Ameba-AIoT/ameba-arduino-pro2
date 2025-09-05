@@ -227,11 +227,11 @@ char *NNImageClassification::parseModelMetaData(mm_context_t *vipnn_ctx)
 {
     char *meta_data = NULL;
     char *nbname = NULL;
-if (ARDUINO_LOAD_MODEL == 0x02) {
-    nbname = (char *)img_classification_mobilenetv2_from_sd.nb();
-} else {
-    nbname = (char *)mobilenetv2.nb();
-}
+    if (ARDUINO_LOAD_MODEL == 0x02) {
+        nbname = (char *)img_classification_mobilenetv2_from_sd.nb();
+    } else {
+        nbname = (char *)mobilenetv2.nb();
+    }
     void *mf = nn_f_open(nbname, M_NORMAL);
     if (mf == NULL) {
         printf("open %s failed\n", nbname);
