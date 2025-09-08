@@ -63,5 +63,10 @@
 		"name" : "hand_landmark.nb",
 		"source":"binary",
 		"file":"hand_landmark_lite_int16.nb"
+	},
+	"mobilenetv2_int16":{
+		"name" : "mobilenetv2.nb",
+		"source":"binary",
+		"file":"mobilenetv2_int16.nb"
 	}
 }

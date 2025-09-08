@@ -49,10 +49,10 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_GC2053         0x02  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_GC4653         0x03  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_F37            0x04  //  |   v    |   v    |   v    |   -    |
-#define SENSOR_IMX327         0x05  //  |   v    |   -    |   v    |   v    |
-#define SENSOR_F51            0x06  //  |   v    |   v    |   v    |   v    |
+#define SENSOR_IMX327         0x05  //  |   v    |   -    |   v    |   v    |  
+#define SENSOR_F51            0x06  //  |   v    |   v    |   v    |   v    |  
 #define SENSOR_PS5258         0x07  //  |   v    |   -    |   v    |   -    |  /* don't support multi sensor function */
-#define SENSOR_SC301          0x08  //  |   v    |   v    |   v    |   v    |
+#define SENSOR_SC301          0x08  //  |   v    |   v    |   v    |   v    |  
 #define SENSOR_IMX307         0x09  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_SC2333         0x0A  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_GC4023         0x0B  //  |   v    |   v    |   v    |   -    |
@@ -61,8 +61,8 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_GC5035         0x0E  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_PS5268         0x0F  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_SC2310         0x10  //  |   v    |   -    |   v    |   -    |
-#define SENSOR_PS5420_HDR     0x11  //  |   v    |   v    |   v    |   -    |
-#define SENSOR_PS5270_HDR     0x12  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_PS5420_HDR     0x11  //  |   v    |   v    |   v    |   -    | 
+#define SENSOR_PS5270_HDR     0x12  //  |   v    |   v    |   v    |   -    | 
 #define SENSOR_F53            0x13  //  |   v    |   v    |   v    |   -    |
 #define SENSOR_F55            0x14  //  |   v    |   -    |   v    |   v    |
 #define SENSOR_GC4663         0x15  //  |   v    |   v    |   v    |   v    |
@@ -98,7 +98,14 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_K306P          0x33  //  |   v    |   -    |   -    |   -    |
 #define SENSOR_OV9734_SD      0x34  //  |   v    |   -    |   v    |   -    |
 #define SENSOR_IMX471         0x35  //  |   v    |   v    |   v    |   -    |
-#define SENSOR_IMX681         0x36  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_IMX471_12M     0x36  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_IMX471_12M_SEQ 0x37  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_IMX681         0x38  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_IMX681_12M     0x39  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_IMX681_12M_SEQ 0x3A  //  |   v    |   -    |   v    |   -    |
+#define SENSOR_FIXP_5M        0x3B  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_FIXP_2K        0x3C  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_SC5356_2M      0x3D  //  |   v    |   v    |   v    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_DUMMY]        = {1920, 1080, 30},
@@ -155,7 +162,14 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_K306P]        = {2560, 1440, 24},
 	[SENSOR_OV9734_SD]    = { 640,  360, 60},
 	[SENSOR_IMX471]       = {2304, 1728, 24},
+	[SENSOR_IMX471_12M]       = {4032, 3024, 5},
+	[SENSOR_IMX471_12M_SEQ]   = {2032, 3024, 5}, //width = 2016 + 16(overlap)
 	[SENSOR_IMX681]       = {2000, 1500, 30},
+	[SENSOR_IMX681_12M]       = {4016, 3008, 4},
+	[SENSOR_IMX681_12M_SEQ]   = {2032, 3008, 4}, //width = 2008 + 24(overlap)
+	[SENSOR_FIXP_5M]        = {2592, 1944, 30}, //fix pattern
+	[SENSOR_FIXP_2K]        = {2560, 1440, 30},
+	[SENSOR_SC5356_2M]       = {1088, 1944, 30},
 };
 
 #define SENSOR_MAX         5

@@ -202,6 +202,14 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
             _imgclassmodel = CUSTOMIZED_IMGCLASS;
             break;
         }
+        case DEFAULT_IMGCLASS_MOBILENETV2: {
+            _imgclassmodel = DEFAULT_IMGCLASS_MOBILENETV2;
+            break;
+        }
+        case CUSTOMIZED_IMGCLASS_MOBILENETV2: {
+            _imgclassmodel = CUSTOMIZED_IMGCLASS_MOBILENETV2;
+            break;
+        }
         case NA_MODEL: {
             _imgclassmodel = NA_MODEL;
             break;
@@ -369,6 +377,14 @@ void NNModelSelection::modelSelect(unsigned char nntask, unsigned char objdetmod
         }
         case CUSTOMIZED_IMGCLASS: {
             _imgclassmodel = CUSTOMIZED_IMGCLASS;
+            break;
+        }
+        case DEFAULT_IMGCLASS_MOBILENETV2: {
+            _imgclassmodel = DEFAULT_IMGCLASS_MOBILENETV2;
+            break;
+        }
+        case CUSTOMIZED_IMGCLASS_MOBILENETV2: {
+            _imgclassmodel = CUSTOMIZED_IMGCLASS_MOBILENETV2;
             break;
         }
         case NA_MODEL: {

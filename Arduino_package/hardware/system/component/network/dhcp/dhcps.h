@@ -155,6 +155,7 @@ PACK_STRUCT_END
 void dhcps_set_addr_pool(int addr_pool_set, struct ip_addr *addr_pool_start, struct ip_addr *addr_pool_end);
 void dhcps_init(struct netif *pnetif);
 void dhcps_deinit(void);
+void dhcps_set_compatibilty_enable(int compatibilty_enabled);
 
 extern struct netif *netif_default;
 

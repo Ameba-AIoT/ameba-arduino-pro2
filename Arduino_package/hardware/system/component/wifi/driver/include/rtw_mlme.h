@@ -416,11 +416,19 @@ struct mlme_priv {
 #endif
 	//For fast reconnection to keep frame info temporarily
 	union recv_frame *p_copy_recv_frame;
+	/*
+	disassoc_reason is used to judge the disconnect reason
+	65535: no beacon for a long time
+	65534: ap has changed, disconnect now
+	65533: Disconnection from driver
+	65532: Disconnection from driver due to wpa3 auth failure and then this value will change to 65533
+	*/
 	unsigned short disassoc_reason;
 	unsigned short status_code;
 
 	//conenction_bssid information
 	u8	connecting_bssid[6];
+	unsigned int	connecting_security_type;
 	u8 	scan_user_setting;  	/* used for wifi scan pecific setting */
 	//used for wifi connection to fixed band: 0: 2.4G/5G, 1: 2.4G only, 2: 5G only
 	u8	fixed_connecting_band;

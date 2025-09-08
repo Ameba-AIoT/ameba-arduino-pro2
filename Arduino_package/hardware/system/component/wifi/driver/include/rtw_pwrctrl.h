@@ -355,6 +355,7 @@ struct pwrctrl_priv {
 	u32 dhcp_renew_pkt_size;
 	u16 dhcp_renew_lease_time;
 	u16 dhcp_renew_t1;
+	u8	dhcp_renew_pb;
 #endif
 
 #ifdef CONFIG_WOWLAN_DYNAMIC_TX_PWR
@@ -430,6 +431,8 @@ struct pwrctrl_priv {
 	u8 bcntrack_max_window;
 	u8 bcntrack_increment_step;
 	u8 bcntrack_duration;
+	u8 bcntrack_null_num;
+	u8 bcntrack_loop_num;
 #endif
 
 #ifdef CONFIG_WOWLAN_PNO

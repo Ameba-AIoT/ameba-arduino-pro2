@@ -29,10 +29,10 @@ typedef struct als_data_s {
 } als_data_t;
 
 typedef struct als_config_s {
-	short thr_color_to_gray;
-	short thr_gray_to_color;
-	short thr_color_ratio;
-	short thr_valid_block;
+	unsigned short thr_color_to_gray;
+	unsigned short thr_gray_to_color;
+	unsigned short thr_color_ratio;
+	unsigned short thr_valid_block;
 	char mask[ALS_MAX_COL * ALS_MAX_ROW];
 } als_config_t;
 
