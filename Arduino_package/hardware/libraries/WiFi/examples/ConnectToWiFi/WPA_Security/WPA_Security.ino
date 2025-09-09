@@ -9,6 +9,7 @@
  by Tom Igoe
 
  modified 17 Jan 2023
+ modified 09 Sep 2025
  by Realtek SG
 
  Example guide:
@@ -17,12 +18,21 @@
 
 #include <WiFi.h>
 
+// Set if user wants the ssid/pwd manually save at flash
+// #define FLASH_SAVE
+
 // Set if user wants to key in ssid/pwd manually during operation
 // #define MANUAL_INPUT
 
 #ifdef MANUAL_INPUT    // Initialise ssid string, pwd string, and serial_in object
 // Initialise strings
 String str_ssid, str_pass;
+#endif
+
+#ifdef FLASH_SAVE
+#include <FlashMemory.h>
+int ssid_len, pass_len;
+#define FLASH_SAVE_BASE FLASH_MEMORY_APP_BASE
 #endif
 
 // If you are connecting to an iPhone WiFi hotspot, the default SSID uses Unicode (U+2019) Right Single Quotation Mark instead of ASCII apostrophe
@@ -72,14 +82,9 @@ void setup()
             Serial.print("Password entered: ");
             Serial.println(str_pass);
         }
-#endif
+
         Serial.print("Attempting to connect to WPA SSID: ");
 
-#ifndef MANUAL_INPUT
-        Serial.println(ssid);
-        // Connect to WPA/WPA2 network:
-        status = WiFi.begin(ssid, pass);
-#else
         char ssid_cust[str_ssid.length() + 1];
         char pass_cust[str_pass.length() + 1];
         strcpy(ssid_cust, str_ssid.c_str());
@@ -87,10 +92,37 @@ void setup()
         Serial.println(str_ssid.c_str());
         status = WiFi.begin(ssid_cust, pass_cust);
         str_ssid = str_pass = "";
+#else
+        Serial.print("Attempting to connect to WPA SSID: ");
+        Serial.println(ssid);
+        // Connect to WPA/WPA2 network:
+        status = WiFi.begin(ssid, pass);
 #endif
         // wait 10 seconds for connection:
         delay(10000);
     }
+
+#ifdef FLASH_SAVE
+#ifdef MANUAL_INPUT
+    ssid_len = sizeof(ssid_cust);
+    pass_len = sizeof(pass_cust);
+
+    FlashMemory.begin(FLASH_SAVE_BASE, (ssid_len + pass_len - 1));
+
+    strcpy((char*)FlashMemory.buf, ssid_cust);
+    strcat((char*)FlashMemory.buf, pass_cust);
+#else
+    ssid_len = sizeof(ssid);
+    pass_len = sizeof(pass);
+
+    FlashMemory.begin(FLASH_SAVE_BASE, (ssid_len + pass_len - 1));
+
+    strcpy((char*)FlashMemory.buf, ssid);
+    strcat((char*)FlashMemory.buf, pass);
+
+#endif
+    FlashMemory.write();
+#endif
 
     // you're connected now, so print out the data:
     Serial.println();
@@ -162,5 +194,24 @@ void printCurrentNet()
     byte encryption = WiFi.encryptionType();
     Serial.print("Encryption Type:");
     Serial.println(encryption, HEX);
+
+#ifdef FLASH_SAVE
+    FlashMemory.read();
+    Serial.print("Flash saved, address: 0x");
+    Serial.println(FLASH_SAVE_BASE, HEX);
+    Serial.print("Flash saved, SSID: ");
+
+    for (int i = 0; i < (ssid_len - 1); i++) {
+        Serial.print((char)FlashMemory.buf[i]);
+    }
+    Serial.println();
+
+    Serial.print("Flash saved, Password: ");
+    for (int j = (ssid_len - 1); j < (ssid_len + pass_len - 2); j++) {
+        Serial.print((char)FlashMemory.buf[j]);
+    }
+    Serial.println();
+#endif
+
     Serial.println();
 }
