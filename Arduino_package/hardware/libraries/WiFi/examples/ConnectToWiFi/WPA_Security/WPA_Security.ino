@@ -109,16 +109,16 @@ void setup()
 
     FlashMemory.begin(FLASH_SAVE_BASE, (ssid_len + pass_len - 1));
 
-    strcpy((char*)FlashMemory.buf, ssid_cust);
-    strcat((char*)FlashMemory.buf, pass_cust);
+    strcpy((char* )FlashMemory.buf, ssid_cust);
+    strcat((char* )FlashMemory.buf, pass_cust);
 #else
     ssid_len = sizeof(ssid);
     pass_len = sizeof(pass);
 
     FlashMemory.begin(FLASH_SAVE_BASE, (ssid_len + pass_len - 1));
 
-    strcpy((char*)FlashMemory.buf, ssid);
-    strcat((char*)FlashMemory.buf, pass);
+    strcpy((char* )FlashMemory.buf, ssid);
+    strcat((char* )FlashMemory.buf, pass);
 
 #endif
     FlashMemory.write();
