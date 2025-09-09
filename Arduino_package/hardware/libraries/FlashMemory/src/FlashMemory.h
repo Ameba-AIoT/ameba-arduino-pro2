@@ -13,10 +13,10 @@ extern "C" {
 }
 #endif
 
-// #define NAND_FLASH_SIZE             0x100000
+// #define NAND_FLASH_SIZE             0x1000000
 
-#define NOR_FLASH_SIZE            0x100000
-#define FLASH_MEMORY_APP_BASE     0xFD000
+#define NOR_FLASH_SIZE            0x1000000
+#define FLASH_MEMORY_APP_BASE     0xFD0000
 #define FLASH_MEMORY_SIZE         NOR_FLASH_SIZE
 #define MAX_FLASH_MEMORY_APP_SIZE (FLASH_MEMORY_SIZE - FLASH_MEMORY_APP_BASE)
 
