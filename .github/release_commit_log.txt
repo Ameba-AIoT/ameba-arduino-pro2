@@ -1,8 +1,16 @@
 Feature:
-- Add SparkFun VL53L5CX examples
+- Add IPv6 example
+- Update example links for ToF examples
+- Update RTSPImageClassification.ino
+- Add FLASH_SAVE function for wifi wpa connect example
 
 API Updates:
-- Add SparkFun VL53L5CX ibraries
-- Minor modification for Wire.cpp
+- Update code base
+- Update FlashMemory.h
+- Remove unused files
 
 Misc:
+- Update tool 1.4.6
+    - Update voe.bin
+- Add ameba_pro2_nn_models-1.0.3
+    - Add mobilenetv2
