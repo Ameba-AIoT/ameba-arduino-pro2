@@ -173,18 +173,15 @@ void ServerDrv::stopSocket(int sock)
 
 bool ServerDrv::sendData(int sock, const uint8_t *data, uint32_t len)
 {
-    int ret;
-    int flag = 0;
-
     if (sock < 0) {
-        return false;
+        return -1;
     }
 
-    ret = send_data(sock, data, len, flag);
+    int ret = send_data(sock, data, len, 0);
     if (ret <= 0) {
-        return false;
+        return -1;
     }
-    return true;
+    return (ssize_t)ret;
 }
 
 bool ServerDrv::sendtoData(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port)
