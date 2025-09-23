@@ -16,8 +16,8 @@
 // Use a pre-defined resolution, or choose to configure your own resolution
 // Depending on your WiFi network quality, using HD resolution may lead to an inconsistent frame rate
 // VideoSetting config(VIDEO_HD, CAM_FPS, VIDEO_JPEG, 1);
-// VideoSetting config(VIDEO_VGA, CAM_FPS, VIDEO_JPEG, 1);
-VideoSetting config(1024, 576, CAM_FPS, VIDEO_JPEG, 1);
+VideoSetting config(VIDEO_VGA, CAM_FPS, VIDEO_JPEG, 1);
+// VideoSetting config(1024, 576, CAM_FPS, VIDEO_JPEG, 1);
 
 // Convert FPS into FreeRTOS tick delay
 #define FRAME_INTERVAL (1000 / CAM_FPS / portTICK_PERIOD_MS)
@@ -28,13 +28,15 @@ int status = WL_IDLE_STATUS;
 
 WiFiServer server(80, TCP_MODE, NON_BLOCKING_MODE);
 
+static char headerBuf[64];
+
 // -------------------- HTTP header --------------------
 void sendHeader(WiFiClient &client)
 {
     client.print("HTTP/1.1 200 OK\r\n");
     client.print("Cache-Control: no-cache\r\n");
     client.print("Pragma: no-cache\r\n");
-    client.print("Connection: keep-alive\r\n");
+    client.print("Connection: close\r\n");
     client.print("Content-Type: multipart/x-mixed-replace; boundary=");
     client.println(PART_BOUNDARY);
     client.print("\r\n");
@@ -63,6 +65,9 @@ void streamTask(void *parameter)
     Camera.videoInit();
     Camera.channelBegin(CHANNEL);
 
+    char lineBuf[128];    // buffer for request lines
+    int linePos = 0;
+
     while (true) {
         WiFiClient client = server.available();
         if (!client) {
@@ -73,24 +78,27 @@ void streamTask(void *parameter)
         Serial.println("New client connected");
 
         // -------------------- Read HTTP request --------------------
-        String currentLine = "";
+        linePos = 0;
+        memset(lineBuf, 0, sizeof(lineBuf));
+
         while (client.connected()) {
             if (client.available()) {
                 char c = client.read();
-                // Print full request info
-                Serial.write(c);
 
                 if (c == '\n') {
-                    if (currentLine.length() == 0) {
-                        // End of HTTP request headers
+                    if (linePos == 0) {
+                        // End of headers
                         sendHeader(client);
                         client.print("--" PART_BOUNDARY "\r\n");
                         break;
                     } else {
-                        currentLine = "";
+                        // Print collected request header line
+                        Serial.println(lineBuf);
+                        linePos = 0;
+                        memset(lineBuf, 0, sizeof(lineBuf));
                     }
-                } else if (c != '\r') {
-                    currentLine += c;
+                } else if (c != '\r' && linePos < (int)sizeof(lineBuf) - 1) {
+                    lineBuf[linePos++] = c;
                 }
             } else {
                 vTaskDelay(1 / portTICK_PERIOD_MS);
@@ -107,11 +115,9 @@ void streamTask(void *parameter)
                 continue;
             }
 
-            char header[64];
-            snprintf(header, sizeof(header), "Content-Type: image/jpeg\r\nContent-Length: %lu\r\n\r\n", len);
+            snprintf(headerBuf, sizeof(headerBuf), "Content-Type: image/jpeg\r\nContent-Length: %lu\r\n\r\n", len);
 
-            // Break loop if client disconnected
-            if (client.write((uint8_t *)header, strlen(header)) == 0) {
+            if (client.write((uint8_t *)headerBuf, strlen(headerBuf)) == 0) {
                 break;
             }
             if (client.write((uint8_t *)addr, len) == 0) {
@@ -121,7 +127,6 @@ void streamTask(void *parameter)
                 break;
             }
 
-            // Yield to FreeRTOS to avoid Wi-Fi stack hang
             vTaskDelay(FRAME_INTERVAL);
         }
 
@@ -135,11 +140,10 @@ void setup()
     Serial.begin(115200);
     connectWiFi();
 
-    // Create FreeRTOS task for streaming
-    xTaskCreate(streamTask, "StreamTask", 4096, NULL, 1, NULL);
+    xTaskCreate(streamTask, "StreamTask", 2048, NULL, 1, NULL);
 }
 
 void loop()
 {
-    // Nothing here; streaming handled in FreeRTOS task
+    // Nothing here
 }
