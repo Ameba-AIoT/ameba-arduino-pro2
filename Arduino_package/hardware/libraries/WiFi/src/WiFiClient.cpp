@@ -211,12 +211,13 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size)
         return 0;
     }
 
-    if (!clientdrv.sendData(_sock, buf, size)) {
+    ssize_t sent = clientdrv.sendData(_sock, buf, (uint32_t)size);
+    if (sent < 0) {
         setWriteError();
         _is_connected = false;
         return 0;
     }
-    return size;
+    return (size_t)sent;
 }
 
 WiFiClient::operator bool()

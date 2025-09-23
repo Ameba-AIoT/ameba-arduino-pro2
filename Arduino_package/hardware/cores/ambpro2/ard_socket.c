@@ -26,7 +26,6 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode)
 
     // create socket
     if (protMode == TCP_MODE) {
-        // TCP
         _sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     } else {
         _sock = lwip_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -75,7 +74,6 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode)
 
     // create socket
     if (protMode == TCP_MODE) {
-        // TCP
         _sock = lwip_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
     } else {
         _sock = lwip_socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
@@ -98,7 +96,6 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode)
 
     // connection starts
     if (protMode == TCP_MODE) {
-        // TCP MODE
         if (connect(_sock, (struct sockaddr *)(&serv_addr6), sizeof(serv_addr6)) == -1) {
             printf("\r\n[ERROR] %s Connect to server failed\n", __FUNCTION__);
         }
@@ -215,6 +212,7 @@ int start_server(uint16_t port, uint8_t protMode)
 {
     int _sock;
     int timeout;
+
     // create socket
     if (protMode == TCP_MODE) {
         timeout = 3000;
@@ -376,8 +374,14 @@ int get_available(int sock)
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
+
+        lwip_setsockopt(client_fd, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable));
+        // printf("\r\n[INFO] MEM_SIZE %d \n", MEM_SIZE);
+        // printf("\r\n[INFO] PBUF_POOL_SIZE %d \n", PBUF_POOL_SIZE);
+        // printf("\r\n[INFO] TCP_SND_BUF %d \n", TCP_SND_BUF);
+
         // printf("\r\n[INFO] Accept connection successfully\n");
-        printf("\r\n[INFO] A client connected to this server :\r\n[PORT]: %d\r\n[IP]:%s\r\n\r\n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
+        printf("\r\n[INFO] A client connected to this server :\r\n[PORT]: %d\r\n[IP]: %s\r\n\r\n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
         return client_fd;
     }
 }
@@ -431,10 +435,51 @@ int recv_data(int sock, const uint8_t *data, uint32_t len, int flag)
 
 int send_data(int sock, const uint8_t *data, uint32_t len, int flag)
 {
+#if 0
     int ret;
     ret = lwip_send(sock, data, len, flag);
-
     return ret;
+#else
+
+// 1 TCP segment (1460 MSS size)
+#define CHUNK_SIZE 512
+    size_t offset = 0;
+    ssize_t sent = 0;
+    ssize_t total_sent = 0;
+    size_t remaining, to_send;
+
+    while (offset < len) {
+        remaining = len - offset;
+        to_send = remaining > CHUNK_SIZE ? CHUNK_SIZE : remaining;
+
+        sent = lwip_send(sock, data + offset, to_send, 0);
+
+        if (sent > 0) {
+            offset += sent;
+            total_sent += sent;
+            sys_msleep(1);
+
+        } else if (sent < 0 && (errno == EWOULDBLOCK || errno == EAGAIN)) {
+            // socket not ready, wait for writable
+            fd_set wfds;
+            FD_ZERO(&wfds);
+            FD_SET(sock, &wfds);
+
+            // 20ms wait
+            struct timeval tv = {0, 20000};
+            int ret = lwip_select(sock + 1, NULL, &wfds, NULL, &tv);
+            if (ret <= 0) {
+                // timeout or error, retry
+                continue;
+            }
+        } else {
+            // real error
+            return -1;
+        }
+    }
+    // success
+    return total_sent;
+#endif
 }
 
 // UDP
