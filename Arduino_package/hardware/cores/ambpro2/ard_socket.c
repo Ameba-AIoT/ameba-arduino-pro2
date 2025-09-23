@@ -74,7 +74,6 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode)
 
     // create socket
     if (protMode == TCP_MODE) {
-        // TCP
         _sock = lwip_socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
     } else {
         _sock = lwip_socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
@@ -97,7 +96,6 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode)
 
     // connection starts
     if (protMode == TCP_MODE) {
-        // TCP MODE
         if (connect(_sock, (struct sockaddr *)(&serv_addr6), sizeof(serv_addr6)) == -1) {
             printf("\r\n[ERROR] %s Connect to server failed\n", __FUNCTION__);
         }
@@ -378,9 +376,9 @@ int get_available(int sock)
         lwip_setsockopt(client_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
 
         lwip_setsockopt(client_fd, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable));
-        //printf("\r\n[INFO] MEM_SIZE %d \n", MEM_SIZE);
-        //printf("\r\n[INFO] PBUF_POOL_SIZE %d \n", PBUF_POOL_SIZE);
-        //printf("\r\n[INFO] TCP_SND_BUF %d \n", TCP_SND_BUF);
+        // printf("\r\n[INFO] MEM_SIZE %d \n", MEM_SIZE);
+        // printf("\r\n[INFO] PBUF_POOL_SIZE %d \n", PBUF_POOL_SIZE);
+        // printf("\r\n[INFO] TCP_SND_BUF %d \n", TCP_SND_BUF);
 
         // printf("\r\n[INFO] Accept connection successfully\n");
         printf("\r\n[INFO] A client connected to this server :\r\n[PORT]: %d\r\n[IP]: %s\r\n\r\n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
@@ -443,7 +441,8 @@ int send_data(int sock, const uint8_t *data, uint32_t len, int flag)
     return ret;
 #else
 
-#define CHUNK_SIZE 512 // 1 TCP segment (1460 MSS size)
+// 1 TCP segment (1460 MSS size)
+#define CHUNK_SIZE 512
     size_t offset = 0;
     ssize_t sent = 0;
     ssize_t total_sent = 0;

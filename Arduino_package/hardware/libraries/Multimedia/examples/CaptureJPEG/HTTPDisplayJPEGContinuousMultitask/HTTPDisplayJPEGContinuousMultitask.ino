@@ -10,20 +10,27 @@
 #include <WiFi.h>
 #include "VideoStream.h"
 
-#define CHANNEL 0
+#define CHANNEL       0
 #define PART_BOUNDARY "123456789000000000000987654321"
 
-// Video configuration (lower resolution + FPS for stability)
-VideoSetting config(800, 448, 20, VIDEO_JPEG, 1);
+// Use a pre-defined resolution, or choose to configure your own resolution
+// Depending on your WiFi network quality, using HD resolution may lead to an inconsistent frame rate
+// VideoSetting config(VIDEO_HD, CAM_FPS, VIDEO_JPEG, 1);
+// VideoSetting config(VIDEO_VGA, CAM_FPS, VIDEO_JPEG, 1);
+VideoSetting config(1024, 576, CAM_FPS, VIDEO_JPEG, 1);
 
-char ssid[] = "Network_SSID5";
+// Convert FPS into FreeRTOS tick delay
+#define FRAME_INTERVAL (1000 / CAM_FPS / portTICK_PERIOD_MS)
+
+char ssid[] = "Network_SSID";
 char pass[] = "Password";
 int status = WL_IDLE_STATUS;
 
 WiFiServer server(80, TCP_MODE, NON_BLOCKING_MODE);
 
 // -------------------- HTTP header --------------------
-void sendHeader(WiFiClient &client) {
+void sendHeader(WiFiClient &client)
+{
     client.print("HTTP/1.1 200 OK\r\n");
     client.print("Cache-Control: no-cache\r\n");
     client.print("Pragma: no-cache\r\n");
@@ -34,7 +41,8 @@ void sendHeader(WiFiClient &client) {
 }
 
 // -------------------- Wi-Fi Connect --------------------
-void connectWiFi() {
+void connectWiFi()
+{
     Serial.print("Connecting to Wi-Fi");
     while (status != WL_CONNECTED) {
         status = WiFi.begin(ssid, pass);
@@ -42,11 +50,13 @@ void connectWiFi() {
         delay(5000);
     }
     Serial.println();
-    Serial.print("Connected! IP: "); Serial.println(WiFi.localIP());
+    Serial.print("Connected! IP: ");
+    Serial.println(WiFi.localIP());
 }
 
 // -------------------- Streaming Task --------------------
-void streamTask(void *parameter) {
+void streamTask(void *parameter)
+{
     server.begin();
 
     Camera.configVideoChannel(CHANNEL, config);
@@ -76,8 +86,12 @@ void streamTask(void *parameter) {
                         sendHeader(client);
                         client.print("--" PART_BOUNDARY "\r\n");
                         break;
-                    } else currentLine = "";
-                } else if (c != '\r') currentLine += c;
+                    } else {
+                        currentLine = "";
+                    }
+                } else if (c != '\r') {
+                    currentLine += c;
+                }
             } else {
                 vTaskDelay(1 / portTICK_PERIOD_MS);
             }
@@ -94,17 +108,21 @@ void streamTask(void *parameter) {
             }
 
             char header[64];
-            snprintf(header, sizeof(header),
-                     "Content-Type: image/jpeg\r\nContent-Length: %lu\r\n\r\n", len);
+            snprintf(header, sizeof(header), "Content-Type: image/jpeg\r\nContent-Length: %lu\r\n\r\n", len);
 
             // Break loop if client disconnected
-            if (client.write((uint8_t *)header, strlen(header)) == 0) break;
-            if (client.write((uint8_t *)addr, len) == 0) break;
-            if (client.write((uint8_t *)"\r\n--" PART_BOUNDARY "\r\n",
-                             strlen("\r\n--" PART_BOUNDARY "\r\n")) == 0) break;
+            if (client.write((uint8_t *)header, strlen(header)) == 0) {
+                break;
+            }
+            if (client.write((uint8_t *)addr, len) == 0) {
+                break;
+            }
+            if (client.write((uint8_t *)"\r\n--" PART_BOUNDARY "\r\n", strlen("\r\n--" PART_BOUNDARY "\r\n")) == 0) {
+                break;
+            }
 
             // Yield to FreeRTOS to avoid Wi-Fi stack hang
-            vTaskDelay(50 / portTICK_PERIOD_MS); // ~20 FPS
+            vTaskDelay(FRAME_INTERVAL);
         }
 
         client.stop();
@@ -112,15 +130,16 @@ void streamTask(void *parameter) {
     }
 }
 
-// -------------------- Setup --------------------
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     connectWiFi();
 
     // Create FreeRTOS task for streaming
-    xTaskCreate(streamTask, "StreamTask", 6144, NULL, 1, NULL);
+    xTaskCreate(streamTask, "StreamTask", 4096, NULL, 1, NULL);
 }
 
-void loop() {
+void loop()
+{
     // Nothing here; streaming handled in FreeRTOS task
 }
