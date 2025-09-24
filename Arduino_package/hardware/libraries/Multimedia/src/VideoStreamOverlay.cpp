@@ -15,6 +15,8 @@ VideoStreamOverlay OSD;
 
 void VideoStreamOverlay::configVideo(int ch, VideoSetting &config)
 {
+    INIT_OSD_LOGGING();
+
     ch_enable[ch] = 1;
     ch_width[ch] = config._w;
     ch_height[ch] = config._h;

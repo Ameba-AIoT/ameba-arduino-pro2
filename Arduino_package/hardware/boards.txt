@@ -4,7 +4,7 @@ menu.03_EraseFlash=* Erase All Flash Memory (16MB)
 menu.04_CameraOption=* Camera Options
 menu.05_FCSMode=* Camera FCS Mode
 menu.06_LoadNNModelSource=* NN Model Load From
-menu.07_SHOWLOGS=* Show Logs
+menu.07_SHOWLOGS=* [Logs] Multimedia
 menu.08_OTAMode=* OTA Mode
 menu.09_StdLibInit=* Standard Lib
 
@@ -104,14 +104,16 @@ Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd=SD Card
 Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
 Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd.build.model_src=LoadFromSD
 
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.EnableAllLogs=Enable all logs
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.EnableAllLogs=Enable all
 Ameba_AMB82-MINI.menu.07_SHOWLOGS.EnableAllLogs.build.show_logs_flags=-DArduino_SHOW_ALL_LOGS
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableAllLogs=Disable all logs
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableAllLogs.build.show_logs_flags=
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.VideoLogsOnly=Enable video logs only
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.VideoLogsOnly.build.show_logs_flags=-DArduino_SHOW_VIDEO_LOGS
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.NNLogsOnly=Enable NN logs only
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.NNLogsOnly.build.show_logs_flags=-DArduino_SHOW_NN_LOGS
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.VideoLogsOnly=Video/OSD logs only
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.VideoLogsOnly.build.show_logs_flags=-DArduino_SHOW_VIDEO_OSD_LOGS
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.NNLogsOnly=NN/OSD logs only
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.NNLogsOnly.build.show_logs_flags=-DArduino_SHOW_NN_OSD_LOGS
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableVidAndNNLogs=Disable all (Soft Mute)
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableVidAndNNLogs.build.show_logs_flags=
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableAllLogs=Disable all (Hard Mute)
+Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableAllLogs.build.show_logs_flags=-DArduino_LOGS_HARD_MUTE
 
 Ameba_AMB82-MINI.menu.08_OTAMode.Disable=Disable
 Ameba_AMB82-MINI.menu.08_OTAMode.Disable.build.ota_mode_val=Disable

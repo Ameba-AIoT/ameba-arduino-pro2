@@ -21,12 +21,30 @@
 #include "Arduino.h"
 #include "cmsis_os.h"
 #include "diag.h"
-
+#if (Arduino_LOGS_HARD_MUTE)
+#include "serial_api.h"
+#include "stdio_port_func.h"
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern void voe_t2ff_prealloc(void);
+
+#if (Arduino_LOGS_HARD_MUTE)
+extern hal_uart_adapter_t log_uart;
+
+void log_uart_putc_empty(void *adapter)
+{
+    return;
+}
+
+int log_uart_getc_empty(void *adapter)
+{
+    return TRUE;
+}
+
+#endif
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
@@ -52,6 +70,15 @@ void main_task(void *)
 int main(void)
 {
     ameba_init();
+
+#if (Arduino_LOGS_HARD_MUTE)    // Off all logs (including printf)
+    stdio_port_deinit_s();
+    stdio_port_deinit_ns();
+    stdio_port_init_s((void *)&log_uart, (stdio_putc_t)&log_uart_putc_empty, (stdio_getc_t)&log_uart_getc_empty);
+    stdio_port_init_ns((void *)&log_uart, (stdio_putc_t)&log_uart_putc_empty, (stdio_getc_t)&log_uart_getc_empty);
+    hal_uart_deinit(&log_uart);
+#endif
+
     initVariant();
     voe_t2ff_prealloc();
 
