@@ -1,16 +1,10 @@
 Feature:
-- Add IPv6 example
-- Update example links for ToF examples
-- Update RTSPImageClassification.ino
-- Add FLASH_SAVE function for wifi wpa connect example
+- Add HTTPDisplayJPEGContinuousMultitask example
 
 API Updates:
-- Update code base
-- Update FlashMemory.h
-- Remove unused files
+- Update TCP api related socket, lwip_send
 
 Misc:
-- Update tool 1.4.6
-    - Update voe.bin
-- Add ameba_pro2_nn_models-1.0.3
-    - Add mobilenetv2
+- Add option to enable and disable codebase logs
+- Update board.txt
+- Update lib
