@@ -75,17 +75,28 @@ extern int dbg_sprintf(char *str, const char *fmt, ...);
 #endif
 
 extern void set_logging(int enable);
-#if defined(Arduino_SHOW_NN_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
-#define INIT_LOGGING() set_logging(1);
+extern void set_video_logging(int enable);
+extern void set_module_video_logging(int enable);
+extern void set_osd_log(int enable);
+
+#if defined(Arduino_SHOW_NN_OSD_LOGS) || defined(Arduino_SHOW_VIDEO_OSD_LOGS)
+#define INIT_OSD_LOGGING() set_osd_log(1);
 #else
-#define INIT_LOGGING() set_logging(0);
+#define INIT_OSD_LOGGING() set_osd_log(0);
 #endif
 
-extern void set_video_logging(int enable);
-#if defined(Arduino_SHOW_VIDEO_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
-#define INIT_VIDEO_LOGGING() set_video_logging(1);
+#if defined(Arduino_SHOW_NN_OSD_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
+#define INIT_NN_LOGGING() set_logging(1);
 #else
-#define INIT_VIDEO_LOGGING() set_video_logging(0);
+#define INIT_NN_LOGGING() set_logging(0);
+#endif
+
+#if defined(Arduino_SHOW_VIDEO_OSD_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
+#define INIT_VIDEO_LOGGING()        set_video_logging(1);
+#define INIT_MODULE_VIDEO_LOGGING() set_module_video_logging(1);
+#else
+#define INIT_VIDEO_LOGGING()        set_video_logging(0);
+#define INIT_MODULE_VIDEO_LOGGING() set_module_video_logging(0);
 #endif
 
 extern void *pvPortMalloc(size_t xWantedSize);

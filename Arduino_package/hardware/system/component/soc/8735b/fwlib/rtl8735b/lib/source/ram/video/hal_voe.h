@@ -156,7 +156,9 @@ void hal_voe_cpy(void *dest, void *src, size_t len);
 void hal_voe_show_fcs_result(void);
 int hal_voe_load_cali_iq(voe_cpy_t isp_cpy, int *iq_cali_addr, int *voe_ddr_addr, u32 cali_iq_size);
 
-
+#ifdef ARDUINO_SDK
+void set_hal_voe_log(int hal_voe_log_enable);
+#endif
 /** @} */ /* End of group hs_hal_voe */
 
 #ifdef __cplusplus

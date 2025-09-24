@@ -387,6 +387,8 @@ void CameraSetting::reset(void)
 VideoSetting::VideoSetting(uint8_t preset)
 {
     INIT_VIDEO_LOGGING();
+    INIT_MODULE_VIDEO_LOGGING();
+
     switch (preset) {
         case 0: {
             _resolution = VIDEO_FHD;
@@ -449,6 +451,8 @@ VideoSetting::VideoSetting(uint8_t preset)
 VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
     INIT_VIDEO_LOGGING();
+    INIT_MODULE_VIDEO_LOGGING();
+
     _resolution = resolution;
     _fps = fps;
     _bps = CAM_BPS;
@@ -486,6 +490,8 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
 VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
     INIT_VIDEO_LOGGING();
+    INIT_MODULE_VIDEO_LOGGING();
+
     _resolution = VIDEO_CUSTOM;
     _fps = fps;
     _bps = CAM_BPS;

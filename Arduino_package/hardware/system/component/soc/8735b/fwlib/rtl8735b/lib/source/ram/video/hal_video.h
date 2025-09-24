@@ -494,6 +494,10 @@ int hal_video_set_isp_stream_fps(int ch, uint32_t fps);
 int hal_video_isp_zoom_filter_coef_init(int ch, u8* buf);
 int hal_video_isp_verify_info(int ch, struct verify_ctrl_config v_cfg);
 
+#ifdef ARDUINO_SDK
+void set_hal_video_log(int hal_video_log_enable);
+#endif
+
 extern hal_video_adapter_t vv_adapter;
 
 static __inline__ int hal_video_fcs_ch(int cnt)

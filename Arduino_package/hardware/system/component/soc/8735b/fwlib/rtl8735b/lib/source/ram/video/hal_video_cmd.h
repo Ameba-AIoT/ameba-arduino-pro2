@@ -46,5 +46,7 @@ void default_parameter(commandLine_s *cml);
 
 int parse_stream_cfg(const char *streamcfg, commandLine_s *pcml);
 
-
+#ifdef ARDUINO_SDK
+void set_hal_video_cmd_log(int hal_video_cmd_log_enable);
+#endif
 #endif //
