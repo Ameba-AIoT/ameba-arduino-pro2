@@ -34,12 +34,12 @@ extern void voe_t2ff_prealloc(void);
 #if (Arduino_LOGS_HARD_MUTE)
 extern hal_uart_adapter_t log_uart;
 
-void log_uart_putc_empty(void *apapter)
+void log_uart_putc_empty(void *adapter)
 {
     return;
 }
 
-int log_uart_getc_empty(void *apapter)
+int log_uart_getc_empty(void *adapter)
 {
     return TRUE;
 }
