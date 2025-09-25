@@ -15,12 +15,13 @@
 
 // Use a pre-defined resolution, or choose to configure your own resolution
 // Depending on your WiFi network quality, using HD resolution may lead to an inconsistent frame rate
-// VideoSetting config(VIDEO_HD, CAM_FPS, VIDEO_JPEG, 1);
-VideoSetting config(VIDEO_VGA, CAM_FPS, VIDEO_JPEG, 1);
-// VideoSetting config(1024, 576, CAM_FPS, VIDEO_JPEG, 1);
+#define STREAM_FPS 15
+// VideoSetting config(VIDEO_HD, STREAM_FPS, VIDEO_JPEG, 1);
+// VideoSetting config(1024, 576, STREAM_FPS, VIDEO_JPEG, 1);
+VideoSetting config(VIDEO_VGA, STREAM_FPS, VIDEO_JPEG, 1);
 
 // Convert FPS into FreeRTOS tick delay
-#define FRAME_INTERVAL (1000 / CAM_FPS / portTICK_PERIOD_MS)
+#define FRAME_INTERVAL (1000 / STREAM_FPS / portTICK_PERIOD_MS)
 
 char ssid[] = "Network_SSID";
 char pass[] = "Password";
@@ -140,7 +141,7 @@ void setup()
     Serial.begin(115200);
     connectWiFi();
 
-    xTaskCreate(streamTask, "StreamTask", 2048, NULL, 1, NULL);
+    xTaskCreate(streamTask, "StreamTask", (8 * 1024), NULL, 1, NULL);
 }
 
 void loop()
