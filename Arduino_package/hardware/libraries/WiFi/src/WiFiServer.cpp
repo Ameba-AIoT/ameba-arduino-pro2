@@ -22,6 +22,7 @@
 #include "WiFi.h"
 #include "WiFiClient.h"
 #include "WiFiServer.h"
+#include "amb_ard_printf.h"
 
 WiFiServer::WiFiServer():
     _port(1883)
@@ -69,10 +70,10 @@ void WiFiServer::begin()
     _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
     if (_sock_ser < 0) {
         _is_connected = false;
-        printf("\r\n[ERROR] Socket connect failed \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Socket connect failed \n");
     } else {
         _is_connected = true;
-        // printf("\r\n[INFO] Socket connect successfully \n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Socket connect successfully \n");
     }
 }
 

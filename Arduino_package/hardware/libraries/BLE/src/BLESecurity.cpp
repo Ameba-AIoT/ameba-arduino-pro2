@@ -2,6 +2,7 @@
 
 #include "gap.h"
 #include "gap_bond_le.h"
+#include "amb_ard_printf.h"
 
 void (*BLESecurity::_pKeyDisplayCB)(uint8_t conn_id, uint32_t passkey) = nullptr;
 uint32_t (*BLESecurity::_pKeyInputCB)(uint8_t conn_id) = nullptr;
@@ -56,7 +57,7 @@ void BLESecurity::setStaticPin(uint32_t pin)
         _authSecReqEnable = true;
         _authSecReqFlags = GAP_AUTHEN_BIT_BONDING_FLAG | GAP_AUTHEN_BIT_MITM_FLAG | GAP_AUTHEN_BIT_SC_FLAG;
     } else {
-        printf("\r\n[ERROR] BLE Static Pin is limited to numbers up to 999999\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] BLE Static Pin is limited to numbers up to 999999\n");
     }
 }
 

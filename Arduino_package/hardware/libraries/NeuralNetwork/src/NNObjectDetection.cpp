@@ -12,6 +12,7 @@ extern "C" {
 #include "nn_utils/class_name.h"
 #include "avcodec.h"
 #include "vfs.h"
+#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -79,11 +80,11 @@ void NNObjectDetection::begin(void)
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] NNObjectDetection init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNObjectDetection init failed\n");
         return;
     }
     if ((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
-        printf("\r\n[ERROR] NNFaceDetection video not configured\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
 
@@ -104,10 +105,10 @@ void NNObjectDetection::begin(void)
 
     if (_nntask != OBJECT_DETECTION) {
         if (ARDUINO_LOAD_MODEL == 0x02) {
-            printf("\r\n[INFO] Models loaded using SD Card\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Models loaded using SD Card\n");
         } else {
             while (1) {
-                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
                 delay(5000);
             }
         }
@@ -119,17 +120,17 @@ void NNObjectDetection::begin(void)
         switch (_yolomodel) {
             case SD_YOLOV3TINY: {
                 vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny_from_sd);
-                // printf("\r\n[INFO] YOLOV3 running...\n");
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV3 running...\n");
                 break;
             }
             case SD_YOLOV4TINY: {
                 vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny_from_sd);
-                // printf("\r\n[INFO] YOLOV4 running...\n");
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV4 running...\n");
                 break;
             }
             case SD_YOLOV7TINY: {
                 vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny_from_sd);
-                // printf("\r\n[INFO] YOLOV7 running...\n");
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV7 running...\n");
                 break;
             }
         }
@@ -138,19 +139,19 @@ void NNObjectDetection::begin(void)
             case DEFAULT_YOLOV3TINY:
             case CUSTOMIZED_YOLOV3TINY: {
                 vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-                // printf("\r\n[INFO] YOLOV3 running...\n");
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV3 running...\n");
                 break;
             }
             case DEFAULT_YOLOV4TINY:
             case CUSTOMIZED_YOLOV4TINY: {
                 vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-                // printf("\r\n[INFO] YOLOV4 running...\n");
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV4 running...\n");
                 break;
             }
             case DEFAULT_YOLOV7TINY:
             case CUSTOMIZED_YOLOV7TINY: {
                 vipnn_control(_p_mmf_context->priv, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-                // printf("\r\n[INFO] YOLOV7 running...\n");
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV7 running...\n");
                 break;
             }
         }
@@ -174,7 +175,7 @@ void NNObjectDetection::end(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] NNObjectDetection deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNObjectDetection deinit failed\n");
     }
 }
 

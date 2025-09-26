@@ -15,6 +15,7 @@
 #include "gap_privacy.h"
 #include "gap_scan.h"
 #include "gap_storage_le.h"
+#include "amb_ard_printf.h"
 
 BLEAdvertData::BLEAdvertData()
 {
@@ -37,7 +38,7 @@ void BLEAdvertData::clear()
 void BLEAdvertData::addData(const uint8_t *data, uint8_t size)
 {
     if ((31 - _dataSize) < size) {
-        printf("\r\n[INFO] Insufficient space in advertising data packet\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Insufficient space in advertising data packet\n");
         return;
     }
     int i;
@@ -197,7 +198,7 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data)
             // AD Type, one octet.
             type = scan_info->data[pos];
 
-            // if (BTDEBUG) printf("\r\n[INFO] parseScanInfo: AD Structure Info: AD type 0x%x, AD Data Length %d\n", type, (length - 1));
+            // if (BTDEBUG) amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] parseScanInfo: AD Structure Info: AD type 0x%x, AD Data Length %d\n", type, (length - 1));
 
             switch (type) {
                 case GAP_ADTYPE_FLAGS: {
@@ -271,7 +272,7 @@ void BLEAdvertData::parseScanInfo(T_LE_CB_DATA *p_data)
                 default: {
                     uint8_t i = 0;
                     for (i = 0; i < (length - 1); i++) {
-                        // if (BTDEBUG) printf("\r\n[INFO] parseScanInfo: Unhandled Data = 0x%x\n", scan_info->data[(pos + i)]);
+                        // if (BTDEBUG) amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] parseScanInfo: Unhandled Data = 0x%x\n", scan_info->data[(pos + i)]);
                     }
                     break;
                 }

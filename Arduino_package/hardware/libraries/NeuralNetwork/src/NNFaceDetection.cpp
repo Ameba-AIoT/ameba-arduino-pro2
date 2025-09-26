@@ -12,6 +12,7 @@ extern "C" {
 #include "avcodec.h"
 #include "vfs.h"
 // #include "roi_delta_qp/roi_delta_qp.h"
+#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -60,20 +61,20 @@ void NNFaceDetection::begin(void)
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] NNFaceDetection init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNFaceDetection init failed\n");
         return;
     }
     if ((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
-        printf("\r\n[ERROR] NNFaceDetection video not configured\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNFaceDetection video not configured\n");
         return;
     }
 
     if (_nntask != FACE_DETECTION) {
         if (ARDUINO_LOAD_MODEL == 0x02) {
-            printf("\r\n[INFO] Models loaded using SD Card\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Models loaded using SD Card\n");
         } else {
             while (1) {
-                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
                 delay(5000);
             }
         }
@@ -102,7 +103,7 @@ void NNFaceDetection::end(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] NNFaceDetection deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNFaceDetection deinit failed\n");
     }
 }
 

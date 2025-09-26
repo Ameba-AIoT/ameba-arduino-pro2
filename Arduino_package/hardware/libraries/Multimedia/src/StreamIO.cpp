@@ -8,6 +8,7 @@ extern "C" {
 #include "miso_drv.h"
 #include "simo_drv.h"
 #include "siso_drv.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }
@@ -16,11 +17,11 @@ extern "C" {
 StreamIO::StreamIO(uint8_t numInput, uint8_t numOutput)
 {
     if (numInput > 4) {
-        printf("\r\n[ERROR] StreamIO too many inputs. Max 4 inputs.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] StreamIO too many inputs. Max 4 inputs.\n");
         return;
     }
     if (numOutput > 4) {
-        printf("\r\n[ERROR] StreamIO too many outputs. Max 4 outputs.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] StreamIO too many outputs. Max 4 outputs.\n");
         return;
     }
     if (numInput > 1) {
@@ -130,7 +131,7 @@ void StreamIO::resume(void)
 void StreamIO::registerInput(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Input not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Input not initialized correctly!\n");
         return;
     }
     if (_p_registerInput != NULL) {
@@ -143,7 +144,7 @@ void StreamIO::registerInput(const MMFModule& module)
 void StreamIO::registerInput1(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Input not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Input not initialized correctly!\n");
         return;
     }
     if (_p_registerInput1 != NULL) {
@@ -156,7 +157,7 @@ void StreamIO::registerInput1(const MMFModule& module)
 void StreamIO::registerInput2(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Input not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Input not initialized correctly!\n");
         return;
     }
     if (_p_registerInput2 != NULL) {
@@ -169,7 +170,7 @@ void StreamIO::registerInput2(const MMFModule& module)
 void StreamIO::registerInput3(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Input not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Input not initialized correctly!\n");
         return;
     }
     if (_p_registerInput3 != NULL) {
@@ -182,7 +183,7 @@ void StreamIO::registerInput3(const MMFModule& module)
 void StreamIO::registerOutput(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Output not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Output not initialized correctly!\n");
         return;
     }
     if (_p_registerOutput != NULL) {
@@ -195,7 +196,7 @@ void StreamIO::registerOutput(const MMFModule& module)
 void StreamIO::registerOutput1(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Output not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Output not initialized correctly!\n");
         return;
     }
     if (_p_registerOutput1 != NULL) {
@@ -208,7 +209,7 @@ void StreamIO::registerOutput1(const MMFModule& module)
 void StreamIO::registerOutput2(const MMFModule& module)
 {
     if (module._p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Output not initialized correctly!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Output not initialized correctly!\n");
         return;
     }
     if (_p_registerOutput2 != NULL) {

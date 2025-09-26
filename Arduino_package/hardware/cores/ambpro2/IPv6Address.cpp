@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <WString.h>
+#include "amb_ard_printf.h"
 
 extern "C" {
 #ifdef _LONG_CALL_
@@ -104,7 +105,7 @@ String IPv6Address::toString() const
 bool IPv6Address::fromString(const char *address)
 {
     // format 0011:2233:4455:6677:8899:aabb:ccdd:eeff
-    printf("streln add %d\r\n", strlen(address));
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO]streln add %d\n", strlen(address));
     if (strlen(address) != 39) {
         return false;
     }

@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "mmf2_module.h"
+#include "amb_ard_printf.h"
 extern mm_module_t rtp_module;
 
 #ifdef __cplusplus
@@ -18,7 +19,7 @@ RTP::RTP(void)
         _p_mmf_context = mm_module_open(&rtp_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] RTP init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] RTP init failed\n");
         return;
     }
 }
@@ -32,7 +33,7 @@ RTP::~RTP(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] RTP deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] RTP deinit failed\n");
     }
 }
 

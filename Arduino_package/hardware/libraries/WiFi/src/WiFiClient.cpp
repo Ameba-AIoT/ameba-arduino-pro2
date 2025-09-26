@@ -11,6 +11,7 @@ extern "C" {
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 #include "server_drv.h"
+#include "amb_ard_printf.h"
 
 WiFiClient::WiFiClient():
     _sock(MAX_SOCK_NUM)
@@ -235,9 +236,9 @@ int WiFiClient::connect(const char *host, uint16_t port)
             return connect(remote_addr, port);
         }
     } else {
-        printf("\r\n[INFO] WiFiClient.cpp: connect hostByNameV6() \n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WiFiClient.cpp: connect hostByNameV6() \n");
         if (WiFi.hostByNamev6(host, remote_addr_v6)) {
-            printf("\r\n[INFO] WiFiClient.cpp: connect ipv6: %s\n", host);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WiFiClient.cpp: connect ipv6: %s\n", host);
             _sock = clientdrv.startClientV6(host, port, TCP_MODE);
         } else {
         }
@@ -273,14 +274,14 @@ int WiFiClient::connectv6(IPv6Address ipv6, uint16_t port)
 {
     _is_connected = false;
     _sock = clientdrv.startClientv6(ipv6, port);
-    // printf("\r\n[INFO] wifiClient.cpp: connectv6 sock value: %x\n", _sock);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifiClient.cpp: connectv6 sock value: %x\n", _sock);
     if (_sock < 0) {
         _is_connected = false;
-        // printf("\r\n[INFO] wifiClient.cpp: connectv6 not connected\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifiClient.cpp: connectv6 not connected\n");
         return 0;
     } else {
         _is_connected = true;
-        // printf("\r\n[INFO] wifiClient.cpp: connectv6 connected\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifiClient.cpp: connectv6 connected\n");
         clientdrv.setSockRecvTimeout(_sock, recvTimeout);
     }
     return 1;

@@ -4,9 +4,10 @@ menu.03_EraseFlash=* Erase All Flash Memory (16MB)
 menu.04_CameraOption=* Camera Options
 menu.05_FCSMode=* Camera FCS Mode
 menu.06_LoadNNModelSource=* NN Model Load From
-menu.07_SHOWLOGS=* [Logs] Multimedia
-menu.08_OTAMode=* OTA Mode
-menu.09_StdLibInit=* Standard Lib
+menu.07_OTAMode=* OTA Mode
+menu.08_StdLibInit=* Standard Lib
+menu.09_SHOWLOGS=* System: Multimedia logs
+menu.10_SHOWLOGS=* Arduino: API logs
 
 ##############################################################
 # PLEASE DO NOT PUT BOARDS ABOVE THE OFFICIAL AMEBA BOARDS! ##
@@ -25,7 +26,7 @@ Ameba_AMB82-MINI.build.core=ambpro2
 Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DBOARD_AMB82_MINI {build.usb_flags} {build.menu_flags}
 Ameba_AMB82-MINI.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
 Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
-Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_logs_flags} {build.sensor_flags}
+Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_logs_flags} {build.show_arduino_logs_flags} {build.sensor_flags}
 
 Ameba_AMB82-MINI.upload.tool=ameba_pro2_tools
 Ameba_AMB82-MINI.upload.protocol=usb_serial
@@ -104,27 +105,36 @@ Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd=SD Card
 Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd.build.Arduino_LOAD_MODEL_flags=-DArduino_LOAD_MODEL_SD
 Ameba_AMB82-MINI.menu.06_LoadNNModelSource.sd.build.model_src=LoadFromSD
 
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.EnableAllLogs=Enable all
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.EnableAllLogs.build.show_logs_flags=-DArduino_SHOW_ALL_LOGS
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.VideoLogsOnly=Video/OSD logs only
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.VideoLogsOnly.build.show_logs_flags=-DArduino_SHOW_VIDEO_OSD_LOGS
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.NNLogsOnly=NN/OSD logs only
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.NNLogsOnly.build.show_logs_flags=-DArduino_SHOW_NN_OSD_LOGS
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableVidAndNNLogs=Disable all (Soft Mute)
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableVidAndNNLogs.build.show_logs_flags=
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableAllLogs=Disable all (Hard Mute)
-Ameba_AMB82-MINI.menu.07_SHOWLOGS.DisableAllLogs.build.show_logs_flags=-DArduino_LOGS_HARD_MUTE
+Ameba_AMB82-MINI.menu.07_OTAMode.Disable=Disable
+Ameba_AMB82-MINI.menu.07_OTAMode.Disable.build.ota_mode_val=Disable
+Ameba_AMB82-MINI.menu.07_OTAMode.Disable.build.ota_mode_flags=
+Ameba_AMB82-MINI.menu.07_OTAMode.Enable=Enable
+Ameba_AMB82-MINI.menu.07_OTAMode.Enable.build.ota_mode_val=Enable
+Ameba_AMB82-MINI.menu.07_OTAMode.Enable.build.ota_mode_flags=-DArduino_OTA_MODE
 
-Ameba_AMB82-MINI.menu.08_OTAMode.Disable=Disable
-Ameba_AMB82-MINI.menu.08_OTAMode.Disable.build.ota_mode_val=Disable
-Ameba_AMB82-MINI.menu.08_OTAMode.Disable.build.ota_mode_flags=
-Ameba_AMB82-MINI.menu.08_OTAMode.Enable=Enable
-Ameba_AMB82-MINI.menu.08_OTAMode.Enable.build.ota_mode_val=Enable
-Ameba_AMB82-MINI.menu.08_OTAMode.Enable.build.ota_mode_flags=-DArduino_OTA_MODE
+Ameba_AMB82-MINI.menu.08_StdLibInit.Enable=Arduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.08_StdLibInit.Enable.build.Arduino_STD_PRINTF_flags=-DArduino_STD_PRINTF
+Ameba_AMB82-MINI.menu.08_StdLibInit.Disable=Disable
+Ameba_AMB82-MINI.menu.08_StdLibInit.Disable.build.Arduino_STD_PRINTF_flags=
 
-Ameba_AMB82-MINI.menu.09_StdLibInit.Enable=Arduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.09_StdLibInit.Enable.build.Arduino_STD_PRINTF_flags=-DArduino_STD_PRINTF
-Ameba_AMB82-MINI.menu.09_StdLibInit.Disable=Disable
-Ameba_AMB82-MINI.menu.09_StdLibInit.Disable.build.Arduino_STD_PRINTF_flags=
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.EnableAllLogs=Enable all
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.EnableAllLogs.build.show_logs_flags=-DArduino_SHOW_ALL_LOGS
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.VideoLogsOnly=Video/OSD logs only
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.VideoLogsOnly.build.show_logs_flags=-DArduino_SHOW_VIDEO_OSD_LOGS
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.NNLogsOnly=NN/OSD logs only
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.NNLogsOnly.build.show_logs_flags=-DArduino_SHOW_NN_OSD_LOGS
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.DisableVidAndNNLogs=Disable all (Soft Mute)
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.DisableVidAndNNLogs.build.show_logs_flags=
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.DisableAllLogs=Disable all (Hard Mute)
+Ameba_AMB82-MINI.menu.09_SHOWLOGS.DisableAllLogs.build.show_logs_flags=-DArduino_LOGS_HARD_MUTE
+
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.EnableAllArdLogs=Enable all
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.EnableAllArdLogs.build.show_arduino_logs_flags=-DArduino_LOGS_ALL
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.EnableArdErrLogs=Error logs
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.EnableArdErrLogs.build.show_arduino_logs_flags=-DArduino_LOGS_ERR
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.EnableArdInfLogs=Info logs
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.EnableArdInfLogs.build.show_arduino_logs_flags=-DArduino_LOGS_INFO
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.DisableAllLogs=Disable all
+Ameba_AMB82-MINI.menu.10_SHOWLOGS.DisableAllLogs.build.show_arduino_logs_flags=
 
 ##############################################################

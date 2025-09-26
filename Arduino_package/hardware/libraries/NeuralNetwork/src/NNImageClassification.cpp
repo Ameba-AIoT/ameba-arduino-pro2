@@ -15,6 +15,7 @@ extern "C" {
 #include "vfs.h"
 #include "nn_file_op.h"
 #include <cJSON.h>
+#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -80,11 +81,11 @@ void NNImageClassification::begin(void)
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] NNImageClassification init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNImageClassification init failed\n");
         return;
     }
     if ((roi_nn.img.width == 0) || (roi_nn.img.height == 0)) {
-        printf("\r\n[ERROR] NNImageClassification video not configured\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNImageClassification video not configured\n");
         return;
     }
 
@@ -105,10 +106,10 @@ void NNImageClassification::begin(void)
 
     if (_nntask != IMAGE_CLASSIFICATION) {
         if (ARDUINO_LOAD_MODEL == 0x02) {
-            printf("\r\n[INFO] Models loaded using SD Card\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Models loaded using SD Card\n");
         } else {
             while (1) {
-                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
                 delay(5000);
             }
         }
@@ -164,7 +165,7 @@ void NNImageClassification::end(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] NNImageClassification deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNImageClassification deinit failed\n");
     }
 }
 
@@ -211,9 +212,9 @@ void NNImageClassification::ICResultCallback(void *p, void *img_param)
     img_class_result_vector.resize((size_t)out->res_cnt);
     int obj_num = out->res_cnt;
 
-    // printf("object num = %d\r\n", obj_num);
+    // amb_ard_printf(ARD_LOG_INF, "[INFO] object num = %d\r\n", obj_num);
     for (i = 0; i < obj_num; i++) {
-        //     printf("prob: %f, class: %d\n", (float)result[i].prob, (int)result[i].clsid);
+        //     amb_ard_printf(ARD_LOG_INF, "[INFO] prob: %f, class: %d\n", (float)result[i].prob, (int)result[i].clsid);
         img_class_result_vector[i].result.clsid = (int)result[i].clsid;
         img_class_result_vector[i].result.prob = (float)result[i].prob;
     }
@@ -234,7 +235,7 @@ char *NNImageClassification::parseModelMetaData(mm_context_t *vipnn_ctx)
     }
     void *mf = nn_f_open(nbname, M_NORMAL);
     if (mf == NULL) {
-        printf("open %s failed\n", nbname);
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] open %s failed\n", nbname);
         return NULL;
     }
     nn_f_seek(mf, 0, SEEK_END);
@@ -262,12 +263,12 @@ char *NNImageClassification::parseModelMetaData(mm_context_t *vipnn_ctx)
         if (meta_data) {
             nn_f_seek(mf, metapos, SEEK_SET);
             nn_f_read(mf, meta_data, meta_size);
-            printf("meta data:%s\r\n", meta_data);
+            amb_ard_printf(ARD_LOG_INF, "[INFO] meta data:%s\r\n", meta_data);
         } else {
-            printf("malloc meta data fail.\r\n");
+            amb_ard_printf(ARD_LOG_ERR, "[ERROR] malloc meta data fail.\r\n");
         }
     } else {
-        printf("meta data of model not found.\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] meta data of model not found.\r\n");
     }
     nn_f_close(mf);
     return meta_data;
@@ -281,12 +282,12 @@ char *NNImageClassification::getClassNameFromMeta(char *meta_data, int class_id,
     char *jsonstr = meta_data;
     cJSON *root = cJSON_Parse(jsonstr);
     if (!root) {
-        printf("Failed to parse json string\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] Failed to parse json string\r\n");
         return NULL;
     }
     // parse json array data from class_id
     char *class_name = cJSON_GetArrayItem(root, class_id)->valuestring;
-    printf("score: %d, class id: %d, class name: %s \r\n", prob, class_id, class_name);
+    amb_ard_printf(ARD_LOG_INF, "[INFO] score: %d, class id: %d, class name: %s \r\n", prob, class_id, class_name);
     cJSON_Delete(root);
     return class_name;
 }
