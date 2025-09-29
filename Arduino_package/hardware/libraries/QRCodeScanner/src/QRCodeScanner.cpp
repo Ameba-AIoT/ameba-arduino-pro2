@@ -12,7 +12,6 @@ extern "C" {
 #endif
 
 
-
 QRCodeScanner::QRCodeScanner()
 {
 }

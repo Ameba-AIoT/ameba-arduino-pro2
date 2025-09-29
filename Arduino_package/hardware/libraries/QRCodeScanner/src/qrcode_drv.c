@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
@@ -19,7 +21,6 @@
 #define VIDEO_3M   7
 #define VIDEO_5M   8
 #define VIDEO_2K   9
-
 
 #define V1_CHANNEL    0
 #define V1_RESOLUTION VIDEO_VGA

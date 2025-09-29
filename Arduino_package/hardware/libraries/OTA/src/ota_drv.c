@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include <osdep_service.h>
 #include <wifi_constants.h>
 #include "wifi_conf.h"
