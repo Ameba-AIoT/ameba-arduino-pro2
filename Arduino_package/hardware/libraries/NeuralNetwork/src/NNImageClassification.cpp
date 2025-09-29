@@ -15,7 +15,6 @@ extern "C" {
 #include "vfs.h"
 #include "nn_file_op.h"
 #include <cJSON.h>
-#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 

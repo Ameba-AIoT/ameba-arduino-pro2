@@ -1,7 +1,8 @@
+#include "Arduino.h"
+
 #include "demuxer_drv.h"
 #include "mmf2_module.h"
 #include "module_demuxer.h"
-#include "amb_ard_printf.h"
 
 static demuxer_params_t demuxer_params = {
     .start_time = 0,

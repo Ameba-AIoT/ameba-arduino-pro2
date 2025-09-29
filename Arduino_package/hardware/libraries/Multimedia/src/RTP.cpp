@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "mmf2_module.h"
-#include "amb_ard_printf.h"
 extern mm_module_t rtp_module;
 
 #ifdef __cplusplus

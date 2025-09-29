@@ -30,8 +30,6 @@
 #include "os_msg.h"
 #include "app_msg.h"
 
-#include "amb_ard_printf.h"
-
 BLEDevice BLE;
 
 uint8_t BLEDevice::_bleState = 0;

@@ -6,7 +6,6 @@
 #include "module_video.h"
 #include "freertos_service.h"
 #include "sensor.h"
-#include "amb_ard_printf.h"
 
 #define QR_CODE_MAX_SCAN_COUNT 5
 

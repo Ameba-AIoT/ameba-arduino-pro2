@@ -1,7 +1,8 @@
+#include "Arduino.h"
+
 #include "mimo_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_mimo.h"
-#include "amb_ard_printf.h"
 
 static uint8_t numIn = 0;
 

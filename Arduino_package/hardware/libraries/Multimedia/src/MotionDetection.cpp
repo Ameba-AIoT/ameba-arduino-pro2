@@ -9,7 +9,6 @@ extern "C" {
 #include "md_api.h"
 #include "module_md.h"
 #include "module_eip.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

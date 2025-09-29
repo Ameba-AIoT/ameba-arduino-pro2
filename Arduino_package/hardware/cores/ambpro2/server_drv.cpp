@@ -1,10 +1,10 @@
+#include "Arduino.h"
 #include "server_drv.h"
 #include "platform_stdlib.h"
 
 #ifdef __cplusplus
 extern "C" {
 #include "ard_socket.h"
-#include "amb_ard_printf.h"
 }
 #endif
 

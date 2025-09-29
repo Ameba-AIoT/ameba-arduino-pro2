@@ -1,7 +1,8 @@
+#include "Arduino.h"
+
 #include "siso_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_siso.h"
-#include "amb_ard_printf.h"
 
 uint32_t sisoCreate(void)
 {

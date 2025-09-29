@@ -7,7 +7,6 @@ extern "C" {
 #include "msc/inc/usbd_msc.h"
 #include "sdio_combine.h"
 #include "sys_api.h"
-#include "amb_ard_printf.h"
 
 // from fatfs_sdcard_api.h
 extern void sd_gpio_init(void);

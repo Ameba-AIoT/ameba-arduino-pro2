@@ -11,7 +11,6 @@ extern "C" {
 #include "WiFiClient.h"
 #include "WiFiServer.h"
 #include "server_drv.h"
-#include "amb_ard_printf.h"
 
 WiFiClient::WiFiClient():
     _sock(MAX_SOCK_NUM)

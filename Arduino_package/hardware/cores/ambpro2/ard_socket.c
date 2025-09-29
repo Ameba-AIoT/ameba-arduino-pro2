@@ -1,4 +1,5 @@
-#include "amb_ard_printf.h"
+#include "Arduino.h"
+
 #include "ard_socket.h"
 
 #include <lwip/netif.h>

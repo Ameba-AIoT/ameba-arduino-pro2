@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "osd_render.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

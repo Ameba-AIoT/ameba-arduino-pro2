@@ -17,7 +17,6 @@ extern "C" {
 #include "vfs.h"
 #include "osd_render.h"
 #include "roi_delta_qp/roi_delta_qp.h"
-#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 

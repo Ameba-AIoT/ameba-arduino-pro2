@@ -23,7 +23,6 @@
 #include "WiFiUdp.h"
 // #include "WiFiClient.h"
 // #include "WiFiServer.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {

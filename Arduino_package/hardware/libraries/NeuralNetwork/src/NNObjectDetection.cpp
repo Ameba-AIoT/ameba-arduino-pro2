@@ -12,7 +12,6 @@ extern "C" {
 #include "nn_utils/class_name.h"
 #include "avcodec.h"
 #include "vfs.h"
-#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 

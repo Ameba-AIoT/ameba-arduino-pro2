@@ -7,7 +7,6 @@ extern "C" {
 #include "mmf2_link.h"
 #include "mmf2_siso.h"
 #include "isp_ctrl_api.h"
-#include "amb_ard_printf.h"
 #ifdef __cplusplus
 }
 #endif

@@ -1,6 +1,5 @@
 #include "Arduino.h"
 #include "AmebaFatFSFile.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {

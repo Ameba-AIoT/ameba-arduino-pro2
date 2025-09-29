@@ -1,7 +1,8 @@
+#include "Arduino.h"
+
 #include "simo_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_simo.h"
-#include "amb_ard_printf.h"
 
 uint32_t simoCreate(void)
 {

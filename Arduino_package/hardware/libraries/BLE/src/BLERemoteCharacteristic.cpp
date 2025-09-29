@@ -2,7 +2,6 @@
 #include "BLEClient.h"
 
 #include "profile_client.h"
-#include "amb_ard_printf.h"
 
 //------------- Configure -------------//
 

@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "ard_ssl.h"
 #include <sockets.h>
 #include <lwip/netif.h>
@@ -9,9 +11,7 @@
 #include <mbedtls/ctr_drbg.h>
 #include <mbedtls/entropy.h>
 #include <FreeRTOS.h>
-#include "amb_ard_printf.h"
 
-#define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messages, 5 to enable all debug messages
 #define MBEDTLS_EXPORT_KEY          0
 
 static mbedtls_ctr_drbg_context *drbg_ctx = NULL;

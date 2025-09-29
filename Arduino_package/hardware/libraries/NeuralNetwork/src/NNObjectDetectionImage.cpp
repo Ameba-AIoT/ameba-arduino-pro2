@@ -9,7 +9,6 @@ extern "C" {
 
 #include "model_yolo.h"
 #include "siso_drv.h"
-#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 

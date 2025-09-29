@@ -23,7 +23,6 @@
 
 #include "wifi_drv.h"
 #include "wiring.h"
-#include "amb_ard_printf.h"
 
 WiFiClass::WiFiClass()
 {

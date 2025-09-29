@@ -15,7 +15,6 @@
 #include "gap_privacy.h"
 #include "gap_scan.h"
 #include "gap_storage_le.h"
-#include "amb_ard_printf.h"
 
 uint8_t BLEScan::_scanProcessing = 0;
 

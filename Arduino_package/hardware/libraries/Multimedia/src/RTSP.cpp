@@ -7,7 +7,6 @@ extern "C" {
 
 #include "rtsp_drv.h"
 #include "avcodec.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

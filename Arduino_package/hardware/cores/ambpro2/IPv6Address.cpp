@@ -23,7 +23,6 @@
 
 #include <stdio.h>
 #include <WString.h>
-#include "amb_ard_printf.h"
 
 extern "C" {
 #ifdef _LONG_CALL_

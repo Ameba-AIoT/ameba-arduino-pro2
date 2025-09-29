@@ -22,7 +22,6 @@
 #include "WiFi.h"
 #include "WiFiClient.h"
 #include "WiFiServer.h"
-#include "amb_ard_printf.h"
 
 WiFiServer::WiFiServer():
     _port(1883)
