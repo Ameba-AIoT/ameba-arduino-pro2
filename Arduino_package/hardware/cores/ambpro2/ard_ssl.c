@@ -12,7 +12,7 @@
 #include <mbedtls/entropy.h>
 #include <FreeRTOS.h>
 
-#define MBEDTLS_EXPORT_KEY          0
+#define MBEDTLS_EXPORT_KEY 0
 
 static mbedtls_ctr_drbg_context *drbg_ctx = NULL;
 static mbedtls_entropy_context *ent_ctx = NULL;
