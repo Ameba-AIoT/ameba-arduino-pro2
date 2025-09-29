@@ -25,6 +25,8 @@
 #include "serial_api.h"
 #include "stdio_port_func.h"
 #endif
+#include <rtw_debug.h>
+extern u8 OtherDebugPortEnable;
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -70,6 +72,12 @@ void main_task(void *)
 int main(void)
 {
     ameba_init();
+
+#if (Arduino_SHOW_WIFI_LOGS)
+    OtherDebugPortEnable = 0;
+#else
+    OtherDebugPortEnable = 1;
+#endif
 
 #if (Arduino_LOGS_HARD_MUTE)    // Off all logs (including printf)
     stdio_port_deinit_s();

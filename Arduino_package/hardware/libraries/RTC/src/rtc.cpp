@@ -1,6 +1,7 @@
 #include "rtc.h"
 #include <time.h>
 #include "wait_api.h"
+#include "amb_ard_printf.h"
 
 RTCClass::RTCClass(){};
 RTCClass::~RTCClass(){};
@@ -72,7 +73,7 @@ long long RTCClass::SetEpoch(int year, int month, int day, int hour, int min, in
     t.tm_isdst = -1;    // Is DST on? 1 = yes, 0 = no, -1 = unknown
     t_of_day = mktime(&t);
 
-    // printf("\r\n[INFO] seconds since the Epoch: %d\n", (long)t_of_day);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] seconds since the Epoch: %d\n", (long)t_of_day);
     return t_of_day;
 }
 
@@ -87,9 +88,9 @@ void RTCClass::EnableAlarm(int day, int hour, int min, int sec, void (*rtc_handl
     alarm.min = min;
     alarm.sec = sec;
     if (1 != rtc_set_alarm(&alarm, (alarm_irq_handler)rtc_handler)) {
-        printf("\r\n[ERROR] Alarm set fail\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Alarm set fail\n");
     } else {
-        // printf("\r\n[INFO] Alarm set success\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Alarm set success\n");
     }
 }
 
@@ -99,7 +100,7 @@ void RTCClass::EnableAlarm(int day, int hour, int min, int sec, void (*rtc_handl
 void RTCClass::DisableAlarm(void)
 {
     rtc_disable_alarm();
-    // printf("\r\n[INFO] Alarm disabled\r\n");
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Alarm disabled\r\n");
 }
 
 RTCClass rtc;

@@ -11,6 +11,7 @@
 
 #include "SPI.h"
 #include "Arduino.h"
+#include "amb_ard_printf.h"
 
 spi_t spi_obj0;
 spi_t spi_obj1;
@@ -114,7 +115,7 @@ void SPIClass::begin(char SPI_mode)
         // Mark SPI init status
         _initStatus = true;
     } else {
-        printf("\r\n[ERROR] SPI begin: SPI mode \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SPI begin: SPI mode \n");
         return;
     }
 }
@@ -148,7 +149,7 @@ void SPIClass::begin(int ss_pin, char SPI_mode)
         // Mark SPI init status
         _initStatus = true;
     } else {
-        printf("\r\n[ERROR] SPI begin: SPI mode \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SPI begin: SPI mode \n");
         return;
     }
 }
@@ -192,7 +193,7 @@ byte SPIClass::transfer(uint8_t data, SPITransferMode mode)
 {    // transfer 1 byte data without SS
     (void)mode;
     spi_master_write(pSpiMaster, data);
-    // printf("\r\n[INFO] Master write: %02X\n", _data);
+    // amb_ard_printf(ARD_LOG_INFO, "\r\n[INFO] Master write: %02X\n", _data);
     return 0;
 }
 
@@ -203,7 +204,7 @@ byte SPIClass::transfer(byte pin, uint8_t data, SPITransferMode mode)
         digitalWrite(pin, 0);
     }
     spi_master_write(pSpiMaster, data);
-    // printf("\r\n[INFO] Master write: %02X\n", _data);
+    // amb_ard_printf(ARD_LOG_INFO, "\r\n[INFO] Master write: %02X\n", _data);
 
     return 0;
 }
@@ -246,7 +247,7 @@ uint16_t SPIClass::transfer16(byte pin, uint16_t data, SPITransferMode mode)
         t.msb = transfer(pin, t.msb, SPI_CONTINUE);
         t.lsb = transfer(pin, t.lsb, mode);
     }
-    // printf("\r\n[INFO] Master write: %04X\n", t.val);
+    // amb_ard_printf(ARD_LOG_INFO, "\r\n[INFO] Master write: %04X\n", t.val);
 
     data = t.val;
     return data;

@@ -8,6 +8,7 @@ extern "C" {
 
 #include "mmf2_module.h"
 #include "module_audio.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

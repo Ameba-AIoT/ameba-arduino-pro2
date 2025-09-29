@@ -9,6 +9,7 @@ extern "C" {
 #include "md_api.h"
 #include "module_md.h"
 #include "module_eip.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }
@@ -62,7 +63,7 @@ void MotionDetection::begin(void)
         _p_mmf_context = MDInit();
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] MD init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MD init failed\n");
         return;
     }
 
@@ -87,7 +88,7 @@ void MotionDetection::end(void)
     if (MDDeinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] MD deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MD deinit failed\n");
     }
 }
 

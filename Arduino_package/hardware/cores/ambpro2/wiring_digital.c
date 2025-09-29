@@ -17,6 +17,7 @@
 */
 
 #include "Arduino.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +50,7 @@ void pinMode(uint32_t ulPin, uint32_t ulMode)
 
     if ((g_APinDescription[ulPin].ulPinMode & 0x000000FF) == ulMode) {
         // Nothing changes
-        // printf("\r\n[INFO] The pin mode is unchanged. \n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] The pin mode is unchanged. \n");
         return;
     }
 
@@ -93,7 +94,7 @@ void pinMode(uint32_t ulPin, uint32_t ulMode)
             g_APinDescription[ulPin].ulPinMode |= GPIO_MODE_ENABLED;
             g_APinDescription[ulPin].ulPinMode &= (~MODE_NOT_INITIAL);
         } else {
-            printf("\r\n[ERROR] Mode not supported. \n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Mode not supported. \n");
         }
     } else {
         pGpio_t = gpio_pin_struct[ulPin];
@@ -156,7 +157,7 @@ void pinMode(uint32_t ulPin, uint32_t ulMode)
             break;
 
         default:
-            printf("\r\n[ERROR] Digital pin mode setup. \n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Digital pin mode setup. \n");
             break;
     }
     g_APinDescription[ulPin].ulPinMode &= 0xFFFFFF00;

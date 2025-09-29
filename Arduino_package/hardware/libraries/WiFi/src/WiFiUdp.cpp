@@ -23,6 +23,7 @@
 #include "WiFiUdp.h"
 // #include "WiFiClient.h"
 // #include "WiFiServer.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,7 +46,7 @@ WiFiUDP::~WiFiUDP()
 /* Start WiFiUDP socket, listening at local port PORT */
 uint8_t WiFiUDP::begin(uint16_t port)
 {
-    // printf("\r\n[INFO] WiFiUDP::begin port %d\n", port);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WiFiUDP::begin port %d\n", port);
     if ((_port == port) && (_sock >= 0)) {
         return 1;
     }
@@ -72,10 +73,10 @@ int WiFiUDP::connect(const char *host, uint16_t port)
             // return connect(remote_addr, port);
         }
     } else {
-        // printf("\r\n[INFO] WiFiUDP.cpp: connect|hostByNameV6 \n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WiFiUDP.cpp: connect|hostByNameV6 \n");
         if (WiFi.hostByNamev6(host, remote_addr_v6)) {
-            // printf("\r\n[INFO] WiFiUDP.cpp: connect v6 \n");
-            // printf("\r\n[INFO] WiFiUDP.cpp: connect ipv6 %s\n", host);
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WiFiUDP.cpp: connect v6 \n");
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WiFiUDP.cpp: connect ipv6 %s\n", host);
             _sock = clientDrv.startClientV6(host, port, UDP_MODE);
         } else {
         }

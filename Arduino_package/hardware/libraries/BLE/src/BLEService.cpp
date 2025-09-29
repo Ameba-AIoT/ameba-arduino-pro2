@@ -1,6 +1,7 @@
 #include "BLEService.h"
 
 #include "gatt.h"
+#include "amb_ard_printf.h"
 
 BLEService::BLEService(BLEUUID uuid)
 {
@@ -22,7 +23,7 @@ void BLEService::setUUID(BLEUUID uuid)
     if ((uuid.length() == 2) || (uuid.length() == 16)) {
         _uuid = uuid;
     } else {
-        printf("\r\n[ERROR] Only 16bit & 128bit UUIDs are supported for services\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Only 16bit & 128bit UUIDs are supported for services\n");
     }
 }
 
@@ -38,7 +39,7 @@ void BLEService::addCharacteristic(BLECharacteristic& newChar)
         _characteristicCount += 1;
         newChar._pService = this;
     } else {
-        printf("\r\n[ERROR] Maximum number of characteristics per service reached\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Maximum number of characteristics per service reached\n");
     }
 }
 
@@ -119,75 +120,75 @@ uint8_t BLEService::generateAttrServiceDeclaration(T_ATTRIB_APPL* attr_tbl, uint
 void BLEService::printAttr()
 {
     uint8_t i;
-    printf("\r\n[INFO] Service attribute table for service %s with %d number of attributes:\n", _uuid.str(), _total_attr_count);
-    printf("--------------------------------------------------------\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Service attribute table for service %s with %d number of attributes:\n", _uuid.str(), _total_attr_count);
+    amb_ard_printf(ARD_LOG_INF, "--------------------------------------------------------\n");
     for (i = 0; i < _total_attr_count; i++) {
-        printf("\r\n[INFO] Attribute num %d:\n", i);
-        printf("\r\n[INFO] Flags: \t 0x%04X \n", _service_attr_tbl[i].flags);
-        printf("\r\n[INFO] Value Length: \t 0x%04X \n", _service_attr_tbl[i].value_len);
-        printf("\r\n[INFO] Type Value: \t %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
-               _service_attr_tbl[i].type_value[0],
-               _service_attr_tbl[i].type_value[1],
-               _service_attr_tbl[i].type_value[2],
-               _service_attr_tbl[i].type_value[3],
-               _service_attr_tbl[i].type_value[4],
-               _service_attr_tbl[i].type_value[5],
-               _service_attr_tbl[i].type_value[6],
-               _service_attr_tbl[i].type_value[7],
-               _service_attr_tbl[i].type_value[8],
-               _service_attr_tbl[i].type_value[9],
-               _service_attr_tbl[i].type_value[10],
-               _service_attr_tbl[i].type_value[11],
-               _service_attr_tbl[i].type_value[12],
-               _service_attr_tbl[i].type_value[13],
-               _service_attr_tbl[i].type_value[14],
-               _service_attr_tbl[i].type_value[15]);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Attribute num %d:\n", i);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Flags: \t 0x%04X \n", _service_attr_tbl[i].flags);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Value Length: \t 0x%04X \n", _service_attr_tbl[i].value_len);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: \t %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+                       _service_attr_tbl[i].type_value[0],
+                       _service_attr_tbl[i].type_value[1],
+                       _service_attr_tbl[i].type_value[2],
+                       _service_attr_tbl[i].type_value[3],
+                       _service_attr_tbl[i].type_value[4],
+                       _service_attr_tbl[i].type_value[5],
+                       _service_attr_tbl[i].type_value[6],
+                       _service_attr_tbl[i].type_value[7],
+                       _service_attr_tbl[i].type_value[8],
+                       _service_attr_tbl[i].type_value[9],
+                       _service_attr_tbl[i].type_value[10],
+                       _service_attr_tbl[i].type_value[11],
+                       _service_attr_tbl[i].type_value[12],
+                       _service_attr_tbl[i].type_value[13],
+                       _service_attr_tbl[i].type_value[14],
+                       _service_attr_tbl[i].type_value[15]);
         if ((_service_attr_tbl[i].type_value[0] == LO_WORD(GATT_UUID_PRIMARY_SERVICE)) && (_service_attr_tbl[i].type_value[1] == HI_WORD(GATT_UUID_PRIMARY_SERVICE))) {
-            printf("\r\n[INFO] Type Value: GATT UUID Primary Service (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: GATT UUID Primary Service (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
         }
         if ((_service_attr_tbl[i].type_value[0] == LO_WORD(GATT_UUID_CHARACTERISTIC)) && (_service_attr_tbl[i].type_value[1] == HI_WORD(GATT_UUID_CHARACTERISTIC))) {
-            printf("\r\n[INFO] Type Value: GATT UUID Characteristic (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: GATT UUID Characteristic (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
             uint8_t char_props = _service_attr_tbl[i].type_value[2];
-            printf("\r\n[INFO] Characteristic Properties: (0x%02X)\n", char_props);
-            printf("\r\n[INFO] Read %d | WriteNR %d | Write %d | Notif %d | Indicate %d\n",
-                   (char_props & GATT_CHAR_PROP_READ) != 0,
-                   (char_props & GATT_CHAR_PROP_WRITE_NO_RSP) != 0,
-                   (char_props & GATT_CHAR_PROP_WRITE) != 0,
-                   (char_props & GATT_CHAR_PROP_NOTIFY) != 0,
-                   (char_props & GATT_CHAR_PROP_INDICATE) != 0);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Characteristic Properties: (0x%02X)\n", char_props);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Read %d | WriteNR %d | Write %d | Notif %d | Indicate %d\n",
+                           (char_props & GATT_CHAR_PROP_READ) != 0,
+                           (char_props & GATT_CHAR_PROP_WRITE_NO_RSP) != 0,
+                           (char_props & GATT_CHAR_PROP_WRITE) != 0,
+                           (char_props & GATT_CHAR_PROP_NOTIFY) != 0,
+                           (char_props & GATT_CHAR_PROP_INDICATE) != 0);
         }
         if ((_service_attr_tbl[i].type_value[0] == LO_WORD(GATT_UUID_CHAR_CLIENT_CONFIG)) && (_service_attr_tbl[i].type_value[1] == HI_WORD(GATT_UUID_CHAR_CLIENT_CONFIG))) {
-            printf("\r\n[INFO] Type Value: GATT UUID CCCD (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: GATT UUID CCCD (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
         }
         if ((_service_attr_tbl[i].type_value[0] == LO_WORD(GATT_UUID_CHAR_USER_DESCR)) && (_service_attr_tbl[i].type_value[1] == HI_WORD(GATT_UUID_CHAR_USER_DESCR))) {
-            printf("\r\n[INFO] Type Value: GATT UUID Char User Descriptor (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: GATT UUID Char User Descriptor (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
         }
         if ((_service_attr_tbl[i].type_value[0] == LO_WORD(GATT_UUID_CHAR_FORMAT)) && (_service_attr_tbl[i].type_value[1] == HI_WORD(GATT_UUID_CHAR_FORMAT))) {
-            printf("\r\n[INFO] Type Value: GATT UUID Char Format (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: GATT UUID Char Format (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
         }
         if ((_service_attr_tbl[i].type_value[0] == LO_WORD(GATT_UUID_CHAR_REPORT_REFERENCE)) && (_service_attr_tbl[i].type_value[1] == HI_WORD(GATT_UUID_CHAR_REPORT_REFERENCE))) {
-            printf("\r\n[INFO] Type Value: GATT UUID Char Report Ref (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Type Value: GATT UUID Char Report Ref (0x%02X 0x%02X)\n", _service_attr_tbl[i].type_value[0], _service_attr_tbl[i].type_value[1]);
         }
         if (_service_attr_tbl[i].p_value_context != NULL) {
-            printf("\r\n[INFO] Context Value Pointer as string: %s \n", (char*)(_service_attr_tbl[i].p_value_context));
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Context Value Pointer as string: %s \n", (char*)(_service_attr_tbl[i].p_value_context));
         } else {
-            printf("\r\n[INFO] Context Value Pointer: NULL \n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Context Value Pointer: NULL \n");
         }
         uint32_t attr_perms = _service_attr_tbl[i].permissions;
-        printf("\r\n[INFO] Permissions: 0x%04X %04X\n", (uint16_t)(attr_perms >> 16), (uint16_t)(attr_perms & 0xFFFF));
-        printf("\r\n[INFO] Read %d | Authen %d | Author %d | Encrypted %d | Authen SC Req %d \n",
-               (attr_perms & GATT_PERM_READ) != 0,
-               (attr_perms & GATT_PERM_READ_AUTHEN_REQ) != 0,
-               (attr_perms & GATT_PERM_READ_AUTHOR_REQ) != 0,
-               (attr_perms & GATT_PERM_READ_ENCRYPTED_REQ) != 0,
-               (attr_perms & GATT_PERM_READ_AUTHEN_SC_REQ) != 0);
-        printf("\r\n[INFO] Write %d | Authen %d | Author %d | Encrypted %d | Authen SC Req %d \n",
-               (attr_perms & GATT_PERM_WRITE) != 0,
-               (attr_perms & GATT_PERM_WRITE_AUTHEN_REQ) != 0,
-               (attr_perms & GATT_PERM_WRITE_AUTHOR_REQ) != 0,
-               (attr_perms & GATT_PERM_WRITE_ENCRYPTED_REQ) != 0,
-               (attr_perms & GATT_PERM_READ_AUTHEN_SC_REQ) != 0);
-        printf("\r\n[INFO]--------------------------------------------------------\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Permissions: 0x%04X %04X\n", (uint16_t)(attr_perms >> 16), (uint16_t)(attr_perms & 0xFFFF));
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Read %d | Authen %d | Author %d | Encrypted %d | Authen SC Req %d \n",
+                       (attr_perms & GATT_PERM_READ) != 0,
+                       (attr_perms & GATT_PERM_READ_AUTHEN_REQ) != 0,
+                       (attr_perms & GATT_PERM_READ_AUTHOR_REQ) != 0,
+                       (attr_perms & GATT_PERM_READ_ENCRYPTED_REQ) != 0,
+                       (attr_perms & GATT_PERM_READ_AUTHEN_SC_REQ) != 0);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Write %d | Authen %d | Author %d | Encrypted %d | Authen SC Req %d \n",
+                       (attr_perms & GATT_PERM_WRITE) != 0,
+                       (attr_perms & GATT_PERM_WRITE_AUTHEN_REQ) != 0,
+                       (attr_perms & GATT_PERM_WRITE_AUTHOR_REQ) != 0,
+                       (attr_perms & GATT_PERM_WRITE_ENCRYPTED_REQ) != 0,
+                       (attr_perms & GATT_PERM_READ_AUTHEN_SC_REQ) != 0);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO]--------------------------------------------------------\n");
     }
 }
 
@@ -197,7 +198,7 @@ T_APP_RESULT BLEService::serviceAttrReadCallbackDefault(uint8_t conn_id, T_SERVE
 
     T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     if (service_id != _service_id) {
-        printf("\r\n[INFO] Service ID mismatch for service %s in read callback\n", getUUID().str());
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Service ID mismatch for service %s in read callback\n", getUUID().str());
         return cause;
     }
     uint8_t i;
@@ -217,7 +218,7 @@ T_APP_RESULT BLEService::serviceAttrWriteCallbackDefault(uint8_t conn_id, T_SERV
 
     T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     if (service_id != _service_id) {
-        printf("\r\n[INFO] Service ID mismatch for service %s in write callback\n", getUUID().str());
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Service ID mismatch for service %s in write callback\n", getUUID().str());
         return cause;
     }
     uint8_t i;
@@ -233,7 +234,7 @@ T_APP_RESULT BLEService::serviceAttrWriteCallbackDefault(uint8_t conn_id, T_SERV
 void BLEService::serviceCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index, uint16_t ccc_bits)
 {
     if (service_id != _service_id) {
-        printf("\r\n[INFO] Service ID mismatch for service %s in CCCD callback\n", getUUID().str());
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Service ID mismatch for service %s in CCCD callback\n", getUUID().str());
     }
     uint8_t i;
     for (i = 0; i < _characteristicCount; i++) {

@@ -1,6 +1,7 @@
 #include "mimo_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_mimo.h"
+#include "amb_ard_printf.h"
 
 static uint8_t numIn = 0;
 
@@ -10,7 +11,7 @@ uint32_t mimoCreate(void)
     mm_mimo_t *context = NULL;
     context = mimo_create();
     if (context == NULL) {
-        printf("\r\n[ERROR] MIMO create failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MIMO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -19,7 +20,7 @@ void mimoDestroy(void *ctx)
 {
     // delete the MIMO object created and stop the mimo task
     if (NULL != mimo_delete((mm_mimo_t *)ctx)) {
-        printf("\r\n[ERROR] MIMO linker destroy failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MIMO linker destroy failed\n");
     }
 }
 

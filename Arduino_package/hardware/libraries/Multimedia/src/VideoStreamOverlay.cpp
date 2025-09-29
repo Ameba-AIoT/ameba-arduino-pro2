@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "osd_render.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }
@@ -21,11 +22,11 @@ void VideoStreamOverlay::configVideo(int ch, VideoSetting &config)
     ch_width[ch] = config._w;
     ch_height[ch] = config._h;
 
-    // printf("\r\n[INFO] ch_enable %d  %d  %d\n", ch_enable[0], ch_enable[1], ch_enable[2]);
-    // printf("\r\n[INFO] character_width %d  %d  %d\n", character_width[0], character_width[1], character_width[2]);
-    // printf("\r\n[INFO] character_height %d  %d  %d\n", character_height[0], character_height[1], character_height[2]);
-    // printf("\r\n[INFO] ch_width %d  %d  %d\n", ch_width[0], ch_width[1], ch_width[2]);
-    // printf("\r\n[INFO] ch_height %d  %d  %d\n", ch_height[0], ch_height[1], ch_height[2]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] ch_enable %d  %d  %d\n", ch_enable[0], ch_enable[1], ch_enable[2]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] character_width %d  %d  %d\n", character_width[0], character_width[1], character_width[2]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] character_height %d  %d  %d\n", character_height[0], character_height[1], character_height[2]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] ch_width %d  %d  %d\n", ch_width[0], ch_width[1], ch_width[2]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] ch_height %d  %d  %d\n", ch_height[0], ch_height[1], ch_height[2]);
 }
 
 void VideoStreamOverlay::configTextSize(int ch, int text_width, int text_height)
@@ -182,7 +183,7 @@ void VideoStreamOverlay::drawImage(int ch, unsigned char *osd_array[], osd_pict_
         free(osd_array[ch]);
     }
 
-    printf("[osd] Heap available:%d\r\n", xPortGetFreeHeapSize());
+    amb_ard_printf(ARD_LOG_INF, "[INFO][osd] Heap available:%d\r\n", xPortGetFreeHeapSize());
     resize_width = (resize_width + 1) & (~1);      // 2 alignment
     resize_height = (resize_height + 1) & (~1);    // 2 alignment
     osd_array[ch] = (unsigned char *)malloc(heapsize);
@@ -193,12 +194,12 @@ void VideoStreamOverlay::drawImage(int ch, unsigned char *osd_array[], osd_pict_
     initOSDBitmapBuf(&pict_osd_buffer, osd_array[ch], heapsize);
 
     rts_osd_set_info(rts_osd2_type_pict_extn, &pict_osd_buffer);
-    printf("[osd] Heap available:%d\r\n", xPortGetFreeHeapSize());
+    amb_ard_printf(ARD_LOG_INF, "[INFO][osd] Heap available:%d\r\n", xPortGetFreeHeapSize());
 }
 
 void VideoStreamOverlay::displayImage(int ch)
 {
     if (xTaskCreate(rts_osd_task, "OSD", 10 * 1024, (void *)(ach_id + ch), tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
-        printf("\n\r%s xTaskCreate failed", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\n\r%s xTaskCreate failed", __FUNCTION__);
     }
 }

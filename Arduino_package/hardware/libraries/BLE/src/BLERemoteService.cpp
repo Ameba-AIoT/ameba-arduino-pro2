@@ -1,4 +1,5 @@
 #include "BLERemoteService.h"
+#include "amb_ard_printf.h"
 
 BLERemoteService::BLERemoteService(BLEUUID uuid)
 {
@@ -27,7 +28,7 @@ BLERemoteCharacteristic* BLERemoteService::getCharacteristic(const char* uuid)
 BLERemoteCharacteristic* BLERemoteService::getCharacteristic(BLEUUID uuid)
 {
     if (_characteristicCount == 0) {
-        printf("\r\n[ERROR] Service %s: No characteristics found \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Service %s: No characteristics found \n", _uuid.str());
         return nullptr;
     }
     uint8_t i;
@@ -42,7 +43,7 @@ BLERemoteCharacteristic* BLERemoteService::getCharacteristic(BLEUUID uuid)
 bool BLERemoteService::addCharacteristic(BLERemoteCharacteristic* newChar)
 {
     if (_characteristicCount >= MAX_NUM_CHARS) {
-        printf("\r\n[ERROR] Service %s: Maximum number of characteristics per service reached \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Service %s: Maximum number of characteristics per service reached \n", _uuid.str());
         return false;
     }
     if (_characteristicCount == 0) {
@@ -67,7 +68,7 @@ bool BLERemoteService::addCharacteristic(BLERemoteCharacteristic* newChar)
 void BLERemoteService::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t cause, uint16_t handle, uint16_t value_size, uint8_t* p_value)
 {
     if ((handle < _handleStart) || (handle > _handleEnd)) {
-        printf("\r\n[ERROR] Service %s: Handle %d mismatch read result callback \n", _uuid.str(), handle);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Service %s: Handle %d mismatch read result callback \n", _uuid.str(), handle);
         return;
     }
     // Check handle and pass into corresponding characteristic
@@ -88,7 +89,7 @@ void BLERemoteService::clientReadResultCallbackDefault(uint8_t conn_id, uint16_t
 void BLERemoteService::clientWriteResultCallbackDefault(uint8_t conn_id, T_GATT_WRITE_TYPE type, uint16_t handle, uint16_t cause, uint8_t credits)
 {
     if ((handle < _handleStart) || (handle > _handleEnd)) {
-        printf("\r\n[ERROR] Service %s: Handle %d mismatch in write result callback \n", _uuid.str(), handle);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Service %s: Handle %d mismatch in write result callback \n", _uuid.str(), handle);
         return;
     }
     // Check handle and pass into corresponding characteristic
@@ -110,7 +111,7 @@ T_APP_RESULT BLERemoteService::clientNotifyIndicateCallbackDefault(uint8_t conn_
 {
     T_APP_RESULT app_result = APP_RESULT_APP_ERR;
     if ((handle < _handleStart) || (handle > _handleEnd)) {
-        printf("\r\n[ERROR] Service %s: Handle %d mismatch in notify/indicate callback \n", _uuid.str(), handle);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Service %s: Handle %d mismatch in notify/indicate callback \n", _uuid.str(), handle);
         return app_result;
     }
     // Check handle and pass into corresponding characteristic
