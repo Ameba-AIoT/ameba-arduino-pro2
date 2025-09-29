@@ -1,4 +1,3 @@
-
 #ifdef AMEBA_ARDUINO_Pin_Mapping_Check
 
 #include "Arduino.h"
@@ -8,7 +7,6 @@ extern "C" {
 #endif
 
 #include "amb_ard_pin_check.h"
-#include "amb_ard_printf.h"
 
 // g_APinDescription[ard_pin_name].pinname;
 // g_APinDescription[ard_pin_name].ulPinType;

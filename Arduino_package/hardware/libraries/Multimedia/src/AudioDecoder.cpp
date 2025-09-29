@@ -11,7 +11,6 @@ extern "C" {
 #include "module_audio.h"
 #include "module_aad.h"
 #include "module_g711.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

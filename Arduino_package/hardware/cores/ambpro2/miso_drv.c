@@ -1,7 +1,8 @@
+#include "Arduino.h"
+
 #include "miso_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_miso.h"
-#include "amb_ard_printf.h"
 
 uint32_t misoCreate(void)
 {

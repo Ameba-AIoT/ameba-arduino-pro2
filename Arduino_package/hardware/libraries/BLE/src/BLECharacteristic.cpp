@@ -3,7 +3,6 @@
 
 #include "gatt.h"
 #include "profile_server.h"
-#include "amb_ard_printf.h"
 
 BLECharacteristic::BLECharacteristic(BLEUUID uuid)
 {

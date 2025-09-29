@@ -1,5 +1,4 @@
 #include "BLERemoteService.h"
-#include "amb_ard_printf.h"
 
 BLERemoteService::BLERemoteService(BLEUUID uuid)
 {

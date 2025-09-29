@@ -1,7 +1,6 @@
 #include "rtc.h"
 #include <time.h>
 #include "wait_api.h"
-#include "amb_ard_printf.h"
 
 RTCClass::RTCClass(){};
 RTCClass::~RTCClass(){};

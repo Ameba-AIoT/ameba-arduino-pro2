@@ -20,7 +20,6 @@
 
 #include "Arduino.h"
 #include "Wire.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {

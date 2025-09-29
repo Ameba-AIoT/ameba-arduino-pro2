@@ -1,5 +1,4 @@
 #include "WS2812B.h"
-#include "amb_ard_printf.h"
 
 WS2812B::WS2812B(uint8_t input_pin, uint16_t num_leds)
 {

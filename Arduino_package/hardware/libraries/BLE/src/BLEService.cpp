@@ -1,7 +1,6 @@
 #include "BLEService.h"
 
 #include "gatt.h"
-#include "amb_ard_printf.h"
 
 BLEService::BLEService(BLEUUID uuid)
 {

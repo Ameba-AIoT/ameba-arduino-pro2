@@ -7,7 +7,6 @@ extern "C" {
 
 #include "video_drv.h"
 #include "isp_ctrl_api.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

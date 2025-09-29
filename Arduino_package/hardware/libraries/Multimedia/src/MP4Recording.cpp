@@ -2,7 +2,6 @@
 
 #include "MP4Recording.h"
 #include "mp4_drv.h"
-#include "amb_ard_printf.h"
 
 MP4Recording::MP4Recording(void)
 {

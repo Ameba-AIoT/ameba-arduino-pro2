@@ -13,7 +13,6 @@ extern "C" {
 #include "siso_drv.h"
 #include "avcodec.h"
 #include "vfs.h"
-#include "amb_ard_printf.h"
 
 extern int vipnn_control(void* p, int cmd, int arg);
 

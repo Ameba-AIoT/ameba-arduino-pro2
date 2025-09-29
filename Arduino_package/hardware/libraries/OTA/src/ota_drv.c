@@ -1,10 +1,11 @@
+#include "Arduino.h"
+
 #include <osdep_service.h>
 #include <wifi_constants.h>
 #include "wifi_conf.h"
 #include "lwip_netconf.h"
 #include <ota_8735b.h>
 #include "ota_drv.h"
-#include "amb_ard_printf.h"
 
 int _port;
 char *_server;

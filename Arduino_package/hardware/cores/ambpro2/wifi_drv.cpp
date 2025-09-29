@@ -1,5 +1,6 @@
+#include "Arduino.h"
+
 #include "wifi_drv.h"
-#include "amb_ard_printf.h"
 
 // arduino includes
 #include "wl_definitions.h"

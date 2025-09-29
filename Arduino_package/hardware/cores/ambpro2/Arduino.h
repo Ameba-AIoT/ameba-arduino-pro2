@@ -26,6 +26,8 @@
 #include <math.h>
 #include "binary.h"
 
+#include "amb_ard_printf.h"
+
 // #define Arduino_STD_PRINTF
 #ifdef Arduino_STD_PRINTF
 #include <stdio.h>
@@ -73,6 +75,8 @@ extern int dbg_sprintf(char *str, const char *fmt, ...);
 #define sprintf dbg_sprintf
 #endif
 #endif
+
+#define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messages, 5 to enable all debug messages
 
 extern void set_logging(int enable);
 extern void set_video_logging(int enable);

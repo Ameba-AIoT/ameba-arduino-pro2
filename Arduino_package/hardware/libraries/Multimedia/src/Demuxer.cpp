@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "demuxer_drv.h"
-#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
@@ -6,7 +8,6 @@
 #include "module_video.h"
 #include "freertos_service.h"
 #include "sensor.h"
-#include "amb_ard_printf.h"
 
 #define QR_CODE_MAX_SCAN_COUNT 5
 
@@ -20,7 +21,6 @@
 #define VIDEO_3M   7
 #define VIDEO_5M   8
 #define VIDEO_2K   9
-
 
 #define V1_CHANNEL    0
 #define V1_RESOLUTION VIDEO_VGA

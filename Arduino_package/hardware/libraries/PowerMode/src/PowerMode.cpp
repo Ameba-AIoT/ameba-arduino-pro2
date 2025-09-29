@@ -1,5 +1,4 @@
 #include "PowerMode.h"
-#include "amb_ard_printf.h"
 
 static gpio_irq_t PM_GPIO_IRQ;
 static gpio_t PM_GPIO_1;

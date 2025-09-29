@@ -25,7 +25,7 @@
 #include "app_msg.h"
 #include "profile_server.h"
 #include "profile_client.h"
-#include "amb_ard_printf.h"
+
 //---------------------------- Default handlers for core BLE functionality ----------------------------//
 
 T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data)

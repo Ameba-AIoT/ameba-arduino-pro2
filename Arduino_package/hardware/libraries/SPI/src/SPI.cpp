@@ -11,7 +11,6 @@
 
 #include "SPI.h"
 #include "Arduino.h"
-#include "amb_ard_printf.h"
 
 spi_t spi_obj0;
 spi_t spi_obj1;

@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "Http_fs.h"
-#include "amb_ard_printf.h"
 
 Http_fs::Http_fs(void)
 {

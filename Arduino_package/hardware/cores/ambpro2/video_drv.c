@@ -1,9 +1,10 @@
+#include "Arduino.h"
+
 #include "video_drv.h"
 #include "hal_video.h"
 #include "video_api.h"
 #include "module_video.h"
 #include "isp_ctrl_api.h"
-#include "amb_ard_printf.h"
 
 uint32_t image_addr = 0;
 uint32_t image_len = 0;

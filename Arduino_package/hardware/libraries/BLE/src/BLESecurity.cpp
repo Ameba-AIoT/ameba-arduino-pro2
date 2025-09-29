@@ -2,7 +2,6 @@
 
 #include "gap.h"
 #include "gap_bond_le.h"
-#include "amb_ard_printf.h"
 
 void (*BLESecurity::_pKeyDisplayCB)(uint8_t conn_id, uint32_t passkey) = nullptr;
 uint32_t (*BLESecurity::_pKeyInputCB)(uint8_t conn_id) = nullptr;

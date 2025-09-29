@@ -1,5 +1,6 @@
+#include "Arduino.h"
+
 #include "http_fs_drv.h"
-#include "amb_ard_printf.h"
 
 // http_fs module init
 mm_context_t *http_fs_Init(void)

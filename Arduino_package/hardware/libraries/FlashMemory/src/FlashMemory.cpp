@@ -1,5 +1,4 @@
 #include "FlashMemory.h"
-#include "amb_ard_printf.h"
 
 flash_t flash_obj;
 

@@ -1,7 +1,7 @@
+#include "Arduino.h"
 #include "mp3dec.h"
 #include "audio_api.h"
 #include "helix_mp3_drv.h"
-#include "amb_ard_printf.h"
 
 #define MP3_MAX_FRAME_SIZE        (1600)
 #define BUFFER_SIZE               (1500)

@@ -3,7 +3,6 @@
 
 #include "gap.h"
 #include "bt_config_service.h"
-#include "amb_ard_printf.h"
 
 extern "C" {
 extern void BC_cmd_task_init(void);
