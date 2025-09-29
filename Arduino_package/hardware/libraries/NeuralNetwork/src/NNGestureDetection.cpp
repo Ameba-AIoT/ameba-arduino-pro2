@@ -17,6 +17,7 @@ extern "C" {
 #include "vfs.h"
 #include "osd_render.h"
 #include "roi_delta_qp/roi_delta_qp.h"
+#include "amb_ard_printf.h"
 
 extern int vipnn_control(void *p, int cmd, int arg);
 
@@ -84,20 +85,20 @@ void NNGestureDetection::begin(void)
         _p_mmf_context = mm_module_open(&vipnn_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] NNPalmDetection init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNPalmDetection init failed\n");
         return;
     }
     if ((palm_nn_roi.img.width == 0) || (palm_nn_roi.img.height == 0)) {
-        printf("\r\n[ERROR] NNPalmDetection video not configured\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNPalmDetection video not configured\n");
         return;
     }
 
     if (_nntask != GESTURE_DETECTION) {
         if (ARDUINO_LOAD_MODEL == 0x02) {
-            printf("\r\n[INFO] Models loaded using SD Card\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Models loaded using SD Card\n");
         } else {
             while (1) {
-                printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
                 delay(5000);
             }
         }
@@ -126,14 +127,14 @@ void NNGestureDetection::begin(void)
         handlandmark_ctx = mm_module_open(&vipnn_module);
     }
     if (handlandmark_ctx == NULL) {
-        printf("\r\n[ERROR] NNHandLandmark init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNHandLandmark init failed\n");
         return;
     }
     if (palm_hand_siso_ctx == NULL) {
         palm_hand_siso_ctx = (void *)sisoCreate();
     }
     if (palm_hand_siso_ctx == NULL) {
-        printf("\r\n[ERROR] HandLandmark SISO init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] HandLandmark SISO init failed\n");
         return;
     }
 
@@ -179,7 +180,7 @@ void NNGestureDetection::end(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] NNPalmDetection deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNPalmDetection deinit failed\n");
     }
 
     if (handlandmark_ctx == NULL) {
@@ -188,7 +189,7 @@ void NNGestureDetection::end(void)
     if (mm_module_close(handlandmark_ctx) == NULL) {
         handlandmark_ctx = NULL;
     } else {
-        printf("\r\n[ERROR] NNHandLandmark deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] NNHandLandmark deinit failed\n");
     }
 }
 
@@ -232,7 +233,7 @@ void NNGestureDetection::drawHandObject(void *p, void *img_param)
     int im_h = RTSP_HEIGHT;
     int im_w = RTSP_WIDTH;
 
-    // printf("im->width = %d, im->height = %d\r\n", im->img.width, im->img.height);
+    // amb_ard_printf(ARD_LOG_INF, "[INFO] im->width = %d, im->height = %d\r\n", im->img.width, im->img.height);
     im->img.width = im->img.height = handlandmark_nn_roi.img.width;
 
     float ratio_w = (float)im_w / (float)im->img.width;
@@ -244,19 +245,19 @@ void NNGestureDetection::drawHandObject(void *p, void *img_param)
     OSD.createBitmap(RTSP_CHANNEL, HAND_LINK_LAYER);
 
     if (res->handedness != HANDEDNESS_NOTFOUND) {
-        // printf("theta:%f w:%d h:%d\r\n", res->theta, res->w, res->h);
+        // amb_ard_printf(ARD_LOG_INF, "[INFO] theta:%f w:%d h:%d\r\n", res->theta, res->w, res->h);
         if (fixLandmark(res) < 0) {
             return;
         }
 
         // First, draw the points for the joints.
         for (int i = 0; i < HAND_LANDMARK_NUM; i++) {
-            // printf("res->landmark3d.pos[i].x = %f, res->landmark3d.pos[i].y = %f, res->landmark3d.pos[i].z = %f\r\n", res->landmark3d.pos[i].x, res->landmark3d.pos[i].y, res->landmark3d.pos[i].z);
+            // amb_ard_printf(ARD_LOG_INF, "[INFO] res->landmark3d.pos[i].x = %f, res->landmark3d.pos[i].y = %f, res->landmark3d.pos[i].z = %f\r\n", res->landmark3d.pos[i].x, res->landmark3d.pos[i].y, res->landmark3d.pos[i].z);
             int xr = res->landmark3d.pos[i].x * ratio + (RTSP_WIDTH - RTSP_HEIGHT) / 2;
             int yr = res->landmark3d.pos[i].y * ratio;
             OSD.drawPoint(RTSP_CHANNEL, xr, yr, 12, COLOR_RED, HAND_JOINT_LAYER);
             // res->landmark3d.pos[i].z = roundf(q2f(&llm[(i*3+2)*datasize], llm_fmt.format));//Not needed to draw OSD
-            // printf("llm %d(%f,%f,%f)\r\n", i, hand_landmark_res->landmark3d.pos[i].x, hand_landmark_res->landmark3d.pos[i].y, hand_landmark_res->landmark3d.pos[i].z);
+            // amb_ard_printf(ARD_LOG_INF, "[INFO] llm %d(%f,%f,%f)\r\n", i, hand_landmark_res->landmark3d.pos[i].x, hand_landmark_res->landmark3d.pos[i].y, hand_landmark_res->landmark3d.pos[i].z);
         }
 
         /*
@@ -313,7 +314,7 @@ void NNGestureDetection::drawHandObject(void *p, void *img_param)
             int start_y = res->landmark3d.pos[idx_start].y * ratio;
             int end_x = res->landmark3d.pos[idx_end].x * ratio + (RTSP_WIDTH - RTSP_HEIGHT) / 2;
             int end_y = res->landmark3d.pos[idx_end].y * ratio;
-            // printf("start_x = %d, start_y = %d, end_x = %d, end_y = %d\r\n", start_x, start_y, end_x, end_y);
+            // amb_ard_printf(ARD_LOG_INF, "[INFO] start_x = %d, start_y = %d, end_x = %d, end_y = %d\r\n", start_x, start_y, end_x, end_y);
             OSD.drawLine(RTSP_CHANNEL, start_x, start_y, end_x, end_y, 8, COLOR_GREEN, HAND_LINK_LAYER);
         }
         if (osd_cleanup_timer) {
@@ -338,7 +339,7 @@ int NNGestureDetection::fixLandmark(handland_res_t *lm)
     float sin_theta = sinf(lm->theta);
     float scale = lm->w / (float)(handlandmark_nn_roi.img.width / 2.0) / lm->ratio;
     for (int i = 0; i < HAND_LANDMARK_NUM; i++) {
-        // printf("before:%d x = %f, y = %f\r\n", i, lm->landmark3d.pos[i].x, lm->landmark3d.pos[i].y);
+        // amb_ard_printf(ARD_LOG_INF, "[INFO] before:%d x = %f, y = %f\r\n", i, lm->landmark3d.pos[i].x, lm->landmark3d.pos[i].y);
         // Place your hand at the edge of the screen. Sometimes, the landmark will go out of the frame. Let's correct it here first.
         LIMIT(lm->landmark3d.pos[i].x, 0, handlandmark_nn_roi.img.width);
         LIMIT(lm->landmark3d.pos[i].y, 0, handlandmark_nn_roi.img.height);
@@ -348,14 +349,14 @@ int NNGestureDetection::fixLandmark(handland_res_t *lm)
         float y = dx * sin_theta + dy * cos_theta + cy;
         if (x < 0 || y < 0) {
             // Place your hand at the edge of the screen. After calibration, it might extend far beyond the screen, so let's not draw this for now.
-            printf("error! x = %f, y = %f\r\n", x, y);
+            amb_ard_printf(ARD_LOG_ERR, "[ERROR] x = %f, y = %f\r\n", x, y);
             return -1;
         }
         x = x * scale;
         y = y * scale;
         lm->landmark3d.pos[i].x = x + lm->offset_x;
         lm->landmark3d.pos[i].y = y + lm->offset_y;
-        // printf("after:%d x = %f, y = %f\r\n", i, lm->landmark3d.pos[i].x, lm->landmark3d.pos[i].y);
+        // amb_ard_printf(ARD_LOG_INF, "[INFO] after:%d x = %f, y = %f\r\n", i, lm->landmark3d.pos[i].x, lm->landmark3d.pos[i].y);
 
         // Here are some additional adjustments to make the skeleton more accurate when the hand is in the upper corner of the screen.
         if (lm->offset_x < 20) {
@@ -367,7 +368,7 @@ int NNGestureDetection::fixLandmark(handland_res_t *lm)
             LIMIT(lm->landmark3d.pos[i].y, 0, handlandmark_nn_roi.img.height);
         }
     }
-    // printf("lm->offset_x = %d, lm->offset_y = %d\r\n", lm->offset_x, lm->offset_y);
+    // amb_ard_printf(ARD_LOG_INF, "[INFO] lm->offset_x = %d, lm->offset_y = %d\r\n", lm->offset_x, lm->offset_y);
     return 0;
 }
 

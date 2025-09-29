@@ -20,6 +20,7 @@
 
 #include "Arduino.h"
 #include "Wire.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,12 +110,12 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
 
     // i2c_read error;
     // if (read != 0) {
-    //     printf("\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
+    //     amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
     // }
 
     /*//i2c_read error;
     if (read != quantity) {
-        printf("\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
 
         return read;
     }

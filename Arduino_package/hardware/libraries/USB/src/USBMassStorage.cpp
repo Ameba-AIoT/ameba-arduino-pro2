@@ -7,6 +7,7 @@ extern "C" {
 #include "msc/inc/usbd_msc.h"
 #include "sdio_combine.h"
 #include "sys_api.h"
+#include "amb_ard_printf.h"
 
 // from fatfs_sdcard_api.h
 extern void sd_gpio_init(void);
@@ -37,13 +38,13 @@ void USBMassStorage::SDIOInit(void)
 int USBMassStorage::USBStatus(void)
 {
     int status = wait_usb_ready();
-    printf("USB init status %d\r\n", status);
+    amb_ard_printf(ARD_LOG_INF, "[INFO] USB init status %d\r\n", status);
 
     if (status != USBD_INIT_OK) {
         if (status == USBD_NOT_ATTACHED) {
-            printf("\r\n NO USB device attached\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n [INFO] NO USB device attached\n");
         } else {
-            printf("\r\n USB init fail\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n [ERROR] USB init fail\n");
         }
     }
     return status;
@@ -54,7 +55,7 @@ void USBMassStorage::initializeDisk(void)
 
     disk_operations = (msc_opts *)malloc(sizeof(struct msc_opts));
     if (disk_operations == NULL) {
-        printf("\r\n disk_operation malloc fail\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n [ERROR] disk_operation malloc fail\n");
     }
 
     disk_operations->disk_init = usb_sd_init;
@@ -68,9 +69,9 @@ void USBMassStorage::loadUSBMassStorageDriver(void)
 {
     int status = usbd_msc_init(MSC_NBR_BUFHD, MSC_BUFLEN, disk_operations);
     if (status) {
-        printf("USB MSC driver load fail.\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] USB MSC driver load fail.\n");
     } else {
-        printf("USB MSC driver load done, Available heap [0x%x]\n", xPortGetFreeHeapSize());
+        amb_ard_printf(ARD_LOG_INF, "[INFO] USB MSC driver load done, Available heap [0x%x]\n", xPortGetFreeHeapSize());
     }
 }
 

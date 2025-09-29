@@ -2,6 +2,7 @@
 
 #include "MP4Recording.h"
 #include "mp4_drv.h"
+#include "amb_ard_printf.h"
 
 MP4Recording::MP4Recording(void)
 {
@@ -37,21 +38,21 @@ MP4Recording::~MP4Recording(void)
     if (mp4Deinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] MP4 deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MP4 deinit failed\n");
     }
 }
 
 void MP4Recording::configVideo(VideoSetting& config)
 {
     if (config._encoder == VIDEO_JPEG) {
-        printf("\r\n[ERROR] MP4 Recording does not support MJPEG format.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MP4 Recording does not support MJPEG format.\n");
         return;
     }
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mp4Init();
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] MP4 Init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MP4 Init failed\n");
         return;
     }
 
@@ -64,7 +65,7 @@ void MP4Recording::configVideo(VideoSetting& config)
 void MP4Recording::configAudio(AudioSetting& config, Audio_Codec_T codec)
 {
     if ((codec == CODEC_G711_PCMU) || (codec == CODEC_G711_PCMA)) {
-        printf("\r\n[ERROR] MP4 Recording only accepts AAC codec\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MP4 Recording only accepts AAC codec\n");
         // Unable to only record G711 audio without video, 23/3/2023
         return;
     }
@@ -72,7 +73,7 @@ void MP4Recording::configAudio(AudioSetting& config, Audio_Codec_T codec)
         _p_mmf_context = mp4Init();
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] MP4 Init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MP4 Init failed\n");
         return;
     }
 
@@ -84,7 +85,7 @@ void MP4Recording::configAudio(AudioSetting& config, Audio_Codec_T codec)
 void MP4Recording::begin(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need MP4 init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need MP4 init first\n");
         return;
     }
     mp4SetParams(_p_mmf_context->priv, &mp4Params);
@@ -95,7 +96,7 @@ void MP4Recording::begin(void)
 void MP4Recording::end(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need MP4 init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need MP4 init first\n");
         return;
     }
     if (getRecordingState()) {
@@ -154,7 +155,7 @@ uint32_t MP4Recording::getRecordingFileCount(void)
 uint8_t MP4Recording::getRecordingState(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need MP4 init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need MP4 init first\n");
         return 0;
     }
     return mp4RecordingState(_p_mmf_context->priv);
@@ -162,7 +163,7 @@ uint8_t MP4Recording::getRecordingState(void)
 
 void MP4Recording::printInfo(void)
 {
-    printf("\r\n[INFO] Recording file name: %s\n", getRecordingFileName().c_str());
-    printf("\r\n[INFO] Recording duration: %ld seconds\n", getRecordingDuration());
-    printf("\r\n[INFO] File count: %ld\n", getRecordingFileCount());
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Recording file name: %s\n", getRecordingFileName().c_str());
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Recording duration: %ld seconds\n", getRecordingDuration());
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] File count: %ld\n", getRecordingFileCount());
 }

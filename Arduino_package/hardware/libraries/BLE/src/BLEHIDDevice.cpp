@@ -1,4 +1,5 @@
 #include "BLEHIDDevice.h"
+#include "amb_ard_printf.h"
 
 BLEHIDDevice BLEHIDDev;
 
@@ -17,15 +18,15 @@ void HIDnotifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd)
         (void)id;
         (void)type;
         if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-            // printf("\r\n[INFO] Notifications enabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Notifications enabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
         } else {
-            // printf("\r\n[INFO] Notifications disabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Notifications disabled on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
         }
     } else {
         if (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) {
-            // printf("\r\n[INFO] Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Notifications enabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         } else {
-            // printf("\r\n[INFO] Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Notifications disabled on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
         }
     }
 }
@@ -38,9 +39,9 @@ void HIDwriteCB(BLECharacteristic* chr, uint8_t connID)
         uint8_t type = chr->getReportRefType();
         (void)id;
         (void)type;
-        // printf("\r\n[INFO] Data written on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Data written on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
     } else {
-        // printf("\r\n[INFO] Data written on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Data written on Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
     }
 }
 
@@ -52,9 +53,9 @@ void HIDreadCB(BLECharacteristic* chr, uint8_t connID)
         uint8_t type = chr->getReportRefType();
         (void)id;
         (void)type;
-        // printf("\r\n[INFO] Data read on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Data read on Characteristic %s ID %d Type %d for connection %d \n", chr->getUUID().str(), id, type, connID);
     } else {
-        // printf("\r\n[INFO] Data read from Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Data read from Characteristic %s for connection %d \n", chr->getUUID().str(), connID);
     }
 }
 

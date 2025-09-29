@@ -1,6 +1,7 @@
 #include "miso_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_miso.h"
+#include "amb_ard_printf.h"
 
 uint32_t misoCreate(void)
 {
@@ -8,7 +9,7 @@ uint32_t misoCreate(void)
     mm_miso_t *context = NULL;
     context = miso_create();
     if (context == NULL) {
-        printf("\r\n[ERROR] MISO create failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MISO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -17,7 +18,7 @@ void misoDestroy(void *ctx)
 {
     // delete the MISO object created and stop the miso task
     if (NULL != miso_delete((mm_miso_t *)ctx)) {
-        printf("\r\n[ERROR] MISO linker destroy failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] MISO linker destroy failed\n");
     }
 }
 

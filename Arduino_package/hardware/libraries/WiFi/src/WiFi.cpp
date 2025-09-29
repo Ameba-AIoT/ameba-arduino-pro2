@@ -23,6 +23,7 @@
 
 #include "wifi_drv.h"
 #include "wiring.h"
+#include "amb_ard_printf.h"
 
 WiFiClass::WiFiClass()
 {
@@ -204,7 +205,7 @@ int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult)
 
 int WiFiClass::hostByNamev6(const char* aHostname, IPv6Address& aResult)
 {
-    printf("\r\n[INFO] wifi.cpp: hostByNamev6()\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi.cpp: hostByNamev6()\n");
     return WiFiDrv::getHostByNamev6(aHostname, aResult);
 }
 

@@ -4,6 +4,7 @@
 #include "lwip_netconf.h"
 #include <ota_8735b.h>
 #include "ota_drv.h"
+#include "amb_ard_printf.h"
 
 int _port;
 char *_server;
@@ -30,9 +31,9 @@ void http_update_ota_task(void *param)
 
     g_otaState = OtaState[3];
 
-    // printf("\n\r[%s] Update task exit", __FUNCTION__);
+    // amb_ard_printf(ARD_LOG_ERR, "\n\r[%s] Update task exit", __FUNCTION__);
     if (!ret) {
-        // printf("\n\r[%s] Ready to reboot", __FUNCTION__);
+        // amb_ard_printf(ARD_LOG_INF, "\n\r[%s] Ready to reboot", __FUNCTION__);
         g_otaState = OtaState[4];
         ota_platform_reset();
     }
@@ -42,6 +43,6 @@ void http_update_ota_task(void *param)
 void ota_http(void)
 {
     if (xTaskCreate(http_update_ota_task, (const char *)"http_update_ota_task", 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
-        printf("\n\r[%s] Create update task failed", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\n\r[%s] Create update task failed", __FUNCTION__);
     }
 }

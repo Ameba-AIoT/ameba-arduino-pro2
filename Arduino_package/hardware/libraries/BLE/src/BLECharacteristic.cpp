@@ -3,6 +3,7 @@
 
 #include "gatt.h"
 #include "profile_server.h"
+#include "amb_ard_printf.h"
 
 BLECharacteristic::BLECharacteristic(BLEUUID uuid)
 {
@@ -29,7 +30,7 @@ void BLECharacteristic::setUUID(BLEUUID uuid)
     if ((uuid.length() == 2) || (uuid.length() == 16)) {
         _uuid = uuid;
     } else {
-        printf("\r\n[ERROR] Characteristic: Only 16bit & 128bit UUIDs are supported for characteristics \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic: Only 16bit & 128bit UUIDs are supported for characteristics \n");
     }
 }
 
@@ -41,11 +42,11 @@ BLEUUID BLECharacteristic::getUUID()
 void BLECharacteristic::setBufferLen(uint16_t max_len)
 {
     if (max_len > CHAR_VALUE_MAX_LEN) {
-        printf("\r\n[ERROR] Characteristic %s: requested buffer size too large, maximum of %d \n", _uuid.str(), CHAR_VALUE_MAX_LEN);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: requested buffer size too large, maximum of %d \n", _uuid.str(), CHAR_VALUE_MAX_LEN);
     } else {
         _data_buf = (uint8_t*)realloc(_data_buf, max_len * sizeof(uint8_t));
         if (_data_buf == NULL) {
-            printf("\r\n[ERROR] Characteristic %s: Not enough memory to set buffer length \n", _uuid.str());
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Not enough memory to set buffer length \n", _uuid.str());
             _data_buf_len = 0;
         } else {
             _data_buf_len = max_len;
@@ -220,7 +221,7 @@ bool BLECharacteristic::writeData32(int num)
 bool BLECharacteristic::setData(uint8_t* data, uint16_t datalen)
 {
     if (datalen > _data_buf_len) {
-        printf("\r\n[ERROR] Characteristic %s: setData size too large, data buffer size set to %d \n", _uuid.str(), _data_buf_len);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: setData size too large, data buffer size set to %d \n", _uuid.str(), _data_buf_len);
         return false;
     }
     memset(_data_buf, 0, _data_buf_len);
@@ -252,7 +253,7 @@ uint16_t BLECharacteristic::getDataLen()
 void BLECharacteristic::notify(uint8_t conn_id)
 {
     if (!(getProperties() & GATT_CHAR_PROP_NOTIFY)) {
-        printf("\r\n[ERROR] Characteristic %s: Notification property not enabled \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Notification property not enabled \n", _uuid.str());
         return;
     }
     server_send_data(conn_id, _pService->getServiceID(), _handle_index, _data_buf, _data_len, GATT_PDU_TYPE_NOTIFICATION);
@@ -261,7 +262,7 @@ void BLECharacteristic::notify(uint8_t conn_id)
 void BLECharacteristic::indicate(uint8_t conn_id)
 {
     if (!(getProperties() & GATT_CHAR_PROP_INDICATE)) {
-        printf("\r\n[ERROR] Characteristic %s: Indication property not enabled \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Indication property not enabled \n", _uuid.str());
         return;
     }
     server_send_data(conn_id, _pService->getServiceID(), _handle_index, _data_buf, _data_len, GATT_PDU_TYPE_INDICATION);
@@ -327,7 +328,7 @@ void BLECharacteristic::setCCCDCallback(void (*fCallback)(BLECharacteristic* chr
 uint8_t BLECharacteristic::getHandleIndex()
 {
     if (_handle_index == 0) {
-        printf("\r\n[ERROR] Characteristic %s: handle index unallocated \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: handle index unallocated \n", _uuid.str());
     }
     return _handle_index;
 }
@@ -482,7 +483,7 @@ T_APP_RESULT BLECharacteristic::charAttrReadCallbackDefault(uint8_t conn_id, T_S
 
     T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     if (attrib_index != _handle_index) {
-        printf("\r\n[ERROR] Characteristic %s: Char ID mismatch in read callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Char ID mismatch in read callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
         return cause;
     }
     // Avoid unused variable warning
@@ -509,7 +510,7 @@ T_APP_RESULT BLECharacteristic::charAttrWriteCallbackDefault(uint8_t conn_id, T_
 
     T_APP_RESULT cause = APP_RESULT_ATTR_NOT_FOUND;
     if (attrib_index != _handle_index) {
-        printf("\r\n[ERROR] Characteristic %s: Char ID mismatch in write callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Char ID mismatch in write callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
         return cause;
     }
     // Avoid unused variable warning
@@ -521,7 +522,7 @@ T_APP_RESULT BLECharacteristic::charAttrWriteCallbackDefault(uint8_t conn_id, T_
 
     // Save updated value
     if (length > _data_buf_len) {
-        printf("\r\n[ERROR] Characteristic %s: Insufficient buffer allocated for write value, required: %d \n", _uuid.str(), length);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Insufficient buffer allocated for write value, required: %d \n", _uuid.str(), length);
         cause = APP_RESULT_APP_ERR;
         return cause;
     } else {
@@ -542,7 +543,7 @@ T_APP_RESULT BLECharacteristic::charAttrWriteCallbackDefault(uint8_t conn_id, T_
 void BLECharacteristic::charCccdUpdateCallbackDefault(uint8_t conn_id, T_SERVER_ID service_id, uint16_t attrib_index, uint16_t ccc_bits)
 {
     if (attrib_index != (_handle_index + 1)) {    // +1 for Cccd attr index
-        printf("\r\n[ERROR] Characteristic %s: Char ID mismatch in CCCD callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Char ID mismatch in CCCD callback: actual %d received %d\n", _uuid.str(), _handle_index, attrib_index);
     }
     // Avoid unused variable warning
     (void)service_id;

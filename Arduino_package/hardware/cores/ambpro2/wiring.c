@@ -17,6 +17,7 @@
 */
 
 #include "Arduino.h"
+#include "amb_ard_printf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +45,7 @@ void delay(uint32_t ms)
 
     ret = osDelay(ms);
     if ((ret != osEventTimeout) && (ret != osOK)) {
-        // printf("\r\n[ERROR] %s. 0x%x \n", __FUNCTION__, ret);
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. 0x%x \n", __FUNCTION__, ret);
     }
 }
 

@@ -1,4 +1,5 @@
 #include "PowerMode.h"
+#include "amb_ard_printf.h"
 
 static gpio_irq_t PM_GPIO_IRQ;
 static gpio_t PM_GPIO_1;
@@ -103,7 +104,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                     gpio_init(&PM_GPIO_1, PA_2);
                     gpio_pull_ctrl(&PM_GPIO_1, PullDown);
                 } else {
-                    printf("\r\n[ERROR] DeepSlesp wakeup AON GPIO pin selection fail. \n");
+                    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] DeepSlesp wakeup AON GPIO pin selection fail. \n");
                     PM_begin_check = 0;
                     return;
                 }
@@ -113,7 +114,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
             } else if (wakeup_source == 2) {
                 PM_wakeup_source = DS_RTC;
             } else {
-                printf("\r\n[ERROR] DeepSlesp wakeup source selection fail. \n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] DeepSlesp wakeup source selection fail. \n");
                 PM_begin_check = 0;
                 return;
             }
@@ -146,7 +147,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                     gpio_init(&PM_GPIO_1, PA_2);
                     gpio_pull_ctrl(&PM_GPIO_1, PullDown);
                 } else {
-                    printf("\r\n[ERROR] DeepSlesp wakeup AON GPIO pin selection fail. \n");
+                    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] DeepSlesp wakeup AON GPIO pin selection fail. \n");
                     PM_begin_check = 0;
                     return;
                 }
@@ -154,7 +155,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                 gpio_irq_pull_ctrl(&PM_GPIO_IRQ, PullDown);
                 gpio_irq_set(&PM_GPIO_IRQ, IRQ_RISE, 1);
             } else {
-                printf("\r\n[ERROR] DeepSlesp wakeup source selection fail. \n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] DeepSlesp wakeup source selection fail. \n");
                 PM_begin_check = 0;
                 return;
             }
@@ -184,7 +185,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                     case PA_3:
                         break;
                     default:
-                        printf("\r\n[ERROR] Standby wakeup AON GPIO pin selection fail. \n");
+                        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup AON GPIO pin selection fail. \n");
                         PM_begin_check = 0;
                         return;
                 }
@@ -220,7 +221,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                         // case PF_17:
                         break;
                     default:
-                        printf("\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
+                        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
                         PM_begin_check = 0;
                         return;
                 }
@@ -260,7 +261,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                 //serial_init(&PM_UART, PA_2, PA_3);
                 // 0:40M, 1:4M
                 serial_init_arduino(&PM_UART, PA_2, PA_3, 1);
-                //printf("\r\n[INFO] Check the 4M en %d \n ", (PM_UART.uart_adp.reserv1));
+                //amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Check the 4M en %d \n ", (PM_UART.uart_adp.reserv1));
                 serial_baud(&PM_UART, 115200);
                 serial_format(&PM_UART, 8, ParityNone, 1);
                 serial_irq_handler(&PM_UART, uart_irq, (uint32_t)&PM_UART);
@@ -282,7 +283,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
             } else if (wakeup_source == 6) {
                 // PWM TBD
             } else {
-                printf("\r\n[ERROR] Standby wakeup source selection fail. \n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup source selection fail. \n");
                 PM_begin_check = 0;
                 return;
             }
@@ -313,7 +314,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                     case PA_3:
                         break;
                     default:
-                        printf("\r\n[ERROR] Standby wakeup AON GPIO pin selection fail. \n");
+                        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup AON GPIO pin selection fail. \n");
                         PM_begin_check = 0;
                         return;
                 }
@@ -349,7 +350,7 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                         // case PF_17:
                         break;
                     default:
-                        printf("\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
+                        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
                         PM_begin_check = 0;
                         return;
                 }
@@ -388,14 +389,14 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
                 HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));    // SWR 1.35V
                 hal_delay_ms(5);
             } else {
-                printf("\r\n[ERROR] Standby wakeup source selection fail. \n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup source selection fail. \n");
                 PM_begin_check = 0;
                 return;
             }
             PM_begin_check = 2;
         }
     } else {
-        printf("\r\n[ERROR] Power mode selection fail. \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Power mode selection fail. \n");
         PM_begin_check = 0;
     }
 }
@@ -459,7 +460,7 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec)
             Standby(PM_wakeup_source, PM_sleep_duration, PM_clock, PM_retention_setting);
         }
     } else {
-        printf("\r\n[ERROR] Power Mode begin check fail. \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Power Mode begin check fail. \n");
     }
 }
 
