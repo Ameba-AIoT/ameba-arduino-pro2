@@ -1,10 +1,12 @@
 Feature:
-- Add HTTPDisplayJPEGContinuousMultitask example
+- Update HTTPDisplayJPEGContinuousMultitask example
 
 API Updates:
-- Update TCP api related socket, lwip_send
+- Add Arduino printf
+    - Add log level options for Arduino
+- Add wifi driver log options
+- Add amb_ard_printf.h to Arduino.h
 
 Misc:
-- Add option to enable and disable codebase logs
-- Update board.txt
+- Update menu options
 - Update lib
