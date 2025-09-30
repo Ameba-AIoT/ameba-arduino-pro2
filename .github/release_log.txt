@@ -2,6 +2,7 @@ Pre Release Version 4.1.0
 
 Version 4.1.0 – 2025/09/11
 Version 4.1.0 - 2025/09/24
+Version 4.1.0 - 2025/09/30
 
 Feature:
 - Add SparkFun VL53L5CX examples
@@ -10,12 +11,17 @@ Feature:
 - Update RTSPImageClassification.ino
 - Add FLASH_SAVE function for wifi wpa connect example
 - Add HTTPDisplayJPEGContinuousMultitask example
+- Update HTTPDisplayJPEGContinuousMultitask example
 
 API Updates:
 - Update code base
 - Update FlashMemory.h
 - Remove unused files
 - Update TCP api related socket, lwip_send
+- Add Arduino printf
+    - Add log level options for Arduino
+- Add wifi driver log options
+- Add amb_ard_printf.h to Arduino.h
 
 Misc:
 - Update tool 1.4.6
@@ -24,4 +30,6 @@ Misc:
     - Add mobilenetv2
 - Add option to enable and disable codebase logs
 - Update board.txt
+- Update lib
+- Update menu options
 - Update lib
