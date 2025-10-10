@@ -1,18 +1,18 @@
 #include "WiFi_eap.h"
 
 extern "C" {
-    extern char *eap_target_ssid;
-    extern char *eap_identity;
-    extern char *eap_password;
-    extern const unsigned char *eap_ca_cert;
-    extern const unsigned char *eap_client_cert;
-    extern const unsigned char *eap_client_key;
-    extern char *eap_client_key_pwd;
-    extern int eap_ca_cert_len;
-    extern int eap_client_cert_len;
-    extern int eap_client_key_len;
+extern char *eap_target_ssid;
+extern char *eap_identity;
+extern char *eap_password;
+extern const unsigned char *eap_ca_cert;
+extern const unsigned char *eap_client_cert;
+extern const unsigned char *eap_client_key;
+extern char *eap_client_key_pwd;
+extern int eap_ca_cert_len;
+extern int eap_client_cert_len;
+extern int eap_client_key_len;
 
-    extern int eap_start(char *method);
+extern int eap_start(char *method);
 }
 
 WiFi_eapClass::WiFi_eapClass()

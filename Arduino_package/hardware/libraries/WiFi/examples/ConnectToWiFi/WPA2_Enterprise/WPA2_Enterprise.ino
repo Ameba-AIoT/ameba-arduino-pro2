@@ -13,25 +13,13 @@ char eap_methord[] = "tls";      // your eap methord "tls", "peap", "ttls"
 char ssid[] = "Network_SSID";    // your network SSID (name)
 char identity[] = "identity";    // your network identity
 char pass[] = "Password";        // your network password
-int status = -1;                 // Indicator of connetion
+int status = -1;                 // Indicator of connection
 
-const unsigned char client_cert [] = \
-    "-----BEGIN CERTIFICATE-----\r\n" \
-    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-    "-----END CERTIFICATE-----\r\n";
+const unsigned char client_cert[] = "-----BEGIN CERTIFICATE-----\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n-----END CERTIFICATE-----\r\n";
 
-const unsigned char client_key [] = \
-    "-----BEGIN PRIVATE KEY-----\r\n" \
-    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-    "-----END PRIVATE KEY-----\r\n";
+const unsigned char client_key[] = "-----BEGIN PRIVATE KEY-----\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n-----END PRIVATE KEY-----\r\n";
 
-const unsigned char ca_cert [] = \
-    "-----BEGIN CERTIFICATE-----\r\n" \
-    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-    "xxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n" \
-    "-----END CERTIFICATE-----\r\n";
+const unsigned char ca_cert[] = "-----BEGIN CERTIFICATE-----\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n-----END CERTIFICATE-----\r\n";
 
 void setup()
 {

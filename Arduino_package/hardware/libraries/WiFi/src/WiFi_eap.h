@@ -16,16 +16,16 @@ public:
     ~WiFi_eapClass();
 
     int begin();
-    int begin(char *method, char* ssid, char* identity, char* password, const unsigned char * client_cert, const unsigned char * client_key, const unsigned char * ca_cert);
+    int begin(char *method, char *ssid, char *identity, char *password, const unsigned char *client_cert, const unsigned char *client_key, const unsigned char *ca_cert);
 
 private:
-    char * _wifi_eap_target_ssid;
-    char * _wifi_eap_identity;
-    char * _wifi_eap_password;
-    const unsigned char * _wifi_eap_client_cert;
-    const unsigned char * _wifi_eap_client_key;
-    const unsigned char * _wifi_eap_ca_cert;
-    char * _wifi_eap_methord = "tls";
+    char *_wifi_eap_target_ssid;
+    char *_wifi_eap_identity;
+    char *_wifi_eap_password;
+    const unsigned char *_wifi_eap_client_cert;
+    const unsigned char *_wifi_eap_client_key;
+    const unsigned char *_wifi_eap_ca_cert;
+    char *_wifi_eap_methord = "tls";
 };
 
 extern WiFi_eapClass WiFi_eap;
