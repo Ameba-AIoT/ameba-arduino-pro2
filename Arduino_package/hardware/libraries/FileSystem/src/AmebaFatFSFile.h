@@ -44,7 +44,7 @@ public:
     void playMp3(void);
 
     void sdstartota(const char *filename);
-    
+
     bool readFile(unsigned char *&file_data, uint32_t &file_size);
 
     friend class AmebaFatFS;
