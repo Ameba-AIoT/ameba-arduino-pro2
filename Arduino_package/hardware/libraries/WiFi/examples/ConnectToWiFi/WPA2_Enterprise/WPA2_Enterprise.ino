@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/WiFi/Connect%20to%20WiFi.html
 */
 
 #include <WiFi_eap.h>
