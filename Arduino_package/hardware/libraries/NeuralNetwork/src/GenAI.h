@@ -26,6 +26,7 @@ public:
     String whisperaudio(String api_key, char *api_server, String api_path, String model, String filename, WiFiSSLClient client);
     void googletts(String filename_mp3, String message, String lang);
     String geminiaudio(String apikey, String filepath, String model, MP4Recording &mp4, String message, WiFiSSLClient client);
+    String geminivideo(String apikey, String filename, String model, MP4Recording &mp4, String message, WiFiSSLClient client);
 
 private:
     String urlencode(String str);
