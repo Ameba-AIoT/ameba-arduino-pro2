@@ -4,6 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #include "helix_mp3_drv.h"
+#include "ota_drv.h"
 }
 #endif
 File::File(void)
@@ -307,6 +308,17 @@ void File::playMp3(void)
 {
     convertMp3ToArray();
     return;
+}
+
+void File::sdstartota(const char *filepath)
+{
+    if (!filepath || filepath[0] == '\0') {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] No OTA file path provided.\n");
+        return;
+    }
+
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Starting OTA using file: %s\n", filepath);
+    ota_sd(filepath);
 }
 
 bool File::readFile(unsigned char *&file_data, uint32_t &file_size)
