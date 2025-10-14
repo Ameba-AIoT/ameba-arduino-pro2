@@ -8,3 +8,4 @@ extern const char *OtaState[];
 extern const char *g_otaState;
 
 void ota_http(void);
+void ota_sd(const char *filename);
