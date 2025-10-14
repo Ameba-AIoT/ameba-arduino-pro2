@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBC
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/MP4%20Recording%20with%20MP3%20Prompts.html
 */
 
 #include "StreamIO.h"
