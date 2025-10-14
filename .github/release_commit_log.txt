@@ -1,12 +1,11 @@
 Feature:
 - Update HTTPDisplayJPEGContinuousMultitask example
+- Add WiFi_eap related API
+- Add WPA2_EAP example
+- Add SD Card OTA example
 
 API Updates:
-- Add Arduino printf
-    - Add log level options for Arduino
-- Add wifi driver log options
-- Add amb_ard_printf.h to Arduino.h
+- Add WiFi_eap related API
+- Add SD Card OTA related API functions
 
 Misc:
-- Update menu options
-- Update lib
