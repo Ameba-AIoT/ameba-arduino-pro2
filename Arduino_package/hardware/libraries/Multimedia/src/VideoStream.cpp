@@ -932,3 +932,10 @@ int Video::videostream_status(int ch)
 {
     return cameraGetCtx(videoModule[ch]._p_mmf_context, ch);
 }
+
+void Video::setQLen(int ch, int len)
+{
+    cameraClearQItem(videoModule[ch]._p_mmf_context);
+    cameraSetQLen(videoModule[ch]._p_mmf_context, len);
+    cameraSetQItem(videoModule[ch]._p_mmf_context);
+}
