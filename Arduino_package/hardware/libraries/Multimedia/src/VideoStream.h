@@ -223,6 +223,7 @@ public:
     void setFPS(int fps);
     void printInfo(void);
     int videostream_status(int ch);
+    void setQLen(int ch, int len);
 
 private:
     void setSnapshotCallback(int ch);

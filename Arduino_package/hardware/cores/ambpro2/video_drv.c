@@ -284,6 +284,12 @@ void cameraSetQItem(mm_context_t *p)
     mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
 }
 
+// clear the queue item of video object
+void cameraClearQItem(mm_context_t *p)
+{
+    mm_module_ctrl(p, MM_CMD_CLEAR_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+}
+
 void cameraStart(void *p, int channel)
 {
     video_control(p, CMD_VIDEO_APPLY, channel);

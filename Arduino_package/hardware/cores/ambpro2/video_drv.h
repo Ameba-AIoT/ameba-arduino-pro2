@@ -45,6 +45,8 @@ void cameraSetQLen(mm_context_t *p, int length);
 
 void cameraSetQItem(mm_context_t *p);
 
+void cameraClearQItem(mm_context_t *p);
+
 void cameraStart(void *p, int channel);
 
 void cameraYUV(void *p);
