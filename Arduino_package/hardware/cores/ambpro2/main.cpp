@@ -27,6 +27,13 @@
 #endif
 #include <rtw_debug.h>
 extern u8 OtherDebugPortEnable;
+
+#if defined(Arduino_WATCHDOG)
+#include "wdt_api.h"
+
+static volatile uint32_t LoopLastTick = 0;    // to signal that main loop is alive for the watchdog
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -64,10 +71,42 @@ void main_task(void *)
         if (serialEventRun) {
             serialEventRun();
         }
+
+#if defined(Arduino_WATCHDOG)
+        LoopLastTick = xTaskGetTickCount();
+#endif
         vPortYield();
     }
     vTaskDelete(NULL);
 }
+
+#if defined(Arduino_WATCHDOG)
+static void watchdog_task(void *arg)
+{
+    // Start WDT
+    watchdog_init_arduino(WDT_TIMEOUT_MS, 0);
+    watchdog_start();
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WDT started\n");
+
+    TickType_t lastTick = xTaskGetTickCount();    // the number of ticks since the scheduler started
+    for (;;) {
+        vTaskDelay(pdMS_TO_TICKS(WDT_PERIOD_MS));
+
+        TickType_t now = xTaskGetTickCount();
+        if (now == lastTick) {    // don't feed
+            continue;
+        }
+        lastTick = now;
+
+        uint32_t dt_ms = (now - LoopLastTick) * portTICK_PERIOD_MS;    // ms elapsed since the last watchdog heartbeat (converted to ms)
+
+        if (dt_ms <= LOOP_TIMEOUT_MS) {
+            watchdog_refresh();
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WDT refreshed\n");
+        }
+    }
+}
+#endif
 
 int main(void)
 {
@@ -93,6 +132,14 @@ int main(void)
     if (xTaskCreate(main_task, ((const char *)"main task"), MAIN_THREAD_STACK_SIZE, NULL, 1, NULL) != pdPASS) {
         printf("\r\n[ERROR] %s xTaskCreate(main task) failed\n", __FUNCTION__);
     }
+
+#if defined(Arduino_WATCHDOG)
+    // start watchdog task (higher than main so it runs reliably)
+    if (xTaskCreate(watchdog_task, ((const char *)"watchdog task"), 1024, NULL, 2, NULL) != pdPASS) {
+        printf("\r\n[ERROR] %s xTaskCreate(watchdog_task) failed\n", __FUNCTION__);
+    }
+#endif
+
     set_initial_tick_count();
     vTaskStartScheduler();
 
