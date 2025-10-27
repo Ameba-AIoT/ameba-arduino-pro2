@@ -78,6 +78,12 @@ extern int dbg_sprintf(char *str, const char *fmt, ...);
 
 #define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messages, 5 to enable all debug messages
 
+#if defined(Arduino_WATCHDOG)
+#define WDT_TIMEOUT_MS  10000    // Delay after last refresh before forcing a reset
+#define WDT_PERIOD_MS   200      // Watchdog health check interval and refresh
+#define LOOP_TIMEOUT_MS 1500     // Max time difference since last loop
+#endif
+
 extern void set_logging(int enable);
 extern void set_video_logging(int enable);
 extern void set_module_video_logging(int enable);
