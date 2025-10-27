@@ -1,11 +1,9 @@
 Feature:
-- Update HTTPDisplayJPEGContinuousMultitask example
-- Add WiFi_eap related API
-- Add WPA2_EAP example
-- Add SD Card OTA example
 
 API Updates:
-- Add WiFi_eap related API
-- Add SD Card OTA related API functions
+- Add cameraClearQItem function
+- Add setQLen function for video class
+- Add watchdog option APIs
 
 Misc:
+- Add watchdog option and menu
