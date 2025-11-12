@@ -59,6 +59,8 @@ void cameraStopVideoStream(void *p, int channel);
 
 int cameraGetCtx(mm_context_t *p, int ch);
 
+int cameraGetStatus(void);
+
 mm_context_t *cameraDeinit(mm_context_t *);
 
 // Functions externed from module_video

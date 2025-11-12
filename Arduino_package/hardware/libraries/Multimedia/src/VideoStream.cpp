@@ -939,3 +939,8 @@ void Video::setQLen(int ch, int len)
     cameraSetQLen(videoModule[ch]._p_mmf_context, len);
     cameraSetQItem(videoModule[ch]._p_mmf_context);
 }
+
+int Video::cameraOpenStatus(void)
+{
+    return cameraGetStatus();
+}
