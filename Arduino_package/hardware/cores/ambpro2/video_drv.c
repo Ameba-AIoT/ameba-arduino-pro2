@@ -387,3 +387,8 @@ int cameraGetCtx(mm_context_t *p, int ch)
 
     return arduino_is_output_ready;
 }
+
+int cameraGetStatus()
+{
+    return video_open_status();
+}

@@ -224,6 +224,7 @@ public:
     void printInfo(void);
     int videostream_status(int ch);
     void setQLen(int ch, int len);
+    int cameraOpenStatus(void);
 
 private:
     void setSnapshotCallback(int ch);
