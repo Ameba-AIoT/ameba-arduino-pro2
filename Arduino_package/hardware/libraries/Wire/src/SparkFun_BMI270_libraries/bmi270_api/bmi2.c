@@ -1590,7 +1590,7 @@ static int8_t do_gtrigger_test(uint8_t gyro_st_crt, struct bmi2_dev *dev);
 /*!
  * @brief This function is to get the rdy for dl bit status
  * this will toggle from 0 to 1 and visevers according to the
- * dowload status
+ * download status
  *
  * @param[in] *rdy_for_dl: gets the rdy_for_dl status
  * @param[in] dev   : Structure instance of bmi2_dev
@@ -1604,7 +1604,7 @@ static int8_t get_rdy_for_dl(uint8_t *rdy_for_dl, struct bmi2_dev *dev);
 /*!
  * @brief This function is to write the config file in the given location for crt.
  * which inter checks the status of the rdy_for_dl bit and also the crt running, and
- * wirtes the given size.
+ * writes the given size.
  *
  * @param[in] write_len: length of the words to be written
  * @param[in] config_file_size: length of the words to be written
@@ -1783,7 +1783,7 @@ static int8_t sensor_disable(uint64_t sensor_sel, struct bmi2_dev *dev);
 static int8_t gyro_crt_test(uint8_t max_burst_length, uint8_t gyro_st_crt, struct bmi2_dev *dev);
 
 /*!
- * @brief This internal API is used to unpack virtual auxillary sensortime data.
+ * @brief This internal API is used to unpack virtual auxiliary sensortime data.
  *
  * @param[out]    aux     : Pointer to structure where the parsed auxiliary data
  *                          bytes are stored.
@@ -1840,7 +1840,7 @@ static int8_t get_average_of_sensor_data(uint8_t sens_list,
  *
  * @param[in] sens_list     : Sensor type
  * @param[in] accel_g_axis  : Accel axis to FOC.
- * @param[in] avg_foc_data  : Average value of sensor sample datas
+ * @param[in] avg_foc_data  : Average value of sensor sample data
  * @param[in] dev           : Structure instance of bmi2_dev.
  *
  * @return Result of API execution status
@@ -1856,7 +1856,7 @@ static int8_t validate_foc_position(uint8_t sens_list,
 /*!
  * @brief This internal API validates accel FOC axis given as input
  *
- * @param[in] avg_foc_data : Average value of sensor sample datas
+ * @param[in] avg_foc_data : Average value of sensor sample data
  * @param[in] dev          : Structure instance of bmi2_dev.
  *
  * @return Result of API execution status
@@ -7885,7 +7885,7 @@ static int8_t unpack_aux_frame(struct bmi2_aux_fifo_data *aux,
 }
 
 /*!
- * @brief This internal API is used to unpack virtual auxillary sensortime data.
+ * @brief This internal API is used to unpack virtual auxiliary sensortime data.
  */
 static void unpack_virtual_aux_data(struct bmi2_aux_fifo_data *aux,
                                     uint16_t *idx,

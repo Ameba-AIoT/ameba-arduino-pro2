@@ -44,7 +44,7 @@ void setup()
     imu.setGyroPowerMode(BMI2_POWER_OPT_MODE, BMI2_POWER_OPT_MODE);
 
     // Lower ODR values result in less power consumption. To ensure the sensors
-    // are syncronized, we'll choose the minimum ODR that both sensors support
+    // are synchronized, we'll choose the minimum ODR that both sensors support
     imu.setAccelODR(BMI2_ACC_ODR_25HZ);
     imu.setGyroODR(BMI2_GYR_ODR_25HZ);
 

@@ -917,7 +917,7 @@ int8_t BMI270::getFIFOData(BMI270_SensorData* data, uint16_t* numData)
     fifoData.length = numFIFOBytes + sensor.dummy_byte;
     fifoData.data = fifoBuffer;
 
-    // Read data out fo the FIFO into the byte buffer
+    // Read data out of the FIFO into the byte buffer
     err = bmi2_read_fifo_data(&fifoData, &sensor);
     if (err != BMI2_OK) {
         free(fifoBuffer);

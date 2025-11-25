@@ -1788,7 +1788,7 @@ int8_t bmi2_get_internal_status(uint8_t *int_stat, struct bmi2_dev *dev);
  * \code
  * int8_t bmi2_get_internal_error_status(uint8_t *status, struct bmi2_dev *dev);
  * \endcode
- * @details This API gets Interanl error status.
+ * @details This API gets Internal error status.
  *
  * @param[in]  status       : Pointer variable to store the status of the error
  * @param[out] int_stat     : Pointer variable to store error bits and

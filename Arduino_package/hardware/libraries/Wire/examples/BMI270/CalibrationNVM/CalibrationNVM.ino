@@ -67,7 +67,7 @@ void setup()
     //
     // Accelerometer offset resolution: 0.0039 g
     // Gyroscope offset resolution: 0.061 deg/sec
-    Serial.println("Performing acclerometer offset calibration...");
+    Serial.println("Performing accelerometer offset calibration...");
     imu.performAccelOffsetCalibration(BMI2_GRAVITY_POS_Z);
     Serial.println("Performing gyroscope offset calibration...");
     imu.performGyroOffsetCalibration();

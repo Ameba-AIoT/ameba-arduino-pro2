@@ -158,7 +158,7 @@ void loop()
             }
         }
         if (!(interruptStatus & (BMI270_STEP_CNT_STATUS_MASK | BMI270_STEP_ACT_STATUS_MASK))) {
-            Serial.print("Unkown interrupt condition!");
+            Serial.print("Unknown interrupt condition!");
         }
 
         Serial.println();

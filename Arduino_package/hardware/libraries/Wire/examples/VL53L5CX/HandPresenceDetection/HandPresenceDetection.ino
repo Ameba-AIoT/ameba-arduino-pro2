@@ -32,7 +32,8 @@ void setup()
     Serial.println("Initializing sensor board. This can take up to 10s. Please wait.");
     if (sensor.begin() == false) {
         Serial.println(F("Sensor not found - check your wiring. Freezing"));
-        while (1);
+        while (1)
+            ;
     }
 
     sensor.setResolution(8 * 8);    // Enable all 64 pads

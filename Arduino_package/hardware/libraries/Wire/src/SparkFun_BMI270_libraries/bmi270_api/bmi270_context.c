@@ -1284,7 +1284,7 @@ int8_t bmi270_context_get_act_recg_sett(struct bmi2_act_recg_sett *sett, struct 
                 /* get the status of enable/disable post processing */
                 sett->pp_en = BMI2_GET_BIT_POS0(feat_config[idx], BMI2_ACT_RECG_POST_PROS_EN_DIS);
 
-                /* increment idx by 2 to point min gdi thres addres */
+                /* increment idx by 2 to point min gdi thres address */
                 idx = idx + 2;
                 lsb = feat_config[idx];
                 idx++;
@@ -1292,7 +1292,7 @@ int8_t bmi270_context_get_act_recg_sett(struct bmi2_act_recg_sett *sett, struct 
                 msb_lsb = (uint16_t)(lsb | msb << 8);
                 sett->min_gdi_thres = msb_lsb;
 
-                /* increment idx by 1 to point max gdi thres addres */
+                /* increment idx by 1 to point max gdi thres address */
                 idx++;
                 lsb = feat_config[idx];
                 idx++;
@@ -1374,13 +1374,13 @@ int8_t bmi270_context_set_act_recg_sett(const struct bmi2_act_recg_sett *sett, s
                 if (rslt == BMI2_OK) {
                     feat_config[idx] = BMI2_SET_BIT_POS0(feat_config[idx], BMI2_ACT_RECG_POST_PROS_EN_DIS, sett->pp_en);
 
-                    /* Increment idx by 2 to point min gdi thres addres */
+                    /* Increment idx by 2 to point min gdi thres address */
                     idx = idx + 2;
                     feat_config[idx] = BMI2_GET_LSB(sett->min_gdi_thres);
                     idx++;
                     feat_config[idx] = BMI2_GET_MSB(sett->min_gdi_thres);
 
-                    /* Increment idx by 1 to point max gdi thres addres */
+                    /* Increment idx by 1 to point max gdi thres address */
                     idx++;
                     feat_config[idx] = BMI2_GET_LSB(sett->max_gdi_thres);
                     idx++;

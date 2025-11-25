@@ -39,7 +39,7 @@ void setup()
 
     // If your IMU axis directions don't match the axis directions you want for
     // your project, you can remap the axes by calling remapAxes(). Note that
-    // each axis can only be selectd once
+    // each axis can only be selected once
     bmi2_remap axes;
     axes.x = BMI2_AXIS_POS_Y;
     axes.y = BMI2_AXIS_NEG_Z;
