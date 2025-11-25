@@ -2,7 +2,7 @@
   This example shows how to use the SparkFun VL53L5CX Time-of-Flight sensor in 8x8 mode
   to detect hand presence.
 
-  Example Guide: TBD
+  Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20sensor%20Hand%20Presence%20Detection.html
 */
 
 #include <Wire.h>
@@ -32,8 +32,7 @@ void setup()
     Serial.println("Initializing sensor board. This can take up to 10s. Please wait.");
     if (sensor.begin() == false) {
         Serial.println(F("Sensor not found - check your wiring. Freezing"));
-        while (1)
-            ;
+        while (1);
     }
 
     sensor.setResolution(8 * 8);    // Enable all 64 pads
