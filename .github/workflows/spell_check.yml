@@ -26,12 +26,7 @@ jobs:
 #      uses: codespell-project/actions-codespell@master
       uses: codespell-project/actions-codespell@v2
       with:
-        skip: Arduino_package/hardware/libraries/NeuralNetwork/examples/AudioClassification/AudioClassList.h,Arduino_package/hardware/libraries/USB/src/usbd_uvc_parm.c,Arduino_package/hardware/libraries/SPI/src/JPEGDEC_Libraries/jpeg.inl,Arduino_package/hardware/libraries/NeuralNetwork/src/3rdparty/stb_image.h,Arduino_package/hardware/libraries/Wire/src/SparkFun_BMI270_libraries/bmi270_api/OIS_README.md,
-              Arduino_package/hardware/libraries/Wire/src/SparkFun_BMI270_libraries/bmi270_api/bmi2.c,
-              Arduino_package/hardware/libraries/Wire/src/SparkFun_BMI270_libraries/bmi270_api/bmi2.h,
-              Arduino_package/hardware/libraries/Wire/src/SparkFun_BMI270_libraries/bmi270_api/bmi2_defs.h,
-              Arduino_package/hardware/libraries/Wire/src/SparkFun_BMI270_libraries/bmi270_api/bmi2_ois.c,
-              Arduino_package/hardware/libraries/Wire/src/SparkFun_BMI270_libraries/bmi270_api/bmi2_ois.h        
-        ignore_words_list: ameba,re-used
+        skip: Arduino_package/hardware/libraries/NeuralNetwork/examples/AudioClassification/AudioClassList.h,Arduino_package/hardware/libraries/USB/src/usbd_uvc_parm.c,Arduino_package/hardware/libraries/SPI/src/JPEGDEC_Libraries/jpeg.inl,Arduino_package/hardware/libraries/NeuralNetwork/src/3rdparty/stb_image.h    
+        ignore_words_list: ameba,re-used,OIS,ois,
 #        ignore_words_file: Ameba_misc/Spell_Check_Ignore/.codespellignore
         path: ${{ matrix.path }}
