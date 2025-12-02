@@ -171,7 +171,7 @@ void checkTelegramCommands()
         return;
     }
 
-    String url
+    String url =
         "/bot"
         + botToken + "/getUpdates?timeout=2&offset=" + String(lastUpdateID + 1);
 
