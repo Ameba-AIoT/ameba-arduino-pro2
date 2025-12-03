@@ -1,5 +1,5 @@
 /*
-This example perform component retrim for the gyroscope, and offset calibration for both the accelerometer and IMU.
+This example shows the application of BMI270 on detecting wrist gestures.
 
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)

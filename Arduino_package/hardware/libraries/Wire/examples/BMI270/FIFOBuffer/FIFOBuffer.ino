@@ -1,5 +1,5 @@
 /*
-This example shows how to use SparkFun 6DoF BMI270 to get basic measurements using I2C.
+This example shows how to use SparkFun 6DoF BMI270 to get basic measurements using I2C based on FIFO buffer.
 
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)
@@ -33,7 +33,7 @@ void setup()
 {
     // Start serial
     Serial.begin(115200);
-    Serial.println("BMI270 Example 5 - FIFO Buffer");
+    Serial.println("BMI270 Example - FIFO Buffer");
 
     // Initialize the I2C library
     Wire.begin();
