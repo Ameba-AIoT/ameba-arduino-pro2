@@ -4,7 +4,8 @@ This example shows how to use SparkFun 6DoF BMI270 to get basic measurements usi
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)
 
-Example Guide: TBD
+Example Guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/BMI270%20FIFO%20Buffer.html
 */
 #include <Wire.h>
 #include "SparkFun_BMI270_libraries/SparkFun_BMI270_Arduino_Library.h"

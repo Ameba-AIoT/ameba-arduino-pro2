@@ -1,7 +1,8 @@
 /*
 This example shows how to upload an image to a local server using http, a copy of the uploaded image will also be saved to SD card.
 
-Example guide: TBD
+Example guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Upload%20Image.html
 */
 
 #include <WiFi.h>

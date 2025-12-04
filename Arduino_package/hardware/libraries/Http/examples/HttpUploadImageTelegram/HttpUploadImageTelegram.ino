@@ -1,7 +1,8 @@
 /*
 This example shows how to upload an image to Telegram using a bot.
 
-Example guide: TBD
+Example guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Upload%20Image%20Telegram.html
 */
 
 #include <WiFi.h>
