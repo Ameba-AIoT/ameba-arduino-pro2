@@ -4,7 +4,8 @@ This example shows how to lower the power consumption by setting the power mode 
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)
 
-Example Guide: TBD
+Example Guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/BMI270%20Low%20Power.html
 */
 
 #include <Wire.h>

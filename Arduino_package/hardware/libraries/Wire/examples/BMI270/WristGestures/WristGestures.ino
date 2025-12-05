@@ -1,10 +1,11 @@
 /*
-This example perform component retrim for the gyroscope, and offset calibration for both the accelerometer and IMU.
+This example shows the application of BMI270 on detecting wrist gestures.
 
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)
 
-Example Guide: TBD
+Example Guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/BMI270%20Wrist%20Gestures.html
 */
 
 #include <Wire.h>

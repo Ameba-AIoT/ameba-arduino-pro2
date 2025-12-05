@@ -1,11 +1,12 @@
 /*
 This example will run the sensor's self test feature. This will return an error code to indicate whether the test was successful.
-Note that the sensor will be reset after the test finishes
+Note that the sensor will be reset after the test finishes.
 
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)
 
-Example Guide: TBD
+Example Guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/BMI270%20Self%20Test.html
 */
 #include <Wire.h>
 #include "SparkFun_BMI270_libraries/SparkFun_BMI270_Arduino_Library.h"

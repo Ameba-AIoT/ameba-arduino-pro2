@@ -4,7 +4,8 @@ This example shows how to enable the step detector, counter, and activity recogn
 Prepared by: SparkFun Electronics
 Modified by: Realtek SG (24 Nov 2025)
 
-Example Guide: TBD
+Example Guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/BMI270%20Step%20Counter.html
 */
 
 #include <Wire.h>

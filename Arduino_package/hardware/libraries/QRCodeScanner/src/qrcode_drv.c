@@ -153,33 +153,54 @@ typedef struct _QR_CODE_SCANNER_CONFIG {
 } QR_CODE_SCANNER_CONFIG;
 
 QR_CODE_SCANNER_CONFIG qr_code_scanner_config_map[] = {
-  //	{640,  480,  2, 2, 0},		// QR_CODE_480P_DENSITY_2
-    {640, 480, 1, 1, 0}, // QR_CODE_480P_DENSITY_1
-  //	{1280, 720,  2, 2, 0},		// QR_CODE_720P_DENSITY_2
-  //	{1280, 720,  1, 1, 0},		// QR_CODE_720P_DENSITY_1
-  //	{1920, 1080, 2, 2, 0},		// QR_CODE_1080P_DENSITY_2
-  //	{1920, 1080, 1, 1, 0}		// QR_CODE_1080P_DENSITY_1
+    {640,  480,  2, 2, 0}, // QR_CODE_480P_DENSITY_2
+    {640,  480,  1, 1, 0}, // QR_CODE_480P_DENSITY_1
+    {1280, 720,  2, 2, 0}, // QR_CODE_720P_DENSITY_2
+    {1280, 720,  1, 1, 0}, // QR_CODE_720P_DENSITY_1
+    {1920, 1080, 2, 2, 0}, // QR_CODE_1080P_DENSITY_2
+    {1920, 1080, 1, 1, 0}  // QR_CODE_1080P_DENSITY_1
 };
 
 typedef enum {
-    //	QR_CODE_480P_DENSITY_2,		// 480P, Density = 2
-    //	QR_CODE_480P_DENSITY_1,		// 480P, Density = 1
-    //	QR_CODE_720P_DENSITY_2,		// 720P, Density = 2
-    //	QR_CODE_720P_DENSITY_1,		// 720P, Density = 1
-    //	QR_CODE_1080P_DENSITY_2,	// 1080P, Density = 2
+    QR_CODE_480P_DENSITY_2,     // 480P, Density = 2
+    QR_CODE_480P_DENSITY_1,     // 480P, Density = 1
+    QR_CODE_720P_DENSITY_2,     // 720P, Density = 2
+    QR_CODE_720P_DENSITY_1,     // 720P, Density = 1
+    QR_CODE_1080P_DENSITY_2,    // 1080P, Density = 2
     QR_CODE_1080P_DENSITY_1,    // 1080P, Density = 1
     QR_CODE_CONFIG_MAX_INDEX
 } qr_code_scanner_config_index;
 
 char *result_string;
 unsigned int result_length;
-char *result_string1 = "";
+char *result_string1 = NULL;
 unsigned int result_length1 = 0;
 
 void copyresultstring(void)
 {
+    if (result_length == 0 || result_string == NULL || result_string[0] == '\0') {
+        result_length1 = 0;
+        if (result_string1 != NULL) {
+            free(result_string1);
+            result_string1 = NULL;
+        }
+        return;
+    }
+
+    if (result_string1 != NULL) {
+        free(result_string1);
+        result_string1 = NULL;
+    }
+
+    result_string1 = (char *)malloc(result_length + 1);
+    if (result_string1 == NULL) {
+        result_length1 = 0;
+        return;
+    }
+
+    memcpy(result_string1, result_string, result_length);
+    result_string1[result_length] = '\0';
     result_length1 = result_length;
-    result_string1 = result_string;
 }
 
 void qr_code_scanner_thread(void *param)
@@ -232,12 +253,6 @@ void qr_code_scanner_thread(void *param)
                 vTaskDelay(1000);
                 yuv_snapshot_close(yuv_ctx);
                 break;
-            } else if (qr_code_result == QR_CODE_FAIL_UNSPECIFIC_ERROR) {
-                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_UNSPECIFIC_ERROR \r\n", __FUNCTION__, index);
-            } else if (qr_code_result == QR_CODE_FAIL_NO_FINDER_CENTER) {
-                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_NO_FINDER_CENTER \r\n", __FUNCTION__, index);
-            } else if (qr_code_result == QR_CODE_FAIL_DECODE_ERROR) {
-                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_DECODE_ERROR \r\n", __FUNCTION__, index);
             }
         }
 
@@ -245,10 +260,16 @@ void qr_code_scanner_thread(void *param)
             amb_ard_printf(ARD_LOG_INF, "[INFO] %s: qr code scan success \r\n", __FUNCTION__);
             amb_ard_printf(ARD_LOG_INF, "[INFO] %s: buf = %s \r\n", __FUNCTION__, result_string);
             amb_ard_printf(ARD_LOG_INF, "[INFO] %s: length = %u \r\n", __FUNCTION__, result_length);
-
-
         } else {
-            amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr code scan fail \r\n", __FUNCTION__);
+            if (qr_code_result == QR_CODE_FAIL_UNSPECIFIC_ERROR) {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_UNSPECIFIC_ERROR \r\n", __FUNCTION__, index);
+            } else if (qr_code_result == QR_CODE_FAIL_NO_FINDER_CENTER) {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_NO_FINDER_CENTER \r\n", __FUNCTION__, index);
+            } else if (qr_code_result == QR_CODE_FAIL_DECODE_ERROR) {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_DECODE_ERROR \r\n", __FUNCTION__, index);
+            } else {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr code scan fail \r\n", __FUNCTION__);
+            }
         }
 
         copyresultstring();
