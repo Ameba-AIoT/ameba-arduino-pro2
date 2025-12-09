@@ -1,8 +1,9 @@
-name: Extract Public Functions
+name: Find Public Functions
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -10,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repo
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Run extraction script
+      - name: Run Python extraction script
         run: |
           python3 << 'EOF'
           import os
@@ -21,7 +22,6 @@ jobs:
 
           HEADER_EXTENSIONS = [".h", ".hpp"]
 
-          # Regex patterns
           class_pattern = re.compile(r'class\s+(\w+)\s*[{:]')
           public_pattern = re.compile(r'public\s*:\s*')
           private_pattern = re.compile(r'private\s*:\s*')
@@ -38,7 +38,6 @@ jobs:
                   class_name = class_match.group(1)
                   start = class_match.end()
 
-                  # find where this class ends (count braces)
                   brace_count = 1
                   i = start
                   while i < len(text) and brace_count > 0:
@@ -49,13 +48,10 @@ jobs:
                       i += 1
 
                   class_body = text[start:i]
-
-                  # Split public/private parts
                   public_functions = []
                   mode = None
-                  lines = class_body.splitlines()
 
-                  for line in lines:
+                  for line in class_body.splitlines():
                       if public_pattern.search(line):
                           mode = "public"
                           continue
@@ -66,8 +62,7 @@ jobs:
                       if mode == "public":
                           func_match = function_pattern.search(line)
                           if func_match:
-                              signature = func_match.group(1).strip()
-                              public_functions.append(signature)
+                              public_functions.append(func_match.group(1).strip())
 
                   if public_functions:
                       classes[class_name] = public_functions
@@ -77,9 +72,9 @@ jobs:
 
           def walk_repository_and_extract(root=".", folder="library"):
               results = {}
-
               target_folder = os.path.join(root, folder)
-              if not os.path.exists(target_folder):
+
+              if not os.path.isdir(target_folder):
                   print(f"Folder '{folder}' does not exist.")
                   return results
 
@@ -94,18 +89,13 @@ jobs:
               return results
 
 
-          if __name__ == "__main__":
-              output = walk_repository_and_extract()
+          output = walk_repository_and_extract()
 
-              for filepath, classes in output.items():
-                  print(f"\n=== File: {filepath} ===")
-                  for classname, funcs in classes.items():
-                      print(f"  Class: {classname}")
-                      for f in funcs:
-                          print(f"    {f}")
+          for filepath, classes in output.items():
+              print(f"\n=== File: {filepath} ===")
+              for classname, funcs in classes.items():
+                  print(f"  Class: {classname}")
+                  for f in funcs:
+                      print(f"    {f}")
           EOF
 
-        for classname, funcs in classes.items():
-            print(f"  Class: {classname}")
-            for f in funcs:
-                print(f"    {f}")
