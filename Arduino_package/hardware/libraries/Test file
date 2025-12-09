@@ -1,0 +1,21 @@
+/*
+    Blink LED Example for Ameba Arduino Pro 2
+
+    This example turns the onboard LED on for one second,
+    then off for one second, repeatedly.
+
+    Connect the board and upload this sketch to see the LED blink.
+*/
+
+#define LED_PIN 13  // Onboard LED pin (change if needed)
+
+void setup() {
+    pinMode(LED_PIN, OUTPUT); // Initialize the LED pin as an output
+}
+
+void loop() {
+    digitalWrite(LED_PIN, HIGH);   // Turn the LED on
+    delay(1000);                   // Wait for one second
+    digitalWrite(LED_PIN, LOW);    // Turn the LED off
+    delay(1000);                   // Wait for one second
+}
