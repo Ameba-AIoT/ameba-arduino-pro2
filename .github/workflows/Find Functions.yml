@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run Python extraction script
         run: |
@@ -67,7 +67,7 @@ jobs:
               return classes
 
 
-          def walk_repository_and_extract(root=".", folder="library"):
+          def walk_repository_and_extract(root=".", folder="libraries"):
               results = {}
               target_folder = os.path.join(root, folder)
 
