@@ -19,24 +19,33 @@ jobs:
 
           HEADER_EXTENSIONS = [".h", ".hpp"]
 
-          class_pattern = re.compile(r'class\s+(\w+)\s*[{:]')
-          public_pattern = re.compile(r'public\s*:\s*')
-          private_pattern = re.compile(r'private\s*:\s*')
+          # Match classes including inheritance lists
+          class_pattern = re.compile(r'\bclass\s+(\w+)\s*(:[^{]+)?\s*\{')
+
+          public_pattern = re.compile(r'\bpublic\s*:\s*')
+          private_pattern = re.compile(r'\bprivate\s*:\s*')
+          protected_pattern = re.compile(r'\bprotected\s*:\s*')
+
+          # Function signature matcher
           function_pattern = re.compile(
-              r'^\s*([~\w][\w\s:&<>*,]+?\([^;{]*\))\s*;', re.MULTILINE
+              r'^\s*([~\w][\w\s:&<>*,]*?\([^;{]*\))\s*;', re.MULTILINE
           )
+
 
           def extract_public_functions_from_file(filepath):
               with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
                   text = f.read()
 
               classes = {}
-              for class_match in class_pattern.finditer(text):
-                  class_name = class_match.group(1)
-                  start = class_match.end()
 
+              for match in class_pattern.finditer(text):
+                  class_name = match.group(1)
+                  start_index = match.end()
+
+                  # Find end of class using brace counting
                   brace_count = 1
-                  i = start
+                  i = start_index
+
                   while i < len(text) and brace_count > 0:
                       if text[i] == '{':
                           brace_count += 1
@@ -44,22 +53,26 @@ jobs:
                           brace_count -= 1
                       i += 1
 
-                  class_body = text[start:i]
+                  class_body = text[start_index:i]
+
+                  # Extract only public section
+                  in_public = False
                   public_functions = []
-                  mode = None
 
                   for line in class_body.splitlines():
+
                       if public_pattern.search(line):
-                          mode = "public"
-                          continue
-                      elif private_pattern.search(line):
-                          mode = "private"
+                          in_public = True
                           continue
 
-                      if mode == "public":
-                          func_match = function_pattern.search(line)
-                          if func_match:
-                              public_functions.append(func_match.group(1).strip())
+                      elif private_pattern.search(line) or protected_pattern.search(line):
+                          in_public = False
+                          continue
+
+                      if in_public:
+                          fn = function_pattern.search(line)
+                          if fn:
+                              public_functions.append(fn.group(1).strip())
 
                   if public_functions:
                       classes[class_name] = public_functions
@@ -73,26 +86,28 @@ jobs:
 
               if not os.path.isdir(target_folder):
                   print(f"Folder '{folder}' does not exist.")
-                  return results
+                  return {}
 
               for subdir, _, files in os.walk(target_folder):
                   for file in files:
                       if any(file.endswith(ext) for ext in HEADER_EXTENSIONS):
-                          path = os.path.join(subdir, file)
-                          class_funcs = extract_public_functions_from_file(path)
-                          if class_funcs:
-                              results[path] = class_funcs
+                          full = os.path.join(subdir, file)
+                          out = extract_public_functions_from_file(full)
+                          if out:
+                              results[full] = out
 
               return results
 
 
-          output = walk_repository_and_extract()
+          if __name__ == "__main__":
+              output = walk_repository_and_extract()
 
-          for filepath, classes in output.items():
-              print(f"\n=== File: {filepath} ===")
-              for classname, funcs in classes.items():
-                  print(f"  Class: {classname}")
-                  for f in funcs:
-                      print(f"    {f}")
-          EOF
+              for filepath, classes in output.items():
+                  print(f"\n=== File: {filepath} ===")
+                  for classname, funcs in classes.items():
+                      print(f"  Class: {classname}")
+                      for f in funcs:
+                          print(f"    {f}")
+
+              EOF
 
