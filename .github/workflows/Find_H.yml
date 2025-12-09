@@ -1,9 +1,7 @@
 name: List .h Files
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   list_headers:
