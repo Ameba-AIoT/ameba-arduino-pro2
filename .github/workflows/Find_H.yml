@@ -1,0 +1,26 @@
+name: List .h Files
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  list_headers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Find and print all .h files
+        run: |
+          echo "Searching for .h files..."
+          FILES=$(find . -type f -name "*.h")
+          
+          if [ -z "$FILES" ]; then
+            echo "No .h files found."
+          else
+            echo "Found .h files:"
+            echo "$FILES"
+          fi
