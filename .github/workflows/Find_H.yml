@@ -14,7 +14,7 @@ jobs:
       - name: Find and print all .h files
         run: |
           echo "Searching for .h files..."
-          FILES=$(find . -type f -name "*.h")
+          FILES=$(find ./Arduino_package/hardware/libraries -type f -name "*.h")
           
           if [ -z "$FILES" ]; then
             echo "No .h files found."
