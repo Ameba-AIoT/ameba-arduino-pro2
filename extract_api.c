@@ -57,7 +57,7 @@ void scan_directory(const char *dirpath, regex_t *regex) {
 
         fclose(f);
 
-        printf('\n');
+        printf("\n");
     }
 
     closedir(dir);
