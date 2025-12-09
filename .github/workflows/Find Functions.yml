@@ -67,7 +67,7 @@ jobs:
               return classes
 
 
-          def walk_repository_and_extract(root=".", folder="libraries"):
+          def walk_repository_and_extract(root=".", folder="Arduino_package/hardware/libraries"):
               results = {}
               target_folder = os.path.join(root, folder)
 
