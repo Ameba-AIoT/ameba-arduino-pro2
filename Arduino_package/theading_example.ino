@@ -73,6 +73,8 @@ void setup()
 {
     Serial.begin(115200);
         delay(2000);
+  pinMode(23, OUTPUT);
+  pinMode(24, OUTPUT);
     // Set up the threads
     thread.start_THREAD_threads();
 }
