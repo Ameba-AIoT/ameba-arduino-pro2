@@ -6,7 +6,9 @@ on:
 jobs:
   greeting:
     runs-on: ubuntu-latest
-
     steps:
-      run: |
-        echo "test"
+    
+      - name: Check Example guide links
+        run: |
+          echo "test1"
+  
