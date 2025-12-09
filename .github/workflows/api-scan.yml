@@ -1,0 +1,27 @@
+name: API Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: sudo apt-get install -y build-essential
+
+      - name: Build extractor
+        run: make extract_api
+
+      - name: List public API
+        run: make list-api
+
+      - name: Upload API list as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: public_api
+          path: public_api.txt
