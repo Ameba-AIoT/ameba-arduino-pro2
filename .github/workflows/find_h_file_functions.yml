@@ -1,4 +1,4 @@
-name: Find Public Functions
+name: List .h file public functions
 
 on:
   workflow_dispatch:
@@ -30,7 +30,6 @@ jobs:
           function_pattern = re.compile(
               r'^\s*([~\w][\w\s:&<>*,]*?\([^;{]*\))\s*;', re.MULTILINE
           )
-
 
           def extract_public_functions_from_file(filepath):
               with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
@@ -79,7 +78,6 @@ jobs:
 
               return classes
 
-
           def walk_repository_and_extract(root=".", folder="Arduino_package/hardware/libraries"):
               results = {}
               target_folder = os.path.join(root, folder)
@@ -97,7 +95,6 @@ jobs:
                               results[full] = out
 
               return results
-
 
           if __name__ == "__main__":
               output = walk_repository_and_extract()

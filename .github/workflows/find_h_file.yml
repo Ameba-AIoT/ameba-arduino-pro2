@@ -1,4 +1,4 @@
-name: List .h Files
+name: List .h files
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Find and print all .h files
         run: |
