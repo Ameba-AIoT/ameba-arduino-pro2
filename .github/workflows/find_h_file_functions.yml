@@ -1,0 +1,107 @@
+name: List .h file public functions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Run Python extraction script
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+
+          HEADER_EXTENSIONS = [".h", ".hpp"]
+
+          # Match classes including inheritance lists
+          class_pattern = re.compile(r'\bclass\s+(\w+)\s*(:[^{]+)?\s*\{')
+
+          public_pattern = re.compile(r'\bpublic\s*:\s*')
+          private_pattern = re.compile(r'\bprivate\s*:\s*')
+          protected_pattern = re.compile(r'\bprotected\s*:\s*')
+
+          # Function signature matcher
+          function_pattern = re.compile(
+              r'^\s*([~\w][\w\s:&<>*,]*?\([^;{]*\))\s*;', re.MULTILINE
+          )
+
+          def extract_public_functions_from_file(filepath):
+              with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+                  text = f.read()
+
+              classes = {}
+
+              for match in class_pattern.finditer(text):
+                  class_name = match.group(1)
+                  start_index = match.end()
+
+                  # Find end of class using brace counting
+                  brace_count = 1
+                  i = start_index
+
+                  while i < len(text) and brace_count > 0:
+                      if text[i] == '{':
+                          brace_count += 1
+                      elif text[i] == '}':
+                          brace_count -= 1
+                      i += 1
+
+                  class_body = text[start_index:i]
+
+                  # Extract only public section
+                  in_public = False
+                  public_functions = []
+
+                  for line in class_body.splitlines():
+
+                      if public_pattern.search(line):
+                          in_public = True
+                          continue
+
+                      elif private_pattern.search(line) or protected_pattern.search(line):
+                          in_public = False
+                          continue
+
+                      if in_public:
+                          fn = function_pattern.search(line)
+                          if fn:
+                              public_functions.append(fn.group(1).strip())
+
+                  if public_functions:
+                      classes[class_name] = public_functions
+
+              return classes
+
+          def walk_repository_and_extract(root=".", folder="Arduino_package/hardware/libraries"):
+              results = {}
+              target_folder = os.path.join(root, folder)
+
+              if not os.path.isdir(target_folder):
+                  print(f"Folder '{folder}' does not exist.")
+                  return {}
+
+              for subdir, _, files in os.walk(target_folder):
+                  for file in files:
+                      if any(file.endswith(ext) for ext in HEADER_EXTENSIONS):
+                          full = os.path.join(subdir, file)
+                          out = extract_public_functions_from_file(full)
+                          if out:
+                              results[full] = out
+
+              return results
+
+          if __name__ == "__main__":
+              output = walk_repository_and_extract()
+
+              for filepath, classes in output.items():
+                  print(f"\n=== File: {filepath} ===")
+                  for classname, funcs in classes.items():
+                      print(f"  Class: {classname}")
+                      for f in funcs:
+                          print(f"    {f}")
