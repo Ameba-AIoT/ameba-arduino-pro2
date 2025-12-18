@@ -5,6 +5,7 @@ Version 4.1.0 - 2025/09/24
 Version 4.1.0 - 2025/09/30
 Version 4.1.0 - 2025/10/14
 Version 4.1.0 - 2025/10/27
+Version 4.1.0 - 2025/12/18
 
 Feature:
 - Add SparkFun VL53L5CX examples
@@ -17,6 +18,10 @@ Feature:
 - Add WiFi_eap related API
 - Add WPA2_EAP example
 - Add SD Card OTA example
+- Add BMI270 examples
+- Add Http Upload Image examples
+- Add Infrared and Ambient Light Sensor Features
+- Add Ollama LLM example and multithreading example
 
 API Updates:
 - Update code base
@@ -32,6 +37,8 @@ API Updates:
 - Add cameraClearQItem function
 - Add setQLen function for video class
 - Add watchdog option APIs
+- Add API for camera status check
+- Update AUTO_PWM for Ambient Light Sensor API
 
 Misc:
 - Update tool 1.4.6
@@ -43,3 +50,4 @@ Misc:
 - Update lib
 - Update menu options
 - Add watchdog option and menu
+- Add Workflow to find and summarise hardware library ".h" functions
