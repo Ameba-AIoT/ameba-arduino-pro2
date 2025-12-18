@@ -39,7 +39,6 @@ static float hw_lux = 0;            /* Lux information from hw-als */
 static int led_brightness = 0;      /* Ref value to led pwm*/
 static int THR_COLOR_TO_GRAY = 0;
 static int THR_GRAY_TO_COLOR = 0;
-static int AUTO_PWM_ENABLE = 0;
 static int DEBUG_EN = 0;
 
 static void autopwm_set_param(auto_pwm_config_t *auto_pwm_config)
@@ -154,51 +153,51 @@ void sensor_thread_hw(void *param)
         if (!gray_mode && (hw_lux <= THR_COLOR_TO_GRAY)) {
             ss_dprintf(SS_LOG_SWITCH, "[SENSOR_SERVICE] RGB2IR:gray_mode(%d), hw_lux(%3.1f) <= THR_COLOR_TO_GRAY(%d)\n", gray_mode, hw_lux, (int)THR_COLOR_TO_GRAY);
             gray_mode = ALS_MODE_IR_ENTRY;
-            if (AUTO_PWM_ENABLE) {
-                if (!en_auto_pwm) {
-                    led_idx = DEF_LED_IDX;
-                } else {
-                    led_idx = auto_pwm_config.led_idx;
-                }
-                day_night_mode_switch(gray_mode, auto_pwm_config.led_step[led_idx]);
+#if (AUTO_PWM)
+            if (!en_auto_pwm) {
+                led_idx = DEF_LED_IDX;
             } else {
-                day_night_mode_switch(gray_mode, LED_MAX_STRENGTH);
+                led_idx = auto_pwm_config.led_idx;
             }
+            day_night_mode_switch(gray_mode, auto_pwm_config.led_step[led_idx]);
+#else
+            day_night_mode_switch(gray_mode, LED_MAX_STRENGTH);
+#endif
         } else if (gray_mode && (hw_lux > THR_GRAY_TO_COLOR)) {
             ss_dprintf(SS_LOG_SWITCH, "[SENSOR_SERVICE] IR2RGB:gray_mode(%d), hw_lux(%3.1f) >= THR_GRAY_TO_COLOR(%d)\n", gray_mode, hw_lux, (int)THR_GRAY_TO_COLOR);
             gray_mode = ALS_MODE_RGB;
-            if (AUTO_PWM_ENABLE) {
-                if (en_auto_pwm) {
-                    auto_pwm_config.led_idx = led_idx;
-                }
+#if (AUTO_PWM)
+            if (en_auto_pwm) {
+                auto_pwm_config.led_idx = led_idx;
             }
+#endif
             day_night_mode_switch(gray_mode, 0);
         } else {
             ss_dprintf(SS_LOG_ALL, "[SENSOR_SERVICE] STABLE:gray_mode(%d), hw_lux(%3.1f)\n", gray_mode, hw_lux);
         }
 
-        if (AUTO_PWM_ENABLE) {
-            /*auto-pwm algorithm*/
-            if (gray_mode) {
-                if (en_auto_pwm) {
-                    if_ae_stable = isp_get_ae_if_stable(&sw_lux, AE_CHECK_DURATION);
-                    ss_dprintf(SS_LOG_ALL, "[SENSOR_SERVICE] if_ae_stable(%d), sw-lux(%d)\n", if_ae_stable, sw_lux);
-                    if (if_ae_stable == AE_UNSTABLE) {
-                        gray_mode = ALS_MODE_IR_ENTRY;
-                    } else {
-                        gray_mode = ALS_MODE_IR_STABLE;
-                        autopwm_flow(auto_pwm_config, &led_idx);
-                        auto_pwm_config.led_idx = led_idx;
-                    }
+#if (AUTO_PWM)
+        /*auto-pwm algorithm*/
+        if (gray_mode) {
+            if (en_auto_pwm) {
+                if_ae_stable = isp_get_ae_if_stable(&sw_lux, AE_CHECK_DURATION);
+                ss_dprintf(SS_LOG_ALL, "[SENSOR_SERVICE] if_ae_stable(%d), sw-lux(%d)\n", if_ae_stable, sw_lux);
+                if (if_ae_stable == AE_UNSTABLE) {
+                    gray_mode = ALS_MODE_IR_ENTRY;
                 } else {
-                    if (led_idx != DEF_LED_IDX) {
-                        led_idx = DEF_LED_IDX;
-                        gray_mode = ALS_MODE_IR_STABLE;
-                        day_night_mode_switch(gray_mode, auto_pwm_config.led_step[led_idx]);
-                    }
+                    gray_mode = ALS_MODE_IR_STABLE;
+                    autopwm_flow(auto_pwm_config, &led_idx);
+                    auto_pwm_config.led_idx = led_idx;
+                }
+            } else {
+                if (led_idx != DEF_LED_IDX) {
+                    led_idx = DEF_LED_IDX;
+                    gray_mode = ALS_MODE_IR_STABLE;
+                    day_night_mode_switch(gray_mode, auto_pwm_config.led_step[led_idx]);
                 }
             }
         }
+#endif
         if (DEBUG_EN) {
             sensor_service_osd();
         }
@@ -273,50 +272,51 @@ void sensor_thread_sw(void *param)
         } else if (!gray_mode && (sw_lux >= als_config.thr_color_to_gray)) {
             ss_dprintf(SS_LOG_SWITCH, "[SENSOR_SERVICE] RGB2IR:gray_mode(%d), sw_lux(%d) >= thr_color_to_gray(%d)\n", gray_mode, sw_lux, als_config.thr_color_to_gray);
             gray_mode = ALS_MODE_IR_ENTRY;
-            if (AUTO_PWM_ENABLE) {
-                if (!en_auto_pwm) {
-                    day_night_mode_switch(gray_mode, LED_MAX_STRENGTH);
-                } else {
-                    day_night_mode_switch(gray_mode, auto_pwm_config.led_step[auto_pwm_config.led_idx]);
-                }
-            } else {
+#if (AUTO_PWM)
+            if (!en_auto_pwm) {
                 day_night_mode_switch(gray_mode, LED_MAX_STRENGTH);
+            } else {
+                day_night_mode_switch(gray_mode, auto_pwm_config.led_step[auto_pwm_config.led_idx]);
             }
+#else
+            day_night_mode_switch(gray_mode, LED_MAX_STRENGTH);
+#endif
         } else if (gray_mode && (sw_lux <= als_config.thr_gray_to_color) && (sw_lux >= 0)) {
             als_get_statist(&als_data);
             if (als_if_switch(&als_config, &als_data)) {
                 gray_mode = ALS_MODE_RGB;
                 ss_dprintf(SS_LOG_SWITCH, "[SENSOR_SERVICE] IR2RGB:gray_mode(%d), sw_lux(%d) <= thr_gray_to_color(%d), als_if_switch(1)\n", gray_mode, sw_lux,
                            als_config.thr_gray_to_color);
-                if (AUTO_PWM) {
-                    if (en_auto_pwm) {
-                        auto_pwm_config.led_idx = led_idx;
-                    }
+#if (AUTO_PWM)
+                if (en_auto_pwm) {
+                    auto_pwm_config.led_idx = led_idx;
                 }
+#endif
                 day_night_mode_switch(gray_mode, 0);
             } else {
                 ss_dprintf(SS_LOG_ALL, "[SENSOR_SERVICE] STABLE:gray_mode(%d), sw_lux(%d) <= thr_gray_to_color(%d), als_if_switch(0)\n", gray_mode, sw_lux,
                            als_config.thr_gray_to_color);
             }
         }
-        if (AUTO_PWM) {
-            /*auto-pwm algorithm*/
-            if (if_ae_stable == AE_STABLE && gray_mode) {
-                if (en_auto_pwm) {
-                    autopwm_flow(auto_pwm_config, &led_idx);
-                }
-            } else {
-                if (led_idx != DEF_LED_IDX) {
-                    led_idx = DEF_LED_IDX;
-                    gray_mode = ALS_MODE_IR_STABLE;
-                    day_night_mode_switch(gray_mode, auto_pwm_config.led_step[led_idx]);
-                }
+#if (AUTO_PWM)
+        /*auto-pwm algorithm*/
+        if (if_ae_stable == AE_STABLE && gray_mode) {
+            if (en_auto_pwm) {
+                autopwm_flow(auto_pwm_config, &led_idx);
+            }
+        } else {
+            if (led_idx != DEF_LED_IDX) {
+                led_idx = DEF_LED_IDX;
+                gray_mode = ALS_MODE_IR_STABLE;
+                day_night_mode_switch(gray_mode, auto_pwm_config.led_step[led_idx]);
             }
         }
+#endif
+        if (DEBUG_EN) {
+            sensor_service_osd();
+        }
     }
-    if (DEBUG_EN) {
-        sensor_service_osd();
-    }
+    
     vTaskDelay(SERVICE_DURATION);
 }
 
@@ -392,5 +392,5 @@ void AmbientLightSensor::setDebugLog(int debugLevel)
 
 void AmbientLightSensor::enableAutoPWM(void)
 {
-    AUTO_PWM_ENABLE = 1;
+    en_auto_pwm = 1;
 }
