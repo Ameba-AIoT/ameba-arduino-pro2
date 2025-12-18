@@ -312,11 +312,12 @@ void sensor_thread_sw(void *param)
             }
         }
 #endif
+
         if (DEBUG_EN) {
             sensor_service_osd();
         }
     }
-    
+
     vTaskDelay(SERVICE_DURATION);
 }
 
