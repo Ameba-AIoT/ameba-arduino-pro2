@@ -1,9 +1,12 @@
 Feature:
+- Add BMI270 examples
+- Add Http Upload Image examples
+- Add Infrared and Ambient Light Sensor Features
+- Add Ollama LLM example and multithreading example
 
 API Updates:
-- Add cameraClearQItem function
-- Add setQLen function for video class
-- Add watchdog option APIs
+- Add API for camera status check
+- Update AUTO_PWM for Ambient Light Sensor API
 
 Misc:
-- Add watchdog option and menu
+- Add Workflow to find and summarise hardware library ".h" functions
