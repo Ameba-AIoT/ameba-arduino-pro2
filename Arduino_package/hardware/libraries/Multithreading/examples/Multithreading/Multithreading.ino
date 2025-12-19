@@ -7,7 +7,7 @@
     - thread B: prints "executing thread b" every 2000ms
 
   Example guide:
-  TBD
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multithreading/Multithreading.html
 */
 
 char BUFFER[1024];
