@@ -1,12 +1,8 @@
 Feature:
-- Add BMI270 examples
-- Add Http Upload Image examples
-- Add Infrared and Ambient Light Sensor Features
-- Add Ollama LLM example and multithreading example
+- Add Add Websocket Viewer example
 
 API Updates:
-- Add API for camera status check
-- Update AUTO_PWM for Ambient Light Sensor API
 
 Misc:
-- Add Workflow to find and summarise hardware library ".h" functions
+- Update code base for websocket
+- fix multithreading library name
