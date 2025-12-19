@@ -331,3 +331,12 @@ setGrayThreshold			KEYWORD2
 debugEnableOSD			KEYWORD2
 setDebugLog			KEYWORD2
 enableAutoPWM			KEYWORD2
+
+#######################################
+# WebSocketViewer.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+loadWebResourcesFromSD	KEYWORD2
+loadWebResources	KEYWORD2
+init	KEYWORD2
+begin	KEYWORD2
+deinit	KEYWORD2

@@ -2,6 +2,7 @@
 #define VIDEO_DRV_H
 
 #include "mmf2_module.h"
+#include "hal_video_common.h"
 
 typedef struct {
     int Brightness;
@@ -62,6 +63,8 @@ int cameraGetCtx(mm_context_t *p, int ch);
 int cameraGetStatus(void);
 
 mm_context_t *cameraDeinit(mm_context_t *);
+
+void cameraOpenWSViewer(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation, uint32_t h264_level, uint32_t h264_profile, uint32_t entropy_mode, uint32_t rc_minQp, uint32_t rc_maxQp);
 
 // Functions externed from module_video
 extern void *video_create(void *parent);

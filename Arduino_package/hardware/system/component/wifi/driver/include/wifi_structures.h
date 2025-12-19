@@ -149,6 +149,7 @@ typedef struct {
 	rtw_wps_type_t          wps_type;         /**< WPS type                                                                  */
 	unsigned int                      channel;          /**< Radio channel that the AP beacon was received on                          */
 	rtw_802_11_band_t       band;             /**< Radio band                                                                */
+	unsigned char country_code[2]; /**< country_code in Probe Response/Beacon */
 #ifdef CONFIG_P2P_NEW
 	unsigned char			p2p_role;
 #endif
@@ -544,6 +545,14 @@ struct  wifi_user_conf {
 	unsigned char chn5G_num;
 	unsigned char regulation2_4G;
 	unsigned char regulation5G;
+        
+	/*
+        The wifi_11v_enabled is used to configure the 11v settings, each bit controls one aspect.
+	bit 0: (0: disable 11v feature, 1:  enable 11v feature)
+	bit 1: (0: disable wifi_connect from the upper layer and enable roaming from the driver, 1:  enable wifi_connect from the upper layer and disable roaming from driver)
+  	*/      
+	unsigned char wifi_11v_enabled;
+	unsigned char wifi_11r_enabled;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 

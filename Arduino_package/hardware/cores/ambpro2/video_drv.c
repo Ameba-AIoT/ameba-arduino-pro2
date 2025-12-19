@@ -48,6 +48,9 @@ static video_params_t video_params = {
                        .ymax = 0,
                        },
     .meta_enable = 0,
+    .level = 0,
+    .profile = 0,
+    .cavlc = 1,
 };
 
 static video_params_t video_v4_params = {
@@ -68,6 +71,11 @@ static video_params_t video_v4_params = {
             .xmax = 0,
             .ymax = 0,
             },
+};
+
+static encode_rc_parm_t encode_rc_params = {
+	.minQp = 0,		// for CBR/VBR
+	.maxQp = 0,		// for CBR/VBR
 };
 
 void ISPControlReset(void)
@@ -250,6 +258,53 @@ void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, in
         mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 1);
         mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+    }
+}
+
+void cameraOpenWSViewer(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation, uint32_t h264_level, uint32_t h264_profile, uint32_t entropy_mode, uint32_t rc_minQp, uint32_t rc_maxQp)
+{
+    // assign value parsing from user level
+    video_params.stream_id = stream_id;
+    // check if there is video with snapshot
+    if (snapshot == 1) {
+        if (type == VIDEO_HEVC) {
+            type = VIDEO_HEVC_JPEG;
+        } else if (type == VIDEO_H264) {
+            type = VIDEO_H264_JPEG;
+        }
+    }
+
+    video_params.type = type;
+    video_params.resolution = res;
+    video_params.width = w;
+    video_params.height = h;
+    video_params.bps = bps;
+    video_params.fps = fps;
+    video_params.gop = gop;
+    video_params.rc_mode = rc_mode;
+    video_params.jpeg_qlevel = jpeg_qlevel;
+    video_params.rotation = video_rotation;
+
+    video_params.level = h264_level;
+    video_params.profile= h264_profile;
+    video_params.cavlc = entropy_mode;
+
+    if (p) {
+        // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
+        video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+        mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, fps * 3);
+        mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+        if ((type == VIDEO_JPEG) || (type == VIDEO_HEVC_JPEG) || (type == VIDEO_H264_JPEG)) {
+            mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 0);
+        }
+
+        encode_rc_params.minQp = rc_minQp;
+        encode_rc_params.maxQp = rc_maxQp;
+
+        mm_module_ctrl(p, CMD_VIDEO_SET_RCPARAM, (int)&encode_rc_params);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] cameraOpenWSViewer done\n");
+    } else {
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] cameraOpenWSViewer fail\n");
     }
 }
 

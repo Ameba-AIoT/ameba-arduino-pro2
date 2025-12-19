@@ -384,7 +384,7 @@ void CameraSetting::reset(void)
     amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] ISP Control Reset.\n");
 }
 
-VideoSetting::VideoSetting(uint8_t preset)
+VideoSetting::VideoSetting(uint8_t preset, int websocket_viewer_en)
 {
     INIT_VIDEO_LOGGING();
     INIT_MODULE_VIDEO_LOGGING();
@@ -396,6 +396,14 @@ VideoSetting::VideoSetting(uint8_t preset)
             _bps = CAM_BPS;
             _encoder = VIDEO_H264;
             _snapshot = 0;
+            _wsviewer_en = websocket_viewer_en;
+            if (_wsviewer_en == 1) {
+                 _h264_level = VCENC_H264_LEVEL_4;
+                _h264_profile = VCENC_H264_BASE_PROFILE;
+                _h264_entropy_mode = 1;
+                _rc_minQp = 15;
+                _rc_maxQp = 35;
+            }
             break;
         }
         case 1: {
@@ -404,6 +412,14 @@ VideoSetting::VideoSetting(uint8_t preset)
             _bps = CAM_BPS;
             _encoder = VIDEO_H264;
             _snapshot = 0;
+            _wsviewer_en = websocket_viewer_en;
+            if (_wsviewer_en == 1) {
+                 _h264_level = VCENC_H264_LEVEL_4;
+                _h264_profile = VCENC_H264_BASE_PROFILE;
+                _h264_entropy_mode = 1;
+                _rc_minQp = 15;
+                _rc_maxQp = 35;
+            }
             break;
         }
         case 2: {
@@ -448,7 +464,7 @@ VideoSetting::VideoSetting(uint8_t preset)
     }
 }
 
-VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot)
+VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot, int websocket_viewer_en)
 {
     INIT_VIDEO_LOGGING();
     INIT_MODULE_VIDEO_LOGGING();
@@ -460,6 +476,15 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     // 0: none; 1: full; 2: crop;
     _snapshot = snapshot;
     _jpeg_qlevel = 5;
+
+    _wsviewer_en = websocket_viewer_en;
+    if (_wsviewer_en == 1) {
+        _h264_level = VCENC_H264_LEVEL_4;
+        _h264_profile = VCENC_H264_BASE_PROFILE;
+        _h264_entropy_mode = 1;
+        _rc_minQp = 15;
+        _rc_maxQp = 35;
+    }
 
     if ((_snapshot == 1) || (_snapshot == 2)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
@@ -487,7 +512,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     }
 }
 
-VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot)
+VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot, int websocket_viewer_en)
 {
     INIT_VIDEO_LOGGING();
     INIT_MODULE_VIDEO_LOGGING();
@@ -501,6 +526,15 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     _w = w;
     _h = h;
     _jpeg_qlevel = 5;
+
+    _wsviewer_en = websocket_viewer_en;
+    if (_wsviewer_en == 1) {
+        _h264_level = VCENC_H264_LEVEL_4;
+        _h264_profile = VCENC_H264_BASE_PROFILE;
+        _h264_entropy_mode = 1;
+        _rc_minQp = 15;
+        _rc_maxQp = 35;
+    }
 
     // Check resolution maximums
     if (_w > 1920) {
@@ -583,6 +617,20 @@ void VideoSetting::setJpegQuality(uint8_t quality)
     _jpeg_qlevel = quality;
 }
 
+// entropy_mode = 0 - baseline profile, entropy_mode = 1 - main/high profiles
+void VideoSetting::setH264EncParams(uint32_t level, uint32_t profile, uint32_t entropy_mode)
+{
+    _h264_level = level;
+    _h264_profile = profile;
+    _h264_entropy_mode = entropy_mode;
+}
+
+void VideoSetting::setRCParams(uint32_t minQp, uint32_t maxQp)
+{
+    _rc_minQp = minQp;
+    _rc_maxQp = maxQp;
+}
+
 // 0 (default): 0 degree
 // 1: 90 degree (Rotate Right)
 // 2: 90 degree (Rotate Left)
@@ -619,7 +667,7 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
     bps[ch] = config._bps;
     encoder[ch] = config._encoder;
     snapshot[ch][0] = config._snapshot;
-
+    wsviewer_en[ch] = config._wsviewer_en;
     if (config._preset == USB_UVCD_STREAM_PRESET) {
         gop[ch] = config._gop;
         rc_mode[ch] = config._rc_mode;
@@ -630,6 +678,13 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
         video_rotation[ch] = config._rotation;
     }
 
+    if (wsviewer_en[ch] == 1) {
+        h264_level[ch] = config._h264_level;
+        h264_profile[ch] = config._h264_profile;
+        h264_entropy_mode[ch] = config._h264_entropy_mode;
+        rc_maxQp[ch] = config._rc_maxQp;
+        rc_minQp[ch] = config._rc_minQp;
+    }
     // Video stream using VIDEO_JPEG requires setting bps = 0
     // if (encoder[ch] == VIDEO_JPEG) {
     //     bps[ch] = 0;
@@ -740,19 +795,41 @@ void Video::videoInit(int ch)
                              0);    // direct output flag
             } else {
                 if (preset[ch] != USB_UVCD_STREAM_PRESET) {
-                    cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
-                               channel[ch],
-                               encoder[ch],
-                               resolution[ch],
-                               w[ch],
-                               h[ch],
-                               bps[ch],
-                               fps[ch],
-                               CAM_GOP,
-                               CAM_RCMODE,
-                               snapshot[ch][0],
-                               jpeg_qlevel[ch],
-                               video_rotation[ch]);
+                    if (wsviewer_en[ch] == 1) {
+                        cameraOpenWSViewer(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                                                    channel[ch],
+                                                    encoder[ch],
+                                                    resolution[ch],
+                                                    w[ch],
+                                                    h[ch],
+                                                    bps[ch],
+                                                    fps[ch],
+                                                    CAM_GOP,
+                                                    CAM_RCMODE,
+                                                    snapshot[ch][0],
+                                                    jpeg_qlevel[ch],
+                                                    video_rotation[ch],
+                                                    h264_level[ch],
+                                                    h264_profile[ch],
+                                                    h264_entropy_mode[ch],
+                                                    rc_minQp[ch],
+                                                    rc_maxQp[ch]);
+                    }
+                    else {
+                        cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                                channel[ch],
+                                encoder[ch],
+                                resolution[ch],
+                                w[ch],
+                                h[ch],
+                                bps[ch],
+                                fps[ch],
+                                CAM_GOP,
+                                CAM_RCMODE,
+                                snapshot[ch][0],
+                                jpeg_qlevel[ch],
+                                video_rotation[ch]);
+                    }
                 } else {
                     // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
                     cameraOpenUVCD(videoModule[ch]._p_mmf_context,

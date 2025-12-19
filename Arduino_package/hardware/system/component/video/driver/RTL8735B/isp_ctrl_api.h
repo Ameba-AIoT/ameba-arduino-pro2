@@ -6,6 +6,26 @@ struct ctrl_range {
 	int max;
 };
 
+enum isp_wdr_mode {
+	WDR_DISABLE = 0,
+	WDR_MANUAL,
+	WDR_AUTO,
+	WDR_DIRECT		//only for hr flow
+};
+
+enum isp_flicker_mode {
+	FLICKER_DISABLE = 0,
+	FLICKER_50HZ,
+	FLICKER_60HZ,
+	FLICKER_AUTO
+};
+
+enum isp_mirrorflip_mode {
+	MIRRORFLIP_DISABLE = 0xF0, //or 0xF0 can directly operating i2C after sensor initialization
+	MIRRORFLIP_MIRROR,
+	MIRRORFLIP_FLIP,
+	MIRRORFLIP_BOTH
+};
 
 void isp_ctrl_enable_log(int enable);
 int isp_set_brightness(int val);

@@ -67,6 +67,13 @@ enum ISP_Buf_Cfg_Order {
 	BUF_ITEM_NUM
 };
 
+enum hal_isp_ae_region {
+	REGION_UPPER_LEFT,
+	REGION_UPPER_RIGHT,
+	REGION_LOWER_LEFT,
+	REGION_LOWER_RIGHT,
+};
+
 typedef struct hal_isp_stream_stream {
 
 	__u8 streamid;	/*initialized by user*/
@@ -464,6 +471,8 @@ int hal_isp_set_init_gray_mode(int gray_mode);
 int hal_isp_get_real_fps(int ch, int *fps100);
 int hal_isp_get_ae_weight(uint8_t *weights, int *win_num);
 int hal_isp_set_ae_weight(uint8_t *weights, int win_num);
+int hal_isp_get_max_dyn_region(enum hal_isp_ae_region *region);
+int hal_isp_set_max_dyn_region_en(uint8_t max_dyn_region_en);
 int hal_isp_set_mask(isp_mask_group_t *input_mask);
 int hal_isp_config_iq_calibration(int config_flag);
 void hal_isp_set_hdr_mode(uint32_t hdr_mode);
@@ -482,7 +491,12 @@ void hal_isp_verify_path_trigger(u32 delay_ms);
 int hal_isp_is_verify_path_last_trigger(void);
 int hal_isp_tuning_iq_nlsc(u32 idx, struct verify_ctrl_config v_cfg);
 void hal_isp_set_zoom_filter_coeff(u8* buff);
+void hal_isp_set_zoom_1x1_up_en(u32 en);
+u32 hal_isp_get_zoom_1x1_up_en(void);
 void hal_isp_set_verify_counter(void);
 u32 hal_isp_get_verify_counter(void);
+int hal_isp_set_statis_irq_en(u32 statis_irq_en);
+int hal_isp_get_dir_wdr_level(uint8_t *level);
+int hal_isp_set_dir_wdr_level(uint8_t *level);
 
 #endif /* HAL_RTL8735B_LIB_SOURCE_RAM_VIDEO_ISP_HAL_ISP_H_ */

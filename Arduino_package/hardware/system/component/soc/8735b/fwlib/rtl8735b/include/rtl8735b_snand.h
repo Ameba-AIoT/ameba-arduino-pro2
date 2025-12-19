@@ -67,14 +67,22 @@ typedef enum snafcClkDivSel_e {
 /**
   \brief  Enumeration to define SNAFC speed level
 */
-enum snafc_clk_sel_e {
+#ifdef ARDUINO_SDK
+typedef enum snafc_clk_sel_e {
+    SNAFC_SPEED_SEL_0 = 0,
+    SNAFC_SPEED_SEL_1 = 1,
+    SNAFC_SPEED_SEL_2 = 2,
+    SNAFC_SPEED_SEL_3 = 3,
+} snafc_clk_sel_t;
+#else
+enum snafc_clk_sel_t {
 	SNAFC_SPEED_SEL_0 = 0,  //!< slowest pre-defined value
 	SNAFC_SPEED_SEL_1 = 1,  //!< slower pre-defined value
 	SNAFC_SPEED_SEL_2 = 2,  //!< faster pre-defined value
 	SNAFC_SPEED_SEL_3 = 3,  //!< fastest pre-defined value
 };
 typedef uint8_t snafc_clk_sel_t;
-
+#endif
 #define SNAFC_INITVAL_SETS (4) //!< 0->3, slowest default value to fastest default value
 
 /**
@@ -175,6 +183,18 @@ enum snandGenericEccSts_e {
 	SNAND_STS_ECC_NO_ERR = 0,
 	SNAND_STS_ECC_ERR_AND_FIXED = 1,
 	SNAND_STS_ECC_ERR_CANNOT_FIX = 2,
+};
+
+enum snand_cont_rd_support_vdr_typeid_e {
+	SNAND_ERR_NO_SUPPORT_TYPEID         = 0x0,
+	SNAND_WINBOND_25N01GVZE1G_TYPEID    = 0x00efaa21,
+	SNAND_MXIC_MX35LF2GE4AD_TYPEID      = 0x00c22603,
+};
+
+enum snand_cont_rd_support_vdr_e {
+	SNAND_ERR_NO_SUPPORT_CONTRD         = 0x0,
+	SNAND_WINBOND_25N01GVZE1G_CONTRD    = 0x10,
+	SNAND_MXIC_MX35LF2GE4AD_CONTRD      = 0x20,
 };
 
 /**
@@ -313,7 +333,7 @@ typedef struct _hal_snafc_adaptor_s {
 	uint8_t pagePerBlk;                 //!< page per block (Usually 64). blockSize = (pageSize+spareSize)xpagePerBlk
 	uint8_t blkPerDev;                  //!< block per device. For pageSize 2KB, capacity 512Mb's device, blkPerDev is 512; 1Gb device is 1024; 2Gb device is 2048.
 	uint8_t dma_en;                     //!< Indicate whether Transfer mode is DMA (1) or PIO (0)
-	uint8_t rsvd1;                      //!< RESERVED
+	uint8_t cont_rd_vdr_idx;            //!< Indicate NAND vndr continous-rd idx
 	uint32_t col_addr;                      //!< Column Address for specific CA[11:0] in S-NAND bus protocol. (default 0)
 	snand_bus_cfg_t snand_cmd_info;     //!< Indicate snand_cmd_info (w_cmd_cycle, w_cmd, w_addr_io, w_data_io)(r_cmd_cycle, r_cmd, r_addr_io, r_data_io)
 	snand_wait_snand_rdy_t *funcWaitSnandReady; //!< S-NAND device dependent wait ready rule

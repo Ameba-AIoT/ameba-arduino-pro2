@@ -195,7 +195,7 @@
 #define DPK_VER_8812F "0x0a"
 #define DPK_VER_8197G "0x0e"
 #define DPK_VER_8814C "0x02"
-#define DPK_VER_8735B "0x0d"
+#define DPK_VER_8735B "0x0f"
 #define DPK_VER_8822E "0x0e"
 
 /*RFK_INIT version*/

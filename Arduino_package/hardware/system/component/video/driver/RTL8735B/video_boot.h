@@ -201,6 +201,7 @@ typedef struct video_boot_stream_cfg {
 	uint8_t extra_video_enable;
 	uint8_t extra_video_snapshot;
 	uint8_t extra_video_drop_frame;
+	uint32_t init_max_dyn_region_en;
 } video_boot_stream_t;
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L

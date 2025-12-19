@@ -4,6 +4,7 @@
 #include "hal_osd_util.h"
 #include "hal_video.h"
 
+
 struct osd_rect_info_st {
 	int format;
 	unsigned char line_width;
