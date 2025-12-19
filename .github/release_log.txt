@@ -6,6 +6,7 @@ Version 4.1.0 - 2025/09/30
 Version 4.1.0 - 2025/10/14
 Version 4.1.0 - 2025/10/27
 Version 4.1.0 - 2025/12/18
+Version 4.1.0 - 2025/12/19
 
 Feature:
 - Add SparkFun VL53L5CX examples
@@ -22,6 +23,7 @@ Feature:
 - Add Http Upload Image examples
 - Add Infrared and Ambient Light Sensor Features
 - Add Ollama LLM example and multithreading example
+- Add Add Websocket Viewer example
 
 API Updates:
 - Update code base
@@ -51,3 +53,5 @@ Misc:
 - Update menu options
 - Add watchdog option and menu
 - Add Workflow to find and summarise hardware library ".h" functions
+- Update code base for websocket
+- fix multithreading library name
