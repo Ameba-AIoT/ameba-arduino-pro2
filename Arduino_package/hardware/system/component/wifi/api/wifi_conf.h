@@ -1139,6 +1139,7 @@ int wifi_set_dhcp_offload(void);
  */
 void wifi_set_unicast_wakeup(u8 enable);
 
+void wifi_set_802_11v_bss_pkt_offload(void);
 
 #if defined CONFIG_ARP_KEEP_ALIVE || defined __DOXYGEN__
 /**

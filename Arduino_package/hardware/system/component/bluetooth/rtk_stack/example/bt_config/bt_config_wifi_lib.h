@@ -107,11 +107,21 @@ struct _BC_band_info
 };
 
 #pragma pack(1)
-struct _BC_connect_AP_info
+struct _BC_connect_AP_info_req
 {	
 	uint8_t band; //0 for 2.4G,1 for 5G
 	uint8_t security_type;/*0:open,1:WPA,2:WEP*/
 	uint8_t SSID[BC_MAX_SSID_LEN];
+	uint8_t BSSID[BC_BSSID_LEN];
+	uint8_t password[RTW_MAX_PSK_LEN];
+};
+
+#pragma pack(1)
+struct _BC_connect_AP_info
+{	
+	uint8_t band; //0 for 2.4G,1 for 5G
+	uint8_t security_type;/*0:open,1:WPA,2:WEP*/
+	uint8_t SSID[BC_MAX_SSID_LEN + 1];
 	uint8_t BSSID[BC_BSSID_LEN];
 	uint8_t password[RTW_MAX_PSK_LEN];
 };

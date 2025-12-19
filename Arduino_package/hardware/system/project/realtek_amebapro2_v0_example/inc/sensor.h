@@ -106,6 +106,13 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_FIXP_5M        0x3B  //  |   v    |   -    |   -    |   -    |
 #define SENSOR_FIXP_2K        0x3C  //  |   v    |   -    |   -    |   -    |
 #define SENSOR_SC5356_2M      0x3D  //  |   v    |   v    |   v    |   -    |
+#define SENSOR_OS02H10        0x3E  //  |   v    |   v    |   -    |   -    |
+#define SENSOR_OV13B10        0x3F  //  |   v    |   v    |   -    |   -    |
+#define SENSOR_OV13B10_12M    0x40  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV13B10_12M_SEQ 0x41  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV12890         0x42  //  |   v    |   v    |   -    |   -    |
+#define SENSOR_OV12890_12M     0x43  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV12890_12M_SEQ 0x44  //  |   v    |   -    |   -    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_DUMMY]        = {1920, 1080, 30},
@@ -164,12 +171,19 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_IMX471]       = {2304, 1728, 24},
 	[SENSOR_IMX471_12M]       = {4032, 3024, 5},
 	[SENSOR_IMX471_12M_SEQ]   = {2032, 3024, 5}, //width = 2016 + 16(overlap)
-	[SENSOR_IMX681]       = {2000, 1500, 30},
-	[SENSOR_IMX681_12M]       = {4016, 3008, 4},
-	[SENSOR_IMX681_12M_SEQ]   = {2032, 3008, 4}, //width = 2008 + 24(overlap)
-	[SENSOR_FIXP_5M]        = {2592, 1944, 30}, //fix pattern
-	[SENSOR_FIXP_2K]        = {2560, 1440, 30},
-	[SENSOR_SC5356_2M]       = {1088, 1944, 30},
+	[SENSOR_IMX681]           = {2000, 1500, 30},
+	[SENSOR_IMX681_12M]       = {4016, 3012, 4},
+	[SENSOR_IMX681_12M_SEQ]   = {2032, 1532, 4}, //width = 2008 + 24(overlap) //height = 1506 + 26
+	[SENSOR_FIXP_5M]          = {2592, 1944, 30}, //fix pattern
+	[SENSOR_FIXP_2K]          = {2560, 1440, 30},
+	[SENSOR_SC5356_2M]        = {1088, 1944, 30},
+	[SENSOR_OS02H10]          = {1920, 1080, 30},
+	[SENSOR_OV13B10]  	      = {2096,  1560, 30},
+	[SENSOR_OV13B10_12M]      = {4032,  3024, 10},
+	[SENSOR_OV13B10_12M_SEQ]  = {2032,  1532, 5}, //width = 2016 + 16(overlap) //height = 1512 + 20
+	[SENSOR_OV12890]  	      = {2048,  1536, 30},
+	[SENSOR_OV12890_12M]      = {4032,  3024, 8},
+	[SENSOR_OV12890_12M_SEQ]  = {2032,  1532, 5}, //width = 2016 + 16(overlap) //height = 1512 + 20
 };
 
 #define SENSOR_MAX         5

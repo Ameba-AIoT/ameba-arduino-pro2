@@ -140,6 +140,10 @@
 
 #define VOE_ISP_SET_STM_FPS				 0x254
 
+#define VOE_ISP_GET_DIR_WDR_LEVEL		 0x256
+
+#define VOE_ISP_GET_MAX_DYN_REGION		 0x257
+
 //OSD
 #define VOE_OSD_QUERY                    0x260
 #define VOE_OSD_UPDATE                   0x261

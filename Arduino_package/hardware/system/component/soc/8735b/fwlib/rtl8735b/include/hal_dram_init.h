@@ -21,6 +21,16 @@ extern "C"
 #define DRAM_TYPE_DDR3 0
 #endif
 
+enum dram_vendor {
+	DRAM_VENDOR_WINBOND = 0,
+	DRAM_VENDOR_ESMT   = 1
+};
+
+enum dram_package_type {
+	DRAM_PACKAGE_10X10 = 0,
+	DRAM_PACKAGE_8X11  = 1
+};
+
 enum rxi316_dram_type {
 	NON_DDR = 0,
 	DDR_1   = 1,

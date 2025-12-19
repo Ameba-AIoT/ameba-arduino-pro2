@@ -103,6 +103,7 @@ extern const u8	WMM_PARA_OUI[];
 
 #define rltk_ap_compatibility_is_enable(a,b) ((a & b) ? 1 : 0)
 #define rltk_wifi_debug_is_enable(a,b) ((a & b) ? 1 : 0)
+#define rltk_11v_is_enable(a,b) ((a & b) ? 1 : 0)
 //
 // Channel Plan Type.
 // Note:
