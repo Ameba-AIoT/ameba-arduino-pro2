@@ -74,8 +74,8 @@ static video_params_t video_v4_params = {
 };
 
 static encode_rc_parm_t encode_rc_params = {
-	.minQp = 0,		// for CBR/VBR
-	.maxQp = 0,		// for CBR/VBR
+    .minQp = 0,    // for CBR/VBR
+    .maxQp = 0,    // for CBR/VBR
 };
 
 void ISPControlReset(void)
@@ -286,7 +286,7 @@ void cameraOpenWSViewer(mm_context_t *p, void *p_priv, int stream_id, int type, 
     video_params.rotation = video_rotation;
 
     video_params.level = h264_level;
-    video_params.profile= h264_profile;
+    video_params.profile = h264_profile;
     video_params.cavlc = entropy_mode;
 
     if (p) {

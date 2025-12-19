@@ -266,7 +266,7 @@ private:
     uint32_t h264_entropy_mode[4] = {0};
     uint32_t rc_maxQp[4] = {0};
     uint32_t rc_minQp[4] = {0};
-   int wsviewer_en[4] = {0};
+    int wsviewer_en[4] = {0};
 
     typedef struct roi_param_s {
         uint32_t xmin;

@@ -1,3 +1,8 @@
+/*
+ Example guide:
+
+*/
+
 #include "WebSocketViewer.h"
 #include "WiFi.h"
 #include "StreamIO.h"
@@ -15,7 +20,8 @@ char ssid[] = "Network_SSID";
 char pass[] = "Password";
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // Connect WiFi in setup
@@ -44,6 +50,7 @@ void setup() {
     ws_viewer.begin();
 }
 
-void loop() {
+void loop()
+{
     // nothing
 }
