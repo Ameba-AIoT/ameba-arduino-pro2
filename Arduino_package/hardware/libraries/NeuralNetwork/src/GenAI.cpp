@@ -13,168 +13,214 @@ GenAI::~GenAI()
 // Server: openAI Platform
 String GenAI::openaivision(String key, String model, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
-    const char *myDomain = "api.openai.com";
-    String getResponse = "", Feedback = "";
-    Serial.println("Connect to " + String(myDomain));
-    if (client.connect(myDomain, 443)) {
-        Serial.println("Connection successful");
+    const char *host = "api.openai.com";
+    String response = "";
+    String imageBase64 = "";
 
-        uint8_t *fbBuf = (uint8_t *)img_addr;
-        uint32_t fbLen = img_len;
-
-        char *input = (char *)fbBuf;
-        char output[base64_enc_len(3)];
-        String imageFile = "data:image/jpeg;base64,";
-        for (uint32_t i = 0; i < fbLen; i++) {
-            base64_encode(output, (input++), 3);
-            if (i % 3 == 0) {
-                imageFile += String(output);
-            }
-        }
-        String Data = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\",\"content\": [{ \"type\": \"text\", \"text\": \"" + message + "\"},{\"type\": \"image_url\", \"image_url\": {\"url\": \"" + imageFile + "\"}}]}]}";
-
-        client.println("POST /v1/chat/completions HTTP/1.1");
-        client.println("Host: " + String(myDomain));
-        client.println("Authorization: Bearer " + key);
-        client.println("Content-Type: application/json; charset=utf-8");
-        client.println("Content-Length: " + String(Data.length()));
-        client.println("Connection: close");
-        client.println();
-
-        unsigned int Index;
-        for (Index = 0; Index < Data.length(); Index = Index + 1024) {
-            client.print(Data.substring(Index, Index + 1024));
-        }
-
-        uint32_t waitTime = 10000;
-        uint32_t startTime = millis();
-        boolean state = false;
-        boolean markState = false;
-        while ((startTime + waitTime) > millis()) {
-            Serial.print(".");
-            delay(100);
-            while (client.available()) {
-                char c = client.read();
-                if (String(c) == "{") {
-                    markState = true;
-                }
-                if (state == true && markState == true) {
-                    Feedback += String(c);
-                }
-                if (c == '\n') {
-                    if (getResponse.length() == 0) {
-                        state = true;
-                    }
-                    getResponse = "";
-                } else if (c != '\r') {
-                    getResponse += String(c);
-                }
-                startTime = millis();
-            }
-            if (Feedback.length() > 0) {
-                break;
-            }
-        }
-        Serial.println();
-        client.stop();
-
-        JsonObject obj;
-        JsonDocument doc;
-        deserializeJson(doc, Feedback);
-        obj = doc.as<JsonObject>();
-        getResponse = obj["choices"][0]["message"]["content"].as<String>();
-        if (getResponse == "null") {
-            getResponse = obj["error"]["message"].as<String>();
-        }
-    } else {
-        getResponse = "Connected to " + String(myDomain) + " failed.";
+    if (!client.connect(host, 443)) {
+        return "TLS connect failed";
     }
-    Serial.println("Response from GPT:");
-    Serial.println(getResponse);
-    return getResponse;
+
+    /* =========================
+     *  Base64 encode image
+     * ========================= */
+    uint8_t *img = (uint8_t *)img_addr;
+    imageBase64.reserve((img_len * 4) / 3 + 32);
+    imageBase64 = "data:image/jpeg;base64,";
+
+    char out[5];
+    for (uint32_t i = 0; i < img_len; i += 3) {
+        char buf[3] = {0, 0, 0};
+        uint32_t remain = img_len - i;
+        memcpy(buf, img + i, remain >= 3 ? 3 : remain);
+        base64_encode(out, buf, 3);
+        imageBase64 += out;
+    }
+
+    /* =========================
+     *  Build OpenAI JSON
+     * ========================= */
+    String json =
+        "{"
+        "\"model\":\""
+        + model + "\","
+                  "\"input\":[{"
+                  "\"role\":\"user\","
+                  "\"content\":["
+                  "{\"type\":\"input_text\",\"text\":\""
+        + message + "\"},"
+                    "{\"type\":\"input_image\",\"image_url\":\""
+        + imageBase64 + "\"}"
+                        "]"
+                        "}]"
+                        "}";
+
+    /* =========================
+     *  Send HTTP request
+     * ========================= */
+    client.print(
+        "POST /v1/responses HTTP/1.1\r\n"
+        "Host: api.openai.com\r\n"
+        "Authorization: Bearer "
+        + key + "\r\n"
+                "Content-Type: application/json\r\n"
+                "Content-Length: "
+        + String(json.length()) + "\r\n"
+                                  "Connection: close\r\n\r\n");
+
+    for (uint32_t i = 0; i < json.length(); i += 1024) {
+        client.print(json.substring(i, i + 1024));
+    }
+
+    /* =========================
+     *  Read response
+     * ========================= */
+    while (client.connected() || client.available()) {
+        if (client.available()) {
+            response += char(client.read());
+        }
+    }
+    client.stop();
+
+    /* =========================
+     *  Extract JSON
+     * ========================= */
+    int start = response.indexOf('{');
+    if (start < 0) {
+        return "No JSON returned";
+    }
+
+    String jsonResp = response.substring(start);
+    Serial.println(jsonResp);
+
+    /* =========================
+     *  Parse JSON
+     * ========================= */
+    JsonDocument doc;
+    if (deserializeJson(doc, jsonResp)) {
+        return "JSON parse failed";
+    }
+
+    if (doc["error"]) {
+        return "OpenAI error: " + doc["error"]["message"].as<String>();
+    }
+
+    Serial.println("Response from OpenAI:");
+    Serial.println(doc["output_text"].as<String>());
+
+    return doc["output_text"].as<String>();
 }
 
 // Server: Google AI Studio
 String GenAI::geminivision(String key, String model, String message, uint32_t img_addr, uint32_t img_len, WiFiSSLClient client)
 {
-    const char *myDomain = "generativelanguage.googleapis.com";
-    String getResponse = "", Feedback = "";
-    Serial.println("Connect to " + String(myDomain));
-    if (client.connect(myDomain, 443)) {
-        Serial.println("Connection successful");
+    const char *host = "generativelanguage.googleapis.com";
+    String response = "";
+    String jsonBody = "";
+    String imageBase64 = "";
 
-        uint8_t *fbBuf = (uint8_t *)img_addr;
-        uint32_t fbLen = img_len;
-        char *input = (char *)fbBuf;
-        char output[base64_enc_len(3)];
-        String imageFile = "";
-        for (uint32_t i = 0; i < fbLen; i++) {
-            base64_encode(output, (input++), 3);
-            if (i % 3 == 0) {
-                imageFile += String(output);
-            }
-        }
-        String Data = "{\"contents\": [{\"parts\": [{\"text\": \"" + message + "\"}, {\"inline_data\": {\"mime_type\":\"image/jpeg\",\"data\":\"" + imageFile + "\"}}]}]}";
-        // String Data = "{\"contents\": [{\"parts\": [{\"text\": \""+message+"\"}]}]}";
+    Serial.println("Connecting to Gemini...");
 
-        client.println("POST /v1beta/models/" + model + ":generateContent?key=" + key + " HTTP/1.1");
-        client.println("Host: " + String(myDomain));
-        client.println("Content-Type: application/json; charset=utf-8");
-        client.println("Content-Length: " + String(Data.length()));
-        client.println("Connection: close");
-        client.println();
-
-        unsigned int Index;
-        for (Index = 0; Index < Data.length(); Index = Index + 1024) {
-            client.print(Data.substring(Index, Index + 1024));
-        }
-
-        uint32_t waitTime = 10000;
-        uint32_t startTime = millis();
-        boolean state = false;
-        boolean markState = false;
-        while ((startTime + waitTime) > millis()) {
-            Serial.print(".");
-            delay(100);
-            while (client.available()) {
-                char c = client.read();
-                if (String(c) == "{") {
-                    markState = true;
-                }
-                if (state == true && markState == true) {
-                    Feedback += String(c);
-                }
-                if (c == '\n') {
-                    if (getResponse.length() == 0) {
-                        state = true;
-                    }
-                    getResponse = "";
-                } else if (c != '\r') {
-                    getResponse += String(c);
-                }
-                startTime = millis();
-            }
-            if (Feedback.length() > 0) {
-                break;
-            }
-        }
-        Serial.println();
-        client.stop();
-
-        JsonObject obj;
-        JsonDocument doc;
-        deserializeJson(doc, Feedback);
-        obj = doc.as<JsonObject>();
-        getResponse = obj["candidates"][0]["content"]["parts"][0]["text"].as<String>();
-        if (getResponse == "null") {
-            getResponse = obj["error"]["message"].as<String>();
-        }
-    } else {
-        getResponse = "Connected to " + String(myDomain) + " failed.";
+    if (!client.connect(host, 443)) {
+        return "TLS connection failed";
     }
+
+    /* =========================
+     *  Base64 encode image
+     * ========================= */
+    uint8_t *img = (uint8_t *)img_addr;
+
+    imageBase64.reserve((img_len * 4) / 3 + 4);
+
+    char out[5];    // 4 chars + '\0'
+    for (uint32_t i = 0; i < img_len; i += 3) {
+        char buf[3] = {0, 0, 0};
+        uint32_t remain = img_len - i;
+
+        if (remain >= 3) {
+            memcpy(buf, img + i, 3);
+        } else {
+            memcpy(buf, img + i, remain);
+        }
+
+        base64_encode(out, buf, 3);
+        imageBase64 += out;
+    }
+
+    /* =========================
+     *  Build Gemini JSON
+     * ========================= */
+    jsonBody =
+        "{\"contents\":[{\"parts\":["
+        "{\"text\":\""
+        + message + "\"},"
+                    "{\"inline_data\":{\"mime_type\":\"image/jpeg\",\"data\":\""
+        + imageBase64 + "\"}}]}]}";
+
+    /* =========================
+     *  Send HTTP request
+     * ========================= */
+    client.print(
+        "POST /v1beta/models/" + model + ":generateContent?key=" + key + " HTTP/1.1\r\n"
+                                                                         "Host: generativelanguage.googleapis.com\r\n"
+                                                                         "Content-Type: application/json\r\n"
+                                                                         "Content-Length: "
+        + String(jsonBody.length()) + "\r\n"
+                                      "Connection: close\r\n\r\n");
+
+    for (uint32_t i = 0; i < jsonBody.length(); i += 1024) {
+        client.print(jsonBody.substring(i, i + 1024));
+    }
+
+    /* =========================
+     *  Read full response
+     * ========================= */
+    while (client.connected() || client.available()) {
+        if (client.available()) {
+            response += char(client.read());
+        }
+    }
+
+    client.stop();
+
+    /* =========================
+     *  Extract JSON
+     * ========================= */
+    int jsonStart = response.indexOf('{');
+    if (jsonStart < 0) {
+        Serial.println(response);
+        return "No JSON received";
+    }
+
+    String json = response.substring(jsonStart);
+    Serial.println("Gemini raw JSON:");
+    Serial.println(json);
+
+    /* =========================
+     *  Parse JSON
+     * ========================= */
+    JsonDocument doc;
+    DeserializationError err = deserializeJson(doc, json);
+
+    if (err) {
+        return "JSON parse error: " + String(err.c_str());
+    }
+
+    if (doc["error"]) {
+        return "Gemini error: " + doc["error"]["message"].as<String>();
+    }
+
+    String result =
+        doc["candidates"][0]["content"]["parts"][0]["text"].as<String>();
+
+    if (result.length() == 0) {
+        return "Gemini returned empty result";
+    }
+
     Serial.println("Response from Gemini:");
-    Serial.println(getResponse);
-    return getResponse;
+    Serial.println(result);
+
+    return result;
 }
 
 // Server: groq
@@ -576,7 +622,7 @@ String GenAI::geminivideo(String apikey, String filename, String model, MP4Recor
         String filePart = "{\"inline_data\": {\"data\": \"" + String(encodedData) + "\", \"mime_type\": \"video/mp4\",},}";
         String textPart = "{\"text\": \"" + message + "\",}";
         String request = "{\"contents\": [{\"role\": \"user\", \"parts\": [" + filePart + ", " + textPart + "]}],}";
-        client.println("POST /v1beta/models/gemini-2.0-flash:generateContent?key=" + apikey + " HTTP/1.1");
+        client.println("POST /v1beta/models/" + model + ":generateContent?key=" + apikey + " HTTP/1.1");
         client.println("Connection: close");
         client.println("Host: generativelanguage.googleapis.com");
         client.println("Content-Type: application/json; charset=utf-8");

@@ -115,7 +115,7 @@ void loop()
             digitalWrite(LED_B, LOW);
             delay(500);
         }
-        String text = llm.geminiaudio(apiKey, fileName, "gemini-2.0-flash", mp4, "Please transcribe the audio into text", client);
+        String text = llm.geminiaudio(apiKey, fileName, "gemini-flash-latest", mp4, "Please transcribe the audio into text", client);
         Serial.println(text);
     }
 }
