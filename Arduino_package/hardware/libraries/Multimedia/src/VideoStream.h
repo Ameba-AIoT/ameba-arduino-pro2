@@ -174,9 +174,9 @@ class VideoSetting {
     friend class Video;
 
 public:
-    VideoSetting(uint8_t preset = 0, int websocket_viewer_en = 0);
-    VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot, int websocket_viewer_en = 0);
-    VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot, int websocket_viewer_en = 0);
+    VideoSetting(uint8_t preset = 0);
+    VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot);
+    VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot);
 
     void setBitrate(uint32_t bitrate);
     void setJpegQuality(uint8_t quality);
@@ -184,6 +184,8 @@ public:
 
     void setH264EncParams(uint32_t level, uint32_t profile, uint32_t entropy_mode);
     void setRCParams(uint32_t minQp, uint32_t maxQp);
+
+    void enableWebsocketViewer(void);
 
     uint16_t width(void);
     uint16_t height(void);
@@ -208,8 +210,8 @@ public:
     uint32_t _h264_entropy_mode;
     uint32_t _rc_minQp;
     uint32_t _rc_maxQp;
-    uint32_t _wsviewer_en;
 private:
+    uint32_t _wsviewer_en = 0;
     int8_t _preset = -1;
 };
 
