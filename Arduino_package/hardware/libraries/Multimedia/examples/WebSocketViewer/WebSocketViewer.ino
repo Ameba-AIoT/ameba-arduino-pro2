@@ -1,5 +1,5 @@
 /*
- Example guide: 
+ Example guide:
  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Websocket%20Viewer.html
 */
 
