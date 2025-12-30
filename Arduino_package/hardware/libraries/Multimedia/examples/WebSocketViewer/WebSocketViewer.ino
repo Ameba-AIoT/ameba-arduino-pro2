@@ -1,6 +1,6 @@
 /*
  Example guide:
-
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Websocket%20Viewer.html
 */
 
 #include "WebSocketViewer.h"
@@ -11,7 +11,7 @@
 
 #define CHANNEL 0
 
-VideoSetting config(CHANNEL, 1);
+VideoSetting config(CHANNEL);
 RTSP rtsp;
 WebSocketViewer ws_viewer;
 StreamIO videoStreamer(1, 1);
@@ -34,6 +34,7 @@ void setup()
 
     ws_viewer.loadWebResources(0);
 
+    config.enableWebsocketViewer();
     // Recommended bitrate - 2 Mbps
     config.setBitrate(2 * 1024 * 1024);
     Camera.configVideoChannel(CHANNEL, config);

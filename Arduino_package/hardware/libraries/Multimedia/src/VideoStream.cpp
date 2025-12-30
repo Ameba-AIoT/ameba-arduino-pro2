@@ -384,7 +384,7 @@ void CameraSetting::reset(void)
     amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] ISP Control Reset.\n");
 }
 
-VideoSetting::VideoSetting(uint8_t preset, int websocket_viewer_en)
+VideoSetting::VideoSetting(uint8_t preset)
 {
     INIT_VIDEO_LOGGING();
     INIT_MODULE_VIDEO_LOGGING();
@@ -396,14 +396,6 @@ VideoSetting::VideoSetting(uint8_t preset, int websocket_viewer_en)
             _bps = CAM_BPS;
             _encoder = VIDEO_H264;
             _snapshot = 0;
-            _wsviewer_en = websocket_viewer_en;
-            if (_wsviewer_en == 1) {
-                _h264_level = VCENC_H264_LEVEL_4;
-                _h264_profile = VCENC_H264_BASE_PROFILE;
-                _h264_entropy_mode = 1;
-                _rc_minQp = 15;
-                _rc_maxQp = 35;
-            }
             break;
         }
         case 1: {
@@ -412,14 +404,6 @@ VideoSetting::VideoSetting(uint8_t preset, int websocket_viewer_en)
             _bps = CAM_BPS;
             _encoder = VIDEO_H264;
             _snapshot = 0;
-            _wsviewer_en = websocket_viewer_en;
-            if (_wsviewer_en == 1) {
-                _h264_level = VCENC_H264_LEVEL_4;
-                _h264_profile = VCENC_H264_BASE_PROFILE;
-                _h264_entropy_mode = 1;
-                _rc_minQp = 15;
-                _rc_maxQp = 35;
-            }
             break;
         }
         case 2: {
@@ -464,7 +448,7 @@ VideoSetting::VideoSetting(uint8_t preset, int websocket_viewer_en)
     }
 }
 
-VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot, int websocket_viewer_en)
+VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
     INIT_VIDEO_LOGGING();
     INIT_MODULE_VIDEO_LOGGING();
@@ -476,15 +460,6 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     // 0: none; 1: full; 2: crop;
     _snapshot = snapshot;
     _jpeg_qlevel = 5;
-
-    _wsviewer_en = websocket_viewer_en;
-    if (_wsviewer_en == 1) {
-        _h264_level = VCENC_H264_LEVEL_4;
-        _h264_profile = VCENC_H264_BASE_PROFILE;
-        _h264_entropy_mode = 1;
-        _rc_minQp = 15;
-        _rc_maxQp = 35;
-    }
 
     if ((_snapshot == 1) || (_snapshot == 2)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
@@ -512,7 +487,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     }
 }
 
-VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot, int websocket_viewer_en)
+VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
     INIT_VIDEO_LOGGING();
     INIT_MODULE_VIDEO_LOGGING();
@@ -526,15 +501,6 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     _w = w;
     _h = h;
     _jpeg_qlevel = 5;
-
-    _wsviewer_en = websocket_viewer_en;
-    if (_wsviewer_en == 1) {
-        _h264_level = VCENC_H264_LEVEL_4;
-        _h264_profile = VCENC_H264_BASE_PROFILE;
-        _h264_entropy_mode = 1;
-        _rc_minQp = 15;
-        _rc_maxQp = 35;
-    }
 
     // Check resolution maximums
     if (_w > 1920) {
@@ -593,6 +559,17 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
             _snapshot = 0;
         }
     }
+}
+
+void VideoSetting::enableWebsocketViewer(void)
+{
+    _wsviewer_en = 1;
+
+    _h264_level = VCENC_H264_LEVEL_4;
+    _h264_profile = VCENC_H264_BASE_PROFILE;
+    _h264_entropy_mode = 1;
+    _rc_minQp = 15;
+    _rc_maxQp = 35;
 }
 
 void VideoSetting::setBitrate(uint32_t bitrate)
