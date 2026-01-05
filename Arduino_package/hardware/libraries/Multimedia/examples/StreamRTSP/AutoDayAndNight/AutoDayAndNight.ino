@@ -1,10 +1,9 @@
 /*
- Please adjust VideoSetting to get better video quality when streaming to V7RC APP:
-     VideoSetting config(VIDEO_D1, CAM_FPS, VIDEO_H264, 0);
-
- Example guide:
-
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/AutoDayAndNight.html
 */
+
+
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
@@ -18,19 +17,18 @@
 #define DEFAULT_THRESHOLD -1
 #define SWITCH_LOG        1
 #define ALL_DEBUG_LOG     2
+#define PWR_EN            9
 
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
 // Channel 1 : 1280 x 720  30FPS H264
 // Channel 2 : 1280 x 720  30FPS MJPEG
-
 VideoSetting config(CHANNEL);
 Infrared ir;
 AmbientLightSensor ALS(SW_ALS);
 RTSP rtsp;
 CameraSetting configCam;
 StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output RTSP
-
 
 char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
@@ -39,6 +37,9 @@ int status = WL_IDLE_STATUS;
 void setup()
 {
     Serial.begin(115200);
+
+    pinMode(PWR_EN, OUTPUT);
+    digitalWrite(PWR_EN, HIGH);
 
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
@@ -52,10 +53,10 @@ void setup()
 
     // Initialize the IR-cut filter and IR led
     // Enable IR-cut and turn off IR led by default
-    ir.cutInit();
-    ir.ledInit();
-    ir.setCut(1);
-    ir.setLedBrightness(0);
+    ir.cutInit();              // Initializes GPIO Pin F12
+    ir.ledInit();              // Initializes GPIO Pin F13
+    ir.setCut(1);              // 0 to disable, 1 to enable
+    ir.setLedBrightness(0);    // Brightness input can be from 0 to 100, [0,100]
 
     // Ambient light sensor set up for automatic day and night modes switching
     // ALS.debugEnableOSD();
