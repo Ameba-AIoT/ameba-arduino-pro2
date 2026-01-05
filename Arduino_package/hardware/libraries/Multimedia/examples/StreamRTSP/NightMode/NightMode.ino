@@ -1,10 +1,8 @@
 /*
- Please adjust VideoSetting to get better video quality when streaming to V7RC APP:
-     VideoSetting config(VIDEO_D1, CAM_FPS, VIDEO_H264, 0);
-
- Example guide:
-
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/NightMode.html
 */
+
+
 
 #include "WiFi.h"
 #include "StreamIO.h"
@@ -13,6 +11,7 @@
 #include "Infrared.h"
 
 #define CHANNEL 0
+#define PWR_EN  9
 
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
@@ -33,6 +32,9 @@ void setup()
 {
     Serial.begin(115200);
 
+    pinMode(PWR_EN, OUTPUT);
+    digitalWrite(PWR_EN, HIGH);
+
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
         Serial.print("Attempting to connect to WPA SSID: ");
@@ -45,10 +47,10 @@ void setup()
 
     // Initialize the IR-cut filter and IR led
     // Disable IR-cut and turn on IR led to the maximum brightness
-    ir.cutInit();
-    ir.ledInit();
-    ir.setCut(0);
-    ir.setLedBrightness(100);
+    ir.cutInit();                // Initializes GPIO Pin F12
+    ir.ledInit();                // Initializes GPIO Pin F13
+    ir.setCut(0);                // 0 to disable, 1 to enable
+    ir.setLedBrightness(100);    // Brightness input can be from 0 to 100, [0,100]
 
     // Configure camera video channel with video format information
     // Adjust the bitrate based on your WiFi network quality
@@ -72,8 +74,8 @@ void setup()
 
     delay(1000);
 
-    configCam.setGrayMode(1);
-    configCam.setDayNightMode(1);
+    configCam.setGrayMode(1);        // 0 for RGB, 1 for Grayscale
+    configCam.setDayNightMode(1);    // 0 for day mode ISP auto-tuning, 1 for night mode ISP auto-tuning
 
     printInfo();
 }
