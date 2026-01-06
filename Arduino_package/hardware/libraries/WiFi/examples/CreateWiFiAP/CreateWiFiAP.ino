@@ -68,17 +68,26 @@ void setup()
             str_channel.trim();
             checker = str_channel.toInt();
             if (str_channel == (String(checker))) {
-                break;
+                if (checker >= 1 && checker <= 13) {
+                    break;
+                }
             }
-            Serial.println("channel should be a number!");
+            Serial.println("channel should be a number from 1 to 13!");
         }
         Serial.print("channel entered: ");
+
         Serial.println(str_channel);
 #endif
         Serial.print("Attempting to start AP with SSID: ");
 #ifndef MANUAL_INPUT
+        int checker = 0;
+
         Serial.println(ssid);
+        checker = atoi(channel);
         status = WiFi.apbegin(ssid, pass, channel, ssid_status);
+        if (checker < 1 || checker > 13) {
+            Serial.println("WARNING: channel is out of 1-13 range, defaulted to channel 1");
+        }
 #else
         char ssid_cust[str_ssid.length() + 1];
         char pass_cust[str_pass.length() + 1];
