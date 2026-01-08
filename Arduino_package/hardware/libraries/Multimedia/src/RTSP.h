@@ -8,12 +8,10 @@ class RTSP: public MMFModule {
 public:
     RTSP(void);
     ~RTSP(void);
-
     void configVideo(VideoSetting& config);
     void configAudio(AudioSetting& config, Audio_Codec_T codec);
     void begin(void);
     void end(void);
-
     int getPort(void);
     void printInfo(void);
     void printInfo(char* ip);
