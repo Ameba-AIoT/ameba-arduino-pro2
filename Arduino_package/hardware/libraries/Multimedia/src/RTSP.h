@@ -16,6 +16,7 @@ public:
 
     int getPort(void);
     void printInfo(void);
+    void printInfo(char* ip);
 
 private:
 };

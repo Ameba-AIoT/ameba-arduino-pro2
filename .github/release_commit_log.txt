@@ -1,8 +1,12 @@
 Feature:
-- Add Add Websocket Viewer example
+- Update GenAIVision example
+- Remove Google Line Notify example
+- Add Example Guide Links for NightMode and AutoDayAndNight RTSP Examples
+- Add GenAIVisionTTS.ino Example‎
+- Update Eink_7in5_Ebook Example
 
 API Updates:
+- Fixed Invalid WiFiAP Channel Issue
 
 Misc:
-- Update code base for websocket
-- fix multithreading library name
+- Minor fix
