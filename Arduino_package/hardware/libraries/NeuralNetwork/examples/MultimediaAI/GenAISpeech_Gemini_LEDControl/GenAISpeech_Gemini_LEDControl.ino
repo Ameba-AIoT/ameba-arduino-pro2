@@ -114,7 +114,7 @@ void loop()
             digitalWrite(LED_B, LOW);
             delay(500);
         }
-        String text = llm.geminiaudio(apiKey, fileName, "gemini-2.0-flash", mp4, "If the audio content means switch on, please return 1, else 0", client);
+        String text = llm.geminiaudio(apiKey, fileName, "gemini-flash-latest", mp4, "If the audio content means switch on, please return 1, else 0", client);
         Serial.println(text);
         if (text.indexOf("1") != -1) {
             digitalWrite(LED_G, HIGH);
