@@ -147,7 +147,7 @@ void loop()
             digitalWrite(LED_B, LOW);
             delay(500);
         }
-        String text = llm.geminivideo(apiKey, fileName, "gemini-2.5-flash", mp4, "Please describe the video and audio content", client);
+        String text = llm.geminivideo(apiKey, fileName, "gemini-flash-latest", mp4, "Please describe the video and audio content", client);
         Serial.println(text);
     }
 }

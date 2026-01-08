@@ -52,8 +52,8 @@ uint8_t SparkFun_VL53L5CX_IO::writeMultipleBytes(uint16_t registerAddress, uint8
     uint32_t bytesToSend = bufferSize;
     while (bytesToSend > 0) {
         uint32_t len = bytesToSend;
-        if (len > (wireMaxPacketSize - 2)) {    // Allow 2 byte for register address
-            len = (wireMaxPacketSize - 2);
+        if (len > ((uint32_t)wireMaxPacketSize - 2)) {    // Allow 2 byte for register address
+            len = ((uint32_t)wireMaxPacketSize - 2);
         }
 
         _i2cPort->beginTransmission((uint8_t)_address);
@@ -96,8 +96,8 @@ uint8_t SparkFun_VL53L5CX_IO::readMultipleBytes(uint16_t registerAddress, uint8_
     while (bytesToReadRemaining > 0) {
         // Limit to 32 bytes or whatever the buffer limit is for given platform
         uint16_t bytesToRead = bytesToReadRemaining;
-        if (bytesToRead > wireMaxPacketSize) {
-            bytesToRead = wireMaxPacketSize;
+        if (bytesToRead > (uint32_t)wireMaxPacketSize) {
+            bytesToRead = (uint32_t)wireMaxPacketSize;
         }
 
         _i2cPort->requestFrom((uint8_t)_address, (uint8_t)bytesToRead);
