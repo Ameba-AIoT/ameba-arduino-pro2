@@ -109,3 +109,10 @@ void RTSP::printInfo(void)
     int port = getPort();
     amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %d\n", port);
 }
+
+void RTSP::printInfo(char* ip)
+{
+    int port = getPort();
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] rtsp://%s:%d\n", ip, port);
+}
+

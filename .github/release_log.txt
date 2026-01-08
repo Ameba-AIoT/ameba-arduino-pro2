@@ -11,22 +11,20 @@ Version 4.1.0 - 2025/12/19
 Feature:
 - Add SparkFun VL53L5CX examples
 - Add IPv6 example
-- Update example links for ToF examples
 - Update RTSPImageClassification.ino
 - Add FLASH_SAVE function for wifi wpa connect example
 - Add HTTPDisplayJPEGContinuousMultitask example
-- Update HTTPDisplayJPEGContinuousMultitask example
-- Add WiFi_eap related API
 - Add WPA2_EAP example
 - Add SD Card OTA example
 - Add BMI270 examples
 - Add Http Upload Image examples
 - Add Infrared and Ambient Light Sensor Features
 - Add Ollama LLM example and multithreading example
-- Add Add Websocket Viewer example
+- Add Websocket Viewer example
 
 API Updates:
 - Update code base
+- Add WiFi_eap related API
 - Update FlashMemory.h
 - Remove unused files
 - Update TCP api related socket, lwip_send
