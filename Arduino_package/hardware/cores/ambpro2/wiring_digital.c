@@ -284,6 +284,48 @@ void pinRemoveMode(uint32_t ulPin)
     g_APinDescription[ulPin].ulPinMode |= MODE_NOT_INITIAL;
 }
 
+uint32_t digitalPinToInterrupt(uint32_t ulPin)
+{
+    if ((g_APinDescription[ulPin].ulPinAttribute & PIO_GPIO_IRQ) == PIO_GPIO_IRQ) {
+        return ulPin;
+    } else {
+        return -1;
+    }
+}
+
+void attachInterrupt(uint32_t ulPin, void (*handler)(void), uint32_t int_mode) {
+    if (int_mode == HIGH) {
+        pinMode(ulPin, INPUT_IRQ_HIGH);
+    } else if (int_mode == LOW) {
+        pinMode(ulPin, INPUT_IRQ_LOW);
+    } else if (int_mode == CHANGE) {
+        pinMode(ulPin, INPUT_IRQ_CHANGE);
+    } else if (int_mode == FALLING) {
+        pinMode(ulPin, INPUT_IRQ_FALL);
+    } else if (int_mode == RISING) {
+        pinMode(ulPin, INPUT_IRQ_RISE);
+    } else {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Interrupt mode not supported. \n");
+        return;
+    }
+
+    //gpio_irq_handler_list[ulPin] = (void *)handler;
+    digitalSetIrqHandler(ulPin, (void *)handler);
+}
+
+void detachInterrupt(uint32_t ulPin) {
+    if ((g_APinDescription[ulPin].ulPinMode & GPIO_IRQ_MODE_ENABLED) == GPIO_IRQ_MODE_ENABLED) {
+        if ((g_APinDescription[ulPin].ulPinAttribute & PIO_GPIO_IRQ) == PIO_GPIO_IRQ) {
+            gpio_irq_deinit((gpio_irq_t *)gpio_pin_struct[ulPin]);
+            free((gpio_irq_t *)gpio_pin_struct[ulPin]);
+            gpio_pin_struct[ulPin] = NULL;
+            g_APinDescription[ulPin].ulPinMode &= (~GPIO_IRQ_MODE_ENABLED);
+        }
+    }
+
+    digitalClearIrqHandler(ulPin);
+}
+
 #ifdef __cplusplus
 }
 #endif
