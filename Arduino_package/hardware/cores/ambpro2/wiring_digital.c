@@ -293,7 +293,8 @@ uint32_t digitalPinToInterrupt(uint32_t ulPin)
     }
 }
 
-void attachInterrupt(uint32_t ulPin, void (*handler)(void), uint32_t int_mode) {
+void attachInterrupt(uint32_t ulPin, void (*handler)(void), uint32_t int_mode)
+{
     if (int_mode == HIGH) {
         pinMode(ulPin, INPUT_IRQ_HIGH);
     } else if (int_mode == LOW) {
@@ -313,7 +314,8 @@ void attachInterrupt(uint32_t ulPin, void (*handler)(void), uint32_t int_mode) {
     digitalSetIrqHandler(ulPin, (void *)handler);
 }
 
-void detachInterrupt(uint32_t ulPin) {
+void detachInterrupt(uint32_t ulPin)
+{
     if ((g_APinDescription[ulPin].ulPinMode & GPIO_IRQ_MODE_ENABLED) == GPIO_IRQ_MODE_ENABLED) {
         if ((g_APinDescription[ulPin].ulPinAttribute & PIO_GPIO_IRQ) == PIO_GPIO_IRQ) {
             gpio_irq_deinit((gpio_irq_t *)gpio_pin_struct[ulPin]);
