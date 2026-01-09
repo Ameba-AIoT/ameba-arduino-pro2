@@ -80,8 +80,5 @@ void printInfo(void)
     IPAddress ip = WiFi.localIP();
 
     Serial.println("- RTSP -");
-    Serial.print("rtsp://");
-    Serial.print(ip);
-    Serial.print(":");
-    rtsp.printInfo();
+    rtsp.printInfo(ip.get_address());
 }
