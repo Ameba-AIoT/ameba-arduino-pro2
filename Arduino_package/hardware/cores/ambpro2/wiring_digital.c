@@ -310,7 +310,7 @@ void attachInterrupt(uint32_t ulPin, void (*handler)(void), uint32_t int_mode)
         return;
     }
 
-    //gpio_irq_handler_list[ulPin] = (void *)handler;
+    // gpio_irq_handler_list[ulPin] = (void *)handler;
     digitalSetIrqHandler(ulPin, (void *)handler);
 }
 
