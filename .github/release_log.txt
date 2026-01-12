@@ -7,26 +7,30 @@ Version 4.1.0 - 2025/10/14
 Version 4.1.0 - 2025/10/27
 Version 4.1.0 - 2025/12/18
 Version 4.1.0 - 2025/12/19
+Version 4.1.0 - 2026/01/08
 
 Feature:
 - Add SparkFun VL53L5CX examples
 - Add IPv6 example
-- Update example links for ToF examples
 - Update RTSPImageClassification.ino
 - Add FLASH_SAVE function for wifi wpa connect example
 - Add HTTPDisplayJPEGContinuousMultitask example
-- Update HTTPDisplayJPEGContinuousMultitask example
-- Add WiFi_eap related API
 - Add WPA2_EAP example
 - Add SD Card OTA example
 - Add BMI270 examples
 - Add Http Upload Image examples
 - Add Infrared and Ambient Light Sensor Features
 - Add Ollama LLM example and multithreading example
-- Add Add Websocket Viewer example
+- Add Websocket Viewer example
+- Update GenAIVision example
+- Remove Google Line Notify example
+- Add Example Guide Links for NightMode and AutoDayAndNight RTSP Examples
+- Add GenAIVisionTTS.ino Example‎
+- Update Eink_7in5_Ebook Example
 
 API Updates:
 - Update code base
+- Add WiFi_eap related API
 - Update FlashMemory.h
 - Remove unused files
 - Update TCP api related socket, lwip_send
@@ -41,6 +45,7 @@ API Updates:
 - Add watchdog option APIs
 - Add API for camera status check
 - Update AUTO_PWM for Ambient Light Sensor API
+- Fixed Invalid WiFiAP Channel Issue
 
 Misc:
 - Update tool 1.4.6
@@ -55,3 +60,4 @@ Misc:
 - Add Workflow to find and summarise hardware library ".h" functions
 - Update code base for websocket
 - fix multithreading library name
+- Minor fix
