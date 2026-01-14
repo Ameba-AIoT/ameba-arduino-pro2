@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Post%20MP4.html
 */
 
 #include "StreamIO.h"
@@ -178,11 +178,12 @@ void encodeMP4andsendHttpPostRequest()
     base64_encode(encodedData, (char *)fileinput, fileSize);
 
     JsonDocument doc;
-
-    // Change "base64_string" to the key that you set in your server.
-    doc["base64_string"] = encodedData;
+    // Change "audio_base64_string" to the key that you set in your server.
+    doc["audio_base64_string"] = encodedData;
     String jsonString;
     serializeJson(doc, jsonString);
+
+    // Serial.println(jsonString);
 
     if (wifiClient.connect(server, 8000)) {
         wifiClient.println("POST /audio HTTP/1.1");

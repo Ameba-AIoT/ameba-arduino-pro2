@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Post%20Image%20and%20MP4.html
 */
 
 #define ARDUINOJSON_STRING_LENGTH_SIZE 4
