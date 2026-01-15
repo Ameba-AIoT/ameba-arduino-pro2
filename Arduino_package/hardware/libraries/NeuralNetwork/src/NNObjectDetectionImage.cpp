@@ -225,25 +225,29 @@ int NNObjectDetectionImage::ImageDecodeToRGB888planar_ConvertInPlace(void *pbuff
         return -1;
     }
 
+    if (im_data == NULL) {
+        printf("Error: stbi_load failed (Corrupt JPG or Out of Memory)\r\n");
+        return -1;
+    }
+
     /* set nn roi according to image size */
     set_nn_roi(w, h);
 
     /* rgb packed to rgb planar */
     int data_size = w * h * c;
-    uint8_t *rgb_planar_buf = (uint8_t *)malloc(data_size);
+    uint8_t *dest_buf = pImageBuf;
     for (int k = 0; k < c; k++) {
         for (int j = 0; j < h; j++) {
             for (int i = 0; i < w; i++) {
                 int dst_i = i + w * j + w * h * k;
                 int src_i = k + c * i + c * w * j;
-                rgb_planar_buf[dst_i] = im_data[src_i];
+                dest_buf[dst_i] = im_data[src_i];
             }
         }
     }
-    memcpy(pImageBuf, rgb_planar_buf, data_size);
+
     *pImageSize = (uint32_t)data_size;
 
-    free(rgb_planar_buf);
     stbi_image_free(im_data);
 
     return 0;
