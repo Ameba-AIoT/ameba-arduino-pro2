@@ -10,3 +10,6 @@ git+https://github.com/openai/whisper.git
 fastapi
 uvicorn
 accelerate
+transformers
+einops
+torch
