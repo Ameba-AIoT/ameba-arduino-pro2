@@ -57,7 +57,7 @@ nest_asyncio.apply()
 app = FastAPI()
 
 class Base64Data(BaseModel):
-    base64_string: str
+    audio_base64_string: str
 
 @app.get("/")
 def home():
@@ -67,7 +67,7 @@ def home():
 async def post_audio(data: Base64Data):
     try:
         #Decode the base64 string
-        decoded_data = base64.b64decode(data.base64_string)
+        decoded_data = base64.b64decode(data.audio_base64_string)
         
         # print(decoded_data)
         #Save the decoded data to an MP4 file
@@ -81,13 +81,12 @@ async def post_audio(data: Base64Data):
         # LLM generate
         prompt = result["text"]
         input_ids = tokenizer.encode(prompt, return_tensors="pt").to("cuda")
-        output = LLM.generate(input_ids, max_length=128, num_beams=5, no_repeat_ngram_size=2)
+        output = LLM.generate(input_ids, max_length=128, num_beams=5, no_repeat_ngram_size=2, use_cache=False)
         generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
         print("LLM: "+generated_text) 
         return Response(generated_text)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="192.168.3.4", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
