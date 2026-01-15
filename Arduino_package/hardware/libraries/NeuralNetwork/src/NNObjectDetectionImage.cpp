@@ -226,7 +226,7 @@ int NNObjectDetectionImage::ImageDecodeToRGB888planar_ConvertInPlace(void *pbuff
     }
 
     if (im_data == NULL) {
-        printf("Error: stbi_load failed (Corrupt JPG or Out of Memory)\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] stbi_load failed (Corrupt JPG or Out of Memory)\r\n");
         return -1;
     }
 
