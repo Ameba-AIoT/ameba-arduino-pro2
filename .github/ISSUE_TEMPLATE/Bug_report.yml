@@ -42,6 +42,7 @@ body:
       options:
         - latest dev (checkout manually)
         - latest main (checkout manually)
+        - v4.0.9
         - v4.0.8
         - v4.0.7
         - v4.0.6

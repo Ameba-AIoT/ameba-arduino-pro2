@@ -1,12 +1,16 @@
 Feature:
-- Update GenAIVision example
-- Remove Google Line Notify example
-- Add Example Guide Links for NightMode and AutoDayAndNight RTSP Examples
-- Add GenAIVisionTTS.ino Example‎
-- Update Eink_7in5_Ebook Example
+- Update HandPresence_Detection.ino
+- Add guide links
+    - Capture_Image_HTTP_Post_Image_Llava_Server_FASTAPI
+    - HTTP_Post_MP4_Whisper_Server_FASTAPI
+    - RecordMP4_HTTP_Post_Whisper_Server_FASTAPI
+- Update object detection image
+    - remove second buffer to prevent memory overflow
 
 API Updates:
-- Fixed Invalid WiFiAP Channel Issue
+- Update printInfo for RTSP showing IP and port at same row
+- Add digitalPinToInterrupt(), attachInterrupt(), detachInterrupt()
 
 Misc:
-- Minor fix
+- Update python scripts for test end points
+- Add requirements.txt for Linux setup env
