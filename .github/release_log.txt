@@ -8,6 +8,7 @@ Version 4.1.0 - 2025/10/27
 Version 4.1.0 - 2025/12/18
 Version 4.1.0 - 2025/12/19
 Version 4.1.0 - 2026/01/08
+Version 4.1.0 - 2026/01/16
 
 Feature:
 - Add SparkFun VL53L5CX examples
@@ -27,6 +28,13 @@ Feature:
 - Add Example Guide Links for NightMode and AutoDayAndNight RTSP Examples
 - Add GenAIVisionTTS.ino Example‎
 - Update Eink_7in5_Ebook Example
+- Update HandPresence_Detection.ino
+- Add guide links
+    - Capture_Image_HTTP_Post_Image_Llava_Server_FASTAPI
+    - HTTP_Post_MP4_Whisper_Server_FASTAPI
+    - RecordMP4_HTTP_Post_Whisper_Server_FASTAPI
+- Update object detection image
+    - remove second buffer to prevent memory overflow
 
 API Updates:
 - Update code base
@@ -46,6 +54,8 @@ API Updates:
 - Add API for camera status check
 - Update AUTO_PWM for Ambient Light Sensor API
 - Fixed Invalid WiFiAP Channel Issue
+- Update printInfo for RTSP showing IP and port at same row
+- Add digitalPinToInterrupt(), attachInterrupt(), detachInterrupt()
 
 Misc:
 - Update tool 1.4.6
@@ -61,3 +71,5 @@ Misc:
 - Update code base for websocket
 - fix multithreading library name
 - Minor fix
+- Update python scripts for test end points
+- Add requirements.txt for Linux setup env
