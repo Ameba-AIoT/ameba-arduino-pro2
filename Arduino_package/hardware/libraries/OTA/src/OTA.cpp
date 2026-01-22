@@ -18,9 +18,12 @@ int priority1;
 WiFiClient OTA::wifiClient;
 char OTA::jsonString[256];
 
-OTA::OTA(): _ota_wifi(&WiFi){};
+OTA::OTA():
+    _ota_wifi(&WiFi)
+{}
 
-OTA::~OTA(){};
+OTA::~OTA()
+{}
 
 void OTA::sendPostRequest()
 {
@@ -34,7 +37,7 @@ void OTA::sendPostRequest()
     // Send POST request
     wifiClient.println("POST /api/connectedclients HTTP/1.1");
     wifiClient.println("Host: " + String(_server));
-    wifiClient.println("Content-Type: application/json");                    // Use appropriate content type
+    wifiClient.println("Content-Type: application/json");    // Use appropriate content type
     // wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
     wifiClient.print("Content-Length: ");
     wifiClient.println(strlen(jsonString));
