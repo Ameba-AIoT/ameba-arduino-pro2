@@ -118,7 +118,7 @@ typedef struct {
  */
 extern uint32_t os_thread_create_arduino(void (*task)(const void *argument), void *argument, int priority, uint32_t stack_size);
 
-//extern uint32_t os_thread_create_name_arduino(void (*task)(const void *argument), void *argument, int priority, uint32_t stack_size, char *task_name);
+// extern uint32_t os_thread_create_name_arduino(void (*task)(const void *argument), void *argument, int priority, uint32_t stack_size, char *task_name);
 
 /**
  * @ingroup thread_management
