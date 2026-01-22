@@ -18,13 +18,13 @@ int priority1;
 WiFiClient OTA::wifiClient;
 char OTA::jsonString[256];
 
-OTA::OTA():_ota_wifi(&WiFi){};
+OTA::OTA(): _ota_wifi(&WiFi){};
 
 OTA::~OTA(){};
 
 void OTA::sendPostRequest()
 {
-    if (wifiClient.connected() == 0){
+    if (wifiClient.connected() == 0) {
         if (wifiClient.connect(_server, _port) == 0) {
             amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] [OTA] Connection to server failed \n");
             return;
@@ -108,7 +108,7 @@ void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
     priority1 = osPriorityNormal;
     stack_size1 = 1024;
     thread1_id = os_thread_create_arduino(thread1_task, NULL, priority1, stack_size1);
-    //thread1_id = os_thread_create_name_arduino(thread1_task, NULL, priority1, stack_size1, "ota_thread1");
+    // thread1_id = os_thread_create_name_arduino(thread1_task, NULL, priority1, stack_size1, "ota_thread1");
 
     // First thread is to do keep alive connectivity check (post requests every 5s)
     if (thread1_id) {
@@ -119,7 +119,7 @@ void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
 
     stack_size2 = 2048;
     thread2_id = os_thread_create_arduino(thread2_task, NULL, priority1, stack_size2);
-    //thread2_id = os_thread_create_name_arduino(thread2_task, NULL, priority1, stack_size2, "ota_thread2");
+    // thread2_id = os_thread_create_name_arduino(thread2_task, NULL, priority1, stack_size2, "ota_thread2");
 
     // Second thread is to get the signal to start OTA process.
     if (thread2_id) {
@@ -134,5 +134,7 @@ uint8_t OTA::check_wifi(void)
     if (!_ota_wifi) {
         return WL_DISCONNECTED;
     }
-    return _ota_wifi->status(); // WL_DISCONNECTED, WL_CONNECTED
+
+    // WL_DISCONNECTED, WL_CONNECTED
+    return _ota_wifi->status();
 }

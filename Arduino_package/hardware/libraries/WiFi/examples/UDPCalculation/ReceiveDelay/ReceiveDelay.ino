@@ -96,11 +96,11 @@ void handle_data(char *buf)
 
             // Re-align clocks
             ameba_epoch = millis();
-            sys_epoch   = data;
+            sys_epoch = data;
 
-            early_diff  = 0;
+            early_diff = 0;
             total_shift = 0;
-            datacount   = 0;
+            datacount = 0;
         }
     }
 }
