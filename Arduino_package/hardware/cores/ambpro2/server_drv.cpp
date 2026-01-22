@@ -12,7 +12,7 @@ int ServerDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t protMode, 
 {
     int sock;
     if (blockMode == BLOCKING_MODE) {
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s WiFi client is set to blocking mode \n", __FUNCTION__);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s WiFi client is set to blocking mode \n", __FUNCTION__);
         sock = start_client(ipAddress, port, protMode);
     } else {
         // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s WiFi client is set to non-blocking mode \n", __FUNCTION__);
@@ -44,7 +44,7 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, tBlockingMode blockM
 {
     int sock;
     if (blockMode == BLOCKING_MODE) {
-        amb_ard_printf(ARD_LOG_INF, "\r\n [INFO] server_drv.cpp: WiFi server is set to blocking mode\r\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] server_drv.cpp: WiFi server is set to blocking mode\n");
         if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
             if (sock >= 0) {
@@ -63,7 +63,7 @@ int ServerDrv::startServer(uint16_t port, uint8_t portMode, tBlockingMode blockM
             }
         }
     } else {
-        amb_ard_printf(ARD_LOG_INF, "\r\n [INFO] server_drv.cpp: WiFi server is set to non-blocking mode\r\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] server_drv.cpp: WiFi server is set to non-blocking mode\n");
         if (getIPv6Status() == 0) {
             sock = start_server(port, portMode);
             set_nonblocking(sock);

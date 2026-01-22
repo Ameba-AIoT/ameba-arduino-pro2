@@ -79,7 +79,6 @@ LOGUARTClass::LOGUARTClass(int dwIrq, RingBuffer *pRx_buffer)
 // Protected Methods //////////////////////////////////////////////////////////////
 
 // Public Methods //////////////////////////////////////////////////////////////
-// zzw
 #if 0
 void LOGUARTClass::IrqHandler(void) {
     uint8_t     data = 0;

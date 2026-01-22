@@ -5,7 +5,7 @@
 // http_fs module init
 mm_context_t *http_fs_Init(void)
 {
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] http_fs module init\r\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] http_fs module init\n");
     return mm_module_open(&httpfs_module);
 }
 
@@ -18,7 +18,7 @@ mm_context_t *http_fs_Deinit(mm_context_t *p)
 // Set http_fs module parameters
 int http_fs_SetParams(mm_context_t *p, httpfs_params_t *params)
 {
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] http_fs module set params\r\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] http_fs module set params\n");
     return mm_module_ctrl(p, CMD_HTTPFS_SET_PARAMS, (int)params);
 }
 
@@ -29,7 +29,7 @@ int http_fs_SetRespCB(mm_context_t *p)
 
 int http_fs_response_cb(void)
 {
-    amb_ard_printf(ARD_LOG_INF, "[INFO] http_fs response\r\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] http_fs response\n");
     return 0;
 }
 
