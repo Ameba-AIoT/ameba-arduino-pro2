@@ -9,6 +9,7 @@ Version 4.1.0 - 2025/12/18
 Version 4.1.0 - 2025/12/19
 Version 4.1.0 - 2026/01/08
 Version 4.1.0 - 2026/01/16
+Version 4.1.0 - 2026/01/23
 
 Feature:
 - Add SparkFun VL53L5CX examples
@@ -35,6 +36,7 @@ Feature:
     - RecordMP4_HTTP_Post_Whisper_Server_FASTAPI
 - Update object detection image
     - remove second buffer to prevent memory overflow
+- Add Re-align clocks for ReceiveDelay.ino
 
 API Updates:
 - Update code base
@@ -56,6 +58,9 @@ API Updates:
 - Fixed Invalid WiFiAP Channel Issue
 - Update printInfo for RTSP showing IP and port at same row
 - Add digitalPinToInterrupt(), attachInterrupt(), detachInterrupt()
+- Add callback function flag for send and receive
+- Update http OTA related api
+    - Update OTA api reconnect when server disconnected
 
 Misc:
 - Update tool 1.4.6
@@ -71,5 +76,7 @@ Misc:
 - Update code base for websocket
 - fix multithreading library name
 - Minor fix
+- Update python scripts for test end points
+- Add requirements.txt for Linux setup env
 - Update python scripts for test end points
 - Add requirements.txt for Linux setup env
