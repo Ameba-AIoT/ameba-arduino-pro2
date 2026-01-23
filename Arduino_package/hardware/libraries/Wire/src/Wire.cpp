@@ -115,7 +115,7 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
     uint32_t timeout_rx = 5000;    // Timeout counter
     do {
         timeout_rx--;
-        wait_us(this->rxBufferLength * 200);
+        wait_us(this->rxBufferLength * 100);
     } while (flag_rx == 0 && timeout_rx > 0);
 
     // i2c_read error;
