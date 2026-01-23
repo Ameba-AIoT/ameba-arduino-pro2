@@ -59,7 +59,8 @@ public:
     void beginTransmission(int);
     uint8_t endTransmission(void);
     uint8_t endTransmission(uint8_t);
-    static void i2c_callback_set_flag(void *userdata);
+    static void i2c_master_rxc_callback(void *userdata);
+    static void i2c_master_txc_callback(void *userdata);
 
     virtual size_t write(uint8_t);
     virtual size_t write(const uint8_t *, size_t);

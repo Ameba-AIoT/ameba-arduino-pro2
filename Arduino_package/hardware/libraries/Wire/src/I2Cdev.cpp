@@ -287,7 +287,7 @@ int8_t I2Cdev::readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8
         useWire->write(regAddr);
         useWire->endTransmission();
         useWire->requestFrom((uint8_t)devAddr, (uint8_t)min((int)length - k, I2CDEVLIB_WIRE_BUFFER_LENGTH));
-        hal_delay_ms(1);
+        // hal_delay_ms(1);
         for (; useWire->available() && (timeout == 0 || millis() - t1 < timeout); count++) {
             data[count] = useWire->read();
 #ifdef I2CDEV_SERIAL_DEBUG
@@ -367,8 +367,7 @@ int8_t I2Cdev::readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint1
         useWire->send(regAddr);
         useWire->endTransmission();
         useWire->requestFrom(devAddr, (uint8_t)(length * 2));    // length=words, this wants bytes
-        hal_delay_ms(1);
-
+        // hal_delay_ms(1);
         bool msb = true;    // starts with MSB, then LSB
         for (; useWire->available() && count < length && (timeout == 0 || millis() - t1 < timeout);) {
             if (msb) {
@@ -400,8 +399,7 @@ int8_t I2Cdev::readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint1
         useWire->write(regAddr);
         useWire->endTransmission();
         useWire->requestFrom(devAddr, (uint8_t)(length * 2));    // length=words, this wants bytes
-        hal_delay_ms(1);
-
+        // hal_delay_ms(1);
         bool msb = true;    // starts with MSB, then LSB
         for (; useWire->available() && count < length && (timeout == 0 || millis() - t1 < timeout);) {
             if (msb) {
@@ -433,7 +431,7 @@ int8_t I2Cdev::readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint1
         useWire->write(regAddr);
         useWire->endTransmission();
         useWire->requestFrom(devAddr, (uint8_t)(length * 2));    // length=words, this wants bytes
-        hal_delay_ms(1);
+        // hal_delay_ms(1);
 
         bool msb = true;    // starts with MSB, then LSB
         for (; useWire->available() && count < length && (timeout == 0 || millis() - t1 < timeout);) {
