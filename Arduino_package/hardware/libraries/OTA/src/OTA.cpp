@@ -9,6 +9,8 @@ extern "C" {
 #include "ota_drv.h"
 }
 
+#define SERVER_DEAD_TIMEOUT_MIN 5
+
 const char *g_otaState = OtaState[0];
 JsonDocument doc;
 static char buffer[1024];
@@ -17,6 +19,7 @@ int priority1;
 
 WiFiClient OTA::wifiClient;
 char OTA::jsonString[256];
+uint32_t OTA::_last_reconnect;
 
 OTA::OTA():
     _ota_wifi(&WiFi)
@@ -25,7 +28,29 @@ OTA::OTA():
 OTA::~OTA()
 {}
 
-void OTA::sendPostRequest()
+uint8_t OTA::check_wifi(void)
+{
+    if (!_ota_wifi) {
+        return WL_DISCONNECTED;
+    }
+
+    // WL_DISCONNECTED, WL_CONNECTED
+    return _ota_wifi->status();
+}
+
+void OTA::reConnection(void)
+{
+    // printf("reConnection millis: %d \r\n", millis());
+    // printf("reConnection _last_reconnect: %d \r\n", _last_reconnect);
+
+    if ((millis() - _last_reconnect) > (SERVER_DEAD_TIMEOUT_MIN * 60 * 1000)) {
+        wifiClient.stop();
+        _last_reconnect = millis();
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Reconnect! \n");
+    }
+}
+
+void OTA::sendPostRequest(void)
 {
     if (wifiClient.connected() == 0) {
         if (wifiClient.connect(_server, _port) == 0) {
@@ -43,6 +68,7 @@ void OTA::sendPostRequest()
     wifiClient.println(strlen(jsonString));
 
     wifiClient.println("Connection: keep-alive");
+    // wifiClient.println("Connection: close");
     wifiClient.println();    // Empty line indicates the end of headers
     wifiClient.print(jsonString);
 
@@ -53,6 +79,7 @@ void OTA::thread1_task(const void *argument)
 {
     for (;;) {
         sendPostRequest();
+        reConnection();
         vTaskDelay(pdMS_TO_TICKS(3000));
     }
 }
@@ -65,6 +92,9 @@ void OTA::thread2_task(const void *argument)
         WiFiClient client = server.available();
 
         while (client.connected()) {
+
+            _last_reconnect = millis();
+
             memset(buffer, 0, 1024);
             int n = client.read((uint8_t *)(&buffer[0]), sizeof(buffer));
             if (n > 0) {
@@ -96,6 +126,7 @@ void OTA::start_OTA_threads(int port, char *server)
 void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
 {
     _ota_wifi = &ota_wifi;
+    _last_reconnect = millis();
     if (check_wifi() == WL_DISCONNECTED) {
         amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] There is no WiFi connection! \n");
         return;
@@ -130,14 +161,4 @@ void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
     } else {
         amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] [OTA] Failed to create Start OTA process thread. \n");
     }
-}
-
-uint8_t OTA::check_wifi(void)
-{
-    if (!_ota_wifi) {
-        return WL_DISCONNECTED;
-    }
-
-    // WL_DISCONNECTED, WL_CONNECTED
-    return _ota_wifi->status();
 }

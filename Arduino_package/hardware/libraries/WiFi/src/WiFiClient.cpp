@@ -93,29 +93,31 @@ int WiFiClient::available()
     int ret = 0;
     int err;
 
-    if (!_is_connected) {
+    // If the client is already marked disconnected, just return 0
+    if (!_is_connected || _sock < 0) {
         return 0;
     }
-    if (_sock >= 0) {
+
 try_again:
-        ret = clientdrv.availData(_sock);
-        if (ret > 0) {
-            return 1;
+
+    ret = clientdrv.availData(_sock);
+
+    if (ret > 0) {
+        return 1;
+    }
+
+    err = clientdrv.getLastErrno(_sock);
+
+    if (err == EAGAIN) {
+        if (_is_blocked) {
+            goto try_again;
         } else {
-            err = clientdrv.getLastErrno(_sock);
-            if (err == EAGAIN) {
-                if (_is_blocked) {
-                    goto try_again;
-                } else {
-                    // since no process exists for the socket, stop it
-                    clientdrv.stopSocket(_sock);
-                }
-            }
-            if (err != 0) {
-                _is_connected = false;
-            }
-            return 0;
+            // since no process exists for the socket, stop it
+            clientdrv.stopSocket(_sock);
         }
+    }
+    if (err != 0) {
+        _is_connected = false;
     }
     return 0;
 }

@@ -19,9 +19,12 @@ private:
     static void thread1_task(const void *argument);
     static void thread2_task(const void *argument);
 
-    static void sendPostRequest();
+    static void sendPostRequest(void);
     static WiFiClient wifiClient;
     static char jsonString[256];
     WiFiClass *_ota_wifi;
+
+    static void reConnection(void);
+    static uint32_t _last_reconnect;
 };
 #endif    // OTA_H
