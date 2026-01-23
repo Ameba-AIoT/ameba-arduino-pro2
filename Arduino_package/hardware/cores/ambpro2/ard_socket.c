@@ -49,7 +49,7 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode)
     if (protMode == TCP_MODE) {
         // TCP MODE
         if (connect(_sock, ((struct sockaddr *)&serv_addr), sizeof(serv_addr)) == 0) {
-            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Connect to Server successfully!\r\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Connect to Server successfully!\n");
             timeout = 3000;
             lwip_setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
             timeout = 30000;
@@ -101,7 +101,7 @@ int start_clientv6(uint32_t *ipv6Address, uint16_t port, uint8_t protMode)
         if (connect(_sock, (struct sockaddr *)(&serv_addr6), sizeof(serv_addr6)) == -1) {
             amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s Connect to server failed\n", __FUNCTION__);
         }
-        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Connect to server successfully\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Connect to server successfully\n");
 
         if (connect(_sock, (struct sockaddr *)(&serv_addr6), sizeof(serv_addr6)) == 0) {
             // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Connect to Server successfully!\r\n");
@@ -144,13 +144,13 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode)
             amb_ard_printf(ARD_LOG_ERR, "\n\r[ERROR] Create socket failed\n");
             return -1;
         }
-        amb_ard_printf(ARD_LOG_INF, "\n\r[INFO] Create socket successfully\n");
+        // amb_ard_printf(ARD_LOG_INF, "\n\r[INFO] Create socket successfully\n");
     } else {
         if ((client_fd = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
             amb_ard_printf(ARD_LOG_ERR, "\n\r[ERROR] Create socket failed\n");
             return -1;
         }
-        amb_ard_printf(ARD_LOG_INF, "\n\r[INFO] Create socket successfully\n");
+        // amb_ard_printf(ARD_LOG_INF, "\n\r[INFO] Create socket successfully\n");
     }
 
     // initialize value in dest
@@ -189,7 +189,7 @@ int start_client_v6(char ipv6Address[], uint16_t port, uint8_t protMode)
         if (connect(client_fd, (struct sockaddr *)&ser_addr, sizeof(ser_addr)) == -1) {
             amb_ard_printf(ARD_LOG_ERR, "\n\r[ERROR] Connect to server failed\n");
         } else {
-            amb_ard_printf(ARD_LOG_INF, "[INFO] Connect to server successfully\n");
+            amb_ard_printf(ARD_LOG_INF, "\n\r[INFO] Connect to server successfully\n");
         }
     }
     return client_fd;
@@ -220,16 +220,16 @@ int start_server(uint16_t port, uint8_t protMode)
         timeout = 3000;
         _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Create TCP socket successfully\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Create TCP socket successfully\n");
     } else {
         timeout = 1000;
         _sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
         setsockopt(_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Create UDP socket successfully\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Create UDP socket successfully\n");
     }
 
     if (_sock < 0) {
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s Opening socket\r\n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s Opening socket\n", __FUNCTION__);
         return -1;
     }
 
@@ -243,7 +243,7 @@ int start_server(uint16_t port, uint8_t protMode)
 
     // Assign a port number to socket
     if (bind(_sock, ((struct sockaddr *)&localHost), sizeof(localHost)) < 0) {
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s On binding\r\n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s On binding\n", __FUNCTION__);
         return -1;
     }
     // lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
@@ -383,7 +383,8 @@ int get_available(int sock)
         // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] TCP_SND_BUF %d \n", TCP_SND_BUF);
 
         // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Accept connection successfully\n");
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] A client connected to this server :\r\n[PORT]: %d\r\n[IP]: %s\r\n\r\n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] A client connected to this server :\r\n[PORT]: %d\r\n[IP]: %s\r\n\r\n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] A client connected to this server \n\t [PORT]: %d \n\t [IP]: %s \n", ntohs(cli_addr.sin_port), inet_ntoa(cli_addr.sin_addr.s_addr));
         return client_fd;
     }
 }

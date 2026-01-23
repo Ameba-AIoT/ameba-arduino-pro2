@@ -417,7 +417,7 @@ int8_t WiFiDrv::apActivate(uint8_t hidden_ssid)
     }
 
     if ((ret = wifi_start_ap(&ap)) < 0) {
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR]  Operation failed!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Operation failed!\n");
         ret = WL_FAILURE;
         goto exit;
     }
@@ -674,10 +674,10 @@ int WiFiDrv::getHostByNamev6(const char* aHostname, IPv6Address& aResult)
     ip_addr_t ip_addr;
     err_t err;
 #if 0
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  0 ip address: %x\n", ip_addr.u_addr.ip6.addr[0]);
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  1 ip address: %x\n", ip_addr.u_addr.ip6.addr[1]);
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  2 ip address: %x\n", ip_addr.u_addr.ip6.addr[2]);
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  3 ip address: %x\n", ip_addr.u_addr.ip6.addr[3]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 0 ip address: %x\n", ip_addr.u_addr.ip6.addr[0]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 1 ip address: %x\n", ip_addr.u_addr.ip6.addr[1]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 2 ip address: %x\n", ip_addr.u_addr.ip6.addr[2]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 3 ip address: %x\n", ip_addr.u_addr.ip6.addr[3]);
 #endif
     err = netconn_gethostbyname_addrtype(aHostname, &ip_addr, NETCONN_DNS_IPV6);
     if (err != ERR_OK) {
@@ -688,10 +688,10 @@ int WiFiDrv::getHostByNamev6(const char* aHostname, IPv6Address& aResult)
             aResult._address.dword[xx] = ip_addr.u_addr.ip6.addr[xx];
         }
 #if 0
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  0 dword: %x\n", aResult._address.dword[0]);
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  1 dword: %x\n", aResult._address.dword[1]);
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  2 dword: %x\n", aResult._address.dword[2]);
-    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp:  3 dword: %x\n", aResult._address.dword[3]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 0 dword: %x\n", aResult._address.dword[0]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 1 dword: %x\n", aResult._address.dword[1]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 2 dword: %x\n", aResult._address.dword[2]);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi_drv.cpp: 3 dword: %x\n", aResult._address.dword[3]);
 #endif
         return WL_SUCCESS;
     }
