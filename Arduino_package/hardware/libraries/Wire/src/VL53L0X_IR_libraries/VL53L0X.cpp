@@ -329,7 +329,7 @@ uint8_t VL53L0X::readReg(uint8_t reg)
 
     bus->requestFrom(address, (uint8_t)1);
 
-    hal_delay_ms(1);
+    // hal_delay_ms(1);
 
     while (bus->available()) {
         value = bus->read();
@@ -348,7 +348,7 @@ uint16_t VL53L0X::readReg16Bit(uint8_t reg)
     last_status = bus->endTransmission();
 
     bus->requestFrom(address, (uint8_t)2);
-    hal_delay_ms(1);
+    // hal_delay_ms(1);
 
     while (bus->available()) {
         value = (uint16_t)bus->read() << 8;    // value high byte
@@ -368,7 +368,7 @@ uint32_t VL53L0X::readReg32Bit(uint8_t reg)
     last_status = bus->endTransmission();
 
     bus->requestFrom(address, (uint8_t)4);
-    hal_delay_ms(1);
+    // hal_delay_ms(1);
 
     while (bus->available()) {
         value = (uint32_t)bus->read() << 24;    // value highest byte
@@ -403,7 +403,7 @@ void VL53L0X::readMulti(uint8_t reg, uint8_t *dst, uint8_t count)
     last_status = bus->endTransmission();
 
     bus->requestFrom(address, count);
-    hal_delay_ms(1);
+    // hal_delay_ms(1);
 
     // while (count-- > 0 && bus->available())
     while (count-- > 0) {

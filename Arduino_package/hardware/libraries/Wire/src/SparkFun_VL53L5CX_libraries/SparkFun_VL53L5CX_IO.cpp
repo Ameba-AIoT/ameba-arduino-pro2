@@ -101,7 +101,7 @@ uint8_t SparkFun_VL53L5CX_IO::readMultipleBytes(uint16_t registerAddress, uint8_
         }
 
         _i2cPort->requestFrom((uint8_t)_address, (uint8_t)bytesToRead);
-        hal_delay_ms(10);
+        // hal_delay_ms(10);
         if (_i2cPort->available()) {
             for (uint16_t x = 0; x < bytesToRead; x++) {
                 buffer[offset + x] = _i2cPort->read();
@@ -124,7 +124,7 @@ uint8_t SparkFun_VL53L5CX_IO::readSingleByte(uint16_t registerAddress)
     _i2cPort->write(lowByte(registerAddress));
     _i2cPort->endTransmission();
     _i2cPort->requestFrom(_address, 1U);
-    hal_delay_ms(10);
+    // hal_delay_ms(10);
     return _i2cPort->read();
 }
 

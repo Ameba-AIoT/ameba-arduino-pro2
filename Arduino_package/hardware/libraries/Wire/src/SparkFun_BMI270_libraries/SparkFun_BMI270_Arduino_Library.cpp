@@ -1237,7 +1237,7 @@ BMI2_INTF_RETURN_TYPE BMI270::readRegistersI2C(uint8_t regAddress, uint8_t* data
 
     // Read bytes from these registers
     interfaceData->i2cPort->requestFrom(interfaceData->i2cAddress, numBytes);
-    hal_delay_ms(10);
+    // hal_delay_ms(10);
 
     // Store all requested bytes
     for (uint32_t i = 0; i < numBytes && interfaceData->i2cPort->available(); i++) {

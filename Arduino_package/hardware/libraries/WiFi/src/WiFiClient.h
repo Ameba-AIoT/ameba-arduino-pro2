@@ -45,7 +45,7 @@ public:
     using Print::write;
 
 private:
-    uint8_t _sock;
+    int _sock;
     ServerDrv clientdrv;
     bool _is_connected;
     uint8_t data[DATA_LENTH];

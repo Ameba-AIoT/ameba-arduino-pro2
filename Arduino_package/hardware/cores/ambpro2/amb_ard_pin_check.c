@@ -16,7 +16,7 @@ void amb_ard_pin_check_name(int pin)
 {
     while (pin > TOTAL_GPIO_PIN_NUM) {
         amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. The pin: %d beyond the pin mapping!!! \n", __FUNCTION__, pin);
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please check if pin or board is correct \n\r");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please check if pin or board is correct \n");
         delay(5000);
     }
 
