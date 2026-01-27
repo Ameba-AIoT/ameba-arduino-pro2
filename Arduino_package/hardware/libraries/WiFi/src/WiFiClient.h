@@ -51,7 +51,7 @@ private:
     uint8_t data[DATA_LENTH];
     int recvTimeout;
     tProtMode _portMode = TCP_MODE;
-    tBlockingMode _is_blocked = BLOCKING_MODE;
+    tBlockingMode _mode_of_block = BLOCKING_MODE;
 };
 
 #ifdef __cplusplus

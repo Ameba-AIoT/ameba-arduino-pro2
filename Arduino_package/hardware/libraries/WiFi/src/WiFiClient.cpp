@@ -42,7 +42,7 @@ WiFiClient::WiFiClient(tBlockingMode blockMode):
 {
     _is_connected = false;
     recvTimeout = 3000;
-    _is_blocked = blockMode;
+    _mode_of_block = blockMode;
 }
 
 WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode)
@@ -63,12 +63,12 @@ WiFiClient::WiFiClient(uint8_t sock, tProtMode portMode, tBlockingMode blockMode
     }
     recvTimeout = 3000;
     _portMode = portMode;
-    _is_blocked = blockMode;
+    _mode_of_block = blockMode;
 }
 
 WiFiClient::~WiFiClient()
 {
-    if (_is_blocked) {
+    if (_mode_of_block == BLOCKING_MODE) {
         stop();
     }
 }
@@ -109,7 +109,7 @@ try_again:
     err = clientdrv.getLastErrno(_sock);
 
     if (err == EAGAIN) {
-        if (_is_blocked) {
+        if (_mode_of_block == BLOCKING_MODE) {
             goto try_again;
         } else {
             // since no process exists for the socket, stop it
@@ -128,9 +128,11 @@ int WiFiClient::read()
     int err;
     uint8_t b[1];
 
-    if (!available()) {
-        return -1;
-    }
+    // memset(b, 0, 1);
+
+    // if (!available()) {
+    //     return -1;
+    // }
 
     ret = clientdrv.getData(_sock, b);
     if (ret > 0) {
@@ -194,12 +196,12 @@ size_t WiFiClient::write(uint8_t b)
 // set WiFi client to blocking/non-blocking mode
 void WiFiClient::setBlockingMode()
 {
-    _is_blocked = BLOCKING_MODE;
+    _mode_of_block = BLOCKING_MODE;
 }
 
 void WiFiClient::setNonBlockingMode()
 {
-    _is_blocked = NON_BLOCKING_MODE;
+    _mode_of_block = NON_BLOCKING_MODE;
 }
 
 size_t WiFiClient::write(const uint8_t *buf, size_t size)
@@ -259,7 +261,7 @@ int WiFiClient::connect(const char *host, uint16_t port)
 int WiFiClient::connect(IPAddress ip, uint16_t port)
 {
     _is_connected = false;
-    _sock = clientdrv.startClient(ip, port, _portMode, _is_blocked);
+    _sock = clientdrv.startClient(ip, port, _portMode, _mode_of_block);
     // whether sock is connected
     if (_sock < 0) {
         _is_connected = false;
