@@ -41,8 +41,9 @@ void setup()
 
     // Configure a separate I2C bus
     // On AMB82-mini, this means you have to adjust your pins from
-    // Pin 12, 13 to
-    // Pin 09, 10
+    // Pin 12 (I2C_SDA), 13 (I2C_SCL) to
+    // Pin 09 (I2C_SDA1), 10 (I2C_SCL1)
+    // if you follow all other examples
     Wire1.begin();
 
     // We can increase I2C clock speed to 400kHz, the NAU7802 supports it.
