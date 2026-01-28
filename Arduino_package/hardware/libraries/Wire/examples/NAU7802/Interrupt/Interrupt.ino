@@ -63,7 +63,7 @@ void loop()
 {
     if (digitalRead(interruptPin) == HIGH) {
         int32_t currentReading = myScale.getReading();
-        Serial.print("Reading: ");
+        Serial.print("NAU7802 reading: ");
         Serial.println(currentReading);
     }
 
