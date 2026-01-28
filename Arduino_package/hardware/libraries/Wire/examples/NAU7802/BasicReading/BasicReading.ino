@@ -23,7 +23,7 @@
   This example merely outputs the raw data from a load cell. For example, the
   output may be 25776 and change to 43122 when a cup of tea is set on the scale.
   These values are unitless - they are not grams or ounces. Instead, it is a
-  linear relationship that must be calculated. Remeber y = mx + b?
+  linear relationship that must be calculated. Remember y = mx + b?
   If 25776 is the 'zero' or tare state, and 43122 when I put 15.2oz of tea on
   the scale, then what is a reading of 57683 in oz?
 

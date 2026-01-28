@@ -1,7 +1,7 @@
 /*
   This is an Arduino library written for the NAU7802 24-bit wheatstone
   bridge and load cell amplifier.
-  By Nathan Seidle @ SparkFun Electronics, March 3nd, 2019
+  By Nathan Seidle @ SparkFun Electronics, March 3rd, 2019
 
   The NAU7802 is an I2C device that converts analog signals to a 24-bit
   digital signal. This makes it possible to create your own digital scale
