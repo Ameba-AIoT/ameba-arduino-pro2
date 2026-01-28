@@ -1,6 +1,5 @@
 /*
-  This example shows how to configure different I2C bus SparkFun
-  NAU7802.
+  This example shows how to configure different I2C bus and clock speed for SparkFun NAU7802.
 
   Modified by: Realtek SG (27 January 2026)
 
