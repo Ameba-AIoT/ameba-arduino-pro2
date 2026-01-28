@@ -33,36 +33,38 @@
 
 #include "SparkFun_NAU7802_libraries/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h"
 
-NAU7802 myScale; // Create instance of the NAU7802 class
+NAU7802 myScale;    // Create instance of the NAU7802 class
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("Qwiic Scale Example");
+void setup()
+{
+    Serial.begin(115200);
+    Serial.println("Qwiic Scale Example");
 
-  // Configure a separate I2C bus
-  // On AMB82-mini, this means you have to adjust your pins from
-  // Pin 12, 13 to
-  // Pin 09, 10
-  Wire1.begin();
+    // Configure a separate I2C bus
+    // On AMB82-mini, this means you have to adjust your pins from
+    // Pin 12, 13 to
+    // Pin 09, 10
+    Wire1.begin();
 
-  // We can increase I2C clock speed to 400kHz, the NAU7802 supports it.
-  // - You are likely to adjust this only when you requires very high sample
-  // rate.
-  Wire1.setClock(400000);
+    // We can increase I2C clock speed to 400kHz, the NAU7802 supports it.
+    // - You are likely to adjust this only when you requires very high sample
+    // rate.
+    Wire1.setClock(400000);
 
-  // Pass the Wire port to the library, if not default to use Wire
-  if (myScale.begin(Wire1) == false) {
-    Serial.println("Scale not detected. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
-  Serial.println("Scale detected!");
+    // Pass the Wire port to the library, if not default to use Wire
+    if (myScale.begin(Wire1) == false) {
+        Serial.println("Scale not detected. Please check wiring. Freezing...");
+        while (1)
+            ;
+    }
+    Serial.println("Scale detected!");
 }
 
-void loop() {
-  if (myScale.available()) {
-    int32_t currentReading = myScale.getReading();
-    Serial.print("Reading: ");
-    Serial.println(currentReading);
-  }
+void loop()
+{
+    if (myScale.available()) {
+        int32_t currentReading = myScale.getReading();
+        Serial.print("Reading: ");
+        Serial.println(currentReading);
+    }
 }

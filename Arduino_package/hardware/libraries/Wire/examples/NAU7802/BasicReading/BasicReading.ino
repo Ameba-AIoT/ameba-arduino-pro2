@@ -45,27 +45,29 @@
 
 #include "SparkFun_NAU7802_libraries/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h"
 
-NAU7802 myScale; // Create instance of the NAU7802 class
+NAU7802 myScale;    // Create instance of the NAU7802 class
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("Qwiic Scale Example");
+void setup()
+{
+    Serial.begin(115200);
+    Serial.println("Qwiic Scale Example");
 
-  Wire.begin();
+    Wire.begin();
 
-  if (myScale.begin() == false) {
-    Serial.println("Scale not detected. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
-  Serial.println("Scale detected!");
+    if (myScale.begin() == false) {
+        Serial.println("Scale not detected. Please check wiring. Freezing...");
+        while (1)
+            ;
+    }
+    Serial.println("Scale detected!");
 }
 
-void loop() {
-  if (myScale.available() == true) {
-    int32_t currentReading = myScale.getReading();
-    Serial.print("NAU7802 reading: ");
-    Serial.println(currentReading);
-  }
-  delay(1000);
+void loop()
+{
+    if (myScale.available() == true) {
+        int32_t currentReading = myScale.getReading();
+        Serial.print("NAU7802 reading: ");
+        Serial.println(currentReading);
+    }
+    delay(1000);
 }

@@ -44,36 +44,38 @@
 
 #include "SparkFun_NAU7802_libraries/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h"
 
-NAU7802 myScale; // Create instance of the NAU7802 class
+NAU7802 myScale;    // Create instance of the NAU7802 class
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("Qwiic Scale Example");
+void setup()
+{
+    Serial.begin(115200);
+    Serial.println("Qwiic Scale Example");
 
-  Wire.begin();
+    Wire.begin();
 
-  if (myScale.begin() == false) {
-    Serial.println("Scale not detected. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
-  Serial.println("Scale detected!");
+    if (myScale.begin() == false) {
+        Serial.println("Scale not detected. Please check wiring. Freezing...");
+        while (1)
+            ;
+    }
+    Serial.println("Scale detected!");
 
-  myScale.setGain(
-      NAU7802_GAIN_2); // Gain can be set to 1, 2, 4, 8, 16, 32, 64, or 128.
+    myScale.setGain(
+        NAU7802_GAIN_2);    // Gain can be set to 1, 2, 4, 8, 16, 32, 64, or 128.
 
-  myScale.setSampleRate(
-      NAU7802_SPS_40); // Sample rate can be set to 10, 20, 40, 80, or 320Hz
+    myScale.setSampleRate(
+        NAU7802_SPS_40);    // Sample rate can be set to 10, 20, 40, 80, or 320Hz
 
-  myScale.calibrateAFE(); // Does an internal calibration. Recommended after
-                          // power up, gain changes, sample rate changes, or
-                          // channel changes.
+    myScale.calibrateAFE();    // Does an internal calibration. Recommended after
+                               // power up, gain changes, sample rate changes, or
+                               // channel changes.
 }
 
-void loop() {
-  if (myScale.available() == true) {
-    int32_t currentReading = myScale.getReading();
-    Serial.print("NAU7802 reading: ");
-    Serial.println(currentReading);
-  }
+void loop()
+{
+    if (myScale.available() == true) {
+        int32_t currentReading = myScale.getReading();
+        Serial.print("NAU7802 reading: ");
+        Serial.println(currentReading);
+    }
 }

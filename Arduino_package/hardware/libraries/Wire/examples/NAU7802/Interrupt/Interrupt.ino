@@ -33,37 +33,39 @@
 
 #include "SparkFun_NAU7802_libraries/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h"
 
-NAU7802 myScale; // Create instance of the NAU7802 class
+NAU7802 myScale;    // Create instance of the NAU7802 class
 
-byte interruptPin = 2; // Tied to the INT pin on Qwiic Scale. Can be any pin.
+byte interruptPin = 2;    // Tied to the INT pin on Qwiic Scale. Can be any pin.
 
-void setup() {
-  pinMode(interruptPin,
-          INPUT); // No need for pullup. NAU7802 does not use open drain INT.
+void setup()
+{
+    pinMode(interruptPin,
+            INPUT);    // No need for pullup. NAU7802 does not use open drain INT.
 
-  Serial.begin(115200);
-  Serial.println("Qwiic Scale Example");
+    Serial.begin(115200);
+    Serial.println("Qwiic Scale Example");
 
-  Wire.begin();
+    Wire.begin();
 
-  if (myScale.begin() == false) {
-    Serial.println("Scale not detected. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
-  Serial.println("Scale detected!");
+    if (myScale.begin() == false) {
+        Serial.println("Scale not detected. Please check wiring. Freezing...");
+        while (1)
+            ;
+    }
+    Serial.println("Scale detected!");
 
-  myScale.setIntPolarityHigh(); // Set Int pin to be high when data is ready
-  // (default)
-  // myScale.setIntPolarityLow(); // Set Int pin to be low when data is ready
+    myScale.setIntPolarityHigh();    // Set Int pin to be high when data is ready
+                                     // (default)
+                                     // myScale.setIntPolarityLow(); // Set Int pin to be low when data is ready
 }
 
-void loop() {
-  if (digitalRead(interruptPin) == HIGH) {
-    int32_t currentReading = myScale.getReading();
-    Serial.print("Reading: ");
-    Serial.println(currentReading);
-  }
+void loop()
+{
+    if (digitalRead(interruptPin) == HIGH) {
+        int32_t currentReading = myScale.getReading();
+        Serial.print("Reading: ");
+        Serial.println(currentReading);
+    }
 
-  delay(1000);
+    delay(1000);
 }

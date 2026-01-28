@@ -32,46 +32,49 @@
 
 #include "SparkFun_NAU7802_libraries/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h"
 
-NAU7802 myScale; // Create instance of the NAU7802 class
+NAU7802 myScale;    // Create instance of the NAU7802 class
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("Qwiic Scale Example");
+void setup()
+{
+    Serial.begin(115200);
+    Serial.println("Qwiic Scale Example");
 
-  Wire.begin();
+    Wire.begin();
 
-  if (myScale.begin() == false) {
-    Serial.println("Scale not detected. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
-  Serial.println("Scale detected!");
+    if (myScale.begin() == false) {
+        Serial.println("Scale not detected. Please check wiring. Freezing...");
+        while (1)
+            ;
+    }
+    Serial.println("Scale detected!");
 }
 
-void loop() {
+void loop()
+{
 
-  // Time how long it takes for scale to take a reading
-  // This should be significantly faster if you do NOT power down then power up,
-  // i.e., comment out the following lines:
+    // Time how long it takes for scale to take a reading
+    // This should be significantly faster if you do NOT power down then power up,
+    // i.e., comment out the following lines:
 
-  // ####################
-  // Power down to ~200nA
-  myScale.powerDown();
-  // Wait for 1s
-  delay(1000);
-  // Power up NAU7802.
-  myScale.powerUp();
-  // ####################
+    // ####################
+    // Power down to ~200nA
+    myScale.powerDown();
+    // Wait for 1s
+    delay(1000);
+    // Power up NAU7802.
+    myScale.powerUp();
+    // ####################
 
-  // ^ Try it out!
+    // ^ Try it out!
 
-  unsigned long startTime = millis();
-  while (myScale.available() == false)
-    delay(1);
+    unsigned long startTime = millis();
+    while (myScale.available() == false) {
+        delay(1);
+    }
 
-  int32_t currentReading = myScale.getReading();
-  Serial.print("Startup time: ");
-  Serial.print(millis() - startTime);
-  Serial.print(", ");
-  Serial.println(currentReading);
+    int32_t currentReading = myScale.getReading();
+    Serial.print("Startup time: ");
+    Serial.print(millis() - startTime);
+    Serial.print(", ");
+    Serial.println(currentReading);
 }
