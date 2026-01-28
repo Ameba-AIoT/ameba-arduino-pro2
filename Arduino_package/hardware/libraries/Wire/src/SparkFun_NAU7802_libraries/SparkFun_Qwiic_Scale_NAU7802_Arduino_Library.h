@@ -207,7 +207,7 @@ public:
     bool setLDO(
         uint8_t ldoValue);    // Set the onboard Low-Drop-Out voltage regulator to a
                               // given value. 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.2, 4.5V
-                              // are avaialable
+                              // are available
     void setLDORampDelay(
         unsigned long
             delay);    // LDO (AVDD) takes ~200ms to ramp up. During .begin, delay
