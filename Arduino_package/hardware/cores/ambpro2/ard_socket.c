@@ -438,7 +438,7 @@ int recv_data(int sock, const uint8_t *data, uint32_t len, int flag)
 
 int send_data(int sock, const uint8_t *data, uint32_t len, int flag)
 {
-#if 0
+#if 1
     int ret;
     ret = lwip_send(sock, data, len, flag);
     return ret;
