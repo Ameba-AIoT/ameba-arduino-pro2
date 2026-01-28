@@ -9,6 +9,27 @@ extern "C" {
 
 extern size_t xPortGetFreeHeapSize(void);
 
+#if 0
+
+uint32_t os_thread_create_name_arduino(void (*task)(const void *argument), void *argument, int priority, uint32_t stack_size, char *task_name)
+{
+    osThreadDef_t thread_def;
+
+    thread_def.pthread = task;
+    thread_def.tpriority = (osPriority)priority;
+    thread_def.stacksize = stack_size;
+    thread_def.name = task_name;
+
+    return (uint32_t)osThreadCreate(&thread_def, argument);
+}
+
+uint32_t os_thread_create_arduino(void (*task)(const void *argument), void *argument, int priority, uint32_t stack_size)
+{
+    return os_thread_create_name_arduino(task, argument, priority, stack_size, "ARDUINO");
+}
+
+#else
+
 uint32_t os_thread_create_arduino(void (*task)(const void *argument), void *argument, int priority, uint32_t stack_size)
 {
     osThreadDef_t thread_def;
@@ -20,6 +41,8 @@ uint32_t os_thread_create_arduino(void (*task)(const void *argument), void *argu
 
     return (uint32_t)osThreadCreate(&thread_def, argument);
 }
+
+#endif
 
 uint32_t os_thread_get_id_arduino(void)
 {

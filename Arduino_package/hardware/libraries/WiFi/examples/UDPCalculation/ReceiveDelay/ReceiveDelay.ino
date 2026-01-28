@@ -93,6 +93,14 @@ void handle_data(char *buf)
             Serial.print("\taverage delay: ");
             Serial.print(early_diff + total_shift * 1.0 / datacount);
             Serial.println(" ms");
+
+            // Re-align clocks
+            ameba_epoch = millis();
+            sys_epoch = data;
+
+            early_diff = 0;
+            total_shift = 0;
+            datacount = 0;
         }
     }
 }

@@ -46,7 +46,7 @@ public:
     void setIPv6UDPServer(char *data_recv, char *data_send);
 
 private:
-    bool _available;
+    bool _available = false;
     uint32_t _peer_addr;
     uint16_t _peer_port;
 };

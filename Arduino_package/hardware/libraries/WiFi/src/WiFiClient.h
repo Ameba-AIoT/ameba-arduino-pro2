@@ -45,13 +45,13 @@ public:
     using Print::write;
 
 private:
-    uint8_t _sock;
+    int _sock;
     ServerDrv clientdrv;
     bool _is_connected;
     uint8_t data[DATA_LENTH];
     int recvTimeout;
     tProtMode _portMode = TCP_MODE;
-    tBlockingMode _is_blocked = BLOCKING_MODE;
+    tBlockingMode _mode_of_block = BLOCKING_MODE;
 };
 
 #ifdef __cplusplus

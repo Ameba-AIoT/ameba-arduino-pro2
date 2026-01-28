@@ -1,15 +1,10 @@
 Feature:
-- Update HandPresence_Detection.ino
-- Add guide links
-    - Capture_Image_HTTP_Post_Image_Llava_Server_FASTAPI
-    - HTTP_Post_MP4_Whisper_Server_FASTAPI
-    - RecordMP4_HTTP_Post_Whisper_Server_FASTAPI
-- Update object detection image
-    - remove second buffer to prevent memory overflow
+- Add Re-align clocks for ReceiveDelay.ino
 
 API Updates:
-- Update printInfo for RTSP showing IP and port at same row
-- Add digitalPinToInterrupt(), attachInterrupt(), detachInterrupt()
+- Add callback function flag for send and receive
+- Update http OTA related api
+    - Update OTA api reconnect when server disconnected
 
 Misc:
 - Update python scripts for test end points
