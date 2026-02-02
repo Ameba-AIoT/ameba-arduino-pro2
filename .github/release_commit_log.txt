@@ -1,11 +1,11 @@
 Feature:
-- Add Re-align clocks for ReceiveDelay.ino
+- Add HX711 apis and examples
+- Add NAU7802 apis and examples
+- Update mqtt server naming for related examples
 
 API Updates:
-- Add callback function flag for send and receive
-- Update http OTA related api
-    - Update OTA api reconnect when server disconnected
+- Update wificlient API
+    - Update block mode process
+    - Update read()
 
 Misc:
-- Update python scripts for test end points
-- Add requirements.txt for Linux setup env
