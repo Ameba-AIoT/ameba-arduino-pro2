@@ -321,6 +321,34 @@ void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_stat
     }
 }
 
+void cameraUpdateParams(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation)
+{
+
+    if (p) {
+        video_params.stream_id = stream_id;
+        video_params.type = type;
+        video_params.resolution = res;
+        video_params.width = w;
+        video_params.height = h;
+        video_params.bps = bps;
+        video_params.fps = fps;
+        video_params.gop = gop;
+        video_params.rc_mode = rc_mode;
+        video_params.jpeg_qlevel = jpeg_qlevel;
+        video_params.rotation = video_rotation;
+
+        if (mm_module_ctrl(p, CMD_VIDEO_STREAM_STOP, video_params.stream_id) == -1) {
+            printf("[cameraUpdateParams] CTRL CMD_VIDEO_STREAM_STOP HAS FAILED\r\n");
+        }
+        if (mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params) == -1) {
+            printf("[cameraUpdateParams] CTRL CMD_VIDEO_SET_PARAMS HAS FAILED\r\n");
+        }
+        if (mm_module_ctrl(p, CMD_VIDEO_APPLY, video_params.stream_id) == -1) {
+            printf("[cameraUpdateParams] CTRL CMD_VIDEO_APPLY HAS FAILED\r\n");
+        }
+    }
+}
+
 // set VOE heapsize
 void cameraSetHeapSize(void *p)
 {

@@ -42,6 +42,8 @@ void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, in
 
 void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel);
 
+void cameraUpdateParams(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation);
+
 void cameraSetQLen(mm_context_t *p, int length);
 
 void cameraSetQItem(mm_context_t *p);
