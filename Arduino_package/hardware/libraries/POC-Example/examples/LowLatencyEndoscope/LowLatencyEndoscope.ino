@@ -8,11 +8,11 @@
 #include "us_ticker_api.h"
 #include "wait_api.h"
 
-#define CHANNEL 0
-#define enableWiFiAP 1  // set 0 to use external WiFi network 
-#define GPIO_LED_S1       PS_1
-#define GPIO_LED_S4       PS_4
-#define GPIO_LED_E0       PE_0
+#define CHANNEL      0
+#define enableWiFiAP 1    // set 0 to use external WiFi network
+#define GPIO_LED_S1  PS_1
+#define GPIO_LED_S4  PS_4
+#define GPIO_LED_E0  PE_0
 
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 RTSP rtsp;
@@ -25,7 +25,7 @@ StreamIO videoStreamer(1, 1);
 // char ssid[] = "\xe2\x9c\x8c\xef\xb8\x8f Ameba \xe2\x9c\x8c\xef\xb8\x8f";
 char ssid[] = "AP_Network_SSID";    // Set the AP SSID
 char pass[] = "AP_Password";        // Set the AP password
-char channel[] = "11";               // Set the AP channel
+char channel[] = "11";              // Set the AP channel
 int status = WL_IDLE_STATUS;        // Indicator of Wifi status
 int ssid_status = 0;                // Set SSID status, 1 hidden, 0 not hidden
 
@@ -35,7 +35,8 @@ char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 #endif
 
-void setup(){
+void setup()
+{
     Serial.begin(115200);
     while (!Serial) {
         ;    // wait for serial port to connect. Needed for native USB port only
@@ -54,7 +55,7 @@ void setup(){
     Serial.println("AP mode already started");
     Serial.println();
     printWifiData();
-    printCurrentNet();  
+    printCurrentNet();
 #else
     // attempt to connect to Wifi network:
     while (status != WL_CONNECTED) {
@@ -65,7 +66,7 @@ void setup(){
         // wait 2 seconds for connection:
         delay(2000);
     }
-#endif  
+#endif
 
     ws_viewer.loadWebResources(0);
     config.enableWebsocketViewer();
@@ -84,10 +85,11 @@ void setup(){
     Camera.channelBegin(CHANNEL);
     ws_viewer.begin();
 
-    enableLightGPIO(); //Remove this if the flashlight GPIOs are not PS_1, PS_4 and PE_0.
+    enableLightGPIO();    // Remove this if the flashlight GPIOs are not PS_1, PS_4 and PE_0.
 }
 
-void loop(){
+void loop()
+{
 }
 
 
@@ -140,25 +142,26 @@ void printCurrentNet()
 }
 
 
-void enableLightGPIO(){
+void enableLightGPIO()
+{
     gpio_t gpio_led_s1;
-	gpio_t gpio_led_s4;
-	gpio_t gpio_led_e0;
+    gpio_t gpio_led_s4;
+    gpio_t gpio_led_e0;
 
-	// Init LED control pin
-	gpio_init(&gpio_led_s1, GPIO_LED_S1);
-	gpio_dir(&gpio_led_s1, PIN_OUTPUT);        // Direction: Output
-	gpio_mode(&gpio_led_s1, PullNone);         // No pull
+    // Init LED control pin
+    gpio_init(&gpio_led_s1, GPIO_LED_S1);
+    gpio_dir(&gpio_led_s1, PIN_OUTPUT);    // Direction: Output
+    gpio_mode(&gpio_led_s1, PullNone);     // No pull
 
-	gpio_init(&gpio_led_s4, GPIO_LED_S4);
-	gpio_dir(&gpio_led_s4, PIN_OUTPUT);        // Direction: Output
-	gpio_mode(&gpio_led_s4, PullNone);         // No pull
+    gpio_init(&gpio_led_s4, GPIO_LED_S4);
+    gpio_dir(&gpio_led_s4, PIN_OUTPUT);    // Direction: Output
+    gpio_mode(&gpio_led_s4, PullNone);     // No pull
 
-	gpio_init(&gpio_led_e0, GPIO_LED_E0);
-	gpio_dir(&gpio_led_e0, PIN_OUTPUT);        // Direction: Output
-	gpio_mode(&gpio_led_e0, PullNone);         // No pull
+    gpio_init(&gpio_led_e0, GPIO_LED_E0);
+    gpio_dir(&gpio_led_e0, PIN_OUTPUT);    // Direction: Output
+    gpio_mode(&gpio_led_e0, PullNone);     // No pull
 
-	gpio_write(&gpio_led_s1, 1);
-	gpio_write(&gpio_led_s4, 1);
-	gpio_write(&gpio_led_e0, 1);
+    gpio_write(&gpio_led_s1, 1);
+    gpio_write(&gpio_led_s4, 1);
+    gpio_write(&gpio_led_e0, 1);
 }

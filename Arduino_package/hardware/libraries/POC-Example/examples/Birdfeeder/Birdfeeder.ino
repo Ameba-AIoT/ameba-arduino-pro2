@@ -16,10 +16,10 @@
 #define NNWIDTH  576
 #define NNHEIGHT 320
 
-#define ROTATE_NONE                     0
-#define ROTATE_90DEG_CLOCKWISE          1
-#define ROTATE_90DEG_COUNTER_CLOCKWISE  2
-#define ROTATE_VERTICAL_FLIP            3
+#define ROTATE_NONE                    0
+#define ROTATE_90DEG_CLOCKWISE         1
+#define ROTATE_90DEG_COUNTER_CLOCKWISE 2
+#define ROTATE_VERTICAL_FLIP           3
 
 // Default preset configurations for each video channel:
 // Channel 0 : 1920 x 1080 30FPS H264
@@ -37,9 +37,9 @@ uint32_t img_addr = 0;
 uint32_t img_len = 0;
 AmebaFatFS fs;
 
-time_t     now;
-struct tm  ts;
-char       buf[80];
+time_t now;
+struct tm ts;
+char buf[80];
 
 int rotate_input = 0;
 int currentRotation = 0;
@@ -48,7 +48,8 @@ char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
 int status = WL_IDLE_STATUS;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // attempt to connect to Wifi network:
@@ -63,7 +64,7 @@ void setup() {
 
     // Configure camera video channel with video format information
     // Adjust the bitrate based on your WiFi network quality
-    config.setBitrate(2 * 1024 * 1024);     // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
+    config.setBitrate(2 * 1024 * 1024);    // Recommend to use 2Mbps for RTSP streaming to prevent network congestion
     Camera.configVideoChannel(CHANNELRTSP, config);
     Camera.configVideoChannel(CHANNELSNAP, configSNAP);
     Camera.configVideoChannel(CHANNELNN, configNN);
@@ -123,8 +124,9 @@ void setup() {
     digitalSetIrqHandler(ROTATE_VERTICAL_FLIP, interruptHandler);
 }
 
-void loop() {
-    if(rotate_input != currentRotation){
+void loop()
+{
+    if (rotate_input != currentRotation) {
         rotate_video(rotate_input);
         currentRotation = rotate_input;
     }
@@ -152,7 +154,7 @@ void loop() {
                 int ymax = (int)(item.yMax() * im_h);
 
                 // Draw boundary box
-                
+
                 printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 OSD.drawRect(CHANNELRTSP, xmin, ymin, xmax, ymax, 3, OSD_COLOR_BLACK);
                 OSD.drawRect(CHANNELSNAP, xmin, ymin, xmax, ymax, 3, OSD_COLOR_BLACK);
@@ -168,7 +170,6 @@ void loop() {
                 captureJPEG(buf);
                 OSD.drawText(CHANNELRTSP, xmin, ymin - OSD.getTextHeight(CHANNELRTSP), text_str, OSD_COLOR_CYAN);
                 OSD.drawText(CHANNELSNAP, xmin, ymin - OSD.getTextHeight(CHANNELSNAP), text_str, OSD_COLOR_CYAN);
-
             }
         }
     }
@@ -197,7 +198,7 @@ void printInfo(void)
 }
 
 void captureJPEG(String FILENAME)
-{  
+{
     fs.begin();
     File file = fs.open(String(fs.getRootPath()) + String(FILENAME));
 
@@ -222,4 +223,3 @@ void rotate_video(int id)
     Camera.configVideoChannel(CHANNELSNAP, configSNAP);
     Camera.updateVideoParams(CHANNELSNAP);
 }
-

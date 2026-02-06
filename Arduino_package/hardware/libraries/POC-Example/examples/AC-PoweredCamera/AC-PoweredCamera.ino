@@ -11,7 +11,7 @@
 #include "VideoStreamOverlay.h"
 #include "ObjectClassList.h"
 
-#define CHANNEL 0
+#define CHANNEL   0
 #define CHANNELNN 3
 // Lower resolution for NN processing
 #define NNWIDTH  576
@@ -33,17 +33,18 @@ MotionDetection MD;
 // char ssid[] = "\xe2\x9c\x8c\xef\xb8\x8f Ameba \xe2\x9c\x8c\xef\xb8\x8f";
 char ssid[] = "AP_Network_SSID";    // Set the AP SSID
 char pass[] = "AP_Password";        // Set the AP password
-char channel[] = "11";               // Set the AP channel
+char channel[] = "11";              // Set the AP channel
 int status = WL_IDLE_STATUS;        // Indicator of Wifi status
 int ssid_status = 0;                // Set SSID status, 1 hidden, 0 not hidden
 String start_input;
 int int_input;
-time_t     now;
-struct tm  ts;
-char       buf[80];
+time_t now;
+struct tm ts;
+char buf[80];
 int noActivityCount = 0;
 
-void setup() {
+void setup()
+{
 
     Serial.begin(115200);
     while (!Serial) {
@@ -80,7 +81,7 @@ void setup() {
     mp4.setRecordingFileCount(1);
     mp4.setRecordingDuration(3600);
     mp4.setRecordingDataType(STORAGE_VIDEO);    // Set MP4 to record video only
-    
+
     // Configure motion detection for low resolution RGB video stream
     MD.configVideo(configNN);
     MD.begin();
@@ -99,7 +100,7 @@ void setup() {
     ObjDet.modelSelect(OBJECT_DETECTION, DEFAULT_YOLOV4TINY, NA_MODEL, NA_MODEL);
     ObjDet.begin();
 
-    
+
     videoStreamerMD.registerInput(Camera.getStream(CHANNELNN));
     videoStreamerMD.setStackSize();
     videoStreamerMD.setTaskPriority();
@@ -123,12 +124,12 @@ void setup() {
     OSD.begin();
 
     ws_viewer.begin();
-
 }
 
-void loop() {
-    if(ObjDet.getResultCount() > 0 || MD.getResultCount() > 0){
-        if(mp4.getRecordingState() == 0){
+void loop()
+{
+    if (ObjDet.getResultCount() > 0 || MD.getResultCount() > 0) {
+        if (mp4.getRecordingState() == 0) {
             // Get current time
             time(&now);
             // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
@@ -141,10 +142,9 @@ void loop() {
             mp4.begin();
         }
         noActivityCount = 0;
-    }
-    else{
+    } else {
         noActivityCount++;
-        if(mp4.getRecordingState() > 0 && noActivityCount >= 100){
+        if (mp4.getRecordingState() > 0 && noActivityCount >= 100) {
             mp4.end();
             // Get current time
             time(&now);
@@ -152,7 +152,7 @@ void loop() {
             ts = *localtime(&now);
             strftime(buf, sizeof(buf), "%H:%M %d-%m-%Y", &ts);
             printf("%s\n", buf);
-        }   
+        }
     }
     OSD.createBitmap(CHANNEL);
 
@@ -195,7 +195,6 @@ void loop() {
                 char text_str[20];
                 snprintf(text_str, sizeof(text_str), "%s %d", itemList[obj_type].objectName, item.score());
                 OSD.drawText(CHANNEL, xmin, ymin - OSD.getTextHeight(CHANNEL), text_str, OSD_COLOR_CYAN);
-
             }
         }
     }
@@ -253,6 +252,3 @@ void printCurrentNet()
     Serial.println(encryption, HEX);
     Serial.println();
 }
-
-
-
