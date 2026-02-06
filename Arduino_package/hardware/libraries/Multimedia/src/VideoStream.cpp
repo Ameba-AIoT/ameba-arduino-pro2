@@ -997,3 +997,20 @@ int Video::cameraOpenStatus(void)
 {
     return cameraGetStatus();
 }
+
+void Video::updateVideoParams(int ch){
+    cameraUpdateParams(videoModule[ch]._p_mmf_context,
+                videoModule[ch]._p_mmf_context->priv,
+                channel[ch],
+                encoder[ch],
+                resolution[ch],
+                w[ch],
+                h[ch],
+                bps[ch],
+                fps[ch],
+                fps[ch],
+                CAM_RCMODE,
+                snapshot[ch][0],
+                jpeg_qlevel[ch],
+                video_rotation[ch]);
+}
