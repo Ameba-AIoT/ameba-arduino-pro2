@@ -236,7 +236,7 @@ public:
     void setQLen(int ch, int len);
     int cameraOpenStatus(void);
     void updateVideoParams(int ch);
-    
+
 private:
     void setSnapshotCallback(int ch);
     static int snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len);
