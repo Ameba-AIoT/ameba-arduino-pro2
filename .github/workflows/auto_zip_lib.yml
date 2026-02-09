@@ -91,6 +91,7 @@ jobs:
       # Step 4: Commit & push updated ZIPs
       # -------------------------------------------------
       - name: Commit and push ZIP updates
+        if: github.event_name != 'pull_request'
         run: |
           set -e
 
@@ -101,6 +102,6 @@ jobs:
             echo "No ZIP changes to commit"
           else
             git add Arduino_zip_libraries/*.zip
-            git commit -m "ci: auto-update Arduino ZIP libraries [skip ci]"
+            git commit -m "Auto-update Arduino ZIP libraries"
             git push
           fi
