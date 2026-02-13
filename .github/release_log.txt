@@ -11,6 +11,7 @@ Version 4.1.0 - 2026/01/08
 Version 4.1.0 - 2026/01/16
 Version 4.1.0 - 2026/01/23
 Version 4.1.0 - 2026/02/02
+Version 4.1.0 - 2026/02/13
 
 Feature:
 - Add SparkFun VL53L5CX examples
@@ -41,6 +42,7 @@ Feature:
 - Add HX711 apis and examples
 - Add NAU7802 apis and examples
 - Update mqtt server naming for related examples
+- Add Proof of Concept Examples
 
 API Updates:
 - Update code base
@@ -68,6 +70,7 @@ API Updates:
 - Update wificlient API
     - Update block mode process
     - Update read()
+- Add API to Update Video Stream Params and Proof of Concept
 
 Misc:
 - Update tool 1.4.6
@@ -87,3 +90,6 @@ Misc:
 - Add requirements.txt for Linux setup env
 - Update python scripts for test end points
 - Add requirements.txt for Linux setup env
+- Update AmebaEink readme
+- Add src for zip libs
+- Add workflow of Auto-update Arduino ZIP libraries
