@@ -38,49 +38,44 @@ uint8_t OTA::check_wifi(void)
     return _ota_wifi->status();
 }
 
-void OTA::reConnection(void)
-{
-    // printf("reConnection millis: %d \r\n", millis());
-    // printf("reConnection _last_reconnect: %d \r\n", _last_reconnect);
-
-    if ((millis() - _last_reconnect) > (SERVER_DEAD_TIMEOUT_MIN * 60 * 1000)) {
-        wifiClient.stop();
-        _last_reconnect = millis();
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Reconnect! \n");
-    }
-}
-
 void OTA::sendPostRequest(void)
 {
-    if (wifiClient.connected() == 0) {
-        if (wifiClient.connect(_server, _port) == 0) {
-            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] [OTA] Connection to server failed \n");
-            return;
-        }
+    // 1. Always start by ensuring we are clean
+    wifiClient.stop(); 
+
+    // 2. Try to connect
+    if (wifiClient.connect(_server, _port) == 0) {
+        amb_ard_printf(ARD_LOG_ERR, "[OTA] Server Unreachable\n");
+        return; 
     }
 
-    // Send POST request
+    // 3. Send the JSON
     wifiClient.println("POST /api/connectedclients HTTP/1.1");
-    wifiClient.println("Host: " + String(_server));
-    wifiClient.println("Content-Type: application/json");    // Use appropriate content type
-    // wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
-    wifiClient.print("Content-Length: ");
-    wifiClient.println(strlen(jsonString));
-
-    wifiClient.println("Connection: keep-alive");
-    // wifiClient.println("Connection: close");
-    wifiClient.println();    // Empty line indicates the end of headers
+    wifiClient.print("Host: "); wifiClient.println(_server);
+    wifiClient.println("Content-Type: application/json");
+    wifiClient.print("Content-Length: "); wifiClient.println(strlen(jsonString));
+    wifiClient.println("Connection: close"); // Standard for 1-min heartbeats
+    wifiClient.println();
     wifiClient.print(jsonString);
 
-    // wifiClient.stop();
+    // 4. Give the server a moment, then close up
+    vTaskDelay(pdMS_TO_TICKS(100));
+    wifiClient.stop(); 
+    
+    // Reset the timer just in case you use it elsewhere
+    _last_reconnect = millis(); 
 }
 
 void OTA::thread1_task(const void *argument)
 {
     for (;;) {
-        sendPostRequest();
-        reConnection();
-        vTaskDelay(pdMS_TO_TICKS(3000));
+        // Only check-in if we aren't busy downloading or rebooting
+        if (g_otaState == OtaState[0]) { 
+            sendPostRequest();
+        }
+        
+        // 60,000ms = 1 minute
+        vTaskDelay(pdMS_TO_TICKS(60000)); 
     }
 }
 
