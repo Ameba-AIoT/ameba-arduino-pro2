@@ -50,6 +50,7 @@ jobs:
         uses: arduino/arduino-lint-action@v2
         with:
           # specifically tells the linter to check for "platform" (Boards Manager) rules
+          path: ./Arduino_package/hardware 
           project-type: platform 
           compliance: strict
 
