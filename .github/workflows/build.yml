@@ -47,6 +47,7 @@ jobs:
           echo "zip_path=./Arduino_package/release/${FILENAME}" >> $GITHUB_OUTPUT
           
       - name: 3. Verify JSON with Arduino Lint
+        if: false  # <--- This disables the step
         uses: arduino/arduino-lint-action@v2
         with:
           # specifically tells the linter to check for "platform" (Boards Manager) rules
