@@ -8,75 +8,58 @@ on:
       - "Arduino_package/hardware/cores/**"
       - "Arduino_package/hardware/variants/**"
   push:
+    branches: [main, dev]
     paths:
       - ".github/workflows/CI_compile_examples.yml"
       - "Arduino_package/hardware/libraries/**"
       - "Arduino_package/hardware/cores/**"
       - "Arduino_package/hardware/variants/**"
-  # workflow_dispatch event allows the workflow to be triggered manually
-  # See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#workflow_dispatch
   workflow_dispatch:
-  # repository_dispatch event allows the workflow to be triggered via the GitHub API
-  # See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#repository_dispatch
-  repository_dispatch:
-
-  # weekly, Monday, 12 00 AM
   schedule:
     - cron: '0 12 * * 1'
 
 jobs:
-  compile-examples_ubuntu:
-    name: ubuntu-latest - ${{ matrix.board.fqbn }}
-    runs-on: ubuntu-latest
-#    runs-on: ${{ matrix.os }}
-    # list of all examples
-    env:
-      examples-to-use: |
-          - Arduino_package/hardware/libraries/Analog
-          - Arduino_package/hardware/libraries/BLE
-          - Arduino_package/hardware/libraries/Debugging
-          - Arduino_package/hardware/libraries/FileSystem
-          - Arduino_package/hardware/libraries/GPIO
-          - Arduino_package/hardware/libraries/GTimer
-          - Arduino_package/hardware/libraries/Http
-          - Arduino_package/hardware/libraries/MQTTClient
-          - Arduino_package/hardware/libraries/Multimedia
-          - Arduino_package/hardware/libraries/NeuralNetwork
-          - Arduino_package/hardware/libraries/NTPClient
-          - Arduino_package/hardware/libraries/OTA
-          - Arduino_package/hardware/libraries/PowerMode
-          - Arduino_package/hardware/libraries/QRCodeScanner
-          - Arduino_package/hardware/libraries/RTC
-          - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
-          - Arduino_package/hardware/libraries/SPI/examples/LCD_Screen_ILI9341_TFT
-          - Arduino_package/hardware/libraries/USB
-          - Arduino_package/hardware/libraries/Watchdog
-          - Arduino_package/hardware/libraries/WiFi
-          - Arduino_package/hardware/libraries/Wire
-          - Arduino_package/hardware/libraries/Multithreading
-          # - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
-
+  compile:
+    name: ${{ matrix.os }} - ${{ matrix.board.fqbn }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        # Multi-OS Support
+        os: [ubuntu-latest, windows-latest, macos-latest]
         board:
           - fqbn: Ameba_AMB82-MINI
-#        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    env:
+      # Determine branch context
+      BRANCH_NAME: ${{ (github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev') && 'dev' || 'main' }}
+      JSON_INDEX: ${{ (github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev') && 'package_realtek_amebapro2_early_index.json' || 'package_realtek_amebapro2_index.json' }}
+      # List of examples
+      EXAMPLES: |
+        - Arduino_package/hardware/libraries/Analog
+        - Arduino_package/hardware/libraries/BLE
+        - Arduino_package/hardware/libraries/Debugging
+        - Arduino_package/hardware/libraries/FileSystem
+        - Arduino_package/hardware/libraries/GPIO
+        - Arduino_package/hardware/libraries/GTimer
+        - Arduino_package/hardware/libraries/Http
+        - Arduino_package/hardware/libraries/MQTTClient
+        - Arduino_package/hardware/libraries/Multimedia
+        - Arduino_package/hardware/libraries/NeuralNetwork
+        - Arduino_package/hardware/libraries/NTPClient
+        - Arduino_package/hardware/libraries/OTA
+        - Arduino_package/hardware/libraries/PowerMode
+        - Arduino_package/hardware/libraries/QRCodeScanner
+        - Arduino_package/hardware/libraries/RTC
+        - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd_JPEGDEC
+        - Arduino_package/hardware/libraries/SPI/examples/LCD_Screen_ILI9341_TFT
+        - Arduino_package/hardware/libraries/USB
+        - Arduino_package/hardware/libraries/Watchdog
+        - Arduino_package/hardware/libraries/WiFi
+        - Arduino_package/hardware/libraries/Wire
+        - Arduino_package/hardware/libraries/Multithreading
 
     steps:
-      - name: Skip workflow (other branches)
-        if: >
-          !startsWith(github.ref, 'refs/heads/dev') &&
-          !startsWith(github.ref, 'refs/heads/main') &&
-          !startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "Skipping workflow for $GITHUB_REF"
-          exit 0
-#        run: |
-#          echo "Exit with $GITHUB_REF"
-#          exit 1
-#        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' && github.event.pull_request.base.ref != 'dev' && github.event.pull_request.base.ref != 'main'}}
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -84,40 +67,31 @@ jobs:
             Arduino_package
             Arduino_zip_libraries
 
-      - name: Compile examples dev
-        uses: arduino/compile-sketches@v1.1.1
+      - name: Cache Arduino Core & Tools
+        uses: actions/cache@v4
         with:
-          fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
-          sketch-paths: |
-            # - Arduino_package/hardware/libraries/
-            ${{ env['examples-to-use'] }}
-          platforms: |
-            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/package_realtek_amebapro2_early_index.json
-              name: realtek:AmebaPro2
-            - source-path: Arduino_package/hardware/
-              name: realtek:AmebaPro2
-          libraries: |
-            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_zip_libraries/AmebaEink.zip
-            # - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
-          verbose: false
-          enable-deltas-report: false
-        if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
+          path: |
+            ~/.arduino15
+            ~/Library/Arduino15
+            ~/AppData/Local/Arduino15
+          # Key incorporates OS and Branch to ensure toolchain compatibility
+          key: ${{ runner.os }}-arduino-${{ env.BRANCH_NAME }}-${{ hashFiles('Arduino_package/hardware/cores/**/platform.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-arduino-${{ env.BRANCH_NAME }}-
 
-      - name: Compile examples main
+      - name: Compile Examples
         uses: arduino/compile-sketches@v1.1.1
         with:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
-          sketch-paths: |
-            # - Arduino_package/hardware/libraries/
-            ${{ env['examples-to-use'] }}
+          sketch-paths: ${{ env.EXAMPLES }}
           platforms: |
-            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/package_realtek_amebapro2_index.json
+            # Use the index from your own fork
+            - source-url: https://github.com{{ env.BRANCH_NAME }}/Arduino_package/${{ env.JSON_INDEX }}
               name: realtek:AmebaPro2
+            # Use the local hardware files checked out in the runner
             - source-path: Arduino_package/hardware/
               name: realtek:AmebaPro2
           libraries: |
-            - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_zip_libraries/AmebaEink.zip
-            # - source-url: https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_zip_libraries/Ameba_TFT_eSPI.zip
+            - source-url: https://github.com{{ env.BRANCH_NAME }}/Arduino_zip_libraries/AmebaEink.zip
           verbose: false
-          enable-deltas-report: false
-        if: ${{ github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main' }}
+          enable-deltas-report: true
