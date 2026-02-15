@@ -7,7 +7,10 @@ on:
         description: "Type of release, E(arly)/R(egular)"
         required: true
         default: 'E'
-        choices: [E, R]
+        type: choice     # You must specify the type as 'choice'
+        options:         # Use 'options' instead of 'choices'
+          - 'E'
+          - 'R'
 
 env:
   REPO_NAME: "ameba_pro2"
