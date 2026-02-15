@@ -1,25 +1,59 @@
 on:
   push:
-    tags: ["v*"] # Triggers automatically on tag push
-  workflow_dispatch: # Allows manual trigger for "Early" releases
+    tags: ["v*"]
+  workflow_dispatch: # Manual trigger with no inputs
 
 jobs:
   release:
     permissions:
-      contents: write # Required to create releases and push commits
+      contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 1. Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      # Build artifacts here (tar, sha, size)
-      
-      - name: Create GitHub Release
+
+      - name: 2. Build Assets & Update JSON
+        id: build
+        run: |
+          mkdir -p ./Arduino_package/release
+          
+          # Zip the hardware folder
+          tar -zcf ./Arduino_package/release/TEMP.tar.gz -C ./Arduino_package hardware/
+          
+          # Metadata calculation
+          SHA=$(sha256sum ./Arduino_package/release/TEMP.tar.gz | awk '{print $1}')
+          SIZE=$(ls -l ./Arduino_package/release/TEMP.tar.gz | awk '{print $5}')
+          TAG=$(git describe --tags --abbrev=0)
+          
+          echo "$SHA" > ./Arduino_package/release/TEMP.tar.gz.sha256
+          
+          # Default to the standard production JSON
+          JSON_FILE="Arduino_package/package_realtek_amebapro2_index.json"
+
+          # Update JSON using built-in jq
+          tmp=$(mktemp)
+          jq --arg sha "$SHA" --arg size "$SIZE" --arg ver "$TAG" \
+            '(.packages[] | select(.name == "ameba_pro2")).platforms[] |= 
+            (.version = $ver | .size = $size | .checksum = "SHA-256:" + $sha)' \
+            "$JSON_FILE" > "$tmp" && mv "$tmp" "$JSON_FILE"
+            
+          echo "CURRENT_TAG=$TAG" >> $GITHUB_ENV
+        shell: bash
+
+      - name: 3. Commit Index Change
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update board index for ${{ env.CURRENT_TAG }}"
+          file_pattern: 'Arduino_package/*.json'
+
+      - name: 4. Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.CURRENT_TAG }}
           files: |
-            ./Arduino_package/release/*.tar.gz
-            ./Arduino_package/release/*.sha256
+            ./Arduino_package/release/TEMP.tar.gz
+            ./Arduino_package/release/TEMP.tar.gz.sha256
           generate_release_notes: true
           draft: false
