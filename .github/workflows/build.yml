@@ -1,0 +1,25 @@
+on:
+  push:
+    tags: ["v*"] # Triggers automatically on tag push
+  workflow_dispatch: # Allows manual trigger for "Early" releases
+
+jobs:
+  release:
+    permissions:
+      contents: write # Required to create releases and push commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      # Build artifacts here (tar, sha, size)
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./Arduino_package/release/*.tar.gz
+            ./Arduino_package/release/*.sha256
+          generate_release_notes: true
+          draft: false
