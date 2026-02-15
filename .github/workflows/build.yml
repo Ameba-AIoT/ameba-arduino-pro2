@@ -1,7 +1,7 @@
 on:
   push:
     tags: ["v*"]
-  workflow_dispatch: # Manual trigger with no inputs
+  workflow_dispatch:
 
 jobs:
   release:
@@ -14,32 +14,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 2. Build Assets & Update JSON
+      - name: 2. Build ZIP & Update JSON
         id: build
         run: |
           mkdir -p ./Arduino_package/release
           
-          # Zip the hardware folder
-          tar -zcf ./Arduino_package/release/TEMP.tar.gz -C ./Arduino_package hardware/
-          
-          # Metadata calculation
-          SHA=$(sha256sum ./Arduino_package/release/TEMP.tar.gz | awk '{print $1}')
-          SIZE=$(ls -l ./Arduino_package/release/TEMP.tar.gz | awk '{print $5}')
+          # Get Tag and define Filename
           TAG=$(git describe --tags --abbrev=0)
+          FILENAME="ameba_pro2_${TAG}.zip"
           
-          echo "$SHA" > ./Arduino_package/release/TEMP.tar.gz.sha256
+          # Create ZIP (using -j to junk paths if needed, or -r for recursive)
+          # We 'cd' in so the ZIP doesn't contain the 'Arduino_package' parent folder
+          cd ./Arduino_package
+          zip -r "./release/${FILENAME}" hardware/
+          cd ..
           
-          # Default to the standard production JSON
+          # Calculate Metadata
+          SHA=$(sha256sum "./Arduino_package/release/${FILENAME}" | awk '{print $1}')
+          SIZE=$(ls -l "./Arduino_package/release/${FILENAME}" | awk '{print $5}')
+          
+          # Update JSON with ZIP details
           JSON_FILE="Arduino_package/package_realtek_amebapro2_index.json"
-
-          # Update JSON using built-in jq
           tmp=$(mktemp)
-          jq --arg sha "$SHA" --arg size "$SIZE" --arg ver "$TAG" \
+          jq --arg sha "$SHA" --arg size "$SIZE" --arg ver "$TAG" --arg file "$FILENAME" \
             '(.packages[] | select(.name == "ameba_pro2")).platforms[] |= 
-            (.version = $ver | .size = $size | .checksum = "SHA-256:" + $sha)' \
+            (.version = $ver | .size = $size | .checksum = "SHA-256:" + $sha | .archiveFileName = $file)' \
             "$JSON_FILE" > "$tmp" && mv "$tmp" "$JSON_FILE"
             
           echo "CURRENT_TAG=$TAG" >> $GITHUB_ENV
+          echo "FILENAME=$FILENAME" >> $GITHUB_ENV
         shell: bash
 
       - name: 3. Commit Index Change
@@ -52,8 +55,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.CURRENT_TAG }}
-          files: |
-            ./Arduino_package/release/TEMP.tar.gz
-            ./Arduino_package/release/TEMP.tar.gz.sha256
+          files: ./Arduino_package/release/${{ env.FILENAME }}
           generate_release_notes: true
-          draft: false
