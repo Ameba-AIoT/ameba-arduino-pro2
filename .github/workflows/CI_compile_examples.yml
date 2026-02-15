@@ -25,16 +25,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Multi-OS Support
         os: [ubuntu-latest, windows-latest, macos-latest]
         board:
           - fqbn: Ameba_AMB82-MINI
 
     env:
-      # Determine branch context
-      BRANCH_NAME: ${{ (github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev') && 'dev' || 'main' }}
-      JSON_INDEX: ${{ (github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev') && 'package_realtek_amebapro2_early_index.json' || 'package_realtek_amebapro2_index.json' }}
-      # List of examples
+      # Pre-calculate branch and index to avoid expression issues in the action step
+      BRANCH: ${{ (github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev') && 'dev' || 'main' }}
+      INDEX_FILE: ${{ (github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev') && 'package_realtek_amebapro2_early_index.json' || 'package_realtek_amebapro2_index.json' }}
       EXAMPLES: |
         - Arduino_package/hardware/libraries/Analog
         - Arduino_package/hardware/libraries/BLE
@@ -74,10 +72,9 @@ jobs:
             ~/.arduino15
             ~/Library/Arduino15
             ~/AppData/Local/Arduino15
-          # Key incorporates OS and Branch to ensure toolchain compatibility
-          key: ${{ runner.os }}-arduino-${{ env.BRANCH_NAME }}-${{ hashFiles('Arduino_package/hardware/cores/**/platform.txt') }}
+          key: ${{ runner.os }}-arduino-${{ env.BRANCH }}-${{ hashFiles('Arduino_package/hardware/cores/**/platform.txt') }}
           restore-keys: |
-            ${{ runner.os }}-arduino-${{ env.BRANCH_NAME }}-
+            ${{ runner.os }}-arduino-${{ env.BRANCH }}-
 
       - name: Compile Examples
         uses: arduino/compile-sketches@v1.1.1
@@ -85,13 +82,11 @@ jobs:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
           sketch-paths: ${{ env.EXAMPLES }}
           platforms: |
-            # Use the index from your own fork
-            - source-url: https://github.com{{ env.BRANCH_NAME }}/Arduino_package/${{ env.JSON_INDEX }}
+            - source-url: https://github.com{{ env.BRANCH }}/Arduino_package/${{ env.INDEX_FILE }}
               name: realtek:AmebaPro2
-            # Use the local hardware files checked out in the runner
             - source-path: Arduino_package/hardware/
               name: realtek:AmebaPro2
           libraries: |
-            - source-url: https://github.com{{ env.BRANCH_NAME }}/Arduino_zip_libraries/AmebaEink.zip
+            - source-url: https://github.com{{ env.BRANCH }}/Arduino_zip_libraries/AmebaEink.zip
           verbose: false
           enable-deltas-report: true
