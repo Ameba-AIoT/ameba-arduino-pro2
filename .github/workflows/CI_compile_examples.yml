@@ -87,6 +87,6 @@ jobs:
             - source-path: Arduino_package/hardware/
               name: realtek:AmebaPro2
           libraries: |
-            - source-url: https://github.com/${{ github.repository }}raw/dev/Arduino_zip_libraries/AmebaEink.zip
+            - source-url: https://github.com/${{ github.repository }}/raw/dev/Arduino_zip_libraries/AmebaEink.zip
           verbose: false
           enable-deltas-report: true
