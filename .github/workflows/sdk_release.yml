@@ -70,6 +70,12 @@ jobs:
 
       - name: Execute python script
         run: |
+          echo "REPO_NAME: ${{ env.REPO_NAME }}"
+          echo "LAST_TAG: ${{ env.LAST_TAG }}"
+          echo "PACKAGE_SHA: ${{ env.PACKAGE_SHA }}"
+          echo "PACKAGE_SIZE: ${{ env.PACKAGE_SIZE }}"
+          echo "JSON_LINK: ${{ env.JSON_LINK_DEV }}"
+          echo "BRANCH: ${{ env.RRLEASE_BRANCH_NAME }}"
           echo "Release type: ${{ github.event.inputs.release_type }}"
           if [[ "${{ github.event.inputs.release_type }}" == "E" ]]; then
             echo "Performing Early release workflow..."
