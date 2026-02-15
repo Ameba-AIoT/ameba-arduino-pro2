@@ -45,6 +45,7 @@ jobs:
           # Export for next steps
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "zip_path=./Arduino_package/release/${FILENAME}" >> $GITHUB_OUTPUT
+          echo "json_asset=./Arduino_package/release/package_realtek_amebapro2_index.json" >> $GITHUB_OUTPUT
           
       - name: 3. Verify JSON with Arduino Lint
         if: false  # <--- This disables the step
@@ -66,5 +67,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.build.outputs.tag }}
-          files: ${{ steps.build.outputs.zip_path }}
+          files: |
+            ${{ steps.build.outputs.zip_path }}
+            ${{ steps.build.outputs.json_asset }}
           generate_release_notes: true
