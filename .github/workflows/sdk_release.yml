@@ -59,7 +59,8 @@ jobs:
 
       - name: Latest tag
         run: |
-          echo "LAST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          # echo "LAST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "LAST_TAG=v9.9.9-debug" >> $GITHUB_ENV
 
       - name: Zip packages
         run: |
