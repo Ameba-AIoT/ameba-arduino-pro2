@@ -73,6 +73,7 @@ jobs:
           echo "json_asset=$RELEASE_DIR/$(basename $JSON_PATH)" >> $GITHUB_OUTPUT
 
       - name: 3. Push Updated JSON to Repo
+        if: false
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update index for ${{ steps.build.outputs.tag }}"
