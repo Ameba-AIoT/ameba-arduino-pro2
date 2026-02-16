@@ -16,10 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug - List Files
-        run: ls -R
-
-
       - name: 2. Build ZIP and Update JSON
         id: build
         run: |
@@ -40,7 +36,7 @@ jobs:
           # Metadata
           SHA=$(sha256sum "$RELEASE_DIR/${FILENAME}" | awk '{print $1}')
           SIZE=$(stat -c%s "$RELEASE_DIR/${FILENAME}")
-          URL="https://github.com{{ github.repository }}/releases/download/${TAG}/${FILENAME}"
+          URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${FILENAME}"
           
           # Define Dependencies
           TOOLS_DATA='[
@@ -75,10 +71,6 @@ jobs:
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "zip_path=$RELEASE_DIR/${FILENAME}" >> $GITHUB_OUTPUT
           echo "json_asset=$RELEASE_DIR/$(basename $JSON_PATH)" >> $GITHUB_OUTPUT
-
-      - name: Debug - List Files
-        run: ls -R
-
 
       - name: 3. Push Updated JSON to Repo
         uses: stefanzweifel/git-auto-commit-action@v5
