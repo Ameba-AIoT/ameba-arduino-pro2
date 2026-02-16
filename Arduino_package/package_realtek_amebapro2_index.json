@@ -12,9 +12,9 @@
         {
           "name": "Ameba Pro2 Boards",
           "architecture": "amebapro2",
-          "version": "1.0.0",
+          "version": "1.0.1",
           "category": "Contributed",
-          "url": "https://github.com/mandl/ameba-arduino-pro2/releases/download/1.0.0/ameba_pro2_1.0.0.zip",
+          "url": "https://github.com/mandl/ameba-arduino-pro2/releases/download/1.0.1/ameba_pro2_1.0.0.zip",
           "archiveFileName": "ameba_pro2_1.0.0.zip",
           "checksum": "SHA-256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "size": 79568281,
