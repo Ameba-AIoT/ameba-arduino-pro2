@@ -1,0 +1,36 @@
+{
+  "packages": [
+    {
+      "name": "ameba_pro2",
+      "maintainer": "mandl",
+      "websiteURL": "https://github.com",
+      "email": "your-email@example.com",
+      "help": {
+        "online": "https://github.com/issues"
+      },
+      "platforms": [
+        {
+          "name": "Ameba Pro2 Boards",
+          "architecture": "amebapro2",
+          "version": "1.0.0",
+          "category": "Contributed",
+          "url": "REPLACE_WITH_URL",
+          "archiveFileName": "REPLACE_WITH_FILENAME",
+          "checksum": "SHA-256:REPLACE_WITH_CHECKSUM",
+          "size": "REPLACE_WITH_SIZE",
+          "boards": [
+            { "name": "AMB82 MINI" }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_tools",
+              "version": "1.0.0"
+            }
+          ]
+        }
+      ],
+      "tools": []
+    }
+  ]
+}
