@@ -169,10 +169,10 @@ recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compil
 recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-Wl,-L{toolchain.path}/lib/" "-Wl,-L{build.variant.path}/linker_scripts/gcc" "-Wl,-T{build.variant.path}/{build.ldscript}" "-Wl,-Map={build.path}/application.ntz.map" -o "{build.path}/application.ntz" -Wl,--start-group {object_files} -Wl,--start-group -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--end-group -Wl,--end-group -Wl,--start-group -Wl,--no-whole-archive {compiler.ameba.ar.list} -lstdc++ -lm -lc -lgcc -lnosys -Wl,--end-group 
 
 ## Create image
-recipe.objcopy.hex.cmd=postbuild_windows.exe
-recipe.objcopy.hex.cmd.windows=postbuild_windows.exe
-recipe.objcopy.hex.cmd.linux=postbuild_linux
-recipe.objcopy.hex.cmd.macosx=postbuild_macos
+#recipe.objcopy.hex.cmd=postbuild_windows.exe
+#recipe.objcopy.hex.cmd.windows=postbuild_windows.exe
+#recipe.objcopy.hex.cmd.linux=postbuild_linux
+#recipe.objcopy.hex.cmd.macosx=postbuild_macos
 
 recipe.objcopy.hex.imagepath_appntz="{build.path}\application.ntz"
 recipe.objcopy.hex.imagepath_appntz.windows="{build.path}\application.ntz"
@@ -192,7 +192,7 @@ recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" 
 
 ## Compute size
 recipe.size.pattern.windows="{ameba.tools_path}/misc/amebasize.exe" "{ameba.tools_path}"
-recipe.size.pattern.linux="{ameba.tools_path}/misc/amebasize" "{ameba.tools_path}"
+#recipe.size.pattern.linux="{ameba.tools_path}/misc/amebasize" "{ameba.tools_path}"
 recipe.size.pattern.macosx="{ameba.tools_path}/misc/amebasize" "{ameba.tools_path}"
 recipe.size.regex=^(?:flash_ntz)\s+([0-9]+).*
 
