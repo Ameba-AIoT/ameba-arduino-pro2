@@ -12,6 +12,35 @@
         {
           "version": "v0.01",
           "size": 79567165,
+          "checksum": "SHA-256:82144c42478ae209e37a4d73d86908fe8abc4ec906f2b2d1fb10ed39fab4bdd5",
+          "archiveFileName": "ameba_pro2_v0.01.zip",
+          "url": "https://github.com/mandl/ameba-arduino-pro2/releases/download/v0.01/ameba_pro2_v0.01.zip",
+          "toolsDependencies": [
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p1"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain2",
+              "version": "1.0.1-p2"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_tools",
+              "version": "1.4.7"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_nn_models",
+              "version": "1.0.3"
+            }
+          ]
+        },
+        {
+          "version": "v0.01",
+          "size": 79567165,
           "checksum": "SHA-256:6330db04d59a8bd9747650b86ba2b50060c4d39049be96c654d221b646100070",
           "archiveFileName": "ameba_pro2_v0.01.zip",
           "url": "https://github.com/mandl/ameba-arduino-pro2/releases/download/v0.01/ameba_pro2_v0.01.zip",
