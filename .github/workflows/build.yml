@@ -39,6 +39,7 @@ jobs:
           URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${FILENAME}"
 
           echo "::notice title=Toolchain Hash::$SHA"
+          echo "::notice title=Toolchain Size::$SIZE"
           
           # Define Dependencies
           TOOLS_DATA='[
@@ -48,26 +49,34 @@ jobs:
             {"packager": "realtek", "name": "ameba_pro2_nn_models", "version": "1.0.3"}
           ]'
 
+          
           tmp=$(mktemp)
+          
           jq --arg ver "$TAG" \
              --arg size "$SIZE" \
              --arg sha "$SHA" \
              --arg file "$FILENAME" \
              --arg url "$URL" \
              --argjson tools "$TOOLS_DATA" \
-            '(.packages[] | select(.name == "realtek")).platforms |= 
-            ([ {
-                "name": .[0].name,
-                "architecture": .[0].architecture,
+            '(.packages[] | select(.name == "realtek")).platforms |= (
+              # 1. Define the new platform object
+              [{
+                "name": "Ameba Pro2 Boards",
+                "architecture": "amebapro2",
                 "version": $ver,
-                "category": .[0].category,
+                "category": "Contributed",
                 "url": $url,
                 "archiveFileName": $file,
                 "checksum": ("SHA-256:" + $sha),
                 "size": ($size | tonumber),
-                "boards": .[0].boards,
+                "boards": [{"name": "AMB82 MINI"}],
                 "toolsDependencies": $tools
-              } ] + .)' "$JSON_PATH" > "$tmp" && mv "$tmp" "$JSON_PATH"
+              }] 
+              + 
+              # 2. Add the rest of the list, but REMOVE any old entry with the same version
+              [ .[] | select(.version != $ver) ]
+            )' "$JSON_PATH" > "$tmp" && mv "$tmp" "$JSON_PATH"
+
 
           
           # Copy updated JSON to release folder for upload
