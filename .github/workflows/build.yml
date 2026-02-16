@@ -19,33 +19,36 @@ jobs:
       - name: 2. Build ZIP and Update JSON
         id: build
         run: |
-          # Define Variables
           TAG=$(git describe --tags --abbrev=0)
           FILENAME="ameba_pro2_${TAG}.zip"
-          JSON_FILE="Arduino_package/package_realtek_amebapro2_index.json"
+          SOURCE_JSON="Arduino_package/package_realtek_amebapro2_index.json"
+          RELEASE_DIR="./Arduino_package/release"
           
-          # Create Release Folder & ZIP
-          mkdir -p ./Arduino_package/release
-          cd ./Arduino_package
-          zip -r "./release/${FILENAME}" hardware/
-          cd ..
+          mkdir -p $RELEASE_DIR
+          zip -r "$RELEASE_DIR/${FILENAME}" Arduino_package/hardware/
           
-          # Calculate Metadata
-          SHA=$(sha256sum "./Arduino_package/release/${FILENAME}" | awk '{print $1}')
-          SIZE=$(ls -l "./Arduino_package/release/${FILENAME}" | awk '{print $5}')
+          SHA=$(sha256sum "$RELEASE_DIR/${FILENAME}" | awk '{print $1}')
+          SIZE=$(stat -c%s "$RELEASE_DIR/${FILENAME}")
+          URL="https://github.com{{ github.repository }}/releases/download/${TAG}/${FILENAME}"
           
-          # Use JQ to update the JSON platform entry
-          # It finds the ameba_pro2 package and updates its platforms array
-          tmp=$(mktemp)
-          jq --arg sha "$SHA" --arg size "$SIZE" --arg ver "$TAG" --arg file "$FILENAME" \
-            '(.packages[] | select(.name == "ameba_pro2")).platforms[] |= 
-            (.version = $ver | .size = $size | .checksum = "SHA-256:" + $sha | .archiveFileName = $file | .url = "https://github.com\(env.GITHUB_REPOSITORY)/releases/download/\($ver)/\($file)")' \
-            "$JSON_FILE" > "$tmp" && mv "$tmp" "$JSON_FILE"
+          # Create the new platform object
+          NEW_RELEASE=$(jq -n \
+            --arg ver "$TAG" --arg size "$SIZE" --arg sha "$SHA" \
+            --arg file "$FILENAME" --arg url "$URL" \
+            '{version: $ver, size: $size, checksum: ("SHA-256:"+$sha), archiveFileName: $file, url: $url}')
+
+          # Prepend to the platforms array of the specific package
+          jq --argjson new "$NEW_RELEASE" \
+            '(.packages[] | select(.name == "ameba_pro2")).platforms |= [$new] + .' \
+            "$SOURCE_JSON" > "${SOURCE_JSON}.tmp" && mv "${SOURCE_JSON}.tmp" "$SOURCE_JSON"
           
-          # Export for next steps
+          # Copy to release folder for step 5
+          cp "$SOURCE_JSON" "$RELEASE_DIR/"
+
           echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "zip_path=./Arduino_package/release/${FILENAME}" >> $GITHUB_OUTPUT
-          echo "json_asset=./Arduino_package/release/package_realtek_amebapro2_index.json" >> $GITHUB_OUTPUT
+          echo "zip_path=$RELEASE_DIR/${FILENAME}" >> $GITHUB_OUTPUT
+          echo "json_asset=$RELEASE_DIR/$(basename $SOURCE_JSON)" >> $GITHUB_OUTPUT
+
           
       - name: 3. Verify JSON with Arduino Lint
         if: false  # <--- This disables the step
