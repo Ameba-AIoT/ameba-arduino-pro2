@@ -14,18 +14,35 @@
           "architecture": "amebapro2",
           "version": "1.0.0",
           "category": "Contributed",
-          "url": "REPLACE_WITH_URL",
-          "archiveFileName": "REPLACE_WITH_FILENAME",
-          "checksum": "SHA-256:REPLACE_WITH_CHECKSUM",
-          "size": "REPLACE_WITH_SIZE",
+          "url": "https://github.com/releases/download/v1.0.0/ameba_pro2_1.0.0.zip",
+          "archiveFileName": "ameba_pro2_1.0.0.zip",
+          "checksum": "SHA-256:6083d36e3e04c51836f56efa52cdba6db3faf87288d15d5d467bd580d341d8e2",
+          "size": 79567165,
           "boards": [
-            { "name": "AMB82 MINI" }
+            {
+              "name": "AMB82 MINI"
+            }
           ],
           "toolsDependencies": [
             {
               "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p1"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain2",
+              "version": "1.0.1-p2"
+            },
+            {
+              "packager": "realtek",
               "name": "ameba_pro2_tools",
-              "version": "1.0.0"
+              "version": "1.4.7"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_nn_models",
+              "version": "1.0.3"
             }
           ]
         }
