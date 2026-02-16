@@ -14,13 +14,19 @@ def main():
     TC_P2      = sys.argv[3]
     MODEL_SRC  = sys.argv[4]
     HW_PATH    = sys.argv[5]
+
+    print(TOOLS_PATH)
+    print(TC_P1)
+    print(TC_P2)
+    print(MODEL_SRC)
+    print(HW_PATH)
     
     # 2. PERMISSION FIX (Run Once Logic)
     FLAG_FILE = os.path.join(TOOLS_PATH, ".perm_fixed_flag")
     if not os.path.exists(FLAG_FILE):
         print(f"[Ameba Manager] First run detected. Fixing permissions on {TOOLS_PATH}...")
         try:
-            subprocess.run(["chmod", "-R", "777", TOOLS_PATH], check=True)
+            subprocess.run(["chmod", "-R", "775", TOOLS_PATH], check=True)
             with open(FLAG_FILE, "w") as f: f.write("fixed")
         except Exception as e:
             print(f"[Error] Permission fix failed: {e}")
