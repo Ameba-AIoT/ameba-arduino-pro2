@@ -48,7 +48,6 @@ jobs:
             {"packager": "realtek", "name": "ameba_pro2_nn_models", "version": "1.0.3"}
           ]'
 
-          # Build the new platform entry and prepend it to the JSON array
           tmp=$(mktemp)
           jq --arg ver "$TAG" \
              --arg size "$SIZE" \
@@ -56,15 +55,20 @@ jobs:
              --arg file "$FILENAME" \
              --arg url "$URL" \
              --argjson tools "$TOOLS_DATA" \
-            '(.packages[] | select(.name == "ameba_pro2")).platforms |= 
-            ([{
-              "version": $ver,
-              "size": ($size | tonumber),
-              "checksum": ("SHA-256:" + $sha),
-              "archiveFileName": $file,
-              "url": $url,
-              "toolsDependencies": $tools
-            }] + .)' "$JSON_PATH" > "$tmp" && mv "$tmp" "$JSON_PATH"
+            '(.packages[] | select(.name == "realtek")).platforms |= 
+            ([ {
+                "name": .[0].name,
+                "architecture": .[0].architecture,
+                "version": $ver,
+                "category": .[0].category,
+                "url": $url,
+                "archiveFileName": $file,
+                "checksum": ("SHA-256:" + $sha),
+                "size": ($size | tonumber),
+                "boards": .[0].boards,
+                "toolsDependencies": $tools
+              } ] + .)' "$JSON_PATH" > "$tmp" && mv "$tmp" "$JSON_PATH"
+
           
           # Copy updated JSON to release folder for upload
           cp "$JSON_PATH" "$RELEASE_DIR/"
