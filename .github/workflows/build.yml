@@ -37,6 +37,8 @@ jobs:
           SHA=$(sha256sum "$RELEASE_DIR/${FILENAME}" | awk '{print $1}')
           SIZE=$(stat -c%s "$RELEASE_DIR/${FILENAME}")
           URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${FILENAME}"
+
+          echo "::notice title=Toolchain Hash::$SHA"
           
           # Define Dependencies
           TOOLS_DATA='[
