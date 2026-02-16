@@ -11,7 +11,7 @@
       "platforms": [
         {
           "name": "Ameba Pro2 Boards",
-          "architecture": "amebapro2",
+          "architecture": "AmebaPro2",
           "version": "1.0.1",
           "category": "Contributed",
           "url": "https://github.com/mandl/ameba-arduino-pro2/releases/download/1.0.1/ameba_pro2_1.0.0.zip",
