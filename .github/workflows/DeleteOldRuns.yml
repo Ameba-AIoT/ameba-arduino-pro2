@@ -2,6 +2,8 @@ name: Delete Old Runs
 on:
   schedule:
     - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch:     # Adds the "Run workflow" button for manual execution
+
 
 jobs:
   delete-runs:
@@ -12,5 +14,5 @@ jobs:
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
-          retain_days: 30
+          retain_days: 1
           keep_minimum_runs: 2
