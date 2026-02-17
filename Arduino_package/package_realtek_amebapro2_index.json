@@ -19,9 +19,8 @@
           "checksum": "SHA-256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "size": 79568281,
           "boards": [
-            {
-              "name": "AMB82 MINI"
-            }
+            {"name": "AMB82 (RTL8735B)"},
+            {"name": "AMB82-MINI (RTL8735B)"}
           ],
           "toolsDependencies": [
             {
