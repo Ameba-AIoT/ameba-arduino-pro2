@@ -5,19 +5,18 @@ on:
   workflow_dispatch:
     inputs:
       retain_days:
-        description: 'Days to retain runs'
+        description: 'Days to retain runs (older than this will be deleted)'
         required: true
         default: '30'
-        type: string
       keep_minimum_runs:
-        description: 'Minimum runs to keep'
+        description: 'Minimum runs to keep (never delete these)'
         required: true
         default: '6'
-        type: string
 
 jobs:
   delete-runs:
     runs-on: ubuntu-latest
+    # CRITICAL: This allows the action to actually delete the runs
     permissions:
       actions: write
       contents: read
@@ -27,6 +26,6 @@ jobs:
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
-          # Use the manual inputs if triggered manually; otherwise use defaults
-          retain_days: ${{ github.event.inputs.retain_days || 30 }}
-          keep_minimum_runs: ${{ github.event.inputs.keep_minimum_runs || 6 }}
+          # Logic: If manual input exists, use it. Otherwise, use default.
+          retain_days: ${{ inputs.retain_days || 30 }}
+          keep_minimum_runs: ${{ inputs.keep_minimum_runs || 6 }}
