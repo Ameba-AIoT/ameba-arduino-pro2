@@ -6,6 +6,7 @@
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
 name=AmebaPro2 ARM (32-bits) Boards
+architecture=AmebaPro2
 version=4.0.X
 toolchain_version=1.0.1
 toolchain_p1_name=ameba_pro2_toolchain
