@@ -62,7 +62,7 @@ jobs:
               # 1. Define the new platform object
               [{
                 "name": "Ameba Pro2 Boards",
-                "architecture": "amebapro2",
+                "architecture": "AmebaPro2",
                 "version": $ver,
                 "category": "Contributed",
                 "url": $url,
