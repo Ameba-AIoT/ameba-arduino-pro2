@@ -69,7 +69,10 @@ jobs:
                 "archiveFileName": $file,
                 "checksum": ("SHA-256:" + $sha),
                 "size": ($size | tonumber),
-                "boards": [{"name": "AMB82 MINI"}],
+                "boards": [
+                  {"name": "AMB82 (RTL8735B)"},
+                  {"name": "AMB82-MINI (RTL8735B)"}
+                ],
                 "toolsDependencies": $tools
               }] 
               + 
