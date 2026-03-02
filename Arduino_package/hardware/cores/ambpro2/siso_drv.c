@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "siso_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_siso.h"
@@ -8,7 +10,7 @@ uint32_t sisoCreate(void)
     mm_siso_t *context = NULL;
     context = siso_create();
     if (context == NULL) {
-        printf("\r\n[ERROR] SISO create failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SISO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -17,7 +19,7 @@ void sisoDestroy(void *ctx)
 {
     // delete the SISO object created and stop the siso task
     if (NULL != siso_delete((mm_siso_t *)ctx)) {
-        printf("\r\n[ERROR] SISO linker destroy failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SISO linker destroy failed\n");
     }
 }
 

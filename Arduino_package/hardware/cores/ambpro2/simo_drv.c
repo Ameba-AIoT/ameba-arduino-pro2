@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "simo_drv.h"
 #include "mmf2_link.h"
 #include "mmf2_simo.h"
@@ -8,7 +10,7 @@ uint32_t simoCreate(void)
     mm_simo_t *context = NULL;
     context = simo_create();
     if (context == NULL) {
-        printf("\r\n[ERROR] SIMO create failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SIMO create failed\n");
     }
     return ((uint32_t)context);
 }
@@ -17,7 +19,7 @@ void simoDestroy(void *ctx)
 {
     // delete the SIMO object created and stop the simo task
     if (NULL != simo_delete((mm_simo_t *)ctx)) {
-        printf("\r\n[ERROR] SIMO linker destroy failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SIMO linker destroy failed\n");
     }
 }
 

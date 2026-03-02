@@ -58,12 +58,12 @@ bool BLEConnect::connect(BLEAddr destAddr, T_GAP_REMOTE_ADDR_TYPE destAddrType, 
 
     if (result == GAP_CAUSE_SUCCESS) {
         if (BTDEBUG) {
-            printf("\r\n[INFO] Connect successful to %s\n", destAddr.str());
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Connect successful to %s\n", destAddr.str());
         }
         return true;
     } else {
         if (BTDEBUG) {
-            printf("\r\n[ERROR] Connect failed\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Connect failed\n");
         }
         return false;
     }
@@ -90,7 +90,7 @@ void BLEConnect::setScanInterval(uint16_t scanInt_ms)
 void BLEConnect::setScanWindow(uint16_t scanWindow_ms)
 {
     if ((scanWindow_ms * 1000 / 625) > _connReqParam.scan_interval) {
-        printf("\r\n[INFO] Scan window should be less than or equal to scan interval\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Scan window should be less than or equal to scan interval\n");
         return;
     }
     if ((scanWindow_ms >= 3) && (scanWindow_ms <= 10240)) {
@@ -101,11 +101,11 @@ void BLEConnect::setScanWindow(uint16_t scanWindow_ms)
 void BLEConnect::setConnInterval(uint16_t min_ms, uint16_t max_ms)
 {
     if ((min_ms < 8) || (min_ms > 4000) || (max_ms < 8) || (max_ms > 4000)) {
-        printf("\r\n[ERROR] valid conn interval values range from 8ms to 4000ms \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] valid conn interval values range from 8ms to 4000ms \n");
         return;
     }
     if (min_ms > max_ms) {
-        printf("\r\n[ERROR] ConnInterval min_ms must be less than or equal to max_ms \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] ConnInterval min_ms must be less than or equal to max_ms \n");
         return;
     }
     _connReqParam.conn_interval_min = (uint16_t)(min_ms / 1.25);
@@ -117,7 +117,7 @@ void BLEConnect::setConnInterval(uint16_t min_ms, uint16_t max_ms)
 void BLEConnect::setConnLatency(uint16_t latency)
 {
     if (latency > 0x01F3) {
-        printf("\r\n[ERROR] valid conn latency values range from 0 to 499 \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] valid conn latency values range from 0 to 499 \n");
         return;
     }
     _connReqParam.conn_latency = latency;
@@ -126,7 +126,7 @@ void BLEConnect::setConnLatency(uint16_t latency)
 void BLEConnect::setConnTimeout(uint16_t timeout_ms)
 {
     if ((timeout_ms < 100) || (timeout_ms > 32000)) {
-        printf("\r\n[ERROR] valid conn interval values range from 100ms to 32000ms \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] valid conn interval values range from 100ms to 32000ms \n");
         return;
     }
     _connReqParam.supv_tout = timeout_ms / 10;

@@ -26,6 +26,8 @@
 #include <math.h>
 #include "binary.h"
 
+#include "amb_ard_printf.h"
+
 // #define Arduino_STD_PRINTF
 #ifdef Arduino_STD_PRINTF
 #include <stdio.h>
@@ -74,11 +76,37 @@ extern int dbg_sprintf(char *str, const char *fmt, ...);
 #endif
 #endif
 
+#define ARDUINO_MBEDTLS_DEBUG_LEVEL 0    // Set to 0 to disable debug messages, 5 to enable all debug messages
+
+#if defined(Arduino_WATCHDOG)
+#define WDT_TIMEOUT_MS  10000    // Delay after last refresh before forcing a reset
+#define WDT_PERIOD_MS   200      // Watchdog health check interval and refresh
+#define LOOP_TIMEOUT_MS 1500     // Max time difference since last loop
+#endif
+
 extern void set_logging(int enable);
-#ifdef Arduino_SHOW_NN_LOGS
-#define INIT_LOGGING() set_logging(1);
+extern void set_video_logging(int enable);
+extern void set_module_video_logging(int enable);
+extern void set_osd_log(int enable);
+
+#if defined(Arduino_SHOW_NN_OSD_LOGS) || defined(Arduino_SHOW_VIDEO_OSD_LOGS)
+#define INIT_OSD_LOGGING() set_osd_log(1);
 #else
-#define INIT_LOGGING() set_logging(0);
+#define INIT_OSD_LOGGING() set_osd_log(0);
+#endif
+
+#if defined(Arduino_SHOW_NN_OSD_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
+#define INIT_NN_LOGGING() set_logging(1);
+#else
+#define INIT_NN_LOGGING() set_logging(0);
+#endif
+
+#if defined(Arduino_SHOW_VIDEO_OSD_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
+#define INIT_VIDEO_LOGGING()        set_video_logging(1);
+#define INIT_MODULE_VIDEO_LOGGING() set_module_video_logging(1);
+#else
+#define INIT_VIDEO_LOGGING()        set_video_logging(0);
+#define INIT_MODULE_VIDEO_LOGGING() set_module_video_logging(0);
 #endif
 
 extern void *pvPortMalloc(size_t xWantedSize);

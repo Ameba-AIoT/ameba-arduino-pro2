@@ -12,7 +12,7 @@
 #define QR_CODE_INFO        2
 #define QR_CODE_DEBUG       3
 #define QR_CODE_NONE        0xFF
-#define QR_CODE_DEBUG_LEVEL QR_CODE_INFO
+#define QR_CODE_DEBUG_LEVEL QR_CODE_WARNING
 
 #if (QR_CODE_DEBUG_LEVEL == QR_CODE_NONE)
 #define qr_code_printf(level, fmt, arg...)

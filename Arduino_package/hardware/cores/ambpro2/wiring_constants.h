@@ -23,8 +23,11 @@
 extern "C" {
 #endif    // __cplusplus
 
-#define HIGH 0x1
-#define LOW  0x0
+#define HIGH    0x1
+#define LOW     0x0
+#define CHANGE  0x2
+#define FALLING 0x3
+#define RISING  0x4
 
 // 0X00 NA
 #define INPUT_PULLDOWN   0x01
@@ -57,12 +60,6 @@ enum BitOrder {
     LSBFIRST = 0,
     MSBFIRST = 1
 };
-
-//      LOW 0
-//      HIGH 1
-#define CHANGE  2
-#define FALLING 3
-#define RISING  4
 
 // #define DEFAULT  1
 #define EXTERNAL 0

@@ -56,7 +56,8 @@ TwoWire::TwoWire(void *pWireObj, uint32_t dwSDAPin, uint32_t dwSCLPin)
 
 int MBED_I2C_SLAVE_ADDR0 = 0x00;
 int I2C_DATA_LENGTH = 1;    // 125
-int flag = 0;
+volatile int flag_tx = 0;
+volatile int flag_rx = 0;
 
 void TwoWire::begin()
 {
@@ -104,17 +105,27 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
         quantity = BUFFER_LENGTH;
     }
 
+    flag_rx = 0;
+
+    i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_RX_COMPLETE, i2c_master_rxc_callback);
+
     // perform blocking read into buffer
     i2c_read(((i2c_t *)this->pI2C), ((int)address), reinterpret_cast<char *>(this->rxBuffer), ((int)quantity), ((int)sendStop));
 
+    uint32_t timeout_rx = 5000;    // Timeout counter
+    do {
+        timeout_rx--;
+        wait_us(this->rxBufferLength * 100);
+    } while (flag_rx == 0 && timeout_rx > 0);
+
     // i2c_read error;
     // if (read != 0) {
-    //     printf("\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
+    //     amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
     // }
 
     /*//i2c_read error;
     if (read != quantity) {
-        printf("\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] requestFrom: read=%d, quantity=%d \n", read, quantity);
 
         return read;
     }
@@ -178,25 +189,31 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
     uint8_t error = 0;
     i2c_reset(((i2c_t *)this->pI2C));
     // toggle flag to normal
-    if (flag == 1) {
-        flag = 0;
+    if (flag_tx == 1) {
+        flag_tx = 0;
     }
 
     i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
     i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
-    i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_TX_COMPLETE, i2c_callback_set_flag);
+    i2c_set_user_callback(((i2c_t *)this->pI2C), I2C_TX_COMPLETE, i2c_master_txc_callback);
     if (sendStop == false) {
         i2c_restart_enable(((i2c_t *)this->pI2C));
     }
     length = i2c_write(((i2c_t *)this->pI2C), ((int)this->txAddress), reinterpret_cast<char *>(this->txBuffer), ((int)this->txBufferLength), ((int)sendStop));
-    hal_delay_us(this->txBufferLength * 200);
+
+    uint32_t timeout_tx = 5000;    // Timeout counter
+    do {
+        timeout_tx--;
+        wait_us(this->txBufferLength * 200);
+    } while (flag_tx == 0 && timeout_tx > 0);
+
     if (sendStop == false) {
         i2c_restart_disable(((i2c_t *)this->pI2C));
     }
     if ((txBufferLength > 0) && (length <= 0)) {
         error = 1;
     }
-    if (flag == 0) {
+    if (flag_tx == 0) {
         error = -1;    // Error for wrong slave address
     } else {
         error = 0;
@@ -213,9 +230,14 @@ uint8_t TwoWire::endTransmission(void)
     return endTransmission(true);
 }
 
-void TwoWire::i2c_callback_set_flag(void *userdata)
+void TwoWire::i2c_master_txc_callback(void *userdata)
 {
-    flag = 1;
+    flag_tx = 1;
+}
+
+void TwoWire::i2c_master_rxc_callback(void *userdata)
+{
+    flag_rx = 1;
 }
 
 size_t TwoWire::write(uint8_t data)

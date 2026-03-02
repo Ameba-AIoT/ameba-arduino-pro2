@@ -51,19 +51,19 @@ void NNObjectDetectionImage::begin(char *filelist_name)
     // init virtual file system
     vfs_init(NULL);
     if (vfs_user_register("sd", VFS_FATFS, VFS_INF_SD) != 0) {
-        printf("fail to register SD vfs\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] fail to register SD vfs\r\n");
         return;
     }
 
     // get test file num on list
-    printf("Getting data set image number in list......\r\n");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] Getting data set image number in list......\r\n");
     uint32_t t0 = xTaskGetTickCount();
     int file_count = get_line_num_in_sdfile((char *)filelist_name);
     if (file_count < 0) {
-        printf("fail to get line numbers\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] fail to get line numbers\r\n");
         return;
     }
-    printf("The file has %d lines, it take %ld ms\r\n", file_count, xTaskGetTickCount() - t0);
+    amb_ard_printf(ARD_LOG_INF, "[INFO] The file has %d lines, it take %ld ms\r\n", file_count, xTaskGetTickCount() - t0);
 
     // file loader
     fileloader_ctx = mm_module_open(&fileloader_module);
@@ -77,20 +77,20 @@ void NNObjectDetectionImage::begin(char *filelist_name)
         mm_module_ctrl(fileloader_ctx, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
         mm_module_ctrl(fileloader_ctx, CMD_FILELOADER_APPLY, 0);
     } else {
-        printf("fileloader open fail\n\r");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] fileloader open fail\n\r");
         goto mmf2_example_file_vipnn_tester_fail;
     }
-    printf("fileloader opened\n\r");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] fileloader opened\n\r");
 
     // VIPNN
     vipnn_ctx = mm_module_open(&vipnn_module);
     if (vipnn_ctx) {
         if (_nntask != OBJECT_DETECTION) {
             if (ARDUINO_LOAD_MODEL == 0x02) {
-                printf("\r\n[INFO] Models loaded using SD Card\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Models loaded using SD Card\n");
             } else {
                 while (1) {
-                    printf("\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
+                    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid NN task selected! Please check modelSelect() again\n");
                     delay(5000);
                 }
             }
@@ -99,17 +99,17 @@ void NNObjectDetectionImage::begin(char *filelist_name)
             switch (_yolomodel) {
                 case SD_YOLOV3TINY: {
                     mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny_from_sd);
-                    // printf("\r\n[INFO] YOLOV3 running...\n");
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV3 running...\n");
                     break;
                 }
                 case SD_YOLOV4TINY: {
                     mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny_from_sd);
-                    // printf("\r\n[INFO] YOLOV4 running...\n");
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV4 running...\n");
                     break;
                 }
                 case SD_YOLOV7TINY: {
                     mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny_from_sd);
-                    // printf("\r\n[INFO] YOLOV7 running...\n");
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV7 running...\n");
                     break;
                 }
             }
@@ -118,19 +118,19 @@ void NNObjectDetectionImage::begin(char *filelist_name)
                 case DEFAULT_YOLOV3TINY:
                 case CUSTOMIZED_YOLOV3TINY: {
                     mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov3_tiny);
-                    // printf("\r\n[INFO] YOLOV3 running...\n");
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV3 running...\n");
                     break;
                 }
                 case DEFAULT_YOLOV4TINY:
                 case CUSTOMIZED_YOLOV4TINY: {
                     mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov4_tiny);
-                    // printf("\r\n[INFO] YOLOV4 running...\n");
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV4 running...\n");
                     break;
                 }
                 case DEFAULT_YOLOV7TINY:
                 case CUSTOMIZED_YOLOV7TINY: {
                     mm_module_ctrl(vipnn_ctx, CMD_VIPNN_SET_MODEL, (int)&yolov7_tiny);
-                    // printf("\r\n[INFO] YOLOV7 running...\n");
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] YOLOV7 running...\n");
                     break;
                 }
             }
@@ -146,10 +146,10 @@ void NNObjectDetectionImage::begin(char *filelist_name)
         mm_module_ctrl(vipnn_ctx, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_STATIC);
         mm_module_ctrl(vipnn_ctx, CMD_VIPNN_APPLY, 0);
     } else {
-        printf("VIPNN open fail\n\r");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] VIPNN open fail\n\r");
         goto mmf2_example_file_vipnn_tester_fail;
     }
-    printf("VIPNN opened\n\r");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] VIPNN opened\n\r");
 
     // file saver
     filesaver_ctx = mm_module_open(&filesaver_module);
@@ -157,10 +157,10 @@ void NNObjectDetectionImage::begin(char *filelist_name)
         mm_module_ctrl(filesaver_ctx, CMD_FILESAVER_SET_TYPE_HANDLER, (int)nn_save_handler_for_evaluate);
         mm_module_ctrl(filesaver_ctx, CMD_FILESAVER_APPLY, 0);
     } else {
-        printf("filesaver open fail\n\r");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] filesaver open fail\n\r");
         goto mmf2_example_file_vipnn_tester_fail;
     }
-    printf("filesaver opened\n\r");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] filesaver opened\n\r");
 
     //--------------Link---------------------------
 
@@ -174,10 +174,10 @@ void NNObjectDetectionImage::begin(char *filelist_name)
         sisoSetStackSizeDefined((void *)siso_fileloader_vipnn, 128);
         sisoStart(siso_fileloader_vipnn);
     } else {
-        printf("siso_fileloader_vipnn open fail\n\r");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] siso_fileloader_vipnn open fail\n\r");
         goto mmf2_example_file_vipnn_tester_fail;
     }
-    printf("siso_fileloader_vipnn started\n\r");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] siso_fileloader_vipnn started\n\r");
 
     if (siso_vipnn_filesaver == NULL) {
         siso_vipnn_filesaver = siso_create();
@@ -189,10 +189,10 @@ void NNObjectDetectionImage::begin(char *filelist_name)
         sisoSetStackSizeDefined((void *)siso_vipnn_filesaver, 128);
         sisoStart(siso_vipnn_filesaver);
     } else {
-        printf("siso_vipnn_filesaver open fail\n\r");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] siso_vipnn_filesaver open fail\n\r");
         goto mmf2_example_file_vipnn_tester_fail;
     }
-    printf("siso_vipnn_filesaver started\n\r");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] siso_vipnn_filesaver started\n\r");
 
     return;
 
@@ -218,10 +218,15 @@ int NNObjectDetectionImage::ImageDecodeToRGB888planar_ConvertInPlace(void *pbuff
     int w, h, c;
     int channels = 3;
     uint8_t *im_data = stbi_load_from_memory(pImageBuf, *pImageSize, &w, &h, &c, channels);
-    printf("\r\nimage data size: w:%d, h:%d, c:%d\r\n", w, h, c);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] image data size: w:%d, h:%d, c:%d\r\n", w, h, c);
 
     if (c != 1 && c != 3) {
-        printf("error: it's not an image file\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] error: it's not an image file\r\n");
+        return -1;
+    }
+
+    if (im_data == NULL) {
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] stbi_load failed (Corrupt JPG or Out of Memory)\r\n");
         return -1;
     }
 
@@ -230,20 +235,19 @@ int NNObjectDetectionImage::ImageDecodeToRGB888planar_ConvertInPlace(void *pbuff
 
     /* rgb packed to rgb planar */
     int data_size = w * h * c;
-    uint8_t *rgb_planar_buf = (uint8_t *)malloc(data_size);
+    uint8_t *dest_buf = pImageBuf;
     for (int k = 0; k < c; k++) {
         for (int j = 0; j < h; j++) {
             for (int i = 0; i < w; i++) {
                 int dst_i = i + w * j + w * h * k;
                 int src_i = k + c * i + c * w * j;
-                rgb_planar_buf[dst_i] = im_data[src_i];
+                dest_buf[dst_i] = im_data[src_i];
             }
         }
     }
-    memcpy(pImageBuf, rgb_planar_buf, data_size);
+
     *pImageSize = (uint32_t)data_size;
 
-    free(rgb_planar_buf);
     stbi_image_free(im_data);
 
     return 0;
@@ -271,7 +275,7 @@ char *NNObjectDetectionImage::nn_get_json_format(void *p, int frame_id, char *fi
     int im_w = roi_tester.img.width;
     int im_h = roi_tester.img.height;
 
-    printf("object num = %d\r\n", out->res_cnt);
+    amb_ard_printf(ARD_LOG_INF, "[INFO] object num = %d\r\n", out->res_cnt);
     if (out->res_cnt > 0) {
         for (int i = 0; i < out->res_cnt; i++) {
 
@@ -320,7 +324,7 @@ int NNObjectDetectionImage::get_id_in_filename(char *str)
     memset(&image_id[0], 0x00, sizeof(image_id));
     strncpy(image_id, &str[start_pos], len);
 
-    printf("image_id = %s\n", image_id);
+    amb_ard_printf(ARD_LOG_INF, "[INFO] image_id = %s\n", image_id);
 
     return (int)strtol(image_id, NULL, 10);
 }
@@ -355,7 +359,7 @@ void NNObjectDetectionImage::nn_save_handler_for_evaluate(char *file_name, uint3
     /* save yolo json result */
     snprintf(nn_fn, sizeof(nn_fn), "%s.json", strip_filename_extention(file_name));
     char *json_format_out = nn_get_json_format((void *)out, image_id, nn_fn);
-    // printf("\r\njson_format_out: %s\r\n", json_format_out);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] json_format_out: %s\r\n", json_format_out);
     sd_save_file(nn_fn, json_format_out, strlen(json_format_out));
 
     // print object detected
@@ -363,7 +367,7 @@ void NNObjectDetectionImage::nn_save_handler_for_evaluate(char *file_name, uint3
         for (int i = 0; i < out->res_cnt; i++) {
             float probability = od_res[i].result[1];
             int class_id = (int)(od_res[i].result[0]);
-            printf("Image: %s, OBJECT IDENTIFIED: %s, with a probability of: %.3f\n\r", file_name, coco_name[class_id], probability);
+            amb_ard_printf(ARD_LOG_INF, "[INFO] Image: %s, OBJECT IDENTIFIED: %s, with a probability of: %.3f\n\r", file_name, coco_name[class_id], probability);
         }
     }
 
@@ -378,13 +382,13 @@ int NNObjectDetectionImage::sd_save_file(char *file_name, char *data_buf, int da
     FILE *fp;
     fp = fopen(fn, "wb+");
     if (fp == NULL) {
-        printf("fail to open file.\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] fail to open file.\r\n");
         return -1;
     }
     fwrite(data_buf, data_buf_size, 1, fp);
     fclose(fp);
 
-    printf("save file to %s\r\n", fn);
+    amb_ard_printf(ARD_LOG_INF, "[INFO] save file to %s\r\n", fn);
 
     return 0;
 }
@@ -398,13 +402,13 @@ int NNObjectDetectionImage::get_line_num_in_sdfile(char *file_name)
     snprintf(file_path, sizeof(file_path), "%s%s", "sd:/", file_name);
     int count = 0;
     if (access(file_path, F_OK) != 0) {
-        printf("file list not exists\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] file list not exists\r\n");
         return -1;
     }
     FILE *f = fopen(file_path, "r");
     while (fgets(line, sizeof(line), f)) {
         count++;
-        // printf("[line %d] %s\r\n", count, line);
+        // amb_ard_printf(ARD_LOG_INF, "[INFO][line %d] %s\r\n", count, line);
         memset(line, 0, sizeof(line));
     }
     fclose(f);

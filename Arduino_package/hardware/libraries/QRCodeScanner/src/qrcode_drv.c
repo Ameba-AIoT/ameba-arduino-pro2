@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
@@ -6,7 +8,6 @@
 #include "module_video.h"
 #include "freertos_service.h"
 #include "sensor.h"
-
 
 #define QR_CODE_MAX_SCAN_COUNT 5
 
@@ -20,7 +21,6 @@
 #define VIDEO_3M   7
 #define VIDEO_5M   8
 #define VIDEO_2K   9
-
 
 #define V1_CHANNEL    0
 #define V1_RESOLUTION VIDEO_VGA
@@ -112,7 +112,7 @@ void yuv_snapshot_start(void *ctx)
     int ret = 0;
     ret = video_open(&video_v1_params, yuv_output_cb, (void *)ctx);
     if (ret < 0) {
-        printf("ERR video_open\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] ERR video_open\n");
         while (1) {
             vTaskDelay(100);
         }
@@ -127,7 +127,7 @@ unsigned char *yuv_snapshot_get(void *ctx)
     if (rtw_down_timeout_sema(&yuv_ctx->snapshot_sema, 1000)) {
         return (unsigned char *)yuv_ctx->isp_addr;
     } else {
-        printf("Can't get the buffer\r\n");
+        amb_ard_printf(ARD_LOG_ERR, "[ERROR] Can't get the buffer\r\n");
         return 0;
     }
 }
@@ -153,33 +153,54 @@ typedef struct _QR_CODE_SCANNER_CONFIG {
 } QR_CODE_SCANNER_CONFIG;
 
 QR_CODE_SCANNER_CONFIG qr_code_scanner_config_map[] = {
-  //	{640,  480,  2, 2, 0},		// QR_CODE_480P_DENSITY_2
-    {640, 480, 1, 1, 0}, // QR_CODE_480P_DENSITY_1
-  //	{1280, 720,  2, 2, 0},		// QR_CODE_720P_DENSITY_2
-  //	{1280, 720,  1, 1, 0},		// QR_CODE_720P_DENSITY_1
-  //	{1920, 1080, 2, 2, 0},		// QR_CODE_1080P_DENSITY_2
-  //	{1920, 1080, 1, 1, 0}		// QR_CODE_1080P_DENSITY_1
+    {640,  480,  2, 2, 0}, // QR_CODE_480P_DENSITY_2
+    {640,  480,  1, 1, 0}, // QR_CODE_480P_DENSITY_1
+    {1280, 720,  2, 2, 0}, // QR_CODE_720P_DENSITY_2
+    {1280, 720,  1, 1, 0}, // QR_CODE_720P_DENSITY_1
+    {1920, 1080, 2, 2, 0}, // QR_CODE_1080P_DENSITY_2
+    {1920, 1080, 1, 1, 0}  // QR_CODE_1080P_DENSITY_1
 };
 
 typedef enum {
-    //	QR_CODE_480P_DENSITY_2,		// 480P, Density = 2
-    //	QR_CODE_480P_DENSITY_1,		// 480P, Density = 1
-    //	QR_CODE_720P_DENSITY_2,		// 720P, Density = 2
-    //	QR_CODE_720P_DENSITY_1,		// 720P, Density = 1
-    //	QR_CODE_1080P_DENSITY_2,	// 1080P, Density = 2
+    QR_CODE_480P_DENSITY_2,     // 480P, Density = 2
+    QR_CODE_480P_DENSITY_1,     // 480P, Density = 1
+    QR_CODE_720P_DENSITY_2,     // 720P, Density = 2
+    QR_CODE_720P_DENSITY_1,     // 720P, Density = 1
+    QR_CODE_1080P_DENSITY_2,    // 1080P, Density = 2
     QR_CODE_1080P_DENSITY_1,    // 1080P, Density = 1
     QR_CODE_CONFIG_MAX_INDEX
 } qr_code_scanner_config_index;
 
 char *result_string;
 unsigned int result_length;
-char *result_string1 = "";
+char *result_string1 = NULL;
 unsigned int result_length1 = 0;
 
 void copyresultstring(void)
 {
+    if (result_length == 0 || result_string == NULL || result_string[0] == '\0') {
+        result_length1 = 0;
+        if (result_string1 != NULL) {
+            free(result_string1);
+            result_string1 = NULL;
+        }
+        return;
+    }
+
+    if (result_string1 != NULL) {
+        free(result_string1);
+        result_string1 = NULL;
+    }
+
+    result_string1 = (char *)malloc(result_length + 1);
+    if (result_string1 == NULL) {
+        result_length1 = 0;
+        return;
+    }
+
+    memcpy(result_string1, result_string, result_length);
+    result_string1[result_length] = '\0';
     result_length1 = result_length;
-    result_string1 = result_string;
 }
 
 void qr_code_scanner_thread(void *param)
@@ -204,7 +225,7 @@ void qr_code_scanner_thread(void *param)
         video_ctrl(video_v1_params.stream_id, VIDEO_NV12_OUTPUT, 0);
         result_string = (char *)malloc(QR_CODE_MAX_RESULT_LENGTH);
         if (result_string == NULL) {
-            printf("%s: result_string malloc fail \r\n", __FUNCTION__);
+            amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: result_string malloc fail \r\n", __FUNCTION__);
             break;
         }
 
@@ -232,23 +253,23 @@ void qr_code_scanner_thread(void *param)
                 vTaskDelay(1000);
                 yuv_snapshot_close(yuv_ctx);
                 break;
-            } else if (qr_code_result == QR_CODE_FAIL_UNSPECIFIC_ERROR) {
-                printf("%s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_UNSPECIFIC_ERROR \r\n", __FUNCTION__, index);
-            } else if (qr_code_result == QR_CODE_FAIL_NO_FINDER_CENTER) {
-                printf("%s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_NO_FINDER_CENTER \r\n", __FUNCTION__, index);
-            } else if (qr_code_result == QR_CODE_FAIL_DECODE_ERROR) {
-                printf("%s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_DECODE_ERROR \r\n", __FUNCTION__, index);
             }
         }
 
         if (qr_code_result == QR_CODE_SUCCESS) {
-            printf("%s: qr code scan success \r\n", __FUNCTION__);
-            printf("%s: buf = %s \r\n", __FUNCTION__, result_string);
-            printf("%s: length = %u \r\n", __FUNCTION__, result_length);
-
-
+            amb_ard_printf(ARD_LOG_INF, "[INFO] %s: qr code scan success \r\n", __FUNCTION__);
+            amb_ard_printf(ARD_LOG_INF, "[INFO] %s: buf = %s \r\n", __FUNCTION__, result_string);
+            amb_ard_printf(ARD_LOG_INF, "[INFO] %s: length = %u \r\n", __FUNCTION__, result_length);
         } else {
-            printf("%s: qr code scan fail \r\n", __FUNCTION__);
+            if (qr_code_result == QR_CODE_FAIL_UNSPECIFIC_ERROR) {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_UNSPECIFIC_ERROR \r\n", __FUNCTION__, index);
+            } else if (qr_code_result == QR_CODE_FAIL_NO_FINDER_CENTER) {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_NO_FINDER_CENTER \r\n", __FUNCTION__, index);
+            } else if (qr_code_result == QR_CODE_FAIL_DECODE_ERROR) {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr_code_scanner_config_map[%d] for QR_CODE_FAIL_DECODE_ERROR \r\n", __FUNCTION__, index);
+            } else {
+                amb_ard_printf(ARD_LOG_ERR, "[ERROR] %s: qr code scan fail \r\n", __FUNCTION__);
+            }
         }
 
         copyresultstring();
@@ -263,6 +284,6 @@ void qr_code_scanner_thread(void *param)
 void qr_code_scanning(void)
 {
     if (xTaskCreate(qr_code_scanner_thread, ((const char *)"qr_code_scanner_thread"), 1024, NULL, tskIDLE_PRIORITY + 2, NULL) != pdPASS) {
-        printf("\n\r%s xTaskCreate(example_qr_code_scanner_thread) failed", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\n\r%s xTaskCreate(example_qr_code_scanner_thread) failed", __FUNCTION__);
     }
 }

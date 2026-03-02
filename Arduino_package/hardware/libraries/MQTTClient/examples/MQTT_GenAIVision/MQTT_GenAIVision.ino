@@ -208,7 +208,7 @@ void thread2_task(void *param)
             // String response = llm.openaivision(openAI_key, "gpt-4o-mini", prompt_msg, img_addr, img_len, sslClient);
 
             // Gemini vision prompt
-            String response = llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, sslClient);
+            String response = llm.geminivision(Gemini_key, "gemini-flash-latest", prompt_msg, img_addr, img_len, sslClient);
 
             // Llama vision prompt
             // String response = llm.llamavision(Llama_key, "meta-llama/llama-4-scout-17b-16e-instruct", prompt_msg, img_addr, img_len, sslClient);

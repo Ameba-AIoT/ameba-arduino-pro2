@@ -36,13 +36,13 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data)
     switch (cb_type) {
         case GAP_MSG_LE_DATA_LEN_CHANGE_INFO: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_DATA_LEN_CHANGE_INFO: conn_id %d, tx octets 0x%x, max_tx_time 0x%x\n", p_data->p_le_data_len_change_info->conn_id, p_data->p_le_data_len_change_info->max_tx_octets, p_data->p_le_data_len_change_info->max_tx_time);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_DATA_LEN_CHANGE_INFO: conn_id %d, tx octets 0x%x, max_tx_time 0x%x\n", p_data->p_le_data_len_change_info->conn_id, p_data->p_le_data_len_change_info->max_tx_octets, p_data->p_le_data_len_change_info->max_tx_time);
             }
             break;
         }
         case GAP_MSG_LE_MODIFY_WHITE_LIST: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_MODIFY_WHITE_LIST: operation %d, cause 0x%x\n", p_data->p_le_modify_white_list_rsp->operation, p_data->p_le_modify_white_list_rsp->cause);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_MODIFY_WHITE_LIST: operation %d, cause 0x%x\n", p_data->p_le_modify_white_list_rsp->operation, p_data->p_le_modify_white_list_rsp->cause);
             }
             break;
         }
@@ -53,8 +53,8 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data)
                 uint16_t conn_int_min = p_data->p_le_conn_update_ind->conn_interval_min;
                 uint16_t conn_latency = p_data->p_le_conn_update_ind->conn_latency;
                 uint16_t supervision_timeout = p_data->p_le_conn_update_ind->supervision_timeout;
-                printf("\r\n[INFO] GAP_MSG_LE_CONN_UPDATE_IND: conn_id %d, conn_interval_max %d ms, conn_interval_min %d ms, conn_latency %d, supervision_timeout %d ms\n",
-                       conn_id, (uint16_t)(conn_int_max * 1.25), (uint16_t)(conn_int_min * 1.25), conn_latency, (uint16_t)(supervision_timeout * 10));
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_CONN_UPDATE_IND: conn_id %d, conn_interval_max %d ms, conn_interval_min %d ms, conn_latency %d, supervision_timeout %d ms\n",
+                               conn_id, (uint16_t)(conn_int_max * 1.25), (uint16_t)(conn_int_min * 1.25), conn_latency, (uint16_t)(supervision_timeout * 10));
             }
             /* if reject the proposed connection parameter from peer device, use APP_RESULT_REJECT. */
             result = APP_RESULT_ACCEPT;
@@ -62,23 +62,23 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data)
         }
         case GAP_MSG_LE_PHY_UPDATE_INFO: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_PHY_UPDATE_INFO:conn_id %d, cause 0x%x, rx_phy %d, tx_phy %d\n", p_data->p_le_phy_update_info->conn_id, p_data->p_le_phy_update_info->cause, p_data->p_le_phy_update_info->rx_phy, p_data->p_le_phy_update_info->tx_phy);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_PHY_UPDATE_INFO:conn_id %d, cause 0x%x, rx_phy %d, tx_phy %d\n", p_data->p_le_phy_update_info->conn_id, p_data->p_le_phy_update_info->cause, p_data->p_le_phy_update_info->rx_phy, p_data->p_le_phy_update_info->tx_phy);
             }
             break;
         }
         case GAP_MSG_LE_REMOTE_FEATS_INFO: {
             uint8_t remote_feats[8];
-            // if (BTDEBUG) printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: conn id %d, cause 0x%x, remote_feats %b\n", p_data->p_le_remote_feats_info->conn_id, p_data->p_le_remote_feats_info->cause, TRACE_BINARY(8, p_data->p_le_remote_feats_info->remote_feats));
+            // if (BTDEBUG) amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: conn id %d, cause 0x%x, remote_feats %b\n", p_data->p_le_remote_feats_info->conn_id, p_data->p_le_remote_feats_info->cause, TRACE_BINARY(8, p_data->p_le_remote_feats_info->remote_feats));
             if (p_data->p_le_remote_feats_info->cause == GAP_SUCCESS) {
                 memcpy(remote_feats, p_data->p_le_remote_feats_info->remote_feats, 8);
                 if (remote_feats[LE_SUPPORT_FEATURES_MASK_ARRAY_INDEX1] & LE_SUPPORT_FEATURES_LE_2M_MASK_BIT) {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support 2M\n");
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support 2M\n");
                     }
                 }
                 if (remote_feats[LE_SUPPORT_FEATURES_MASK_ARRAY_INDEX1] & LE_SUPPORT_FEATURES_LE_CODED_PHY_MASK_BIT) {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support CODED\n");
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_REMOTE_FEATS_INFO: support CODED\n");
                     }
                 }
             }
@@ -94,7 +94,7 @@ T_APP_RESULT BLEDevice::gapCallbackDefault(uint8_t cb_type, void *p_cb_data)
         }
         default:
             if (BTDEBUG) {
-                printf("\r\n[ERROR] gapCallbackDefault: unhandled cb_type 0x%x\n", cb_type);
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] gapCallbackDefault: unhandled cb_type 0x%x\n", cb_type);
             }
             break;
     }
@@ -112,7 +112,7 @@ void BLEDevice::ioMsgHandlerDefault(T_IO_MSG io_msg)
         }
         default:
             if (BTDEBUG) {
-                printf("\r\n[ERROR] ioMsgHandlerDefault: unhandled\n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] ioMsgHandlerDefault: unhandled\n");
             }
             break;
     }
@@ -125,7 +125,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
     memcpy(&gap_msg, &p_gap_msg->u.param, sizeof(p_gap_msg->u.param));
 
     if (BTDEBUG) {
-        printf("\r\n[INFO] gapMsgHandlerDefault: subtype %d\n", p_gap_msg->subtype);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] gapMsgHandlerDefault: subtype %d\n", p_gap_msg->subtype);
     }
     switch (p_gap_msg->subtype) {
         case GAP_MSG_LE_DEV_STATE_CHANGE: {
@@ -160,7 +160,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
             // defaults are set up to accept all bonding requests from all methods
         case GAP_MSG_LE_BOND_PASSKEY_DISPLAY: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_DISPLAY\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_DISPLAY\n");
             }
             uint32_t display_value = 0;
             conn_id = gap_msg.msg_data.gap_bond_passkey_display.conn_id;
@@ -173,7 +173,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
         }
         case GAP_MSG_LE_BOND_PASSKEY_INPUT: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_INPUT\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_BOND_PASSKEY_INPUT\n");
             }
             uint32_t passkey = 0;
             conn_id = gap_msg.msg_data.gap_bond_passkey_input.conn_id;
@@ -185,7 +185,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
         }
         case GAP_MSG_LE_BOND_OOB_INPUT: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_BOND_OOB_INPUT\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_BOND_OOB_INPUT\n");
             }
             uint8_t oob_data[GAP_OOB_LEN] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             conn_id = gap_msg.msg_data.gap_bond_oob_input.conn_id;
@@ -195,7 +195,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
         }
         case GAP_MSG_LE_BOND_USER_CONFIRMATION: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_BOND_USER_CONFIRMATION\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_BOND_USER_CONFIRMATION\n");
             }
             uint32_t display_value = 0;
             conn_id = gap_msg.msg_data.gap_bond_user_conf.conn_id;
@@ -213,7 +213,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
         }
         case GAP_MSG_LE_BOND_JUST_WORK: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP_MSG_LE_BOND_JUST_WORK\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_MSG_LE_BOND_JUST_WORK\n");
             }
             conn_id = gap_msg.msg_data.gap_bond_just_work_conf.conn_id;
             le_bond_just_work_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
@@ -221,7 +221,7 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
         }
         default:
             if (BTDEBUG) {
-                printf("\r\n[ERROR] gapMsgHandlerDefault: unknown subtype %d\n", p_gap_msg->subtype);
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] gapMsgHandlerDefault: unknown subtype %d\n", p_gap_msg->subtype);
             }
             break;
     }
@@ -230,17 +230,17 @@ void BLEDevice::gapMsgHandlerDefault(T_IO_MSG *p_gap_msg)
 void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint16_t cause)
 {
     if (BTDEBUG) {
-        printf("\r\n[INFO] devStateEvtHandlerPeriphDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] devStateEvtHandlerPeriphDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
     }
     if (_gapDevState.gap_init_state != new_state.gap_init_state) {
         if (new_state.gap_init_state == GAP_INIT_STATE_STACK_READY) {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP stack ready\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP stack ready\n");
             }
             // BLE stack is ready
             uint8_t bt_addr[6];
             gap_get_param(GAP_PARAM_BD_ADDR, bt_addr);
-            printf("\r\n[INFO] BLE Device. Local BT addr: %02X:%02X:%02X:%02X:%02X:%02X\n", bt_addr[5], bt_addr[4], bt_addr[3], bt_addr[2], bt_addr[1], bt_addr[0]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. Local BT addr: %02X:%02X:%02X:%02X:%02X:%02X\n", bt_addr[5], bt_addr[4], bt_addr[3], bt_addr[2], bt_addr[1], bt_addr[0]);
             le_adv_start();
         }
     }
@@ -248,12 +248,12 @@ void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint1
     if (_gapDevState.gap_adv_state != new_state.gap_adv_state) {
         if (new_state.gap_adv_state == GAP_ADV_STATE_IDLE) {
             if (new_state.gap_adv_sub_state == GAP_ADV_TO_IDLE_CAUSE_CONN) {
-                printf("\r\n[INFO] BLE Device. GAP adv stopped: because connection created\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. GAP adv stopped: because connection created\n");
             } else {
-                printf("\r\n[INFO] BLE Device. GAP adv stopped\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. GAP adv stopped\n");
             }
         } else if (new_state.gap_adv_state == GAP_ADV_STATE_ADVERTISING) {
-            printf("\r\n[INFO] BLE Device. GAP adv start\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. GAP adv start\n");
         }
     }
     _gapDevState = new_state;
@@ -262,25 +262,25 @@ void BLEDevice::devStateEvtHandlerPeriphDefault(T_GAP_DEV_STATE new_state, uint1
 void BLEDevice::devStateEvtHandlerCentralDefault(T_GAP_DEV_STATE new_state, uint16_t cause)
 {
     if (BTDEBUG) {
-        printf("\r\n[INFO] devStateEvtHandlerCentralDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] devStateEvtHandlerCentralDefault: init state %d, adv state %d, cause 0x%x\n", new_state.gap_init_state, new_state.gap_adv_state, cause);
     }
     if (_gapDevState.gap_init_state != new_state.gap_init_state) {
         if (new_state.gap_init_state == GAP_INIT_STATE_STACK_READY) {
             if (BTDEBUG) {
-                printf("\r\n[INFO] GAP stack ready\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP stack ready\n");
             }
             // BLE stack is ready
             uint8_t bt_addr[6];
             gap_get_param(GAP_PARAM_BD_ADDR, bt_addr);
-            printf("\r\n[INFO] BLE Device. Local BT addr: %02X:%02X:%02X:%02X:%02X:%02X\n", bt_addr[5], bt_addr[4], bt_addr[3], bt_addr[2], bt_addr[1], bt_addr[0]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. Local BT addr: %02X:%02X:%02X:%02X:%02X:%02X\n", bt_addr[5], bt_addr[4], bt_addr[3], bt_addr[2], bt_addr[1], bt_addr[0]);
         }
     }
 
     if (_gapDevState.gap_scan_state != new_state.gap_scan_state) {
         if (new_state.gap_scan_state == GAP_SCAN_STATE_IDLE) {
-            printf("\r\n[INFO] BLE Device. GAP scan stop\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. GAP scan stop\n");
         } else if (new_state.gap_scan_state == GAP_SCAN_STATE_SCANNING) {
-            printf("\r\n[INFO] BLE Device. GAP scan start\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. GAP scan start\n");
         }
     }
     _gapDevState = new_state;
@@ -289,16 +289,16 @@ void BLEDevice::devStateEvtHandlerCentralDefault(T_GAP_DEV_STATE new_state, uint
 void BLEDevice::connStateEvtHandlerPeriphDefault(uint8_t conn_id, T_GAP_CONN_STATE new_state, uint16_t disc_cause)
 {
     if (BTDEBUG) {
-        printf("\r\n[INFO] connStateEvtHandlerPeriphDefault: conn_id %d old_state %d new_state %d, disc_cause 0x%x\n", conn_id, _gapConnState, new_state, disc_cause);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connStateEvtHandlerPeriphDefault: conn_id %d old_state %d new_state %d, disc_cause 0x%x\n", conn_id, _gapConnState, new_state, disc_cause);
     }
     switch (new_state) {
         case GAP_CONN_STATE_DISCONNECTED: {
             if ((disc_cause != (HCI_ERR | HCI_ERR_REMOTE_USER_TERMINATE)) && (disc_cause != (HCI_ERR | HCI_ERR_LOCAL_HOST_TERMINATE))) {
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] connStateEvtHandlerPeriphDefault: connection lost cause 0x%x\n", disc_cause);
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connStateEvtHandlerPeriphDefault: connection lost cause 0x%x\n", disc_cause);
                 }
             }
-            printf("\r\n[INFO] BLE Device. BT Disconnected, start ADV\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. BT Disconnected, start ADV\n");
             le_adv_start();
             break;
         }
@@ -313,15 +313,15 @@ void BLEDevice::connStateEvtHandlerPeriphDefault(uint8_t conn_id, T_GAP_CONN_STA
                 le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_latency, conn_id);
                 le_get_conn_param(GAP_PARAM_CONN_TIMEOUT, &conn_supervision_timeout, conn_id);
                 le_get_conn_addr(conn_id, remote_bd, (uint8_t *)&remote_bd_type);
-                printf("\r\n[INFO] GAP_CONN_STATE_CONNECTED:remote_bd %02X:%02X:%02X:%02X:%02X:%02X, remote_addr_type %d, conn_interval %d ms, conn_latency %d, conn_supervision_timeout %d ms\n", remote_bd[0], remote_bd[1], remote_bd[2], remote_bd[3], remote_bd[4], remote_bd[5], remote_bd_type, (uint16_t)(conn_interval * 1.25), conn_latency, (uint16_t)(conn_supervision_timeout * 10));
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_CONN_STATE_CONNECTED:remote_bd %02X:%02X:%02X:%02X:%02X:%02X, remote_addr_type %d, conn_interval %d ms, conn_latency %d, conn_supervision_timeout %d ms\n", remote_bd[0], remote_bd[1], remote_bd[2], remote_bd[3], remote_bd[4], remote_bd[5], remote_bd_type, (uint16_t)(conn_interval * 1.25), conn_latency, (uint16_t)(conn_supervision_timeout * 10));
 
                 uint8_t tx_phy;
                 uint8_t rx_phy;
                 le_get_conn_param(GAP_PARAM_CONN_TX_PHY_TYPE, &tx_phy, conn_id);
                 le_get_conn_param(GAP_PARAM_CONN_RX_PHY_TYPE, &rx_phy, conn_id);
-                printf("\r\n[INFO] GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
             }
-            printf("\r\n[INFO] BLE Device. BT Connected\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. BT Connected\n");
             break;
         }
         default:
@@ -336,7 +336,7 @@ void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_ST
         return;
     }
     if (BTDEBUG) {
-        printf("\r\n[INFO] connStateEvtHandlerCentralDefault: conn_id %d, conn_state(%d -> %d), disc_cause 0x%x\n", conn_id, _bleCentralAppLinkTable[conn_id].conn_state, new_state, disc_cause);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connStateEvtHandlerCentralDefault: conn_id %d, conn_state(%d -> %d), disc_cause 0x%x\n", conn_id, _bleCentralAppLinkTable[conn_id].conn_state, new_state, disc_cause);
     }
 
     _bleCentralAppLinkTable[conn_id].conn_state = new_state;
@@ -344,16 +344,16 @@ void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_ST
         case GAP_CONN_STATE_DISCONNECTED: {
             if ((disc_cause != (HCI_ERR | HCI_ERR_REMOTE_USER_TERMINATE)) && (disc_cause != (HCI_ERR | HCI_ERR_LOCAL_HOST_TERMINATE))) {
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] connStateEvtHandlerCentralDefault: connection lost, conn_id %d, cause 0x%x\n", conn_id, disc_cause);
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connStateEvtHandlerCentralDefault: connection lost, conn_id %d, cause 0x%x\n", conn_id, disc_cause);
                 }
             }
-            printf("\r\n[INFO] BLE Device. Disconnected conn_id %d\n", conn_id);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. Disconnected conn_id %d\n", conn_id);
             memset(&_bleCentralAppLinkTable[conn_id], 0, sizeof(T_APP_LINK));
             break;
         }
         case GAP_CONN_STATE_CONNECTED: {
             le_get_conn_addr(conn_id, _bleCentralAppLinkTable[conn_id].bd_addr, (uint8_t *)&_bleCentralAppLinkTable[conn_id].bd_type);
-            printf("\r\n[INFO] BLE Device. Connected conn_id %d\n", conn_id);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BLE Device. Connected conn_id %d\n", conn_id);
             if (BTDEBUG) {
                 uint16_t conn_interval;
                 uint16_t conn_latency;
@@ -364,13 +364,13 @@ void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_ST
                 le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_latency, conn_id);
                 le_get_conn_param(GAP_PARAM_CONN_TIMEOUT, &conn_supervision_timeout, conn_id);
                 le_get_conn_addr(conn_id, remote_bd, (uint8_t *)&remote_bd_type);
-                printf("\r\n[INFO] GAP_CONN_STATE_CONNECTED:remote_bd %02X:%02X:%02X:%02X:%02X:%02X, remote_addr_type %d, conn_interval %d ms, conn_latency %d, conn_supervision_timeout %d ms\n", remote_bd[0], remote_bd[1], remote_bd[2], remote_bd[3], remote_bd[4], remote_bd[5], remote_bd_type, (uint16_t)(conn_interval * 1.25), conn_latency, (uint16_t)(conn_supervision_timeout * 10));
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_CONN_STATE_CONNECTED:remote_bd %02X:%02X:%02X:%02X:%02X:%02X, remote_addr_type %d, conn_interval %d ms, conn_latency %d, conn_supervision_timeout %d ms\n", remote_bd[0], remote_bd[1], remote_bd[2], remote_bd[3], remote_bd[4], remote_bd[5], remote_bd_type, (uint16_t)(conn_interval * 1.25), conn_latency, (uint16_t)(conn_supervision_timeout * 10));
 
                 uint8_t tx_phy;
                 uint8_t rx_phy;
                 le_get_conn_param(GAP_PARAM_CONN_TX_PHY_TYPE, &tx_phy, conn_id);
                 le_get_conn_param(GAP_PARAM_CONN_RX_PHY_TYPE, &rx_phy, conn_id);
-                printf("\r\n[INFO] GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
             }
             le_set_phy(conn_id, all_phys, tx_phys, rx_phys, phy_options);
             break;
@@ -384,7 +384,7 @@ void BLEDevice::connStateEvtHandlerCentralDefault(uint8_t conn_id, T_GAP_CONN_ST
 void BLEDevice::connMtuInfoEvtHandlerDefault(uint8_t conn_id, uint16_t mtu_size)
 {
     if (BTDEBUG) {
-        printf("\r\n[INFO] connMtuInfoEvtHandlerDefault: conn_id %d, mtu_size %d\n", conn_id, mtu_size);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connMtuInfoEvtHandlerDefault: conn_id %d, mtu_size %d\n", conn_id, mtu_size);
     }
 }
 
@@ -400,19 +400,19 @@ void BLEDevice::connParamUpdateEvtHandlerDefault(uint8_t conn_id, uint8_t status
             le_get_conn_param(GAP_PARAM_CONN_LATENCY, &conn_slave_latency, conn_id);
             le_get_conn_param(GAP_PARAM_CONN_TIMEOUT, &conn_supervision_timeout, conn_id);
             if (BTDEBUG) {
-                printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update success:conn_interval %d ms, conn_slave_latency %d, conn_supervision_timeout %d ms\n", (uint16_t)(conn_interval * 1.25), conn_slave_latency, (uint16_t)(conn_supervision_timeout * 10));
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connParamUpdateEvtHandlerDefault update success:conn_interval %d ms, conn_slave_latency %d, conn_supervision_timeout %d ms\n", (uint16_t)(conn_interval * 1.25), conn_slave_latency, (uint16_t)(conn_supervision_timeout * 10));
             }
             break;
         }
         case GAP_CONN_PARAM_UPDATE_STATUS_FAIL: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update failed: cause 0x%x\n", cause);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connParamUpdateEvtHandlerDefault update failed: cause 0x%x\n", cause);
             }
             break;
         }
         case GAP_CONN_PARAM_UPDATE_STATUS_PENDING: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] connParamUpdateEvtHandlerDefault update pending: conn_id %d\n", conn_id);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] connParamUpdateEvtHandlerDefault update pending: conn_id %d\n", conn_id);
             }
             break;
         }
@@ -424,30 +424,30 @@ void BLEDevice::connParamUpdateEvtHandlerDefault(uint8_t conn_id, uint8_t status
 void BLEDevice::authenStateEvtHandlerDefault(uint8_t conn_id, uint8_t new_state, uint16_t cause)
 {
     if (BTDEBUG) {
-        printf("\r\n[INFO] authenStateEvtHandlerDefault:conn_id %d, cause 0x%x\n", conn_id, cause);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] authenStateEvtHandlerDefault:conn_id %d, cause 0x%x\n", conn_id, cause);
     }
     switch (new_state) {
         case GAP_AUTHEN_STATE_STARTED: {
             if (BTDEBUG) {
-                printf("\r\n[INFO] authenStateEvtHandlerDefault: GAP_AUTHEN_STATE_STARTED\n");
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] authenStateEvtHandlerDefault: GAP_AUTHEN_STATE_STARTED\n");
             }
             break;
         }
         case GAP_AUTHEN_STATE_COMPLETE: {
             if (cause == GAP_SUCCESS) {
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] authenStateEvtHandlerDefault: Pair success conn id :%d\n", conn_id);
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] authenStateEvtHandlerDefault: Pair success conn id :%d\n", conn_id);
                 }
             } else {
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] authenStateEvtHandlerDefault: Pair failed: cause 0x%x\n", cause);
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] authenStateEvtHandlerDefault: Pair failed: cause 0x%x\n", cause);
                 }
             }
             break;
         }
         default:
             if (BTDEBUG) {
-                printf("\r\n[INFO] authenStateEvtHandlerDefault: unknown newstate %d\n", new_state);
+                amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] authenStateEvtHandlerDefault: unknown newstate %d\n", new_state);
             }
             break;
     }
@@ -463,26 +463,26 @@ T_APP_RESULT BLEDevice::appServiceCallbackDefault(T_SERVER_ID service_id, void *
         switch (p_param->eventId) {
             case PROFILE_EVT_SRV_REG_COMPLETE:    // srv register result event.
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] PROFILE_EVT_SRV_REG_COMPLETE: result %d\n", p_param->event_data.service_reg_result);
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] PROFILE_EVT_SRV_REG_COMPLETE: result %d\n", p_param->event_data.service_reg_result);
                 }
                 break;
 
             case PROFILE_EVT_SEND_DATA_COMPLETE:
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE: conn_id %d, cause 0x%x, service_id %d, attrib_idx 0x%x, credits %d\n",
-                           p_param->event_data.send_data_result.conn_id,
-                           p_param->event_data.send_data_result.cause,
-                           p_param->event_data.send_data_result.service_id,
-                           p_param->event_data.send_data_result.attrib_idx,
-                           p_param->event_data.send_data_result.credits);
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE: conn_id %d, cause 0x%x, service_id %d, attrib_idx 0x%x, credits %d\n",
+                                   p_param->event_data.send_data_result.conn_id,
+                                   p_param->event_data.send_data_result.cause,
+                                   p_param->event_data.send_data_result.service_id,
+                                   p_param->event_data.send_data_result.attrib_idx,
+                                   p_param->event_data.send_data_result.credits);
                 }
                 if (p_param->event_data.send_data_result.cause == GAP_SUCCESS) {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE success\n");
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] PROFILE_EVT_SEND_DATA_COMPLETE success\n");
                     }
                 } else {
                     if (BTDEBUG) {
-                        printf("\r\n[ERROR] PROFILE_EVT_SEND_DATA_COMPLETE failed\n");
+                        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] PROFILE_EVT_SEND_DATA_COMPLETE failed\n");
                     }
                 }
                 break;
@@ -540,7 +540,7 @@ T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t 
 {
     T_APP_RESULT result = APP_RESULT_SUCCESS;
     if (BTDEBUG) {
-        printf("\r\n[INFO] app_client_callback: client_id %d, conn_id %d\n", client_id, conn_id);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] app_client_callback: client_id %d, conn_id %d\n", client_id, conn_id);
     }
     if (client_id == CLIENT_PROFILE_GENERAL_ID) {
         T_CLIENT_APP_CB_DATA *p_client_app_cb_data = (T_CLIENT_APP_CB_DATA *)p_data;
@@ -548,11 +548,11 @@ T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t 
             case CLIENT_APP_CB_TYPE_DISC_STATE:
                 if (p_client_app_cb_data->cb_content.disc_state_data.disc_state == DISC_STATE_SRV_DONE) {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] Discovery All Service Procedure Done.\n");
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Discovery All Service Procedure Done.\n");
                     }
                 } else {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] Discovery state send to application directly.\n");
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Discovery state send to application directly.\n");
                     }
                 }
                 break;
@@ -560,14 +560,14 @@ T_APP_RESULT BLEDevice::appClientCallbackDefault(T_CLIENT_ID client_id, uint8_t 
             case CLIENT_APP_CB_TYPE_DISC_RESULT:
                 if (p_client_app_cb_data->cb_content.disc_result_data.result_type == DISC_RESULT_ALL_SRV_UUID16) {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] Discovery All Primary Service: UUID16 0x%x, start handle 0x%x, end handle 0x%x.\n",
-                               p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->uuid16,
-                               p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->att_handle,
-                               p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->end_group_handle);
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Discovery All Primary Service: UUID16 0x%x, start handle 0x%x, end handle 0x%x.\n",
+                                       p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->uuid16,
+                                       p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->att_handle,
+                                       p_client_app_cb_data->cb_content.disc_result_data.result_data.p_srv_uuid16_disc_data->end_group_handle);
                     }
                 } else {
                     if (BTDEBUG) {
-                        printf("\r\n[INFO] Discovery result send to application directly.\n");
+                        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Discovery result send to application directly.\n");
                     }
                 }
                 break;

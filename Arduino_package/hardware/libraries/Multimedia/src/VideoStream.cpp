@@ -22,64 +22,64 @@ void CameraSetting::setBrightness(int value)
 {
     if (value >= BRIGHTNESS_MIN && value <= BRIGHTNESS_MAX) {
         isp_set_brightness(value);
-        printf("\r\n[INFO] Brightness is set to %d.\n", value);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Brightness is set to %d.\n", value);
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
 void CameraSetting::getBrightness(void)
 {
     isp_get_brightness(&ret);
-    printf("\r\n[INFO] Brightness = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Brightness = %d\n", ret);
 }
 
 void CameraSetting::setContrast(int value)
 {
     if (value >= CONTRAST_MIN && value <= CONTRAST_MAX) {
         isp_set_contrast(value);
-        printf("\r\n[INFO] Contrast is set to %d.\n", value);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Contrast is set to %d.\n", value);
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
 void CameraSetting::getContrast(void)
 {
     isp_get_contrast(&ret);
-    printf("\r\n[INFO] Contrast = %d \n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Contrast = %d \n", ret);
 }
 
 void CameraSetting::setSaturation(int value)
 {
     if (value >= SATURATION_MIN && value <= SATURATION_MAX) {
         isp_set_saturation(value);
-        printf("\r\n[INFO] Saturation is set to %d.\n", value);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Saturation is set to %d.\n", value);
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
 void CameraSetting::getSaturation(void)
 {
     isp_get_saturation(&ret);
-    printf("\r\n[INFO] Saturation = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Saturation = %d\n", ret);
 }
 
 void CameraSetting::setSharpness(int value)
 {
     if (value >= SHARPNESS_MIN && value <= SHARPNESS_MAX) {
         isp_set_sharpness(value);
-        printf("\r\n[INFO] Sharpness is set to %d.\n", value);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Sharpness is set to %d.\n", value);
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
 void CameraSetting::getSharpness(void)
 {
     isp_get_sharpness(&ret);
-    printf("\r\n[INFO] Sharpness = %d \n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Sharpness = %d \n", ret);
 }
 
 // Len Distortion Correction
@@ -87,11 +87,11 @@ void CameraSetting::setLDC(int enable)
 {
     isp_set_ldc(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Len Distortion Correction is Disabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Len Distortion Correction is Disabled.\n");
     } else if (enable == 1) {
-        printf("[INFO] Len Distortion Correction is Enabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "[INFO] Len Distortion Correction is Enabled.\n");
     } else {
-        printf("\r\n[ERROR] Invalid Input. \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input. \n");
     }
 }
 
@@ -99,9 +99,9 @@ void CameraSetting::getLDC(void)
 {
     isp_get_ldc(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Len Distortion Correction is Disabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Len Distortion Correction is Disabled.\n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Len Distortion Correction is Enabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Len Distortion Correction is Enabled.\n");
     }
 }
 
@@ -110,13 +110,13 @@ void CameraSetting::setWDR(int enable)
 {
     isp_set_wdr_mode(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Wide Dynamic Range is Disabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Wide Dynamic Range is Disabled.\n");
     } else if (enable == 1) {
-        printf("\r\n[INFO] Wide Dynamic Range is set to Manual.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Wide Dynamic Range is set to Manual.\n");
     } else if (enable == 2) {
-        printf("\r\n[INFO] Wide Dynamic Range is set to Auto.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Wide Dynamic Range is set to Auto.\n");
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
@@ -124,11 +124,11 @@ void CameraSetting::getWDR(void)
 {
     isp_get_wdr_mode(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Wide Dynamic Range = Disabled \n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Wide Dynamic Range = Disabled \n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Wide Dynamic Range = Manual \n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Wide Dynamic Range = Manual \n");
     } else if (ret == 2) {
-        printf("\r\n[INFO] Wide Dynamic Range = Auto \n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Wide Dynamic Range = Auto \n");
     }
 }
 
@@ -138,19 +138,19 @@ void CameraSetting::setWDRLevel(int value)
     if (ret == 1) {
         if (value >= 50 && value <= 100) {
             isp_set_wdr_level(value);
-            printf("\r\n[INFO] WDR level is set to %d.\n", value);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WDR level is set to %d.\n", value);
         } else {
-            printf("\r\n[INFO] Invalid value. WDR level value should be between 50 to 100.\n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Invalid value. WDR level value should be between 50 to 100.\n");
         }
     } else {
-        printf("\r\n[ERROR] Please set WDR to Manual to set the WDR level manually.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please set WDR to Manual to set the WDR level manually.\n");
     }
 }
 
 void CameraSetting::getWDRLevel(void)
 {
     isp_get_wdr_level(&ret);
-    printf("\r\n[INFO] WDR level = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] WDR level = %d\n", ret);
 }
 
 // AE (Auto Exposure)
@@ -158,11 +158,11 @@ void CameraSetting::setExposureMode(int enable)
 {
     isp_set_exposure_mode(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Exposure Mode is set to Manual.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Exposure Mode is set to Manual.\n");
     } else if (enable == 1) {
-        printf("\r\n[INFO] Exposure Mode is set to Auto.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Exposure Mode is set to Auto.\n");
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
@@ -170,9 +170,9 @@ void CameraSetting::getExposureMode(void)
 {
     isp_get_exposure_mode(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Exposure Mode = Manual\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Exposure Mode = Manual\n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Exposure Mode = Auto\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Exposure Mode = Auto\n");
     }
 }
 
@@ -182,19 +182,19 @@ void CameraSetting::setExposureTime(int time)
     if (ret == 0) {
         if (time <= EXPOSURETIME_MAX) {
             isp_set_exposure_time(time);
-            printf("\r\n[INFO] Exposure time is set to %dus.\n", time);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Exposure time is set to %dus.\n", time);
         } else {
-            printf("\r\n[ERROR] Exposure Time should be less than or equals to 33333us.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Exposure Time should be less than or equals to 33333us.\n");
         }
     } else {
-        printf("\r\n[ERROR] Please set Exposure Mode to Manual to set the Exposure Time manually.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please set Exposure Mode to Manual to set the Exposure Time manually.\n");
     }
 }
 
 void CameraSetting::getExposureTime(void)
 {    // duration in us
     isp_get_exposure_time(&ret);
-    printf("\r\n[INFO] Exposure time = %dus\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Exposure time = %dus\n", ret);
 }
 
 void CameraSetting::setAEGain(int value)
@@ -203,32 +203,32 @@ void CameraSetting::setAEGain(int value)
     if (ret == 0) {
         if (value >= AEGAIN_MIN && value <= AEGAIN_MAX) {
             isp_set_ae_gain(value);
-            printf("\r\n[INFO] AE Gain is set to %d.\n", value);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] AE Gain is set to %d.\n", value);
         } else {
-            printf("\r\n[ERROR] Invalid Input.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
         }
     } else if (ret == 1) {
-        printf("\r\n[ERROR] Please set Exposure Mode to Manual to set the AE Gain manually.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please set Exposure Mode to Manual to set the AE Gain manually.\n");
     }
 }
 
 void CameraSetting::getAEGain(void)
 {
     isp_get_ae_gain(&ret);
-    printf("\r\n[INFO] AE Gain = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] AE Gain = %d\n", ret);
 }
 
 void CameraSetting::setPowerLineFreq(int enable)
 {
     isp_set_power_line_freq(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Power Line Frequency is disabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency is disabled.\n");
     } else if (enable == 1) {
-        printf("\r\n[INFO] Power Line Frequency is 50Hz.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency is 50Hz.\n");
     } else if (enable == 2) {
-        printf("\r\n[INFO] Power Line Frequency is 60Hz.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency is 60Hz.\n");
     } else if (enable == 3) {
-        printf("\r\n[INFO] Power Line Frequency is Auto.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency is Auto.\n");
     }
 }
 
@@ -236,13 +236,13 @@ void CameraSetting::getPowerLineFreq(void)
 {
     isp_get_power_line_freq(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Power Line Frequency = disabled.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency = disabled.\n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Power Line Frequency = 50Hz.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency = 50Hz.\n");
     } else if (ret == 2) {
-        printf("\r\n[INFO] Power Line Frequency = 60Hz.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency = 60Hz.\n");
     } else if (ret == 3) {
-        printf("\r\n[INFO] Power Line Frequency = Auto.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Power Line Frequency = Auto.\n");
     }
 }
 
@@ -251,11 +251,11 @@ void CameraSetting::setAWB(int enable)
 {
     isp_set_awb_ctrl(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Auto White Balance is set to Manual.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Auto White Balance is set to Manual.\n");
     } else if (enable == 1) {
-        printf("\r\n[INFO] Auto White Balance is set to Auto.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Auto White Balance is set to Auto.\n");
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
@@ -263,16 +263,16 @@ void CameraSetting::getAWB(void)
 {
     isp_get_awb_ctrl(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Auto White Balance = Manual.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Auto White Balance = Manual.\n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Auto White Balance = Auto.\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Auto White Balance = Auto.\n");
     }
 }
 
 void CameraSetting::getWBTemp(void)
 {
     isp_get_wb_temperature(&ret);
-    printf("\r\n[INFO] White Balance Temperature = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] White Balance Temperature = %d\n", ret);
 }
 
 void CameraSetting::setRedBalance(int value)
@@ -281,19 +281,19 @@ void CameraSetting::setRedBalance(int value)
     if (ret == 0) {
         if (value >= REDBALANCE_MIN && value <= REDBALANCE_MAX) {
             isp_set_red_balance(value);
-            printf("\r\n[INFO] Red balance is set to %d.\n", value);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Red balance is set to %d.\n", value);
         } else {
-            printf("\r\n[ERROR] Invalid Input.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
         }
     } else {
-        printf("\r\n[ERROR] Please set AWB to Manual to adjust the temperature manually.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please set AWB to Manual to adjust the temperature manually.\n");
     }
 }
 
 void CameraSetting::getRedBalance(void)
 {
     isp_get_red_balance(&ret);
-    printf("\r\n[INFO] Red balance = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Red balance = %d\n", ret);
 }
 
 void CameraSetting::setBlueBalance(int value)
@@ -302,19 +302,19 @@ void CameraSetting::setBlueBalance(int value)
     if (ret == 0) {
         if (value >= BLUEBALANCE_MIN && value <= BLUEBALANCE_MAX) {
             isp_set_blue_balance(value);
-            printf("\r\n[INFO] Blue balance is set to %d.\n", value);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Blue balance is set to %d.\n", value);
         } else {
-            printf("\r\n[ERROR] Invalid Input.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
         }
     } else if (ret == 1) {
-        printf("\r\n[ERROR] Please set AWB to Manual to adjust the temperature manually.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please set AWB to Manual to adjust the temperature manually.\n");
     }
 }
 
 void CameraSetting::getBlueBalance(void)
 {
     isp_get_blue_balance(&ret);
-    printf("\r\n[INFO] Blue balance = %d\n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Blue balance = %d\n", ret);
 }
 
 // Mode
@@ -322,11 +322,11 @@ void CameraSetting::setGrayMode(int enable)
 {
     isp_set_gray_mode(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Not Gray Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Not Gray Mode\n");
     } else if (enable == 1) {
-        printf("\r\n[INFO] Gray Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Gray Mode\n");
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
@@ -334,9 +334,9 @@ void CameraSetting::getGrayMode(void)
 {
     isp_get_gray_mode(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Not Gray Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Not Gray Mode\n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Gray Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Gray Mode\n");
     }
 }
 
@@ -344,11 +344,11 @@ void CameraSetting::setDayNightMode(int enable)
 {
     isp_set_day_night(enable);
     if (enable == 0) {
-        printf("\r\n[INFO] Day Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Day Mode\n");
     } else if (enable == 1) {
-        printf("\r\n[INFO] Night Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Night Mode\n");
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
@@ -356,9 +356,9 @@ void CameraSetting::getDayNightMode(void)
 {
     isp_get_day_night(&ret);
     if (ret == 0) {
-        printf("\r\n[INFO] Day Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Day Mode\n");
     } else if (ret == 1) {
-        printf("\r\n[INFO] Night Mode\n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Night Mode\n");
     }
 }
 
@@ -366,26 +366,29 @@ void CameraSetting::setMinFPS(int value)
 {
     if (value >= 1 && value <= 30) {
         isp_set_min_fps(value);
-        printf("\r\n[INFO] Min FPS is set to %d.\n", value);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Min FPS is set to %d.\n", value);
     } else {
-        printf("\r\n[ERROR] Invalid Input.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
     }
 }
 
 void CameraSetting::getMinFPS(void)
 {
     isp_get_min_fps(&ret);
-    printf("\r\n[INFO] Min FPS = %d \n", ret);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Min FPS = %d \n", ret);
 }
 
 void CameraSetting::reset(void)
 {
     ISPControlReset();
-    printf("\r\n[INFO] ISP Control Reset.\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] ISP Control Reset.\n");
 }
 
 VideoSetting::VideoSetting(uint8_t preset)
 {
+    INIT_VIDEO_LOGGING();
+    INIT_MODULE_VIDEO_LOGGING();
+
     switch (preset) {
         case 0: {
             _resolution = VIDEO_FHD;
@@ -427,7 +430,7 @@ VideoSetting::VideoSetting(uint8_t preset)
             break;
         }
         default: {
-            printf("\r\n[ERROR] Invalid VideoSetting preset!\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid VideoSetting preset!\n");
             return;
         }
     }
@@ -447,6 +450,9 @@ VideoSetting::VideoSetting(uint8_t preset)
 
 VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
+    INIT_VIDEO_LOGGING();
+    INIT_MODULE_VIDEO_LOGGING();
+
     _resolution = resolution;
     _fps = fps;
     _bps = CAM_BPS;
@@ -457,7 +463,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
 
     if ((_snapshot == 1) || (_snapshot == 2)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
-            printf("\r\n[ERROR] snapshot function not supported on selected encoder!\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] snapshot function not supported on selected encoder!\n");
             _snapshot = 0;
         }
     }
@@ -483,6 +489,9 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
 
 VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
+    INIT_VIDEO_LOGGING();
+    INIT_MODULE_VIDEO_LOGGING();
+
     _resolution = VIDEO_CUSTOM;
     _fps = fps;
     _bps = CAM_BPS;
@@ -496,11 +505,11 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     // Check resolution maximums
     if (_w > 1920) {
         _w = 1920;
-        printf("\r\n[INFO] Maximum resolution 1920 x 1080 \n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Maximum resolution 1920 x 1080 \n");
     }
     if (_h > 1080) {
         _h = 1080;
-        printf("\r\n[INFO] Maximum resolution 1920 x 1080 \n");
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Maximum resolution 1920 x 1080 \n");
     }
 
     // Check resolution minimums
@@ -509,20 +518,20 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
 
         if (_w < 352) {
             _w = 352;
-            printf("\r\n[INFO] Minimum JPEG resolution 352 x 288 \n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Minimum JPEG resolution 352 x 288 \n");
         }
         if (_h < 288) {
             _h = 288;
-            printf("\r\n[INFO] Minimum JPEG resolution 352 x 288 \n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Minimum JPEG resolution 352 x 288 \n");
         }
     } else {
         if (_w < 176) {
             _w = 176;
-            printf("\r\n[INFO] Minimum resolution 176 x 144 \n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Minimum resolution 176 x 144 \n");
         }
         if (_h < 144) {
             _h = 144;
-            printf("\r\n[INFO] Minimum resolution 176 x 144 \n");
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Minimum resolution 176 x 144 \n");
         }
     }
 
@@ -534,22 +543,33 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
         if ((_w + 16) <= 1920) {
             _w += 16;
         }
-        printf("\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
     }
     if (((_h % 16) != 0) && (_h != 360) && (_h != 1080)) {
         _h -= (_h % 16);
         if ((_h + 16) <= 1080) {
             _h += 16;
         }
-        printf("\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
     }
 
     if ((_snapshot == 1) || (_snapshot == 2)) {
         if ((_encoder != VIDEO_H264_JPEG) && (_encoder != VIDEO_HEVC_JPEG) && (_encoder != VIDEO_JPEG)) {
-            printf("\r\n[ERROR] snapshot function not supported on selected encoder!\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] snapshot function not supported on selected encoder!\n");
             _snapshot = 0;
         }
     }
+}
+
+void VideoSetting::enableWebsocketViewer(void)
+{
+    _wsviewer_en = 1;
+
+    _h264_level = VCENC_H264_LEVEL_4;
+    _h264_profile = VCENC_H264_BASE_PROFILE;
+    _h264_entropy_mode = 1;
+    _rc_minQp = 15;
+    _rc_maxQp = 35;
 }
 
 void VideoSetting::setBitrate(uint32_t bitrate)
@@ -572,6 +592,20 @@ void VideoSetting::setJpegQuality(uint8_t quality)
         quality = 9;
     }
     _jpeg_qlevel = quality;
+}
+
+// entropy_mode = 0 - baseline profile, entropy_mode = 1 - main/high profiles
+void VideoSetting::setH264EncParams(uint32_t level, uint32_t profile, uint32_t entropy_mode)
+{
+    _h264_level = level;
+    _h264_profile = profile;
+    _h264_entropy_mode = entropy_mode;
+}
+
+void VideoSetting::setRCParams(uint32_t minQp, uint32_t maxQp)
+{
+    _rc_minQp = minQp;
+    _rc_maxQp = maxQp;
 }
 
 // 0 (default): 0 degree
@@ -610,7 +644,7 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
     bps[ch] = config._bps;
     encoder[ch] = config._encoder;
     snapshot[ch][0] = config._snapshot;
-
+    wsviewer_en[ch] = config._wsviewer_en;
     if (config._preset == USB_UVCD_STREAM_PRESET) {
         gop[ch] = config._gop;
         rc_mode[ch] = config._rc_mode;
@@ -621,15 +655,22 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
         video_rotation[ch] = config._rotation;
     }
 
+    if (wsviewer_en[ch] == 1) {
+        h264_level[ch] = config._h264_level;
+        h264_profile[ch] = config._h264_profile;
+        h264_entropy_mode[ch] = config._h264_entropy_mode;
+        rc_maxQp[ch] = config._rc_maxQp;
+        rc_minQp[ch] = config._rc_minQp;
+    }
     // Video stream using VIDEO_JPEG requires setting bps = 0
     // if (encoder[ch] == VIDEO_JPEG) {
     //     bps[ch] = 0;
     // }
 
-    // printf("\r\n[INFO] V1 %d    %d    %d    %d    %d    %d\n", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
-    // printf("\r\n[INFO] V2 %d    %d    %d    %d    %d    %d\n", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
-    // printf("\r\n[INFO] V3 %d    %d    %d    %d    %d    %d\n", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
-    // printf("\r\n[INFO] V4 %d    %d    %d    %d    %d    %d\n", channelEnable[3], w[3], h[3]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] V1 %d    %d    %d    %d    %d    %d\n", channelEnable[0], w[0], h[0], bps[0], snapshot[0], fps[0]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] V2 %d    %d    %d    %d    %d    %d\n", channelEnable[1], w[1], h[1], bps[1], snapshot[1], fps[1]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] V3 %d    %d    %d    %d    %d    %d\n", channelEnable[2], w[2], h[2], bps[2], snapshot[2], fps[2]);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] V4 %d    %d    %d    %d    %d    %d\n", channelEnable[3], w[3], h[3]);
 }
 
 #if 0
@@ -663,7 +704,7 @@ void Video::videoInit(void)
                                 channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
                                 channelEnable[3], w[3], h[3]);
     _heap_size = heapSize;
-    // printf("\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
 
     for (int ch = 0; ch < 4; ch++) {
         videoInit(ch);
@@ -678,7 +719,7 @@ void Video::videoInit(int ch)
                                     channelEnable[2], w[2], h[2], bps[2], snapshot[2][0],
                                     channelEnable[3], w[3], h[3]);
         _heap_size = heapSize;
-        // printf("\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s VOE heap size is: %d\n", __FUNCTION__, heapSize);
     }
     if (channelEnable[ch]) {
         videoModule[ch]._p_mmf_context = cameraInit();
@@ -731,21 +772,42 @@ void Video::videoInit(int ch)
                              0);    // direct output flag
             } else {
                 if (preset[ch] != USB_UVCD_STREAM_PRESET) {
-                    cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
-                               channel[ch],
-                               encoder[ch],
-                               resolution[ch],
-                               w[ch],
-                               h[ch],
-                               bps[ch],
-                               fps[ch],
-                               CAM_GOP,
-                               CAM_RCMODE,
-                               snapshot[ch][0],
-                               jpeg_qlevel[ch],
-                               video_rotation[ch]);
+                    if (wsviewer_en[ch] == 1) {
+                        cameraOpenWSViewer(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                                           channel[ch],
+                                           encoder[ch],
+                                           resolution[ch],
+                                           w[ch],
+                                           h[ch],
+                                           bps[ch],
+                                           fps[ch],
+                                           CAM_GOP,
+                                           CAM_RCMODE,
+                                           snapshot[ch][0],
+                                           jpeg_qlevel[ch],
+                                           video_rotation[ch],
+                                           h264_level[ch],
+                                           h264_profile[ch],
+                                           h264_entropy_mode[ch],
+                                           rc_minQp[ch],
+                                           rc_maxQp[ch]);
+                    } else {
+                        cameraOpen(videoModule[ch]._p_mmf_context, videoModule[ch]._p_mmf_context->priv,
+                                   channel[ch],
+                                   encoder[ch],
+                                   resolution[ch],
+                                   w[ch],
+                                   h[ch],
+                                   bps[ch],
+                                   fps[ch],
+                                   CAM_GOP,
+                                   CAM_RCMODE,
+                                   snapshot[ch][0],
+                                   jpeg_qlevel[ch],
+                                   video_rotation[ch]);
+                    }
                 } else {
-                    // printf("\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s cameraOpenUVCD \n", __FUNCTION__);
                     cameraOpenUVCD(videoModule[ch]._p_mmf_context,
                                    channel[ch],
                                    encoder[ch],
@@ -849,7 +911,7 @@ int Video::snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len)
 {
     image_addr[0] = jpeg_addr;
     image_len[0] = jpeg_len;
-    // printf("\r\n[INFO] snapshot 0 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] snapshot 0 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
@@ -857,7 +919,7 @@ int Video::snapshotCB1(uint32_t jpeg_addr, uint32_t jpeg_len)
 {
     image_addr[1] = jpeg_addr;
     image_len[1] = jpeg_len;
-    // printf("\r\n[INFO] snapshot 1 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] snapshot 1 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
@@ -865,7 +927,7 @@ int Video::snapshotCB2(uint32_t jpeg_addr, uint32_t jpeg_len)
 {
     image_addr[2] = jpeg_addr;
     image_len[2] = jpeg_len;
-    // printf("\r\n[INFO] snapshot 2 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] snapshot 2 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
@@ -873,27 +935,27 @@ int Video::snapshotCB3(uint32_t jpeg_addr, uint32_t jpeg_len)
 {
     image_addr[3] = jpeg_addr;
     image_len[3] = jpeg_len;
-    // printf("\r\n[INFO] snapshot 3 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] snapshot 3 addr=%X, size=%d\n", (int)jpeg_addr, (int)jpeg_len);
     return 0;
 }
 
 void Video::getImage(int ch, uint32_t* addr, uint32_t* len)
 {
     if ((snapshot[ch][0] == 1) || snapshot[ch][0] == 2) {
-        // printf("\r\n[INFO] Taking snapshot channel = %d\n", ch);
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Taking snapshot channel = %d\n", ch);
         image_addr[ch] = 0;
         image_len[ch] = 0;
         cameraSnapshot(videoModule[ch]._p_mmf_context->priv, 1);    // 1 does not represent ch, it represents mode
         while ((image_addr[ch] == 0) || (image_len[ch] == 0)) {
             // wait for jpeg data to arrive
-            // printf("\r\n[INFO] wait for jpeg data......\n");
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wait for jpeg data......\n");
             delay(10);
         }
         *addr = image_addr[ch];
         *len = image_len[ch];
         // printSnapshotInfo();
     } else {
-        // printf("\r\n[ERROR] Snapshot disabled\n");
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Snapshot disabled\n");
         *addr = (uint32_t)NULL;
         *len = (uint32_t)NULL;
     }
@@ -908,13 +970,13 @@ void Video::printInfo(void)
 {
     for (int ch = 0; ch < 4; ch++) {
         if (channelEnable[ch] == 1) {
-            printf("\r\n[INFO] Channel: %d\n", channel[ch]);
-            printf("\r\n[INFO] Encoder type: %s\n", encoderArray[encoder[ch]].c_str());
-            printf("\r\n[INFO] Resolution: %s\n", resolutionArray[resolution[ch]].c_str());
-            printf("\r\n[INFO] Video width: %d\n", w[ch]);
-            printf("\r\n[INFO] Video height: %d\n", h[ch]);
-            printf("\r\n[INFO] fps: %d\n", fps[ch]);
-            printf("\r\n[INFO] bps: %ld\n", bps[ch]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Channel: %d\n", channel[ch]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Encoder type: %s\n", encoderArray[encoder[ch]].c_str());
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Resolution: %s\n", resolutionArray[resolution[ch]].c_str());
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Video width: %d\n", w[ch]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Video height: %d\n", h[ch]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] fps: %d\n", fps[ch]);
+            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] bps: %ld\n", bps[ch]);
         }
     }
 }
@@ -922,4 +984,34 @@ void Video::printInfo(void)
 int Video::videostream_status(int ch)
 {
     return cameraGetCtx(videoModule[ch]._p_mmf_context, ch);
+}
+
+void Video::setQLen(int ch, int len)
+{
+    cameraClearQItem(videoModule[ch]._p_mmf_context);
+    cameraSetQLen(videoModule[ch]._p_mmf_context, len);
+    cameraSetQItem(videoModule[ch]._p_mmf_context);
+}
+
+int Video::cameraOpenStatus(void)
+{
+    return cameraGetStatus();
+}
+
+void Video::updateVideoParams(int ch)
+{
+    cameraUpdateParams(videoModule[ch]._p_mmf_context,
+                       videoModule[ch]._p_mmf_context->priv,
+                       channel[ch],
+                       encoder[ch],
+                       resolution[ch],
+                       w[ch],
+                       h[ch],
+                       bps[ch],
+                       fps[ch],
+                       fps[ch],
+                       CAM_RCMODE,
+                       snapshot[ch][0],
+                       jpeg_qlevel[ch],
+                       video_rotation[ch]);
 }

@@ -86,10 +86,10 @@ void setup()
     // llm.openaivision(openAI_key, "gpt-4o-mini", prompt_msg, img_addr, img_len, client);
 
     // Gemini vision prompt
-    llm.geminivision(Gemini_key, "gemini-2.0-flash", prompt_msg, img_addr, img_len, client);
+    llm.geminivision(Gemini_key, "gemini-flash-latest", prompt_msg, img_addr, img_len, client);
 
     // Llama vision prompt
-    // llm.llamavision(Llama_key, "llama-3.2-90b-vision-preview", prompt_msg, img_addr, img_len, client);
+    // llm.llamavision(Llama_key, "meta-llama/llama-4-scout-17b-16e-instruct", prompt_msg, img_addr, img_len, client);
 }
 
 void loop()

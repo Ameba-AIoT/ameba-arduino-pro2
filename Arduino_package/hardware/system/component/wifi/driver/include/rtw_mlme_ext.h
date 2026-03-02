@@ -103,6 +103,7 @@ extern const u8	WMM_PARA_OUI[];
 
 #define rltk_ap_compatibility_is_enable(a,b) ((a & b) ? 1 : 0)
 #define rltk_wifi_debug_is_enable(a,b) ((a & b) ? 1 : 0)
+#define rltk_11v_is_enable(a,b) ((a & b) ? 1 : 0)
 //
 // Channel Plan Type.
 // Note:
@@ -1116,6 +1117,11 @@ unsigned int OnAction_sa_query(_adapter *padapter, union recv_frame *precv_frame
 #endif
 #ifdef CONFIG_RTW_WNM
 unsigned int OnAction_wnm(_adapter *adapter, union recv_frame *precv_frame);
+#else
+unsigned int OnAction_wnm_debug(_adapter *adapter, union recv_frame *precv_frame);
+#endif
+#ifndef CONFIG_IEEE80211K
+unsigned int onAction_rm_debug(_adapter *adapter, union recv_frame *precv_frame);
 #endif
 unsigned int OnAction_wmm(_adapter *padapter, union recv_frame *precv_frame);
 unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame);

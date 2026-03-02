@@ -103,6 +103,7 @@ void loop()
 
 void printInfo(void)
 {
+    Serial.println(" ");
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

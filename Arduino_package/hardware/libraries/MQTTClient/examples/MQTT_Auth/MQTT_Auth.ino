@@ -17,7 +17,7 @@ int status = WL_IDLE_STATUS;     // Indicator of Wifi status
 
 char clientIdBackup[32];
 
-char mqttServer[] = "cloud.amebaiot.com";
+char mqttServer[] = "192.168.1.1";    // or server domain name eg, mqtt_auth.com
 char clientId[] = "amebaClient";
 char clientUser[] = "testuser";
 char clientPass[] = "testpass";

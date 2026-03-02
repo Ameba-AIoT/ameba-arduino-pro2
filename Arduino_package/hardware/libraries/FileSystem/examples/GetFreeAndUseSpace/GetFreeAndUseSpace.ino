@@ -7,31 +7,42 @@
 
 #include "AmebaFatFS.h"
 
-uint64_t device_used_bytes;
-uint64_t device_free_bytes;
-
-uint16_t device_used_Mbytes;
-uint16_t device_free_Mbytes;
-
 AmebaFatFS fs;
 void setup()
 {
     fs.begin();
-    device_used_bytes = fs.get_used_space();
-    device_used_Mbytes = (uint16_t)(device_used_bytes / 1048576);    // convert bytes to Mbytes /(1024*1024)
 
-    device_free_bytes = fs.get_free_space();
-    device_free_Mbytes = (uint16_t)(device_free_bytes / 1048576);    // convert bytes to Mbytes /(1024*1024)
+    uint64_t used_bytes = fs.get_used_space();
+    uint64_t free_bytes = fs.get_free_space();
 
-    printf("Use space on SD card: %llu bytes\r\n", device_used_bytes);
-    printf("Use space on SD card: %u Mbytes\r\n", device_used_Mbytes);
+    printReadableSize(used_bytes, "Used space on SD card");
+    printReadableSize(free_bytes, "Free space on SD card");
 
-    printf("Free space on SD card: %llu bytes\r\n", device_free_bytes);
-    printf("Free space on SD card: %u Mbytes\r\n", device_free_Mbytes);
     fs.end();
 }
 
 void loop()
 {
     delay(1000);
+}
+
+void printReadableSize(uint64_t bytes, const char* label)
+{
+    double value = (double)bytes;
+    const char* unit = "B";
+
+    if (value >= 1024.0) {
+        value /= 1024.0;
+        unit = "KB";
+    }
+    if (value >= 1024.0) {
+        value /= 1024.0;
+        unit = "MB";
+    }
+    if (value >= 1024.0) {
+        value /= 1024.0;
+        unit = "GB";
+    }
+
+    printf("%s: %llu bytes (%.2f %s)\r\n", label, bytes, value, unit);
 }

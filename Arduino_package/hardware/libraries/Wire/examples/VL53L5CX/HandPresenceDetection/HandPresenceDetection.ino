@@ -2,13 +2,14 @@
   This example shows how to use the SparkFun VL53L5CX Time-of-Flight sensor in 8x8 mode
   to detect hand presence.
 
-  Example Guide: TBD
+  Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/VL53L5CX%20sensor%20Hand%20Presence%20Detection.html
 */
 
 #include <Wire.h>
 #include <SparkFun_VL53L5CX_libraries/SparkFun_VL53L5CX_Library.h>
 
 #define HAND_DETECTION_THRESHOLD_MM 100
+#define BACKGROUND_CUTOFF_MM        300    // Values beyond this are treated as background
 #define MIN_VALID_READINGS          5
 #define NO_VALID_DATA               9999    // The value 9999 is used as a clearly invalid or out-of-range number that signals “no valid data.”
 
@@ -20,6 +21,7 @@ int imageWidth = 0;
 float leftAvg, rightAvg;
 uint32_t leftColSum = 0, rightColSum = 0;
 int leftColCount = 0, rightColCount = 0;
+float overallAvg;
 
 void setup()
 {
@@ -56,8 +58,8 @@ void loop()
 
             // Use center rows 2 to 5 to avoid top/bottom noise
             for (int row = 2; row <= 5; row++) {
-                for (int col = 0; col < 8; col++) {
-                    int idx = row * 8 + col;
+                for (int col = 0; col < imageWidth; col++) {
+                    int idx = row * imageWidth + col;
                     uint16_t d = data.distance_mm[idx];
 
                     if (d == 0 || d > 800) {
@@ -74,10 +76,10 @@ void loop()
                 }
             }
 
-            if (leftColCount < 3 && rightColCount < 3) {
-                Serial.println("No hand present");
-                delay(67);
-                return;
+            if (leftColCount + rightColCount > 0) {
+                overallAvg = (float)(leftColSum + rightColSum) / (leftColCount + rightColCount);
+            } else {
+                overallAvg = NO_VALID_DATA;
             }
 
             if (leftColCount > 0) {
@@ -92,12 +94,13 @@ void loop()
                 rightAvg = NO_VALID_DATA;
             }
 
-            if (abs(leftAvg - rightAvg) < HAND_DETECTION_THRESHOLD_MM) {
+            if (overallAvg < BACKGROUND_CUTOFF_MM && abs(leftAvg - rightAvg) < HAND_DETECTION_THRESHOLD_MM) {
                 Serial.println("Hand present");
                 // printDistance();
+            } else {
+                Serial.println("No hand present");
+                // printDistance();
             }
-
-            delay(67);
         }
     }
 }

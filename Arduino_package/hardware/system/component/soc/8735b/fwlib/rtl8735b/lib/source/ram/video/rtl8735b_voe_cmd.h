@@ -134,10 +134,15 @@
 #define VOE_ISP_SET_MASK				 0x251
 
 #define VOE_ISP_SET_ZOOM_CROP			 0x252
+#define VOE_ISP_GET_ZOOM_CROP			 0x255
 
 #define VOE_SET_IQ_CALI_ENABLE			 0x253
 
 #define VOE_ISP_SET_STM_FPS				 0x254
+
+#define VOE_ISP_GET_DIR_WDR_LEVEL		 0x256
+
+#define VOE_ISP_GET_MAX_DYN_REGION		 0x257
 
 //OSD
 #define VOE_OSD_QUERY                    0x260

@@ -90,4 +90,8 @@ unsigned int rts_osd_pict_heapsize_cal(int width, int height, enum rts_osd2_blk_
 enum rts_osd_err_code rts_osd2_set_time(int hour, int minute, int seconds);
 enum rts_osd_err_code rts_osd2_set_date(int year, int month, int day);
 
+#ifdef ARDUINO_SDK
+int get_osd_log(void);
+void set_osd_log(int osd_log_enable);
+#endif
 #endif	// OSD_API_H

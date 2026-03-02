@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "realtek",
-      "maintainer": "Realtek",
+      "maintainer": "Realtek SG SD3",
       "websiteURL": "https://www.amebaiot.com/",
       "email": "realteksgsd3@gmail.com",
       "help": {
@@ -10,6 +10,45 @@
       },
 
       "platforms": [
+		{
+          "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
+          "architecture": "AmebaPro2",
+          "version": "4.1.0",
+          "category": "Contributed",
+          "help": {
+            "online": "https://forum.amebaiot.com/"
+          },
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.1.0-build20260213.tar.gz",
+          "archiveFileName": "ameba_pro2-4.1.0-build20260213.tar.gz",
+          "checksum": "SHA-256:d180bc2b967e4fd5a012fdf87708865f05b4268ff380981a98cc11729d908efe",
+          "size": "75019333",
+          "boards": [
+            {"name": "AMB82 (RTL8735B)"},
+            {"name": "AMB82-MINI (RTL8735B)"}
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain",
+              "version": "1.0.1-p1"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_toolchain2",
+              "version": "1.0.1-p2"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_tools",
+              "version": "1.4.7"
+            },
+            {
+              "packager": "realtek",
+              "name": "ameba_pro2_nn_models",
+              "version": "1.0.3"
+            }
+          ]
+        },
 		{
           "name": "Realtek Ameba Boards (32-bit Arm v8M @500MHz)",
           "architecture": "AmebaPro2",
@@ -57,10 +96,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.8.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.8.tar.gz",
-          "checksum": "SHA-256:88d5e0f669efb2e6d4a293b60918859a06c69798205e42e21853a3b7b1264743",
-          "size": "68998905",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.8-build20241025.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.8-build20241025.tar.gz",
+          "checksum": "SHA-256:233d31a2b8aba3a7e65c05910f44ca2c8d5e7f940f09abd10cf409cfdb3c0638",
+          "size": "69119683",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -96,10 +135,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.7.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.7.tar.gz",
-          "checksum": "SHA-256:9e20fbc4ddda62df9d40d4e2bc725643e6e66f5a8f285966e654d5fe3edec6d4",
-          "size": "69785206",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.7-build20240610.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.7-build20240610.tar.gz",
+          "checksum": "SHA-256:b2e84be99f8d0d328ac93a88015ab6c58ea6d42eb07f8a54ba3a5f6a4ab68297",
+          "size": "69954193",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -135,10 +174,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.6.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.6.tar.gz",
-          "checksum": "SHA-256:ed1eb255ecb2895b57de72c66d057cf06864f02a268cde09657c77423af6bc04",
-          "size": "92711303",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.6-build20240202.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.6-build20240202.tar.gz",
+          "checksum": "SHA-256:c4eb7aee78ddd6c4e41ba7435ea394ed40fa5bc5d6adbbcf78f9d5a6e4a12bd1",
+          "size": "92710330",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -169,8 +208,8 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.5.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.5.tar.gz",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.5-build20231108.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.5-build20231108.tar.gz",
           "checksum": "SHA-256:aa6d9d4ea3ead00d6db373a57297051ca46b757f65cd70f6e69c02e7ed6d20ca",
           "size": "97447220",
           "boards": [
@@ -203,10 +242,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.4-1.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.4-1.tar.gz",
-          "checksum": "SHA-256:f2bca47e5b69bef173681d6179bcd92729794d0edd973ff46c890df04883ee62",
-          "size": "96444935",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.4-1-build20230719.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.4-1-build20230719.tar.gz",
+          "checksum": "SHA-256:0a60419560379494cfdbcb08f3769656ec4b18982ee53c019917eb478890a28f",
+          "size": "96734385",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -237,10 +276,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.3.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.3.tar.gz",
-          "checksum": "SHA-256:1b695004c09276c132b7cefa2eebe1c4548452e1ec0c466037484f74d2bd628a",
-          "size": "94068276",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.3-build20230414.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.3-build20230414.tar.gz",
+          "checksum": "SHA-256:d28e4797e8690203613123d162710394f82399ea233bd842a67d0b7a95757415",
+          "size": "94066228",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -271,10 +310,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.2.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.2.tar.gz",
-          "checksum": "SHA-256:381007ed3e0b9159e7cbc40e7045d52bf957570783f79e2aef314d6db2baa702",
-          "size": "92275857",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.2-build20230220.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.2-build20230220.tar.gz",
+          "checksum": "SHA-256:dc941c12db3d6bd233f852aa4999eb9fd5ff04cb8a2f2170888acdcda9cbd1f9",
+          "size": "92278918",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -287,7 +326,7 @@
             },
             {
               "packager": "realtek",
-              "name": "ameba_pro2_toolchain",
+              "name": "ameba_pro2_toolchain2",
               "version": "1.0.1-p2"
             },
             {
@@ -305,10 +344,10 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.1.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.1.tar.gz",
-          "checksum": "SHA-256:1934934ab03befaeab9f3cda3111178fb15ad5c51c307e25e1eda357158ad330",
-          "size": "90601481",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.1-build20230201.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.1-build20230201.tar.gz",
+          "checksum": "SHA-256:071d53992f8e377d99c7a85597bc368dcc8a7d19186023b821eaad5939dd1d82",
+          "size": "90601284",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
             {"name": "AMB82-MINI (RTL8735B)"}
@@ -321,7 +360,7 @@
             },
             {
               "packager": "realtek",
-              "name": "ameba_pro2_toolchain",
+              "name": "ameba_pro2_toolchain2",
               "version": "1.0.1-p2"
             },
             {
@@ -339,8 +378,8 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.0.tar.gz",
-          "archiveFileName": "ameba_pro2-4.0.0.tar.gz",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2-4.0.0-build20221125.tar.gz",
+          "archiveFileName": "ameba_pro2-4.0.0-build20221125.tar.gz",
           "checksum": "SHA-256:81db26aa1599f26157ed4aaad19b29403873fdc1484c89faf2e4157297ea381c",
           "size": "44432725",
           "boards": [
@@ -355,7 +394,7 @@
             },
             {
               "packager": "realtek",
-              "name": "ameba_pro2_toolchain",
+              "name": "ameba_pro2_toolchain2",
               "version": "1.0.1-p2"
             },
             {
@@ -367,6 +406,33 @@
         }
       ],
       "tools": [
+		{
+          "name": "ameba_pro2_nn_models",
+          "version":"1.0.3",
+          "systems": [
+            {
+              "host":"i686-mingw32",
+              "archiveFileName":"ameba_pro2_nn_models-1.0.3.tar.gz",
+              "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_nn_models-1.0.3.tar.gz",
+              "checksum":"SHA-256:acb3c512fe8e84531409b6cd4954dee84a63f7cdb9529479699af881b8fbf067",
+              "size":"37724966"
+            },
+            {
+              "host":"x86_64-pc-linux-gnu",
+              "archiveFileName":"ameba_pro2_nn_models-1.0.3.tar.gz",
+              "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_nn_models-1.0.3.tar.gz",
+              "checksum":"SHA-256:acb3c512fe8e84531409b6cd4954dee84a63f7cdb9529479699af881b8fbf067",
+              "size":"37724966"
+            },
+            {
+              "host":"x86_64-apple-darwin",
+              "archiveFileName":"ameba_pro2_nn_models-1.0.3.tar.gz",
+              "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_nn_models-1.0.3.tar.gz",
+              "checksum":"SHA-256:acb3c512fe8e84531409b6cd4954dee84a63f7cdb9529479699af881b8fbf067",
+              "size":"37724966"
+            }
+          ]
+        },
 		{
           "name": "ameba_pro2_nn_models",
           "version":"1.0.2",
@@ -503,29 +569,29 @@
           ]
         },
 		{
-          "name": "ameba_pro2_toolchain",
-          "version":"1.0.1-p2",
+          "name": "ameba_pro2_tools",
+          "version": "1.4.7",
           "systems": [
             {
-              "host":"i686-mingw32",
-              "archiveFileName":"ameba_pro2_toolchain_windows-1.0.1-p2.tar.bz2",
-              "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_toolchain_windows-1.0.1-p2.tar.bz2",
-              "checksum":"SHA-256:2efdb80f1001c7cc3ef926c605e523bdfa6a05d1cef9bed7cfd5d0a214728223",
-              "size":"76361876"
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.4.7.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_tools_windows-1.4.7.tar.gz",
+              "checksum": "SHA-256:c81d95091bdac51c0265c1a80113bf6b5dfd4139ef64705f03bb8b896592b4be",
+              "size": "10015224"
             },
             {
-              "host":"x86_64-pc-linux-gnu",
-              "archiveFileName":"ameba_pro2_toolchain_linux-1.0.1-p2.tar.bz2",
-              "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_toolchain_linux-1.0.1-p2.tar.bz2",
-              "checksum":"SHA-256:ca78d21893e1d08b8611be062c5d93482042424cc4860e6c8e3356768c936006",
-              "size":"78722976"
+              "host": "x86_64-pc-linux-gnu",
+              "archiveFileName": "ameba_pro2_tools_linux-1.4.7.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_tools_linux-1.4.7.tar.gz",
+              "checksum": "SHA-256:e63e44bbd1ce6c0a49a3774764fd44f337525a8ae11be2925e69f022a147b6b1",
+              "size": "13519798"
             },
             {
-              "host":"x86_64-apple-darwin",
-              "archiveFileName":"ameba_pro2_toolchain_macos-1.0.1-p2.tar.bz2",
-              "url":"https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_toolchain_macos-1.0.1-p2.tar.bz2",
-              "checksum":"SHA-256:892a0a6848863b0853a0b60a3fcfedb703d897961615274049f8fca036c9db32",
-              "size":"77770301"
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.4.7.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/main/Arduino_package/release/ameba_pro2_tools_macos-1.4.7.tar.gz",
+              "checksum": "SHA-256:5756f5c4848dd012623d3aaf24afdd0a4834713a23afa78791c448c39d167e64",
+              "size": "12253025"
             }
           ]
         },

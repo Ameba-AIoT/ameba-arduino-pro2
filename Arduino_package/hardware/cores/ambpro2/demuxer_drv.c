@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "demuxer_drv.h"
 #include "mmf2_module.h"
 #include "module_demuxer.h"
@@ -40,7 +42,7 @@ void demuxerOpen(mm_context_t *p, const char *file_name, uint8_t stream_type, ui
     mm_module_ctrl(p, CMD_DEMUXER_INIT_MEM_POOL, 0);
     mm_module_ctrl(p, CMD_DEMUXER_OPEN, 0);
 
-    printf("DEMUXER OPENED\r\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] DEMUXER OPENED\n");
 }
 
 void demuxerStart(mm_context_t *p)
@@ -50,12 +52,12 @@ void demuxerStart(mm_context_t *p)
 
 void demuxerPause(mm_context_t *p)
 {
-    printf("Set Pause for the MP4\r\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Set Pause for the MP4\n");
     mm_module_ctrl(p, CMD_DEMUXER_STREAM_PAUSE, 0);
 }
 
 void demuxerResume(mm_context_t *p)
 {
-    printf("Set RESUME for the MP4\r\n");
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Set RESUME for the MP4\n");
     mm_module_ctrl(p, CMD_DEMUXER_STREAM_RESUME, 0);
 }

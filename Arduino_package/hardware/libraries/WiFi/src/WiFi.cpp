@@ -115,11 +115,10 @@ IPAddress WiFiClass::localIP(uint8_t interface)
     return ret;
 }
 
-#if 0
-void WiFiClass::printLocalIPv6() {
+void WiFiClass::printLocalIPv6()
+{
     WiFiDrv::getIpv6Address();
 }
-#endif
 
 IPAddress WiFiClass::subnetMask(uint8_t interface)
 {
@@ -203,11 +202,11 @@ int WiFiClass::hostByName(const char* aHostname, IPAddress& aResult)
     return WiFiDrv::getHostByName(aHostname, aResult);
 }
 
-// int WiFiClass::hostByNamev6(const char* aHostname, IPv6Address& aResult)
-//{
-//     printf("\r\n[INFO] wifi.cpp: hostByNamev6()\n");
-//     return WiFiDrv::getHostByNamev6(aHostname, aResult);
-// }
+int WiFiClass::hostByNamev6(const char* aHostname, IPv6Address& aResult)
+{
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] wifi.cpp: hostByNamev6()\n");
+    return WiFiDrv::getHostByNamev6(aHostname, aResult);
+}
 
 int WiFiClass::apbegin(char* ssid, char* channel, uint8_t hidden_ssid)
 {

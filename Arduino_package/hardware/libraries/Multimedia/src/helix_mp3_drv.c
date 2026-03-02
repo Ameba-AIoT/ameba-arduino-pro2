@@ -1,6 +1,8 @@
+#include "Arduino.h"
 #include "mp3dec.h"
 #include "audio_api.h"
 #include "helix_mp3_drv.h"
+
 #define MP3_MAX_FRAME_SIZE        (1600)
 #define BUFFER_SIZE               (1500)
 #define AUDIO_DMA_PAGE_SIZE       (2304)
@@ -64,7 +66,7 @@ void audio_play_binary_array(uint8_t *srcbuf, uint32_t len, uint8_t _audio_vol)
 
             if (first_frame) {
                 initialize_audio(frameInfo.samprate, _audio_vol);
-                printf("[INFO] sample rate: %d\r\n", frameInfo.samprate);
+                amb_ard_printf(ARD_LOG_INF, "[INFO] sample rate: %d\r\n", frameInfo.samprate);
                 first_frame = 0;
             }
             audio_play_pcm((int16_t *)decodebuf, frameInfo.outputSamps);
@@ -72,15 +74,15 @@ void audio_play_binary_array(uint8_t *srcbuf, uint32_t len, uint8_t _audio_vol)
             if (ret == ERR_MP3_INDATA_UNDERFLOW) {
                 break;
             }
-            // printf("[ERROR] %d\r\n", ret);    // user may uncomment to view decoding error
+            // amb_ard_printf(ARD_LOG_INF, "[ERROR] %d\r\n", ret);    // user may uncomment to view decoding error
             inbuf++;
             bytesLeft--;
         }
     }
     osDelay(1000);
     audio_deinit(&g_taudio);
-    printf("[INFO] audio deinitialized\r\n");
-    printf("[INFO] decoding finished\r\n");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] audio deinitialized\r\n");
+    amb_ard_printf(ARD_LOG_INF, "[INFO] decoding finished\r\n");
 }
 
 void initialize_audio(int sample_rate, uint8_t digital_vol)

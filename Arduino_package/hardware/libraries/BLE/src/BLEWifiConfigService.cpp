@@ -63,7 +63,7 @@ T_APP_RESULT BLEWifiConfigService::serviceCallbackDefault(T_SERVER_ID service_id
                     bt_config_service_set_parameter(BTCONFIG_SERVICE_PARAM_V1_READ_CHAR_VAL, read_buf_len, read_buf);
                 }
                 if (BTDEBUG) {
-                    printf("\r\n[INFO] BTCONFIG read char value\n");
+                    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BTCONFIG read char value\n");
                 }
                 break;
             }
@@ -74,7 +74,7 @@ T_APP_RESULT BLEWifiConfigService::serviceCallbackDefault(T_SERVER_ID service_id
                         // Otherwise, use BC_send_cmd to send data (BT Config command) to BT Config
                         BC_send_cmd(p_simp_cb_data->msg_data.write.p_value, p_simp_cb_data->msg_data.write.len);
                         if (BTDEBUG) {
-                            printf("\r\n[INFO] BTCONFIG write char value\n");
+                            amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] BTCONFIG write char value\n");
                         }
                         break;
                     }

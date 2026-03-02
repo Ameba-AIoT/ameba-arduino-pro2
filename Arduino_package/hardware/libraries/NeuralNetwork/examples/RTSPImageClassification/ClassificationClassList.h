@@ -19,4 +19,12 @@ ClassificationDetectionItem imgclassItemList[6] = {
     {5, "trash",     1}
 };
 
+ClassificationDetectionItem imgclassMobileNetV2ItemList[5] = {
+    {0, "Daisy",     1},
+    {1, "Lavender",  1},
+    {2, "Lily",      1},
+    {3, "Rose",      1},
+    {4, "Sunflower", 1},
+};
+
 #endif

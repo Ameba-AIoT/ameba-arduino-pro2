@@ -28,7 +28,7 @@ RTSP::~RTSP(void)
     if (RTSPDeinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] RTSP deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] RTSP deinit failed\n");
     }
 }
 
@@ -39,7 +39,7 @@ void RTSP::configVideo(VideoSetting &config)
         _p_mmf_context = RTSPInit();
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] RTSP init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] RTSP init failed\n");
         return;
     }
 
@@ -67,7 +67,7 @@ void RTSP::configAudio(AudioSetting &config, Audio_Codec_T codec)
         _p_mmf_context = RTSPInit();
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] RTSP init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] RTSP init failed\n");
         return;
     }
 
@@ -82,7 +82,7 @@ void RTSP::configAudio(AudioSetting &config, Audio_Codec_T codec)
 void RTSP::begin(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need RTSP init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need RTSP init first\n");
     } else {
         RTSPSetStreaming((void *)_p_mmf_context, 1);
     }
@@ -91,7 +91,7 @@ void RTSP::begin(void)
 void RTSP::end(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need RTSP init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need RTSP init first\n");
     }
     RTSPSetStreaming((void *)_p_mmf_context, 0);
 }
@@ -99,7 +99,7 @@ void RTSP::end(void)
 int RTSP::getPort(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need RTSP init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need RTSP init first\n");
     }
     return RTSPGetPort(_p_mmf_context->priv);
 }
@@ -107,5 +107,11 @@ int RTSP::getPort(void)
 void RTSP::printInfo(void)
 {
     int port = getPort();
-    printf("\r\n[INFO] %d\n", port);
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %d\n", port);
+}
+
+void RTSP::printInfo(char *ip)
+{
+    int port = getPort();
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] rtsp://%s:%d\n", ip, port);
 }

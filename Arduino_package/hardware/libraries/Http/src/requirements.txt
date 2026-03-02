@@ -1,0 +1,15 @@
+# python3 -m venv .venv
+# source .venv/bin/activate
+# sudo apt update && sudo apt install ffmpeg
+# pip install --upgrade pip
+# pip install -r requirements.txt
+
+Flask
+# torch --index-url https://download.pytorch.org/whl/cpu
+git+https://github.com/openai/whisper.git
+fastapi
+uvicorn
+accelerate
+transformers
+einops
+torch

@@ -21,9 +21,9 @@ Please describe your proposed Pull Request and it's impact. \
 Please describe on what Hardware, SDK, IDE, OS that tested this Pull Request and how if necessary. \
 *eg.*
 - AMB82-mini
-- ambpro2_arduino V4.0.0
-- Arduino IDE 2.3.0
-- Windows 10
+- ambpro2_arduino V4.1.0
+- Arduino IDE 2.3.6
+- Windows 11
 
 ## Remark related links
 Please provide links to related issue, PRs etc. \

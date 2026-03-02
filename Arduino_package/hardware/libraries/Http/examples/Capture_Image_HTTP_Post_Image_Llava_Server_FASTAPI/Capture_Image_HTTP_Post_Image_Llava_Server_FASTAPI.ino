@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Post%20Image%20and%20MP4.html
 */
 
 #define ARDUINOJSON_STRING_LENGTH_SIZE 4
@@ -41,7 +41,7 @@ StreamIO audioStreamer2(1, 1);    // 1 Input AAC -> 1 Output MP4
 int encodedLen;
 char *encodedData;
 
-JsonDocument doc;
+JsonDocument jsondoc;
 
 int encodedAudioLen;
 char *encodedAudioData;
@@ -191,11 +191,11 @@ void encodeMP4andsendHttpPostRequest()
     encodedAudioData = (char *)malloc(encodedLen);
     base64_encode(encodedAudioData, (char *)audiofileinput, audiofileSize);
 
-    doc["audio_base64_string"] = encodedAudioData;
-    doc["image_base64_string"] = encodedData;
+    jsondoc["audio_base64_string"] = encodedAudioData;
+    jsondoc["image_base64_string"] = encodedData;
 
     String jsonString;
-    serializeJson(doc, jsonString);
+    serializeJson(jsondoc, jsonString);
 
     if (wifiClient.connect(server, 8000)) {
         wifiClient.println("POST /audio HTTP/1.1");

@@ -52,6 +52,11 @@
 #define		DM_RATR_STA_ULTRA_LOW	4
 #endif
 
+typedef enum tag_Package_Definition {
+	PACKAGE_10x10,
+	PACKAGE_8x11
+} PACKAGE_TYPE_E;
+
 /* MP Functions */
 #ifdef CONFIG_MP_INCLUDED
 void rtl8735b_phy_init_haldm(PADAPTER);				/* rtw_mp.c */

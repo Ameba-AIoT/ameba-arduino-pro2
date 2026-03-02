@@ -4,7 +4,7 @@
 #include "Print.h"
 #include "Client.h"
 #include "IPAddress.h"
-// #include "IPv6Address.h"
+#include "IPv6Address.h"
 #include "server_drv.h"
 
 class WiFiClient: public Client {
@@ -31,27 +31,27 @@ public:
     virtual operator bool();
     virtual int connect(const char *host, uint16_t port);
     virtual int connect(IPAddress ip, uint16_t port);
-    // virtual int connectv6(IPv6Address ipv6, uint16_t port);
+    virtual int connectv6(IPv6Address ipv6, uint16_t port);
     virtual int peek();
     virtual void flush();
     // extend API from RTK
     int setRecvTimeout(int timeout);
     int read(char *buf, size_t size);
     // IPv6 related
-    // int enableIPv6();
-    // int getIPv6Status();
+    int enableIPv6();
+    int getIPv6Status();
 
     friend class WiFiServer;
     using Print::write;
 
 private:
-    uint8_t _sock;
+    int _sock;
     ServerDrv clientdrv;
     bool _is_connected;
     uint8_t data[DATA_LENTH];
     int recvTimeout;
     tProtMode _portMode = TCP_MODE;
-    tBlockingMode _is_blocked = BLOCKING_MODE;
+    tBlockingMode _mode_of_block = BLOCKING_MODE;
 };
 
 #ifdef __cplusplus

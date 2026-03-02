@@ -11,7 +11,7 @@ toolchain_version=1.0.1
 toolchain_p1_name=ameba_pro2_toolchain
 toolchain_p2_name=ameba_pro2_toolchain2
 nn_tool_name=ameba_pro2_nn_models
-nn_tool_version=1.0.2
+nn_tool_version=1.0.3
 freertos_version=freertos_v202012.00
 lwip_version=lwip_v2.1.2
 mbedtls_version=mbedtls-2.28.1
@@ -119,7 +119,7 @@ compiler.define=-DARDUINO
 
 # Ameba archive list
 # -------------------
-compiler.ameba.ar.list= "{com_lib.path}/libfaac.a" "{com_lib.path}/libfmp4.a" "{com_lib.path}/libg711.a" "{com_lib.path}/libhaac.a" "{com_lib.path}/libhmp3.a" "{com_lib.path}/libhttp.a" "{com_lib.path}/libmmf.a" "{com_lib.path}/libmuxer.a" "{com_lib.path}/libnn.a" "{com_lib.path}/libopus.a" "{com_lib.path}/libopusenc.a" "{com_lib.path}/libopusfile.a" "{com_lib.path}/libqrcode.a" "{com_lib.path}/libsdcard.a" "{com_lib.path}/libusbd.a" "{com_lib.path}/libvideo_ntz.a" "{com_lib.path}/libwlan.a" "{com_lib.path}/libwps.a" "{com_lib.path}/btgap.a" "{com_lib.path}/hal_pmc.a" "{com_lib.path}/libsoc_ntz.a" "{com_lib.path}/libarduino.a" "{com_lib.path}/libispfeature.a" "{com_lib.path}/libctaec.a" "{com_lib.path}/liboutsrc.a" "{com_lib.path}/libVQE.a" "{com_lib.path}/libmd.a" "{com_lib.path}/libfdkaac.a" "{com_lib.path}/libeap.a" "{com_lib.path}/libarduino_sensor_sel.a"
+compiler.ameba.ar.list= "{com_lib.path}/libfaac.a" "{com_lib.path}/libfmp4.a" "{com_lib.path}/libg711.a" "{com_lib.path}/libhaac.a" "{com_lib.path}/libhmp3.a" "{com_lib.path}/libhttp.a" "{com_lib.path}/libmmf.a" "{com_lib.path}/libmuxer.a" "{com_lib.path}/libnn.a" "{com_lib.path}/libopus.a" "{com_lib.path}/libopusenc.a" "{com_lib.path}/libopusfile.a" "{com_lib.path}/libqrcode.a" "{com_lib.path}/libsdcard.a" "{com_lib.path}/libusbd.a" "{com_lib.path}/libvideo_ntz.a" "{com_lib.path}/libwlan.a" "{com_lib.path}/libwps.a" "{com_lib.path}/btgap.a" "{com_lib.path}/hal_pmc.a" "{com_lib.path}/libsoc_ntz.a" "{com_lib.path}/libarduino.a" "{com_lib.path}/libispfeature.a" "{com_lib.path}/libctaec.a" "{com_lib.path}/liboutsrc.a" "{com_lib.path}/libVQE.a" "{com_lib.path}/libmd.a" "{com_lib.path}/libfdkaac.a" "{com_lib.path}/libeap.a" "{com_lib.path}/libarduino_sensor_sel.a" "{com_lib.path}/libwebsocket_viewer.a"
 
 
 # USB Flags

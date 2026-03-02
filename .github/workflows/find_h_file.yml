@@ -1,0 +1,24 @@
+name: List .h files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list_headers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Find and print all .h files
+        run: |
+          echo "Searching for .h files..."
+          FILES=$(find ./Arduino_package/hardware/libraries -type f -name "*.h")
+          
+          if [ -z "$FILES" ]; then
+            echo "No .h files found."
+          else
+            echo "Found .h files:"
+            echo "$FILES"
+          fi

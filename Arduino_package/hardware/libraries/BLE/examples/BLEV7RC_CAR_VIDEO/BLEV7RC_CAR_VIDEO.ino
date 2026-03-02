@@ -200,6 +200,7 @@ void ParseCMDString(String cmd)
 
 void printInfo(void)
 {
+    Serial.println(" ");
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");

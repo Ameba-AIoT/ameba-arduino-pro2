@@ -42,8 +42,8 @@ extern "C" {
 #define WAIT_FOR_ACK
 #endif
 
-#define MQTT_SENDBUF_LEN  1024
-#define MQTT_READBUF_LEN  1024
+#define MQTT_SENDBUF_LEN  4096
+#define MQTT_READBUF_LEN  4096
 
 enum mqtt_status {
 	MQTT_START       = 0,

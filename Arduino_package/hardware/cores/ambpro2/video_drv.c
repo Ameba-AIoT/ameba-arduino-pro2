@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "video_drv.h"
 #include "hal_video.h"
 #include "video_api.h"
@@ -46,6 +48,9 @@ static video_params_t video_params = {
                        .ymax = 0,
                        },
     .meta_enable = 0,
+    .level = 0,
+    .profile = 0,
+    .cavlc = 1,
 };
 
 static video_params_t video_v4_params = {
@@ -66,6 +71,11 @@ static video_params_t video_v4_params = {
             .xmax = 0,
             .ymax = 0,
             },
+};
+
+static encode_rc_parm_t encode_rc_params = {
+    .minQp = 0,    // for CBR/VBR
+    .maxQp = 0,    // for CBR/VBR
 };
 
 void ISPControlReset(void)
@@ -105,7 +115,7 @@ int cameraConfig(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_snapshot,
                                          v2_enable, v2_w, v2_h, v2_bps, v2_snapshot,
                                          v3_enable, v3_w, v3_h, v3_bps, v3_snapshot,
                                          v4_enable, v4_w, v4_h);
-    // printf("\r\n[INFO] voe_heap_size assigned.\n");
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] voe_heap_size assigned.\n");
     return voe_heap_size;
 }
 
@@ -128,12 +138,12 @@ mm_context_t *cameraInit(void)
     if (!videoData->priv) {
         goto mm_open_fail;
     }
-    // printf("\r\n[INFO] module open - free heap %d\n", xPortGetFreeHeapSize());
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module open - free heap %d\n", xPortGetFreeHeapSize());
 
     return videoData;
 
 mm_open_fail:
-    printf("\r\n[ERROR] cameraInit failed\n");
+    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] cameraInit failed\n");
     if (videoData->module) {
         free(videoData->module);
     }
@@ -170,7 +180,7 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
     video_params.jpeg_qlevel = jpeg_qlevel;
     video_params.rotation = video_rotation;
 
-    // printf("\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, rc_mode);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, rc_mode);
 
     if (p) {
         // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
@@ -180,9 +190,9 @@ void cameraOpen(mm_context_t *p, void *p_priv, int stream_id, int type, int res,
         if ((type == VIDEO_JPEG) || (type == VIDEO_HEVC_JPEG) || (type == VIDEO_H264_JPEG)) {
             mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 0);
         }
-        // printf("\r\n[INFO] cameraOpen done\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] cameraOpen done\n");
     } else {
-        // printf("\r\n[ERROR] cameraOpen fail\n");
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] cameraOpen fail\n");
     }
 }
 
@@ -207,15 +217,15 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int re
     video_v4_params.roi.xmax = 1920;
     video_v4_params.roi.ymax = 1080;
 
-    // printf("\r\n[INFO] V4 %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, direct_output);
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] V4 %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, direct_output);
 
     if (p) {
         video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_v4_params);
         mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 2);
         mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
-        // printf("\r\n[INFO] cameraOpen done\n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] cameraOpen done\n");
     } else {
-        // printf("\r\n[ERROR] cameraOpen fail\n");
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] cameraOpen fail\n");
     }
 }
 
@@ -251,6 +261,53 @@ void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, in
     }
 }
 
+void cameraOpenWSViewer(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation, uint32_t h264_level, uint32_t h264_profile, uint32_t entropy_mode, uint32_t rc_minQp, uint32_t rc_maxQp)
+{
+    // assign value parsing from user level
+    video_params.stream_id = stream_id;
+    // check if there is video with snapshot
+    if (snapshot == 1) {
+        if (type == VIDEO_HEVC) {
+            type = VIDEO_HEVC_JPEG;
+        } else if (type == VIDEO_H264) {
+            type = VIDEO_H264_JPEG;
+        }
+    }
+
+    video_params.type = type;
+    video_params.resolution = res;
+    video_params.width = w;
+    video_params.height = h;
+    video_params.bps = bps;
+    video_params.fps = fps;
+    video_params.gop = gop;
+    video_params.rc_mode = rc_mode;
+    video_params.jpeg_qlevel = jpeg_qlevel;
+    video_params.rotation = video_rotation;
+
+    video_params.level = h264_level;
+    video_params.profile = h264_profile;
+    video_params.cavlc = entropy_mode;
+
+    if (p) {
+        // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
+        video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+        mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, fps * 3);
+        mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+        if ((type == VIDEO_JPEG) || (type == VIDEO_HEVC_JPEG) || (type == VIDEO_H264_JPEG)) {
+            mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 0);
+        }
+
+        encode_rc_params.minQp = rc_minQp;
+        encode_rc_params.maxQp = rc_maxQp;
+
+        mm_module_ctrl(p, CMD_VIDEO_SET_RCPARAM, (int)&encode_rc_params);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] cameraOpenWSViewer done\n");
+    } else {
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] cameraOpenWSViewer fail\n");
+    }
+}
+
 void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel)
 {
     video_params.type = type;
@@ -261,6 +318,34 @@ void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_stat
     if (p) {
         mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
         mm_module_ctrl(p, CMD_VIDEO_APPLY, channel);
+    }
+}
+
+void cameraUpdateParams(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation)
+{
+
+    if (p) {
+        video_params.stream_id = stream_id;
+        video_params.type = type;
+        video_params.resolution = res;
+        video_params.width = w;
+        video_params.height = h;
+        video_params.bps = bps;
+        video_params.fps = fps;
+        video_params.gop = gop;
+        video_params.rc_mode = rc_mode;
+        video_params.jpeg_qlevel = jpeg_qlevel;
+        video_params.rotation = video_rotation;
+
+        if (mm_module_ctrl(p, CMD_VIDEO_STREAM_STOP, video_params.stream_id) == -1) {
+            printf("[cameraUpdateParams] CTRL CMD_VIDEO_STREAM_STOP HAS FAILED\r\n");
+        }
+        if (mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params) == -1) {
+            printf("[cameraUpdateParams] CTRL CMD_VIDEO_SET_PARAMS HAS FAILED\r\n");
+        }
+        if (mm_module_ctrl(p, CMD_VIDEO_APPLY, video_params.stream_id) == -1) {
+            printf("[cameraUpdateParams] CTRL CMD_VIDEO_APPLY HAS FAILED\r\n");
+        }
     }
 }
 
@@ -280,6 +365,12 @@ void cameraSetQLen(mm_context_t *p, int length)
 void cameraSetQItem(mm_context_t *p)
 {
     mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+}
+
+// clear the queue item of video object
+void cameraClearQItem(mm_context_t *p)
+{
+    mm_module_ctrl(p, MM_CMD_CLEAR_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
 }
 
 void cameraStart(void *p, int channel)
@@ -312,11 +403,11 @@ mm_context_t *cameraDeinit(mm_context_t *p)
             while (xQueueReceive(video_data->port[i].output_ready, (void *)&tmp_item, 0) == pdTRUE) {
                 xQueueSend(video_data->port[i].output_recycle, (void *)&tmp_item, 0);
             }
-            // printf("\r\n[INFO] module close - move item to recycle\n");
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - move item to recycle\n");
             while (xQueueReceive(video_data->port[i].output_recycle, (void *)&tmp_item, 0) == pdTRUE) {
-                // printf("\r\n[INFO] module close - tmp_item %x\n",(unsigned int)tmp_item);
+                // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - tmp_item %x\n",(unsigned int)tmp_item);
                 if (tmp_item) {
-                    // printf("\r\n[INFO] module close - data_addr %x\n", (unsigned int)tmp_item->data_addr);
+                    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - data_addr %x\n", (unsigned int)tmp_item->data_addr);
                     if (i == 0) {
                         if (tmp_item->data_addr) {
                             video_del_item(video_data->priv, (void *)tmp_item->data_addr);
@@ -332,19 +423,19 @@ mm_context_t *cameraDeinit(mm_context_t *p)
                 }
                 xQueueSend(video_data->port[i].output_ready, (void *)&tmp_item, 0);
             }
-            // printf("\r\n[INFO] module close - clean resource in recycle\n");
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - clean resource in recycle\n");
             //  create port
             vQueueDelete(video_data->port[i].output_recycle);
             vQueueDelete(video_data->port[i].output_ready);
 
-            // printf("\r\n[INFO] module close - free port\n");
+            // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - free port\n");
         }
     }
     // cannot delete item after destroy
     video_destroy(video_data->priv);
     free(video_data);
-    // printf("\r\n[INFO] module close - free context\n");
-    // printf("\r\n[INFO] module close - free heap %d\n", xPortGetFreeHeapSize());
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - free context\n");
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] module close - free heap %d\n", xPortGetFreeHeapSize());
     video_deinit();
     return NULL;
 }
@@ -378,4 +469,9 @@ int cameraGetCtx(mm_context_t *p, int ch)
     }
 
     return arduino_is_output_ready;
+}
+
+int cameraGetStatus()
+{
+    return video_open_status();
 }

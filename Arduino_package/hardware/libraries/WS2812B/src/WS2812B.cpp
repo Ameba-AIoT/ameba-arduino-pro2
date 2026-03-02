@@ -25,7 +25,7 @@ void WS2812B::begin(void)
         // (PinName)g_APinDescription[SPI1_SS].pinname
 #endif
     } else {
-        printf("\r\n[ERROR] spi_init: wrong spi_idx, _input_pin \r\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] spi_init: wrong spi_idx, _input_pin \r\n");
         return;
     }
 
@@ -84,7 +84,7 @@ void WS2812B::setLEDCount(uint16_t num_leds)
     _led_array = (pixel *)realloc(_led_array, num_leds * sizeof(pixel));
     // Check if memory allocation is successful
     if (_led_array == NULL) {
-        printf("\r\n[ERROR] Insufficient memory available \r\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Insufficient memory available \r\n");
         _num_leds = 0;
     } else {
         memset(_led_array, 0, num_leds * sizeof(pixel));
@@ -96,7 +96,7 @@ void WS2812B::setPixelColor(uint16_t led_Number, uint8_t rColor, uint8_t gColor,
 {
     // Verify that memory was successfully allocated
     if (_led_array == NULL) {
-        printf("\r\n[ERROR] set LED count first \r\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] set LED count first \r\n");
         return;
     }
     if (led_Number < _num_leds) {
@@ -104,7 +104,7 @@ void WS2812B::setPixelColor(uint16_t led_Number, uint8_t rColor, uint8_t gColor,
         _led_array[led_Number].green = gColor;
         _led_array[led_Number].blue = bColor;
     } else {
-        printf("\r\n[ERROR] This LED does not exist \r\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] This LED does not exist \r\n");
     }
 }
 

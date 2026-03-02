@@ -69,10 +69,10 @@ void WiFiServer::begin()
     _sock_ser = serverdrv.startServer(_port, _portMode, _is_blocked);
     if (_sock_ser < 0) {
         _is_connected = false;
-        printf("\r\n[ERROR] Socket connect failed \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Socket connect failed \n");
     } else {
         _is_connected = true;
-        // printf("\r\n[INFO] Socket connect successfully \n");
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Socket connect successfully \n");
     }
 }
 
@@ -85,8 +85,9 @@ WiFiClient WiFiServer::available(uint8_t* status)
     return WiFiClient(client_fd);
 }
 
-#if 0
-int WiFiServer::available(int server_fd) {
+
+int WiFiServer::available(int server_fd)
+{
     int client_fd;
 
     client_fd = serverdrv.getAvailable(server_fd);
@@ -95,7 +96,8 @@ int WiFiServer::available(int server_fd) {
     return client_fd;
 }
 
-uint8_t WiFiServer::connected() {
+uint8_t WiFiServer::connected()
+{
     if ((_sock_ser < 0) || (_sock_ser == 0xFF)) {
         _is_connected = false;
         return 0;
@@ -109,7 +111,8 @@ uint8_t WiFiServer::connected() {
     }
 }
 
-int WiFiServer::recv(uint8_t* buf, size_t size) {
+int WiFiServer::recv(uint8_t* buf, size_t size)
+{
     uint16_t _size = size;
     int ret;
     int err;
@@ -124,7 +127,6 @@ int WiFiServer::recv(uint8_t* buf, size_t size) {
 
     return ret;
 }
-#endif
 
 size_t WiFiServer::write(uint8_t b)
 {
@@ -152,8 +154,8 @@ void WiFiServer::setNonBlockingMode()
     _is_blocked = NON_BLOCKING_MODE;
 }
 
-#if 0
-size_t WiFiServer::write(const uint8_t *buf, size_t size) {
+size_t WiFiServer::write(const uint8_t* buf, size_t size)
+{
     if (_sock_ser < 0) {
         setWriteError();
         return 0;
@@ -171,16 +173,19 @@ size_t WiFiServer::write(const uint8_t *buf, size_t size) {
     return size;
 }
 
-void WiFiServer::end() {
+void WiFiServer::end()
+{
     stop();
 }
 
-void WiFiServer::close() {
+void WiFiServer::close()
+{
     stop();
 }
 
 // extend API from RTK
-int WiFiServer::setTimeout(int timeout) {
+int WiFiServer::setTimeout(int timeout)
+{
     if (connected()) {
         recvTimeout = timeout;
         serverdrv.setSockRecvTimeout(_sock_ser, recvTimeout);
@@ -189,11 +194,12 @@ int WiFiServer::setTimeout(int timeout) {
 }
 
 // IPv6 related
-int WiFiServer::enableIPv6() {
+int WiFiServer::enableIPv6()
+{
     return serverdrv.enableIPv6();
 }
 
-int WiFiServer::getIPv6Status() {
+int WiFiServer::getIPv6Status()
+{
     return serverdrv.getIPv6Status();
 }
-#endif

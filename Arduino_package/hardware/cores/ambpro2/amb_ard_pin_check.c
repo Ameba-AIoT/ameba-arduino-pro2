@@ -1,4 +1,3 @@
-
 #ifdef AMEBA_ARDUINO_Pin_Mapping_Check
 
 #include "Arduino.h"
@@ -16,14 +15,14 @@ extern "C" {
 void amb_ard_pin_check_name(int pin)
 {
     while (pin > TOTAL_GPIO_PIN_NUM) {
-        printf("\r\n[ERROR] %s. The pin: %d beyond the pin mapping!!! \n", __FUNCTION__, pin);
-        printf("\r\n[ERROR] Please check if pin or board is correct \n\r");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. The pin: %d beyond the pin mapping!!! \n", __FUNCTION__, pin);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please check if pin or board is correct \n");
         delay(5000);
     }
 
     while (g_APinDescription[pin].pinname == 0xFFFFFFFF) {
-        printf("\r\n[ERROR] %s. The pin: %d is NC!!! \n", __FUNCTION__, pin);
-        printf("\r\n[ERROR] Please check if pin or board is correct \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. The pin: %d is NC!!! \n", __FUNCTION__, pin);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please check if pin or board is correct \n");
         delay(5000);
     }
 }
@@ -45,8 +44,8 @@ void amb_ard_pin_check_type(int pin, uint32_t pin_type)
             break;
         default:
             while (1) {
-                printf("\r\n[ERROR] %s. Incorrect pin: %d !!! \n", __FUNCTION__, pin);
-                printf("\r\n[ERROR] Please check if pin or board is correct \n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Incorrect pin: %d !!! \n", __FUNCTION__, pin);
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please check if pin or board is correct \n");
                 delay(5000);
             }
     }
@@ -97,8 +96,8 @@ void amb_ard_pin_check_fun(int pin, uint32_t pin_fun)
             break;
         default:
             while (1) {
-                printf("\r\n[ERROR] %s. Incorrect pin: %d !!! \n", __FUNCTION__, pin);
-                printf("\r\n[ERROR] Please check if pin or board is correct \n");
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Incorrect pin: %d !!! \n", __FUNCTION__, pin);
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Please check if pin or board is correct \n");
                 delay(5000);
             }
     }

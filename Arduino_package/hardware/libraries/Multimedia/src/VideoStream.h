@@ -182,6 +182,11 @@ public:
     void setJpegQuality(uint8_t quality);
     void setRotation(int angle);
 
+    void setH264EncParams(uint32_t level, uint32_t profile, uint32_t entropy_mode);
+    void setRCParams(uint32_t minQp, uint32_t maxQp);
+
+    void enableWebsocketViewer(void);
+
     uint16_t width(void);
     uint16_t height(void);
     uint16_t fps(void);
@@ -200,8 +205,13 @@ public:
     uint32_t _rc_mode;
     uint32_t _use_static_addr;
     uint32_t _meta_enable;
-
+    uint32_t _h264_level;
+    uint32_t _h264_profile;
+    uint32_t _h264_entropy_mode;
+    uint32_t _rc_minQp;
+    uint32_t _rc_maxQp;
 private:
+    uint32_t _wsviewer_en = 0;
     int8_t _preset = -1;
 };
 
@@ -223,6 +233,9 @@ public:
     void setFPS(int fps);
     void printInfo(void);
     int videostream_status(int ch);
+    void setQLen(int ch, int len);
+    int cameraOpenStatus(void);
+    void updateVideoParams(int ch);
 
 private:
     void setSnapshotCallback(int ch);
@@ -251,6 +264,13 @@ private:
     uint32_t rc_mode[4] = {0};
     uint32_t use_static_addr[4] = {0};
     uint32_t meta_enable[4] = {0};
+    uint32_t h264_level[4] = {0};
+    uint32_t h264_profile[4] = {0};
+    uint32_t h264_entropy_mode[4] = {0};
+    uint32_t rc_maxQp[4] = {0};
+    uint32_t rc_minQp[4] = {0};
+    int wsviewer_en[4] = {0};
+
     typedef struct roi_param_s {
         uint32_t xmin;
         uint32_t ymin;

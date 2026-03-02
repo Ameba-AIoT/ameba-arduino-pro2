@@ -1,6 +1,6 @@
 /*
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/HTTP/HTTP%20Post%20MP4.html
 */
 
 #include <Arduino.h>
@@ -70,11 +70,8 @@ void setup()
     base64_encode(encodedData, (char *)fileinput, fileSize);
 
     JsonDocument doc;
-
-    doc["base64_string"] = encodedData;
-
+    doc["audio_base64_string"] = encodedData;
     String jsonString;
-
     serializeJson(doc, jsonString);
 
     // Serial.println(jsonString);

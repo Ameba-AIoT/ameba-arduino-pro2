@@ -6,8 +6,8 @@ body:
     attributes:
       value: |
         * We welcome any feature requests! It is helpful if you can explain exactly why the feature would be useful.
-        * There are some outstanding feature requests in the [List of existing issues](https://github.com/ambiot/ambpro2_arduino/issues?q=is%3Aopen+is%3Aissue) and [List of closed issues](https://github.com/ambiot/ambpro2_arduino/issues?q=is%3Aissue+is%3Aclosed), feel free to add any comments.
-        * If you would like to contribute, please refer to the [Contributing guide](https://github.com/ambiot/ambpro2_arduino/blob/dev/CONTRIBUTING.md).
+        * There are some outstanding feature requests in the [List of existing issues](https://github.com/Ameba-AIoT/ameba-arduino-pro2/issues?q=is%3Aopen+is%3Aissue) and [List of closed issues](https://github.com/Ameba-AIoT/ameba-arduino-pro2/issues?q=is%3Aissue+is%3Aclosed), feel free to add any comments.
+        * If you would like to contribute, please refer to the [Contributing guide](https://github.com/Ameba-AIoT/ameba-arduino-pro2/blob/dev/CONTRIBUTING.md).
   - type: input
     id: fr-hw
     attributes:

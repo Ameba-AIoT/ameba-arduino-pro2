@@ -22,7 +22,7 @@ AAC::AAC(void)
         _p_mmf_context = mm_module_open(&aac_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] AAC init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] AAC init failed\n");
         return;
     }
 }
@@ -36,7 +36,7 @@ AAC::~AAC(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] AAC deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] AAC deinit failed\n");
     }
 }
 
@@ -90,10 +90,10 @@ void G711E::configAudio(AudioSetting& config)
     audio_params_t* _audioParams = &(config._audioParams);
 
     if (config._sampleRate > 16000) {
-        printf("\r\n[ERROR] Audio sample rate incompatible with G711 codec!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Audio sample rate incompatible with G711 codec!\n");
     }
     if (_audioParams->word_length != WL_16BIT) {
-        printf("\r\n[ERROR] Audio word length incompatible with G711 codec!\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Audio word length incompatible with G711 codec!\n");
     }
 }
 
@@ -118,7 +118,7 @@ void G711E::begin(void)
         _p_mmf_context = mm_module_open(&g711_module);
     }
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] G711E init failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] G711E init failed\n");
         return;
     }
     mm_module_ctrl(_p_mmf_context, CMD_G711_SET_PARAMS, (int)&_g711Params);
@@ -135,6 +135,6 @@ void G711E::end(void)
     if (mm_module_close(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] G711E deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] G711E deinit failed\n");
     }
 }

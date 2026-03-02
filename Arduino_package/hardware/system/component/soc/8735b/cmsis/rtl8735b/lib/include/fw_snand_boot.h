@@ -247,6 +247,15 @@ typedef struct snand_sect_cipher_info_s {
 	uint32_t resv;
 } snand_sect_cipher_info_t, *psnand_sect_cipher_info_t;
 
+typedef struct snand_boot_addr_info_s {
+	u32 cur_vblk;
+	u32 cur_page;
+	u32 cur_vpage;
+	s32 cur_blk;
+	u16 cur_col;
+	u16 resv;
+} snand_boot_addr_info_t, *psnand_boot_addr_info_t;
+
 STATIC_ASSERT(sizeof(hal_snand_boot_stubs_t) == (48 * 4), stub_sz_changed);
 
 extern const hal_snand_boot_stubs_t hal_snand_boot_stubs;

@@ -35,8 +35,10 @@
  */
 
 #define CONFIG_8735B
+#define CONFIG_8735B_PKG1
 #ifdef CONFIG_8735B_DRV_DIS
     #undef CONFIG_8735B
+    #undef CONFIG_8735B_PKG1
 #endif
 
 #define CONFIG_8735BTSSI

@@ -21,7 +21,7 @@ bool AmebaFatFS::begin(void)
 
     res = (FRESULT)fatfs_sd_init();
     if (res != 0) {
-        printf("\r\n[ERROR] fatfs_sd_init fail (%d)\n", res);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] fatfs_sd_init fail (%d)\n", res);
         fatfs_sd_close();
         return (res == FR_OK);
     }

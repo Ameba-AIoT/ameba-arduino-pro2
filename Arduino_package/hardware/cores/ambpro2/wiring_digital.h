@@ -70,6 +70,10 @@ extern uint32_t digitalSetIrqHandler(uint32_t ulPin, void (*handler)(uint32_t id
 extern uint32_t digitalClearIrqHandler(uint32_t ulPin);
 extern void pinRemoveMode(uint32_t ulPin);
 
+extern uint32_t digitalPinToInterrupt(uint32_t ulPin);
+extern void attachInterrupt(uint32_t ulPin, void (*handler)(void), uint32_t int_mode);
+extern void detachInterrupt(uint32_t ulPin);
+
 #ifdef __cplusplus
 }
 #endif

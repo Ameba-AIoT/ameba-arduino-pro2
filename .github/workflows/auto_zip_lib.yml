@@ -1,0 +1,107 @@
+name: Auto ZIP Arduino Libraries
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'Arduino_zip_libraries/**'
+
+jobs:
+  auto-zip:
+    runs-on: ubuntu-latest
+
+    steps:
+      # -------------------------------------------------
+      # Step 0: Checkout ONLY Arduino_zip_libraries folder
+      # -------------------------------------------------
+      - name: Checkout Arduino_zip_libraries
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            Arduino_zip_libraries
+          persist-credentials: true
+
+      # -------------------------------------------------
+      # Step 1: Block manual ZIP changes
+      # -------------------------------------------------
+      - name: Detect illegal ZIP changes
+        run: |
+          set -e
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_REF="HEAD~1"
+          fi
+
+          echo "Comparing against $BASE_REF"
+
+          CHANGED_FILES=$(git diff --name-only "$BASE_REF" HEAD || true)
+
+          ZIP_CHANGED=$(echo "$CHANGED_FILES" | grep -E '\.zip$' || true)
+          SRC_CHANGED=$(echo "$CHANGED_FILES" | grep -E '/src/' || true)
+
+          if [ -n "$ZIP_CHANGED" ] && [ -z "$SRC_CHANGED" ]; then
+            echo "❌ ZIP files were modified without src/ changes"
+            exit 1
+          fi
+
+          echo "✅ ZIP change check passed"
+
+      # -------------------------------------------------
+      # Step 2: Install zip utility
+      # -------------------------------------------------
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+
+      # -------------------------------------------------
+      # Step 3: Generate ZIP files (contents only)
+      # -------------------------------------------------
+      - name: Generate ZIP files from src
+        run: |
+          set -e
+
+          SRC_DIR="Arduino_zip_libraries/src"
+          ZIP_DIR="$(pwd)/Arduino_zip_libraries"
+
+          echo "Processing libraries in $SRC_DIR"
+
+          for lib in "$SRC_DIR"/*; do
+            if [ -d "$lib" ]; then
+              LIB_NAME=$(basename "$lib")
+              ZIP_PATH="$ZIP_DIR/${LIB_NAME}.zip"
+
+              echo "Zipping $LIB_NAME → $ZIP_PATH"
+
+              rm -f "$ZIP_PATH"
+
+              # Zip ONLY contents of the library folder
+              (
+                cd "$lib"
+                zip -r "$ZIP_PATH" .
+              )
+            fi
+          done
+
+      # -------------------------------------------------
+      # Step 4: Commit & push updated ZIPs
+      # -------------------------------------------------
+      - name: Commit and push ZIP updates
+        if: github.event_name != 'pull_request'
+        run: |
+          set -e
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet Arduino_zip_libraries/*.zip; then
+            echo "No ZIP changes to commit"
+          else
+            git add Arduino_zip_libraries/*.zip
+            git commit -m "Auto-update Arduino ZIP libraries"
+            git push
+          fi

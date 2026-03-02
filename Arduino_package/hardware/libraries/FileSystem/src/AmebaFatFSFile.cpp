@@ -4,6 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #include "helix_mp3_drv.h"
+#include "ota_drv.h"
 }
 #endif
 File::File(void)
@@ -29,14 +30,14 @@ bool File::open(const char *filename)
     _file = (FIL *)malloc(sizeof(FIL));
     if (_file == NULL) {
         res = FR_INT_ERR;
-        printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] open file (%s) malloc fail.\n", filename);
         return false;
     }
 
     res = f_open(_file, filename, FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
 
     if (res != FR_OK) {
-        printf("\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
         if (_file != NULL) {
             free(_file);
             _file = NULL;
@@ -55,12 +56,12 @@ bool File::open(const char *filename, int fileType)
     _file = (FIL *)malloc(sizeof(FIL));
     if (_file == NULL) {
         res = FR_INT_ERR;
-        printf("\r\n[ERROR] open file (%s) malloc fail.\n", filename);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] open file (%s) malloc fail.\n", filename);
         return false;
     }
 
     if (fileType == MP3) {
-        printf("\r\n[INFO] Play MP3 file (%s)...\n", filename);
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Play MP3 file (%s)...\n", filename);
         res = f_open(_file, filename, FA_OPEN_EXISTING | FA_READ);
     } else {
         if (_file != NULL) {
@@ -71,7 +72,7 @@ bool File::open(const char *filename, int fileType)
     }
 
     if (res != FR_OK) {
-        printf("\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] open file (%s) fail. (res=%d)\n", filename, res);
         if (_file != NULL) {
             free(_file);
             _file = NULL;
@@ -106,7 +107,7 @@ size_t File::write(const uint8_t *buf, size_t size)
     if (_file != NULL) {
         res = f_write(_file, (const void *)buf, size, &writesize);
         if (res != FR_OK) {
-            printf("\r\n[ERROR] File write.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] File write.\n");
         }
     }
 
@@ -135,7 +136,7 @@ int File::read(void)
     if (_file != NULL) {
         res = f_read(_file, &c, 1, &readsize);
         if (res != FR_OK) {
-            printf("\r\n[ERROR] File read.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] File read.\n");
         }
     }
     return c;
@@ -149,7 +150,7 @@ int File::read(void *buf, size_t nbyte)
     if (_file != NULL) {
         res = f_read(_file, buf, nbyte, &readsize);
         if (res != FR_OK) {
-            printf("\r\n[ERROR] File read.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] File read.\n");
         }
     }
     return readsize;
@@ -248,7 +249,7 @@ void File::convertMp3ToArray(void)
         FRESULT res = f_read(_file, id3_header, 10, &bytesRead);
 
         if (res != FR_OK || bytesRead != 10) {
-            printf("\r\n[ERROR] Failed to read ID3v2 header. (res=%d)\n", res);
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Failed to read ID3v2 header. (res=%d)\n", res);
             return;
         }
 
@@ -267,7 +268,7 @@ void File::convertMp3ToArray(void)
         // Allocate memory for MP3 data
         mp3_data = (unsigned char *)malloc(mp3_size);
         if (mp3_data == NULL) {
-            printf("\r\n[ERROR] Memory allocation failed for MP3 data.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Memory allocation failed for MP3 data.\n");
             return;
         }
 
@@ -275,7 +276,7 @@ void File::convertMp3ToArray(void)
         res = f_read(_file, mp3_data, mp3_size, &bytesRead);
 
         if (res != FR_OK || bytesRead != mp3_size) {
-            printf("\r\n[ERROR] Failed to read MP3 data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Failed to read MP3 data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
             free(mp3_data);
             return;
         }
@@ -283,7 +284,7 @@ void File::convertMp3ToArray(void)
         free(mp3_data);
         mp3_data = NULL;
     } else {
-        printf("\r\n[ERROR] No file opened to convert.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] No file opened to convert.\n");
     }
 }
 
@@ -309,6 +310,17 @@ void File::playMp3(void)
     return;
 }
 
+void File::sdstartota(const char *filepath)
+{
+    if (!filepath || filepath[0] == '\0') {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] No OTA file path provided.\n");
+        return;
+    }
+
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Starting OTA using file: %s\n", filepath);
+    ota_sd(filepath);
+}
+
 bool File::readFile(unsigned char *&file_data, uint32_t &file_size)
 {
     file_data = NULL;
@@ -321,14 +333,14 @@ bool File::readFile(unsigned char *&file_data, uint32_t &file_size)
 
         file_data = (unsigned char *)malloc(file_size);
         if (file_data == NULL) {
-            printf("\r\n[ERROR] Memory allocation failed for file data.\n");
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Memory allocation failed for file data.\n");
             return false;
         }
 
         res = f_read(_file, file_data, file_size, &bytesRead);
 
         if (res != FR_OK || bytesRead != file_size) {
-            printf("\r\n[ERROR] Failed to read file data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Failed to read file data. (res=%d, bytesRead=%lu)\n", res, bytesRead);
             free(file_data);
             file_data = NULL;
             file_size = 0;
@@ -336,7 +348,7 @@ bool File::readFile(unsigned char *&file_data, uint32_t &file_size)
         }
         return true;
     } else {
-        printf("\r\n[ERROR] No file opened to convert.\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] No file opened to convert.\n");
         return false;
     }
 }

@@ -97,6 +97,7 @@ void loop()
 
 void printInfo(void)
 {
+    Serial.println(" ");
     Serial.println("------------------------------");
     Serial.println("- Summary of Streaming -");
     Serial.println("------------------------------");
@@ -105,10 +106,7 @@ void printInfo(void)
     IPAddress ip = WiFi.localIP();
 
     Serial.println("- RTSP -");
-    Serial.print("rtsp://");
-    Serial.print(ip);
-    Serial.print(":");
-    rtsp.printInfo();
+    rtsp.printInfo(ip.get_address());
 
     Serial.println("- Audio -");
     audio.printInfo();

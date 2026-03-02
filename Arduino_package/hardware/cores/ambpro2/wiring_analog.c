@@ -26,7 +26,6 @@ extern "C" {
 #include "analogout_api.h"
 #include "pwmout_api.h"
 #include "gpio_ex_api.h"
-
 /* ADC */
 // analogin_t   adc0;
 // analogin_t   adc1;
@@ -59,7 +58,7 @@ static int _calibrate_en = 0;
 void analogReadResolution(int res)
 {
     if (res > 12) {
-        printf("\r\n[INFO] Analog read has a maximum resolution of 12 bits. \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[INFO] Analog read has a maximum resolution of 12 bits. \n");
         _readResolution = 12;
     } else {
         _readResolution = res;
@@ -178,7 +177,7 @@ uint32_t analogRead(uint32_t ulPin)
                 analogin_init((analogin_t *)pAdc_t, PA_3);
                 break;
             default:
-                printf("\r\n[ERROR] %s : ulPin %d wrong\n", __FUNCTION__, ((int)ulPin));
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s : ulPin %d wrong\n", __FUNCTION__, ((int)ulPin));
                 return 0;
         }
         g_APinDescription[ulPin].ulPinMode |= ADC_MODE_ENABLED;

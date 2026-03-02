@@ -30,6 +30,8 @@
 #ifndef _HAL_VIDEO_COMMON_H_
 #define _HAL_VIDEO_COMMON_H_
 
+#include "hal_isp.h"
+
 #define MAX_BPS_ADJUST			20
 #define MAX_SCENE_CHANGE		20
 
@@ -560,20 +562,25 @@ typedef struct {
 	u32 *axi_buf_cfg;
 
 	u32 init_raw;
-	u32 verify_addr0;
-	u32 verify_addr1;
+	u32 verify_number;
+	u32 *verify_addr;
 	u32 verify_ylen;
 	u32 verify_uvlen;
-	u32 verify_nlsc_rcenter_x;
-	u32 verify_nlsc_rcenter_y;
-	u32 verify_nlsc_gcenter_x;
-	u32 verify_nlsc_gcenter_y;
-	u32 verify_nlsc_bcenter_x;
-	u32 verify_nlsc_bcenter_y;
+	verify_nlsc_center_s *verify_nlsc_center;
 
 	u8 *manual_zoom_filter_coef;
 
 	u32 isp_raw_mode_tnr_dis;
+
+	u32 init_dyn_iq_mode;
+
+	u32 i2c_clock;
+
+	u32 init_dir_wdr_level;
+
+	u32 init_max_dyn_region_en;
+
+	u32 zoom_1x1_up_en;
 
 	u32 rsvd[26];   //When add new element, please reduce same rsvd size
 

@@ -13,7 +13,7 @@ BLERemoteDescriptor* BLERemoteCharacteristic::getDescriptor(const char* uuid)
 BLERemoteDescriptor* BLERemoteCharacteristic::getDescriptor(BLEUUID uuid)
 {
     if (_descriptorCount == 0) {
-        printf("\r\n[ERROR] Characteristic %s: No descriptors found \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: No descriptors found \n", _uuid.str());
         return nullptr;
     }
     uint8_t i;
@@ -33,11 +33,11 @@ BLEUUID BLERemoteCharacteristic::getUUID()
 void BLERemoteCharacteristic::setBufferLen(uint16_t max_len)
 {
     if (max_len > CHAR_VALUE_MAX_LEN) {
-        printf("\r\n[ERROR] Characteristic %s: requested buffer size too large, maximum of %d \n", _uuid.str(), CHAR_VALUE_MAX_LEN);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: requested buffer size too large, maximum of %d \n", _uuid.str(), CHAR_VALUE_MAX_LEN);
     } else {
         _data_buf = (uint8_t*)realloc(_data_buf, max_len * sizeof(uint8_t));
         if (_data_buf == NULL) {
-            printf("\r\n[ERROR] Characteristic %s: Not enough memory to set buffer length \n", _uuid.str());
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Not enough memory to set buffer length \n", _uuid.str());
             _data_buf_len = 0;
         } else {
             _data_buf_len = max_len;
@@ -142,23 +142,23 @@ bool BLERemoteCharacteristic::writeData32(int num)
 bool BLERemoteCharacteristic::setData(uint8_t* data, uint16_t datalen)
 {
     if (!canWrite()) {
-        printf("\r\n[ERROR] Characteristic %s: write not permitted \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: write not permitted \n", _uuid.str());
         return false;
     }
     // Check if device is still connected
     if (!_pClient->connected()) {
-        printf("\r\n[ERROR] Characteristic %s: client not connected \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: client not connected \n", _uuid.str());
         return false;
     }
     // Attempt to write
     if (client_attr_write(_pClient->getConnId(), _pClient->getClientId(), GATT_WRITE_TYPE_REQ, _valueHandle, datalen, data) == GAP_CAUSE_SUCCESS) {
         // Check for write callback semaphore indicating data write successful
         if (xSemaphoreTake(_writeSemaphore, CB_WAIT_TIMEOUT / portTICK_PERIOD_MS) != pdTRUE) {
-            printf("\r\n[ERROR] Characteristic %s: set data timeout \n", _uuid.str());
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: set data timeout \n", _uuid.str());
             return false;
         }
     } else {
-        printf("\r\n[ERROR] Characteristic %s: client_attr_write failed \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: client_attr_write failed \n", _uuid.str());
         return false;
     }
     return true;
@@ -167,19 +167,19 @@ bool BLERemoteCharacteristic::setData(uint8_t* data, uint16_t datalen)
 uint16_t BLERemoteCharacteristic::getData(uint8_t* data, uint16_t datalen)
 {
     if (!canRead()) {
-        printf("\r\n[ERROR] Characteristic %s: read not permitted \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: read not permitted \n", _uuid.str());
         return 0;
     }
     // Check if device is still connected
     if (!_pClient->connected()) {
-        printf("\r\n[ERROR] Characteristic %s: client not connected \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: client not connected \n", _uuid.str());
         return 0;
     }
     // Attempt to read
     if (client_attr_read(_pClient->getConnId(), _pClient->getClientId(), _valueHandle) == GAP_CAUSE_SUCCESS) {
         // Check for read callback semaphore indicating new data received
         if (xSemaphoreTake(_readSemaphore, CB_WAIT_TIMEOUT / portTICK_PERIOD_MS) != pdTRUE) {
-            printf("\r\n[ERROR] Characteristic %s: get data timeout \n", _uuid.str());
+            amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: get data timeout \n", _uuid.str());
         } else {
             // Copy new data, up to the smaller data buffer size
             if (datalen > _data_buf_len) {
@@ -191,7 +191,7 @@ uint16_t BLERemoteCharacteristic::getData(uint8_t* data, uint16_t datalen)
             }
         }
     } else {
-        printf("\r\n[ERROR] Characteristic %s: client_attr_read failed \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: client_attr_read failed \n", _uuid.str());
     }
     return 0;
 }
@@ -200,7 +200,7 @@ void BLERemoteCharacteristic::enableNotifyIndicate(bool notify)
 {
     BLERemoteDescriptor* pdesc = getDescriptor("2902");
     if (pdesc == nullptr) {
-        printf("\r\n[ERROR] Characteristic %s: CCCD descriptor not found \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: CCCD descriptor not found \n", _uuid.str());
         return;
     }
     uint8_t val[2] = {0x01, 0x00};
@@ -214,7 +214,7 @@ void BLERemoteCharacteristic::disableNotifyIndicate()
 {
     BLERemoteDescriptor* pdesc = getDescriptor("2902");
     if (pdesc == nullptr) {
-        printf("\r\n[ERROR] Characteristic %s: CCCD descriptor not found \n", _uuid.str());
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: CCCD descriptor not found \n", _uuid.str());
         return;
     }
     uint8_t val[2] = {0x00, 0x00};
@@ -257,7 +257,7 @@ bool BLERemoteCharacteristic::addDescriptor(BLERemoteDescriptor* newDesc)
         _descriptorCount += 1;
         return true;
     }
-    printf("\r\n[ERROR] Characteristic %s: Maximum number of descriptors per characteristic reached \n", _uuid.str());
+    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Maximum number of descriptors per characteristic reached \n", _uuid.str());
     return false;
 }
 
@@ -266,7 +266,7 @@ void BLERemoteCharacteristic::clientReadResultCallbackDefault(uint8_t conn_id, u
     if (handle == _valueHandle) {
         if (cause == GAP_SUCCESS) {
             if (value_size > _data_buf_len) {
-                printf("\r\n[ERROR] Characteristic %s: Buffer size insufficient for data size of %d bytes \n", _uuid.str(), _data_buf_len);
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Buffer size insufficient for data size of %d bytes \n", _uuid.str(), _data_buf_len);
             } else {
                 memset(_data_buf, 0, _data_buf_len);
                 memcpy(_data_buf, p_value, value_size);
@@ -304,10 +304,10 @@ T_APP_RESULT BLERemoteCharacteristic::clientNotifyIndicateCallbackDefault(uint8_
 {
     T_APP_RESULT app_result = APP_RESULT_APP_ERR;
     if (handle != _valueHandle) {
-        printf("\r\n[ERROR] Characteristic %s: Handle %d mismatch in notify/indicate callback \n", _uuid.str(), handle);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Handle %d mismatch in notify/indicate callback \n", _uuid.str(), handle);
         return app_result;
     } else if (value_size > _data_buf_len) {
-        printf("\r\n[ERROR] Characteristic %s: Buffer size insufficient for data size of %d bytes \n", _uuid.str(), _data_buf_len);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Characteristic %s: Buffer size insufficient for data size of %d bytes \n", _uuid.str(), _data_buf_len);
         return app_result;
     } else {
         /*/

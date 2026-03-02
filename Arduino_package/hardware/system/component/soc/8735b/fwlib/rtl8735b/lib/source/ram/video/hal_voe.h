@@ -56,6 +56,7 @@ extern "C" {
 
 #define TM_SRAM_S       VOE_DRAM_S + REMAP_S7_DTCM
 #define TM_DRAM_S		VOE_DDR_S + VOE_CODE_SHIFT
+#define VOE_ERR_OFFSET	0x3e0
 
 #define VOE_STATUS_DIS  0
 #define VOE_STATUS_EN   1
@@ -97,6 +98,7 @@ typedef struct hal_voe_adapter_s {
 
 	volatile u32 voe_status;		/*! 0:disable, 1:enable 2: OK 3:NOK */
 	u32 timeout;
+	volatile u32 voe_err_code;
 } hal_voe_adapter_t, *phal_voe_adapter_t;
 
 
@@ -154,7 +156,9 @@ void hal_voe_cpy(void *dest, void *src, size_t len);
 void hal_voe_show_fcs_result(void);
 int hal_voe_load_cali_iq(voe_cpy_t isp_cpy, int *iq_cali_addr, int *voe_ddr_addr, u32 cali_iq_size);
 
-
+#ifdef ARDUINO_SDK
+void set_hal_voe_log(int hal_voe_log_enable);
+#endif
 /** @} */ /* End of group hs_hal_voe */
 
 #ifdef __cplusplus

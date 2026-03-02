@@ -725,6 +725,8 @@ typedef enum {
 	WIFI_EVENT_MISMATCH_CHANNEL,
 	WIFI_EVENT_DEAUTH_RECVD,
 	WIFI_EVENT_DISASSOC_RECVD,
+	WIFI_EVENT_DETAIL_JOIN_STATUS,
+        WIFI_EVENT_BTM_REQ_RECVD,
 	WIFI_EVENT_MAX,
 } rtw_event_indicate_t;
 
@@ -969,8 +971,42 @@ typedef enum  {
 	WOWLAN_NORMAL_BCNV1 = 0, /*0: normal fw with bcn tracking v1*/
 	WOWLAN_TCPPTL_BCNV2, /*1: tcp protocol keep alive with bcn tracking v2*/
 	WOWLAN_MQTT_BCNV2, /*2: mqtt keep alive with bcn tracking v2*/
+	WOWLAN_PNO,	/*only pno function*/
 	WOWLAN_FW_VERMAX
 } rtw_wowlan_fw_version;
+
+/**
+  * @brief The enumeration lists the deatil join status.
+  */
+typedef enum {
+	RTW_DETAIL_JOINSTATUS_UNKNOWN = 0,    /**< unknown */
+	RTW_DETAIL_JOINSTATUS_STARTING,          /**< starting phase */
+	RTW_DETAIL_JOINSTATUS_SCANNING,          /**< scanning phase */
+	RTW_DETAIL_JOINSTATUS_SCANN_DONE,
+	RTW_DETAIL_JOINSTATUS_AUTHEN_START,  /**< authenticating phase */                               //4
+	RTW_DETAIL_JOINSTATUS_AUTHEN_SAE_START,  /**< authenticating phase */                           //5
+	RTW_DETAIL_JOINSTATUS_AUTHEN_SAE_COMMIT_SENT,  /**< authenticating phase */                     //6
+	RTW_DETAIL_JOINSTATUS_AUTHEN_SAE_COMMIT_RCVD,  /**< authenticating phase */                     //7
+	RTW_DETAIL_JOINSTATUS_AUTHEN_SAE_CONFIRM_SENT,  /**< authenticating phase */                    //8
+	RTW_DETAIL_JOINSTATUS_AUTHEN_SAE_CONFIRM_RCVD,  /**< authenticating phase */                    //9
+	RTW_DETAIL_JOINSTATUS_AUTHENTICATED,   /**< authenticated phase */                              //10
+	RTW_DETAIL_JOINSTATUS_ASSOCIATING,       /**< associating phase */                              //11
+	RTW_DETAIL_JOINSTATUS_ASSOCIATED,         /**< associated phase */                              //12
+	RTW_DETAIL_JOINSTATUS_4WAY_HANDSHAK_START, /**< 4 way handshaking phase */                      //13
+	RTW_DETAIL_JOINSTATUS_4WAY_HANDSHAK_MSG1_RCVD, /**< 4 way handshaking phase */                  //14
+	RTW_DETAIL_JOINSTATUS_4WAY_HANDSHAK_MSG2_SENT, /**< 4 way handshaking phase */                  //15
+	RTW_DETAIL_JOINSTATUS_4WAY_HANDSHAK_MSG3_RCVD, /**< 4 way handshaking phase */                  //16
+	RTW_DETAIL_JOINSTATUS_4WAY_HANDSHAK_MSG4_SENT, /**< 4 way handshaking phase */                  //17
+	RTW_DETAIL_JOINSTATUS_4WAY_HANDSHAKE_DONE, /**< 4 way handshake done phase */                   //18
+	RTW_DETAIL_JOINSTATUS_SUCCESS,                        /**< join success  */                     //19
+	RTW_DETAIL_JOINSTATUS_FAIL,                               /**< join fail  */                    //20
+	RTW_DETAIL_JOINSTATUS_DISCONNECT,                 /**< disconnect */                            //21
+	RTW_DETAIL_JOINSTATUS_REJECT_CONNECTION_SECURITY,         /**< RTW_DETAIL_JOINSTATUS_REJECT_CONNECTION_SECURITY */
+	RTW_DETAIL_JOINSTATUS_SCANNING_EXTERNAL,          /**< external scanning phase */
+	RTW_DETAIL_JOINSTATUS_REJECT_UNSUPPORT_SECURITY,         /**< RTW_DETAIL_JOINSTATUS_REJECT_UNSUPPORT_SECURITY */
+	RTW_DETAIL_JOINSTATUS_TIMEOUT,         /**< RTW_DETAIL_JOINSTATUS_TIMEOUT */
+	RTW_DETAIL_JOINSTATUS_STATUS_CODE_FAIL,         /**< RTW_DETAIL_JOINSTATUS_STATUS_CODE_FAIL */
+} rtw_detail_join_status_t;
 
 /**
   * @}

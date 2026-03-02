@@ -53,6 +53,7 @@ jobs:
           - Arduino_package/hardware/libraries/Watchdog
           - Arduino_package/hardware/libraries/WiFi
           - Arduino_package/hardware/libraries/Wire
+          - Arduino_package/hardware/libraries/Multithreading
           # - Arduino_package/hardware/libraries/SPI/examples/Camera_2_Lcd
 
     strategy:
@@ -63,11 +64,18 @@ jobs:
 #        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - name: Exit workflow (other branches)
+      - name: Skip workflow (other branches)
+        if: >
+          !startsWith(github.ref, 'refs/heads/dev') &&
+          !startsWith(github.ref, 'refs/heads/main') &&
+          !startsWith(github.ref, 'refs/tags/')
         run: |
-          echo "Exit with $GITHUB_REF"
-          exit 1
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' && github.event.pull_request.base.ref != 'dev' && github.event.pull_request.base.ref != 'main'}}
+          echo "Skipping workflow for $GITHUB_REF"
+          exit 0
+#        run: |
+#          echo "Exit with $GITHUB_REF"
+#          exit 1
+#        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev' && github.event.pull_request.base.ref != 'dev' && github.event.pull_request.base.ref != 'main'}}
 
       - name: Checkout repository
         uses: actions/checkout@v4

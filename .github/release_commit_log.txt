@@ -1,8 +1,10 @@
 Feature:
-- Add SparkFun VL53L5CX examples
+- Add Proof of Concept Examples
 
 API Updates:
-- Add SparkFun VL53L5CX ibraries
-- Minor modification for Wire.cpp
+- Add API to Update Video Stream Params and Proof of Concept
 
 Misc:
+- Update AmebaEink readme
+- Add src for zip libs
+- Add workflow of Auto-update Arduino ZIP libraries

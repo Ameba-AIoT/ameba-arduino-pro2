@@ -314,6 +314,8 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_BCN_TRACK_INCREMENTSTEP(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 #define SET_H2CCMD_BCN_TRACK_DURATION(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 #define SET_H2CCMD_NULL_RETRY_LIMIT(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+5, 0, 8, __Value)
+#define SET_H2CCMD_BCN_TRACK_NULL_NUM(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+6, 0, 4, __Value)
+#define SET_H2CCMD_BCN_TRACK_LOOP_NUM(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd+6, 4, 4, __Value)
 
 /*_PNO_PARAM_SET_CMD_0x97*/
 #define SET_H2CCMD_PNO_SCAN_SET_ENABLE(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
@@ -354,6 +356,7 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 
 /* _DHCP_RENEW_CMD_0x91 */
 #define SET_H2CCMD_DHCP_RENEW_PARM_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
+#define SET_H2CCMD_DHCP_RENEW_PARM_POWER_BIT(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 2, 1, __Value)
 #define SET_H2CCMD_DHCP_RENEW_LIMIT_WAKE_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 1, 1, __Value)
 #define	SET_H2CCMD_DHCP_RENEW_PARM_LOC(__pH2CCmd, __Value)                      SET_BITS_TO_LE_1BYTE(__pH2CCmd+1, 0, 8, __Value)
 #define	SET_H2CCMD_DHCP_RENEW_PARM_T1_H(__pH2CCmd, __Value)              SET_BITS_TO_LE_1BYTE(__pH2CCmd+2, 0, 8, __Value)

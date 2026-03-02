@@ -51,10 +51,10 @@ void FlashMemoryClass::end()
 void FlashMemoryClass::read(unsigned int offset)
 {
     if ((_flash_base_address + offset) < FLASH_MEMORY_APP_BASE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     } else if ((_flash_base_address + offset + buf_size) > FLASH_MEMORY_SIZE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     }
 
@@ -64,10 +64,10 @@ void FlashMemoryClass::read(unsigned int offset)
 void FlashMemoryClass::write(unsigned int offset)
 {
     if ((_flash_base_address + offset) < FLASH_MEMORY_APP_BASE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     } else if ((_flash_base_address + offset + buf_size) > FLASH_MEMORY_SIZE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     }
 
@@ -81,10 +81,10 @@ void FlashMemoryClass::write(unsigned int offset)
 unsigned int FlashMemoryClass::readWord(unsigned int offset)
 {
     if ((_flash_base_address + offset) < FLASH_MEMORY_APP_BASE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return 0;
     } else if ((_flash_base_address + offset) > (FLASH_MEMORY_SIZE - 4)) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return 0;
     }
 
@@ -98,10 +98,10 @@ unsigned int FlashMemoryClass::readWord(unsigned int offset)
 void FlashMemoryClass::writeWord(unsigned int offset, unsigned int data)
 {
     if ((_flash_base_address + offset) < FLASH_MEMORY_APP_BASE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     } else if ((_flash_base_address + offset) > (FLASH_MEMORY_SIZE - 4)) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     }
 
@@ -128,7 +128,7 @@ void FlashMemoryClass::writeWord(unsigned int offset, unsigned int data)
 void FlashMemoryClass::eraseSector(unsigned int sector_offset)
 {
     if ((sector_offset % FLASH_SECTOR_SIZE) != 0) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     }
 
@@ -138,10 +138,10 @@ void FlashMemoryClass::eraseSector(unsigned int sector_offset)
 void FlashMemoryClass::eraseWord(unsigned int offset)
 {
     if ((_flash_base_address + offset) < FLASH_MEMORY_APP_BASE) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     } else if ((_flash_base_address + offset) > (FLASH_MEMORY_SIZE - 4)) {
-        printf("\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. Invalid offset \n", __FUNCTION__);
         return;
     }
 

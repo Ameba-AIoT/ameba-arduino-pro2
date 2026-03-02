@@ -24,7 +24,7 @@ Http_fs::~Http_fs(void)
     if (http_fs_Deinit(_p_mmf_context) == NULL) {
         _p_mmf_context = NULL;
     } else {
-        printf("\r\n[ERROR] Http_fs deinit failed\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Http_fs deinit failed\n");
     }
 }
 
@@ -33,7 +33,7 @@ void Http_fs::begin(void)
     _p_mmf_context = http_fs_Init();
 
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need Http_fs init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need Http_fs init first\n");
         return;
     }
     http_fs_SetParams(_p_mmf_context, &http_fsParams);
@@ -64,7 +64,7 @@ void Http_fs::mp4DirectoryInit(void)
 void Http_fs::end(void)
 {
     if (_p_mmf_context == NULL) {
-        printf("\r\n[ERROR] Need Http_fs init first\n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Need Http_fs init first\n");
     }
     http_fs_Deinit(_p_mmf_context);
 }
@@ -115,7 +115,7 @@ void Http_fs::del_old_file(void)
 
         if (strlen(old_filename)) {
             sprintf(old_filepath, "%s/%s", sd_dirname, old_filename);
-            printf("[INFO] del %s\n\r", old_filepath);
+            amb_ard_printf(ARD_LOG_INF, "[INFO] del %s\n\r", old_filepath);
             f_unlink(old_filepath);
         }
     }

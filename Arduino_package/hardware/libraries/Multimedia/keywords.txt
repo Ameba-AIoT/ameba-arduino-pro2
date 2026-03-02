@@ -24,6 +24,7 @@ MotionDetection	KEYWORD1
 MotionDetectionPostProcess	KEYWORD1
 MotionDetectionRegion	KEYWORD1
 Demuxer	KEYWORD1
+Infrared KEYWORD1
 
 #######################################
 # AudioDecoder.h Methods (KEYWORD2) & Constants (LITERAL1)
@@ -301,3 +302,41 @@ begin	KEYWORD2
 pause	KEYWORD2
 resume	KEYWORD2
 end	KEYWORD2
+
+#######################################
+# Infrared.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+cutInit     KEYWORD2
+setCut      KEYWORD2
+getCut      KEYWORD2
+ledInit     KEYWORD2
+setLedBrightness    KEYWORD2
+getLedBrightness    KEYWORD2
+
+
+#######################################
+# AmbientLightSensor.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+autopwm_set_param     KEYWORD2
+autopwm_get_param      KEYWORD2
+autopwm_flow      KEYWORD2
+sensor_service_osd      KEYWORD2
+sensor_thread_hw      KEYWORD2
+als_set_param_sw    	KEYWORD2
+als_get_param	  	KEYWORD2
+sensor_thread_sw	  	KEYWORD2
+init_sensor_service_ALS     	KEYWORD2
+setColorThreshold			KEYWORD2
+setGrayThreshold			KEYWORD2
+debugEnableOSD			KEYWORD2
+setDebugLog			KEYWORD2
+enableAutoPWM			KEYWORD2
+
+#######################################
+# WebSocketViewer.h Methods (KEYWORD2) & Constants (LITERAL1)
+#######################################
+loadWebResourcesFromSD	KEYWORD2
+loadWebResources	KEYWORD2
+init	KEYWORD2
+begin	KEYWORD2
+deinit	KEYWORD2

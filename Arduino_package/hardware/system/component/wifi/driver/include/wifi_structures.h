@@ -101,6 +101,8 @@ typedef void (*ap_channel_switch_callback_t)(unsigned char channel, rtw_channel_
 typedef void (*rtw_joinstatus_callback_t)(\
 		rtw_join_status_t join_status);
 
+typedef void (*rtw_detail_joinstatus_callback_t)(\
+		rtw_detail_join_status_t detail_join_status);
 /**
   * @brief  The structure is used to describe the connection setting about SSID,
   *			security type and password,etc., used when connecting to an AP.
@@ -124,6 +126,7 @@ typedef struct {
 	unsigned char				roam_en;
 	unsigned char				band;			//used for wifi connection to fixed band: 0: 2.4G/5G, 1: 2.4G only, 2: 5G only
 	rtw_joinstatus_callback_t	joinstatus_user_callback;   /**< user callback for processing joinstatus, please set to NULL if not use it */
+	rtw_detail_joinstatus_callback_t	detail_joinstatus_user_callback;   /**< user detail callback for processing joinstatus, please set to NULL if not use it */
 } rtw_network_info_t;
 
 #if defined(__IAR_SYSTEMS_ICC__) || defined(__GNUC__) || defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
@@ -146,6 +149,7 @@ typedef struct {
 	rtw_wps_type_t          wps_type;         /**< WPS type                                                                  */
 	unsigned int                      channel;          /**< Radio channel that the AP beacon was received on                          */
 	rtw_802_11_band_t       band;             /**< Radio band                                                                */
+	unsigned char country_code[2]; /**< country_code in Probe Response/Beacon */
 #ifdef CONFIG_P2P_NEW
 	unsigned char			p2p_role;
 #endif
@@ -541,6 +545,14 @@ struct  wifi_user_conf {
 	unsigned char chn5G_num;
 	unsigned char regulation2_4G;
 	unsigned char regulation5G;
+        
+	/*
+        The wifi_11v_enabled is used to configure the 11v settings, each bit controls one aspect.
+	bit 0: (0: disable 11v feature, 1:  enable 11v feature)
+	bit 1: (0: disable wifi_connect from the upper layer and enable roaming from the driver, 1:  enable wifi_connect from the upper layer and disable roaming from driver)
+  	*/      
+	unsigned char wifi_11v_enabled;
+	unsigned char wifi_11r_enabled;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 

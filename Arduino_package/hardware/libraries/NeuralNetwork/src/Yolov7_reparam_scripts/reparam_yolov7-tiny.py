@@ -19,7 +19,7 @@ device = select_device('0', batch_size=1)
 # model trained by cfg/training/*.yaml
 ckpt = torch.load(args.weights, map_location=device)
 # reparameterized model in cfg/deploy/*.yaml
-model = Model(args.custom_yaml, ch=3, nc=2).to(device)
+model = Model(args.custom_yaml, ch=3, nc=ckpt['model'].nc).to(device)
 
 with open(args.custom_yaml) as f:
     yml = yaml.load(f, Loader=yaml.SafeLoader)
