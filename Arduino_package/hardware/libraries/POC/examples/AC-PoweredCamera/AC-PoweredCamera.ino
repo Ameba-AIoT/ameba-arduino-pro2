@@ -17,6 +17,9 @@
 #define NNWIDTH  576
 #define NNHEIGHT 320
 
+// Delay in ~0.1 second to end recording after no activity is detected. (10 = ~1s, 100 = ~10s)
+#define END_RECORDING_DELAY 100
+
 VideoSetting config(VIDEO_FHD, 30, VIDEO_H264, 0);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
 RTSP rtsp;
@@ -129,14 +132,13 @@ void setup()
 void loop()
 {
     if (ObjDet.getResultCount() > 0 || MD.getResultCount() > 0) {
+        // Start/Keep recording on object or motion detected
         if (mp4.getRecordingState() == 0) {
             // Get current time
             time(&now);
-            // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+            // Format time, "HOUR MINUTE SECONDS dd-mm-YYYY"
             ts = *localtime(&now);
-            strftime(buf, sizeof(buf), "%H:%M %d-%m-%Y", &ts);
-            printf("%s\n", buf);
-            strftime(buf, sizeof(buf), "%H %M %d-%m-%Y", &ts);
+            strftime(buf, sizeof(buf), "%H %M %S %d-%m-%Y", &ts);
             delay(100);
             mp4.setRecordingFileName(buf);
             mp4.begin();
@@ -144,14 +146,8 @@ void loop()
         noActivityCount = 0;
     } else {
         noActivityCount++;
-        if (mp4.getRecordingState() > 0 && noActivityCount >= 100) {
+        if (mp4.getRecordingState() > 0 && noActivityCount >= END_RECORDING_DELAY) {
             mp4.end();
-            // Get current time
-            time(&now);
-            // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
-            ts = *localtime(&now);
-            strftime(buf, sizeof(buf), "%H:%M %d-%m-%Y", &ts);
-            printf("%s\n", buf);
         }
     }
     OSD.createBitmap(CHANNEL);
@@ -164,7 +160,7 @@ void loop()
             int xmax = (int)(result.xMax() * config.width());
             int ymin = (int)(result.yMin() * config.height());
             int ymax = (int)(result.yMax() * config.height());
-            // printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
+            printf("%d:\t%d %d %d %d\n\r", i, xmin, xmax, ymin, ymax);
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
         }
     }
@@ -189,7 +185,7 @@ void loop()
                 int ymax = (int)(item.yMax() * im_h);
 
                 // Draw boundary box
-                // printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
+                printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, OSD_COLOR_WHITE);
                 // Print identification text
                 char text_str[20];

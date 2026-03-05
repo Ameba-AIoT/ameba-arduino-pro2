@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map for POC-Example
+# Syntax Coloring Map for AmebaPOC
 #######################################
 
 #######################################

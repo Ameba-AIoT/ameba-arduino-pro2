@@ -136,7 +136,7 @@ void loop()
     uint16_t im_h = config.height();
     uint16_t im_w = config.width();
 
-    // printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
+    printf("Total number of objects detected = %d\r\n", ObjDet.getResultCount());
     OSD.createBitmap(CHANNELRTSP);
     OSD.createBitmap(CHANNELSNAP);
 
@@ -154,15 +154,15 @@ void loop()
                 int ymax = (int)(item.yMax() * im_h);
 
                 // Draw boundary box
-
                 printf("Item %d %s:\t%d %d %d %d\n\r", i, itemList[obj_type].objectName, xmin, xmax, ymin, ymax);
                 OSD.drawRect(CHANNELRTSP, xmin, ymin, xmax, ymax, 3, OSD_COLOR_BLACK);
                 OSD.drawRect(CHANNELSNAP, xmin, ymin, xmax, ymax, 3, OSD_COLOR_BLACK);
                 // Print identification text
+                // Append bird type to image name based on model used. Default example does not discriminate bird types.
                 char text_str[20];
                 snprintf(text_str, sizeof(text_str), "%s", itemList[obj_type].objectName);
                 time(&now);
-                // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+                // Format time, "HOUR MINUTE SECONDS dd-mm-YYYY"
                 ts = *localtime(&now);
                 strftime(buf, sizeof(buf), "%H %M %S %d-%m-%Y ", &ts);
                 strcat(buf, text_str);
