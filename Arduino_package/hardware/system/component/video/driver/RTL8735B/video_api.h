@@ -35,6 +35,8 @@
 #define VIDEO_DEBUG             0x19
 #define VIDEO_RC_CTRL			0x1a
 #define VIDEO_GET_RC_CTRL		0x1b
+#define VIDEO_SET_DYN_ROI		0x1c
+#define VIDEO_GET_ROI_STAT		0x1d
 
 
 #define VIDEO_HEVC_OUTPUT       0x20
@@ -287,6 +289,7 @@ typedef struct video_param_s {
 	uint32_t vui_disable;//Disable the VUI feature that the sps/pps won't be changed.
 	uint32_t meta_enable;
 	jpeg_crop_parm_t jpeg_crop_parm;
+	uint32_t dyn_scale_up_en; //enables runtime switch to scale-up mode when initial output in 1:1
 } video_params_t;
 
 typedef struct bps_stbl_ctrl_param_s {
@@ -322,20 +325,25 @@ typedef struct video_rc_info_s {
 } video_rc_info_t;
 
 typedef struct video_ch_info_s {
-	video_params_t *param;
+	video_params_t param;
 	uint32_t isp_fps;
 	uint32_t stream_is_open;
 	video_rc_info_t *rc_info;
 	bps_stbl_ctrl_t *bps_stbl_ctrl;
 	void (*video_output_cb)(void *param1, void  *param2, uint32_t arg);
 	volatile int incb;
+	int dyn_drop_frame;
+	int forcei;
 } video_ch_info_t;
 
 typedef struct voe_info_s {
 	uint32_t voe_heap_addr;
 	uint32_t voe_heap_size;
-	uint32_t voe_scale_up_en;
-	video_roi_t voe_scale_up_roi;
+	struct {
+		uint32_t enable;
+		uint32_t use_roi;
+		video_roi_t roi;
+	} scale_up_info;
 	video_ch_info_t ch_info[MAX_CHANNEL];
 	int iq_addr;
 	int sensor_addr;

@@ -122,6 +122,7 @@ int netif_get_idx(struct netif *pnetif);
 uint32_t LwIP_GetXID(uint8_t idx);
 uint32_t LwIP_GetLEASETIME(uint8_t idx);
 uint32_t LwIP_GetRENEWTIME(uint8_t idx);
+uint32_t  LwIP_GetLEASEUSED(uint8_t idx);
 #ifdef __cplusplus
 }
 #endif

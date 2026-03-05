@@ -222,8 +222,8 @@
 #define TXGAPK_VER_8822E "0x6"
 
 /*RXDCK version*/
-#define RXDCK_VER_8735B "0xd"
-#define RXDCK_VER_8822E "0x4"
+#define RXDCK_VER_8735B "0xe"
+#define RXDCK_VER_8822E "0x5"
 
 /*RCK version*/
 #define RCK_VER_8735B "0x1"
@@ -273,7 +273,7 @@
 #define TSSI_VER_8814B "0x1"
 #define TSSI_VER_8197G "0x1"
 #define TSSI_VER_8723F "0x1"
-#define TSSI_VER_8735B "0x20"
+#define TSSI_VER_8735B "0x24"
 
 /*PA Bias Calibration version*/
 #define PABIASK_VER_8188E \
@@ -589,6 +589,13 @@ enum halrf_iot_dram_size {
 enum halrf_iot_dram_type {
 	HALRF_DRAM_TYPE_DDR2,
 	HALRF_DRAM_TYPE_DDR3
+};
+
+enum EFEM_MODE {
+	EFEM_TX = 0x0,
+	EFEM_RX_LNA,
+	EFEM_RX_BYPASS,
+	EFEM_BT,
 };
 
 #define POWER_INDEX_DIFF 4

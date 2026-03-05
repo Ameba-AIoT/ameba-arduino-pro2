@@ -354,7 +354,7 @@ struct pwrctrl_priv {
 	u8 *dhcp_renew_pkt;
 	u32 dhcp_renew_pkt_size;
 	u16 dhcp_renew_lease_time;
-	u16 dhcp_renew_t1;
+	u16 dhcp_renew_lease_used;
 	u8	dhcp_renew_pb;
 #endif
 

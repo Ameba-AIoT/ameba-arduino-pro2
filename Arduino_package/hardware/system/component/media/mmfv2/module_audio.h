@@ -203,4 +203,8 @@ extern RX_cfg_t default_rx_asp_params;
 extern audio_params_t default_audio_params;
 extern mm_module_t audio_module;
 
+#ifdef ARDUINO_SDK
+extern volatile int32_t g_latest_audio_amplitude;
+#endif
+
 #endif

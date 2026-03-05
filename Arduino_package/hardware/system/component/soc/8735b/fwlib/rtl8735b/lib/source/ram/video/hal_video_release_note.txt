@@ -1,3 +1,13 @@
+<01/20/2026 12:00 Juling>
+Version : RTL8735B_VOE_1.6.9.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Add AE debug metadata
+
+--------------------------------------------------------------------------
 <12/02/2025 12:00 Juling>
 Version : RTL8735B_VOE_1.6.8.0
 Modified Files:

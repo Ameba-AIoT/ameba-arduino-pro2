@@ -472,6 +472,7 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_ACTION(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 0, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_FW_PARSING_UNTIL_WAKEUP(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 4, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_POWER_BIT_EN(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+2, 7, 1, __Value)
+#define SET_H2CCMD_REMOTE_WAKE_CTRL_SW_PARSER_11V_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 2, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_OFLD_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 3, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_PWR_BIT(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 4, 1, __Value)
 #define SET_H2CCMD_REMOTE_WAKE_CTRL_ARP_REQ_DTIM1TO_EN(__pH2CCmd, __Value) SET_BITS_TO_LE_1BYTE((__pH2CCmd)+4, 5, 1, __Value)

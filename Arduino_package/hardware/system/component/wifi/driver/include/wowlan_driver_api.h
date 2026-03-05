@@ -62,6 +62,7 @@ extern "C" {
 #define RX_ICMP_REPLY                   0x80
 #define ICMP_MAX_SEND                   0x81
 #define MQTT_FW_RX_TCP_PKT_WAKEUP       0x84
+#define RX_WPA3_11V_PKT                 0x82
 
 //wlan lib wowlan api
 
@@ -214,10 +215,10 @@ int rtw_hal_wlan_resume_check(void);
 //return@
 //1 for success, 0 for fail
 int rtw_hal_read_aoac_rpt_from_txfifo(u8 *buf, u16 addr, u16 len);
-//read DHCP T1 time when wakeup
+//read DHCP lease used time when wakeup
 //return@
-//DHCP T1 time
-uint16_t rtw_hal_read_wowlan_t1_time(void);
+//DHCP lease used time
+uint16_t rtw_hal_read_wowlan_lease_used(void);
 //Resume Wi-Fi connection status based on saved data
 //return@
 //1 for success, 0 for fail

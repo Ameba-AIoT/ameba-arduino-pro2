@@ -109,4 +109,6 @@ u8 halrf_get_thermal_8735b(void *dm_void,u8 path);
 
 void halrf_pabias_track_init_8735b(void *dm_void);
 
+void halrf_efem_setting_by_mode_8735b(void *dm_void, enum EFEM_MODE mode, enum halrf_dbg_comp dbg_type);
+
 #endif /*__HALRF_8735B_H__*/

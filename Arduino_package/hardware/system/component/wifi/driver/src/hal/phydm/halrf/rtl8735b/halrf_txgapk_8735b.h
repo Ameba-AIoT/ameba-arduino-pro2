@@ -32,7 +32,7 @@
 #define DIFFK_EN_8735B 1
 #define TAK_EN_8735B 2
 #define GAPK_RF_PATH_NUM_8735B 1
-#define GAPK_BB_REG_NUM_8735B 10
+#define GAPK_BB_REG_NUM_8735B 12
 
 #define GAPK_RF_REG_NUM_8735B 6
 
@@ -41,7 +41,7 @@
 #define GAPK_PSD_PWR_DBG_8735B 1
 #define GAPK_TRACK_TABLE_8735B 0
 #define GAPK_POWER_TABLE_8735B 1 /*disable power table gapk*/
-#define GAPK_VERSION 9
+#define GAPK_VERSION 0xa
 
 /*---------------------------End Define Parameters----------------------------*/
 

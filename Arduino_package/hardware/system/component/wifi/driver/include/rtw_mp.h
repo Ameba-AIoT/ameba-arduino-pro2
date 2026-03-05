@@ -336,7 +336,8 @@ enum {
 	MP_SET_TSSIDE,
 	MP_PHYDM,
 	MP_TX_PLCP_USER,
-	MP_TX_PLCP_DATA
+	MP_TX_PLCP_DATA,
+	MP_RFE
 };
 
 struct mp_priv {
@@ -383,6 +384,7 @@ struct mp_priv {
 	u16 antenna_tx;
 	u16 antenna_rx;
 //	u8 curr_rfpath;
+	u8 rfe_type;
 
 	/* add for support pmac tx: start */
 	u8 ppdu_type;  //0:cck;1:legacy;2:ht_mf;3:ht_gf;4:vht;5:he_su;6:he_er_su;7:he_mu_ofdma;8:he_tb

@@ -25,7 +25,11 @@
 #if WIFI_LOGO_CERTIFICATION
 #define MAX_SKB_BUF_NUM		10             //tx+rx, ping 10k test
 #else
-#define MAX_SKB_BUF_NUM		28	//8              //tx
+#ifdef ARDUINO_SDK
+#define MAX_SKB_BUF_NUM		28	//8              //tx+rx
+#else
+#define MAX_SKB_BUF_NUM		24	//8              //tx+rx
+#endif
 #endif
 #define MAX_LOCAL_SKB_NUM		(MAX_SKB_BUF_NUM + 2)	//tx+rx, +2: AP mode broadcast
 #endif

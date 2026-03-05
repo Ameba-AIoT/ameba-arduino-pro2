@@ -29,7 +29,7 @@
 #if (RTL8735B_SUPPORT == 1)
 /*--------------------------Define Parameters-------------------------------*/
 #define DPK_RF_PATH_NUM_8735B 1
-#define DPK_BB_REG_NUM_8735B 10
+#define DPK_BB_REG_NUM_8735B 11
 #define DPK_RF_REG_NUM_8735B 9
 #define DPK_PAS_CHK_DBG_8735B 0
 #define DPK_REG_DBG_8735B 0

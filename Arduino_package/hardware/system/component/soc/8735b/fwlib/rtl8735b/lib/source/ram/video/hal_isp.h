@@ -19,6 +19,7 @@
 #define MAX_SW_BUFFER 5
 #define MAX_VERIFY_NUM 32
 
+#define ISP_DEBUG_INFO_LEN 36
 //#define RTS_VIDEOIN_HEIGHT_ALIGN	16
 
 typedef struct hal_isp_buffer {
@@ -299,6 +300,9 @@ typedef struct {
 
 	uint32_t wdr_hist_contrast;
 	uint32_t wdr_hist_contrast_origin;
+
+	uint8_t ae_algo_dbg_buf[ISP_DEBUG_INFO_LEN];
+
 	uint32_t reserved;
 
 } isp_statis_meta_t;

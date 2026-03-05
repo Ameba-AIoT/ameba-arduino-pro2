@@ -471,6 +471,26 @@ struct FW_Sta_Info {
 // 3 * SURVEY_TO millisecond.
 #endif //defined CONFIG_STA_MODE_SCAN_UNDER_AP_MODE && defined CONFIG_CONCURRENT_MODE
 
+struct bss {
+	u16 beacon_interval_tu;   /* from assoc */
+	u8  dtim_period;          /* from assoc */
+	u16 listen_interval;      /* from assoc */
+
+	u8  dtim_count;           /* from last beacon */
+	u32 last_beacon_time_ms;  /* local time of last beacon */
+	u16 beacons_since_listen; /* count since last "must listen" */
+        bool ps_enabled;
+};
+
+struct scan_cfg {
+	u32 min_slot_ms;     /* 20 */
+	u32 max_slot_ms;     /* 200 */
+    /* be back on the home channel at least this long before the next on-channel deadline, to reliably receive the beacon. */
+	u32 guard_before_ms; /* 5 */
+    /* additional timing reserve for things like channel switch latency, scan start/stop overhead and etc. */
+	u32 safety_ms;       /* 5 */
+};
+
 struct mlme_ext_info {
 	u32	state;
 	u32	reauth_count;
@@ -492,6 +512,10 @@ struct mlme_ext_info {
 	u8	force_preamble_mode;
 	u8	WMM_enable;
 	u8  DTIM_period;
+        u8  DTIM_count;
+        u32	last_beacon_time_ms;
+        u32	beacons_since_listen;
+        u8  special_scan_en;
 	u8	ERP_enable;
 	u8	ERP_IE;
 	u8	HT_enable;
