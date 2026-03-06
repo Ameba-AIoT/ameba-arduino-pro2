@@ -75,6 +75,7 @@ public:
     void muteMic(uint8_t mute);
     void muteSpk(uint8_t mute);
     void printInfo(void);
+    int micLevel(void);
 
 private:
     audio_params_t* _audioParams = NULL;
