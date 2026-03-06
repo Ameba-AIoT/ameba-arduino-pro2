@@ -382,3 +382,8 @@ void Audio::printInfo(void)
     printf("\r\n[INFO] Sample rate: %ld Hz\n", sample_rate);
     printf("\r\n[INFO] Word length: %s\n", wordLengthArray[word_length].c_str());
 }
+
+int Audio::micLevel(void)
+{
+    return g_latest_audio_amplitude;
+}
