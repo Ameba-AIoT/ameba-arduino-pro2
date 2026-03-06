@@ -1,10 +1,12 @@
 Feature:
-- Add Proof of Concept Examples
+- Add Battery-Powered Camera POC Example
+- Add Audio Trigger Recording example
 
 API Updates:
-- Add API to Update Video Stream Params and Proof of Concept
+- Update code base
+- Delete Arduino_package/hardware/libraries/POC-Example directory
+- Updated POC examples and Example folder name
 
 Misc:
-- Update AmebaEink readme
-- Add src for zip libs
-- Add workflow of Auto-update Arduino ZIP libraries
+- Update tools version 1.4.8
+    - Add camera sensor support, IMX681, IMX681_12M, IMX681_12M_SEQ, OV50A40
