@@ -15,7 +15,7 @@ limitations under the License.
 /*
 
  Example guide:
- https://www.amebaiot.com/en/amebad-arduino-audio-tensorflow-detection/
+ TBD
  */
 
 #include <TensorFlowLite.h>
