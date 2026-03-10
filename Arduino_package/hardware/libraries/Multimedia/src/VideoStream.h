@@ -13,6 +13,7 @@ extern "C" {
 
 #define DEFAULT_PRESET         -1
 #define USB_UVCD_STREAM_PRESET 10
+#define RAW_STREAM_PRESET      20
 
 #define VIDEO_ENABLE  1
 #define VIDEO_DISABLE 0
@@ -77,16 +78,19 @@ enum encode_type {
 #define VIDEO_WVGA_HEIGHT 360
 
 // define video frame rate
-#define CAM_FPS    30
-#define CAM_NN_FPS 10
+#define CAM_FPS     30
+#define CAM_NN_FPS  10
+#define CAM_RAW_FPS 2
 
 // define video group of pictures
-#define CAM_GOP    30
-#define CAM_NN_GOP 10
+#define CAM_GOP     30
+#define CAM_NN_GOP  10
+#define CAM_RAW_GOP 80
 
 // define default video bit rate
-#define CAM_BPS    4 * 1024 * 1024
-#define CAM_NN_BPS 1 * 1024 * 1024
+#define CAM_BPS     4 * 1024 * 1024
+#define CAM_NN_BPS  1 * 1024 * 1024
+#define CAM_RAW_BPS 1 * 1024 * 1024
 
 // define video rate control
 #define CAM_RCMODE 2    // 1: CBR, 2: VBR

@@ -308,6 +308,35 @@ void cameraOpenWSViewer(mm_context_t *p, void *p_priv, int stream_id, int type, 
     }
 }
 
+void cameraOpenRaw(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode)
+{
+    // assign value parsing from user level
+    video_params.stream_id = stream_id;
+    video_params.type = type;
+    video_params.resolution = res;
+    video_params.width = w;
+    video_params.height = h;
+    video_params.bps = bps;
+    video_params.fps = fps;
+    video_params.gop = gop;
+    video_params.rc_mode = rc_mode;
+
+    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %d    %d    %d    %d    %d    %d    %d    %d    %d\n", stream_id, type, res, w, h, bps, fps, gop, rc_mode);
+
+    if (p) {
+        // mm_module_ctrl(p, CMD_VIDEO_SET_VOE_HEAP, voe_heap_size);
+        video_control(p_priv, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+        mm_module_ctrl(p, MM_CMD_SET_QUEUE_LEN, 3);
+        mm_module_ctrl(p, MM_CMD_INIT_QUEUE_ITEMS, MMQI_FLAG_DYNAMIC);
+        if ((type == VIDEO_JPEG) || (type == VIDEO_HEVC_JPEG) || (type == VIDEO_H264_JPEG)) {
+            mm_module_ctrl(p, CMD_VIDEO_SNAPSHOT, 0);
+        }
+        // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] cameraOpen done\n");
+    } else {
+        // amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] cameraOpen fail\n");
+    }
+}
+
 void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel)
 {
     video_params.type = type;
@@ -381,6 +410,14 @@ void cameraStart(void *p, int channel)
 void cameraYUV(void *p)
 {
     video_control(p, CMD_VIDEO_YUV, 2);
+}
+
+void cameraRawStart(void *p, int channel)
+{
+    video_control(p, CMD_VIDEO_APPLY, channel);
+    video_control(p, CMD_VIDEO_YUV, 2);
+    hal_video_isp_set_rawfmt(channel, 1);    // set raw format to NV16 for RAW stream
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s Raw Started on channel %d\n", __FUNCTION__, channel);
 }
 
 void cameraSnapshot(void *p, int arg)

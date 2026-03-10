@@ -40,6 +40,8 @@ void cameraOpenNN(mm_context_t *p, void *p_priv, int stream_id, int type, int re
 
 void cameraOpenUVCD(mm_context_t *p, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int use_static_addr, int meta_enable, int voe_heap_size);
 
+void cameraOpenRaw(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode);
+
 void cameraReSetParams(mm_context_t *p, int type, int fps, int gop, int use_static_addr, int channel);
 
 void cameraUpdateParams(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation);
@@ -53,6 +55,8 @@ void cameraClearQItem(mm_context_t *p);
 void cameraStart(void *p, int channel);
 
 void cameraYUV(void *p);
+
+void cameraRawStart(void *p, int channel);
 
 void cameraSnapshot(void *p, int arg);
 
