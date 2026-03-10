@@ -88,11 +88,7 @@ void setup()
 
 void loop()
 {
-#if DYN_ZOOM_MODE == SCALE_DOWN_MODE
-    scaleDown();
-#else
-    scaleUp();
-#endif
+    zoom(config.width(), config.height(), maxWidth, maxHeight, minWidth, minHeight, DYN_ZOOM_MODE);
 }
 
 void showOSDZoomInfo(int ch, int input_w, int input_h)
@@ -110,57 +106,46 @@ void showOSDZoomInfo(int ch, int input_w, int input_h)
     delay(500);
 }
 
-void scaleDown(void)
+void zoom(int ch_width, int ch_height, int max_width, int max_height, int min_width, int min_height, int scaling)
 {
     isp_crop_t crop_info;
     const int steps = 20;
 
     for (int i = 0; i <= 2 * steps; i++) {
         int input_width, input_height;
-        if (i <= steps) {
-            // 1:1 -> scale down
-            input_width = config.width() + (maxWidth - config.width()) * i / steps;
-            input_height = config.height() + (maxHeight - config.height()) * i / steps;
+        if (scaling == SCALE_DOWN_MODE) {
+            if (i <= steps) {
+                // 1:1 -> scale down
+                input_width = ch_width + (max_width - ch_width) * i / steps;
+                input_height = ch_height + (maxHeight - ch_height) * i / steps;
+            } else {
+                // scale down -> 1:1
+                input_width = max_width - (max_width - ch_width) * (i - steps) / steps;
+                input_height = max_height - (max_height - ch_height) * (i - steps) / steps;
+            }
         } else {
-            // scale down -> 1:1
-            input_width = maxWidth - (maxWidth - config.width()) * (i - steps) / steps;
-            input_height = maxHeight - (maxHeight - config.height()) * (i - steps) / steps;
+            if (i <= steps) {
+                // 1:1 -> scale up
+                input_width = ch_width - (ch_width - min_width) * i / steps;
+                input_height = ch_height - (ch_height - min_height) * i / steps;
+            } else {
+                // scale up -> 1:1
+                input_width = min_width + (ch_width - min_width) * (i - steps) / steps;
+                input_height = min_height + (ch_height - min_height) * (i - steps) / steps;
+            }
         }
+
         input_width = (input_width + 1) & ~1;      // force 2 aligned
         input_height = (input_height + 1) & ~1;    // force 2 aligned
 
         // set dynamic zoom to ch0
         Camera.crop_info_update(&crop_info, 0, 0, input_width, input_height);
         Camera.setROI(CHANNEL, &crop_info);
-        printf("scale down %dx%d->%dx%d\n", input_width, input_height, config.width(), config.height());
-
-        showOSDZoomInfo(CHANNEL, input_width, input_height);
-    }
-}
-
-void scaleUp(void)
-{
-    isp_crop_t crop_info;
-    const int steps = 20;
-
-    for (int i = 0; i <= 2 * steps; i++) {
-        int input_width, input_height;
-        if (i <= steps) {
-            // 1:1 -> scale up
-            input_width = config.width() - (config.width() - minWidth) * i / steps;
-            input_height = config.height() - (config.height() - minHeight) * i / steps;
+        if (scaling == SCALE_DOWN_MODE) {
+            printf("scale down %dx%d->%dx%d\n", input_width, input_height, ch_width, ch_height);
         } else {
-            // scale up -> 1:1
-            input_width = minWidth + (config.width() - minWidth) * (i - steps) / steps;
-            input_height = minHeight + (config.height() - minHeight) * (i - steps) / steps;
+            printf("scale up %dx%d->%dx%d\n", input_width, input_height, ch_width, ch_height);
         }
-        input_width = (input_width + 1) & ~1;      // force 2 aligned
-        input_height = (input_height + 1) & ~1;    // force 2 aligned
-
-        // set dynamic zoom to ch0
-        Camera.crop_info_update(&crop_info, 0, 0, input_width, input_height);
-        Camera.setROI(CHANNEL, &crop_info);
-        printf("scale up %dx%d->%dx%d\n", input_width, input_height, config.width(), config.height());
         showOSDZoomInfo(CHANNEL, input_width, input_height);
     }
 }
