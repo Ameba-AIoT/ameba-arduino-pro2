@@ -9,23 +9,93 @@ on:
     - cron: '0 12 * * 1'
 
 jobs:
+  build-matrix:
+    name: Build formatting matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.gen-matrix.outputs.matrix }}
+    env:
+      # Customize excluded library directory names here (space-separated)
+      EXCLUDED_LIBS: "TensorFlowLite FolderA FolderB"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          sparse-checkout: |
+            Arduino_package/hardware/cores
+            Arduino_package/hardware/libraries
+            .github/Coding_Style/coding_style_mbed
+
+      - name: Generate matrix JSON (exclude configurable libraries)
+        id: gen-matrix
+        run: |
+          set -e
+
+          CORE_PATH="Arduino_package/hardware/cores"
+          LIB_ROOT="Arduino_package/hardware/libraries"
+
+          echo "Excluded libraries: $EXCLUDED_LIBS"
+
+          # Collect all first-level library directories
+          ALL_LIB_DIRS=$(find "$LIB_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%P\n')
+
+          echo "All library directories:"
+          echo "$ALL_LIB_DIRS"
+
+          # Filter out excluded names
+          FILTERED_LIB_DIRS=""
+          for d in $ALL_LIB_DIRS; do
+            SKIP=false
+            for ex in $EXCLUDED_LIBS; do
+              if [ "$d" = "$ex" ]; then
+                echo "Skipping excluded library: $d"
+                SKIP=true
+                break
+              fi
+            done
+
+            if [ "$SKIP" = false ]; then
+              FILTERED_LIB_DIRS="$FILTERED_LIB_DIRS $d"
+            fi
+          done
+
+          echo "Libraries after exclusion:"
+          echo "$FILTERED_LIB_DIRS"
+
+          # Build JSON array: ["cores", "libraries/Lib1", "libraries/Lib2", ...]
+          JSON="[\"$CORE_PATH\""
+          for d in $FILTERED_LIB_DIRS; do
+            JSON+=",\"$LIB_ROOT/$d\""
+          done
+          JSON+="]"
+
+          echo "Matrix JSON: $JSON"
+          echo "matrix=$JSON" >> "$GITHUB_OUTPUT"
+
   formatting-check:
     name: Run clang-format check
+    needs: build-matrix
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        path:
-          - 'Arduino_package/hardware/cores'
-          - 'Arduino_package/hardware/libraries'
+        path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+
     steps:
-    - name: Checkout repository and submodules
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Run C/C++/header files check
-      uses: M-ichae-l/clang-format-action@v1.0.0
-      with:
-        clang-format-version: '17'
-        check-path: ${{ matrix.path }}
-        clang-format-style-path: .github/Coding_Style/coding_style_mbed/.clang-format
-        fallback-style: 'Mozilla' # optional
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          sparse-checkout: |
+            Arduino_package/hardware/cores
+            Arduino_package/hardware/libraries
+            .github/Coding_Style/coding_style_mbed
+
+      - name: Run C/C++/header files check
+        uses: M-ichae-l/clang-format-action@v1.0.0
+        with:
+          clang-format-version: '17'
+          check-path: ${{ matrix.path }}
+          clang-format-style-path: .github/Coding_Style/coding_style_mbed/.clang-format
+          fallback-style: 'Mozilla' # optional
