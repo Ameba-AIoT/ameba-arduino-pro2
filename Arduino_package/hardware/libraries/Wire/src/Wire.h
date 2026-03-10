@@ -127,6 +127,9 @@ private:
     // Timeouts
     static const uint32_t RECV_TIMEOUT = 50;
     static const uint32_t XMIT_TIMEOUT = 100000;
+
+    bool _initStatus;    // flag to mark I2C init status
+    uint8_t _address = 0;
 };
 
 extern TwoWire Wire;
