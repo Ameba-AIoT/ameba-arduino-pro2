@@ -630,6 +630,16 @@ void VideoSetting::setRotation(int angle)
     _rotation = angle;
 }
 
+void VideoSetting::setWidth(int width)
+{
+    _w = width;
+}
+
+void VideoSetting::setHeight(int height)
+{
+    _h = height;
+}
+
 uint16_t VideoSetting::width(void)
 {
     return _w;
@@ -643,6 +653,11 @@ uint16_t VideoSetting::height(void)
 uint16_t VideoSetting::fps(void)
 {
     return _fps;
+}
+
+void VideoSetting::enableROI(int width, int height)
+{
+    setROI(width, height);
 }
 
 void Video::configVideoChannel(int ch, VideoSetting& config)
@@ -1046,4 +1061,42 @@ void Video::updateVideoParams(int ch)
                        snapshot[ch][0],
                        jpeg_qlevel[ch],
                        video_rotation[ch]);
+}
+
+int Video::getSensorWidth(void)
+{
+    return sensor_params[USE_SENSOR].sensor_width;
+}
+
+int Video::getSensorHeight(void)
+{
+    return sensor_params[USE_SENSOR].sensor_height;
+}
+
+void Video::setDynScaleDown(int ch)
+{
+    dynScaleDown(videoModule[ch]._p_mmf_context);
+}
+
+void Video::setDynScaleUp(int ch)
+{
+    dynScaleUp(videoModule[ch]._p_mmf_context);
+}
+
+void Video::crop_info_update(isp_crop_t* crop_info, int start_x, int start_y, int width, int height)
+{
+    crop_info->start_x = start_x;
+    crop_info->start_y = start_y;
+    crop_info->width = width;
+    crop_info->height = height;
+}
+
+void Video::setROI(int ch, isp_crop_t* crop_info)
+{
+    setDynROI(videoModule[ch]._p_mmf_context, crop_info);
+}
+
+void Video::getROIStat(int ch, int use_roi)
+{
+    ROIStat(videoModule[ch]._p_mmf_context, use_roi);
 }
