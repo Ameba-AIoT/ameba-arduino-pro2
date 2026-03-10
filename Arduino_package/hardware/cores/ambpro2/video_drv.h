@@ -72,6 +72,16 @@ mm_context_t *cameraDeinit(mm_context_t *);
 
 void cameraOpenWSViewer(mm_context_t *p, void *p_priv, int stream_id, int type, int res, int w, int h, int bps, int fps, int gop, int rc_mode, int snapshot, int jpeg_qlevel, int video_rotation, uint32_t h264_level, uint32_t h264_profile, uint32_t entropy_mode, uint32_t rc_minQp, uint32_t rc_maxQp);
 
+void setROI(int width, int height);
+
+void dynScaleDown(mm_context_t *p);
+
+void dynScaleUp(mm_context_t *p);
+
+void setDynROI(mm_context_t *p, isp_crop_t *crop_info);
+
+void ROIStat(mm_context_t *p, int use_roi);
+
 // Functions externed from module_video
 extern void *video_create(void *parent);
 extern void *video_destroy(void *p);
