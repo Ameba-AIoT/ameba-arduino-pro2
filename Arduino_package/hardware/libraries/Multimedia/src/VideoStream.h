@@ -118,6 +118,9 @@ enum encode_type {
 #define BLUEBALANCE_MIN  256
 #define BLUEBALANCE_MAX  2047
 
+#define SCALE_DOWN_MODE 0
+#define SCALE_UP_MODE   1
+
 class MMFModule {
     friend class StreamIO;
     friend class Video;
@@ -190,7 +193,10 @@ public:
     void setRCParams(uint32_t minQp, uint32_t maxQp);
 
     void enableWebsocketViewer(void);
+    void enableROI(int width, int height);
 
+    void setWidth(int width);
+    void setHeight(int height);
     uint16_t width(void);
     uint16_t height(void);
     uint16_t fps(void);
@@ -241,6 +247,14 @@ public:
     int cameraOpenStatus(void);
     void updateVideoParams(int ch);
 
+    int getSensorWidth(void);
+    int getSensorHeight(void);
+
+    void setDynScaleDown(int ch);
+    void setDynScaleUp(int ch);
+    void crop_info_update(isp_crop_t* crop_info, int start_x, int start_y, int width, int height);
+    void setROI(int ch, isp_crop_t* crop_info);
+    void getROIStat(int ch, int use_roi);
 private:
     void setSnapshotCallback(int ch);
     static int snapshotCB0(uint32_t jpeg_addr, uint32_t jpeg_len);

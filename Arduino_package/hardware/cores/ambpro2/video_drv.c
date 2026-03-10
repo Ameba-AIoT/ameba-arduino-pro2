@@ -51,6 +51,7 @@ static video_params_t video_params = {
     .level = 0,
     .profile = 0,
     .cavlc = 1,
+    .dyn_scale_up_en = 0,
 };
 
 static video_params_t video_v4_params = {
@@ -511,4 +512,39 @@ int cameraGetCtx(mm_context_t *p, int ch)
 int cameraGetStatus()
 {
     return video_open_status();
+}
+
+void setROI(int width, int height)
+{
+    video_roi_t roi;
+
+    roi.xmin = 0;
+    roi.ymin = 0;
+    roi.xmax = roi.xmin + width;
+    roi.ymax = roi.ymin + height;
+    video_params.use_roi = 1;
+
+    memcpy(&(video_params.roi), &roi, sizeof(roi));
+}
+
+void dynScaleDown(mm_context_t *p)
+{
+    video_params.dyn_scale_up_en = 0;
+    mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+}
+
+void dynScaleUp(mm_context_t *p)
+{
+    video_params.dyn_scale_up_en = 1;
+    mm_module_ctrl(p, CMD_VIDEO_SET_PARAMS, (int)&video_params);
+}
+
+void setDynROI(mm_context_t *p, isp_crop_t *crop_info)
+{
+    mm_module_ctrl(p, CMD_VIDEO_SET_DYN_ROI, (int)crop_info);
+}
+
+void ROIStat(mm_context_t *p, int use_roi)
+{
+    mm_module_ctrl(p, CMD_VIDEO_GET_ROI_STAT, (int)&use_roi);
 }
