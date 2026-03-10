@@ -14,6 +14,4 @@ int filesaver_SetTypeHandler(mm_context_t *p, void (*fsCB)(char *, uint32_t, uin
 int filesaver_Apply(mm_context_t *p);
 int filesaver_SetFilePath(mm_context_t *p, const char *filename);
 
-// int filesaver_cb(void);
-
 #endif

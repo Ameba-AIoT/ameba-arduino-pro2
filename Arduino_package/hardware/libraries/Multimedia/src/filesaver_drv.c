@@ -37,9 +37,3 @@ int filesaver_SetFilePath(mm_context_t *p, const char *filename)
 {
     return mm_module_ctrl(p, CMD_FILESAVER_SET_SAVE_FILE_PATH, (int)filename);
 }
-
-// int filesaver_cb(void)
-// {
-//     amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] filesaver response\n");
-//     return 0;
-// }
