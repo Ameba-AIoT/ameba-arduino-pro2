@@ -267,12 +267,14 @@ void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const 
 
     //*portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
-    for (i = 0; i < pixelCount; i++) {
-        color_hi = color[i] >> 8;
-        color_lo = color[i] & 0xFF;
-        SPI.transfer(color_hi);
-        SPI.transfer(color_lo);
+
+    uint16_t *pPixels = (uint16_t *)color;
+
+    for (uint32_t i = 0; i < pixelCount; i++) {
+        pPixels[i] = (pPixels[i] << 8) | (pPixels[i] >> 8);
     }
+
+    SPI.transfer(pPixels, pixelCount * 2);
 }
 
 void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
