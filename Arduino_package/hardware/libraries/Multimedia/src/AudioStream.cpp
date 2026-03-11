@@ -387,3 +387,14 @@ int Audio::micLevel(void)
 {
     return g_latest_audio_amplitude;
 }
+
+void Audio::setHPFc(uint8_t fc)
+{
+    if (fc > 7) {
+        printf("\r\n[ERROR] Highest value for cutoff frequency is 7!\n");
+        fc = 7;
+    }
+    audio_ctx_t *ctx = (audio_ctx_t *)_p_mmf_context->priv;
+    audio_adc_l_hpf(ctx->audio, 1, (audio_hpf_fc)fc);
+    printf("fc=%d\r\n", fc);
+}
