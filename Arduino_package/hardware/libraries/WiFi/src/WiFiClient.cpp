@@ -103,7 +103,7 @@ try_again:
     ret = clientdrv.availData(_sock);
 
     if (ret > 0) {
-        return 1;
+        return ret;
     }
 
     err = clientdrv.getLastErrno(_sock);
