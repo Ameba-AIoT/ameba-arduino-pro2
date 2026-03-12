@@ -21,6 +21,7 @@
 #define SERVER_DRV_H
 
 #include <inttypes.h>
+#include <sys/types.h>
 #include "wl_definitions.h"
 
 #define DATA_LENTH 128
