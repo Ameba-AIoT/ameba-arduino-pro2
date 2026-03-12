@@ -216,7 +216,7 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size)
     }
 
     ssize_t sent = clientdrv.sendData(_sock, buf, (uint32_t)size);
-    if (sent < 0) {
+    if (sent <= 0) {
         setWriteError();
         _is_connected = false;
         return 0;

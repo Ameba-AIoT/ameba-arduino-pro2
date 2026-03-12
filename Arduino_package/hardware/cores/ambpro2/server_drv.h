@@ -37,7 +37,7 @@ public:
     int getDataBuf(int sock, uint8_t *_data, uint32_t _dataLen);
     int getLastErrno(int sock);
     void stopSocket(int sock);
-    bool sendData(int sock, const uint8_t *data, uint32_t len);
+    ssize_t sendData(int sock, const uint8_t *data, uint32_t len);
     bool sendtoData(int sock, const uint8_t *data, uint32_t len, uint32_t peer_ip, uint16_t peer_port);
     void getRemoteData(int sock, uint32_t *ip, uint16_t *port);
     int setSockRecvTimeout(int sock, int timeout);

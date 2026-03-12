@@ -172,7 +172,7 @@ void ServerDrv::stopSocket(int sock)
     _available = false;
 }
 
-bool ServerDrv::sendData(int sock, const uint8_t *data, uint32_t len)
+ssize_t ServerDrv::sendData(int sock, const uint8_t *data, uint32_t len)
 {
     if (sock < 0) {
         return -1;
