@@ -25,6 +25,7 @@ static isp_control ISPCtrl = {
     .GrayMode = 0,
     .PowerLineFreq = 3,
     .DayNightMode = 0,
+    .en_3DNR = 1,
 };
 
 static video_params_t video_params = {
@@ -92,6 +93,7 @@ void ISPControlReset(void)
     isp_set_gray_mode(ISPCtrl.GrayMode);
     isp_set_power_line_freq(ISPCtrl.PowerLineFreq);
     isp_set_day_night(ISPCtrl.DayNightMode);
+    isp_set_day_night(ISPCtrl.en_3DNR);
 }
 
 extern int set_uvc_string(char *product_name, char *serial_name, unsigned short bcdDevice);

@@ -170,6 +170,8 @@ public:
     void getGrayMode(void);
     void setDayNightMode(int enable);
     void getDayNightMode(void);
+    void set3DNR(int enable);
+    void get3DNR(void);
     void setMinFPS(int value);
     void getMinFPS(void);
 
