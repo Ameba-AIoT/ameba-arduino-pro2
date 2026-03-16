@@ -27,6 +27,7 @@
 #include "binary.h"
 
 #include "amb_ard_printf.h"
+#include "amb_ard_user_sensor_list.h"
 
 // #define Arduino_STD_PRINTF
 #ifdef Arduino_STD_PRINTF

@@ -35,6 +35,10 @@ extern "C" {
 #include "WiFiSSLClient.h"
 #include "WiFiUdp.h"
 
+#define AUTORECONNECT_DISABLE  0    // disable auto reconnect
+#define AUTORECONNECT_FINITE   1    // finite auto reconnect
+#define AUTORECONNECT_INFINITE 2    // infinite auto reconnect
+
 class WiFiClass {
 private:
     static void init();
@@ -270,6 +274,8 @@ public:
     void setHostname(const char* hostname);
 
     const char* getHostname();
+
+    void configureAutoReconnect(int mode, int count, int interval);
 
     friend class WiFiClient;
     friend class WiFiServer;
