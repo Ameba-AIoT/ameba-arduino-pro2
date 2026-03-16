@@ -769,4 +769,9 @@ const char* WiFiDrv::getHostname()
     return (const char*)_hostname;
 }
 
+void WiFiDrv::configureWiFiAutoReconnect(int mode, int count, int interval)
+{
+    wifi_config_autoreconnect(mode, count, interval);
+}
+
 WiFiDrv wiFiDrv;

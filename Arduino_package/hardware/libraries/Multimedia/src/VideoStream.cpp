@@ -682,6 +682,8 @@ void Video::configVideoChannel(int ch, VideoSetting& config)
         gop[ch] = config._gop;
         rc_mode[ch] = config._rc_mode;
         use_static_addr[ch] = config._use_static_addr;
+        w[ch] = getSensorWidth();
+        h[ch] = getSensorHeight();
     } else {
         jpeg_qlevel[ch] = config._jpeg_qlevel;
         video_rotation[ch] = config._rotation;
