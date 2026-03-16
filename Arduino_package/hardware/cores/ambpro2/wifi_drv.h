@@ -293,6 +293,8 @@ public:
     static void setHostname(const char* hostname);
 
     static const char* getHostname();
+
+    static void configureWiFiAutoReconnect(int mode, int count, int interval);
 };
 
 extern uint8_t arduino_wifi_mode_check;
