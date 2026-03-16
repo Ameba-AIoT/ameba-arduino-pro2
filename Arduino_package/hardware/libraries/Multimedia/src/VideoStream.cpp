@@ -362,6 +362,30 @@ void CameraSetting::getDayNightMode(void)
     }
 }
 
+void CameraSetting::set3DNR(int enable)
+{
+    isp_set_tnr(enable);
+    if (enable == 1) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] 3DNR Enabled\n");
+    } else if (enable == 0) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] 3DNR Disabled\n");
+    } else {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid Input.\n");
+    }
+}
+
+void CameraSetting::get3DNR(void)
+{
+    isp_get_tnr(&ret);
+    if (ret == 0) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] 3DNR Disabled\n");
+    } else if (ret == 1) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] 3DNR Enabled\n");
+    } else {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid\n");
+    }
+}
+
 void CameraSetting::setMinFPS(int value)
 {
     if (value >= 1 && value <= 30) {
