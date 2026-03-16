@@ -21,6 +21,7 @@ typedef struct {
     int GrayMode;
     int PowerLineFreq;
     int DayNightMode;
+    int en_3DNR;
 } isp_control;
 
 void ISPControlReset(void);

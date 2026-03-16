@@ -1,11 +1,9 @@
 /*
  Example guide:
- https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/ISP%20Control.html
+ TBC
 
-  // "DAYNIGHT="  Set Day/Night Mode: 0: Day, 1: Night
-  // "DAYNIGHT"   Get value of DayNight Mode to determine whether is day or night mode
-  // "GRAY="      Set Gray Mode:  0: Color Mode, 1: Gray Mode
-  // "GRAY"       Get value of Gray Mode to determine whether if it is gray mode
+  // "3DNR="  Set 3DNR: 0: Disable, 1: Enable
+  // "3DNR"   Get value of DayNight Mode to determine whether is day or night mode
   // "RESET"      Reset to default
 */
 
@@ -79,6 +77,8 @@ void loop()
             configCam.set3DNR(val);
         } else if (input.startsWith(String("3DNR"))) {
             configCam.get3DNR();
+        } else if (input.startsWith(String("RESET"))) {
+            configCam.reset();
         }
     }
 }
