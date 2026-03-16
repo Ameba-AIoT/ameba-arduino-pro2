@@ -72,7 +72,7 @@ void loop()
         input.trim();
 
         if (input.startsWith(String("3DNR="))) {
-            String value = input.substring(6);
+            String value = input.substring(5);
             int val = value.toInt();
             configCam.set3DNR(val);
         } else if (input.startsWith(String("3DNR"))) {
