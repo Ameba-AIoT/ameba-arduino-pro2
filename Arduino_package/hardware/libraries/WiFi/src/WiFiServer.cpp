@@ -165,12 +165,13 @@ size_t WiFiServer::write(const uint8_t* buf, size_t size)
         return 0;
     }
 
-    if (!serverdrv.sendData(_sock_ser, buf, size)) {
+    ssize_t sent = serverdrv.sendData(_sock_ser, buf, size);
+    if (sent <= 0) {
         setWriteError();
         return 0;
     }
 
-    return size;
+    return (size_t)sent;
 }
 
 void WiFiServer::end()

@@ -103,7 +103,7 @@ try_again:
     ret = clientdrv.availData(_sock);
 
     if (ret > 0) {
-        return 1;
+        return ret;
     }
 
     err = clientdrv.getLastErrno(_sock);
@@ -216,7 +216,7 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size)
     }
 
     ssize_t sent = clientdrv.sendData(_sock, buf, (uint32_t)size);
-    if (sent < 0) {
+    if (sent <= 0) {
         setWriteError();
         _is_connected = false;
         return 0;
