@@ -1,3 +1,8 @@
+/*
+ Example guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/POC/AC-Powered%20Camera.html
+*/
+
 #include "WiFi.h"
 #include "WebSocketViewer.h"
 #include "StreamIO.h"
@@ -13,6 +18,7 @@
 
 #define CHANNEL   0
 #define CHANNELNN 3
+
 // Lower resolution for NN processing
 #define NNWIDTH  576
 #define NNHEIGHT 320
@@ -96,13 +102,11 @@ void setup()
         Serial.println("StreamIO link start failed");
     }
 
-
     // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
     ObjDet.configVideo(configNN);
     ObjDet.modelSelect(OBJECT_DETECTION, DEFAULT_YOLOV4TINY, NA_MODEL, NA_MODEL);
     ObjDet.begin();
-
 
     videoStreamerMD.registerInput(Camera.getStream(CHANNELNN));
     videoStreamerMD.setStackSize();
@@ -131,25 +135,6 @@ void setup()
 
 void loop()
 {
-    if (ObjDet.getResultCount() > 0 || MD.getResultCount() > 0) {
-        // Start/Keep recording on object or motion detected
-        if (mp4.getRecordingState() == 0) {
-            // Get current time
-            time(&now);
-            // Format time, "HOUR MINUTE SECONDS dd-mm-YYYY"
-            ts = *localtime(&now);
-            strftime(buf, sizeof(buf), "%H %M %S %d-%m-%Y", &ts);
-            delay(100);
-            mp4.setRecordingFileName(buf);
-            mp4.begin();
-        }
-        noActivityCount = 0;
-    } else {
-        noActivityCount++;
-        if (mp4.getRecordingState() > 0 && noActivityCount >= END_RECORDING_DELAY) {
-            mp4.end();
-        }
-    }
     OSD.createBitmap(CHANNEL);
 
     std::vector<MotionDetectionResult> md_results = MD.getResult();
@@ -164,7 +149,6 @@ void loop()
             OSD.drawRect(CHANNEL, xmin, ymin, xmax, ymax, 3, COLOR_GREEN);
         }
     }
-    OSD.update(CHANNEL);
 
     std::vector<ObjectDetectionResult> results = ObjDet.getResult();
 
@@ -196,6 +180,26 @@ void loop()
     }
 
     OSD.update(CHANNEL);
+
+    if (ObjDet.getResultCount() > 0 || MD.getResultCount() > 0) {
+        // Start/Keep recording on object or motion detected
+        if (mp4.getRecordingState() == 0) {
+            // Get current time
+            time(&now);
+            // Format time, "HOUR MINUTE SECONDS dd-mm-YYYY"
+            ts = *localtime(&now);
+            strftime(buf, sizeof(buf), "%H %M %S %d-%m-%Y", &ts);
+            delay(100);
+            mp4.setRecordingFileName(buf);
+            mp4.begin();
+        }
+        noActivityCount = 0;
+    } else {
+        noActivityCount++;
+        if (mp4.getRecordingState() > 0 && noActivityCount >= END_RECORDING_DELAY) {
+            mp4.end();
+        }
+    }
 
     // delay to wait for new results
     delay(100);

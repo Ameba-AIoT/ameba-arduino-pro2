@@ -1,3 +1,8 @@
+/*
+ Example guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/POC/Battery-Powered%20Camera.html
+*/
+
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "MotionDetection.h"
@@ -70,6 +75,7 @@ void loop()
                 break;
         }
     }
+
     std::vector<MotionDetectionResult> md_results = MD.getResult();
     if (MD.getResultCount() > 0) {
         // Serial.println("Motion Detected");
