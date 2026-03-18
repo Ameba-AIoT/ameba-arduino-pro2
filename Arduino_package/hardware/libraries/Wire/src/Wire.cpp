@@ -61,6 +61,11 @@ volatile int flag_rx = 0;
 
 void TwoWire::begin()
 {
+    if (_initStatus) {
+        // Already initialized, so do nothing or maybe re-config only
+        return;
+    }
+
     amb_ard_pin_check_fun(SDA_pin, PIO_I2C);
     amb_ard_pin_check_fun(SCL_pin, PIO_I2C);
 
@@ -69,18 +74,14 @@ void TwoWire::begin()
 
     i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
     i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
+
+    _initStatus = true;
 }
 
-void TwoWire::begin(uint8_t address = 0)
+void TwoWire::begin(uint8_t address)
 {
-    amb_ard_pin_check_fun(SDA_pin, PIO_I2C);
-    amb_ard_pin_check_fun(SCL_pin, PIO_I2C);
-
-    SDA_pin = (PinName)g_APinDescription[SDA_pin].pinname;
-    SCL_pin = (PinName)g_APinDescription[SCL_pin].pinname;
-
-    i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
-    i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
+    _address = address;
+    begin();
 }
 
 void TwoWire::begin(int address)
@@ -91,6 +92,7 @@ void TwoWire::begin(int address)
 void TwoWire::end()
 {
     i2c_reset((i2c_t *)this->pI2C);
+    _initStatus = false;
 }
 
 void TwoWire::setClock(uint32_t frequency)

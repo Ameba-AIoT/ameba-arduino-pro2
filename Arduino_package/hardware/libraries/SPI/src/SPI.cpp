@@ -37,33 +37,25 @@ SPIClass::SPIClass(spi_t *pSpiObj, int mosi_pin, int miso_pin, int clk_pin, int 
 
 void SPIClass::begin(void)
 {
-    amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
-    amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
-    amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
-    amb_ard_pin_check_fun(_pinSS, PIO_SPI);
-
-    _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
-    _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
-    _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
-    _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
-
-    spi_init(
-        pSpiMaster,
-        (PinName)(_pinMOSI),
-        (PinName)(_pinMISO),
-        (PinName)(_pinCLK),
-        (PinName)(_pinSS));
-    spi_format(pSpiMaster, _dataBits, _dataMode, 0);
-    spi_frequency(pSpiMaster, _defaultFrequency);
-
-    // Mark SPI init status
-    _initStatus = true;
+    begin(SPI_MODE_MASTER);
 }
 
 void SPIClass::begin(int ss_pin)
 {
     _pinSS = ss_pin;
 
+    begin();
+}
+
+void SPIClass::begin(char SPI_mode)
+{
+    if (_initStatus) {
+        // Already initialized, so do nothing or maybe re-config only
+        return;
+    }
+
+    _SPI_Mode = SPI_mode;
+
     amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
     amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
     amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
@@ -74,83 +66,36 @@ void SPIClass::begin(int ss_pin)
     _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
     _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
 
-    spi_init(
-        pSpiMaster,
-        (PinName)(_pinMOSI),
-        (PinName)(_pinMISO),
-        (PinName)(_pinCLK),
-        (PinName)(_pinSS));
-    spi_format(pSpiMaster, _dataBits, _dataMode, 0);
-    spi_frequency(pSpiMaster, _defaultFrequency);
+    if (_SPI_Mode == SPI_MODE_MASTER) {
+        spi_init(
+            pSpiMaster,
+            (PinName)(_pinMOSI),
+            (PinName)(_pinMISO),
+            (PinName)(_pinCLK),
+            (PinName)(_pinSS));
+        spi_format(pSpiMaster, _dataBits, _dataMode, 0);
+        spi_frequency(pSpiMaster, _defaultFrequency);
+    } else if (_SPI_Mode == SPI_MODE_SLAVE) {
+        spi_init(
+            pSpiSlave,
+            (PinName)(_pinMOSI),
+            (PinName)(_pinMISO),
+            (PinName)(_pinCLK),
+            (PinName)(_pinSS));
+        spi_format(pSpiSlave, _dataBits, _dataMode, 1);
+    } else {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SPI begin: SPI mode \n");
+        return;
+    }
 
     // Mark SPI init status
     _initStatus = true;
 }
 
-void SPIClass::begin(char SPI_mode)
-{
-    _SPI_Mode = SPI_mode;
-    if (_SPI_Mode == SPI_MODE_MASTER) {
-        begin();
-    } else if (_SPI_Mode == SPI_MODE_SLAVE) {
-        amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
-        amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
-        amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
-        amb_ard_pin_check_fun(_pinSS, PIO_SPI);
-
-        _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
-        _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
-        _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
-        _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
-
-        spi_init(
-            pSpiSlave,
-            (PinName)(_pinMOSI),
-            (PinName)(_pinMISO),
-            (PinName)(_pinCLK),
-            (PinName)(_pinSS));
-        spi_format(pSpiSlave, _dataBits, _dataMode, 1);
-
-        // Mark SPI init status
-        _initStatus = true;
-    } else {
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SPI begin: SPI mode \n");
-        return;
-    }
-}
-
 void SPIClass::begin(int ss_pin, char SPI_mode)
 {
-    _SPI_Mode = SPI_mode;
-    if (_SPI_Mode == SPI_MODE_MASTER) {
-        begin(ss_pin);
-    } else if (_SPI_Mode == SPI_MODE_SLAVE) {
-        _pinSS = ss_pin;
-
-        amb_ard_pin_check_fun(_pinMOSI, PIO_SPI);
-        amb_ard_pin_check_fun(_pinMISO, PIO_SPI);
-        amb_ard_pin_check_fun(_pinCLK, PIO_SPI);
-        amb_ard_pin_check_fun(_pinSS, PIO_SPI);
-
-        _pinMOSI = (PinName)g_APinDescription[_pinMOSI].pinname;
-        _pinMISO = (PinName)g_APinDescription[_pinMISO].pinname;
-        _pinCLK = (PinName)g_APinDescription[_pinCLK].pinname;
-        _pinSS = (PinName)g_APinDescription[_pinSS].pinname;
-
-        spi_init(
-            pSpiSlave,
-            (PinName)(_pinMOSI),
-            (PinName)(_pinMISO),
-            (PinName)(_pinCLK),
-            (PinName)(_pinSS));
-        spi_format(pSpiSlave, _dataBits, _dataMode, 1);
-
-        // Mark SPI init status
-        _initStatus = true;
-    } else {
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SPI begin: SPI mode \n");
-        return;
-    }
+    _pinSS = ss_pin;
+    begin(SPI_mode);
 }
 
 void SPIClass::beginTransaction(uint8_t ss_pin, SPISettings settings)
@@ -191,9 +136,10 @@ void SPIClass::endTransaction(void)
 byte SPIClass::transfer(uint8_t data, SPITransferMode mode)
 {    // transfer 1 byte data without SS
     (void)mode;
-    spi_master_write(pSpiMaster, data);
+    // spi_master_write(pSpiMaster, data);
     // amb_ard_printf(ARD_LOG_INFO, "\r\n[INFO] Master write: %02X\n", _data);
-    return 0;
+    // return 0;
+    return spi_master_write(pSpiMaster, data);
 }
 
 byte SPIClass::transfer(byte pin, uint8_t data, SPITransferMode mode)
@@ -202,10 +148,10 @@ byte SPIClass::transfer(byte pin, uint8_t data, SPITransferMode mode)
         pinMode(pin, OUTPUT);
         digitalWrite(pin, 0);
     }
-    spi_master_write(pSpiMaster, data);
+    // spi_master_write(pSpiMaster, data);
     // amb_ard_printf(ARD_LOG_INFO, "\r\n[INFO] Master write: %02X\n", _data);
-
-    return 0;
+    // return 0;
+    return spi_master_write(pSpiMaster, data);
 }
 
 void SPIClass::transfer(byte pin, void *buf, SIZE_T count, SPITransferMode mode)
@@ -331,6 +277,8 @@ void SPIClass::end(char SPI_mode)
     } else if (_SPI_Mode == SPI_MODE_SLAVE) {
         spi_free(pSpiSlave);
     }
+
+    _initStatus = false;
 }
 
 SPIClass SPI((&spi_obj0), SPI_MOSI, SPI_MISO, SPI_SCLK, SPI_SS);
