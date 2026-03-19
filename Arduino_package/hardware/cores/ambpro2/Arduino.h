@@ -90,7 +90,7 @@ extern void set_video_logging(int enable);
 extern void set_module_video_logging(int enable);
 extern void set_osd_log(int enable);
 
-#if defined(Arduino_SHOW_NN_OSD_LOGS) || defined(Arduino_SHOW_VIDEO_OSD_LOGS)
+#if defined(Arduino_SHOW_NN_OSD_LOGS) || defined(Arduino_SHOW_VIDEO_OSD_LOGS) || defined(Arduino_SHOW_ALL_LOGS)
 #define INIT_OSD_LOGGING() set_osd_log(1);
 #else
 #define INIT_OSD_LOGGING() set_osd_log(0);
