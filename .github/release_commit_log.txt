@@ -1,12 +1,13 @@
 Feature:
-- Add Battery-Powered Camera POC Example
-- Add Audio Trigger Recording example
+- Add Video with Zoom feature
+- Add TensorFlowLite
+- Add AntiCollision POC and update POC example links
 
 API Updates:
-- Update code base
-- Delete Arduino_package/hardware/libraries/POC-Example directory
-- Updated POC examples and Example folder name
+- Add audio high pass filter API
+- Add configureAutoReconnect API
+- Add .h to modify USE_SENSOR macro
+- Update ServerDrv API for WiFi TCP data corruption
 
 Misc:
-- Update tools version 1.4.8
-    - Add camera sensor support, IMX681, IMX681_12M, IMX681_12M_SEQ, OV50A40
+- Update auto_zip_lib.yml

@@ -16,7 +16,7 @@ jobs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
     env:
       # Customize excluded library directory names here (space-separated)
-      EXCLUDED_LIBS: "TensorFlowLite FolderA FolderB"
+      EXCLUDED_LIBS: "TFLite FolderA FolderB"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
