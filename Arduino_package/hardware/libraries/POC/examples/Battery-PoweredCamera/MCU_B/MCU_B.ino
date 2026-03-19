@@ -1,15 +1,21 @@
-#include "PowerMode.h"
+/*
+ Example guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/POC/Battery-Powered%20Camera.html
+*/
 
+#include "PowerMode.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
 #include "RTSP.h"
 #include "VideoStreamOverlay.h"
 #include "MP4Recording.h"
 
-#define WAKEUP_SOURCE       3
-#define RETENTION           0
-#define PIN_NUMBER          0
-#define CHANNEL             0
+#define WAKEUP_SOURCE 3
+#define RETENTION     0
+#define PIN_NUMBER    0
+#define CHANNEL       0
+
+// Delay is in multiples of 100ms. 50 = 5000ms = 5s.
 #define END_RECORDING_DELAY 50
 
 String detected = "detected";

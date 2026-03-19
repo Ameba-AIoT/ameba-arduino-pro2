@@ -1,3 +1,8 @@
+/*
+ Example guide:
+https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/POC/Birdfeeder.html
+*/
+
 #include "WiFi.h"
 #include "StreamIO.h"
 #include "VideoStream.h"
