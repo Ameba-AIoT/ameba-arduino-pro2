@@ -1,6 +1,8 @@
 /*
+ This example demonstrates the trigger of MP4 recording based on sound detection level of microphone.
+
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Audio/Audio%20Trigger%20Recording.html
 */
 
 #include "WiFi.h"
