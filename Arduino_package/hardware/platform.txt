@@ -6,7 +6,7 @@
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
 name=AmebaPro2 ARM (32-bits) Boards
-version=4.0.X
+version=4.1.X
 toolchain_version=1.0.1
 toolchain_p1_name=ameba_pro2_toolchain
 toolchain_p2_name=ameba_pro2_toolchain2
@@ -59,7 +59,7 @@ compiler.ameba.c.include= "-I." "-I{ameba.proj_path}/inc" "-I{ameba.component_pa
 compiler.arduino.c.include="-I{build.core.path}"
 
 
-# Compiler 
+# Compiler
 # ----------------------
 ##Optimization flags
 # O2 = optimize for code size and execution speed
@@ -116,11 +116,9 @@ compiler.elf2hex.cmd=arm-none-eabi-objcopy
 compiler.size.cmd=arm-none-eabi-size
 compiler.define=-DARDUINO
 
-
 # Ameba archive list
 # -------------------
 compiler.ameba.ar.list= "{com_lib.path}/libfaac.a" "{com_lib.path}/libfmp4.a" "{com_lib.path}/libg711.a" "{com_lib.path}/libhaac.a" "{com_lib.path}/libhmp3.a" "{com_lib.path}/libhttp.a" "{com_lib.path}/libmmf.a" "{com_lib.path}/libmuxer.a" "{com_lib.path}/libnn.a" "{com_lib.path}/libopus.a" "{com_lib.path}/libopusenc.a" "{com_lib.path}/libopusfile.a" "{com_lib.path}/libqrcode.a" "{com_lib.path}/libsdcard.a" "{com_lib.path}/libusbd.a" "{com_lib.path}/libvideo_ntz.a" "{com_lib.path}/libwlan.a" "{com_lib.path}/libwps.a" "{com_lib.path}/btgap.a" "{com_lib.path}/hal_pmc.a" "{com_lib.path}/libsoc_ntz.a" "{com_lib.path}/libarduino.a" "{com_lib.path}/libispfeature.a" "{com_lib.path}/libctaec.a" "{com_lib.path}/liboutsrc.a" "{com_lib.path}/libVQE.a" "{com_lib.path}/libmd.a" "{com_lib.path}/libfdkaac.a" "{com_lib.path}/libeap.a" "{com_lib.path}/libarduino_sensor_sel.a" "{com_lib.path}/libwebsocket_viewer.a"
-
 
 # USB Flags
 # ---------
@@ -152,6 +150,10 @@ recipe.hooks.prebuild.5.pattern.windows = "{ameba.tools_path}/nn_json_modify_win
 recipe.hooks.prebuild.5.pattern.linux = {ameba.tools_path}/nn_json_modify_linux {build.path} {ameba.tools_path} {build.model_src}
 recipe.hooks.prebuild.5.pattern.macosx = {ameba.tools_path}/nn_json_modify_macos {build.path} {ameba.tools_path} {build.model_src}
 
+recipe.hooks.prebuild.6.pattern.windows="{ameba.tools_path}/compile_system_windows.exe" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
+recipe.hooks.prebuild.6.pattern.linux="{ameba.tools_path}/compile_system_linux" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
+recipe.hooks.prebuild.6.pattern.macosx="{ameba.tools_path}/compile_system_macos" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
+
 # Ameba compile patterns
 # ----------------------
 ## Compile c file
@@ -164,6 +166,11 @@ recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -c
 
 ## Create archives
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+
+# Run between compile and link
+recipe.hooks.linking.prelink.1.pattern.windows="{ameba.tools_path}/handel_libarduino_windows.exe" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
+recipe.hooks.linking.prelink.1.pattern.linux="{ameba.tools_path}/handel_libarduino_linux" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
+recipe.hooks.linking.prelink.1.pattern.macosx="{ameba.tools_path}/handel_libarduino_macos" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
 
 ## Linking
 recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-Wl,-L{toolchain.path}/lib/" "-Wl,-L{build.variant.path}/linker_scripts/gcc" "-Wl,-T{build.variant.path}/{build.ldscript}" "-Wl,-Map={build.path}/application.ntz.map" -o "{build.path}/application.ntz" -Wl,--start-group {object_files} -Wl,--start-group -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--end-group -Wl,--end-group -Wl,--start-group -Wl,--no-whole-archive {compiler.ameba.ar.list} -lstdc++ -lm -lc -lgcc -lnosys -Wl,--end-group 

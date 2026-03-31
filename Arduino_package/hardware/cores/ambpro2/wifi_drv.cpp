@@ -28,6 +28,9 @@ extern "C" {
 #include "ard_socket.h"
 
 extern struct netif xnetif[NET_IF_NUM];
+extern rtw_mode_t wifi_mode;
+extern struct static_ip_config user_static_ip;
+
 #ifdef __cplusplus
 }
 #endif
@@ -39,9 +42,8 @@ int32_t WiFiDrv::_networkRssi[WL_NETWORKS_LIST_MAXNUM] = {0};
 uint32_t WiFiDrv::_networkEncr[WL_NETWORKS_LIST_MAXNUM] = {0};
 
 static bool init_wlan = false;
-// static int wifi_mode = NULL;
-rtw_mode_t wifi_mode = RTW_MODE_STA;
-struct static_ip_config user_static_ip;
+// rtw_mode_t wifi_mode = RTW_MODE_STA;
+// struct static_ip_config user_static_ip;
 
 static rtw_network_info_t wifi;
 static rtw_softap_info_t ap = {0};
