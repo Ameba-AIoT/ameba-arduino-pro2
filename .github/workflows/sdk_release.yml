@@ -23,6 +23,16 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Checkout private scripts
+        uses: actions/checkout@v4
+        with:
+          repository: M-ichae-l/python_script_private
+          token: ${{ secrets.GH_PAT }}
+          path: private_scripts
+          sparse-checkout: |
+            ameba_arduino_release_notes_maker.py
+            ameba_arduino_release_package_maker.py
+
       - name: Check branch
         run: |
           echo "Current branch (full ref): $GITHUB_REF"
@@ -47,8 +57,8 @@ jobs:
       - name: Execute python script
         run: |
           echo "Performing Early release workflow..."
-          python .github/Scripts/Python/python_script_public/ameba_arduino_release_package_maker.py ${{ env.REPO_NAME }} E ${{ env.LAST_TAG }} ${{ env.PACKAGE_SHA }} ${{ env.PACKAGE_SIZE }} ${{ env.JSON_LINK_DEV }} ${{ env.RRLEASE_BRANCH_NAME }}
-          python .github/Scripts/Python/python_script_public/ameba_arduino_release_notes_maker.py E ${{ env.RRLEASE_LOG }} ${{ env.RRLEASE_COMMIT_LOG }} ${{ env.LAST_TAG }}
+          python private_scripts/ameba_arduino_release_package_maker.py ${{ env.REPO_NAME }} E ${{ env.LAST_TAG }} ${{ env.PACKAGE_SHA }} ${{ env.PACKAGE_SIZE }} ${{ env.JSON_LINK_DEV }} ${{ env.RRLEASE_BRANCH_NAME }}
+          python private_scripts/ameba_arduino_release_notes_maker.py E ${{ env.RRLEASE_LOG }} ${{ env.RRLEASE_COMMIT_LOG }} ${{ env.LAST_TAG }}
         shell: bash
 
       - name: Set commit message
