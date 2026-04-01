@@ -7,6 +7,7 @@ on:
   # weekly, Monday, 12 00 AM
   schedule:
     - cron: '0 12 * * 1'
+  workflow_dispatch:
 
 jobs:
   build-matrix:
@@ -25,7 +26,6 @@ jobs:
           sparse-checkout: |
             Arduino_package/hardware/cores
             Arduino_package/hardware/libraries
-            .github/Coding_Style/coding_style_mbed
 
       - name: Generate matrix JSON (exclude configurable libraries)
         id: gen-matrix
@@ -83,19 +83,27 @@ jobs:
         path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
 
     steps:
-      - name: Checkout repository and submodules
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
           sparse-checkout: |
             Arduino_package/hardware/cores
             Arduino_package/hardware/libraries
-            .github/Coding_Style/coding_style_mbed
+
+      - name: Checkout private clang-format config
+        uses: actions/checkout@v4
+        with:
+          repository: M-ichae-l/python_script_private
+          token: ${{ secrets.GH_PAT }}
+          path: _clang_config
+          sparse-checkout: |
+            coding_style_mbed/.clang-format
 
       - name: Run C/C++/header files check
         uses: M-ichae-l/clang-format-action@v1.0.0
         with:
           clang-format-version: '17'
           check-path: ${{ matrix.path }}
-          clang-format-style-path: .github/Coding_Style/coding_style_mbed/.clang-format
+          clang-format-style-path: _clang_config/coding_style_mbed/.clang-format
           fallback-style: 'Mozilla' # optional
