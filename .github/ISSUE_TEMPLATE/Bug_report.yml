@@ -6,9 +6,9 @@ body:
     attributes:
       value: |
         * Please check [Online Documentation](https://www.amebaiot.com/en/ameba-arduino-summary/)
-        * Please check [FAQ](https://forum.amebaiot.com/c/faq/48), [forum](https://forum.amebaiot.com/) and [GitHub Wiki](https://github.com/ambiot/ambpro2_arduino/wiki)
-        * Please check and search in [List of closed issues](https://github.com/ambiot/ambpro2_arduino/issues?q=is%3Aissue+is%3Aclosed)
-        * Please check and search in [List of existing issues](https://github.com/ambiot/ambpro2_arduino/issues?q=is%3Aopen+is%3Aissue)
+        * Please check [FAQ](https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/FAQ/index.html), [forum](https://forum.amebaiot.com/) and [GitHub Wiki](https://github.com/Ameba-AIoT/ameba-arduino-pro2/wiki)
+        * Please check and search in [List of closed issues](https://github.com/Ameba-AIoT/ameba-arduino-pro2/issues?q=is%3Aissue+is%3Aclosed)
+        * Please check and search in [List of existing issues](https://github.com/Ameba-AIoT/ameba-arduino-pro2/issues?q=is%3Aopen+is%3Aissue)
         * If still experiencing the issue, please provide as many details as possible below about your hardware, environment setup and software.
   - type: input
     id: br-boards
@@ -42,6 +42,7 @@ body:
       options:
         - latest dev (checkout manually)
         - latest main (checkout manually)
+        - v4.1.0
         - v4.0.9
         - v4.0.8
         - v4.0.7
