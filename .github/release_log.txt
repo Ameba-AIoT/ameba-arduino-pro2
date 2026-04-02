@@ -2,6 +2,7 @@ Pre Release Version 4.1.1
 
 Version 4.1.1 - 2026/03/06
 Version 4.1.1 - 2026/03/20
+Version 4.1.1 - 2026/04/02
 
 Feature:
 - Add Battery-Powered Camera POC Example
@@ -9,6 +10,7 @@ Feature:
 - Add Video with Zoom feature
 - Add TensorFlowLite
 - Add AntiCollision POC and update POC example links
+- Add sound detector trigger example
 
 API Updates:
 - Update code base
@@ -18,8 +20,17 @@ API Updates:
 - Add configureAutoReconnect API
 - Add .h to modify USE_SENSOR macro
 - Update ServerDrv API for WiFi TCP data corruption
+- Add application level source code at "system" folder
+- Add sensor K306P support
 
 Misc:
 - Update tools version 1.4.8
     - Add camera sensor support, IMX681, IMX681_12M, IMX681_12M_SEQ, OV50A40
 - Update auto_zip_lib.yml
+- Update the Arduino IDE menu
+- Update SD_model
+- Update ameba_pro2_tools 1.4.9
+    - Add "Dev Mode" or "Fast Mode" for compilation
+    - Support camera sensor K306P
+    - Update signed tools
+    - Update img classification eg and nn_model.json
