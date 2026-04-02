@@ -6,8 +6,10 @@ API Updates:
 - Add sensor K306P support
 
 Misc:
-- Add "Dev Mode" or "Fast Mode" for compilation
 - Update the Arduino IDE menu
-- Update lib for sensor K306P support
-- Update signed tools
-- Minor bug fix
+- Update SD_model
+- Update ameba_pro2_tools 1.4.9
+    - Add "Dev Mode" or "Fast Mode" for compilation
+    - Support camera sensor K306P
+    - Update signed tools
+    - Update img classification eg and nn_model.json
