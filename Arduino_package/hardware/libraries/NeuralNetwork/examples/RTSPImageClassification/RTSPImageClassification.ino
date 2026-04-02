@@ -89,10 +89,13 @@ void setup()
     // Configure object detection with corresponding video format information
     // Select Neural Network(NN) task and models
     imgclass.configVideo(configNN);
-    imgclass.configInputImageColor(IMAGERGB);    // only valid use for custom CNN model (e.g sequential)
+    // only valid use for custom CNN model (e.g sequential)
+    imgclass.configInputImageColor(IMAGERGB);
     imgclass.useModelMetaData(USE_MODEL_META_DATA_EN);
-    imgclass.setResultCallback(ICPostProcess_MobileNetV2);                                                               // MobileNetV2 model callback function: ICPostProcess_MobileNetV2, custom CNN model (e.g sequential) callback function: ICPostProcess
-    imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS_MOBILENETV2);    // if using MobileNetV2 model: DEFAULT_IMGCLASS_MOBILENETV2/CUSTOMIZED_IMGCLASS_MOBILENETV2, custom CNN model (e.g sequential): DEFAULT_IMGCLASS/CUSTOMIZED_IMGCLASS
+    // MobileNetV2 model callback function: ICPostProcess_MobileNetV2, custom CNN model (e.g sequential) callback function: ICPostProcess
+    imgclass.setResultCallback(ICPostProcess_MobileNetV2);
+    // if using MobileNetV2 model: DEFAULT_IMGCLASS_MOBILENETV2/CUSTOMIZED_IMGCLASS_MOBILENETV2, custom CNN model (e.g sequential): DEFAULT_IMGCLASS/CUSTOMIZED_IMGCLASS
+    imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS_MOBILENETV2);    
     imgclass.begin();
 
     // Configure StreamIO object to stream data from video channel to RTSP
