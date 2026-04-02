@@ -1,13 +1,13 @@
 Feature:
-- Add Video with Zoom feature
-- Add TensorFlowLite
-- Add AntiCollision POC and update POC example links
+- Add sound detector trigger example
 
 API Updates:
-- Add audio high pass filter API
-- Add configureAutoReconnect API
-- Add .h to modify USE_SENSOR macro
-- Update ServerDrv API for WiFi TCP data corruption
+- Add application level source code at "system" folder
+- Add sensor K306P support
 
 Misc:
-- Update auto_zip_lib.yml
+- Add "Dev Mode" or "Fast Mode" for compilation
+- Update the Arduino IDE menu
+- Update lib for sensor K306P support
+- Update signed tools
+- Minor bug fix
