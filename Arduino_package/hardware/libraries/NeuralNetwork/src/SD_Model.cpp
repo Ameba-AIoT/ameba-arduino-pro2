@@ -76,37 +76,37 @@ static void *yolov7_get_SD_filename(void)
 static void *scrfd_get_SD_filename(void)
 {
     /* set filename of customized model */
-    return (void *)"sd:/NN_MDL/scrfd.nb";
+    return (void *)"sd:/NN_MDL/scrfd_500m_bnkps_640x640_u8.nb";
 }
 
 static void *mobilefacenet_get_SD_filename(void)
 {
     /* set filename of customized model */
-    return (void *)"sd:/NN_MDL/mobilefacenet.nb";
+    return (void *)"sd:/NN_MDL/mobilefacenet_int16.nb";
 }
 
 static void *yamnet_get_SD_filename(void)
 {
     /* set filename of customized model */
-    return (void *)"sd:/NN_MDL/yamnet.nb";
+    return (void *)"sd:/NN_MDL/yamnet_fp16.nb";
 }
 
 static void *classification_get_SD_filename(void)
 {
     /* set filename of customized model */
-    return (void *)"sd:/NN_MDL/imgclassification.nb";
+    return (void *)"sd:/NN_MDL/img_class_cnn.nb";
 }
 
 static void *palmdet_get_SD_filename(void)
 {
     /* set filename of customized model */
-    return (void *)"sd:/NN_MDL/palm_detection.nb";
+    return (void *)"sd:/NN_MDL/palm_detection_lite_int16.nb";
 }
 
 static void *handlandmark_get_SD_filename(void)
 {
     /* set filename of customized model */
-    return (void *)"sd:/NN_MDL/hand_landmark.nb";
+    return (void *)"sd:/NN_MDL/hand_landmark_lite_int16.nb";
 }
 
 static void *classification_mobilenetv2_get_SD_filename(void)

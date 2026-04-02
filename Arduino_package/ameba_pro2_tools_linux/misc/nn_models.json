@@ -41,7 +41,7 @@
 		"CUSTOMIZED_MOBILEFACENET": "mobilefacenet_i16",
 		"CUSTOMIZED_SCRFD": "scrfd640",
 		"CUSTOMIZED_YAMNET": "yamnet_fp16",
-		"CUSTOMIZED_IMGCLASS": "img_class_cnn",
+		"CUSTOMIZED_IMGCLASS": "img_class",
 		"CUSTOMIZED_IMGCLASS_MOBILENETV2": "mobilenetv2_int16",
 		"CUSTOMIZED_PALMDETECT": "palm_detection_lite_int16",
 		"CUSTOMIZED_HANDLANDMARK": "hand_landmark_lite_int16",
@@ -66,7 +66,7 @@
 		"scrfd320p": "scrfd_500m_bnkps_576x320_u8.nb",
         "scrfd640": "scrfd_500m_bnkps_640x640_u8.nb",
         "yamnet_fp16": "yamnet_fp16.nb",
-        "mobilenetv2": "mobilenetv2_int16.nb",
+        "mobilenetv2_int16": "mobilenetv2_int16.nb",
 		"img_class": "img_class_cnn.nb",
 		"palm_detection_lite_int16": "palm_detection_lite_int16.nb",
         "hand_landmark_lite_int16": "hand_landmark_lite_int16.nb"
