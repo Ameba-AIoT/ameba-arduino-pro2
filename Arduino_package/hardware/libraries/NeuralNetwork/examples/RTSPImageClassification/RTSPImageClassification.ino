@@ -95,7 +95,7 @@ void setup()
     // MobileNetV2 model callback function: ICPostProcess_MobileNetV2, custom CNN model (e.g sequential) callback function: ICPostProcess
     imgclass.setResultCallback(ICPostProcess_MobileNetV2);
     // if using MobileNetV2 model: DEFAULT_IMGCLASS_MOBILENETV2/CUSTOMIZED_IMGCLASS_MOBILENETV2, custom CNN model (e.g sequential): DEFAULT_IMGCLASS/CUSTOMIZED_IMGCLASS
-    imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS_MOBILENETV2);    
+    imgclass.modelSelect(IMAGE_CLASSIFICATION, NA_MODEL, NA_MODEL, NA_MODEL, NA_MODEL, DEFAULT_IMGCLASS_MOBILENETV2);
     imgclass.begin();
 
     // Configure StreamIO object to stream data from video channel to RTSP
