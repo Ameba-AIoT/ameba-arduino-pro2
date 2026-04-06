@@ -13,6 +13,11 @@ jobs:
   build-matrix:
     name: Build formatting matrix
     runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'pull_request_target') ||
+      (github.event_name == 'schedule') ||
+      (github.event_name == 'workflow_dispatch')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
     env:
@@ -35,12 +40,10 @@ jobs:
           CORE_PATH="Arduino_package/hardware/cores"
           LIB_ROOT="Arduino_package/hardware/libraries"
           echo "Excluded libraries: $EXCLUDED_LIBS"
-
           # Collect all first-level library directories
           ALL_LIB_DIRS=$(find "$LIB_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%P\n')
           echo "All library directories:"
           echo "$ALL_LIB_DIRS"
-
           # Filter out excluded names
           FILTERED_LIB_DIRS=""
           for d in $ALL_LIB_DIRS; do
@@ -58,7 +61,6 @@ jobs:
           done
           echo "Libraries after exclusion:"
           echo "$FILTERED_LIB_DIRS"
-
           # Build JSON array: ["cores", "libraries/Lib1", "libraries/Lib2", ...]
           JSON="[\"$CORE_PATH\""
           for d in $FILTERED_LIB_DIRS; do
@@ -75,7 +77,6 @@ jobs:
     strategy:
       matrix:
         path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
