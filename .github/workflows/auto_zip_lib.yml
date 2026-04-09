@@ -44,11 +44,72 @@ jobs:
             ameba_arduino_zip_lib_update.py
 
       # -------------------------------------------------
-      # Step 2: Run private python script
+      # Step 2: Detect changed src folders, block illegal ZIPs,
+      #         run python, then zip only changed folders
       # -------------------------------------------------
-      - name: Run python script
+      - name: Detect changes, run python and zip changed folders
         run: |
-          python private_scripts/ameba_arduino_zip_lib_update.py
+          set -e
+          SRC_DIR="Arduino_zip_libraries/src"
+          ZIP_DIR="$(pwd)/Arduino_zip_libraries"
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_REF="HEAD~1"
+          fi
+          echo "Comparing against $BASE_REF"
+          CHANGED_FILES=$(git diff --name-only "$BASE_REF" HEAD || true)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Block manual ZIP changes
+          ZIP_CHANGED=$(echo "$CHANGED_FILES" | grep -E '\.zip$' || true)
+          SRC_CHANGED=$(echo "$CHANGED_FILES" | grep -E 'Arduino_zip_libraries/src/' || true)
+          if [ -n "$ZIP_CHANGED" ] && [ -z "$SRC_CHANGED" ]; then
+            echo "❌ ZIP files were modified without src/ changes"
+            exit 1
+          fi
+
+          # Build array of unique changed folder names under src/
+          CHANGED_FOLDERS=()
+          while IFS= read -r file; do
+            if [[ "$file" == Arduino_zip_libraries/src/* ]]; then
+              FOLDER=$(echo "$file" | awk -F'/' '{print $3}')
+              if [ -n "$FOLDER" ] && [[ ! " ${CHANGED_FOLDERS[*]} " =~ " ${FOLDER} " ]]; then
+                CHANGED_FOLDERS+=("$FOLDER")
+              fi
+            fi
+          done <<< "$CHANGED_FILES"
+
+          if [ ${#CHANGED_FOLDERS[@]} -eq 0 ]; then
+            echo "ℹ️ No src/ folder changes detected, skipping"
+            exit 0
+          fi
+
+          echo "✅ Changed folders: ${CHANGED_FOLDERS[*]}"
+
+          # Run python script with changed folders as arguments
+          python private_scripts/ameba_arduino_zip_lib_update.py "${CHANGED_FOLDERS[@]}"
+
+          # Install zip
+          sudo apt-get update && sudo apt-get install -y zip
+
+          # Zip only changed folders
+          for FOLDER in "${CHANGED_FOLDERS[@]}"; do
+            LIB_PATH="$SRC_DIR/$FOLDER"
+            ZIP_PATH="$ZIP_DIR/${FOLDER}.zip"
+            if [ -d "$LIB_PATH" ]; then
+              echo "Zipping $FOLDER → $ZIP_PATH"
+              rm -f "$ZIP_PATH"
+              (
+                cd "$LIB_PATH"
+                zip -r "$ZIP_PATH" .
+              )
+            else
+              echo "⚠️ Folder $FOLDER not found in $SRC_DIR, skipping"
+            fi
+          done
 
       # -------------------------------------------------
       # Step 3: Cleanup private scripts
@@ -58,57 +119,7 @@ jobs:
         run: rm -rf private_scripts
 
       # -------------------------------------------------
-      # Step 4: Block manual ZIP changes
-      # -------------------------------------------------
-      - name: Detect illegal ZIP changes
-        run: |
-          set -e
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BASE_REF="${{ github.event.pull_request.base.sha }}"
-          else
-            BASE_REF="HEAD~1"
-          fi
-          echo "Comparing against $BASE_REF"
-          CHANGED_FILES=$(git diff --name-only "$BASE_REF" HEAD || true)
-          ZIP_CHANGED=$(echo "$CHANGED_FILES" | grep -E '\.zip$' || true)
-          SRC_CHANGED=$(echo "$CHANGED_FILES" | grep -E '/src/' || true)
-          if [ -n "$ZIP_CHANGED" ] && [ -z "$SRC_CHANGED" ]; then
-            echo "❌ ZIP files were modified without src/ changes"
-            exit 1
-          fi
-          echo "✅ ZIP change check passed"
-
-      # -------------------------------------------------
-      # Step 5: Install zip utility
-      # -------------------------------------------------
-      - name: Install zip
-        run: sudo apt-get update && sudo apt-get install -y zip
-
-      # -------------------------------------------------
-      # Step 6: Generate ZIP files (contents only)
-      # -------------------------------------------------
-      - name: Generate ZIP files from src
-        run: |
-          set -e
-          SRC_DIR="Arduino_zip_libraries/src"
-          ZIP_DIR="$(pwd)/Arduino_zip_libraries"
-          echo "Processing libraries in $SRC_DIR"
-          for lib in "$SRC_DIR"/*; do
-            if [ -d "$lib" ]; then
-              LIB_NAME=$(basename "$lib")
-              ZIP_PATH="$ZIP_DIR/${LIB_NAME}.zip"
-              echo "Zipping $LIB_NAME → $ZIP_PATH"
-              rm -f "$ZIP_PATH"
-              # Zip ONLY contents of the library folder
-              (
-                cd "$lib"
-                zip -r "$ZIP_PATH" .
-              )
-            fi
-          done
-
-      # -------------------------------------------------
-      # Step 7: Commit & push updated ZIPs
+      # Step 4: Commit & push updated ZIPs
       # -------------------------------------------------
       - name: Commit and push ZIP updates
         if: github.event_name != 'pull_request'
