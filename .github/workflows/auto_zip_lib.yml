@@ -133,3 +133,4 @@ jobs:
             git add Arduino_zip_libraries/*.zip
             git commit -m "Auto-update Arduino ZIP libraries"
             git push
+          fi
