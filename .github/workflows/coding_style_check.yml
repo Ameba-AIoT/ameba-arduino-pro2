@@ -4,7 +4,6 @@ name: Check mbed coding style
 on:
   push:
   pull_request_target:
-  # weekly, Monday, 12 00 AM
   schedule:
     - cron: '0 12 * * 1'
   workflow_dispatch:
@@ -16,8 +15,8 @@ jobs:
     if: |
       (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
       (github.event_name == 'pull_request_target') ||
-      (github.event_name == 'schedule') ||
-      (github.event_name == 'workflow_dispatch')
+      (github.event_name == 'schedule' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
     env:
