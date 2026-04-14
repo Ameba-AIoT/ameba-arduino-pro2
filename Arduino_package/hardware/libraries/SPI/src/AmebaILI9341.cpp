@@ -246,7 +246,6 @@ void AmebaILI9341::clr(void)
 
 void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color)
 {
-    uint8_t color_hi, color_lo;
 
     if ((x >= _width) || (y >= _height)) {
         return;
@@ -263,7 +262,6 @@ void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const 
     setAddress(x, y, (x + w - 1), (y + h - 1));
 
     uint32_t pixelCount = h * w;
-    uint32_t i;
 
     //*portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
