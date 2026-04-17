@@ -27,7 +27,6 @@ toolchain_p1_name_path={toolchain_p1_name}/{toolchain_p1_version}
 toolchain_p2_name_path={toolchain_p2_name}/{toolchain_p2_version}
 nn_tool_name_path={nn_tool_name}/{nn_tool_version}
 
-
 # Ameba paths
 # ----------------------
 ## package/lib/SDK path
@@ -150,9 +149,9 @@ recipe.hooks.prebuild.5.pattern.windows = "{ameba.tools_path}/nn_json_modify_win
 recipe.hooks.prebuild.5.pattern.linux = {ameba.tools_path}/nn_json_modify_linux {build.path} {ameba.tools_path} {build.model_src}
 recipe.hooks.prebuild.5.pattern.macosx = {ameba.tools_path}/nn_json_modify_macos {build.path} {ameba.tools_path} {build.model_src}
 
-recipe.hooks.prebuild.6.pattern.windows="{ameba.tools_path}/compile_system_windows.exe" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
-recipe.hooks.prebuild.6.pattern.linux="{ameba.tools_path}/compile_system_linux" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
-recipe.hooks.prebuild.6.pattern.macosx="{ameba.tools_path}/compile_system_macos" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
+### recipe.hooks.prebuild.6.pattern.windows="{ameba.tools_path}/compile_system_windows.exe" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
+### recipe.hooks.prebuild.6.pattern.linux="{ameba.tools_path}/compile_system_linux" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
+### recipe.hooks.prebuild.6.pattern.macosx="{ameba.tools_path}/compile_system_macos" "{compiler.path}" "{runtime.platform.path}" "{build.path}" "{build.compile_mode}" "{build.system.path}" "{build.f_cpu}" "{runtime.ide.version}" "{build.board}" "{build.arch}" "{build.extra_flags}" "{build.core.path}" "{build.variant.path}" "{ameba.tools_path}/includes.rsp" "{freertos_version}" "{lwip_version}" "{mbedtls_version}" "{VIPLiteDrv_version}"
 
 # Ameba compile patterns
 # ----------------------
@@ -168,9 +167,9 @@ recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -c
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 # Run between compile and link
-recipe.hooks.linking.prelink.1.pattern.windows="{ameba.tools_path}/handel_libarduino_windows.exe" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
-recipe.hooks.linking.prelink.1.pattern.linux="{ameba.tools_path}/handel_libarduino_linux" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
-recipe.hooks.linking.prelink.1.pattern.macosx="{ameba.tools_path}/handel_libarduino_macos" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
+### recipe.hooks.linking.prelink.1.pattern.windows="{ameba.tools_path}/handel_libarduino_windows.exe" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
+### recipe.hooks.linking.prelink.1.pattern.linux="{ameba.tools_path}/handel_libarduino_linux" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
+### recipe.hooks.linking.prelink.1.pattern.macosx="{ameba.tools_path}/handel_libarduino_macos" "{compiler.path}" "{build.path}" "{com_lib.path}" "{build.compile_mode}"
 
 ## Linking
 recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-Wl,-L{toolchain.path}/lib/" "-Wl,-L{build.variant.path}/linker_scripts/gcc" "-Wl,-T{build.variant.path}/{build.ldscript}" "-Wl,-Map={build.path}/application.ntz.map" -o "{build.path}/application.ntz" -Wl,--start-group {object_files} -Wl,--start-group -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--end-group -Wl,--end-group -Wl,--start-group -Wl,--no-whole-archive {compiler.ameba.ar.list} -lstdc++ -lm -lc -lgcc -lnosys -Wl,--end-group 
@@ -192,9 +191,7 @@ recipe.objcopy.hex.imagepath_appntzmap.linux="{build.path}/application.ntz.map"
 recipe.objcopy.hex.imagepath_appntzmap.macosx="{build.path}/application.ntz.map"
 
 recipe.objcopy.hex.pattern.windows="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}" "{build.ota_mode_val}" "{build.fcs_mode_val}"
-
 recipe.objcopy.hex.pattern.linux="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}" "{build.ota_mode_val}" "{build.fcs_mode_val}"
-
 recipe.objcopy.hex.pattern.macosx="{ameba.tools_path}/{recipe.objcopy.hex.cmd}" "{ameba.tools_path}" "{recipe.objcopy.hex.imagepath_appntz}" "{compiler.path}" "{build.variant.path}/{build.sym_bklist}" "{recipe.objcopy.hex.imagepath_appntzmap}" "{hardware.path}" "{build.camera_opt}" "{build.ota_mode_val}" "{build.fcs_mode_val}"
 
 ## Compute size
