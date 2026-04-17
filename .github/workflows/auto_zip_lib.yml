@@ -44,8 +44,7 @@ jobs:
             ameba_arduino_zip_lib_update.py
 
       # -------------------------------------------------
-      # Step 2: Detect changed src folders, block illegal ZIPs,
-      #         run python, then zip only changed folders
+      # Step 2: Detect changes, run python and zip changed folders
       # -------------------------------------------------
       - name: Detect changes, run python and zip changed folders
         run: |
@@ -82,34 +81,33 @@ jobs:
             fi
           done <<< "$CHANGED_FILES"
 
-          if [ ${#CHANGED_FOLDERS[@]} -eq 0 ]; then
-            echo "ℹ️ No src/ folder changes detected, skipping"
-            exit 0
-          fi
-
           echo "✅ Changed folders: ${CHANGED_FOLDERS[*]}"
 
-          # Run python script with changed folders as arguments
+          # Always run python, pass changed folders as arguments (can be empty)
           python private_scripts/ameba_arduino_zip_lib_update.py "${CHANGED_FOLDERS[@]}"
 
           # Install zip
           sudo apt-get update && sudo apt-get install -y zip
 
-          # Zip only changed folders
-          for FOLDER in "${CHANGED_FOLDERS[@]}"; do
-            LIB_PATH="$SRC_DIR/$FOLDER"
-            ZIP_PATH="$ZIP_DIR/${FOLDER}.zip"
-            if [ -d "$LIB_PATH" ]; then
-              echo "Zipping $FOLDER → $ZIP_PATH"
-              rm -f "$ZIP_PATH"
-              (
-                cd "$LIB_PATH"
-                zip -r "$ZIP_PATH" .
-              )
-            else
-              echo "⚠️ Folder $FOLDER not found in $SRC_DIR, skipping"
-            fi
-          done
+          # Zip only the folders detected BEFORE python ran
+          if [ ${#CHANGED_FOLDERS[@]} -eq 0 ]; then
+            echo "ℹ️ No src/ folder changes detected, skipping zip"
+          else
+            for FOLDER in "${CHANGED_FOLDERS[@]}"; do
+              LIB_PATH="$SRC_DIR/$FOLDER"
+              ZIP_PATH="$ZIP_DIR/${FOLDER}.zip"
+              if [ -d "$LIB_PATH" ]; then
+                echo "Zipping $FOLDER → $ZIP_PATH"
+                rm -f "$ZIP_PATH"
+                (
+                  cd "$LIB_PATH"
+                  zip -r "$ZIP_PATH" .
+                )
+              else
+                echo "⚠️ Folder $FOLDER not found in $SRC_DIR, skipping"
+              fi
+            done
+          fi
 
       # -------------------------------------------------
       # Step 3: Cleanup private scripts
