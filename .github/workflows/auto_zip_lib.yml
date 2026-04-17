@@ -2,7 +2,7 @@ name: Auto ZIP Arduino Libraries
 
 on:
   workflow_dispatch:
-  pull_request:
+  pull_request_target:
     branches:
       - dev
     paths:
@@ -18,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    if: |
+      (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'pull_request_target') ||
+      (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
     steps:
       # -------------------------------------------------
       # Step 0: Checkout ONLY Arduino_zip_libraries folder with submodules
@@ -25,6 +29,7 @@ jobs:
       - name: Checkout Arduino_zip_libraries
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           submodules: recursive
           sparse-checkout: |
@@ -52,7 +57,7 @@ jobs:
           SRC_DIR="Arduino_zip_libraries/src"
           ZIP_DIR="$(pwd)/Arduino_zip_libraries"
 
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
+          if [ "${{ github.event_name }}" = "pull_request_target" ]; then
             BASE_REF="${{ github.event.pull_request.base.sha }}"
           else
             BASE_REF="HEAD~1"
@@ -120,7 +125,7 @@ jobs:
       # Step 4: Commit & push updated ZIPs
       # -------------------------------------------------
       - name: Commit and push ZIP updates
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request_target'
         run: |
           set -e
           git config user.name "github-actions[bot]"
