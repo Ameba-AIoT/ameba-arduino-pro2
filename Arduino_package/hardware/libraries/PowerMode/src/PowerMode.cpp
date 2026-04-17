@@ -401,6 +401,223 @@ void PMClass::begin(uint32_t sleep_mode, int wakeup_source, uint32_t retention, 
 }
 
 /**
+ * @brief      Initializes the PowerMode settings with multiple wakeup sources (bitwise).
+ *             This function supports combining multiple wakeup sources using bitwise OR.
+ * @param      sleep_mode: DEEPSLEEP_MODE or STANDBY_MODE
+ *             wakeup_source: bitwise OR of wakeup source flags
+ *                            for DEEPSLEEP_MODE: DS_AON_TIMER | DS_AON_GPIO | DS_RTC | DS_COMP
+ *                            for STANDBY_MODE: SLP_AON_TIMER | SLP_AON_GPIO | SLP_RTC | etc.
+ *             retention: 0: off retention, 1: on retention
+ *             wakeup_settings: pointer to array of settings for each wakeup source
+ *                              Index 0: DS_AON_TIMER/SLP_AON_TIMER settings (clock, duration)
+ *                              Index 1: DS_AON_GPIO/SLP_AON_GPIO settings (pin number)
+ *                              Index 2: DS_RTC/SLP_RTC settings (day, hour, min, sec)
+ *                              Index 3: DS_COMP/SLP_COMP settings
+ * @retval     none
+ */
+void PMClass::begin(uint32_t sleep_mode, uint32_t wakeup_source, uint32_t retention, uint32_t *wakeup_settings)
+{
+    PM_retention_setting = retention;
+    PM_wakeup_source = wakeup_source;
+    pinMode(LED_B, OUTPUT_PULLDOWN);
+
+    // Store wakeup settings for each source
+    PM_wakeup_source_count = 0;
+    for (int i = 0; i < MAX_WAKEUP_SOURCES; i++) {
+        PM_wakeup_settings[i] = wakeup_settings[i];
+    }
+
+    // Validate: RTC wakeup is not supported when retention is enabled
+    if (retention == 1) {
+        if (sleep_mode == DEEPSLEEP_MODE) {
+            if (wakeup_source & DS_RTC) {
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] DeepSleep with retention does not support RTC wakeup. \n");
+                PM_begin_check = 0;
+                return;
+            }
+        } else if (sleep_mode == STANDBY_MODE) {
+            if (wakeup_source & SLP_RTC) {
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby with retention does not support RTC wakeup. \n");
+                PM_begin_check = 0;
+                return;
+            }
+        }
+    }
+
+    if (sleep_mode == DEEPSLEEP_MODE) {
+        // Determine which pins need pull-down based on wakeup sources
+        bool pull_down_pa2 = true;
+        bool pull_down_pa3 = true;
+
+        // If DS_AON_GPIO is set, check which pin is used as wakeup
+        if (wakeup_source & DS_AON_GPIO) {
+            uint32_t gpio_pin = wakeup_settings[1];
+            if ((g_APinDescription[gpio_pin].pinname) == PA_2) {
+                pull_down_pa2 = false;    // PA_2 is used as wakeup pin
+            } else if ((g_APinDescription[gpio_pin].pinname) == PA_3) {
+                pull_down_pa3 = false;    // PA_3 is used as wakeup pin
+            } else if ((g_APinDescription[gpio_pin].pinname) == PA_1) {
+                // If user needs to use SWD pins for GPIO, disable SWD debugging to free pins
+                sys_jtag_off();
+                // PA_1 is used, so PA_2 and PA_3 can be pulled down
+            } else {
+                amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] DeepSleep wakeup AON GPIO pin selection fail. \n");
+                PM_begin_check = 0;
+                return;
+            }
+            // Initialize GPIO IRQ for wakeup pin
+            gpio_irq_init(&PM_GPIO_IRQ, (PinName)(g_APinDescription[gpio_pin].pinname), NULL, (uint32_t)&PM_GPIO_IRQ);
+            gpio_irq_pull_ctrl(&PM_GPIO_IRQ, PullDown);
+            gpio_irq_set(&PM_GPIO_IRQ, IRQ_RISE, 1);
+        }
+
+        // Apply pull-down only to pins that are not used as wakeup pins
+        // PA_2 & PA_3 default pullup, need to be set according to external circuit
+        if (pull_down_pa2) {
+            gpio_init(&PM_GPIO_1, PA_2);
+            gpio_pull_ctrl(&PM_GPIO_1, PullDown);
+        }
+        if (pull_down_pa3) {
+            gpio_init(&PM_GPIO_2, PA_3);
+            gpio_pull_ctrl(&PM_GPIO_2, PullDown);
+        }
+
+        // Process AON Timer wakeup
+        if (wakeup_source & DS_AON_TIMER) {
+            uint32_t *PM_Aontimer_setting = (uint32_t *)wakeup_settings[0];
+            PM_clock = PM_Aontimer_setting[0];
+            PM_sleep_duration = PM_Aontimer_setting[1] * 1000 * 1000;
+        }
+
+        if (wakeup_source & DS_RTC) {
+            // RTC wakeup - handled in start()
+            // PM_wakeup_setting = wakeup_settings[2];
+        }
+
+        if (wakeup_source & DS_COMP) {
+            // COMP wakeup - handled by hardware
+        }
+
+        PM_begin_check = 1;
+
+    } else if (sleep_mode == STANDBY_MODE) {
+        // Determine which pins need pull-down based on wakeup sources
+        bool pull_down_pa2 = true;
+        bool pull_down_pa3 = true;
+
+        if (wakeup_source & SLP_AON_GPIO) {
+            uint32_t gpio_pin = wakeup_settings[1];
+            switch (g_APinDescription[gpio_pin].pinname) {
+                case PA_1:
+                    sys_jtag_off();
+                    break;
+                case PA_2:
+                    pull_down_pa2 = false;    // PA_2 is used as wakeup pin
+                    break;
+                case PA_3:
+                    pull_down_pa3 = false;    // PA_3 is used as wakeup pin
+                    break;
+                default:
+                    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup AON GPIO pin selection fail. \n");
+                    PM_begin_check = 0;
+                    return;
+            }
+            gpio_irq_init(&PM_GPIO_IRQ, (PinName)(g_APinDescription[gpio_pin].pinname), PM_gpio_irq_handler, (uint32_t)&PM_GPIO_IRQ);
+            gpio_irq_pull_ctrl(&PM_GPIO_IRQ, PullDown);
+            gpio_irq_set(&PM_GPIO_IRQ, IRQ_RISE, 1);
+        }
+
+        // Apply pull-down only to pins that are not used as wakeup pins
+        // PA_2 & PA_3 default pullup, need to be set according to external circuit
+        if (pull_down_pa2) {
+            gpio_init(&PM_GPIO_1, PA_2);
+            gpio_pull_ctrl(&PM_GPIO_1, PullDown);
+        }
+        if (pull_down_pa3) {
+            gpio_init(&PM_GPIO_2, PA_3);
+            gpio_pull_ctrl(&PM_GPIO_2, PullDown);
+        }
+
+        // Process each wakeup source bit for Standby mode
+        if (wakeup_source & SLP_AON_TIMER) {
+            uint32_t *PM_Aontimer_setting = (uint32_t *)wakeup_settings[0];
+            PM_clock = PM_Aontimer_setting[0];
+            PM_sleep_duration = PM_Aontimer_setting[1] * 1000 * 1000;
+        }
+
+        if (wakeup_source & SLP_RTC) {
+            // RTC wakeup - handled in start()
+        }
+
+        if (wakeup_source & SLP_PON_GPIO) {
+            uint32_t gpio_pin = wakeup_settings[1];
+            switch (g_APinDescription[gpio_pin].pinname) {
+                case PF_0:
+                case PF_1:
+                case PF_2:
+                case PF_5:
+                case PF_6:
+                case PF_7:
+                case PF_8:
+                case PF_9:
+                case PF_11:
+                case PF_12:
+                case PF_13:
+                case PF_14:
+                case PF_15:
+                    break;
+                default:
+                    amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Standby wakeup PON GPIO pin selection fail. \n");
+                    PM_begin_check = 0;
+                    return;
+            }
+
+            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));    // SWR 1.35V
+            hal_delay_ms(5);
+            gpio_irq_init(&PM_GPIO_IRQ, (PinName)(g_APinDescription[gpio_pin].pinname), PM_gpio_irq_handler, (uint32_t)&PM_GPIO_IRQ);
+            gpio_irq_pull_ctrl(&PM_GPIO_IRQ, PullDown);
+            gpio_irq_set(&PM_GPIO_IRQ, IRQ_RISE, 1);
+
+            // set gpio pull control
+            HAL_WRITE32(0x40009850, 0x0, 0x4f004f);
+            HAL_WRITE32(0x40009854, 0x0, (((HAL_READ32(0x40009854, 0x0)) & 0xFFFF0000) | 0x4f));
+            HAL_WRITE32(0x40009858, 0x0, (((HAL_READ32(0x40009858, 0x0)) & 0x0000FFFF) | 0x4f0000));
+            HAL_WRITE32(0x4000985c, 0x0, 0x4f004f);
+            HAL_WRITE32(0x40009860, 0x0, 0x4f004f);
+            HAL_WRITE32(0x40009864, 0x0, 0x4f004f);
+            HAL_WRITE32(0x40009868, 0x0, 0x4f004f);
+            HAL_WRITE32(0x4000986C, 0x0, 0x4f004f);
+            HAL_WRITE32(0x40009870, 0x0, 0x4f004f);
+        }
+
+        if (wakeup_source & SLP_UART) {
+            PM_clock = 1;
+            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));
+            hal_delay_ms(5);
+            Serial1.begin(115200, SERIAL_8N1, 1);
+            Serial1.println("Enter Standby, wake up by Serial1");
+        }
+
+        if (wakeup_source & SLP_GTIMER) {
+            PM_clock = 1;
+            HAL_WRITE32(0x40009000, 0x18, 0x1 | HAL_READ32(0x40009000, 0x18));
+            hal_delay_ms(5);
+        }
+
+        if (retention == 1) {
+            // When retention is enabled for Standby mode, SLP_GTIMER must be added
+            wakeup_source = wakeup_source | SLP_GTIMER;
+            PM_wakeup_source = wakeup_source;
+        }
+
+        PM_begin_check = 2;
+    } else {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Power mode selection fail. \n");
+        PM_begin_check = 0;
+    }
+}
+
+/**
   * @brief      Start the PowerMode of device.
   * @param      Optional when wake up source is RTC. Default start time is 1970.1.1 00:00:00.
                 year: Start time by year. Starts from 1900.
@@ -419,7 +636,8 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec)
         if (PM_retention_setting == 1) {
             SleepCG(PM_wakeup_source, PM_sleep_duration, PM_clock, PM_retention_setting);
         } else if (PM_retention_setting == 0) {
-            if (PM_wakeup_source == DS_RTC) {
+            // Check for RTC wakeup using bitwise AND (supports multiple wakeup sources)
+            if (PM_wakeup_source & DS_RTC) {
                 rtc.Init();
                 if (year == 0) {
                     rtc.Write(0);
@@ -427,16 +645,18 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec)
                     long long initTime = rtc.SetEpoch(year, month, day, hour, min, sec);
                     rtc.Write(initTime);
                 }
-                uint32_t *PM_rtc_alarm = (uint32_t *)PM_wakeup_setting;
+                // Use PM_wakeup_settings[2] if multiple wakeup sources are supported, otherwise use PM_wakeup_setting
+                uint32_t rtc_setting = (PM_wakeup_settings[2] != 0) ? PM_wakeup_settings[2] : PM_wakeup_setting;
+                uint32_t *PM_rtc_alarm = (uint32_t *)rtc_setting;
                 rtc.EnableAlarm((PM_rtc_alarm[0] + day), (PM_rtc_alarm[1] + hour), (PM_rtc_alarm[2] + min), (PM_rtc_alarm[3] + sec), PM_rtc_handler);
-                // rtc_set_alarm_time(10, PM_rtc_handler);
             }
             DeepSleep(PM_wakeup_source, PM_sleep_duration, PM_clock);
         }
     } else if (PM_begin_check == 2) {
         PM_begin_check = 0;
         if (PM_retention_setting == 0) {
-            if (PM_wakeup_source == SLP_RTC) {
+            // Check for RTC wakeup using bitwise AND (supports multiple wakeup sources)
+            if (PM_wakeup_source & SLP_RTC) {
                 rtc.Init();
                 if (year == 0) {
                     rtc.Write(0);
@@ -444,17 +664,24 @@ void PMClass::start(int year, int month, int day, int hour, int min, int sec)
                     long long initTime = rtc.SetEpoch(year, month, day, hour, min, sec);
                     rtc.Write(initTime);
                 }
-                uint32_t *PM_rtc_alarm = (uint32_t *)PM_wakeup_setting;
+                uint32_t rtc_setting = (PM_wakeup_settings[2] != 0) ? PM_wakeup_settings[2] : PM_wakeup_setting;
+                uint32_t *PM_rtc_alarm = (uint32_t *)rtc_setting;
                 rtc.EnableAlarm((PM_rtc_alarm[0] + day), (PM_rtc_alarm[1] + hour), (PM_rtc_alarm[2] + min), (PM_rtc_alarm[3] + sec), PM_rtc_handler);
-            } else if (PM_wakeup_source == SLP_GTIMER) {
-                // PM_GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
-                GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
+            }
+            // Check for GTimer wakeup using bitwise AND (supports multiple wakeup sources)
+            if (PM_wakeup_source & SLP_GTIMER) {
+                // Use the timer setting from the settings array
+                uint32_t timer_duration_setting = (PM_wakeup_settings[1] != 0) ? PM_wakeup_settings[1] : PM_wakeup_setting;
+                uint32_t timer_duration = timer_duration_setting;
+                GTimer.begin(0, (timer_duration * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
             }
             Standby(PM_wakeup_source, PM_sleep_duration, PM_clock, PM_retention_setting);
         } else if (PM_retention_setting == 1) {
-            if (PM_wakeup_source == SLP_GTIMER) {
-                // PM_GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
-                GTimer.begin(0, (PM_wakeup_setting * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
+            // Check for GTimer wakeup using bitwise AND (supports multiple wakeup sources)
+            if (PM_wakeup_source & SLP_GTIMER) {
+                uint32_t timer_duration_setting = (PM_wakeup_settings[1] != 0) ? PM_wakeup_settings[1] : PM_wakeup_setting;
+                uint32_t timer_duration = timer_duration_setting;
+                GTimer.begin(0, (timer_duration * 1000 * 1000), PM_Gtimer_timeout_handler, false, (uint32_t)NULL, 1);
             }
             Standby(PM_wakeup_source, PM_sleep_duration, PM_clock, PM_retention_setting);
         }

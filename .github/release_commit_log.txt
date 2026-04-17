@@ -1,15 +1,10 @@
 Feature:
-- Add sound detector trigger example
+- Update PowerMode examples and API to support multiple wakeup sources
 
 API Updates:
-- Add application level source code at "system" folder
-- Add sensor K306P support
 
 Misc:
 - Update the Arduino IDE menu
-- Update SD_model
-- Update ameba_pro2_tools 1.4.9
-    - Add "Dev Mode" or "Fast Mode" for compilation
-    - Support camera sensor K306P
-    - Update signed tools
-    - Update img classification eg and nn_model.json
+- Update ameba_pro2_tools 1.4.10
+    - remove unused modes
+    - minor bug fix
