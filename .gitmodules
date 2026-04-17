@@ -1,0 +1,6 @@
+[submodule "Arduino_zip_libraries/src/Ameba_JPEGDecoder"]
+	path = Arduino_zip_libraries/src/Ameba_JPEGDecoder
+	url = https://github.com/Bodmer/JPEGDecoder.git
+[submodule "Arduino_zip_libraries/src/Ameba_ArduCAM_Arduino"]
+	path = Arduino_zip_libraries/src/Ameba_ArduCAM_Arduino
+	url = https://github.com/ArduCAM/Arduino.git

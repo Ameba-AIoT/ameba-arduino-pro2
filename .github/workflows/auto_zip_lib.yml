@@ -2,7 +2,7 @@ name: Auto ZIP Arduino Libraries
 
 on:
   workflow_dispatch:
-  pull_request:
+  pull_request_target:
     branches:
       - dev
     paths:
@@ -16,92 +16,120 @@ on:
 jobs:
   auto-zip:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+    if: |
+      (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
+      (github.event_name == 'pull_request_target') ||
+      (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
     steps:
       # -------------------------------------------------
-      # Step 0: Checkout ONLY Arduino_zip_libraries folder
+      # Step 0: Checkout ONLY Arduino_zip_libraries folder with submodules
       # -------------------------------------------------
       - name: Checkout Arduino_zip_libraries
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          submodules: recursive
           sparse-checkout: |
             Arduino_zip_libraries
           persist-credentials: true
 
       # -------------------------------------------------
-      # Step 1: Block manual ZIP changes
+      # Step 1: Checkout private python script
       # -------------------------------------------------
-      - name: Detect illegal ZIP changes
+      - name: Checkout private python script
+        uses: actions/checkout@v4
+        with:
+          repository: M-ichae-l/python_script_private
+          token: ${{ secrets.GH_PAT }}
+          path: private_scripts
+          sparse-checkout: |
+            ameba_arduino_zip_lib_update.py
+
+      # -------------------------------------------------
+      # Step 2: Detect changes, run python and zip changed folders
+      # -------------------------------------------------
+      - name: Detect changes, run python and zip changed folders
         run: |
           set -e
+          SRC_DIR="Arduino_zip_libraries/src"
+          ZIP_DIR="$(pwd)/Arduino_zip_libraries"
 
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
+          if [ "${{ github.event_name }}" = "pull_request_target" ]; then
             BASE_REF="${{ github.event.pull_request.base.sha }}"
           else
             BASE_REF="HEAD~1"
           fi
-
           echo "Comparing against $BASE_REF"
-
           CHANGED_FILES=$(git diff --name-only "$BASE_REF" HEAD || true)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
 
+          # Block manual ZIP changes
           ZIP_CHANGED=$(echo "$CHANGED_FILES" | grep -E '\.zip$' || true)
-          SRC_CHANGED=$(echo "$CHANGED_FILES" | grep -E '/src/' || true)
-
+          SRC_CHANGED=$(echo "$CHANGED_FILES" | grep -E 'Arduino_zip_libraries/src/' || true)
           if [ -n "$ZIP_CHANGED" ] && [ -z "$SRC_CHANGED" ]; then
             echo "❌ ZIP files were modified without src/ changes"
             exit 1
           fi
 
-          echo "✅ ZIP change check passed"
-
-      # -------------------------------------------------
-      # Step 2: Install zip utility
-      # -------------------------------------------------
-      - name: Install zip
-        run: sudo apt-get update && sudo apt-get install -y zip
-
-      # -------------------------------------------------
-      # Step 3: Generate ZIP files (contents only)
-      # -------------------------------------------------
-      - name: Generate ZIP files from src
-        run: |
-          set -e
-
-          SRC_DIR="Arduino_zip_libraries/src"
-          ZIP_DIR="$(pwd)/Arduino_zip_libraries"
-
-          echo "Processing libraries in $SRC_DIR"
-
-          for lib in "$SRC_DIR"/*; do
-            if [ -d "$lib" ]; then
-              LIB_NAME=$(basename "$lib")
-              ZIP_PATH="$ZIP_DIR/${LIB_NAME}.zip"
-
-              echo "Zipping $LIB_NAME → $ZIP_PATH"
-
-              rm -f "$ZIP_PATH"
-
-              # Zip ONLY contents of the library folder
-              (
-                cd "$lib"
-                zip -r "$ZIP_PATH" .
-              )
+          # Build array of unique changed folder names under src/
+          CHANGED_FOLDERS=()
+          while IFS= read -r file; do
+            if [[ "$file" == Arduino_zip_libraries/src/* ]]; then
+              FOLDER=$(echo "$file" | awk -F'/' '{print $3}')
+              if [ -n "$FOLDER" ] && [[ ! " ${CHANGED_FOLDERS[*]} " =~ " ${FOLDER} " ]]; then
+                CHANGED_FOLDERS+=("$FOLDER")
+              fi
             fi
-          done
+          done <<< "$CHANGED_FILES"
+
+          echo "✅ Changed folders: ${CHANGED_FOLDERS[*]}"
+
+          # Always run python, pass changed folders as arguments (can be empty)
+          python private_scripts/ameba_arduino_zip_lib_update.py "${CHANGED_FOLDERS[@]}"
+
+          # Install zip
+          sudo apt-get update && sudo apt-get install -y zip
+
+          # Zip only the folders detected BEFORE python ran
+          if [ ${#CHANGED_FOLDERS[@]} -eq 0 ]; then
+            echo "ℹ️ No src/ folder changes detected, skipping zip"
+          else
+            for FOLDER in "${CHANGED_FOLDERS[@]}"; do
+              LIB_PATH="$SRC_DIR/$FOLDER"
+              ZIP_PATH="$ZIP_DIR/${FOLDER}.zip"
+              if [ -d "$LIB_PATH" ]; then
+                echo "Zipping $FOLDER → $ZIP_PATH"
+                rm -f "$ZIP_PATH"
+                (
+                  cd "$LIB_PATH"
+                  zip -r "$ZIP_PATH" .
+                )
+              else
+                echo "⚠️ Folder $FOLDER not found in $SRC_DIR, skipping"
+              fi
+            done
+          fi
+
+      # -------------------------------------------------
+      # Step 3: Cleanup private scripts
+      # -------------------------------------------------
+      - name: Cleanup private scripts
+        if: always()
+        run: rm -rf private_scripts
 
       # -------------------------------------------------
       # Step 4: Commit & push updated ZIPs
       # -------------------------------------------------
       - name: Commit and push ZIP updates
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request_target'
         run: |
           set -e
-
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
           if git diff --quiet Arduino_zip_libraries/*.zip; then
             echo "No ZIP changes to commit"
           else
