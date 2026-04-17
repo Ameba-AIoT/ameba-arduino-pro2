@@ -28,8 +28,8 @@ extern "C" {
 #include "ard_socket.h"
 
 extern struct netif xnetif[NET_IF_NUM];
-//extern rtw_mode_t wifi_mode;
-//extern struct static_ip_config user_static_ip;
+// extern rtw_mode_t wifi_mode;
+// extern struct static_ip_config user_static_ip;
 
 #ifdef __cplusplus
 }
