@@ -77,3 +77,13 @@ void WDT::init_irq(wdt_irq_handler handler, uint32_t id)
 {
     watchdog_irq_init(handler, id);
 }
+
+uint8_t WDT::reboot_reason_check(void)
+{
+    return watchdog_aon_reboot_check();
+}
+
+void WDT::reboot_reason_clear(void)
+{
+    watchdog_aon_clear();
+}

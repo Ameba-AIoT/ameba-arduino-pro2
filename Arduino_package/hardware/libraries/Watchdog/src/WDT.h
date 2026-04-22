@@ -21,6 +21,8 @@ public:
     void stop(void);
     void refresh(void);
     void init_irq(wdt_irq_handler handler, uint32_t id);
+    uint8_t reboot_reason_check(void);
+    void reboot_reason_clear(void);
 
 private:
     int aon_wdt_check = 0;
