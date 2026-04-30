@@ -346,5 +346,5 @@ size_t TwoWire::slaveWrite(uint8_t *buffer, size_t len) {
 }
 #endif
 
-TwoWire Wire = TwoWire((void *)(&i2cwire0), 12, 13);
-TwoWire Wire1 = TwoWire((void *)(&i2cwire1), 9, 10);
+TwoWire Wire = TwoWire((void *)(&i2cwire0), I2C_SDA, I2C_SCL);
+TwoWire Wire1 = TwoWire((void *)(&i2cwire1), I2C1_SDA, I2C1_SCL);

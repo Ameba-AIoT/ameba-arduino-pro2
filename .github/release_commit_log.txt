@@ -1,10 +1,11 @@
 Feature:
-- Update PowerMode examples and API to support multiple wakeup sources
+- Add AMB82-zero
 
 API Updates:
+- Update WDT API
+- Update codebase for ATcmd
 
 Misc:
-- Update the Arduino IDE menu
-- Update ameba_pro2_tools 1.4.10
-    - remove unused modes
-    - minor bug fix
+- Add Arduino ZIP library submodules: JPEGDecoder and ArduCAM
+    - Add zip files
+- Update auto_zip_lib.yml

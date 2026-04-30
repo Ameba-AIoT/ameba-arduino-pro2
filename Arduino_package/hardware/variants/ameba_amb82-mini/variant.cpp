@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/* AMB82 (RTL8735B) */
+/* AMB82-mini (RTL8735B) */
 
 #include "variant.h"
 

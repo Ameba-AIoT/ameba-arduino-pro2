@@ -138,8 +138,6 @@ extern void loop(void);
 #define PIO_UART     (1UL << 8)
 #define PIO_SPI      (1UL << 9)
 
-// #define TYPE_ANALOG  (1UL<<7)
-// #define TYPE_DIGITAL (1UL<<8)
 #define TYPE_ANALOG  (1UL << 21)
 #define TYPE_DIGITAL (1UL << 22)
 
