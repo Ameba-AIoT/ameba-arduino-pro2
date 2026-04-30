@@ -4,6 +4,7 @@ Version 4.1.1 - 2026/03/06
 Version 4.1.1 - 2026/03/20
 Version 4.1.1 - 2026/04/02
 Version 4.1.1 - 2026/04/17
+Version 4.1.1 - 2026/04/30
 
 Feature:
 - Add Battery-Powered Camera POC Example
@@ -13,6 +14,7 @@ Feature:
 - Add AntiCollision POC and update POC example links
 - Add sound detector trigger example
 - Update PowerMode examples and API to support multiple wakeup sources
+- Add AMB82-zero
 
 API Updates:
 - Update code base
@@ -24,6 +26,8 @@ API Updates:
 - Update ServerDrv API for WiFi TCP data corruption
 - Add application level source code at "system" folder
 - Add sensor K306P support
+- Update WDT API
+- Update codebase for ATcmd
 
 Misc:
 - Update tools version 1.4.8
@@ -40,3 +44,6 @@ Misc:
 - Update ameba_pro2_tools 1.4.10
     - remove unused modes
     - minor bug fix
+- Add Arduino ZIP library submodules: JPEGDecoder and ArduCAM
+    - Add zip files
+- Update auto_zip_lib.yml
