@@ -33,6 +33,8 @@ extern void gpio_deinit(gpio_t *obj);
 extern void *gpio_pin_struct[TOTAL_GPIO_PIN_NUM];
 extern void *gpio_irq_handler_list[TOTAL_GPIO_PIN_NUM];
 
+static int swd_pin_check = 0;
+
 void gpioIrqHandler(uint32_t id, gpio_irq_event event)
 {
     if (gpio_irq_handler_list[id] != NULL) {
@@ -56,7 +58,12 @@ void pinMode(uint32_t ulPin, uint32_t ulMode)
     // SWD_DATA, SWD_CLK
     if ((g_APinDescription[ulPin].pinname) == PA_0 || (g_APinDescription[ulPin].pinname) == PA_1) {
         // If user needs to use SWD pins for GPIO, disable SWD debugging to free pins
-        sys_jtag_off();
+        // sys_jtag_off();
+        if (swd_pin_check == 0) {
+            hal_sys_dbg_port_cfg(DBG_PORT_OFF, TMS_IO_S0_CLK_S0);
+            // hal_sys_dbg_port_cfg(DBG_PORT_OFF, TMS_IO_S1_CLK_S1);
+            swd_pin_check = 1;
+        }
     }
 
     if ((g_APinDescription[ulPin].ulPinMode & ADC_MODE_ENABLED) == ADC_MODE_ENABLED) {

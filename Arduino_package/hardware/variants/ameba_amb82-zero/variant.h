@@ -38,7 +38,7 @@ extern void wait_for_debug(void);
 
 #define MAIN_THREAD_STACK_SIZE                  (4096 * 4)
 
-#define TOTAL_GPIO_PIN_NUM                      (44) // (31)
+#define TOTAL_GPIO_PIN_NUM                      (45) // 0 is not in use; 31 real GPIO
 #define TOTAL_PWM_PIN_NUM                       (9)
 
 /* Digital pin mapping refer to g_APinDescription */
@@ -56,10 +56,10 @@ extern void wait_for_debug(void);
 //#define AMB_D11                                 11 // N-I-U    NC
 #define AMB_D12                                 12 // PF_13
 #define AMB_D13                                 13 // PA_1
-//#define AMB_D14                                 14 // N-I-U    VDD33
+//#define AMB_D14                                 14 // N-I-U    GND
 #define AMB_D15                                 15 // PA_2
 #define AMB_D16                                 16 // PA_3
-//#define AMB_D17                                 17 // N-I-U    GND
+//#define AMB_D17                                 17 // N-I-U    VDD33
 #define AMB_D18                                 18 // PD_15
 #define AMB_D19                                 19 // PF_7
 //#define AMB_D20                                 20 // N-I-U    GND
@@ -89,6 +89,30 @@ extern void wait_for_debug(void);
 #define AMB_D43                                 43 // PF_9
 #define AMB_D44                                 44 // PE_6
 
+// double pin pamming
+#ifdef AMB_D27
+#undef AMB_D33
+#endif
+
+#ifdef AMB_D32
+#undef AMB_D36
+#endif
+
+#ifdef AMB_D28
+#undef AMB_D37
+#endif
+
+#ifdef AMB_D33
+#undef AMB_D27
+#endif
+
+#ifdef AMB_D36
+#undef AMB_D32
+#endif
+
+#ifdef AMB_D37
+#undef AMB_D28
+#endif
 
 /* Analog pin mapping */
 #define A0                                      AMB_D32 // PF_0    3.3V    CH0

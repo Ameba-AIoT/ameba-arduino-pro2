@@ -66,7 +66,7 @@ PinDescription g_APinDescription[TOTAL_GPIO_PIN_NUM]=
     {PF_6,  TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ | PIO_PWM                                | PIO_SPI, MODE_NOT_INITIAL}, // AMB_D23                                                   SPI1_SCLK
     {PF_8,  TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ | PIO_PWM                                | PIO_SPI, MODE_NOT_INITIAL}, // AMB_D24                                                   SPI1_SS0
     {NC  ,  TYPE_DIGITAL              , NOT_INITIAL                                                                  , MODE_NOT_INITIAL}, // *AMB_D25  Not-in-use  GND
-    {PF_10, TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ                                                   , MODE_NOT_INITIAL}  // AMB_D26                                                   SPI1_SS2
+    {PF_10, TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ                                                   , MODE_NOT_INITIAL}, // AMB_D26                                                   SPI1_SS2
     {PF_2,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO    | PIO_GPIO_IRQ           | PIO_ADC            | PIO_I2C          , MODE_NOT_INITIAL}, // AMB_D27   connected   AMB_D33     *LOG_CTS      I2C1_SDA
     {PF_1,  TYPE_DIGITAL | TYPE_ANALOG, PIO_GPIO    | PIO_GPIO_IRQ           | PIO_ADC            | PIO_I2C          , MODE_NOT_INITIAL}, // AMB_D28   connected   AMB_D37     *LOG_RTS      I2C1_SCL
     {PD_17, TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ           | PIO_ADC                               , MODE_NOT_INITIAL}, // AMB_D29                           *SERIAL2_CTS
@@ -88,7 +88,7 @@ PinDescription g_APinDescription[TOTAL_GPIO_PIN_NUM]=
     {PF_3,  TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ                     | PIO_UART                    , MODE_NOT_INITIAL}, // *AMB_D42                          LOG_RX
 #endif
     {PF_9,  TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ | PIO_PWM                                         , MODE_NOT_INITIAL}, // *AMB_D43  onboard     LED1 blue
-    {PE_6,  TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ                                                   , MODE_NOT_INITIAL}, // *AMB_D44  onboard     LED2 green
+    {PE_6,  TYPE_DIGITAL              , PIO_GPIO    | PIO_GPIO_IRQ                                                   , MODE_NOT_INITIAL}  // *AMB_D44  onboard     LED2 green
 };
 
 void *gpio_pin_struct[TOTAL_GPIO_PIN_NUM] = {NULL};
