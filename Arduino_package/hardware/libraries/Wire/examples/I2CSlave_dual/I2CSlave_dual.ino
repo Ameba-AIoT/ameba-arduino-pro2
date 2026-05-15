@@ -34,7 +34,8 @@ volatile int rxDataCount = 0;
 void setup()
 {
     Serial.begin(115200);
-    while (!Serial);    // Wait for Serial port to connect
+    while (!Serial)
+        ;    // Wait for Serial port to connect
     Serial.println("\r\n========================================");
     Serial.println("AmebaPro2 I2C Slave (Wire Library)");
     Serial.println("========================================");

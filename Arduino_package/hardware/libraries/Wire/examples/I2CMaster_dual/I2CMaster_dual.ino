@@ -33,7 +33,8 @@ uint8_t rxData[DATA_LENGTH];
 void setup()
 {
     Serial.begin(115200);
-    while (!Serial);    // Wait for Serial port to connect
+    while (!Serial)
+        ;    // Wait for Serial port to connect
     Serial.println("\r\n========================================");
     Serial.println("AmebaPro2 I2C Master (Wire Library)");
     Serial.println("========================================");
