@@ -155,7 +155,7 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
     i2c_read(((i2c_t *)this->pI2C), ((int)address), reinterpret_cast<char *>(this->rxBuffer), ((int)quantity), ((int)sendStop));
 
     // Wait for RX complete callback with timeout
-    uint32_t timeout_rx = 50000;
+    uint32_t timeout_rx = _timeout_rx;
 
     do {
         timeout_rx--;
@@ -242,7 +242,7 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
     // dbg_printf("\r\n[DEBUG] endTransmission: i2c_write returned %d\n", length);
 
     // Wait for TX complete callback with timeout
-    uint32_t timeout_tx = 5000;
+    uint32_t timeout_tx = _timeout_tx;
     do {
         timeout_tx--;
         wait_us(this->txBufferLength * 200);    // Wait time proportional to expected data length
@@ -440,6 +440,36 @@ void TwoWire::slaveReadLen(int len)
 void TwoWire::slaveClrRxFlag(void)
 {
     flag_slv_rx = 0;
+}
+
+void TwoWire::setWireTimeout(uint32_t timeout)
+{
+    _timeout_tx_offset = timeout;
+    _timeout_tx += timeout;
+    _timeout_rx_offset = timeout;
+    _timeout_rx += timeout;
+    _timeout_flag = true;
+    dbg_printf("\r\n[INFO]Timeout is set by user\n");
+}
+
+bool TwoWire::getWireTimeoutFlag(void)
+{
+    return (_timeout_flag);
+}
+
+void TwoWire::clearWireTimeoutFlag(void)
+{
+
+    if (_timeout_flag) {
+        _timeout_tx -= _timeout_tx_offset;
+        _timeout_rx -= _timeout_rx_offset;
+        _timeout_tx_offset = 0;
+        _timeout_rx_offset = 0;
+        _timeout_flag = false;
+        dbg_printf("\r\n[INFO] User-set timeout is cleared\n");
+    } else {
+        dbg_printf("\r\n[ERROR] No timeout is set\n");
+    }
 }
 
 TwoWire Wire = TwoWire((void *)(&i2cwire0), I2C_SDA, I2C_SCL);

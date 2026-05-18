@@ -99,6 +99,9 @@ public:
     void slaveWrite(void);
     void slaveReadLen(int len);
     void slaveClrRxFlag(void);
+    void setWireTimeout(uint32_t timeout = 1000);
+    bool getWireTimeoutFlag(void);
+    void clearWireTimeoutFlag(void);
 
 private:
     bool is_slave;
@@ -137,8 +140,11 @@ private:
     uint32_t twiClock;
 
     // Timeouts
-    static const uint32_t RECV_TIMEOUT = 50;
-    static const uint32_t XMIT_TIMEOUT = 100000;
+    uint32_t _timeout_tx = 5000;
+    uint32_t _timeout_rx = 500000;
+    uint32_t _timeout_tx_offset = 0;
+    uint32_t _timeout_rx_offset = 0;
+    bool _timeout_flag;
 
     bool _initStatus;    // flag to mark I2C init status
     uint8_t _address = 0;
