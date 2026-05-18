@@ -44,6 +44,7 @@ public:
     void begin();
     void begin(uint8_t);
     void begin(int);
+    void slaveBegin();
 
     void end();
 
@@ -62,6 +63,10 @@ public:
     static void i2c_master_rxc_callback(void *userdata);
     static void i2c_master_txc_callback(void *userdata);
 
+    static void i2c_slave_txc_callback(void *userdata);
+    static void i2c_slave_rxc_callback(void *userdata);
+    static void i2c_slave_rd_req_callback(void *userdata);
+
     virtual size_t write(uint8_t);
     virtual size_t write(const uint8_t *, size_t);
 
@@ -69,6 +74,7 @@ public:
     virtual int read(void);
     virtual int peek(void);
     virtual void flush(void);
+
     inline size_t write(unsigned long n)
     {
         return write((uint8_t)n);
@@ -87,14 +93,15 @@ public:
     }
     using Print::write;
 
-#if 0
-        void onReceive(void(*)(int));
-        void onRequest(void(*)(void));
+    void onReceive(void (*)(int));
+    void onRequest(void (*)(void));
 
-        size_t slaveWrite(int);
-        size_t slaveWrite(char *);
-        size_t slaveWrite(uint8_t *, size_t);
-#endif
+    void slaveWrite(void);
+    void slaveReadLen(int len);
+    void slaveClrRxFlag(void);
+    void setWireTimeout(uint32_t timeout = 1000);
+    bool getWireTimeoutFlag(void);
+    void clearWireTimeoutFlag(void);
 
 private:
     bool is_slave;
@@ -109,11 +116,19 @@ private:
     uint8_t txBuffer[BUFFER_LENGTH];
     uint8_t txBufferLength;
 
+    // Slave RX Buffer
+    uint8_t rxSlaveBuffer[BUFFER_LENGTH];
+    uint8_t rxSlaveBufferIndex;
+    uint8_t rxSlaveBufferLength;
+
+    // Slave TX Buffer
+    uint8_t txSlaveAddress;
+    uint8_t txSlaveBuffer[BUFFER_LENGTH];
+    uint8_t txSlaveBufferLength;
+
     // Callback user functions
     void (*user_onRequest)(void);
     void (*user_onReceive)(int);
-    static void onRequestService(void *);
-    static void onReceiveService(uint8_t *, size_t, bool, void *);
 
     uint32_t SDA_pin;
     uint32_t SCL_pin;
@@ -125,11 +140,15 @@ private:
     uint32_t twiClock;
 
     // Timeouts
-    static const uint32_t RECV_TIMEOUT = 50;
-    static const uint32_t XMIT_TIMEOUT = 100000;
+    uint32_t _timeout_tx = 5000;
+    uint32_t _timeout_rx = 500000;
+    uint32_t _timeout_tx_offset = 0;
+    uint32_t _timeout_rx_offset = 0;
+    bool _timeout_flag;
 
     bool _initStatus;    // flag to mark I2C init status
     uint8_t _address = 0;
+    int _slvRXLen = 0;
 };
 
 extern TwoWire Wire;
