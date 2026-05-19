@@ -37,7 +37,7 @@ static const struct sensor_params_t sensor_params[] = {
     [SENSOR_IMX327] = {1920, 1080, 24},
     [SENSOR_IMX662] = {1920, 1080, 30},
     [SENSOR_IMX681] = {2000, 1500, 30},
-    [SENSOR_IMX681_5M] = {2592, 1944, 4},
+    [SENSOR_IMX681_5M] = {2592, 1944, 4 },
     [SENSOR_IMX681_12M] = {4016, 3012, 4 },
     [SENSOR_IMX681_12M_SEQ] = {2128, 1604, 4 }, //  width = 2008 + 120(overlap) //height = 1506 + 98(overlap)
     [SENSOR_K306P] = {2560, 1440, 24},
