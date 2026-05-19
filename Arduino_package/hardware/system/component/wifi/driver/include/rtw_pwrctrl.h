@@ -356,6 +356,8 @@ struct pwrctrl_priv {
 	u16 dhcp_renew_lease_time;
 	u16 dhcp_renew_lease_used;
 	u8	dhcp_renew_pb;
+	u16 dhcp_renew_lease_time_ext;
+	u16 dhcp_renew_lease_used_ext;
 #endif
 
 #ifdef CONFIG_WOWLAN_DYNAMIC_TX_PWR

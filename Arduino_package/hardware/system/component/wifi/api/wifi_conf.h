@@ -912,11 +912,11 @@ int wifi_get_auto_chl(
 	unsigned char channel_num);
 
 /**
- * @brief	Get wifi TSF register[31:0].
- * @param[in]	port: wifi port 0/1.
- * @return TSF[31:0] or 0
+ * @brief	Get wifi TSF register[63:0].
+ * @param[in]	tsf: tsf value 8 bytes.
+ * @return RTW_SUCCESS or RTW_ERROR
  */
-unsigned int wifi_get_tsf_low(unsigned char port_id);
+int wifi_get_tsf(u64 *tsf);
 
 /**
  * @brief  switch to a new channel in AP mode and using CSA to inform sta

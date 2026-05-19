@@ -930,6 +930,18 @@ static __inline__ int hal_video_set_zoom_1x1_up_en(int ch, int enable)
 	return OK;
 }
 
+static __inline__ int hal_video_set_isp_gain(int ch, int mode, int isp_gain)
+{
+	hal_video_adapter_t *v_adp = &vv_adapter;
+	commandLine_s *cml;
+
+	cml = v_adp->cmd[ch];
+	cml->isp_gain_mode = mode;
+	cml->isp_gain = isp_gain;
+	dcache_clean_invalidate_by_addr((uint32_t *)v_adp->cmd[ch], sizeof(commandLine_s));
+	return OK;
+}
+
 #endif // #if !defined (CONFIG_VOE_PLATFORM) || !CONFIG_VOE_PLATFORM // Run on TM9
 /** @} */ /* End of group hal_enc */
 

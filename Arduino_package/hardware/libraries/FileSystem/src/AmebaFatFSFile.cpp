@@ -3,10 +3,14 @@
 
 #ifdef __cplusplus
 extern "C" {
-#include "helix_mp3_drv.h"
-#include "ota_drv.h"
+// #include "helix_mp3_drv.h"
+extern void audio_play_binary_array(uint8_t *srcbuf, uint32_t len, uint8_t _audio_vol);
+
+// #include "ota_drv.h"
+extern void ota_sd(const char *filename);
 }
 #endif
+
 File::File(void)
 {
     _file = NULL;

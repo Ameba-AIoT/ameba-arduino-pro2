@@ -526,6 +526,14 @@ struct  wifi_user_conf {
 	unsigned char wifi_debug_enabled;
 
 	/*
+	The active_keepalive_mode is used to select arp request with difference ip
+	0: send arp request with dhcp server ip address
+	1: send arp request with gw server ip address
+	2: send arp request with gw server ip address first, if gw isn't exist, pro2 will send arp request with dhcp server ip
+	*/
+	unsigned char active_keepalive_mode;
+
+	/*
 	The active_keepalive_enabled is used to enable active keep alive to send keepalive packet.
 	bit 0: (0: disable to send unicast arp request, 1:  enable to send unicast arp request)
 	*/
@@ -545,12 +553,12 @@ struct  wifi_user_conf {
 	unsigned char chn5G_num;
 	unsigned char regulation2_4G;
 	unsigned char regulation5G;
-        
+
 	/*
-        The wifi_11v_enabled is used to configure the 11v settings, each bit controls one aspect.
+	    The wifi_11v_enabled is used to configure the 11v settings, each bit controls one aspect.
 	bit 0: (0: disable 11v feature, 1:  enable 11v feature)
 	bit 1: (0: disable wifi_connect from the upper layer and enable roaming from the driver, 1:  enable wifi_connect from the upper layer and disable roaming from driver)
-  	*/      
+	*/
 	unsigned char wifi_11v_enabled;
 	unsigned char wifi_11r_enabled;
 } ;

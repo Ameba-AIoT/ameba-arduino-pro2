@@ -233,6 +233,8 @@ typedef struct video_pre_init_params_s {
 	struct verify_ctrl_config *v_cfg; //verify seqeunce dirver config
 	uint8_t *zoom_coef; //work around.
 	uint32_t dyn_iq_mode;
+	uint32_t isp_gain_mode;
+	uint32_t isp_gain;
 #endif
 } video_pre_init_params_t;
 

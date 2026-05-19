@@ -726,7 +726,7 @@ typedef enum {
 	WIFI_EVENT_DEAUTH_RECVD,
 	WIFI_EVENT_DISASSOC_RECVD,
 	WIFI_EVENT_DETAIL_JOIN_STATUS,
-        WIFI_EVENT_BTM_REQ_RECVD,
+	WIFI_EVENT_BTM_REQ_RECVD,
 	WIFI_EVENT_MAX,
 } rtw_event_indicate_t;
 
@@ -974,6 +974,15 @@ typedef enum  {
 	WOWLAN_PNO,	/*only pno function*/
 	WOWLAN_FW_VERMAX
 } rtw_wowlan_fw_version;
+
+/**
+  * @brief The enumeration ARP mode
+  */
+typedef enum {
+	ACITVE_ARP_DHCP_MODE = 0, /**< send arp request with dhcp server ip address */
+	ACITVE_ARP_GW_MODE,  /**< send arp request with gw server ip address */
+	ACITVE_ARP_DHCP_GW_MODE /** < send arp request with gw server ip address first, if gw isn't exist, pro2 will send arp request with dhcp server ip */
+} Active_ARP_mode;
 
 /**
   * @brief The enumeration lists the deatil join status.

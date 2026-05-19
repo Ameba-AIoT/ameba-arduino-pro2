@@ -1,6 +1,8 @@
 #ifndef __VIDEO_STREAM_H__
 #define __VIDEO_STREAM_H__
 
+#include "Arduino.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

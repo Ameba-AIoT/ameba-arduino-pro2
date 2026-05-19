@@ -17,13 +17,14 @@
 #define SENSOR_IMX327         0x07
 #define SENSOR_IMX662         0x08
 #define SENSOR_IMX681         0x09
-#define SENSOR_IMX681_12M     0x0A
-#define SENSOR_IMX681_12M_SEQ 0x0B
-#define SENSOR_K306P          0x0C
-#define SENSOR_PS5268         0x0D
-#define SENSOR_OV9734         0x0E
-#define SENSOR_OV50A40        0x0F
-#define SENSOR_SC2336         0x10
+#define SENSOR_IMX681_5M      0x0A
+#define SENSOR_IMX681_12M     0x0B
+#define SENSOR_IMX681_12M_SEQ 0x0C
+#define SENSOR_K306P          0x0D
+#define SENSOR_PS5268         0x0E
+#define SENSOR_OV9734         0x0F
+#define SENSOR_OV50A40        0x10
+#define SENSOR_SC2336         0x11
 
 static const struct sensor_params_t sensor_params[] = {
     [SENSOR_DUMMY] = {1920, 1080, 30},
@@ -36,6 +37,7 @@ static const struct sensor_params_t sensor_params[] = {
     [SENSOR_IMX327] = {1920, 1080, 24},
     [SENSOR_IMX662] = {1920, 1080, 30},
     [SENSOR_IMX681] = {2000, 1500, 30},
+    [SENSOR_IMX681_5M] = {2592, 1944, 4},
     [SENSOR_IMX681_12M] = {4016, 3012, 4 },
     [SENSOR_IMX681_12M_SEQ] = {2128, 1604, 4 }, //  width = 2008 + 120(overlap) //height = 1506 + 98(overlap)
     [SENSOR_K306P] = {2560, 1440, 24},
@@ -64,6 +66,8 @@ static const struct sensor_params_t sensor_params[] = {
 #define USE_SENSOR SENSOR_IMX662
 #elif defined(ARDUINO_SENSOR_IMX681)
 #define USE_SENSOR SENSOR_IMX681
+#elif defined(ARDUINO_SENSOR_IMX681_5M)
+#define USE_SENSOR_IMX681_5M
 #elif defined(ARDUINO_SENSOR_IMX681_12M)
 #define USE_SENSOR SENSOR_IMX681_12M
 #elif defined(ARDUINO_IMX681_12M_SEQ)

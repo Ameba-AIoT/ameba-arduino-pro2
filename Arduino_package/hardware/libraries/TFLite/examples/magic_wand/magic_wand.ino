@@ -15,7 +15,7 @@ limitations under the License.
 /*
 
  Example guide:
- TBD
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/TensorFlow%20Lite/TensorFlow%20Lite%20-%20Magic%20Wand.html
  */
 
 #include <TensorFlowLite.h>

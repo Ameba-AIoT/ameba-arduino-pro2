@@ -6,6 +6,7 @@
 
 #define MAX_FILENAME_LEN 255
 #define MP3              1
+
 class File: public Stream {
 public:
     File(void);

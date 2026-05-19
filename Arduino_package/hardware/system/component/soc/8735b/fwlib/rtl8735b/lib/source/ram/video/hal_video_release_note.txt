@@ -1,3 +1,24 @@
+<04/21/2026 12:00 Juling>
+Version : RTL8735B_VOE_1.7.1.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix dual sensor id FCS mirror/flip issue
+
+--------------------------------------------------------------------------
+<03/17/2026 12:00 Juling>
+Version : RTL8735B_VOE_1.7.0.0
+Modified Files:
+All
+Change Notes:
+
+	ISP/sensor related
+	1. Fix dual sensor id mirror/flip issue
+	2. Merge PC2 12M DRC modification
+
+--------------------------------------------------------------------------
 <01/20/2026 12:00 Juling>
 Version : RTL8735B_VOE_1.6.9.0
 Modified Files:

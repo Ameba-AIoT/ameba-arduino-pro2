@@ -126,7 +126,7 @@
 #define IQK_VER_8197G "0x05"
 #define IQK_VER_8723F "0x00"
 #define IQK_VER_8814C "0x00"
-#define IQK_VER_8735B "0x04"
+#define IQK_VER_8735B "0x07"
 #define IQK_VER_8822E "0x11"
 
 /*LCK version*/
@@ -195,7 +195,7 @@
 #define DPK_VER_8812F "0x0a"
 #define DPK_VER_8197G "0x0e"
 #define DPK_VER_8814C "0x02"
-#define DPK_VER_8735B "0x0f"
+#define DPK_VER_8735B "0x10"
 #define DPK_VER_8822E "0x0e"
 
 /*RFK_INIT version*/
@@ -273,7 +273,7 @@
 #define TSSI_VER_8814B "0x1"
 #define TSSI_VER_8197G "0x1"
 #define TSSI_VER_8723F "0x1"
-#define TSSI_VER_8735B "0x24"
+#define TSSI_VER_8735B "0x25"
 
 /*PA Bias Calibration version*/
 #define PABIASK_VER_8188E \

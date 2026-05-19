@@ -107,7 +107,7 @@ int rltk_wlan_del_mac_filter(unsigned char *hwaddr);
 
 int rltk_set_hidden_ssid(const char *ifname, unsigned char value);
 unsigned char rltk_get_band_type(void);
-unsigned int rltk_wlan_get_tsf(unsigned char port_id);
+int rltk_wlan_get_tsf(__u64 *tsf);
 int rltk_wlan_get_ccmp_key(unsigned char *uncst_key, unsigned char *group_key);
 int rltk_wlan_set_tx_rate_by_ToS(unsigned char enable, unsigned char ToS_precedence, unsigned char tx_rate);
 int rltk_wlan_set_EDCA_param(unsigned int AC_param);
