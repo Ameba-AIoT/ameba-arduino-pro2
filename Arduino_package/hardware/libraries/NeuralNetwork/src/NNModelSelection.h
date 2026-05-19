@@ -59,12 +59,14 @@
 
 class NNModelSelection: public MMFModule {
 public:
-    NNModelSelection(void) {
+    NNModelSelection(void)
+    {
         INIT_NN_LOGGING();
         INIT_OSD_LOGGING();
     }
 
-    ~NNModelSelection(void) {}
+    ~NNModelSelection(void)
+    {}
     void modelSelect(unsigned char nntask);
     void modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel);
     void modelSelect(unsigned char nntask, unsigned char objdetmodel, unsigned char facedetmodel, unsigned char facerecogmodel, unsigned char audclassmodel);
