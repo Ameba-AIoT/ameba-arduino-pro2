@@ -2467,7 +2467,6 @@ int classification_postprocess(void *tensor_out, nn_tensor_param_t *param, void 
     return class_cnt;
 }
 
-
 nnmodel_t img_classification = {
     .nb = classification_get_network_filename,
     .preprocess = classification_preprocess,

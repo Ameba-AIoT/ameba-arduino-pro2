@@ -21,7 +21,7 @@ limitations under the License.
 // The pin of the LED, PWM
 
 #if defined(BOARD_AMB82_MINI)
-#define led 8
+#define led LED_B
 
 #endif
 

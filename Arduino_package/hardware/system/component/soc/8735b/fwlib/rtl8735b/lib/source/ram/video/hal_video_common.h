@@ -582,7 +582,10 @@ typedef struct {
 
 	u32 zoom_1x1_up_en;
 
-	u32 rsvd[26];   //When add new element, please reduce same rsvd size
+	u32 isp_gain_mode;
+	u32 isp_gain;
+
+	u32 rsvd[24];   //When add new element, please reduce same rsvd size
 
 } __attribute__((aligned(32))) commandLine_s;
 

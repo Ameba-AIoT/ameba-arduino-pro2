@@ -13,6 +13,11 @@ enum isp_wdr_mode {
 	WDR_DIRECT		//only for hr flow
 };
 
+enum isp_drc_mode {
+	DRC_AUTO = 0,
+	DRC_MANUAL
+};
+
 enum isp_flicker_mode {
 	FLICKER_DISABLE = 0,
 	FLICKER_50HZ,
@@ -76,5 +81,12 @@ int isp_set_max_fps(int val);
 int isp_get_max_fps(int *pval);
 int isp_set_min_fps(int val);
 int isp_get_min_fps(int *pval);
+
+//only for HR example
+int isp_set_drc_mode(int val);
+int isp_get_drc_mode(int *pval);
+int isp_set_drc_blending_rate(int val);
+int isp_get_drc_blending_rate(int *pval);
+int isp_get_isp_gain(int *pval);
 
 #endif

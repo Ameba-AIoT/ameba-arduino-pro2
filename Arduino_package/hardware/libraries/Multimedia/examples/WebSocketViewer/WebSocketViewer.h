@@ -1,7 +1,9 @@
 #ifndef __WEBSOCKETVIEWER_H__
 #define __WEBSOCKETVIEWER_H__
 
+#include "Arduino.h"
 #include "VideoStream.h"
+#include "htdocs.h"
 
 #ifdef __cplusplus
 extern "C" {

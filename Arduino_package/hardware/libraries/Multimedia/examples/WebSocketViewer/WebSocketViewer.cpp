@@ -1,6 +1,4 @@
-#include <Arduino.h>
 #include "WebSocketViewer.h"
-#include "htdocs.h"
 
 WebSocketViewer::WebSocketViewer(void)
 {

@@ -245,6 +245,10 @@ void wifi_wowlan_set_pstune_param(uint8_t set_pstimeout, uint8_t set_pstimeout_r
 ////0 for success
 int wifi_wowlan_set_fwdecision_param(u8  fwdis_period, u8  fwdis_trypktnum, u8  pno_enable, u8  pno_timeout, u8  l2_keepalive_period);
 
+//select wowlan arp taget ip
+//param@
+//u8  use_type                  0 for dhcp server ip, 1 for gateway ip
+void wowlan_set_arp_target_ip(uint8_t use_type);
 
 #ifdef	__cplusplus
 }

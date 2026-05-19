@@ -51,7 +51,6 @@ int USBMassStorage::USBStatus(void)
 
 void USBMassStorage::initializeDisk(void)
 {
-
     disk_operations = (msc_opts *)malloc(sizeof(struct msc_opts));
     if (disk_operations == NULL) {
         amb_ard_printf(ARD_LOG_ERR, "\r\n [ERROR] disk_operation malloc fail\n");

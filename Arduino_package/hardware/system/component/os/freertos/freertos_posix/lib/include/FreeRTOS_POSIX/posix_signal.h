@@ -36,7 +36,7 @@
 
 #ifndef _FREERTOS_POSIX_SIGNAL_H_
 #define _FREERTOS_POSIX_SIGNAL_H_
-
+#include <sys/types.h>
 /**
  * @defgroup Values of sigev_notify.
  */

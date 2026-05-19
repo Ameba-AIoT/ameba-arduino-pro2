@@ -363,6 +363,7 @@ s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool 
 #define	SET_H2CCMD_DHCP_RENEW_PARM_T1_L(__pH2CCmd, __Value)              SET_BITS_TO_LE_1BYTE(__pH2CCmd+3, 0, 8, __Value)
 #define	SET_H2CCMD_DHCP_RENEW_PARM_LEASE_H(__pH2CCmd, __Value)        SET_BITS_TO_LE_1BYTE(__pH2CCmd+4, 0, 8, __Value)
 #define	SET_H2CCMD_DHCP_RENEW_PARM_LEASE_L(__pH2CCmd, __Value)        SET_BITS_TO_LE_1BYTE(__pH2CCmd+5, 0, 8, __Value)
+#define	SET_H2CCMD_DHCP_RENEW_PARM_EXT(__pH2CCmd, __Value)        SET_BITS_TO_LE_1BYTE(__pH2CCmd+6, 0, 8, __Value)
 
 /* _DYNAMIC_TX_PWR_CMD_0x92 */
 #define SET_H2CCMD_DYNAMIC_TX_PWR_ENABLE(__pH2CCmd, __Value)			SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)

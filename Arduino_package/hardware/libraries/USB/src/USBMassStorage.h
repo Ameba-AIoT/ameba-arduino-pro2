@@ -17,4 +17,5 @@ public:
 private:
     struct msc_opts *disk_operations = NULL;
 };
+
 #endif
