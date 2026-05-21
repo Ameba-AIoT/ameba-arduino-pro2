@@ -92,7 +92,7 @@
 
 class AmebaILI9341: public Print {
 public:
-    AmebaILI9341(int csPin, int dcPin, int resetPin);
+    AmebaILI9341(int csPin, int dcPin, int resetPin, SPIClass *spi = &SPI);
 
     void begin(void);
 
@@ -136,6 +136,7 @@ public:
 private:
     void reset(void);
 
+    SPIClass *_spi;
     int _csPin;
     int _dcPin;
     int _resetPin;

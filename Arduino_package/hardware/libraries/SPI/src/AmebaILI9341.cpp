@@ -5,8 +5,9 @@
 
 #include <inttypes.h>
 
-AmebaILI9341::AmebaILI9341(int csPin, int dcPin, int resetPin)
+AmebaILI9341::AmebaILI9341(int csPin, int dcPin, int resetPin, SPIClass *spi)
 {
+    _spi = spi;
     _csPin = csPin;    // TODO: no effect now, use pin 10 as default
     _dcPin = dcPin;
     _resetPin = resetPin;
@@ -33,7 +34,7 @@ void AmebaILI9341::begin(void)
     _dcPort = digitalPinToPort(_dcPin);
     _dcMask = digitalPinToBitMask(_dcPin);
 
-    SPI.begin();
+    _spi->begin();
 
     reset();
 
@@ -169,41 +170,41 @@ void AmebaILI9341::setAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1
 
     //    *portOutputRegister(_dcPort) &= ~(_dcMask);
     digitalWrite(_dcPin, 0);
-    SPI.transfer(ILI9341_CASET);
+    _spi->transfer(ILI9341_CASET);
     //    *portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
-    SPI.transfer(x >> 8);
-    SPI.transfer(x & 0xFF);
-    SPI.transfer((x + w) >> 8);
-    SPI.transfer((x + w) & 0xFF);
+    _spi->transfer(x >> 8);
+    _spi->transfer(x & 0xFF);
+    _spi->transfer((x + w) >> 8);
+    _spi->transfer((x + w) & 0xFF);
 
     //    *portOutputRegister(_dcPort) &= ~(_dcMask);
     digitalWrite(_dcPin, 0);
-    SPI.transfer(ILI9341_PASET);
+    _spi->transfer(ILI9341_PASET);
     //    *portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
-    SPI.transfer(y >> 8);
-    SPI.transfer(y & 0xFF);
-    SPI.transfer((y + h) >> 8);
-    SPI.transfer((y + h) & 0xFF);
+    _spi->transfer(y >> 8);
+    _spi->transfer(y & 0xFF);
+    _spi->transfer((y + h) >> 8);
+    _spi->transfer((y + h) & 0xFF);
 
     //    *portOutputRegister(_dcPort) &= ~(_dcMask);
     digitalWrite(_dcPin, 0);
-    SPI.transfer(ILI9341_RAMWR);
+    _spi->transfer(ILI9341_RAMWR);
 }
 
 void AmebaILI9341::writecommand(uint8_t command)
 {
     //    *portOutputRegister(_dcPort) &= ~(_dcMask);
     digitalWrite(_dcPin, 0);
-    SPI.transfer(command);
+    _spi->transfer(command);
 }
 
 void AmebaILI9341::writedata(uint8_t data)
 {
     //    *portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
-    SPI.transfer(data);
+    _spi->transfer(data);
 }
 
 void AmebaILI9341::setRotation(uint8_t m)
@@ -272,7 +273,7 @@ void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const 
         pPixels[i] = (pPixels[i] << 8) | (pPixels[i] >> 8);
     }
 
-    SPI.transfer(pPixels, pixelCount * 2);
+    _spi->transfer(pPixels, pixelCount * 2);
 }
 
 void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
@@ -301,8 +302,8 @@ void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uin
     //    *portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
     for (i = 0; i < pixelCount; i++) {
-        SPI.transfer(color_hi);
-        SPI.transfer(color_lo);
+        _spi->transfer(color_hi);
+        _spi->transfer(color_lo);
     }
 }
 
@@ -315,8 +316,8 @@ void AmebaILI9341::drawPixel(int16_t x, int16_t y, uint16_t color)
     setAddress(x, y, (x + 1), (y + 1));
     //    *portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
-    SPI.transfer(color >> 8);
-    SPI.transfer(color & 0xFF);
+    _spi->transfer(color >> 8);
+    _spi->transfer(color & 0xFF);
 }
 
 void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color)
@@ -359,8 +360,8 @@ void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint
         digitalWrite(_dcPin, 1);
         linelen = abs(y1 - y0);
         for (idx = 0; idx < linelen; idx++) {
-            SPI.transfer(color_hi);
-            SPI.transfer(color_lo);
+            _spi->transfer(color_hi);
+            _spi->transfer(color_lo);
         }
     } else if (y0 == y1) {
         // draw horizontal line
@@ -382,8 +383,8 @@ void AmebaILI9341::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint
         digitalWrite(_dcPin, 1);
         linelen = abs(x1 - x0);
         for (idx = 0; idx < linelen; idx++) {
-            SPI.transfer(color_hi);
-            SPI.transfer(color_lo);
+            _spi->transfer(color_hi);
+            _spi->transfer(color_lo);
         }
     } else {
         // Bresenham's line algorithm

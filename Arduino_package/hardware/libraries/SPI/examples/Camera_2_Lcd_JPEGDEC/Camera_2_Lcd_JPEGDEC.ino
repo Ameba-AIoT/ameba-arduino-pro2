@@ -45,12 +45,12 @@ long lTime;
 
 #define CHANNEL 0
 
-#define TFT_RESET 5
-#define TFT_DC    4
-#define TFT_CS    SPI_SS
+#define TFT_RESET 5         // You may use other non-conflict pin (e.x.pin 16) if you are using SPI0 for AMB82-zero
+#define TFT_DC    4         // You may use other non-conflict pin (e.x.pin 18) if you are using SPI0 for AMB82-zero
+#define TFT_CS    SPI_SS    // Please change to SPI1_SS if you are using SPI1
 
-
-AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET);
+AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET);    // SPI0
+// AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET, &SPI1); // SPI1
 
 #define ILI9341_SPI_FREQUENCY 40000000
 
@@ -73,7 +73,8 @@ void setup()
 
     Serial.println("TFT ILI9341 ");
 
-    SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);
+    SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);    // SPI0
+    // SPI1.setDefaultFrequency(ILI9341_SPI_FREQUENCY);  // SPI1
 
     Camera.configVideoChannel(CHANNEL, config);
     Camera.videoInit();
