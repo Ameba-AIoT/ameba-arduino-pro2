@@ -17,7 +17,8 @@
 
   Slave address: 0x08
 
-  Example guide: TBD
+  Example guide:
+  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/Dual%20Board%20I2C%20Slave.html
 */
 
 #include <Wire.h>

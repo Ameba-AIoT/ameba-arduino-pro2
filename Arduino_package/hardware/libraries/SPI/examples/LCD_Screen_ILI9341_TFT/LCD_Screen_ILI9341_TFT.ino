@@ -18,11 +18,12 @@
 
 // For all supported boards (AMB21/AMB22, AMB23, BW16/BW16-TypeC, AW-CU488_ThingPlus),
 // Select 2 GPIO pins connect to TFT_RESET and TFT_DC. And default SPI_SS/SPI1_SS connect to TFT_CS.
-#define TFT_RESET 5
-#define TFT_DC    4
-#define TFT_CS    SPI_SS
+#define TFT_RESET 5         // You may use other non-conflict pin (e.x.pin 16) if you are using SPI0 for AMB82-zero
+#define TFT_DC    4         // You may use other non-conflict pin (e.x.pin 18) if you are using SPI0 for AMB82-zero
+#define TFT_CS    SPI_SS    // Please change to SPI1_SS if you are using SPI1
 
-AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET);
+AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET);    // SPI0
+// AmebaILI9341 tft = AmebaILI9341(TFT_CS, TFT_DC, TFT_RESET, &SPI1); // SPI1
 
 #define ILI9341_SPI_FREQUENCY 20000000
 
@@ -31,7 +32,8 @@ void setup()
     Serial.begin(115200);
     Serial.println("ILI9341 Test!");
 
-    SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);
+    SPI.setDefaultFrequency(ILI9341_SPI_FREQUENCY);    // SPI0
+    // SPI1.setDefaultFrequency(ILI9341_SPI_FREQUENCY);  // SPI1
 
     tft.begin();
 

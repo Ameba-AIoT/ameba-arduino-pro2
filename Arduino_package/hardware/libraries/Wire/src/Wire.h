@@ -44,7 +44,6 @@ public:
     void begin();
     void begin(uint8_t);
     void begin(int);
-    void slaveBegin();
 
     void end();
 

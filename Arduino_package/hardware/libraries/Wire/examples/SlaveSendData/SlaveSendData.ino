@@ -8,7 +8,8 @@
  modified 15 May 2026
  by Realtek SG
 
- Example guide: TBD
+ Example guide:
+ https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/Slave%20Send%20Data%20to%20Arduino%20UNO.html
 */
 
 #include <Wire.h>
