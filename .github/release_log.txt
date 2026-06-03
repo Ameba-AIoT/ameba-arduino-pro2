@@ -30,15 +30,11 @@ API Updates:
 - Add sensor K306P support
 - Update WDT API
 - Update codebase for ATcmd
-- Update Code base
 - Update API for AMB82-zero and SWD off logic
-- Minor bug fix
 
 Misc:
 - Update tools version 1.4.8
     - Add camera sensor support, IMX681, IMX681_12M, IMX681_12M_SEQ, OV50A40
-- Update auto_zip_lib.yml
-- Update the Arduino IDE menu
 - Update SD_model
 - Update ameba_pro2_tools 1.4.9
     - Add "Dev Mode" or "Fast Mode" for compilation

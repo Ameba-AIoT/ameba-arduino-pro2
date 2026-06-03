@@ -148,6 +148,7 @@ private:
     bool _initStatus;    // flag to mark I2C init status
     uint8_t _address = 0;
     int _slvRXLen = 0;
+    int _swd_pin_check = 0;
 };
 
 extern TwoWire Wire;

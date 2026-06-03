@@ -79,6 +79,14 @@ void TwoWire::begin()
     SDA_pin = (PinName)g_APinDescription[SDA_pin].pinname;
     SCL_pin = (PinName)g_APinDescription[SCL_pin].pinname;
 
+    // SWD_DATA, SWD_CLK, deinit
+    if ((SCL_pin == PA_0 || (SDA_pin == PA_1) {
+        if (_swd_pin_check == 0) {
+            hal_sys_dbg_port_cfg(DBG_PORT_OFF, TMS_IO_S0_CLK_S0);
+            _swd_pin_check = 1;
+        }
+    }
+
     i2c_init(((i2c_t *)this->pI2C), ((PinName)this->SDA_pin), ((PinName)this->SCL_pin));
     i2c_frequency(((i2c_t *)this->pI2C), this->twiClock);
 
@@ -99,6 +107,14 @@ void TwoWire::begin(uint8_t address)
 
     SDA_pin = (PinName)g_APinDescription[SDA_pin].pinname;
     SCL_pin = (PinName)g_APinDescription[SCL_pin].pinname;
+
+    // SWD_DATA, SWD_CLK, deinit
+    if ((SCL_pin == PA_0 || (SDA_pin == PA_1) {
+        if (_swd_pin_check == 0) {
+            hal_sys_dbg_port_cfg(DBG_PORT_OFF, TMS_IO_S0_CLK_S0);
+            _swd_pin_check = 1;
+        }
+    }
 
     // Init I2C as slave using native mbed API
     // dbg_printf("\r\n[INFO] TwoWire::begin() - Calling i2c_slave_init with SDA pin %lu, SCL pin %lu, address 0x%02X\n", this->SDA_pin, this->SCL_pin, address);
