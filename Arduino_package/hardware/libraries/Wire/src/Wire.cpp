@@ -80,7 +80,7 @@ void TwoWire::begin()
     SCL_pin = (PinName)g_APinDescription[SCL_pin].pinname;
 
     // SWD_DATA, SWD_CLK, deinit
-    if ((SCL_pin == PA_0 || (SDA_pin == PA_1) {
+    if ((SCL_pin == PA_0) || (SDA_pin == PA_1)) {
         if (_swd_pin_check == 0) {
             hal_sys_dbg_port_cfg(DBG_PORT_OFF, TMS_IO_S0_CLK_S0);
             _swd_pin_check = 1;
@@ -109,7 +109,7 @@ void TwoWire::begin(uint8_t address)
     SCL_pin = (PinName)g_APinDescription[SCL_pin].pinname;
 
     // SWD_DATA, SWD_CLK, deinit
-    if ((SCL_pin == PA_0 || (SDA_pin == PA_1) {
+    if ((SCL_pin == PA_0) || (SDA_pin == PA_1)) {
         if (_swd_pin_check == 0) {
             hal_sys_dbg_port_cfg(DBG_PORT_OFF, TMS_IO_S0_CLK_S0);
             _swd_pin_check = 1;
