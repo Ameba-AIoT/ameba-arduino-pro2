@@ -114,6 +114,9 @@ static const      char manual_iq[SENSOR_MAX][64] = {
 #define SENSOR_OV12890         0x43  //  |   v    |   v    |   -    |   -    |
 #define SENSOR_OV12890_12M     0x44  //  |   v    |   -    |   -    |   -    |
 #define SENSOR_OV12890_12M_SEQ 0x45  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_F57				0x46  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_SC450AI			0x47  //  |   v    |   -    |   -    |   -    |
+#define SENSOR_OV5647		  	0x48  //  |   v    |   -    |   -    |   -    |
 
 static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_DUMMY]        = {1920, 1080, 30},
@@ -186,6 +189,9 @@ static const struct sensor_params_t sensor_params[] = {
 	[SENSOR_OV12890]  	      = {2048,  1536, 30},
 	[SENSOR_OV12890_12M]      = {4032,  3024, 8},
 	[SENSOR_OV12890_12M_SEQ]  = {2112,  1616, 5}, //width = 2016 + 96(overlap) //height = 1512 + 104(overlap)
+	[SENSOR_F57]			  = {1920, 1080, 30},
+	[SENSOR_SC450AI]		  = {2560, 1440, 30},
+	[SENSOR_OV5647]			  = {2592, 1944, 15},
 };
 
 #define SENSOR_MAX         5

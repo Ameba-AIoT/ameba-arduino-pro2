@@ -1,11 +1,12 @@
 Feature:
-- Add I2C Slave
+- Update I2C slave example guide links
+- Update  SDCardOTA and SDCardPlayMP3
 
 API Updates:
-- Update Code base
-- Update API for AMB82-zero and SWD off logic
+- Update SPI API for SPI1 switching
+- Add SWD pin deinit check for I2C
 - Minor bug fix
 
 Misc:
-- Update ameba_pro2_tools 1.4.11
-    - Add camera sensor IMX681_5M
+- Update ameba_pro2_tools 1.4.12
+    - Add camera sensor OV5647 and GC4663
