@@ -3,6 +3,7 @@
 extern int _port;
 extern char *_server;
 extern const char *resource;
+extern bool useSSL;
 
 extern const char *OtaState[];
 extern const char *g_otaState;

@@ -11,6 +11,7 @@
 int _port;
 char *_server;
 const char *resource = "api/uploadfile";    // DO NOT MODIFY
+bool useSSL = false;
 
 // DO NOT MODIFY
 const char *OtaState[] = {
@@ -28,7 +29,13 @@ void http_update_ota_task(void *param)
 
     g_otaState = OtaState[2];
 
-    ret = http_update_ota((char *)_server, _port, (char *)resource);
+    if (useSSL) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Starting HTTPS firmware download... \n");
+        ret = https_update_ota((char *)_server, _port, (char *)resource);
+    } else {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Starting HTTP firmware download... \n");
+        ret = http_update_ota((char *)_server, _port, (char *)resource);
+    }
 
     g_otaState = OtaState[3];
 
@@ -68,7 +75,9 @@ void sd_update_ota_task(void *param)
 
 void ota_http(void)
 {
-    if (xTaskCreate(http_update_ota_task, (const char *)"http_update_ota_task", 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
+    // HTTPS (TLS handshake) needs significantly more stack than HTTP
+    int fw_stack_size = useSSL ? 6144 : 1024;
+    if (xTaskCreate(http_update_ota_task, (const char *)"http_update_ota_task", fw_stack_size, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS) {
         amb_ard_printf(ARD_LOG_ERR, "\n\r[ERROR] [%s] Create update task failed", __FUNCTION__);
     }
 }
