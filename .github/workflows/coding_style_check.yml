@@ -17,18 +17,10 @@ jobs:
       (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
-      excluded_folder: ${{ env.EXCLUDED_folder }}
-      excluded_sub_folder: ${{ env.EXCLUDED_sub_folder }}
     env:
       # CASE 1: Whole top-level library directory names (space-separated).
-      # Any exact match here skips that library's matrix job entirely --
-      # it is never checked out or formatted-checked at all.
+      # Any exact match here skips that library's matrix job entirely.
       EXCLUDED_folder: "TFLite FolderB"
-      # CASE 2: Nested paths, relative to Arduino_package/hardware/libraries
-      # (space-separated). The PARENT library still gets a matrix job and is
-      # still checked, but this specific nested path is deleted from that
-      # job's checkout before clang-format runs against it.
-      EXCLUDED_sub_folder: "Wire/src/Adafruit-PWM-Servo-Driver-Library"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,31 +30,22 @@ jobs:
           sparse-checkout: |
             Arduino_package/hardware/cores
             Arduino_package/hardware/libraries
-      - name: Debug - list libraries root before filtering
-        run: |
-          echo "---- Contents of Arduino_package/hardware/libraries ----"
-          ls -la Arduino_package/hardware/libraries
-          echo "---- Contents of Wire/src (checking sub-folder case) ----"
-          ls -la Arduino_package/hardware/libraries/Wire/src || echo "Wire/src not found"
       - name: Generate matrix JSON (exclude configurable libraries)
         id: gen-matrix
         run: |
           set -e
           CORE_PATH="Arduino_package/hardware/cores"
           LIB_ROOT="Arduino_package/hardware/libraries"
-          echo "EXCLUDED_folder     = $EXCLUDED_folder"
-          echo "EXCLUDED_sub_folder = $EXCLUDED_sub_folder"
-          # Collect all first-level library directories
+          echo "EXCLUDED_folder = $EXCLUDED_folder"
           ALL_LIB_DIRS=$(find "$LIB_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%P\n')
           echo "All library directories:"
           echo "$ALL_LIB_DIRS"
-          # Filter out excluded top-level names (CASE 1)
           FILTERED_LIB_DIRS=""
           for d in $ALL_LIB_DIRS; do
             SKIP=false
             for ex in $EXCLUDED_folder; do
               if [ "$d" = "$ex" ]; then
-                echo "[CASE 1] Skipping excluded library entirely: $d"
+                echo "Skipping excluded library entirely: $d"
                 SKIP=true
                 break
               fi
@@ -71,9 +54,8 @@ jobs:
               FILTERED_LIB_DIRS="$FILTERED_LIB_DIRS $d"
             fi
           done
-          echo "Libraries after CASE 1 exclusion:"
+          echo "Libraries after exclusion:"
           echo "$FILTERED_LIB_DIRS"
-          # Build JSON array: ["cores", "libraries/Lib1", "libraries/Lib2", ...]
           JSON="[\"$CORE_PATH\""
           for d in $FILTERED_LIB_DIRS; do
             JSON+=",\"$LIB_ROOT/$d\""
@@ -89,7 +71,11 @@ jobs:
       matrix:
         path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     env:
-      EXCLUDED_sub_folder: ${{ needs.build-matrix.outputs.excluded_sub_folder }}
+      # CASE 2: Nested paths, relative to Arduino_package/hardware/libraries
+      # (space-separated). Hardcoded directly here (not passed via job outputs)
+      # to avoid any cross-job context-resolution issues. The parent library
+      # still gets a matrix job; only this nested path is pruned before check.
+      EXCLUDED_sub_folder: "Wire/src/Adafruit-PWM-Servo-Driver-Library"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -112,22 +98,29 @@ jobs:
         run: |
           set -e
           LIB_ROOT="Arduino_package/hardware/libraries"
-          echo "This job's matrix path: ${{ matrix.path }}"
-          echo "EXCLUDED_sub_folder = $EXCLUDED_sub_folder"
+          echo "This job's matrix path : ${{ matrix.path }}"
+          echo "EXCLUDED_sub_folder    : [$EXCLUDED_sub_folder]"
+          if [ -z "$EXCLUDED_sub_folder" ]; then
+            echo "WARNING: EXCLUDED_sub_folder is empty -- nothing will be pruned."
+          fi
           for sub in $EXCLUDED_sub_folder; do
             TARGET="$LIB_ROOT/$sub"
             echo "---- Checking: $TARGET ----"
             if [ -e "$TARGET" ]; then
-              echo "BEFORE removal, contents:"
-              ls -la "$(dirname "$TARGET")"
-              echo "Removing excluded sub-folder: $TARGET"
-              rm -rf "$TARGET"
-              echo "AFTER removal, contents:"
-              ls -la "$(dirname "$TARGET")"
+              echo "FOUND. Removing: $TARGET"
+              rm -rf -- "$TARGET"
+              if [ -e "$TARGET" ]; then
+                echo "ERROR: $TARGET still exists after rm -rf!"
+                exit 1
+              else
+                echo "Confirmed removed: $TARGET"
+              fi
             else
-              echo "Not present in this checkout (either wrong path, or this job's matrix.path doesn't cover it): $TARGET"
+              echo "Not present in this checkout: $TARGET"
             fi
           done
+          echo "---- Final listing of $LIB_ROOT (top level) ----"
+          ls -la "$LIB_ROOT"
 
       - name: Run C/C++/header files check
         uses: M-ichae-l/clang-format-action@v1.0.0
