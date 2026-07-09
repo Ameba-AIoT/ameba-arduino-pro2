@@ -1,13 +1,11 @@
 # This workflow runs coding_style_check test for Ameba Arduino SDK
 name: Check mbed coding style
-
 on:
   push:
   pull_request_target:
   schedule:
     - cron: '0 12 * * 1'
   workflow_dispatch:
-
 jobs:
   build-matrix:
     name: Build formatting matrix
@@ -19,8 +17,13 @@ jobs:
       (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
+      excluded_libs: ${{ env.EXCLUDED_LIBS }}
     env:
-      # Customize excluded library directory names here (space-separated)
+      # Customize excluded library directory names here (space-separated).
+      # Entries with no "/" exclude an entire top-level library (job skipped).
+      # Entries containing "/" (e.g. "Wire/src/Adafruit-PWM-Servo-Driver-Library")
+      # are left alone here -- they don't match any top-level dir name, so the
+      # parent library's job still runs; they're pruned later in formatting-check.
       EXCLUDED_LIBS: "TFLite Wire/src/Adafruit-PWM-Servo-Driver-Library FolderB"
     steps:
       - name: Checkout repository
@@ -31,7 +34,6 @@ jobs:
           sparse-checkout: |
             Arduino_package/hardware/cores
             Arduino_package/hardware/libraries
-
       - name: Generate matrix JSON (exclude configurable libraries)
         id: gen-matrix
         run: |
@@ -68,7 +70,6 @@ jobs:
           JSON+="]"
           echo "Matrix JSON: $JSON"
           echo "matrix=$JSON" >> "$GITHUB_OUTPUT"
-
   formatting-check:
     name: Run clang-format check
     needs: build-matrix
@@ -76,6 +77,11 @@ jobs:
     strategy:
       matrix:
         path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+    env:
+      # Pulled from build-matrix's output -- single source of truth, no duplication.
+      # Entries containing "/" are sub-paths to prune out of the checkout before
+      # running clang-format on this job's path.
+      EXCLUDED_LIBS: ${{ needs.build-matrix.outputs.excluded_libs }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -85,7 +91,6 @@ jobs:
           sparse-checkout: |
             Arduino_package/hardware/cores
             Arduino_package/hardware/libraries
-
       - name: Checkout private clang-format config
         uses: actions/checkout@v4
         with:
@@ -94,6 +99,22 @@ jobs:
           path: _clang_config
           sparse-checkout: |
             coding_style_mbed/.clang-format
+
+      - name: Remove excluded sub-paths from this job's checkout
+        run: |
+          set -e
+          LIB_ROOT="Arduino_package/hardware/libraries"
+          for ex in $EXCLUDED_LIBS; do
+            case "$ex" in
+              */*)
+                TARGET="$LIB_ROOT/$ex"
+                if [ -e "$TARGET" ]; then
+                  echo "Removing excluded sub-path: $TARGET"
+                  rm -rf "$TARGET"
+                fi
+                ;;
+            esac
+          done
 
       - name: Run C/C++/header files check
         uses: M-ichae-l/clang-format-action@v1.0.0
