@@ -457,6 +457,12 @@ void *video_poweroff(void);
 
 void video_set_isp_info(isp_info_t *info);
 
+int  video_get_isp_info_status(void);
+
+void video_get_isp_info(isp_info_t *info);
+
+void video_reset_isp_info_status(void);
+
 int video_buf_calc(int v1_enable, int v1_w, int v1_h, int v1_bps, int v1_shapshot,
 				   int v2_enable, int v2_w, int v2_h, int v2_bps, int v2_shapshot,
 				   int v3_enable, int v3_w, int v3_h, int v3_bps, int v3_shapshot,

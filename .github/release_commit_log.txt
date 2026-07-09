@@ -1,12 +1,11 @@
 Feature:
-- Update I2C slave example guide links
-- Update  SDCardOTA and SDCardPlayMP3
+- Add support of PCA9685
 
 API Updates:
-- Update SPI API for SPI1 switching
-- Add SWD pin deinit check for I2C
+- Update codebase
+- Add Adafruits PWM Servo Driver library sources
 - Minor bug fix
 
 Misc:
-- Update ameba_pro2_tools 1.4.12
-    - Add camera sensor OV5647 and GC4663
+- Update ameba_pro2_tools 1.4.13
+    - Add camera sensor related bin files

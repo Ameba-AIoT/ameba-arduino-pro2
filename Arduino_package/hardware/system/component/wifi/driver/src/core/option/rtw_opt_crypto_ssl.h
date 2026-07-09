@@ -27,8 +27,15 @@
 #include MBEDTLS_CONFIG_FILE
 #endif
 
+#include "mbedtls/version.h"
+
+#if defined(MBEDTLS_VERSION_NUMBER) && (MBEDTLS_VERSION_NUMBER >= 0x04000000)
+#include "mbedtls/private/ecp.h"
+#include "mbedtls/private/sha256.h"
+#else
 #include "mbedtls/ecp.h"
 #include "mbedtls/sha256.h"
+#endif
 
 /************************************************************************************************
 

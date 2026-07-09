@@ -9,6 +9,11 @@
 
 /************************Related setting****************************/
 #define HTTP_OTA_UPDATE
+
+#ifdef ARDUINO_SDK
+#define HTTPS_OTA_UPDATE
+#endif
+
 #define EXT_STORAGE_OTA_UPDATE
 
 #define NOR_BLOCK_SIZE		4096
@@ -91,6 +96,22 @@ int update_ota_http_connect_server(int server_socket, char *host, int port);
 ** Return         : NULL
 **************************************************************************************************/
 int http_update_ota(char *host, int port, char *resource);
+#endif
+
+#ifdef ARDUINO_SDK
+
+#ifdef HTTPS_OTA_UPDATE
+/*************************************************************************************************
+** Function Name  : https_update_ota
+** Description    : The process of OTA updating through https protocol
+** Input          : host: server hostname or IP string
+**                  port: server port (typically 443)
+**                  resource: firmware file path on server
+** Return         : 0: OTA success, -1: OTA failed
+**************************************************************************************************/
+int https_update_ota(char *host, int port, char *resource);
+#endif
+
 #endif
 
 #ifdef EXT_STORAGE_OTA_UPDATE
