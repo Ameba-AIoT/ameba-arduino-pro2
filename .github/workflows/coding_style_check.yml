@@ -21,7 +21,7 @@ jobs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
     env:
       # Customize excluded library directory names here (space-separated)
-      EXCLUDED_LIBS: "TFLite FolderA FolderB"
+      EXCLUDED_LIBS: "TFLite Wire/src/Adafruit-PWM-Servo-Driver-Library FolderB"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
