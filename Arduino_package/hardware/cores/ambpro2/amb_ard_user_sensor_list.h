@@ -32,29 +32,29 @@
 #define SENSOR_SC2336         0x16
 
 static const struct sensor_params_t sensor_params[] = {
-    [SENSOR_DUMMY]            = {1920, 1080, 30},
-    [SENSOR_F37]              = {1920, 1080, 30},
-    [SENSOR_F53]              = {1920, 1080, 30},
-    [SENSOR_GC2053]           = {1920, 1080, 30},
-    [SENSOR_GC4653]           = {2560, 1440, 24},
-    [SENSOR_GC4663]           = {2560, 1440, 24},  //HDR Mode fps=20
-    [SENSOR_GC5035]           = {2592, 1944, 15},
-    [SENSOR_IMX307]           = {1920, 1080, 30},
-    [SENSOR_IMX327]           = {1920, 1080, 24},
-    [SENSOR_IMX662]           = {1920, 1080, 30},
-    [SENSOR_IMX681]           = {2000, 1500, 30},
-    [SENSOR_IMX681_5M]        = {2592, 1944,  4},
-    [SENSOR_IMX681_12M]       = {4016, 3012,  4},
-    [SENSOR_IMX681_12M_SEQ]   = {2128, 1604,  4}, //width = 2008 + 120(overlap) //height = 1506 + 98(overlap)
-    [SENSOR_K306P]            = {2560, 1440, 24},  //HDR Mode fps=20
-    [SENSOR_K306P_HD]         = {1284,  724, 20},
-    [SENSOR_OV50A40]          = {2048, 1536, 30},
-    [SENSOR_OV50A40_50M]      = {2048, 1536, 30},
-    [SENSOR_OV5647]           = {2592, 1944, 15},
-    [SENSOR_OV9734]           = {1280,  720, 30},
-    [SENSOR_OV9734_SD]        = { 640,  360, 60},
-    [SENSOR_PS5268]           = {1920, 1080, 30},
-    [SENSOR_SC2336]           = {1920, 1080, 30},
+    [SENSOR_DUMMY] = {1920, 1080, 30},
+    [SENSOR_F37] = {1920, 1080, 30},
+    [SENSOR_F53] = {1920, 1080, 30},
+    [SENSOR_GC2053] = {1920, 1080, 30},
+    [SENSOR_GC4653] = {2560, 1440, 24},
+    [SENSOR_GC4663] = {2560, 1440, 24}, //  HDR Mode fps=20
+    [SENSOR_GC5035] = {2592, 1944, 15},
+    [SENSOR_IMX307] = {1920, 1080, 30},
+    [SENSOR_IMX327] = {1920, 1080, 24},
+    [SENSOR_IMX662] = {1920, 1080, 30},
+    [SENSOR_IMX681] = {2000, 1500, 30},
+    [SENSOR_IMX681_5M] = {2592, 1944, 4 },
+    [SENSOR_IMX681_12M] = {4016, 3012, 4 },
+    [SENSOR_IMX681_12M_SEQ] = {2128, 1604, 4 }, //  width = 2008 + 120(overlap) //height = 1506 + 98(overlap)
+    [SENSOR_K306P] = {2560, 1440, 24}, //  HDR Mode fps=20
+    [SENSOR_K306P_HD] = {1284, 724,  20},
+    [SENSOR_OV50A40] = {2048, 1536, 30},
+    [SENSOR_OV50A40_50M] = {2048, 1536, 30},
+    [SENSOR_OV5647] = {2592, 1944, 15},
+    [SENSOR_OV9734] = {1280, 720,  30},
+    [SENSOR_OV9734_SD] = {640,  360,  60},
+    [SENSOR_PS5268] = {1920, 1080, 30},
+    [SENSOR_SC2336] = {1920, 1080, 30},
 };
 #endif
 
