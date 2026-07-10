@@ -16,7 +16,7 @@ jobs:
       (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
       (github.event_name == 'pull_request_target') ||
       (github.event_name == 'schedule' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
-      (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
+      (github.event_name == 'workflow_dispatch')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
     env:
