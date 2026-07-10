@@ -61,6 +61,7 @@ jobs:
       matrix:
         board:
           - fqbn: Ameba_AMB82-MINI
+          - fqbn: Ameba_AMB82-ZERO
 #        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
