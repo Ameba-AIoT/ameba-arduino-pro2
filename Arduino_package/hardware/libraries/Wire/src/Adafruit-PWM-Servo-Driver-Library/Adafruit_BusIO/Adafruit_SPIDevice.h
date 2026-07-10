@@ -146,7 +146,7 @@ private:
   bool _begun;
 };
 
-#ifdef BOARD_AMB82_ZERO
+#if defined(BOARD_AMB82_ZERO) || defined(BOARD_AMB82_ZERO)
 #undef BUSIO_USE_FAST_PINIO
 #endif
 
