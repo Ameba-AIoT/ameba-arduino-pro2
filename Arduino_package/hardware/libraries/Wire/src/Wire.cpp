@@ -33,8 +33,16 @@ extern "C" {
 #include "ex_api.h"
 #include "i2c_slave.h"
 
+#if defined(BOARD_AMB82_MINI)
 i2c_t i2cwire0;
 i2c_t i2cwire1;
+#elif defined(BOARD_AMB82_ZERO)
+i2c_t i2cwire0;
+i2c_t i2cwire1;
+i2c_t i2cwire2;
+#else
+#error check the board supported
+#endif
 
 #ifdef __cplusplus
 }
@@ -488,5 +496,17 @@ void TwoWire::clearWireTimeoutFlag(void)
     }
 }
 
+#if defined(BOARD_AMB82_MINI)
 TwoWire Wire = TwoWire((void *)(&i2cwire0), I2C_SDA, I2C_SCL);
 TwoWire Wire1 = TwoWire((void *)(&i2cwire1), I2C1_SDA, I2C1_SCL);
+#elif defined(BOARD_AMB82_ZERO)
+// TwoWire Wire = TwoWire((void *)(&i2cwire0), I2C_SDA, I2C_SCL);
+// TwoWire Wire1 = TwoWire((void *)(&i2cwire1), I2C1_SDA, I2C1_SCL);
+// TwoWire Wire2 = TwoWire((void *)(&i2cwire2), I2C2_SDA, I2C2_SCL);
+
+TwoWire Wire = TwoWire((void *)(&i2cwire0), I2C2_SDA, I2C2_SCL);
+TwoWire Wire1 = TwoWire((void *)(&i2cwire1), I2C1_SDA, I2C1_SCL);
+TwoWire Wire2 = TwoWire((void *)(&i2cwire2), I2C_SDA, I2C_SCL);
+#else
+#error check the board supported
+#endif

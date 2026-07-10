@@ -732,7 +732,6 @@ struct _ADAPTER {
 #endif
 
 	PVOID		HalData;
-	u32 		hal_data_sz;
 	struct hal_ops	HalFunc;
 
 	s32	bDriverStopped;

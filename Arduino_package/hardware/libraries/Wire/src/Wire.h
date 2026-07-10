@@ -151,7 +151,15 @@ private:
     int _swd_pin_check = 0;
 };
 
+#if defined(BOARD_AMB82_MINI)
 extern TwoWire Wire;
 extern TwoWire Wire1;
+#elif defined(BOARD_AMB82_ZERO)
+extern TwoWire Wire;
+extern TwoWire Wire1;
+extern TwoWire Wire2;
+#else
+#error check the board supported
+#endif
 
 #endif

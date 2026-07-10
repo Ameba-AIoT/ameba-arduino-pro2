@@ -1,7 +1,7 @@
 SENSOR_K306P
 voe.bin
 firmware_isp_iq.bin
-fcs_data_dummy.bin
-iq.bin
-sensor_k306p.bin
+fcs_data_k306p_hd.bin
+iq_k306_hd.bin
+sensor_k306p_hd.bin
 ------------------

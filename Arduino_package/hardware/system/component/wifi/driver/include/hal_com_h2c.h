@@ -133,7 +133,7 @@ enum h2c_cmd {
 #define H2C_DISCON_DECISION_LEN		3
 #define H2C_PNO_LEN		        4
 #define H2C_TCP_KEEP_ALIVE_CTRL_LEN 7
-#define H2C_DHCP_RENEW_CTRL_LEN 6
+#define H2C_DHCP_RENEW_CTRL_LEN 7
 
 #define H2C_AP_OFFLOAD_LEN		3
 #define H2C_AP_WOW_GPIO_CTRL_LEN	4
