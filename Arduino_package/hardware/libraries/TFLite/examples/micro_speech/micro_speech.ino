@@ -35,9 +35,6 @@ limitations under the License.
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
 
-// Using external PDM microphone
-#define TFL_PDM_MIC
-
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
     tflite::ErrorReporter* error_reporter = nullptr;

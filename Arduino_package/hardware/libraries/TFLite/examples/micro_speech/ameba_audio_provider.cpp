@@ -40,16 +40,23 @@ limitations under the License.
 
 #include "audio_api.h"
 
+// Using external PDM microphone
+// #define TFL_PDM_MIC
+
 #define DEFAULT_BUFFER_SIZE 512
 
-#define AD_PAGE_SIZE 512 //64*N bytes 
+#define AD_PAGE_SIZE    512    // 64*N bytes
 #define TX_AD_PAGE_SIZE AD_PAGE_SIZE
 #define RX_AD_PAGE_SIZE AD_PAGE_SIZE
-#define DMA_AD_PAGE_NUM AUDIO_PNUM_4 //4
+#define DMA_AD_PAGE_NUM AUDIO_PNUM_4    // 4
+
+// DMIC pin definitions (matches Ameba Pro2 MMF defaults)
+#define TFL_DMIC_CLK_PIN  PD_16
+#define TFL_DMIC_DATA_PIN PD_18
 
 static audio_t audio_obj;
-static uint8_t ad_dma_txdata[TX_AD_PAGE_SIZE * DMA_AD_PAGE_NUM]__attribute__((aligned(0x20)));
-static uint8_t ad_dma_rxdata[RX_AD_PAGE_SIZE * DMA_AD_PAGE_NUM]__attribute__((aligned(0x20)));
+static uint8_t ad_dma_txdata[TX_AD_PAGE_SIZE * DMA_AD_PAGE_NUM] __attribute__((aligned(0x20)));
+static uint8_t ad_dma_rxdata[RX_AD_PAGE_SIZE * DMA_AD_PAGE_NUM] __attribute__((aligned(0x20)));
 
 namespace {
     bool g_is_audio_initialized = false;
@@ -83,12 +90,11 @@ void CaptureSamples()
 
 void audio_tx_irq(uint32_t arg, uint8_t *pbuf)
 {
-	audio_t *obj = (audio_t *)arg;
+    audio_t *obj = (audio_t *)arg;
 
-	if (audio_get_tx_error_cnt(obj) != 0x00) {
-		dbg_printf("tx page error !!! \r\n");
-	}
-
+    if (audio_get_tx_error_cnt(obj) != 0x00) {
+        dbg_printf("tx page error !!! \r\n");
+    }
 }
 
 void audio_rx_irq(uint32_t arg, uint8_t *pbuf)
@@ -103,67 +109,95 @@ void audio_rx_irq(uint32_t arg, uint8_t *pbuf)
     const int capture_index = start_sample_offset % kAudioCaptureBufferSize;
     // Read the data to the correct place in our buffer
 
-	audio_t *obj = (audio_t *)arg;
-	uint8_t *ptx_addre;
-	uint32_t j;
+    audio_t *obj = (audio_t *)arg;
+    uint8_t *ptx_addre;
 
-	if (audio_get_rx_error_cnt(obj) != 0x00) {
-		// dbg_printf("rx page error !!! \r\n");
-	}
+    if (audio_get_rx_error_cnt(obj) != 0x00) {
+        // dbg_printf("rx page error !!! \r\n");
+    }
 
-	ptx_addre = audio_get_tx_page_adr(obj);
+    // Copy received audio data from the DMA buffer into the capture ring buffer
+    memcpy((g_audio_capture_buffer + capture_index), (void *)pbuf, DEFAULT_BUFFER_SIZE);
 
-#if 0
-    memcpy((void *)ptx_addre, (void *)pbuf, TX_AD_PAGE_SIZE);
-#else
-    memcpy((void *)ptx_addre, (g_audio_capture_buffer + capture_index), DEFAULT_BUFFER_SIZE);
-#endif
+    // Optional: loopback received audio to speaker output
+    ptx_addre = audio_get_tx_page_adr(obj);
+    if (ptx_addre) {
+        memset(ptx_addre, 0, DEFAULT_BUFFER_SIZE);
+        audio_set_tx_page(obj, ptx_addre);
+    }
 
-    audio_set_tx_page(obj, ptx_addre);
-
-	audio_set_rx_page(obj); // submit a new page for receive
+    audio_set_rx_page(obj);    // submit a new page for receive
 
     g_latest_audio_timestamp = time_in_ms;
 }
 
 
-TfLiteStatus InitAudioRecording(tflite::ErrorReporter* error_reporter)
+TfLiteStatus InitAudioRecording(tflite::ErrorReporter *error_reporter)
 {
 
+    uint32_t i;
+    uint8_t *ptx_buf;
+#ifdef TFL_PDM_MIC
+    printf("Start audio DMic (PDM)\r\n");
 
-#if 1
+    // Configure DMIC pins before audio_init
+    audio_dmic_pinmux(&audio_obj, TFL_DMIC_CLK_PIN, TFL_DMIC_DATA_PIN);
 
-	uint32_t i;
-	uint8_t *ptx_buf;
-	printf("Start audio AMic\r\n");
+    // Audio Init � LEFT DMIC (mono, suitable for keyword spotting)
+    audio_init(&audio_obj, OUTPUT_SINGLE_EDNED, LEFT_DMIC, AUDIO_CODEC_2p8V);
+#else
+    printf("Start audio AMic\r\n");
 
-	//Audio Init
-	audio_init(&audio_obj, OUTPUT_SINGLE_EDNED, MIC_SINGLE_EDNED, AUDIO_CODEC_2p8V);
-
-	audio_set_param_adv(&audio_obj, ASR_16KHZ, WL_16BIT, A_MONO, A_MONO);
-
-	audio_set_dma_buffer(&audio_obj, ad_dma_txdata, ad_dma_rxdata, AD_PAGE_SIZE, DMA_AD_PAGE_NUM);
-
-	//Init RX dma
-	audio_rx_irq_handler(&audio_obj, (audio_irq_handler)audio_rx_irq, (uint32_t *)&audio_obj);
-
-	//Init TX dma
-	//audio_tx_irq_handler(&audio_obj, (audio_irq_handler)audio_tx_irq, (uint32_t *)&audio_obj);
-
-	/* Use (DMA page count -1) because occur RX interrupt in first */
-	for (i = 0; i < (DMA_AD_PAGE_NUM - 1); i++) {
-		ptx_buf = audio_get_tx_page_adr(&audio_obj);
-		if (ptx_buf) {
-			audio_set_tx_page(&audio_obj, ptx_buf);
-		}
-		audio_set_rx_page(&audio_obj);
-	}
-
-	audio_mic_analog_gain(&audio_obj, ENABLE, MIC_20DB);
-
-	audio_trx_start(&audio_obj);
-
+    // Audio Init
+    audio_init(&audio_obj, OUTPUT_SINGLE_EDNED, MIC_SINGLE_EDNED, AUDIO_CODEC_2p8V);
 #endif
+
+    // Set DMA buffer before audio params (matches working MMF init order)
+    audio_set_dma_buffer(&audio_obj, ad_dma_txdata, ad_dma_rxdata, AD_PAGE_SIZE, DMA_AD_PAGE_NUM);
+
+    // Set sample rate, word length, mono channels
+    audio_set_param_adv(&audio_obj, ASR_16KHZ, WL_16BIT, A_MONO, A_MONO);
+
+    // Set ADC and DAC digital volume (matches MMF defaults)
+    audio_adc_digital_vol(&audio_obj, 0x66);
+    audio_dac_digital_vol(&audio_obj, 0xAF);
+
+    // Init RX dma
+    audio_rx_irq_handler(&audio_obj, (audio_irq_handler)audio_rx_irq, (uint32_t *)&audio_obj);
+
+    // Init TX dma
+    audio_tx_irq_handler(&audio_obj, (audio_irq_handler)audio_tx_irq, (uint32_t *)&audio_obj);
+
+    // Enable ADC high-pass filter to remove DC offset
+    audio_adc_l_hpf(&audio_obj, ENABLE, HPF_FS_0);
+    audio_adc_r_hpf(&audio_obj, ENABLE, HPF_FS_0);
+
+    /* Use (DMA page count -1) because occur RX interrupt in first */
+    for (i = 0; i < (DMA_AD_PAGE_NUM - 1); i++) {
+        ptx_buf = audio_get_tx_page_adr(&audio_obj);
+        if (ptx_buf) {
+            memset(ptx_buf, 0, AD_PAGE_SIZE);
+            audio_set_tx_page(&audio_obj, ptx_buf);
+        }
+        audio_set_rx_page(&audio_obj);
+    }
+
+#ifdef TFL_PDM_MIC
+    // DMIC: enable analog mic boost + set digital DMIC gain
+    audio_mic_analog_gain(&audio_obj, ENABLE, MIC_20DB);
+    audio_l_dmic_gain(&audio_obj, DMIC_BOOST_0DB);
+#else
+    // AMIC: enable mic bias voltage (CRITICAL for analog mic to work)
+    audio_mic_bias_ctrl(&audio_obj, ENABLE, BIAS_0p9_AVDD);
+    audio_mic_analog_gain(&audio_obj, ENABLE, MIC_20DB);
+#endif
+
+    // Ensure ADC and DAC are unmuted
+    audio_adc_digital_mute(&audio_obj, DISABLE);
+    audio_dac_digital_mute(&audio_obj, DISABLE);
+
+    // Start both TX and RX
+    audio_trx_start(&audio_obj);
 
     // Block until we have our first audio sample
     while (!g_latest_audio_timestamp) {
@@ -173,9 +207,9 @@ TfLiteStatus InitAudioRecording(tflite::ErrorReporter* error_reporter)
     return kTfLiteOk;
 }
 
-TfLiteStatus GetAudioSamples(tflite::ErrorReporter* error_reporter,
+TfLiteStatus GetAudioSamples(tflite::ErrorReporter *error_reporter,
                              int start_ms, int duration_ms,
-                             int* audio_samples_size, int16_t** audio_samples)
+                             int *audio_samples_size, int16_t **audio_samples)
 {
     // Set everything up to start receiving audio
     if (!g_is_audio_initialized) {
