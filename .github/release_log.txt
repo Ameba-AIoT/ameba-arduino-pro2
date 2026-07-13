@@ -7,6 +7,7 @@ Version 4.1.1 - 2026/04/17
 Version 4.1.1 - 2026/04/30
 Version 4.1.1 - 2026/05/19
 Version 4.1.1 - 2026/06/03
+Version 4.1.1 - 2026/07/13
 
 Feature:
 - Add Battery-Powered Camera POC Example
@@ -20,6 +21,7 @@ Feature:
 - Add I2C Slave
 - Update I2C slave example guide links
 - Update  SDCardOTA and SDCardPlayMP3
+- Add support of PCA9685
 
 API Updates:
 - Update code base
@@ -36,6 +38,9 @@ API Updates:
 - Update API for AMB82-zero and SWD off logic
 - Update SPI API for SPI1 switching
 - Add SWD pin deinit check for I2C
+- Minor bug fix
+- Update codebase
+- Add Adafruits PWM Servo Driver library sources
 - Minor bug fix
 
 Misc:
@@ -58,3 +63,5 @@ Misc:
     - Add camera sensor IMX681_5M
 - Update ameba_pro2_tools 1.4.12
     - Add camera sensor OV5647 and GC4663
+- Update ameba_pro2_tools 1.4.13
+    - Add camera sensor related bin files
