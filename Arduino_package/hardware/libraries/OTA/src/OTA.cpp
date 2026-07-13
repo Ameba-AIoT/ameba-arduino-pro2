@@ -17,7 +17,7 @@ static char buffer[1024];
 uint32_t thread1_id, thread2_id, stack_size1, stack_size2;
 int priority1;
 
-WiFiClient OTA::wifiClient;
+Client *OTA::client = NULL;
 char OTA::jsonString[256];
 uint32_t OTA::_last_reconnect;
 
@@ -26,7 +26,13 @@ OTA::OTA():
 {}
 
 OTA::~OTA()
-{}
+{
+    if (client) {
+        client->stop();
+        delete client;
+        client = NULL;
+    }
+}
 
 uint8_t OTA::check_wifi(void)
 {
@@ -44,7 +50,9 @@ void OTA::reConnection(void)
     // printf("reConnection _last_reconnect: %d \r\n", _last_reconnect);
 
     if ((millis() - _last_reconnect) > (SERVER_DEAD_TIMEOUT_MIN * 60 * 1000)) {
-        wifiClient.stop();
+        if (client) {
+            client->stop();
+        }
         _last_reconnect = millis();
         amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Reconnect! \n");
     }
@@ -52,27 +60,31 @@ void OTA::reConnection(void)
 
 void OTA::sendPostRequest(void)
 {
-    if (wifiClient.connected() == 0) {
-        if (wifiClient.connect(_server, _port) == 0) {
+    if (client == NULL) {
+        return;
+    }
+
+    if (client->connected() == 0) {
+        if (client->connect(_server, _port) == 0) {
             amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] [OTA] Connection to server failed \n");
             return;
         }
     }
 
     // Send POST request
-    wifiClient.println("POST /api/connectedclients HTTP/1.1");
-    wifiClient.println("Host: " + String(_server));
-    wifiClient.println("Content-Type: application/json");    // Use appropriate content type
-    // wifiClient.println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
-    wifiClient.print("Content-Length: ");
-    wifiClient.println(strlen(jsonString));
+    client->println("POST /api/connectedclients HTTP/1.1");
+    client->println("Host: " + String(_server));
+    client->println("Content-Type: application/json");    // Use appropriate content type
+    // client->println("Content-Length: " + String(jsonString.length()));    // Specify the length of the content
+    client->print("Content-Length: ");
+    client->println(strlen(jsonString));
 
-    wifiClient.println("Connection: keep-alive");
-    // wifiClient.println("Connection: close");
-    wifiClient.println();    // Empty line indicates the end of headers
-    wifiClient.print(jsonString);
+    client->println("Connection: keep-alive");
+    // client->println("Connection: close");
+    client->println();    // Empty line indicates the end of headers
+    client->print(jsonString);
 
-    // wifiClient.stop();
+    // client->stop();
 }
 
 void OTA::thread1_task(const void *argument)
@@ -89,19 +101,19 @@ void OTA::thread2_task(const void *argument)
     WiFiServer server(5000);
     server.begin();
     while (1) {
-        WiFiClient client = server.available();
+        WiFiClient client_tmp = server.available();
 
-        while (client.connected()) {
+        while (client_tmp.connected()) {
 
             _last_reconnect = millis();
 
             memset(buffer, 0, 1024);
-            int n = client.read((uint8_t *)(&buffer[0]), sizeof(buffer));
+            int n = client_tmp.read((uint8_t *)(&buffer[0]), sizeof(buffer));
             if (n > 0) {
                 for (int i = 0; i < n; i++) {
                     // Serial.print(buffer[i]);
                 }
-                n = client.write(buffer, n);
+                n = client_tmp.write(buffer, n);
                 if (n <= 0) {
                     break;
                 }
@@ -113,17 +125,27 @@ void OTA::thread2_task(const void *argument)
                 }
             }
             delay(500);
-            client.stop();
+            client_tmp.stop();
         }
     }
 }
 
 void OTA::start_OTA_threads(int port, char *server)
 {
-    start_OTA_threads(port, server, WiFi);
+    start_OTA_threads(port, server, WiFi, false);
 }
 
 void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
+{
+    start_OTA_threads(port, server, ota_wifi, false);
+}
+
+void OTA::start_OTA_threads(int port, char *server, bool enableSSL)
+{
+    start_OTA_threads(port, server, WiFi, enableSSL);
+}
+
+void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi, bool enableSSL)
 {
     _ota_wifi = &ota_wifi;
     _last_reconnect = millis();
@@ -134,13 +156,30 @@ void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
 
     _port = port;
     _server = server;
+    useSSL = enableSSL;
+
+    // Delete any existing client and create the appropriate one
+    if (client) {
+        client->stop();
+        delete client;
+        client = NULL;
+    }
+
+    if (enableSSL) {
+        client = new WiFiSSLClient();
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Using HTTPS (WiFiSSLClient) \n");
+    } else {
+        client = new WiFiClient();
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Using HTTP (WiFiClient) \n");
+    }
 
     doc["OTA_state"] = g_otaState;
     // serializeJson(doc, jsonString);
     serializeJson(doc, jsonString, sizeof(jsonString));
 
     priority1 = osPriorityNormal;
-    stack_size1 = 1024;
+    // HTTPS (TLS handshake) needs significantly more stack than HTTP
+    stack_size1 = enableSSL ? 6144 : 2048;
     thread1_id = os_thread_create_arduino(thread1_task, NULL, priority1, stack_size1);
     // thread1_id = os_thread_create_name_arduino(thread1_task, NULL, priority1, stack_size1, "ota_thread1");
 
@@ -151,7 +190,7 @@ void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi)
         amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] [OTA] Failed to create keep-alive connectivity thread. \n");
     }
 
-    stack_size2 = 2048;
+    stack_size2 = 4096;
     thread2_id = os_thread_create_arduino(thread2_task, NULL, priority1, stack_size2);
     // thread2_id = os_thread_create_name_arduino(thread2_task, NULL, priority1, stack_size2, "ota_thread2");
 

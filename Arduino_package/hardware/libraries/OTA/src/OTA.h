@@ -13,6 +13,9 @@ public:
     // To start OTA firmware update process via HTTP
     void start_OTA_threads(int port, char *server);
     void start_OTA_threads(int port, char *server, WiFiClass &ota_wifi);
+    // To start OTA firmware update process via HTTPS
+    void start_OTA_threads(int port, char *server, bool useSSL);
+    void start_OTA_threads(int port, char *server, WiFiClass &ota_wifi, bool useSSL);
     uint8_t check_wifi(void);
 
 private:
@@ -20,7 +23,7 @@ private:
     static void thread2_task(const void *argument);
 
     static void sendPostRequest(void);
-    static WiFiClient wifiClient;
+    static Client *client;
     static char jsonString[256];
     WiFiClass *_ota_wifi;
 
