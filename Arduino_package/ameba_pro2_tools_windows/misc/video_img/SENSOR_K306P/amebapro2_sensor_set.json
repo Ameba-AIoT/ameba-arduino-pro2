@@ -32,15 +32,15 @@
         "merge_en": true,
         "fcs_data": {
             "source":"binary",
-            "file":"fcs_data_dummy.bin"
+            "file":"fcs_data_k306p_hd.bin"
         },
         "iq_data": {
             "source":"binary",
-            "file":"iq.bin"
+            "file":"iq_k306_hd.bin"
         },
         "sensor_data": {
             "source":"binary",
-            "file":"sensor_k306p.bin"
+            "file":"sensor_k306p_hd.bin"
         }
     }
 }

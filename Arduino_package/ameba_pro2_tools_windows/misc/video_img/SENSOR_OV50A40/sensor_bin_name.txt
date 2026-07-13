@@ -2,6 +2,6 @@ SENSOR_OV50A40
 voe.bin
 firmware_isp_iq.bin
 fcs_data_dummy.bin
-iq_ov50a40.bin
-sensor_ov50a40.bin
+iq_ov50a40_crop.bin
+sensor_ov50a40_50m.bin
 ------------------

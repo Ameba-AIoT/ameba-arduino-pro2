@@ -9,6 +9,7 @@
 #endif
 
 #include "hal_osd_util.h"
+#include "canvas.h"
 
 #define RTS_OSD2_CH_BLK_MAX_NUMBER 	24
 

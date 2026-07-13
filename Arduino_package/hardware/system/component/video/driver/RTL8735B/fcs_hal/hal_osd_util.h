@@ -86,7 +86,7 @@
 #define OSD_DATE_BLK_IDX	4
 #define OSD_TIME_BLK_IDX	5
 
-#define OSD_TEXT_STR_MAX	32
+#define OSD_TEXT_STR_MAX	128
 
 #define RTS_OSD2_BLK_MAX_NUMBER		96
 #define RTS_MAX_STM_COUNT		5

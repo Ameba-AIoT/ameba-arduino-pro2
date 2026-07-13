@@ -16,12 +16,15 @@ jobs:
       (github.event_name == 'push' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
       (github.event_name == 'pull_request_target') ||
       (github.event_name == 'schedule' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2') ||
-      (github.event_name == 'workflow_dispatch' && github.repository == 'Ameba-AIoT/ameba-arduino-pro2')
+      (github.event_name == 'workflow_dispatch')
     outputs:
       matrix: ${{ steps.gen-matrix.outputs.matrix }}
     env:
       # Customize excluded library directory names here (space-separated)
-      EXCLUDED_LIBS: "TFLite FolderA FolderB"
+      # Top-level libraries to drop from the matrix entirely
+      EXCLUDED_LIBS: "TFLite FolderB"
+      # Nested sub-paths to skip during file scanning (regex, pipe-separated)
+      EXCLUDED_PATHS_REGEX: "Adafruit-PWM-Servo-Driver-Library"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,48 +35,61 @@ jobs:
             Arduino_package/hardware/cores
             Arduino_package/hardware/libraries
 
-      - name: Generate matrix JSON (exclude configurable libraries)
+      - name: Generate matrix JSON (objects with check + exclude)
         id: gen-matrix
         run: |
-          set -e
+          set -euo pipefail
           CORE_PATH="Arduino_package/hardware/cores"
           LIB_ROOT="Arduino_package/hardware/libraries"
-          echo "Excluded libraries: $EXCLUDED_LIBS"
-          # Collect all first-level library directories
-          ALL_LIB_DIRS=$(find "$LIB_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%P\n')
+
+          echo "Excluded top-level libs : $EXCLUDED_LIBS"
+          echo "Excluded nested regex   : $EXCLUDED_PATHS_REGEX"
+
+          # Collect all first-level library directories (sorted for stable order)
+          mapfile -t ALL_LIB_DIRS < <(find "$LIB_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort)
+
           echo "All library directories:"
-          echo "$ALL_LIB_DIRS"
-          # Filter out excluded names
-          FILTERED_LIB_DIRS=""
-          for d in $ALL_LIB_DIRS; do
-            SKIP=false
+          printf '  %s\n' "${ALL_LIB_DIRS[@]}"
+
+          # Filter out fully-excluded top-level libraries
+          KEEP=()
+          for d in "${ALL_LIB_DIRS[@]}"; do
+            skip=false
             for ex in $EXCLUDED_LIBS; do
               if [ "$d" = "$ex" ]; then
-                echo "Skipping excluded library: $d"
-                SKIP=true
+                echo "Dropping excluded library: $d"
+                skip=true
                 break
               fi
             done
-            if [ "$SKIP" = false ]; then
-              FILTERED_LIB_DIRS="$FILTERED_LIB_DIRS $d"
+            if [ "$skip" = false ]; then
+              KEEP+=("$LIB_ROOT/$d")
             fi
           done
+
           echo "Libraries after exclusion:"
-          echo "$FILTERED_LIB_DIRS"
-          # Build JSON array: ["cores", "libraries/Lib1", "libraries/Lib2", ...]
-          JSON="[\"$CORE_PATH\""
-          for d in $FILTERED_LIB_DIRS; do
-            JSON+=",\"$LIB_ROOT/$d\""
-          done
-          JSON+="]"
-          echo "Matrix JSON: $JSON"
-          echo "matrix=$JSON" >> "$GITHUB_OUTPUT"
+          printf '  %s\n' "${KEEP[@]}"
+
+          # Build a JSON array of objects: [{check, exclude}, ...]
+          # Core path + every kept library share the same nested-exclude regex.
+          {
+            printf '%s\n' "$CORE_PATH"
+            printf '%s\n' "${KEEP[@]}"
+          } | jq -R --arg regex "$EXCLUDED_PATHS_REGEX" \
+                 '{check: ., exclude: $regex}' \
+             | jq -sc '.' > matrix.json
+
+          echo "Matrix JSON:"
+          cat matrix.json
+
+          echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
 
   formatting-check:
     name: Run clang-format check
     needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
@@ -99,6 +115,7 @@ jobs:
         uses: M-ichae-l/clang-format-action@v1.0.0
         with:
           clang-format-version: '17'
-          check-path: ${{ matrix.path }}
+          check-path: ${{ matrix.path.check }}
+          exclude-regex: ${{ matrix.path.exclude }}
           clang-format-style-path: _clang_config/coding_style_mbed/.clang-format
           fallback-style: 'Mozilla'

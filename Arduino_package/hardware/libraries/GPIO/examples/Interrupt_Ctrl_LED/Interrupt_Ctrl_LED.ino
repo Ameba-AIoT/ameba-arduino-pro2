@@ -11,7 +11,9 @@
  https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GPIO/Interrupt%20Control%20LED.html
 */
 
-int button = PUSH_BTN;
+// PUSH_BTN can be used if the board has builtin
+int button = 3;
+// LED_BUILTIN can be used if the board has builtin
 int led = LED_BUILTIN;
 
 int ledState = 1;
