@@ -23,10 +23,10 @@ struct sensor_params_t {
 
 #define SENSOR_DUMMY        0x00
 #define SENSOR_F37          0x01
-static const struct sensor_params_t sensor_params[] = {
-	[SENSOR_DUMMY]      = {1920, 1080, 30},
-	[SENSOR_F37]              = {1920, 1080, 30},
-};
+//static const struct sensor_params_t sensor_params[] = {
+//	[SENSOR_DUMMY]      = {1920, 1080, 30},
+//	[SENSOR_F37]              = {1920, 1080, 30},
+//};
 #define SENSOR_MAX         2
 static const unsigned char sen_id[SENSOR_MAX] = {
 	SENSOR_DUMMY,
