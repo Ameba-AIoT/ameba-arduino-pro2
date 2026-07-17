@@ -22,9 +22,9 @@ jobs:
     env:
       # Customize excluded library directory names here (space-separated)
       # Top-level libraries to drop from the matrix entirely
-      EXCLUDED_LIBS: "TFLite FolderB"
+      EXCLUDED_LIBS: "TFLite Adafruit_libs"
       # Nested sub-paths to skip during file scanning (regex, pipe-separated)
-      EXCLUDED_PATHS_REGEX: "Adafruit-PWM-Servo-Driver-Library"
+      EXCLUDED_PATHS_REGEX: "Adafruit"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
