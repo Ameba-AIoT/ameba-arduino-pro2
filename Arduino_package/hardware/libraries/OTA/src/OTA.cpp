@@ -21,6 +21,9 @@ Client *OTA::client = NULL;
 char OTA::jsonString[256];
 uint32_t OTA::_last_reconnect;
 
+WiFiClient OTA::httpClient;
+WiFiSSLClient OTA::httpsClient;
+
 OTA::OTA():
     _ota_wifi(&WiFi)
 {}
@@ -29,7 +32,6 @@ OTA::~OTA()
 {
     if (client) {
         client->stop();
-        delete client;
         client = NULL;
     }
 }
@@ -154,22 +156,21 @@ void OTA::start_OTA_threads(int port, char *server, WiFiClass &ota_wifi, bool en
         return;
     }
 
+    // Delete any existing client and create the appropriate one
+    if (client) {
+        client->stop();
+        client = NULL;
+    }
+
     _port = port;
     _server = server;
     useSSL = enableSSL;
 
-    // Delete any existing client and create the appropriate one
-    if (client) {
-        client->stop();
-        delete client;
-        client = NULL;
-    }
-
     if (enableSSL) {
-        client = new WiFiSSLClient();
+        client = &httpsClient;
         amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Using HTTPS (WiFiSSLClient) \n");
     } else {
-        client = new WiFiClient();
+        client = &httpClient;
         amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] [OTA] Using HTTP (WiFiClient) \n");
     }
 

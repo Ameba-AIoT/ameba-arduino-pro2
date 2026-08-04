@@ -19,6 +19,8 @@ public:
     uint8_t check_wifi(void);
 
 private:
+    static WiFiClient httpClient;
+    static WiFiSSLClient httpsClient;
     static void thread1_task(const void *argument);
     static void thread2_task(const void *argument);
 
