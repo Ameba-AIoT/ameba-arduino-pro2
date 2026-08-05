@@ -12,10 +12,10 @@ extern "C" {
 #define SERVER_DEAD_TIMEOUT_MIN 5
 
 const char *g_otaState = OtaState[0];
-JsonDocument doc;
+static JsonDocument doc;
 static char buffer[1024];
-uint32_t thread1_id, thread2_id, stack_size1, stack_size2;
-int priority1;
+static uint32_t thread1_id, thread2_id, stack_size1, stack_size2;
+static int priority1;
 
 Client *OTA::client = NULL;
 char OTA::jsonString[256];
