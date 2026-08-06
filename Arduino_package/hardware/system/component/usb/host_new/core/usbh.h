@@ -167,7 +167,11 @@ typedef struct _usb_host_t {
 	usbh_class_driver_t  *class_driver[USBH_MAX_CLASSES_NUM];	/* Class drivers */
 	usbh_class_driver_t  *active_class_driver;			/* Active class driver */
 	usbh_user_cb_t       *cb;							/* Host user callback */
+#ifdef ARDUINO_SDK
+	void                 *priv;						/* Host private data */
+#else
 	void                 *private;						/* Host private data */
+#endif
 } usb_host_t;
 
 /* Exported macros -----------------------------------------------------------*/
