@@ -20,12 +20,12 @@ extern int otg_select_usb_mode(int value);
 }
 #endif
 
-#define USBH_UVC_JFIF_TAG   0xFF
-#define USBH_UVC_JFIF_SOI   0xD8
-#define USBH_UVC_JFIF_EOI   0xD9
+#define USBH_UVC_JFIF_TAG 0xFF
+#define USBH_UVC_JFIF_SOI 0xD8
+#define USBH_UVC_JFIF_EOI 0xD9
 
-#define WARMUP_FRAMES       30
-#define USBH_UVC_BUF_SIZE   500000U
+#define WARMUP_FRAMES     30
+#define USBH_UVC_BUF_SIZE 500000U
 
 #define DEBUG_UVC 1
 

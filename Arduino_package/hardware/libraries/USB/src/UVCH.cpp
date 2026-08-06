@@ -157,7 +157,7 @@ bool UVCH::readyToCapture(void)
     }
 
     _saveCount++;
-    
+
     if ((_saveCount % _frame_rate) != 0) {
         return false;
     }
