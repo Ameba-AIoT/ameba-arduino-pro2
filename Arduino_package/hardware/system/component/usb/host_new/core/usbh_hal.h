@@ -107,6 +107,9 @@ u32 usbh_hal_hc_read_interrupt(void);
 u8 usbh_hal_hc_halt(u8 hc_num);
 u8 usbh_hal_do_ping(u8 ch_num);
 u8 usbh_hal_stop(void);
+#ifdef ARDUINO_SDK
+u8 usbh_hal_enable_host_interrupts(void);
+#endif
 
 #endif /* USBD_HAL_H */
 
