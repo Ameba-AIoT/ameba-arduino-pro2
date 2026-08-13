@@ -201,9 +201,12 @@ recipe.size.pattern.macosx="{ameba.tools_path}/misc/amebasize" "{ameba.tools_pat
 recipe.size.regex=^(?:flash_ntz)\s+([0-9]+).*
 
 ## Export bin
-recipe.hooks.objcopy.postobjcopy.pattern.windows=cmd /c copy /y "{ameba.tools_path}\flash_ntz.bin" "{build.path}"
-recipe.hooks.objcopy.postobjcopy.pattern.linux=cp -f {ameba.tools_path}/flash_ntz.bin {build.path}
-recipe.hooks.objcopy.postobjcopy.pattern.macosx=cp -f {ameba.tools_path}/flash_ntz.bin {build.path}
+recipe.hooks.objcopy.postobjcopy.1.pattern.windows=cmd /c copy /y "{ameba.tools_path}\flash_ntz.bin" "{build.path}"
+recipe.hooks.objcopy.postobjcopy.1.pattern.linux=cp -f {ameba.tools_path}/flash_ntz.bin {build.path}
+recipe.hooks.objcopy.postobjcopy.1.pattern.macosx=cp -f {ameba.tools_path}/flash_ntz.bin {build.path}
+recipe.hooks.objcopy.postobjcopy.2.pattern.windows=cmd /c if exist "{ameba.tools_path}\ota.bin" copy /y "{ameba.tools_path}\ota.bin" "{build.path}"
+recipe.hooks.objcopy.postobjcopy.2.pattern.linux=bash -c 'cp -f "{ameba.tools_path}/ota.bin" "{build.path}" 2>/dev/null || true'
+recipe.hooks.objcopy.postobjcopy.2.pattern.macosx=bash -c 'cp -f "{ameba.tools_path}/ota.bin" "{build.path}" 2>/dev/null || true'
 recipe.output.tmp_file=flash_ntz.bin
 recipe.output.save_file=flash_ntz.bin
 

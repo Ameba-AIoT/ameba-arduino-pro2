@@ -1,11 +1,13 @@
 Feature:
-- Add support of PCA9685
+- Add example Wire\examples\PCA9685\3PositionTest
+- Add example Wire\examples\PCA9685\ServoSweep
+- Add example SPI\examples\graphicstest
+- Update OTA example for warnings
+- Add USB Host UVC Snapshot
 
 API Updates:
-- Update codebase
-- Add Adafruits PWM Servo Driver library sources
-- Minor bug fix
+- Add Adafruit_libs
+- Update OTA API
 
 Misc:
-- Update ameba_pro2_tools 1.4.13
-    - Add camera sensor related bin files
+- Update platform for enabling exports OTA.bin
