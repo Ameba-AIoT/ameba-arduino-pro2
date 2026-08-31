@@ -9,6 +9,7 @@ Version 4.1.1 - 2026/05/19
 Version 4.1.1 - 2026/06/03
 Version 4.1.1 - 2026/07/13
 Version 4.1.1 - 2026/08/13
+Version 4.1.1 - 2026/08/31
 
 Feature:
 - Add Battery-Powered Camera POC Example
@@ -74,3 +75,6 @@ Misc:
 - Update ameba_pro2_tools 1.4.13
     - Add camera sensor related bin files
 - Update platform for enabling exports OTA.bin
+- Update ameba_pro2_tools 1.4.14
+    - Add camera sensor FIXP_5M and FIXP_2K, for testing without camera
+- Add arm64-apple-darwin for tools
