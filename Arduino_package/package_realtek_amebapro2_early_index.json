@@ -1350,6 +1350,40 @@
         },
 		{
           "name": "ameba_pro2_tools",
+          "version": "1.4.14",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "archiveFileName": "ameba_pro2_tools_windows-1.4.14.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.4.14.tar.gz",
+              "checksum": "SHA-256:74333ef3316c290759509f82213cbee254a3093e65cabc4a216556aa2b729b16",
+              "size": "10065767"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "archiveFileName": "ameba_pro2_tools_linux-1.4.14.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.4.14.tar.gz",
+              "checksum": "SHA-256:4ec134d8fb0b27d177f23989b948d9e421ada7b1d38312789772dcf859d13e80",
+              "size": "13568628"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.4.14.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.4.14.tar.gz",
+              "checksum": "SHA-256:7a6526069908249509039766687910d5025b50d4cb1dc070add17bb801b43c09",
+              "size": "12304153"
+            },
+            {
+              "host": "arm64-apple-darwin",
+              "archiveFileName": "ameba_pro2_tools_macos-1.4.14.tar.gz",
+              "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.4.14.tar.gz",
+              "checksum": "SHA-256:7a6526069908249509039766687910d5025b50d4cb1dc070add17bb801b43c09",
+              "size": "12304153"
+            }
+          ]
+        },
+		{
+          "name": "ameba_pro2_tools",
           "version": "1.4.13",
           "systems": [
             {

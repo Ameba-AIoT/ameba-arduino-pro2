@@ -30,6 +30,8 @@
 #define SENSOR_OV9734_SD      0x14
 #define SENSOR_PS5268         0x15
 #define SENSOR_SC2336         0x16
+#define SENSOR_FIXP_2K        0x17
+#define SENSOR_FIXP_5M        0x18
 
 static const struct sensor_params_t sensor_params[] = {
     [SENSOR_DUMMY] = {1920, 1080, 30},
@@ -55,6 +57,8 @@ static const struct sensor_params_t sensor_params[] = {
     [SENSOR_OV9734_SD] = {640,  360,  60},
     [SENSOR_PS5268] = {1920, 1080, 30},
     [SENSOR_SC2336] = {1920, 1080, 30},
+    [SENSOR_FIXP_2K] = {2560, 1440, 24},
+    [SENSOR_FIXP_5M] = {2592, 1944, 15},
 };
 #endif
 
@@ -102,6 +106,10 @@ static const struct sensor_params_t sensor_params[] = {
 #define USE_SENSOR SENSOR_PS5268
 #elif defined(ARDUINO_SENSOR_SC2336)
 #define USE_SENSOR SENSOR_SC2336
+#elif defined(ARDUINO_SENSOR_FIXP_2K)
+#define USE_SENSOR SENSOR_FIXP_2K
+#elif defined(ARDUINO_SENSOR_FIXP_5M)
+#define USE_SENSOR SENSOR_FIXP_5M
 #endif
 
 #endif

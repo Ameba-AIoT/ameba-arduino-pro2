@@ -130,6 +130,12 @@ Ameba_AMB82-MINI.menu.04_CameraOption.ps5268.build.sensor_flags=-DARDUINO_SENSOR
 Ameba_AMB82-MINI.menu.04_CameraOption.sc2336=SC2336
 Ameba_AMB82-MINI.menu.04_CameraOption.sc2336.build.camera_opt=SENSOR_SC2336
 Ameba_AMB82-MINI.menu.04_CameraOption.sc2336.build.sensor_flags=-DARDUINO_SENSOR_SC2336
+Ameba_AMB82-MINI.menu.04_CameraOption.fixp_2k=FIXP_2K
+Ameba_AMB82-MINI.menu.04_CameraOption.fixp_2k.build.camera_opt=SENSOR_FIXP_2K
+Ameba_AMB82-MINI.menu.04_CameraOption.fixp_2k.build.sensor_flags=-DARDUINO_SENSOR_FIXP_2K
+Ameba_AMB82-MINI.menu.04_CameraOption.fixp_5m=FIXP_5M
+Ameba_AMB82-MINI.menu.04_CameraOption.fixp_5m.build.camera_opt=SENSOR_FIXP_5M
+Ameba_AMB82-MINI.menu.04_CameraOption.fixp_5m.build.sensor_flags=-DARDUINO_SENSOR_FIXP_5M
 
 Ameba_AMB82-MINI.menu.05_FCSMode.Disable=Disable
 Ameba_AMB82-MINI.menu.05_FCSMode.Disable.build.fcs_mode_val=Disable
@@ -311,6 +317,12 @@ Ameba_AMB82-ZERO.menu.04_CameraOption.ps5268.build.sensor_flags=-DARDUINO_SENSOR
 Ameba_AMB82-ZERO.menu.04_CameraOption.sc2336=SC2336
 Ameba_AMB82-ZERO.menu.04_CameraOption.sc2336.build.camera_opt=SENSOR_SC2336
 Ameba_AMB82-ZERO.menu.04_CameraOption.sc2336.build.sensor_flags=-DARDUINO_SENSOR_SC2336
+Ameba_AMB82-ZERO.menu.04_CameraOption.fixp_2k=FIXP_2K
+Ameba_AMB82-ZERO.menu.04_CameraOption.fixp_2k.build.camera_opt=SENSOR_FIXP_2K
+Ameba_AMB82-ZERO.menu.04_CameraOption.fixp_2k.build.sensor_flags=-DARDUINO_SENSOR_FIXP_2K
+Ameba_AMB82-ZERO.menu.04_CameraOption.fixp_5m=FIXP_5M
+Ameba_AMB82-ZERO.menu.04_CameraOption.fixp_5m.build.camera_opt=SENSOR_FIXP_5M
+Ameba_AMB82-ZERO.menu.04_CameraOption.fixp_5m.build.sensor_flags=-DARDUINO_SENSOR_FIXP_5M
 
 Ameba_AMB82-ZERO.menu.05_FCSMode.Disable=Disable
 Ameba_AMB82-ZERO.menu.05_FCSMode.Disable.build.fcs_mode_val=Disable
