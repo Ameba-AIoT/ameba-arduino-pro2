@@ -225,6 +225,11 @@ void Audio::begin(void)
         return;
     }
 
+    if (_audioParams->use_mic_type != USE_AUDIO_AMIC) {
+        audio_ctx_t *ctx = (audio_ctx_t *)_p_mmf_context->priv;
+        audio_dmic_pinmux(ctx->audio, _dmic_clk_pin, _dmic_data_pin);
+    }
+
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_MESSAGE_LEVEL, 0);
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_PARAMS, (int)_audioParams);
     mm_module_ctrl(_p_mmf_context, CMD_AUDIO_SET_RXASP_PARAM, (int)&_rxASPParams);
@@ -386,6 +391,12 @@ void Audio::printInfo(void)
 int Audio::micLevel(void)
 {
     return g_latest_audio_amplitude;
+}
+
+void Audio::setDMicPins(PinName dmic_clk_pin, PinName dmic_data_pin)
+{
+    _dmic_clk_pin = dmic_clk_pin;
+    _dmic_data_pin = dmic_data_pin;
 }
 
 void Audio::setHPFc(uint8_t fc)
