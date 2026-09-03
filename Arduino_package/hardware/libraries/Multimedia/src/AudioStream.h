@@ -78,6 +78,8 @@ public:
     void printInfo(void);
     int micLevel(void);
 
+    void setDMicPins(PinName dmic_clk_pin, PinName dmic_data_pin);
+
 private:
     audio_params_t* _audioParams = NULL;
     uint8_t _audioStarted = 0;
@@ -136,6 +138,10 @@ private:
 
     String micTypeArray[4] = {"USE_AUDIO_AMIC", "USE_AUDIO_LEFT_DMIC", "USE_AUDIO_RIGHT_DMIC", "USE_AUDIO_STEREO_DMIC"};
     String wordLengthArray[2] = {"16 bit", "24 bit"};
+
+    // PD_14 or PD_6
+    PinName _dmic_clk_pin = PD_14;
+    PinName _dmic_data_pin = PD_18;
 };
 
 #endif
