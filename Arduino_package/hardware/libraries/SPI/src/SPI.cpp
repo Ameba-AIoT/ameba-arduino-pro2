@@ -235,6 +235,11 @@ void SPIClass::setBitOrder(BitOrder order)
     setBitOrder(_pinSS, order);
 }
 
+void SPIClass::setDataMode(uint8_t dataMode)
+{
+    setDataMode(_dataBits, dataMode, _SPI_Mode);
+}
+
 void SPIClass::setDataMode(uint8_t bits, uint8_t dataMode, char SPI_mode)
 {
     _dataBits = bits;
@@ -268,14 +273,27 @@ void SPIClass::setDefaultFrequency(int frequency)
     _defaultFrequency = frequency;
 }
 
+void SPIClass::end(void)
+{
+    // Use the mode recorded at begin() time
+    end(_SPI_Mode);
+}
+
 void SPIClass::end(char SPI_mode)
 {
+    if (!_initStatus) {
+        return;    // guard against double-free
+    }
+
     _SPI_Mode = SPI_mode;
 
     if (_SPI_Mode == SPI_MODE_MASTER) {
         spi_free(pSpiMaster);
     } else if (_SPI_Mode == SPI_MODE_SLAVE) {
         spi_free(pSpiSlave);
+    } else {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] SPI end: invalid SPI mode\n");
+        return;
     }
 
     _initStatus = false;
