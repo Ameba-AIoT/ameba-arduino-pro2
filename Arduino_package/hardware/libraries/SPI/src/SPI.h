@@ -132,15 +132,18 @@ public:
     void setBitOrder(BitOrder order);
 
     // Set data mode
-    void setDataMode(uint8_t pin, uint8_t dataMode, char SPI_mode = SPI_MODE_MASTER);
-    // void setDataMode(uint8_t _mode);
+    // Arduino-standard: set data mode only, keep current data bits
+    void setDataMode(uint8_t _mode);
+    // Ameba extended: set data bits + data mode + master/slave role
+    void setDataMode(uint8_t bits, uint8_t dataMode, char SPI_mode = SPI_MODE_MASTER);
 
     // Set to correct clock speed (no effect on Ameba)
     void setClockDivider(uint8_t pin, uint8_t divider);
     void setClockDivider(uint8_t div);
 
     // Stop SPI master/slave mode
-    void end(char SPI_mode);
+    void end(void);             // NEW: Arduino-standard, ends current mode
+    void end(char SPI_mode);    // Legacy Ameba API (kept for compatibility)
 
     /* extend api added by RTK */
     // Set default SPI frequency
