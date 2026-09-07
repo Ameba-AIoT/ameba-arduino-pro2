@@ -2,6 +2,12 @@
 
 #include "MP4Recording.h"
 #include "mp4_drv.h"
+#include "module_mp4.h"
+
+void MP4Recording::setRecordingStopCallback(int (*callback)(void*))
+{
+    stopCallback = callback;
+}
 
 MP4Recording::MP4Recording(void)
 {
@@ -89,6 +95,11 @@ void MP4Recording::begin(void)
     }
     mp4SetParams(_p_mmf_context->priv, &mp4Params);
     mp4SetLoopMode(_p_mmf_context->priv, loopEnable);
+
+    if (stopCallback != NULL) {
+        mp4_control(_p_mmf_context->priv, CMD_MP4_SET_STOP_CB, (int)(uintptr_t)stopCallback);
+    }
+
     mp4RecordingStart(_p_mmf_context->priv, &mp4Params);
 }
 
