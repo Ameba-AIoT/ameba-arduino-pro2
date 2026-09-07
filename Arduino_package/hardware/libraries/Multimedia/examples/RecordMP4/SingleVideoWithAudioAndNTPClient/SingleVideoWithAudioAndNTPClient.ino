@@ -166,7 +166,7 @@ void printInfo(void)
     mp4.printInfo();
 }
 
-int MP4FileClosedCb(void *parm)
+int MP4FileClosedCb(void *param)
 {
     uint32_t index = fileCloseCount;
 

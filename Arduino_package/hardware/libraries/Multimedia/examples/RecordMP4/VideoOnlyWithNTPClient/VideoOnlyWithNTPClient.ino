@@ -140,7 +140,7 @@ void printInfo(void)
     mp4.printInfo();
 }
 
-int MP4FileClosed(void *parm)
+int MP4FileClosed(void *param)
 {
     uint32_t index = fileCloseCount;
 

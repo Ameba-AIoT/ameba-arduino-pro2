@@ -207,7 +207,7 @@ void printInfo(void)
     mp4_2.printInfo();
 }
 
-int MP4FileClosedCb1(void *parm)
+int MP4FileClosedCb1(void *param)
 {
     uint32_t index = fileCloseCount1;
 
@@ -222,7 +222,7 @@ int MP4FileClosedCb1(void *parm)
     return 0;
 }
 
-int MP4FileClosedCb2(void *parm)
+int MP4FileClosedCb2(void *param)
 {
     uint32_t index = fileCloseCount2;
 
