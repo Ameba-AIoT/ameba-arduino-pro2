@@ -23,6 +23,13 @@ WiFiUDP ntpUDP;
 
 AmebaFatFS fs;
 
+#define TOTAL_FILES          1
+#define RECORDING_DURATION_S 30
+
+volatile uint32_t fileCloseCount = 0;
+
+volatile unsigned long fileCloseTimestamps[TOTAL_FILES];
+bool timestampsWritten = false;
 // You can specify the time server pool and the offset (in seconds, can be
 // changed later with setTimeOffset() ). Additionally you can specify the
 // update interval (in milliseconds, can be changed using setUpdateInterval() ).
@@ -48,6 +55,15 @@ void setup()
     }
     timeClient.begin();
 
+    Serial.println("Synchronizing NTP...");
+
+    while (!timeClient.forceUpdate()) {
+        Serial.println("NTP sync failed, retrying...");
+        delay(1000);
+    }
+
+    Serial.println("NTP synchronized");
+
     // Configure camera video channel with video format information
     Camera.configVideoChannel(CHANNEL, config);
     Camera.videoInit();
@@ -55,10 +71,11 @@ void setup()
     // Configure MP4 with identical video format information
     // Configure MP4 recording settings
     mp4.configVideo(config);
-    mp4.setRecordingDuration(30);
-    mp4.setRecordingFileCount(1);
-    mp4.setRecordingFileName("TestRecordingVideoOnly");
+    mp4.setRecordingDuration(RECORDING_DURATION_S);
+    mp4.setRecordingFileCount(TOTAL_FILES);
+    mp4.setRecordingFileName("TestRecording");
     mp4.setRecordingDataType(STORAGE_VIDEO);    // Set MP4 to record video only
+    mp4.setRecordingStopCallback(MP4FileClosed);
 
     // Configure StreamIO object to stream data from video channel to MP4 recording
     videoStreamer.registerInput(Camera.getStream(CHANNEL));
@@ -69,6 +86,18 @@ void setup()
 
     // Start data stream from video channel
     Camera.channelBegin(CHANNEL);
+
+    if (!fs.begin()) {
+        Serial.println("ERROR: FATFS initialization failed");
+
+        while (1) {
+            delay(1000);
+        }
+    }
+
+    Serial.print("FATFS root: ");
+    Serial.println(fs.getRootPath());
+
     // Start recording MP4 data to SD card
     mp4.begin();
 
@@ -76,29 +105,28 @@ void setup()
     printInfo();
 }
 
+
+
 void loop()
 {
-    // For updating last modified time after recording stop
-    int state = (int)mp4.getRecordingState();
-    if (state == 0 && updatemodifiedtime == false) {
-        timeClient.update();
+    if ((fileCloseCount >= TOTAL_FILES) && (mp4.getRecordingState() == 0) && (timestampsWritten == false)) {
 
-        uint16_t year = (uint16_t)timeClient.getYear();
-        uint16_t month = (uint16_t)timeClient.getMonth();
-        uint16_t date = (uint16_t)timeClient.getMonthDay();
-        uint16_t hour = (uint16_t)timeClient.getHours();
-        uint16_t minute = (uint16_t)timeClient.getMinutes();
-        uint16_t second = (uint16_t)timeClient.getSeconds();
+        Serial.println();
+        Serial.println("Updating timestamps...");
 
-        sprintf(path, "%s%s%s", fs.getRootPath(), mp4.getRecordingFileName().c_str(), ".mp4");
-        fs.begin();
-        fs.setLastModTime(path, year, month, date, hour, minute, second);
+        for (uint32_t i = 0; i < TOTAL_FILES; i++) {
+
+            unsigned long timestamp = fileCloseTimestamps[i];
+
+            updateFileTimestamp(i, timestamp);
+        }
+
+        timestampsWritten = true;
+
         fs.end();
-        updatemodifiedtime = true;
-    } else if (state == 1 && updatemodifiedtime == true) {
-        updatemodifiedtime = false;
     }
-    delay(100);
+
+    delay(20);
 }
 
 void printInfo(void)
@@ -110,4 +138,96 @@ void printInfo(void)
     Camera.printInfo();
     Serial.println("- MP4 Recording Information -");
     mp4.printInfo();
+}
+
+int MP4FileClosed(void *param)
+{
+    uint32_t index = fileCloseCount;
+
+    if (index < TOTAL_FILES) {
+
+        // Capture NTP-synchronized clock at actual MP4 stop event
+        fileCloseTimestamps[index] = timeClient.getEpochTime();
+
+        fileCloseCount = index + 1;
+    }
+
+    return 0;
+}
+
+void updateFileTimestamp(uint32_t index, unsigned long epoch)
+{
+    time_t fileTime = (time_t)epoch;
+    struct tm *timeinfo = gmtime(&fileTime);
+
+    if (timeinfo == NULL) {
+        Serial.println("ERROR: Time conversion failed");
+        return;
+    }
+
+    uint16_t year = timeinfo->tm_year + 1900;
+    uint16_t month = timeinfo->tm_mon + 1;
+    uint16_t day = timeinfo->tm_mday;
+    uint16_t hour = timeinfo->tm_hour;
+    uint16_t minute = timeinfo->tm_min;
+    uint16_t second = timeinfo->tm_sec;
+
+    String baseFileName = mp4.getRecordingFileName();
+    uint32_t fileCount = mp4.getRecordingFileCount();
+
+    if (fileCount == 1) {
+        snprintf(
+            path,
+            sizeof(path),
+            "%s%s.mp4",
+            fs.getRootPath(),
+            baseFileName.c_str());
+    } else {
+        snprintf(
+            path,
+            sizeof(path),
+            "%s%s_%lu.mp4",
+            fs.getRootPath(),
+            baseFileName.c_str(),
+            (unsigned long)index);
+    }
+
+    Serial.print("Updating: ");
+    Serial.println(path);
+
+    char timeBuffer[64];
+
+    snprintf(
+        timeBuffer,
+        sizeof(timeBuffer),
+        "Close time: %04u-%02u-%02u %02u:%02u:%02u",
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second);
+
+    Serial.println(timeBuffer);
+
+    if (!fs.exists(path)) {
+        Serial.println("ERROR: File not found");
+        return;
+    }
+
+    int ret = fs.setLastModTime(
+        path,
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second);
+
+    if (ret == 0) {
+        Serial.println("Timestamp updated successfully");
+    } else {
+        Serial.print("setLastModTime failed: ");
+        Serial.println(ret);
+    }
 }
