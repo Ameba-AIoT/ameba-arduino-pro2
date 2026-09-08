@@ -40,7 +40,7 @@ MP4Recording mp4;
 StreamIO audioStreamer1(1, 1);    // 1 Input Audio -> 1 Output AAC
 StreamIO audioStreamer2(1, 1);    // 1 Input AAC -> 1 Output MP4
 
-#define TOTAL_FILES 1
+#define TOTAL_FILES          1
 #define RECORDING_DURATION_S 30
 
 volatile uint32_t fileCloseCount = 0;
@@ -189,8 +189,7 @@ void updateFileTimestamp(uint32_t index, unsigned long epoch)
             sizeof(path),
             "%s%s.mp4",
             fs.getRootPath(),
-            baseFileName.c_str()
-        );
+            baseFileName.c_str());
     } else {
         snprintf(
             path,
@@ -198,8 +197,7 @@ void updateFileTimestamp(uint32_t index, unsigned long epoch)
             "%s%s_%lu.mp4",
             fs.getRootPath(),
             baseFileName.c_str(),
-            (unsigned long)index
-        );
+            (unsigned long)index);
     }
 
     Serial.print("Updating: ");

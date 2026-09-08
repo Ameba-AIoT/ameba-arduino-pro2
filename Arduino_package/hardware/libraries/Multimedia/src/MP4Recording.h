@@ -26,7 +26,7 @@ public:
     void setRecordingFileCount(uint32_t count);
     void setLoopRecording(int enable);
     void setRecordingDataType(uint8_t type);
-	void setRecordingStopCallback(int (*callback)(void*));
+    void setRecordingStopCallback(int (*callback)(void*));
     String getRecordingFileName(void);
     uint32_t getRecordingDuration(void);
     uint32_t getRecordingFileCount(void);
@@ -37,7 +37,7 @@ public:
 private:
     int loopEnable = 0;
     mp4_params_t mp4Params;
-	int (*stopCallback)(void*) = NULL;
+    int (*stopCallback)(void*) = NULL;
 };
 
 #endif
