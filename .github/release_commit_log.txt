@@ -1,8 +1,12 @@
+
 Feature:
+- Modify RecordMP4 with NTPClient Examples
 
 API Updates:
+- Add Dmic clk and data pin selection function
+- Update end api to ensure compatibility with standard Arduino SPI
+- Code base update
 
 Misc:
-- Update ameba_pro2_tools 1.4.14
-    - Add camera sensor FIXP_5M and FIXP_2K, for testing without camera
-- Add arm64-apple-darwin for tools
+- Update ameba_pro2_tools 1.4.15
+    - Fix installing issue related prebuild tool for old version

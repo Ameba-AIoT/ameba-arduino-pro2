@@ -87,11 +87,11 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmdss.clear();
-    cmdss << "if exist " << nn_tool_name << " rmdir /s /q " << nn_tool_name;
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
+    // cmdss.clear();
+    // cmdss << "if exist " << nn_tool_name << " rmdir /s /q " << nn_tool_name;
+    // getline(cmdss, cmd);
+    // cout << cmd << endl;
+    // system(cmd.c_str());
 
 #elif defined(__linux__) || defined(__APPLE__) // ubuntu 32 bits and OS X 64bits
     string string_temp_1 = "cp ";
@@ -138,11 +138,11 @@ int main(int argc, char *argv[]) {
     cout << cmd << endl;
     system(cmd.c_str());
 
-    cmdss.clear();
-    cmdss << "rm -rf " << nn_tool_name;
-    getline(cmdss, cmd);
-    cout << cmd << endl;
-    system(cmd.c_str());
+    // cmdss.clear();
+    // cmdss << "rm -rf " << nn_tool_name;
+    // getline(cmdss, cmd);
+    // cout << cmd << endl;
+    // system(cmd.c_str());
 #else
     #error compiler is not supported!
 #endif
