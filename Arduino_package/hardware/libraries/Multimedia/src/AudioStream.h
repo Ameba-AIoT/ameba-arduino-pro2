@@ -139,7 +139,7 @@ private:
     String micTypeArray[4] = {"USE_AUDIO_AMIC", "USE_AUDIO_LEFT_DMIC", "USE_AUDIO_RIGHT_DMIC", "USE_AUDIO_STEREO_DMIC"};
     String wordLengthArray[2] = {"16 bit", "24 bit"};
 
-    // PD_14 or PD_6
+    // PD_14 or PD_16
     PinName _dmic_clk_pin = PD_14;
     PinName _dmic_data_pin = PD_18;
 };
