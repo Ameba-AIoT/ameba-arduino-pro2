@@ -32,7 +32,7 @@
 #define ENC_CREATE_BUF (859+59)*1024
 
 //SNAPSHOT AND OSD
-#define SNAPSHOT_BUF   300*1024
+#define JPEG_EXTRA_BUF_SIZE   300*1024
 #define OSD_CREATE_BUF (10*1024+24*480) //default 24 blocks, each one require 480 bytes
 
 #define V1_ENC_BUF_SIZE  8 //sec
@@ -205,11 +205,11 @@ typedef struct video_boot_stream_cfg {
 } video_boot_stream_t;
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-    _Static_assert(offsetof(video_boot_stream_t, voe_scale_up_roi) == 1688, "error: wrong offset of voe_scale_up_roi");
-    _Static_assert(offsetof(video_boot_stream_t, extra_video_drop_frame) == 1814, "error: wrong offset of extra_video_drop_frame");
+_Static_assert(offsetof(video_boot_stream_t, voe_scale_up_roi) == 1688, "error: wrong offset of voe_scale_up_roi");
+_Static_assert(offsetof(video_boot_stream_t, extra_video_drop_frame) == 1814, "error: wrong offset of extra_video_drop_frame");
 #else
-    typedef char static_assertion_failed[(offsetof(video_boot_stream_t, voe_scale_up_roi) == 1688) ? 1 : -1];
-    typedef char static_assertion_failed[(offsetof(video_boot_stream_t, extra_video_drop_frame) == 1814) ? 1 : -1];
+typedef char static_assertion_failed[(offsetof(video_boot_stream_t, voe_scale_up_roi) == 1688) ? 1 : -1];
+typedef char static_assertion_failed[(offsetof(video_boot_stream_t, extra_video_drop_frame) == 1814) ? 1 : -1];
 #endif
 
 void video_boot_setup_slot_num(int stream_id, int slot_number);

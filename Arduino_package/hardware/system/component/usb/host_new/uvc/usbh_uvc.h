@@ -41,11 +41,17 @@
 
 
 
-#define UVC_URB_NUMS		4
-#define UVC_URB_SIZE		512*8
+#define UVC_URB_NUMS		8
+/* Each URB holds multiple isochronous microframes.
+ * Worst case HS bandwidth: 3 transactions × 1024 bytes = 3072 bytes/μframe.
+ * 16 microframes × 3072 = 49152 bytes → round to 48*1024 gives comfortable room. */
+#define UVC_URB_SIZE		(48*1024)
 
-#define VIDEO_MAX_FRAME		2
-#define VIDEO_FRAME_SIZE	200*1024
+#define VIDEO_MAX_FRAME		4
+/* Must hold the largest uncompressed frame expected.
+ * 640x480 YUY2 = 614400 bytes; round up to a 4-byte boundary.
+ * Increase further if using 1280x720 (2764800 bytes). */
+#define VIDEO_FRAME_SIZE	(640*1024)
 
 
 /*For Freertos real size is parameter*4 bytes*/
@@ -129,7 +135,7 @@ typedef struct {
 	void *p;
 	u8 bInterfaceNumber;
 	u8 alt_num;
-	uvc_alt altsetting[10];
+	uvc_alt altsetting[16];
 	uvc_vs_input_header_desc *InputHeader;
 
 	u32 nformat;

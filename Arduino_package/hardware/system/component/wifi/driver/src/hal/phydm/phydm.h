@@ -449,6 +449,7 @@ enum odm_cmninfo {
 	ODM_CMNINFO_EN_AUTO_BW_TH,
 	ODM_CMNINFO_PEAK_DETECT_MODE,
 	ODM_CMNINFO_EN_NBI_DETECT,
+	ODM_CMNINFO_CUSTOME_EFEM,	
 	/*@-----------HOOK BEFORE REG INIT-----------*/
 
 	/*@Dynamic value:*/
@@ -914,6 +915,7 @@ struct dm_struct {
 	#if (RTL8822E_SUPPORT)
 	boolean			bt_is_linked;
 	#endif
+	u32			custome_efem;	
 	boolean			is_nbi_csi;
 	char			dbg_buf[PHYDM_SNPRINT_SIZE];
 	u8			rx_rate_plurality;

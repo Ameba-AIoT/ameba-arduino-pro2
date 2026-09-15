@@ -1,4 +1,4 @@
-﻿#ifndef CANVAS_H_
+#ifndef CANVAS_H_
 #define CANVAS_H_
 
 #include <stdio.h>
@@ -9,15 +9,15 @@
 #define CHAR_MAX_H 72
 
 typedef struct argb_s {
-	uint8_t a, r, g, b;
+	uint8_t b, g, r, a; // ordered as little-endian
 } argb_t;
 
 typedef union {
-	uint32_t argb_u32;	// u32 [a, b, g, r]
+	uint32_t argb_u32;	// u32 [a, r, g, b]
 	argb_t argb;
 } canvas_color_t;
 
-#define ARGB(a, r, g, b) ((((b)&0xff) << 24) | (((g)&0xff) << 16) | (((r)&0xff) << 8) | ((a)&0xff))
+#define ARGB(a, r, g, b) ((((a)&0xff) << 24) | (((r)&0xff) << 16) | (((g)&0xff) << 8) | ((b)&0xff))
 
 #define COLOR_RED 			ARGB(0xff,0xff,0x00,0x00)
 #define COLOR_BLUE 			ARGB(0xff,0x00,0x00,0xff)

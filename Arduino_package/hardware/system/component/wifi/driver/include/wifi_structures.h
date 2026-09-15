@@ -561,6 +561,8 @@ struct  wifi_user_conf {
 	*/
 	unsigned char wifi_11v_enabled;
 	unsigned char wifi_11r_enabled;
+
+	unsigned char wifi_custome_efem_t;
 } ;
 extern  struct wifi_user_conf wifi_user_config;
 

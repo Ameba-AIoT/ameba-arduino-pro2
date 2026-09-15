@@ -1424,29 +1424,29 @@
               "host": "i686-mingw32",
               "archiveFileName": "ameba_pro2_tools_windows-1.4.15.tar.gz",
               "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_windows-1.4.15.tar.gz",
-              "checksum": "SHA-256:9f6e78af5c637d1ca75ba766fe623a59b3bb02e43789bf98cbf33543edc3a4db",
-              "size": "10104013"
+              "checksum": "SHA-256:b50fb0d63f6b193ee79c7d6a56b4cd0858d874908274d3c897012f2a7d566bc3",
+              "size": "10103517"
             },
             {
               "host": "x86_64-pc-linux-gnu",
               "archiveFileName": "ameba_pro2_tools_linux-1.4.15.tar.gz",
               "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_linux-1.4.15.tar.gz",
-              "checksum": "SHA-256:58f7f34f8a85cda987999d6d7255e6d02f69e7886fba4f4e6731b60a6e9fbba9",
-              "size": "13568966"
+              "checksum": "SHA-256:df4daebdae61b0ae32ea96ba5d0c18bcb1765b437ebfe5c1db4126e666f5ed6c",
+              "size": "13568525"
             },
             {
               "host": "x86_64-apple-darwin",
               "archiveFileName": "ameba_pro2_tools_macos-1.4.15.tar.gz",
               "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.4.15.tar.gz",
-              "checksum": "SHA-256:ec67ef493bb1e8cacb87f32e2e02350e74c511ad8a8c584e176bd9df262e3b42",
-              "size": "12300917"
+              "checksum": "SHA-256:f645b83a777d2ee2192486b9db4a62c526812d4c88700f6e2d1dfc9c0d96c89e",
+              "size": "12300280"
             },
             {
               "host": "arm64-apple-darwin",
               "archiveFileName": "ameba_pro2_tools_macos-1.4.15.tar.gz",
               "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/raw/dev/Arduino_package/release/ameba_pro2_tools_macos-1.4.15.tar.gz",
-              "checksum": "SHA-256:ec67ef493bb1e8cacb87f32e2e02350e74c511ad8a8c584e176bd9df262e3b42",
-              "size": "12300917"
+              "checksum": "SHA-256:f645b83a777d2ee2192486b9db4a62c526812d4c88700f6e2d1dfc9c0d96c89e",
+              "size": "12300280"
             }
           ]
         },
