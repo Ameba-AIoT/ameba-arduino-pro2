@@ -7,7 +7,7 @@
 
 name=AmebaPro2 ARM (32-bits) Boards
 version=4.1.X
-toolchain_version=1.0.1
+toolchain_version=1.0.2
 toolchain_p1_name=ameba_pro2_toolchain
 toolchain_p2_name=ameba_pro2_toolchain2
 nn_tool_name=ameba_pro2_nn_models

@@ -294,6 +294,10 @@ typedef struct {
 
 	enum rts_osd_time_fmt time_fmt;
 	enum rts_osd_date_fmt date_fmt;
+
+	uint32_t colorkey_src;  //0xAARRGGBB, 0=disabled (memcpy fallback)
+	uint32_t colorkey_dst;  //0xAARRGGBB
+	uint32_t stroke_color;  //0xAARRGGBB, 0=disabled
 } rt_font_st;
 
 typedef struct {

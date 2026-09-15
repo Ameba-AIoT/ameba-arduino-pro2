@@ -88,7 +88,13 @@ typedef union {
 } header_bitmap;
 
 
-typedef struct {
+/* This struct is used for direct memcpy to/from USB wire data.
+ * The UVC probe/commit control block is 26 bytes (UVC 1.0) or 34 bytes (UVC 1.1+)
+ * with NO padding between wDelay and dwMaxVideoFrameSize on the wire.
+ * packed is required to prevent the 2-byte compiler padding that would otherwise
+ * appear after wDelay, which mis-reads all subsequent u32 fields. */
+typedef struct __attribute__((packed))
+{
 	u16 bmHint;
 	u8  bFormatIndex;
 	u8  bFrameIndex;
@@ -105,7 +111,8 @@ typedef struct {
 	u8  bPreferedVersion;
 	u8  bMinVersion;
 	u8  bMaxVersion;
-} uvc_stream_control;
+}
+uvc_stream_control;
 
 
 
@@ -140,7 +147,12 @@ typedef struct {
 } uvc_vc_intr_ep_desc;
 
 
-typedef struct {
+/* Wire overlay — must be packed: bcdUVC sits at byte offset 3, but the
+ * compiler inserts 1 byte of padding after bDescriptorSubtype (u8) to
+ * align the u16, shifting bcdUVC to offset 4 and corrupting the UVC
+ * version check in usbh_uvc_get_video() which determines probe/commit size. */
+typedef struct __attribute__((packed))
+{
 	u8  bLength;
 	u8  bDescriptorType;
 	u8  bDescriptorSubtype;
@@ -149,7 +161,8 @@ typedef struct {
 	u32 dwClockFrequency;
 	u8  bInCollection;
 	u8  baInterfaceNr[0];
-} uvc_vc_header_desc;
+}
+uvc_vc_header_desc;
 
 
 typedef struct {

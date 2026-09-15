@@ -15,6 +15,7 @@
 #endif
 
 #define EXT_STORAGE_OTA_UPDATE
+#define HEAP_OTA_UPDATE
 
 #define NOR_BLOCK_SIZE		4096
 #define NAND_BLOCK_SIZE		(64 * 2048)
@@ -27,36 +28,39 @@
 #define OTA_NN_MDL 	5
 #define OTA_CER 	6
 
-#define UPDATE_UPGRADE_PROGRESS_TO_8773   0
-
 /*******************************************************************/
 
-#if UPDATE_UPGRADE_PROGRESS_TO_8773
+/****************Callback function types for OTA status reporting***/
+/**
+ * @brief Callback function type for reporting OTA upgrade progress
+ * @param device_id: Device identifier (1=WiFi FW, 2=BT FW)
+ * @param progress: Progress percentage (0-100)
+ * @return void
+ */
+typedef void (*ota_status_callback_t)(uint8_t device_id, uint8_t progress);
 
-#include <uart_service.h>
-#include <uart_cmd.h>
 
-#endif
 
+/**************************************************************************/
 
 /****************Define the structures used*************************/
 typedef struct {
-	uint32_t	ip_addr;
-	uint16_t	port;
+    uint32_t	ip_addr;
+    uint16_t	port;
 } update_cfg_local_t;
 
 typedef struct {
-	uint32_t	status_code;
-	uint32_t	header_len;
-	uint8_t		*body;
-	uint32_t	body_len;
-	uint8_t		*header_bak;
-	uint32_t	parse_status;
+    uint32_t	status_code;
+    uint32_t	header_len;
+    uint8_t		*body;
+    uint32_t	body_len;
+    uint8_t		*header_bak;
+    uint32_t	parse_status;
 } http_response_result_t;
 
 typedef union {
-	uint32_t u;
-	unsigned char c[4];
+    uint32_t u;
+    unsigned char c[4];
 } _file_checksum;
 /*******************************************************************/
 
@@ -124,5 +128,60 @@ int https_update_ota(char *host, int port, char *resource);
 int ext_storage_update_ota(char *filename);
 int ext_storage_update_boot_ota(char *filename);
 #endif
+
+#ifdef HEAP_OTA_UPDATE
+/*************************************************************************************************
+** Function Name  : heap_update_ota
+** Description    : Performs OTA firmware update using binary data stored in heap memory.
+**                  The binary OTA file is passed directly via buffer without relying on
+**                  file system.
+** Input          : buffer - Pointer to OTA binary data in heap
+**                  length - Length of the binary data
+** Return         : 0      - OTA success
+**                  < 0    - OTA failure
+**************************************************************************************************/
+int heap_update_ota(uint8_t *buffer, uint32_t length);
+int heap_update_boot_ota(uint8_t *buffer, uint32_t length);
+int heap_update_nn_ota(uint8_t *buffer, uint32_t length);
+int heap_update_isp_iq_ota(uint8_t *buffer, uint32_t length);
+#endif
+
+/***************Callback Management Functions***********************/
+/**
+ * @brief Register a callback for reporting OTA upgrade status
+ * @param callback: Pointer to callback function, or NULL to unregister
+ * @return 0 on success, -1 on failure
+ */
+int ota_register_status_callback(ota_status_callback_t callback);
+
+/**
+ * @brief Invoke the status callback to report upgrade progress
+ * @param device_id: Device identifier (1=WiFi FW, 2=BT FW)
+ * @param progress: Progress percentage (0-100)
+ * @return void
+ */
+void ota_invoke_status_callback(uint8_t device_id, uint8_t progress);
+
+/**
+ * @brief Set an OTA cancellation request for the given device
+ * @param device_id: Device identifier (1=WiFi FW, 2=BT FW)
+ * @return 1 if upgrade should be cancelled, 0 otherwise
+ */
+uint8_t ota_set_cancel(uint8_t device_id);
+
+/**
+ * @brief Get the OTA cancellation status for the given device
+ * @param device_id: Device identifier (1=WiFi FW, 2=BT FW)
+ * @return 1 if upgrade should be cancelled, 0 otherwise
+ */
+uint8_t ota_get_cancel_status(uint8_t device_id);
+
+/**
+ * @brief Clear the OTA cancellation status for the given device
+ * @param device_id: Device identifier (1=WiFi FW, 2=BT FW)
+ */
+void ota_clear_cancel_status(uint8_t device_id);
+
+/**************************************************************************/
 
 #endif

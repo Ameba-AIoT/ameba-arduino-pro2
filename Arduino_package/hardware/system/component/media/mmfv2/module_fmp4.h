@@ -18,8 +18,8 @@
 #define CMD_FMP4_SET_FILENAME   MM_MODULE_CMD(0x02)
 #define CMD_FMP4_FILE_OPEN      MM_MODULE_CMD(0x03)
 #define CMD_FMP4_FILE_CLOSE     MM_MODULE_CMD(0x04)
-#define CMD_FMP4_APPLY          MM_MODULE_CMD(0x05)
-
+#define CMD_FMP4_FILE_FLUSH     MM_MODULE_CMD(0x05)
+#define CMD_FMP4_APPLY          MM_MODULE_CMD(0x06)
 
 struct mov_h264_test_t {
 	struct mpeg4_avc_t avc;

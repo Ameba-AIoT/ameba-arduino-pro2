@@ -47,8 +47,8 @@ enum rts_osd_err_code {
 
 
 #define OSD_TEXT_FONT_BG_ENABLE		0
-#define OSD_TEXT_FONT_BG_COLOR		RGB_Green
-#define OSD_TEXT_FONT_CH_COLOR		RGB_White
+#define OSD_TEXT_FONT_BG_COLOR		COLOR_GREEN
+#define OSD_TEXT_FONT_CH_COLOR		COLOR_WHITE
 #define OSD_TEXT_FONT_BLOCK_ALPHA	10	// 0~15
 #define OSD_TEXT_FONT_H_GAP			0
 #define OSD_TEXT_FONT_V_GAP			0
