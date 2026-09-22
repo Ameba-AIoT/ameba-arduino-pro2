@@ -148,7 +148,9 @@
 /**
  * For Ethernet configurations
  */
+#ifndef CONFIG_ETHERNET
 #define CONFIG_ETHERNET     0
+#endif
 #if CONFIG_ETHERNET
 //Choice the different interface for Ethernet
 #define MII_INTERFACE       0

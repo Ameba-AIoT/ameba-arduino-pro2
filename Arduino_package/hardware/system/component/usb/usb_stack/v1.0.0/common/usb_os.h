@@ -1,0 +1,287 @@
+/*
+ * Copyright (c) 2024 Realtek Semiconductor Corp.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#ifndef USB_OS_H
+#define USB_OS_H
+
+/* Includes ------------------------------------------------------------------*/
+
+#include <string.h>
+#include "basic_types.h"
+#include "ameba_soc.h"
+/* rtl8735b has no component/os/os_wrapper (that layer does not exist in this
+ * SDK generation) - the usb_os_* abstraction below is backed directly by
+ * FreeRTOS instead, matching how the rest of this project already calls
+ * FreeRTOS APIs directly (no rtos_xxx/os_wrapper indirection). See usb_os.c. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "queue.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Exported defines ----------------------------------------------------------*/
+
+/** @addtogroup USB_Common_API USB Common API
+ *  @{
+ */
+/** @addtogroup USB_Common_Constants USB Common Constants
+ * @{
+ */
+
+/**
+ * @brief Defines the maximum timeout value for semaphore operations.
+ */
+#ifndef CONFIG_NON_OS
+#define USB_OS_SEMA_TIMEOUT		(0xFFFFFFFFU)  /* sentinel: wait forever, see usb_os_sema_take() */
+#endif
+
+/**
+ * @brief Ensures a variable is aligned to the cache line size for DMA operations.
+ * @details This is critical for DMA buffers to prevent data corruption due to
+ *          cache coherency issues.
+ */
+#ifndef USB_DMA_ALIGNED
+#define USB_DMA_ALIGNED		__attribute__((aligned(CACHE_LINE_SIZE)))
+#endif
+
+/* Exported macros -----------------------------------------------------------*/
+
+/**
+ * @brief Checks if a memory address is aligned to the cache line size.
+ * @param x: The memory address to check.
+ * @return Non-zero if aligned, 0 otherwise.
+ */
+#ifndef USB_IS_MEM_DMA_ALIGNED
+#define USB_IS_MEM_DMA_ALIGNED(x)		((u32)((u32)(x) & ((CACHE_LINE_SIZE)-1)) == 0)
+#endif
+
+/**
+ * @brief Extracts the low byte from a 16-bit value.
+ * @param x: The 16-bit value.
+ * @return The low byte (u8).
+ */
+#ifndef USB_LOW_BYTE
+#define USB_LOW_BYTE(x)		((u8)((x) & 0x00FFU))
+#endif
+
+/**
+ * @brief Extracts the high byte from a 16-bit value.
+ * @param x: The 16-bit value.
+ * @return The high byte (u8).
+ */
+#ifndef USB_HIGH_BYTE
+#define USB_HIGH_BYTE(x)	((u8)(((x) >> 8) & 0x00FFU))
+#endif
+/** @} End of USB_Common_Constants group */
+
+/* Exported types ------------------------------------------------------------*/
+
+/** @addtogroup USB_Common_Types USB Common Types
+ * @{
+ */
+/**
+ * @brief Type definitions for abstracting OS objects.
+ * @{
+ */
+#ifndef CONFIG_NON_OS
+typedef SemaphoreHandle_t usb_os_lock_t;   /**< Abstracted type for a mutex or lock. */
+typedef SemaphoreHandle_t usb_os_sema_t;   /**< Abstracted type for a semaphore. */
+typedef QueueHandle_t usb_os_queue_t;      /**< Abstracted type for a message queue. */
+typedef TaskHandle_t usb_os_task_t;        /**< Abstracted type for a task handle. */
+#endif
+/** @} */
+/** @} End of USB_Common_Types group */
+
+/* Exported variables --------------------------------------------------------*/
+
+/* Exported functions --------------------------------------------------------*/
+
+/** @addtogroup USB_Common_Functions USB Common Functions
+ * @{
+ */
+/**
+ * @brief Delays execution for a specified number of milliseconds.
+ * @param[in] ms: The duration to sleep in milliseconds.
+ */
+void usb_os_sleep_ms(u32 ms);
+
+/**
+ * @brief Delays execution for a specified number of microseconds.
+ * @param[in] us: The duration to delay in microseconds.
+ */
+void usb_os_delay_us(u32 us);
+
+/**
+ * @brief Gets the current time stamp in milliseconds.
+ * @return The current time stamp in milliseconds.
+ */
+u32 usb_os_get_timestamp_ms(void);
+
+/**
+ * @brief Gets the current time stamp in microseconds.
+ * @return The current time stamp in microseconds.
+ */
+u64 usb_os_get_timestamp_us(void);
+
+/**
+  * @brief  Gets the current time tick.
+  * @retval The current time tick.
+  */
+u32 usb_os_get_time_tick(u8 speed);
+
+/**
+ * @brief Fills a block of memory with a specified value.
+ * @param[out] buf: Pointer to the memory block to fill.
+ * @param[in] val: The value to be set.
+ * @param[in] size: The number of bytes to be set to the value.
+ */
+void usb_os_memset(void *buf, u8 val, u32 size);
+
+/**
+ * @brief Copies a block of memory from a source to a destination.
+ * @param[out] dst: Pointer to the destination array where the content is to be copied.
+ * @param[in] src: Pointer to the source of data to be copied.
+ * @param[in] size: The number of bytes to copy.
+ */
+void usb_os_memcpy(void *dst, const void *src, u32 size);
+
+#ifndef CONFIG_NON_OS
+/**
+ * @brief Allocates a block of memory from the heap.
+ * @param[in] size: The size of the memory block to allocate, in bytes.
+ * @return A pointer to the allocated memory, or NULL if the request fails.
+ */
+void *usb_os_malloc(u32 size);
+
+/**
+ * @brief Frees a previously allocated block of memory.
+ * @param[in] handle: A pointer to the memory block to be freed.
+ */
+void usb_os_mfree(void *handle);
+
+/**
+ * @brief Creates a new mutex.
+ * @param[out] lock: Pointer to the mutex handle to be created.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_lock_create(usb_os_lock_t *lock);
+
+/**
+ * @brief Deletes a mutex.
+ * @param[in] lock: The mutex handle to be deleted.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_lock_delete(usb_os_lock_t lock);
+
+/**
+ * @brief Acquires a mutex (locks it).
+ * @param[in] lock: The mutex handle to be acquired.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_lock(usb_os_lock_t lock);
+
+/**
+ * @brief Releases a mutex (unlocks it).
+ * @param[in] lock: The mutex handle to be released.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_unlock(usb_os_lock_t lock);
+
+/**
+ * @brief Enters a critical section (disables interrupts).
+ * @param[in] in_critical: Flag indicating if this should be a critical section.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_enter_critical(u8 in_critical);
+
+/**
+ * @brief Exits a critical section (enables interrupts).
+ * @param[in] in_critical: Flag indicating if this should be a critical section.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_exit_critical(u8 in_critical);
+
+/**
+ * @brief Creates a new binary or counting semaphore.
+ * @param[out] sema: Pointer to the semaphore handle to be created.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_sema_create(usb_os_sema_t *sema);
+
+/**
+ * @brief Deletes a semaphore.
+ * @param[in] sema: The semaphore handle to be deleted.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_sema_delete(usb_os_sema_t sema);
+
+/**
+ * @brief Acquires a semaphore.
+ * @param[in] sema: The semaphore handle to acquire.
+ * @param[in] timeout_ms: The maximum time in milliseconds to wait for the semaphore.
+ * @return 0 on success, a negative error code on failure or timeout.
+ */
+int usb_os_sema_take(usb_os_sema_t sema, u32 timeout_ms);
+
+/**
+ * @brief Releases a semaphore.
+ * @param[in] sema: The semaphore handle to release.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_sema_give(usb_os_sema_t sema);
+
+/**
+ * @brief Creates a new message queue.
+ * @param[out] queue: Pointer to the queue handle to be created.
+ * @param[in] msg_num: The maximum number of messages the queue can hold.
+ * @param[in] msg_size: The size of each message in bytes.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_queue_create(usb_os_queue_t *queue, u32 msg_num, u32 msg_size);
+
+/**
+ * @brief Deletes a message queue.
+ * @param[in] queue: The queue handle to be deleted.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_queue_delete(usb_os_queue_t queue);
+
+/**
+ * @brief Sends a message to a queue.
+ * @param[in] queue: The handle of the target queue.
+ * @param[in] msg: A pointer to the message to be sent.
+ * @param[in] wait_ms: The maximum time in milliseconds to wait if the queue is full.
+ * @return 0 on success, non-zero on failure
+ */
+int usb_os_queue_send(usb_os_queue_t queue, void *msg, u32 wait_ms);
+
+/**
+ * @brief Receives a message from a queue.
+ * @param[in] queue: The handle of the target queue.
+ * @param[out] msg: A pointer to a buffer to store the received message.
+ * @param[in] wait_ms: The maximum time in milliseconds to wait if the queue is empty.
+ * @return 0 on success, a negative error code on failure or timeout.
+ */
+int usb_os_queue_receive(usb_os_queue_t queue, void *msg, u32 wait_ms);
+
+/**
+ * @brief Gets the size of the free heap memory.
+ * @return The number of free bytes in the heap.
+ */
+u32 usb_os_get_free_heap_size(void);
+#endif
+/** @} End of USB_Common_Functions group */
+/** @} End of USB_Common_API group */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* USB_OS_H */
+

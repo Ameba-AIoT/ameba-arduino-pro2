@@ -1,0 +1,293 @@
+/*
+ * Copyright (c) 2024 Realtek Semiconductor Corp.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#ifndef USBH_CDC_ACM_H
+#define USBH_CDC_ACM_H
+
+/* Includes ------------------------------------------------------------------*/
+
+#include "usbh.h"
+#include "usb_cdc_acm.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Exported defines ----------------------------------------------------------*/
+
+/** @addtogroup USB_Host_API USB Host API
+ *  @{
+ */
+/** @addtogroup USB_Host_Constants USB Host Constants
+ * @{
+ */
+/** @addtogroup Host_CDC_ACM_Constants Host CDC ACM Constants
+ * @{
+ */
+#define CONFIG_USBH_CDC_ACM_NOTIFY                  0   /**< Enable/Disable notification feature. */
+
+#define USBH_CDC_ACM_DEBUG                          0   /**< Enable/Disable debug dump (pipe/descriptor info). Set to 1 for debug. */
+
+/**
+ * @brief Enable optional 4G LTE dongle support (Quectel / Fibocom, ECM mode).
+ *        When enabled, the driver accepts a VID/PID parameter table via
+ *        usbh_cdc_acm_cb_t::priv and handles vendor-specific ACM topologies
+ *        (param-driven AT-command interface index, single vendor interface
+ *        carrying INTR+BULK+BULK, SET_INTERFACE alternate setting). A plain
+ *        CDC ACM device (priv == NULL) works exactly as before.
+ */
+#ifndef CONFIG_USBH_CDC_ACM_4G_DONGLE
+#define CONFIG_USBH_CDC_ACM_4G_DONGLE               0
+#endif
+
+/* Quectel CAT1 dongle (ECM mode) VID/PID */
+#define USBH_CDC_ACM_QUECTEL_DONGLE_VID             (0x2C7C)
+#define USBH_CDC_ACM_QUECTEL_DONGLE_EG915_PID       (0x0901)
+#define USBH_CDC_ACM_QUECTEL_DONGLE_EG91_PID        (0x0191)
+/* Fibocom LE271 CAT1 dongle (ECM mode) VID/PID */
+#define USBH_CDC_ACM_FIBOCOM_DONGLE_LE271_VID       (0x2CB7)
+#define USBH_CDC_ACM_FIBOCOM_DONGLE_LE271_PID       (0x0D01)
+/* SIMCom SIM767X CAT1 dongle (ECM mode) VID/PID */
+#define USBH_CDC_ACM_SIMCOM_DONGLE_SIM767X_VID      (0x05C6)
+#define USBH_CDC_ACM_SIMCOM_DONGLE_SIM767X_PID      (0x9330)
+
+/** @} End of Host_CDC_ACM_Constants group */
+/** @} End of USB_Host_Constants group */
+
+/* Exported types ------------------------------------------------------------*/
+
+/** @addtogroup USB_Host_Types USB Host Types
+ * @{
+ */
+/** @addtogroup Host_CDC_ACM_Types Host CDC ACM Types
+ * @{
+ */
+
+/**
+ * @brief CDC ACM state machine.
+ */
+typedef enum {
+	USBH_CDC_ACM_STATE_IDLE = 0U,                /**< State IDLE: Ready for operation. */
+	USBH_CDC_ACM_STATE_SET_LINE_CODING,          /**< State SET_LINE_CODING: Configuring line coding. */
+	USBH_CDC_ACM_STATE_GET_LINE_CODING,          /**< State GET_LINE_CODING: Retrieving line coding. */
+	USBH_CDC_ACM_STATE_SET_CONTROL_LINE_STATE,   /**< State SET_CONTROL_LINE_STATE: Setting control line state. */
+	USBH_CDC_ACM_STATE_SEND_BREAK,               /**< State SEND_BREAK: Sending break signal (PSTN §6.3.13). */
+	USBH_CDC_ACM_STATE_TRANSFER,                 /**< State TRANSFER: Data transfer in progress. */
+	USBH_CDC_ACM_STATE_ERROR,                    /**< State ERROR: Error occurred. */
+} usbh_cdc_acm_state_t;
+
+#if CONFIG_USBH_CDC_ACM_4G_DONGLE
+/**
+ * @brief 4G dongle VID/PID parameter entry (optional, CONFIG_USBH_CDC_ACM_4G_DONGLE).
+ * @details A NULL-terminated array (vid==0 sentinel) supplied via
+ *          usbh_cdc_acm_cb_t::priv lets the driver recognise specific LTE
+ *          dongles and locate their AT-command interface.
+ */
+typedef struct {
+	u16 vid;               /**< Dongle Vendor ID. */
+	u16 pid;               /**< Dongle Product ID. */
+	u8 at_line_idx;        /**< Dongle AT-command interface index (used as SET/GET_LINE_CODING wIndex and comm interface number). */
+} usbh_cdc_acm_param_t;
+#endif  /* CONFIG_USBH_CDC_ACM_4G_DONGLE */
+
+/**
+ * @brief Structure containing callback functions for the CDC ACM host class.
+ * @details The user application should provide an instance of this structure
+ *          to handle class-specific events.
+ */
+typedef struct {
+	/**
+	 * @brief Called when the CDC ACM host driver initialization.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* init)(void);
+
+	/**
+	 * @brief Called when the CDC ACM host driver de-initialization.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* deinit)(void);
+
+	/**
+	 * @brief Called when a CDC ACM device is attached.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* attach)(void);
+
+	/**
+	 * @brief Called when a CDC ACM device is detached.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* detach)(void);
+
+	/**
+	 * @brief Called to handle class-specific SETUP requests completion.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* setup)(void);
+
+	/**
+	 * @brief Called when interrupt data is received from the device (e.g. Serial State).
+	 * @param[in] buf: Pointer to the received data buffer.
+	 * @param[in] len: Length of the received data in bytes.
+	 * @param[in] status: The status of the transfer.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* notify)(u8 *buf, u32 len, u8 status);
+
+	/**
+	 * @brief Called when data is received from the device on the BULK IN pipe.
+	 * @param[in] buf: Pointer to the received data buffer.
+	 * @param[in] len: Length of the received data in bytes.
+	 * @param[in] status: The status of the transfer.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* receive)(u8 *buf, u32 len, u8 status);
+
+	/**
+	 * @brief Called when a data transmission to the device on the BULK OUT pipe is complete.
+	 * @param[in] status: The status of the transmission.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* transmit)(u8 status);
+
+	/**
+	 * @brief Called when the line coding parameters have changed.
+	 * @param[in] line_coding: Pointer to the new line coding structure.
+	 * @return 0 on success, non-zero on failure.
+	 */
+	int(* line_coding_changed)(usb_cdc_line_coding_t *line_coding);
+#if CONFIG_USBH_CDC_ACM_4G_DONGLE
+	/**
+	 * @brief Optional 4G-dongle VID/PID parameter table (NULL-terminated,
+	 *        vid==0 sentinel). Leave NULL for a plain CDC ACM device.
+	 */
+	usbh_cdc_acm_param_t *priv;
+#endif
+} usbh_cdc_acm_cb_t;
+
+/**
+ * @brief Structure representing the CDC ACM host instance.
+ */
+typedef struct {
+	usbh_pipe_t bulk_in;                        /**< BULK IN pipe structure. */
+	usbh_pipe_t bulk_out;                       /**< BULK OUT pipe structure. */
+	usbh_pipe_t intr_in;                        /**< INTERRUPT IN pipe structure. */
+	usb_host_t *host;                           /**< Pointer to the USB host instance. */
+	const usbh_cdc_acm_cb_t *cb;                /**< Pointer to the user-defined callback structure. */
+	usb_cdc_line_coding_t *line_coding;         /**< Current line coding of the device. */
+	usb_cdc_line_coding_t *user_line_coding;    /**< User requested line coding. */
+	u16 ctrl_line_state;                        /**< Control Signal Bitmap sent in SET_CONTROL_LINE_STATE wValue: D0=DTR, D1=RTS (PSTN §6.3.12). */
+	u16 break_duration;                         /**< Duration for SEND_BREAK in milliseconds; 0xFFFF = continuous break. */
+#if CONFIG_USBH_CDC_ACM_4G_DONGLE
+	usbh_cdc_acm_param_t *priv_param;           /**< 4G dongle param table (from cb->priv). */
+	usbh_cdc_acm_param_t *param_item;           /**< Matched 4G dongle param entry for the attached device. */
+	u8 data_itf_num;                            /**< Data interface number for SET_INTERFACE. */
+	u8 data_itf_alt;                            /**< Data interface alternate setting carrying BULK endpoints. */
+	u8 sub_status;                              /**< 4G control-setting sub-state. */
+#endif
+	u8 comm_itf_num;                            /**< bInterfaceNumber of Communication Interface, used as wIndex in class requests (SET_CONTROL_LINE_STATE / SEND_BREAK). */
+	u8 state;                                   /**< Current state of the CDC ACM host driver, @ref usbh_cdc_acm_state_t. */
+} usbh_cdc_acm_host_t;
+
+/** @} End of Host_CDC_ACM_Types group */
+/** @} End of USB_Host_Types group */
+
+/* Exported macros -----------------------------------------------------------*/
+
+/* Exported variables --------------------------------------------------------*/
+
+/* Exported functions --------------------------------------------------------*/
+
+/** @addtogroup USB_Host_Functions USB Host Functions
+ * @{
+ */
+/** @addtogroup Host_CDC_ACM_Functions Host CDC ACM Functions
+ * @{
+ */
+
+/**
+ * @brief Initializes the CDC ACM host class driver.
+ * @param[in] cb: Pointer to the user-defined callback structure.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_init(const usbh_cdc_acm_cb_t *cb);
+
+/**
+ * @brief De-initializes the CDC ACM host class driver.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_deinit(void);
+
+/**
+ * @brief Sets the line coding parameters for the device.
+ * @param[in] lc: Pointer to the line coding structure.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_set_line_coding(usb_cdc_line_coding_t *lc);
+
+/**
+ * @brief Gets the current line coding parameters from the device.
+ * @param[out] lc: Pointer to the structure where the line coding will be stored.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_get_line_coding(usb_cdc_line_coding_t *lc);
+
+/**
+ * @brief Sets the control line state (PSTN §6.3.12 SET_CONTROL_LINE_STATE).
+ * @param[in] bitmap: Control Signal Bitmap written to wValue. D0=DTR, D1=RTS; all other bits reserved and shall be zero.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_set_control_line_state(u16 bitmap);
+
+/**
+ * @brief Sends a break signal to the device (PSTN §6.3.13).
+ * @param[in] duration_ms: Break duration in milliseconds. 0xFFFF = continuous break; 0x0000 = end break.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_send_break(u16 duration_ms);
+
+/**
+ * @brief Transmits data to the device over the BULK OUT pipe.
+ * @param[in] buf: Pointer to the data buffer to be transmitted.
+ * @param[in] len: Length of the data in bytes.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_transmit(u8 *buf, u32 len);
+
+/**
+ * @brief Prepares to receive data from the device over the BULK IN pipe.
+ * @param[in] buf: Pointer to the buffer where received data will be stored.
+ * @param[in] len: Length of the buffer in bytes.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_receive(u8 *buf, u32 len);
+
+#if CONFIG_USBH_CDC_ACM_NOTIFY
+/**
+ * @brief Prepares to receive notification data (e.g. Serial State) over the INTERRUPT IN pipe.
+ * @param[in] buf: Pointer to the buffer where notification data will be stored.
+ * @param[in] len: Length of the buffer in bytes.
+ * @return 0 on success, non-zero on failure.
+ */
+int usbh_cdc_acm_notify_receive(u8 *buf, u32 len);
+#endif
+
+/**
+ * @brief Gets the Maximum Packet Size (MPS) of the BULK endpoint.
+ * @return The MPS in bytes.
+ */
+u16 usbh_cdc_acm_get_bulk_ep_mps(void);
+
+/** @} End of Host_CDC_ACM_Functions group */
+/** @} End of USB_Host_Functions group */
+/** @} End of USB_Host_API group */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif  /* USBH_CDC_ACM_H */
