@@ -490,6 +490,7 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #define LWIP_DNS_LEGACY_SUPPORT 0
 #define LWIP_ICMP_SUPPRESS 0
 #define LWIP_ICMP_SUPPRESS_INTERVAL 900 // allow one icmp per second with tolerance of 100 ms
+#define LWIP_ICMP_FILTER_SRC 0 // filter ping from network addr or different subnet
 /* Added by Realtek end */
 
 /* Extra options for lwip_v2.0.2 which should not affect lwip_v1.4.1 */

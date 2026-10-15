@@ -14,24 +14,26 @@
 #define SENSOR_GC4653         0x04
 #define SENSOR_GC4663         0x05
 #define SENSOR_GC5035         0x06
-#define SENSOR_IMX307         0x07
-#define SENSOR_IMX327         0x08
-#define SENSOR_IMX662         0x09
-#define SENSOR_IMX681         0x0A
-#define SENSOR_IMX681_5M      0x0B
-#define SENSOR_IMX681_12M     0x0C
-#define SENSOR_IMX681_12M_SEQ 0x0D
-#define SENSOR_K306P          0x0E
-#define SENSOR_K306P_HD       0x0F
-#define SENSOR_OV50A40        0x10
-#define SENSOR_OV50A40_50M    0x11
-#define SENSOR_OV5647         0x12
-#define SENSOR_OV9734         0x13
-#define SENSOR_OV9734_SD      0x14
-#define SENSOR_PS5268         0x15
-#define SENSOR_SC2336         0x16
-#define SENSOR_FIXP_2K        0x17
-#define SENSOR_FIXP_5M        0x18
+#define SENSOR_GC02M1         0x07
+#define SENSOR_IMX307         0x08
+#define SENSOR_IMX327         0x09
+#define SENSOR_IMX662         0x0A
+#define SENSOR_IMX681         0x0B
+#define SENSOR_IMX681_5M      0x0C
+#define SENSOR_IMX681_12M     0x0D
+#define SENSOR_IMX681_12M_SEQ 0x0E
+#define SENSOR_K306P          0x0F
+#define SENSOR_K306P_HD       0x10
+#define SENSOR_OV50A40        0x11
+#define SENSOR_OV50A40_50M    0x12
+#define SENSOR_OV5647         0x13
+#define SENSOR_OV7251         0x14
+#define SENSOR_OV9734         0x15
+#define SENSOR_OV9734_SD      0x16
+#define SENSOR_PS5268         0x17
+#define SENSOR_SC2336         0x18
+#define SENSOR_FIXP_2K        0x19
+#define SENSOR_FIXP_5M        0x1A
 
 static const struct sensor_params_t sensor_params[] = {
     [SENSOR_DUMMY] = {1920, 1080, 30},
@@ -41,11 +43,12 @@ static const struct sensor_params_t sensor_params[] = {
     [SENSOR_GC4653] = {2560, 1440, 24},
     [SENSOR_GC4663] = {2560, 1440, 24}, //  HDR Mode fps=20
     [SENSOR_GC5035] = {2592, 1944, 15},
+	[SENSOR_GC02M1] = {1600, 1200, 30},
     [SENSOR_IMX307] = {1920, 1080, 30},
     [SENSOR_IMX327] = {1920, 1080, 24},
     [SENSOR_IMX662] = {1920, 1080, 30},
     [SENSOR_IMX681] = {2000, 1500, 30},
-    [SENSOR_IMX681_5M] = {2592, 1944, 4 },
+	[SENSOR_IMX681_5M] = {2560, 1920, 30},
     [SENSOR_IMX681_12M] = {4016, 3012, 4 },
     [SENSOR_IMX681_12M_SEQ] = {2128, 1604, 4 }, //  width = 2008 + 120(overlap) //height = 1506 + 98(overlap)
     [SENSOR_K306P] = {2560, 1440, 24}, //  HDR Mode fps=20
@@ -53,6 +56,7 @@ static const struct sensor_params_t sensor_params[] = {
     [SENSOR_OV50A40] = {2048, 1536, 30},
     [SENSOR_OV50A40_50M] = {2048, 1536, 30},
     [SENSOR_OV5647] = {2592, 1944, 15},
+	[SENSOR_OV7251] = { 640,  480, 30},
     [SENSOR_OV9734] = {1280, 720,  30},
     [SENSOR_OV9734_SD] = {640,  360,  60},
     [SENSOR_PS5268] = {1920, 1080, 30},
@@ -74,6 +78,8 @@ static const struct sensor_params_t sensor_params[] = {
 #define USE_SENSOR SENSOR_GC4663
 #elif defined(ARDUINO_SENSOR_GC5035)
 #define USE_SENSOR SENSOR_GC5035
+#elif defined(ARDUINO_SENSOR_GC02M1)
+#define USE_SENSOR SENSOR_GC02M1
 #elif defined(ARDUINO_SENSOR_IMX307)
 #define USE_SENSOR SENSOR_IMX307
 #elif defined(ARDUINO_SENSOR_IMX327)
@@ -98,6 +104,8 @@ static const struct sensor_params_t sensor_params[] = {
 #define USE_SENSOR SENSOR_OV50A40_50M
 #elif defined(ARDUINO_SENSOR_OV5647)
 #define USE_SENSOR SENSOR_OV5647
+#elif defined(ARDUINO_SENSOR_OV7251)
+#define USE_SENSOR SENSOR_OV7251
 #elif defined(ARDUINO_SENSOR_OV9734)
 #define USE_SENSOR SENSOR_OV9734
 #elif defined(ARDUINO_SENSOR_OV9734_SD)
