@@ -16,6 +16,7 @@ typedef struct httpfs_param_s {
 	char filedir[32];
 	char request_string[128];
 	uint32_t fatfs_buf_size;
+	uint32_t disable_fast_mp4;	// 0: use qt_faststart for mp4 (default), 1: send file as-is (ex. jpg)
 } httpfs_params_t;
 
 typedef struct httpfs_ctx_s {

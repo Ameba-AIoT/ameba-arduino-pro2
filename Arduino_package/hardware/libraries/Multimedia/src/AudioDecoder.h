@@ -4,8 +4,8 @@
 #include "VideoStream.h"
 #include "AudioStream.h"
 
-#include "faac.h"
-#include "faaccfg.h"
+// #include "faac.h"
+// #include "faaccfg.h"
 #include "module_aad.h"
 #include "module_g711.h"
 
