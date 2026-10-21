@@ -8,10 +8,10 @@
 #include "aac_util.h"
 #include <math.h>
 #include "psych.h"
-// #include "faac.h"
+#include "faac.h"
 
 #include "sample_aacenc.h"
-// #include "faac_api.h"
+#include "faac_api.h"
 
 #include "memory_encoder.h"
 #include "encoder_buffer_handler.h"
