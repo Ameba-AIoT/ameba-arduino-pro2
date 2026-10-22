@@ -2,20 +2,31 @@
 #define __UVCH_H__
 
 #include <Arduino.h>
-
 #include "ff.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include <platform_stdlib.h>
 #include "osdep_service.h"
-#include "usbh_uvc_intf.h"
-#include "usbh.h"
+
+// FreeRTOS USB Stack v1.0.0.
+// usb_os.h MUST come first: it pulls in ameba_soc.h, which defines __PACKED,
+// used by usb_ch9.h when it declares usb_setup_req_t.
+//
+// These use explicit paths on purpose. A bare "usb_ch9.h" resolves to
+// system/component/soc/8735b/fwlib/rtl8735b/lib/source/ram/usb_otg/inc/usb_ch9.h
+// (include position 33, guard _USB_CH9_H_), which does NOT define
+// usb_setup_req_t. That ROM copy shadows the v1.0.0 header at position 168.
+#include "usb_stack/v1.0.0/common/usb_os.h"
+#include "usb_stack/v1.0.0/common/usb_ch9.h"
+#include "usb_stack/v1.0.0/common/usb_hal.h"
+#include "usb_stack/v1.0.0/host/core/usbh.h"
+#include "usb_stack/v1.0.0/host/uvc/usbh_uvc.h"
 
 #include "fatfs_sdcard_api.h"
 
-extern int otg_select_usb_mode(int value);
 #ifdef __cplusplus
 }
 #endif
@@ -42,7 +53,7 @@ public:
     static int uvcIsAttach(void);
     static int uvcIsDetach(void);
 
-    static uint8_t usbStatus(usb_host_t *host, uint8_t id);
+    static int usbStatus(usb_host_t *host, uint8_t id);
     bool initUSB(void);
     bool initUVC(void);
     void initSD(void);
@@ -51,7 +62,7 @@ public:
     void deinitSD(void);
     void setParameters(void);
     bool readyToCapture(void);
-    bool uvcFrameToBuf(uvc_frame *frame);
+    bool uvcFrameToBuf(usbh_uvc_frame_t *frame);
     void saveImageToSD(void);
     void startStream(void);
     void stopStream(void);

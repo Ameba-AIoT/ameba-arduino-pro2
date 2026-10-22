@@ -8,21 +8,33 @@ usbh_uvc_cb_t uvc_cb = {
     .deinit = UVCH::uvcIsDeinit,
     .attach = UVCH::uvcIsAttach,
     .detach = UVCH::uvcIsDetach,
+    .setup = nullptr,
+    .set_param = nullptr
 };
 
 usbh_user_cb_t user_cb = {
     .process = UVCH::usbStatus,
 };
 
+/* v1.0.0 host config. The legacy host_channels / dma_enable / *_fifo_size
+ * members do not exist in this stack; FIFO depths are in dwords. */
 static usbh_config_t usbh_cfg = {
-    .host_channels = 5U,
-    .speed = USB_SPEED_HIGH,
-    .dma_enable = FALSE,
+    /* USBH_SOF_INTR is required: usbh_hal_host_init() only sets the SOF
+     * interrupt enable bit in GAHBCFG when this flag is set (or when
+     * tick_source == USBH_SOF_TICK). Without SOF the UVC class driver's
+     * usbh_uvc_sof() callback never fires, so no isochronous URBs are
+     * queued and usbh_uvc_get_frame() always times out. */
+    .ext_intr_enable = USBH_SOF_INTR,
+    .rx_fifo_depth = 0x200U,
+    .nptx_fifo_depth = 0x100U,
+    .ptx_fifo_depth = 0x100U,
+    .main_task_stack_size = 2048U,
     .main_task_priority = 3U,
-    .isr_task_priority = 4U,
-    .rx_fifo_size = 0x200U,
-    .nptx_fifo_size = 0x100U,
-    .ptx_fifo_size = 0x100U,
+    .isr_priority = 4U,
+    .xfer_retry_max_cnt = 3U,
+    .class_num = 1U,
+    .tick_source = USBH_SW_TICK,
+    .speed = USB_SPEED_HIGH,
 };
 
 volatile bool UVCH::_attached = false;
@@ -40,7 +52,12 @@ UVCH::UVCH(int width, int height, int frame_rate, int format)
     _frame_rate = frame_rate;
     _fmt_type = format;
 
-    otg_select_usb_mode(1);
+    // No OTG-mode call here. usbh_hcd_init() already performs
+    // usb_hal_set_otg_mode(USB_OTG_MODE_HOST) as part of usbh_init().
+    // Calling it from this constructor would run during static initialisation -
+    // before the scheduler starts and before the USB clock/PHY are enabled -
+    // and usb_hal_set_otg_mode() both touches USB registers and calls
+    // usb_os_sleep_ms(), which faults at that point.
 }
 
 UVCH::~UVCH(void)
@@ -73,7 +90,7 @@ int UVCH::uvcIsDetach(void)
     return HAL_OK;
 }
 
-uint8_t UVCH::usbStatus(usb_host_t *host, uint8_t id)
+int UVCH::usbStatus(usb_host_t *host, uint8_t id)
 {
     switch (id) {
         case USBH_MSG_CONNECTED:
@@ -106,10 +123,26 @@ bool UVCH::isUsbConnected(void)
 
 bool UVCH::initUVC(void)
 {
-    if (usbh_uvc_init(&uvc_cb)) {
-        printf("Fail to init UVC driver\n");
+    usbh_uvc_ctx_t cfg = {};
+
+    cfg.frame_buf_size = 500000;
+
+    int ret = usbh_uvc_init(&cfg, &uvc_cb);
+
+    if (ret != 0) {
+        printf("UVC init failed: %d\n", ret);
         return false;
     }
+
+    // usbh_uvc_init() registers the UVC class driver, but the v1.0.0 stack
+    // does not begin enumeration until usbh_start() is called. The legacy
+    // stack started automatically, so this call has no legacy equivalent.
+    ret = usbh_start();
+    if (ret != 0) {
+        printf("Fail to start USB host: %d\n", ret);
+        return false;
+    }
+
     return true;
 }
 
@@ -165,13 +198,13 @@ bool UVCH::readyToCapture(void)
     return true;
 }
 
-bool UVCH::uvcFrameToBuf(uvc_frame *frame)
+bool UVCH::uvcFrameToBuf(usbh_uvc_frame_t *frame)
 {
     uint32_t len = 0;
     uint32_t start = 0;
 
     if (frame != NULL) {
-        if (_fmt_type == UVC_FORMAT_MJPEG) {
+        if (_fmt_type == USBH_UVC_FORMAT_MJPEG) {
 
             uint8_t *ptr = frame->buf;
             len = frame->byteused;
@@ -285,17 +318,39 @@ void UVCH::saveImageToSD()
     _imgFileNoSD++;
 }
 
+// void UVCH::setParameters(void)
+// {
+//     struct uvc_config uvc_ctx;
+
+//     uvc_ctx.fmt_type = _fmt_type;
+//     uvc_ctx.width = _width;
+//     uvc_ctx.height = _height;
+//     uvc_ctx.frame_rate = _frame_rate;
+
+//     if (usbh_uvc_set_param(&uvc_ctx, 0) == 0) {
+//         printf("UVC para: %d*%d@%dfps\n", uvc_ctx.width, uvc_ctx.height, uvc_ctx.frame_rate);
+//     }
+// }
+
 void UVCH::setParameters(void)
 {
-    struct uvc_config uvc_ctx;
+    usbh_uvc_s_ctx_t uvc_ctx = {};
 
     uvc_ctx.fmt_type = _fmt_type;
     uvc_ctx.width = _width;
     uvc_ctx.height = _height;
     uvc_ctx.frame_rate = _frame_rate;
+    uvc_ctx.frame_buf_size = USBH_UVC_BUF_SIZE;
 
-    if (usbh_uvc_set_param(&uvc_ctx) == 0) {
-        printf("UVC para: %d*%d@%dfps\n", uvc_ctx.width, uvc_ctx.height, uvc_ctx.frame_rate);
+    int ret = usbh_uvc_set_param(&uvc_ctx, 0);
+
+    if (ret == HAL_OK) {
+        printf("UVC para: %d*%d@%dfps\n",
+               uvc_ctx.width,
+               uvc_ctx.height,
+               uvc_ctx.frame_rate);
+    } else {
+        printf("UVC set param failed: %d\n", ret);
     }
 }
 
@@ -314,7 +369,7 @@ void UVCH::startStream(void)
     setParameters();
 
     printf("\nUVC stream on\n");
-    usbh_uvc_stream_on();
+    usbh_uvc_start(0);
 
     if (!_attached) {
         if (!attachedReady(3000)) {
@@ -322,16 +377,16 @@ void UVCH::startStream(void)
         }
 
         delay(1000);
-        usbh_uvc_stream_off();
+        usbh_uvc_stop(0);
         setParameters();
-        usbh_uvc_stream_on();
+        usbh_uvc_start(0);
     }
 
     uint32_t frame_wait = millis();
     while ((millis() - frame_wait) < 5000) {
-        uvc_frame *first_frame = usbh_uvc_get_frame();
+        usbh_uvc_frame_t *first_frame = usbh_uvc_get_frame(0);
         if (first_frame != NULL) {
-            usbh_uvc_put_frame(first_frame);
+            usbh_uvc_put_frame(first_frame, 0);
             break;
         }
         delay(100);
@@ -340,9 +395,9 @@ void UVCH::startStream(void)
 
 void UVCH::captureFrameStart(void)
 {
-    if (_usbConnected && !usbh_get_status()) {
-        _usbConnected = false;
-    }
+    // usbh_get_status() does not exist in the v1.0.0 stack. _usbConnected is
+    // driven by usbStatus() from the USBH_MSG_CONNECTED / _DISCONNECTED
+    // callbacks, so no polling is needed here.
 
     // USB physically disconnected — wait for reconnection, then re-init
     if (!_usbConnected) {
@@ -359,7 +414,7 @@ void UVCH::captureFrameStart(void)
 
         printf("USB reconnected, waiting for UVC device...\n");
 
-        usbh_uvc_stream_off();
+        usbh_uvc_stop(0);
 
         _warmupCount = 0;
         _saveCount = 0;
@@ -377,21 +432,21 @@ void UVCH::captureFrameStart(void)
         delay(100);
         return;
     }
-    uvc_frame *buf = usbh_uvc_get_frame();
+    usbh_uvc_frame_t *buf = usbh_uvc_get_frame(0);
     if (buf == NULL) {
         delay(10);
         return;
     }
 
     if (uvcFrameToBuf(buf)) {
-        usbh_uvc_put_frame(buf);
+        usbh_uvc_put_frame(buf, 0);
 
         if (uvc_buf_size > 0) {
             saveImageToSD();
             uvc_buf_size = 0;
         }
     } else {
-        usbh_uvc_put_frame(buf);
+        usbh_uvc_put_frame(buf, 0);
     }
 
     delay(1);
@@ -411,7 +466,7 @@ void UVCH::deinitUVC(void)
 
 void UVCH::stopStream(void)
 {
-    usbh_uvc_stream_off();
+    usbh_uvc_stop(0);
     deinitUVC();
 }
 
