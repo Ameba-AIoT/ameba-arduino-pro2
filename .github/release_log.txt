@@ -13,6 +13,7 @@ Version 4.1.1 - 2026/08/31
 Version 4.1.1 - 2026/09/15
 Version 4.1.1 - 2026/09/22
 Version 4.1.1 - 2026/10/15
+Version 4.1.1 - 2026/10/22
 
 Feature:
 - Add Battery-Powered Camera POC Example
@@ -33,6 +34,7 @@ Feature:
 - Update OTA example for warnings
 - Add USB Host UVC Snapshot
 - Modify RecordMP4 with NTPClient Examples
+- Add USBH CDC with MI48 examples
 
 API Updates:
 - Update code base
