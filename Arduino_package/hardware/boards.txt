@@ -11,6 +11,7 @@ menu.10_system_mm_logs=* System: Multimedia logs
 menu.11_system_wifi_logs=* System: WiFi logs
 menu.12_all_logs=* All logs: Hard mute
 menu.13_Watchdog=* Watchdog
+menu.14_bmptohpp=* BMP to HPP Img Conv
 
 ### menu.14_CompliationMode=* Compiling Mode
 
@@ -32,7 +33,7 @@ Ameba_AMB82-MINI.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DCORE_RTL873
 Ameba_AMB82-MINI.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
 Ameba_AMB82-MINI.build.variant=ameba_amb82-mini
 
-Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_arduino_logs_flags} {build.show_mm_logs_flags} {build.show_wifi_logs_flags} {build.hardmute_logs_flags} {build.watchdog_flags} {build.sensor_flags}
+Ameba_AMB82-MINI.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_arduino_logs_flags} {build.show_mm_logs_flags} {build.show_wifi_logs_flags} {build.hardmute_logs_flags} {build.watchdog_flags} {build.sensor_flags} {build.bmptohpp_flags}
 ### {build.compile_mode_flag}
 
 Ameba_AMB82-MINI.upload.tool=ameba_pro2_tools
@@ -202,6 +203,13 @@ Ameba_AMB82-MINI.menu.13_Watchdog.DisableWatchdog.build.watchdog_flags=
 Ameba_AMB82-MINI.menu.13_Watchdog.EnableWatchdog=Enable
 Ameba_AMB82-MINI.menu.13_Watchdog.EnableWatchdog.build.watchdog_flags=-DArduino_WATCHDOG
 
+Ameba_AMB82-MINI.menu.14_bmptohpp.DisableImgConvert=Disable
+Ameba_AMB82-MINI.menu.14_bmptohpp.DisableImgConvert.build.bmptohpp_flags=
+Ameba_AMB82-MINI.menu.14_bmptohpp.DisableImgConvert.build.enable_bmp2hpp=0
+Ameba_AMB82-MINI.menu.14_bmptohpp.EnableImgConvert=Enable
+Ameba_AMB82-MINI.menu.14_bmptohpp.EnableImgConvert.build.bmptohpp_flags=-DArduino_IMG_CONVERT
+Ameba_AMB82-MINI.menu.14_bmptohpp.EnableImgConvert.build.enable_bmp2hpp=1
+
 ### Ameba_AMB82-MINI.menu.14_CompliationMode.FastMode=FastMode
 ### Ameba_AMB82-MINI.menu.14_CompliationMode.FastMode.build.compile_mode=Comepile_Fast_Mode
 ### Ameba_AMB82-MINI.menu.14_CompliationMode.FastMode.build.compile_mode_flag=-DComepile_Fast_Mode
@@ -225,7 +233,7 @@ Ameba_AMB82-ZERO.build.extra_flags=-DARDUINO_SDK -DARDUINO_AMBPRO2 -DCORE_RTL873
 Ameba_AMB82-ZERO.build.ldscript=linker_scripts/gcc/amebapro2_ram_arduino.ld
 Ameba_AMB82-ZERO.build.variant=ameba_amb82-zero
 
-Ameba_AMB82-ZERO.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_arduino_logs_flags} {build.show_mm_logs_flags} {build.show_wifi_logs_flags} {build.hardmute_logs_flags} {build.watchdog_flags} {build.sensor_flags}
+Ameba_AMB82-ZERO.build.menu_flags={build.Arduino_STD_PRINTF_flags} {build.Arduino_LOAD_MODEL_flags} {build.ota_mode_flags} {build.fcs_mode_flags} {build.show_arduino_logs_flags} {build.show_mm_logs_flags} {build.show_wifi_logs_flags} {build.hardmute_logs_flags} {build.watchdog_flags} {build.sensor_flags} {build.bmptohpp_flags}
 ### {build.compile_mode_flag}
 
 Ameba_AMB82-ZERO.upload.tool=ameba_pro2_tools
@@ -394,6 +402,13 @@ Ameba_AMB82-ZERO.menu.13_Watchdog.DisableWatchdog=Disable
 Ameba_AMB82-ZERO.menu.13_Watchdog.DisableWatchdog.build.watchdog_flags=
 Ameba_AMB82-ZERO.menu.13_Watchdog.EnableWatchdog=Enable
 Ameba_AMB82-ZERO.menu.13_Watchdog.EnableWatchdog.build.watchdog_flags=-DArduino_WATCHDOG
+
+Ameba_AMB82-ZERO.menu.14_bmptohpp.DisableImgConvert=Disable
+Ameba_AMB82-ZERO.menu.14_bmptohpp.DisableImgConvert.build.bmptohpp_flags=
+Ameba_AMB82-ZERO.menu.14_bmptohpp.DisableImgConvert.build.enable_bmp2hpp=0
+Ameba_AMB82-ZERO.menu.14_bmptohpp.EnableImgConvert=Enable
+Ameba_AMB82-ZERO.menu.14_bmptohpp.EnableImgConvert.build.bmptohpp_flags=-DArduino_IMG_CONVERT
+Ameba_AMB82-ZERO.menu.14_bmptohpp.EnableImgConvert.build.enable_bmp2hpp=1
 
 ### Ameba_AMB82-ZERO.menu.14_CompliationMode.FastMode=FastMode
 ### Ameba_AMB82-ZERO.menu.14_CompliationMode.FastMode.build.compile_mode=Comepile_Fast_Mode

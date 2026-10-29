@@ -27,7 +27,7 @@ on:
 jobs:
   compile-examples_ubuntu:
     name: ubuntu-latest - ${{ matrix.board.fqbn }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 #    runs-on: ${{ matrix.os }}
     # list of all examples
     env:
@@ -87,7 +87,7 @@ jobs:
             Arduino_zip_libraries
 
       - name: Compile examples dev
-        uses: arduino/compile-sketches@v1.1.1
+        uses: arduino/compile-sketches@v1
         with:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
           sketch-paths: |
@@ -106,7 +106,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/dev' || github.event.pull_request.base.ref == 'dev'}}
 
       - name: Compile examples main
-        uses: arduino/compile-sketches@v1.1.1
+        uses: arduino/compile-sketches@v1
         with:
           fqbn: realtek:AmebaPro2:${{ matrix.board.fqbn }}
           sketch-paths: |

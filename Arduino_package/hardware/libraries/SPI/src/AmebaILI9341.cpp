@@ -1,5 +1,6 @@
 #include "AmebaILI9341.h"
 #include "SPI.h"
+#include "Arduino.h"    // millis()
 
 #include "font5x7.h"
 
@@ -23,6 +24,8 @@ AmebaILI9341::AmebaILI9341(int csPin, int dcPin, int resetPin, SPIClass *spi)
     background = ILI9341_BLACK;
     fontsize = 1;
     rotation = 0;
+
+    _streamBroken = false;
 }
 
 void AmebaILI9341::begin(void)
@@ -245,10 +248,61 @@ void AmebaILI9341::clr(void)
     fillScreen(background);
 }
 
+// Wait for an in-flight spi_master_write_stream() to finish, but never spin
+// forever. TX_BUSY is only cleared by spi_tx_done_callback(), which spi_format()
+// binds; if that callback is missing the flag never clears and an unbounded
+// wait hangs the sketch (which looks like a blank screen).
+bool AmebaILI9341::waitTxIdle(uint32_t timeout_ms)
+{
+    uint32_t deadline = millis() + timeout_ms;
+
+    while (_spi->pSpiMaster->state & SPI_STATE_TX_BUSY) {
+        if ((int32_t)(millis() - deadline) >= 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Transmit one staged chunk with spi_master_write_stream().
+//
+// Returns false without transmitting if the stream path is unusable; the
+// caller then falls back to the blocking byte-wise path. Three hazards are
+// handled here, all of them in the SDK implementation:
+//  - spi_master_write_stream() returns HAL_BUSY (not HAL_OK) when a previous
+//    transfer is still in flight; ignoring the result silently drops the chunk.
+//  - It is TX-only, so nothing drains the RX FIFO. The write ISR's RX drain is
+//    gated on rx_length > 0, which is always false for a pure write, while
+//    every byte shifted out shifts one in. Flush on both sides.
+//  - Completion depends on the TX interrupt running, hence the bounded wait.
+bool AmebaILI9341::streamChunk(const uint8_t *data, uint32_t length)
+{
+    if (length == 0) {
+        return true;
+    }
+
+    if (!waitTxIdle(ILI9341_STREAM_TIMEOUT_MS)) {
+        return false;
+    }
+
+    spi_flush_rx_fifo(_spi->pSpiMaster);
+
+    bool ok = (spi_master_write_stream(_spi->pSpiMaster, (char *)data, length) == HAL_OK);
+
+    if (ok) {
+        ok = waitTxIdle(ILI9341_STREAM_TIMEOUT_MS);
+    }
+
+    spi_flush_rx_fifo(_spi->pSpiMaster);
+
+    return ok;
+}
+
 void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const unsigned short *color)
 {
 
-    if ((x >= _width) || (y >= _height)) {
+    if ((x >= _width) || (y >= _height) || (w <= 0) || (h <= 0)) {
         return;
     }
 
@@ -267,13 +321,28 @@ void AmebaILI9341::drawBitmap(int16_t x, int16_t y, int16_t w, int16_t h, const 
     //*portOutputRegister(_dcPort) |=  (_dcMask);
     digitalWrite(_dcPin, 1);
 
-    uint16_t *pPixels = (uint16_t *)color;
+    const uint16_t *pSrc = (const uint16_t *)color;
 
-    for (uint32_t i = 0; i < pixelCount; i++) {
-        pPixels[i] = (pPixels[i] << 8) | (pPixels[i] >> 8);
+    while (pixelCount > 0) {
+        uint32_t chunk = (pixelCount > ILI9341_DRAW_CHUNK_PIXELS) ? ILI9341_DRAW_CHUNK_PIXELS : pixelCount;
+
+        for (uint32_t i = 0; i < chunk; i++) {
+            uint16_t pixel = pSrc[i];
+            _drawBuf[i * 2] = (uint8_t)(pixel >> 8);
+            _drawBuf[i * 2 + 1] = (uint8_t)(pixel & 0xFF);
+        }
+
+        if (_streamBroken || !streamChunk(_drawBuf, chunk * 2)) {
+            _streamBroken = true;
+
+            for (uint32_t i = 0; i < chunk * 2; i++) {
+                _spi->transfer(_drawBuf[i]);
+            }
+        }
+
+        pSrc += chunk;
+        pixelCount -= chunk;
     }
-
-    _spi->transfer(pPixels, pixelCount * 2);
 }
 
 void AmebaILI9341::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)

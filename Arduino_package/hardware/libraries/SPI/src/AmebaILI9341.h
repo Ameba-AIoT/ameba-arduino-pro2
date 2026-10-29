@@ -8,6 +8,14 @@
 #define ILI9341_TFTWIDTH  240
 #define ILI9341_TFTHEIGHT 320
 
+// drawBitmap() stages pixels through a private buffer so the caller's image
+// (often 'const' / read-only) is never written to. 4 rows of a 240px-wide
+// panel = 1920 bytes; larger chunks mean fewer interrupt-driven transfers.
+#define ILI9341_DRAW_CHUNK_PIXELS (ILI9341_TFTWIDTH * 4)
+
+// Upper bound on waiting for an interrupt-driven SPI transfer to complete.
+#define ILI9341_STREAM_TIMEOUT_MS 250
+
 #define ILI9341_NOP     0x00
 #define ILI9341_SWRESET 0x01
 #define ILI9341_RDDID   0x04
@@ -136,6 +144,9 @@ public:
 private:
     void reset(void);
 
+    bool waitTxIdle(uint32_t timeout_ms);
+    bool streamChunk(const uint8_t *data, uint32_t length);
+
     SPIClass *_spi;
     int _csPin;
     int _dcPin;
@@ -153,6 +164,13 @@ private:
     uint16_t background;
     uint8_t fontsize;
     uint8_t rotation;
+
+    // Staging buffer for drawBitmap(); see ILI9341_DRAW_CHUNK_PIXELS.
+    uint8_t _drawBuf[ILI9341_DRAW_CHUNK_PIXELS * 2];
+
+    // Set once the interrupt-driven path fails; drawBitmap() then stays on the
+    // blocking path instead of retrying a transfer that may not complete.
+    bool _streamBroken;
 };
 
 #endif
