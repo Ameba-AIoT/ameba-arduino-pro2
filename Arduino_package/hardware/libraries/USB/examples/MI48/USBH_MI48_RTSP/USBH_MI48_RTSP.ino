@@ -14,7 +14,7 @@
 #define MI48_VIDEO_EXT_FMT    1    // 1 = NV12
 #define MI48_VIDEO_RAINBOW    1    // 1 = rainbow-colour, 0 = grayscale
 
-char ssid[] = "Network_SSID5";
+char ssid[] = "Network_SSID";
 char pass[] = "Password";
 
 MI48ThermalCamera thermal;
