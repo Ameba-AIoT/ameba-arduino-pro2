@@ -24,7 +24,8 @@
           "size": "80138271",
           "boards": [
             {"name": "AMB82 (RTL8735B)"},
-            {"name": "AMB82-MINI (RTL8735B)"},
+            {"name": "AMB82-MINI-V1 (RTL8735B)"},
+			{"name": "AMB82-MINI-V2 (RTL8735B)"},
             {"name": "AMB82-ZERO (RTL8735B)"}
           ],
           "toolsDependencies": [
