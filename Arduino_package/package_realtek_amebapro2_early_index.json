@@ -18,7 +18,7 @@
           "help": {
             "online": "https://forum.amebaiot.com/"
           },
-          "url": "https://github.com/pammyleong/ameba-arduino-pro2/releases/download/V4.1.1-QC-V15/ameba_pro2-4.1.1-build20261030.tar.gz",
+          "url": "https://github.com/Ameba-AIoT/ameba-arduino-pro2/releases/download/V4.1.1-QC-V15/ameba_pro2-4.1.1-build20261030.tar.gz",
           "archiveFileName": "ameba_pro2-4.1.1-build20261030.tar.gz",
           "checksum": "SHA-256:c722c649220d89b22c35df5cea2d389cb574bf4a3302c31e5389c46193a08255",
           "size": "80138271",
