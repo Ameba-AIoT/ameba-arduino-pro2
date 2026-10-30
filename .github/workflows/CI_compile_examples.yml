@@ -61,8 +61,7 @@ jobs:
       fail-fast: false
       matrix:
         board:
-          - fqbn: Ameba_AMB82-MINI-V1
-          - fqbn: Ameba_AMB82-MINI-V2
+          - fqbn: Ameba_AMB82-MINI
           - fqbn: Ameba_AMB82-ZERO
 #        os: [ubuntu-latest, windows-latest, macos-latest]
 
