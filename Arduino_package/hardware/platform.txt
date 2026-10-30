@@ -153,7 +153,8 @@ recipe.hooks.prebuild.5.pattern.windows = "{ameba.tools_path}/nn_json_modify_win
 recipe.hooks.prebuild.5.pattern.linux = {ameba.tools_path}/nn_json_modify_linux {build.path} {ameba.tools_path} {build.model_src}
 recipe.hooks.prebuild.5.pattern.macosx = {ameba.tools_path}/nn_json_modify_macos {build.path} {ameba.tools_path} {build.model_src}
 
-recipe.hooks.prebuild.6.pattern.windows=cmd /c if "{build.enable_bmp2hpp}"=="1" "{ameba.tools_path}\bmp2hpp_windows.exe" "{build.source.path}" "{build.path}\sketch"
+#recipe.hooks.prebuild.6.pattern.windows=cmd /c if "{build.enable_bmp2hpp}"=="1" "{ameba.tools_path}\bmp2hpp_windows.exe" "{build.source.path}" "{build.path}\sketch"
+recipe.hooks.prebuild.6.pattern.windows=cmd /c if {build.enable_bmp2hpp}==1 "{ameba.tools_path}\bmp2hpp_windows.exe" "{build.source.path}" "{build.path}\sketch"
 recipe.hooks.prebuild.6.pattern.linux=bash -c "if [ '{build.enable_bmp2hpp}' = '1' ]; then '{ameba.tools_path}/bmp2hpp_linux' '{build.source.path}' '{build.path}/sketch'; fi"
 recipe.hooks.prebuild.6.pattern.macosx=bash -c "if [ '{build.enable_bmp2hpp}' = '1' ]; then '{ameba.tools_path}/bmp2hpp_macos' '{build.source.path}' '{build.path}/sketch'; fi"
 
