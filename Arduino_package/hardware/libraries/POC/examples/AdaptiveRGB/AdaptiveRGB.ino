@@ -1,5 +1,5 @@
 /*
-Example Guide:
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/POC/AdaptiveRGB.html
 */
 
 #include "WiFi.h"
@@ -17,7 +17,7 @@ Example Guide:
 #define NUM_LEDS 16
 
 // Set to 0 to drive the strip without starting an RTSP stream.
-#define ENABLE_RTSP 0
+#define ENABLE_RTSP 1
 
 char ssid[] = "Network_SSID";    // your network SSID (name)
 char pass[] = "Password";        // your network password
