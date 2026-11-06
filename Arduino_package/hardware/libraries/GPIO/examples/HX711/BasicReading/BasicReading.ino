@@ -3,8 +3,7 @@ This example shows how to use SparkFun HX711 to get raw reading using a load cel
 
 Prepared by: Realtek SG (22 January 2026)
 
-Example Guide:
-*To be added*
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GPIO/HX711%20Basic%20Reading.html
 */
 
 #include "HX711.h"

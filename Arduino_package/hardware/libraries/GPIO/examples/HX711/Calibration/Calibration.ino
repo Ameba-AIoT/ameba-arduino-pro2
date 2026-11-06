@@ -3,8 +3,7 @@ This example shows how to calibrate SparkFun HX711 to get actual reading (in gra
 
 Prepared by: Realtek SG (22 January 2026)
 
-Example Guide:
-*To be added*
+Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/GPIO/HX711%20Calibration.html
 */
 
 #include "HX711.h"

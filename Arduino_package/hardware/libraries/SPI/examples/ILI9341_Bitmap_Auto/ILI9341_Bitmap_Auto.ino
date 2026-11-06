@@ -4,7 +4,7 @@
  * Drop any .bmp beside this sketch (16/24/32-bit, up to 240x320) and it is
  * converted to auto_bitmap.h on the next build -- no manual .hpp step.
  *
- * Example Guide: TBD
+ * Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/SPI/ILI9341%20Bitmap%20Auto.html
  */
 
 #include "SPI.h"
