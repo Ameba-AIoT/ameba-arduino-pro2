@@ -1,7 +1,6 @@
 /*
  This example shows the audio configuration of the I2S mic.
- Example guide:
- TBD
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/Audio/I2S%20Audio.html
 */
 
 #include "StreamIO.h"

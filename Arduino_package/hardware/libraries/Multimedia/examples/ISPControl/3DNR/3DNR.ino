@@ -1,6 +1,5 @@
 /*
- Example guide:
- TBC
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/ISP%20Control.html
 
   // "3DNR="  Set 3DNR: 0: Disable, 1: Enable
   // "3DNR"   Get value of DayNight Mode to determine whether is day or night mode

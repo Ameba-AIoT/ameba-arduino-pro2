@@ -3,8 +3,7 @@
 
   Modified by: Realtek SG (27 January 2026)
 
-  Example Guide:
-  *To be added*
+  Example Guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/I2C/NAU7802%20Advanced%20I2C.html
 
   #####
 

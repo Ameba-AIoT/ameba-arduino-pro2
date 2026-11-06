@@ -1,8 +1,7 @@
 /*  This example uses the camera to capture a raw image in NV16 format,
     and saves the image to SD Card.
 
- Example guide:
- TBD
+ Example guide: https://ameba-doc-arduino-sdk.readthedocs-hosted.com/en/latest/ameba_pro2/amb82-mini/Example_Guides/Multimedia/CaptureRaw/Capture%20Raw%20Image%20save%20to%20SD%20Card.html
 */
 #include "VideoStream.h"
 #include "StreamIO.h"
