@@ -7,6 +7,9 @@ extern "C" {
 #include "mmf2_link.h"
 #include "mmf2_siso.h"
 #include "isp_ctrl_api.h"
+#include "platform_opts.h"
+#include "tuning-server.h"
+#include "config_tuning.h"
 #ifdef __cplusplus
 }
 #endif
@@ -62,6 +65,24 @@ int UVCD::isUsbUvcConnected(int uvcd_getctx_state)
  */
 void UVCD::configVideo(VideoSetting &config)
 {
+#if CONFIG_TUNING
+    usbd_ext_init();
+    tuning_init();
+    tuning_set_custom_iq_addr(TUNING_IQ_FW);
+
+    unsigned char *uvcd_iq = (unsigned char *)malloc(TUNING_IQ_MAX_SIZE);
+    unsigned char *uvcd_sensor = (unsigned char *)malloc(16 * 1024);
+    if (uvcd_iq == NULL || uvcd_sensor == NULL) {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. malloc fail\n", __FUNCTION__);
+        return;
+    }
+    memset(uvcd_iq, 0, TUNING_IQ_MAX_SIZE);
+    memset(uvcd_sensor, 0, 16 * 1024);
+    detect_iq_fw((int *)uvcd_iq);
+    detect_sensor_fw((int *)uvcd_sensor);
+
+    tuning_set_max_resolution(MAX_W, MAX_H);
+#endif
     _p_mmf_context = mm_module_open(&uvcd_module);
     if (_p_mmf_context == NULL) {
         _p_mmf_context = mm_module_open(&uvcd_module);
@@ -70,7 +91,9 @@ void UVCD::configVideo(VideoSetting &config)
         amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. module open fail\n", __FUNCTION__);
         return;
     }
-
+#if CONFIG_TUNING
+    tuning_set_custom_cmd_cb((int)tuning_customized_set_cmd, (int)tuning_customized_get_cmd, (int)tuning_customized_get_size_cmd);
+#endif
     uvc_format_ptr = (struct uvc_format *)malloc(sizeof(struct uvc_format));
     memset(uvc_format_ptr, 0, sizeof(struct uvc_format));
 
