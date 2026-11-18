@@ -40,7 +40,9 @@ void setup()
 
     // Start data stream from video channel
     camera_uvcd.channelBegin(STREAM_CHANNEL);
-
+#if CONFIG_TUNING
+    camera_uvcd.setMetaCallback(STREAM_CHANNEL);
+#endif
     // Start usb uvcd
     usb_uvcd.begin(camera_uvcd.getStream(STREAM_CHANNEL), videoStreamer.linker, STREAM_CHANNEL);
 }
