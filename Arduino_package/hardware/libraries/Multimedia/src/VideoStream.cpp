@@ -485,17 +485,17 @@ VideoSetting::VideoSetting(uint8_t preset)
         _h = VIDEO_VGA_HEIGHT;
     }
 
-    if ((sensor_params[USE_SENSOR].sensor_width > _w) || (sensor_params[USE_SENSOR].sensor_height > _h) ){
+    if ((_w > sensor_params[USE_SENSOR].sensor_width) || (_h > sensor_params[USE_SENSOR].sensor_height)) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
+                       _w, _h,
+                       sensor_params[USE_SENSOR].sensor_width,
+                       sensor_params[USE_SENSOR].sensor_height);
         _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
-        _fps = sensor_params[USE_SENSOR].sensor_fps;
-        _preset = -1;
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid VideoSetting preset! Using default USER_SENSOR setup! \n");
-        return;
     }
 
-    if ((_w/_h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
+    if ((_w / _h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
         _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
@@ -505,7 +505,6 @@ VideoSetting::VideoSetting(uint8_t preset)
         return;
     }
 }
-
 
 VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uint8_t snapshot)
 {
@@ -545,16 +544,17 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
         _h = VIDEO_D1_HEIGHT;
     }
 
-    if ((sensor_params[USE_SENSOR].sensor_width > _w) || (sensor_params[USE_SENSOR].sensor_height > _h) ){
+    if ((_w > sensor_params[USE_SENSOR].sensor_width) || (_h > sensor_params[USE_SENSOR].sensor_height)) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
+                       _w, _h,
+                       sensor_params[USE_SENSOR].sensor_width,
+                       sensor_params[USE_SENSOR].sensor_height);
         _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
-        // _fps = sensor_params[USE_SENSOR].sensor_fps;
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid resolution! Using default USER_SENSOR setup! \n");
-        return;
     }
 
-    if ((_w/_h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
+    if ((_w / _h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
         _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
@@ -589,14 +589,15 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     //     amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Maximum resolution 1920 x 1080 \n");
     // }
 
-    if ((sensor_params[USE_SENSOR].sensor_width > _w) || (sensor_params[USE_SENSOR].sensor_height > _h) ){
-        // _resolution = VIDEO_CUSTOM;
+    if ((_w > sensor_params[USE_SENSOR].sensor_width) || (_h > sensor_params[USE_SENSOR].sensor_height)) {
+        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
+                       _w, _h,
+                       sensor_params[USE_SENSOR].sensor_width,
+                       sensor_params[USE_SENSOR].sensor_height);
+        _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
-        // _fps = sensor_params[USE_SENSOR].sensor_fps;
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[INFO] Resolution out of range, using default USER_SENSOR resolution setup! \n");
     }
-
     // Check resolution minimums
     if (encoder == VIDEO_JPEG) {
         _jpeg_qlevel = 2;
@@ -636,10 +637,10 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     //             _h += 16;
     //         }
     //         amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Custom resolution must be a multiple of 16, new resolution: %d X %d\n", _w, _h);
-     //    }
+    //    }
 
     // Check resolution ratio
-    if ((_w/_h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
+    if ((_w / _h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
         // _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
