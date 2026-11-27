@@ -29,6 +29,10 @@ UVCD::UVCD(const char *usb_uvcd_driver_name)
 
 UVCD::~UVCD(void)
 {
+    if (_nn_task != NULL) {
+        vTaskDelete((TaskHandle_t)_nn_task);
+        _nn_task = NULL;
+    }
     if (_p_mmf_context == NULL) {
         return;
     }
@@ -102,14 +106,14 @@ void UVCD::configVideo(VideoSetting &config)
 
     rtw_init_sema(&uvc_format_ptr->uvcd_change_sema, 0);
 
-    if (config._encoder == VIDEO_H264) {
-        uvc_format_ptr->format = FORMAT_TYPE_H264;
-        uvc_format_local->format = FORMAT_TYPE_H264;
-    } else {
-        // default setting
-        uvc_format_ptr->format = FORMAT_TYPE_H264;
-        uvc_format_local->format = FORMAT_TYPE_H264;
-    }
+    // if (config._encoder == VIDEO_H264) {
+    //     uvc_format_ptr->format = FORMAT_TYPE_H264;
+    //     uvc_format_local->format = FORMAT_TYPE_H264;
+    // } else {
+    //     // default setting
+    //     uvc_format_ptr->format = FORMAT_TYPE_H264;
+    //     uvc_format_local->format = FORMAT_TYPE_H264;
+    // }
 
     uvc_format_ptr->height = config._h;
     uvc_format_ptr->width = config._w;
@@ -120,73 +124,102 @@ void UVCD::configVideo(VideoSetting &config)
 }
 
 /**
- *  @brief   Begin video streaming and NN
+ *  @brief   Apply a pending host-requested format change to the camera channel
+ */
+void UVCD::handleFormatChange(mm_context_t *cam_ctx, void *linker)
+{
+    if ((uvc_format_local->format == uvc_format_ptr->format) && (uvc_format_local->width == uvc_format_ptr->width) && (uvc_format_local->height == uvc_format_ptr->height) && (uvc_format_local->fps == uvc_format_ptr->fps)) {
+        return;
+    }
+    amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s format change: fmt %d->%d w %d->%d h %d->%d fps %d->%d\r\n", __FUNCTION__,
+                   (int)uvc_format_local->format, (int)uvc_format_ptr->format,
+                   (int)uvc_format_local->width, (int)uvc_format_ptr->width,
+                   (int)uvc_format_local->height, (int)uvc_format_ptr->height,
+                   (int)uvc_format_local->fps, (int)uvc_format_ptr->fps);
+    if (uvc_format_ptr->format == FORMAT_TYPE_YUY2) {
+        cameraStopVideoStream(cam_ctx->priv, _uvcd_channel);
+        vTaskDelay(1000);
+        siso_pause((mm_siso_t *)(linker));
+        vTaskDelay(1000);
+        cameraReSetParams(cam_ctx, VIDEO_NV16, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
+        cameraYUV(cam_ctx->priv);
+        siso_resume((mm_siso_t *)(linker));
+    } else if (uvc_format_ptr->format == FORMAT_TYPE_NV12) {
+        cameraStopVideoStream(cam_ctx->priv, _uvcd_channel);
+        vTaskDelay(1000);
+        siso_pause((mm_siso_t *)(linker));
+        vTaskDelay(1000);
+        cameraReSetParams(cam_ctx, VIDEO_NV12, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
+        cameraYUV(cam_ctx->priv);
+        siso_resume((mm_siso_t *)(linker));
+    } else if (uvc_format_ptr->format == FORMAT_TYPE_H264) {
+        cameraStopVideoStream(cam_ctx->priv, _uvcd_channel);
+        vTaskDelay(1000);
+        siso_pause((mm_siso_t *)(linker));
+        vTaskDelay(100);
+        cameraReSetParams(cam_ctx, VIDEO_H264, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
+        siso_resume((mm_siso_t *)(linker));
+    } else if (uvc_format_ptr->format == FORMAT_TYPE_MJPEG) {
+        cameraStopVideoStream(cam_ctx->priv, _uvcd_channel);
+        vTaskDelay(1000);
+        siso_pause((mm_siso_t *)(linker));
+        vTaskDelay(1000);
+        cameraReSetParams(cam_ctx, VIDEO_JPEG, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
+        cameraSnapshot(cam_ctx->priv, 2);
+        siso_resume((mm_siso_t *)(linker));
+    } else if (uvc_format_ptr->format == FORMAT_TYPE_H265) {
+        cameraStopVideoStream(cam_ctx->priv, _uvcd_channel);
+        vTaskDelay(1000);
+        siso_pause((mm_siso_t *)(linker));
+        vTaskDelay(100);
+        cameraReSetParams(cam_ctx, VIDEO_HEVC, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
+        siso_resume((mm_siso_t *)(linker));
+    }
+    uvc_format_local->format = uvc_format_ptr->format;
+    uvc_format_local->width = uvc_format_ptr->width;
+    uvc_format_local->height = uvc_format_ptr->height;
+    uvc_format_local->fps = uvc_format_ptr->fps;
+}
+
+void UVCD::formatChangeTask(void *param)
+{
+    UVCD *self = (UVCD *)param;
+    while (1) {
+        rtw_down_sema(&uvc_format_ptr->uvcd_change_sema);
+        self->handleFormatChange(self->_nn_cam_ctx, self->_nn_linker);
+    }
+}
+
+/**
+ *  @brief   Begin video streaming and NN. Returns immediately; format changes
+ *           requested by the USB host are handled by a background task.
  *
  *  @param   module_videocam: stream data from camera video
  *           module_videolinker: StreamIO object for uvcd
  *           uvcd_channel: video channel
- *           uvcd_getctx_check: get USB connected status
+ *           uvcd_getctx_check: unused, kept for API compatibility
  *  @return  none
  *
  */
 void UVCD::nnbegin(const MMFModule &module_videocam, void *module_videolinker, int uvcd_channel, int uvcd_getctx_check)
 {
+    (void)uvcd_getctx_check;
+    if (_nn_task != NULL) {
+        return;
+    }
     _uvcd_channel = uvcd_channel;
+    _nn_cam_ctx = module_videocam._p_mmf_context;
+    _nn_linker = module_videolinker;
     int wdr_mode = 2;
     isp_set_wdr_mode(wdr_mode);
-    rtw_down_sema(&uvc_format_ptr->uvcd_change_sema);
-    if ((uvc_format_local->format != uvc_format_ptr->format) || (uvc_format_local->width != uvc_format_ptr->width) || (uvc_format_local->height != uvc_format_ptr->height) || (uvc_format_local->fps != uvc_format_ptr->fps)) {
-        if (uvc_format_ptr->format == FORMAT_TYPE_YUY2) {
-            cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-            vTaskDelay(1000);
-            siso_pause((mm_siso_t *)(module_videolinker));
-            vTaskDelay(1000);
-            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV16, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-            cameraYUV(module_videocam._p_mmf_context);
-            siso_resume((mm_siso_t *)(module_videolinker));
-            isUsbUvcConnected(uvcd_getctx_check);
-        } else if (uvc_format_ptr->format == FORMAT_TYPE_NV12) {
-            cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-            vTaskDelay(1000);
-            siso_pause((mm_siso_t *)(module_videolinker));
-            vTaskDelay(1000);
-            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV12, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-            cameraYUV(module_videocam._p_mmf_context);
-            siso_resume((mm_siso_t *)(module_videolinker));
-            isUsbUvcConnected(uvcd_getctx_check);
-        } else if (uvc_format_ptr->format == FORMAT_TYPE_H264) {
-            cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-            vTaskDelay(1000);
-            siso_pause((mm_siso_t *)(module_videolinker));
-            vTaskDelay(100);
-            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_H264, uvc_format_ptr->fps, (uvc_format_ptr->fps * 3), 1, _uvcd_channel);
-            siso_resume((mm_siso_t *)(module_videolinker));
-            isUsbUvcConnected(uvcd_getctx_check);
-        } else if (uvc_format_ptr->format == FORMAT_TYPE_MJPEG) {
-            cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-            vTaskDelay(1000);
-            siso_pause((mm_siso_t *)(module_videolinker));
-            vTaskDelay(1000);
-            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_JPEG, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-            cameraSnapshot(module_videocam._p_mmf_context, 2);
-            siso_resume((mm_siso_t *)(module_videolinker));
-            isUsbUvcConnected(uvcd_getctx_check);
-        } else if (uvc_format_ptr->format == FORMAT_TYPE_H265) {
-            cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-            vTaskDelay(1000);
-            siso_pause((mm_siso_t *)(module_videolinker));
-            vTaskDelay(100);
-            cameraReSetParams(module_videocam._p_mmf_context, VIDEO_HEVC, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-            siso_resume((mm_siso_t *)(module_videolinker));
-            isUsbUvcConnected(uvcd_getctx_check);
-        }
-        uvc_format_local->format = uvc_format_ptr->format;
-        uvc_format_local->width = uvc_format_ptr->width;
-        uvc_format_local->height = uvc_format_ptr->height;
-        uvc_format_local->fps = uvc_format_ptr->fps;
-    }
-}
 
+    TaskHandle_t handle = NULL;
+    if (xTaskCreate(formatChangeTask, "uvcd_fmt_task", 4096, this, tskIDLE_PRIORITY + 1, &handle) != pdPASS) {
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] %s. create task fail\n", __FUNCTION__);
+        return;
+    }
+    _nn_task = (void *)handle;
+}
 
 /**
  *  @brief   Begin video streaming
@@ -201,59 +234,11 @@ void UVCD::begin(const MMFModule &module_videocam, void *module_videolinker, int
 {
     _uvcd_channel = uvcd_channel;
     int wdr_mode = 2;
-    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s. [uvcd]set wdr_mode:%d \n", __FUNCTION__, wdr_mode);
     isp_set_wdr_mode(wdr_mode);
     isp_get_wdr_mode(&wdr_mode);
-    // amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] %s. [uvcd]get wdr_mode:%d \n", __FUNCTION__, wdr_mode);
 
     while (1) {
         rtw_down_sema(&uvc_format_ptr->uvcd_change_sema);
-
-        if ((uvc_format_local->format != uvc_format_ptr->format) || (uvc_format_local->width != uvc_format_ptr->width) || (uvc_format_local->height != uvc_format_ptr->height) || (uvc_format_local->fps != uvc_format_ptr->fps)) {
-
-            if (uvc_format_ptr->format == FORMAT_TYPE_YUY2) {
-                cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-                vTaskDelay(1000);
-                siso_pause((mm_siso_t *)(module_videolinker));
-                vTaskDelay(1000);
-                cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV16, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-                cameraYUV(module_videocam._p_mmf_context);
-                siso_resume((mm_siso_t *)(module_videolinker));
-            } else if (uvc_format_ptr->format == FORMAT_TYPE_NV12) {
-                cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-                vTaskDelay(1000);
-                siso_pause((mm_siso_t *)(module_videolinker));
-                vTaskDelay(1000);
-                cameraReSetParams(module_videocam._p_mmf_context, VIDEO_NV12, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-                cameraYUV(module_videocam._p_mmf_context);
-                siso_resume((mm_siso_t *)(module_videolinker));
-            } else if (uvc_format_ptr->format == FORMAT_TYPE_H264) {
-                cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-                vTaskDelay(1000);
-                siso_pause((mm_siso_t *)(module_videolinker));
-                vTaskDelay(100);
-                cameraReSetParams(module_videocam._p_mmf_context, VIDEO_H264, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-                siso_resume((mm_siso_t *)(module_videolinker));
-            } else if (uvc_format_ptr->format == FORMAT_TYPE_MJPEG) {
-                cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-                vTaskDelay(1000);
-                siso_pause((mm_siso_t *)(module_videolinker));
-                vTaskDelay(1000);
-                cameraReSetParams(module_videocam._p_mmf_context, VIDEO_JPEG, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-                cameraSnapshot(module_videocam._p_mmf_context, 2);
-                siso_resume((mm_siso_t *)(module_videolinker));
-            } else if (uvc_format_ptr->format == FORMAT_TYPE_H265) {
-                cameraStopVideoStream(module_videocam._p_mmf_context, _uvcd_channel);
-                vTaskDelay(1000);
-                siso_pause((mm_siso_t *)(module_videolinker));
-                vTaskDelay(100);
-                cameraReSetParams(module_videocam._p_mmf_context, VIDEO_HEVC, uvc_format_ptr->fps, ((uvc_format_ptr->fps) * 3), 1, _uvcd_channel);
-                siso_resume((mm_siso_t *)(module_videolinker));
-            }
-            uvc_format_local->format = uvc_format_ptr->format;
-            uvc_format_local->width = uvc_format_ptr->width;
-            uvc_format_local->height = uvc_format_ptr->height;
-            uvc_format_local->fps = uvc_format_ptr->fps;
-        }
+        handleFormatChange(module_videocam._p_mmf_context, module_videolinker);
     }
 }

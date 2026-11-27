@@ -37,8 +37,11 @@
 #define STREAM_CHANNEL 0
 #define CHANNELNN      3
 
+#define DISCONNECT_DEBOUNCE 10
+
 int reconnect = 0;
 int disconnect = 0;
+int disconnectCount = 0;
 
 Video camera_uvcd;
 NNObjectDetection ObjDet;
@@ -50,7 +53,7 @@ UVCD usb_uvcd;
 
 StreamIO videoStreamer(1, 1);    // 1 Input Video -> 1 Output USB_CAM
 StreamIO videoStreamerNN(1, 1);
-VideoSetting stream_config(VIDEO_FHD, 24, VIDEO_H264, 0);
+VideoSetting stream_config(USB_UVCD_STREAM_PRESET);
 VideoSetting configNN(NNWIDTH, NNHEIGHT, 10, VIDEO_RGB, 0);
 void setup()
 {
@@ -81,7 +84,6 @@ void setup()
     // Configure StreamIO object to stream data from RGB video channel to object detection
     videoStreamerNN.registerInput(camera_uvcd.getStream(CHANNELNN));
     videoStreamerNN.setStackSize();
-    videoStreamerNN.setTaskPriority();
     videoStreamerNN.registerOutput(ObjDet);
     if (videoStreamerNN.begin() != 0) {
         Serial.println("StreamIO link start failed");
@@ -99,14 +101,16 @@ void setup()
 
 void loop()
 {
-    if (!usb_uvcd.isUsbUvcConnected(camera_uvcd.videostream_status(STREAM_CHANNEL))) {
-        Serial.println("USB UVC device disconnected");
-        // Handle disconnection processes
-        if (disconnect == 0) {
+    // Pass 1 so only the USB stream state decides;
+    if (!usb_uvcd.isUsbUvcConnected(1)) {
+        if (disconnect == 0 && ++disconnectCount >= DISCONNECT_DEBOUNCE) {
+            Serial.println("USB UVC device disconnected");
             disconnectNN();
         }
+        delay(100);
         return;
     } else {
+        disconnectCount = 0;
         // Handle reconnection or restart processes
         if (reconnect == 1) {
             reconnectNN();
@@ -149,16 +153,14 @@ void loop()
 
 void disconnectNN()
 {
-    camera_uvcd.channelEnd(CHANNELNN);           // Stop video channel from NN
-    camera_uvcd.channelBegin(STREAM_CHANNEL);    // Stop video channel from video channel
+    camera_uvcd.channelEnd(CHANNELNN);    // Stop video channel for NN
     reconnect = 1;
     disconnect = 1;
 }
 
 void reconnectNN()
 {
-    camera_uvcd.channelBegin(CHANNELNN);         // Start video channel for NN
-    camera_uvcd.channelBegin(STREAM_CHANNEL);    // Start video channel for video channel
+    camera_uvcd.channelBegin(CHANNELNN);    // Start video channel for NN
     reconnect = 0;
     disconnect = 0;
 }

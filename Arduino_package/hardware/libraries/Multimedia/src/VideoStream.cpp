@@ -442,10 +442,8 @@ VideoSetting::VideoSetting(uint8_t preset)
         }
         case 10: {
             _resolution = VIDEO_FHD;
-            //_w = VIDEO_FHD_WIDTH;
-            //_h = VIDEO_FHD_HEIGHT;
-            _fps = 20;
-            _bps = 1 * 1024 * 1024;
+            _fps = CAM_FPS;
+            _bps = CAM_BPS;
             _encoder = VIDEO_H264;
             _gop = 80;
             _rc_mode = 1;
@@ -486,7 +484,7 @@ VideoSetting::VideoSetting(uint8_t preset)
     }
 
     if ((_w > sensor_params[USE_SENSOR].sensor_width) || (_h > sensor_params[USE_SENSOR].sensor_height)) {
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
                        _w, _h,
                        sensor_params[USE_SENSOR].sensor_width,
                        sensor_params[USE_SENSOR].sensor_height);
@@ -499,10 +497,7 @@ VideoSetting::VideoSetting(uint8_t preset)
         _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
-        _fps = sensor_params[USE_SENSOR].sensor_fps;
-        _preset = -1;
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid VideoSetting preset! Using default USER_SENSOR setup! \n");
-        return;
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid w/h ratio! Auto-reset to default USE_SENSOR setup \n");
     }
 }
 
@@ -545,7 +540,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
     }
 
     if ((_w > sensor_params[USE_SENSOR].sensor_width) || (_h > sensor_params[USE_SENSOR].sensor_height)) {
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
                        _w, _h,
                        sensor_params[USE_SENSOR].sensor_width,
                        sensor_params[USE_SENSOR].sensor_height);
@@ -558,8 +553,7 @@ VideoSetting::VideoSetting(uint8_t resolution, uint8_t fps, uint8_t encoder, uin
         _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
-        // _fps = sensor_params[USE_SENSOR].sensor_fps;
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid w/h ratio! Using default USER_SENSOR setup! \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid w/h ratio! Auto-reset to default USE_SENSOR setup \n");
         return;
     }
 }
@@ -590,7 +584,7 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
     // }
 
     if ((_w > sensor_params[USE_SENSOR].sensor_width) || (_h > sensor_params[USE_SENSOR].sensor_height)) {
-        amb_ard_printf(ARD_LOG_INF, "\r\n[INFO] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Preset resolution %d x %d exceeds sensor capability, using %d x %d \n",
                        _w, _h,
                        sensor_params[USE_SENSOR].sensor_width,
                        sensor_params[USE_SENSOR].sensor_height);
@@ -641,11 +635,10 @@ VideoSetting::VideoSetting(uint16_t w, uint16_t h, uint8_t fps, uint8_t encoder,
 
     // Check resolution ratio
     if ((_w / _h) != ((sensor_params[USE_SENSOR].sensor_width) / (sensor_params[USE_SENSOR].sensor_height))) {
-        // _resolution = VIDEO_CUSTOM;
+        _resolution = VIDEO_CUSTOM;
         _w = sensor_params[USE_SENSOR].sensor_width;
         _h = sensor_params[USE_SENSOR].sensor_height;
-        // _fps = sensor_params[USE_SENSOR].sensor_fps;
-        amb_ard_printf(ARD_LOG_ERR, "\r\n[INFO] Ratio out of range, using default USER_SENSOR setup! \n");
+        amb_ard_printf(ARD_LOG_ERR, "\r\n[ERROR] Invalid w/h ratio! Auto-reset to default USE_SENSOR setup \n");
     }
 
     if ((_snapshot == 1) || (_snapshot == 2)) {
