@@ -21,6 +21,12 @@ public:
     int isUsbUvcConnected(int uvcd_getctx_state);
 
 private:
+    void handleFormatChange(mm_context_t *cam_ctx, void *linker);
+    static void formatChangeTask(void *param);
+
+    mm_context_t *_nn_cam_ctx = NULL;
+    void *_nn_linker = NULL;
+    void *_nn_task = NULL;
     unsigned char _uuid[16] = {0xc7, 0x98, 0x2c, 0x28, 0x0a, 0xfc, 0x49, 0xe6, 0xaa, 0xe4, 0x7f, 0x8f, 0x64, 0xee, 0x65, 0x01};
     int _uvcd_channel = 0;
     int _nn_channel = 3;
